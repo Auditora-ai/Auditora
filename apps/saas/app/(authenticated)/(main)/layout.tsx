@@ -50,6 +50,21 @@ export default async function MainLayout({ children }: PropsWithChildren) {
 		if (!activePlan) {
 			redirect("/choose-plan");
 		}
+
+		// Check if trial has expired (createdAt + 14 days)
+		if (activePlan.status === "trialing") {
+			const trialPurchase = purchases.find(
+				(p) => p.type === "SUBSCRIPTION" && p.status === "trialing",
+			);
+			if (trialPurchase) {
+				const TRIAL_DAYS = 14;
+				const trialEnd = new Date(trialPurchase.createdAt);
+				trialEnd.setDate(trialEnd.getDate() + TRIAL_DAYS);
+				if (new Date() > trialEnd) {
+					redirect("/choose-plan");
+				}
+			}
+		}
 	}
 
 	return children;

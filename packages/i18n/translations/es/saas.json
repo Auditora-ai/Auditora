@@ -191,7 +191,9 @@
 	},
 	"choosePlan": {
 		"title": "Elige tu plan",
-		"description": "Para continuar, por favor selecciona un plan."
+		"description": "Para continuar, por favor selecciona un plan.",
+		"trialExpiredTitle": "Tu prueba ha terminado",
+		"trialExpiredDescription": "Tu prueba gratis de 14 días ha expirado. Elige un plan para seguir usando Prozea."
 	},
 	"documentation": {
 		"title": "Documentación"

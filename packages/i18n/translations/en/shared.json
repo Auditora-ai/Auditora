@@ -4,6 +4,7 @@
 		"contactSales": "Contact sales",
 		"description": "Pick the plan that fits your practice. Start with a 14-day free trial.",
 		"getStarted": "Get started",
+		"startTrial": "Start free trial",
 		"month": "{count, plural, one {month} other {{count} months}}",
 		"monthly": "Monthly",
 		"products": {

@@ -51,6 +51,10 @@ export function PricingTable({
 		orpc.payments.createCheckoutLink.mutationOptions(),
 	);
 
+	const startTrialMutation = useMutation(
+		orpc.payments.startTrial.mutationOptions(),
+	);
+
 	const onSelectPlan = async (planId: PlanId, selection?: PlanSelection) => {
 		if (!(userId || organizationId)) {
 			router.push("/signup");
@@ -64,6 +68,28 @@ export function PricingTable({
 		setLoading(planId);
 
 		try {
+			// Check if the selected price has a trial period — start trial directly without Stripe
+			const planConfig = plans[planId as keyof typeof plans];
+			const prices = planConfig && "prices" in planConfig ? planConfig.prices : [];
+			const selectedPrice = prices.find(
+				(p) =>
+					p.type === selection.type &&
+					(p.type === "one-time" || p.interval === selection.interval),
+			);
+			const hasTrialPeriod =
+				selectedPrice &&
+				"trialPeriodDays" in selectedPrice &&
+				selectedPrice.trialPeriodDays;
+
+			if (hasTrialPeriod) {
+				await startTrialMutation.mutateAsync({
+					planId,
+					organizationId,
+				});
+				router.push("/");
+				return;
+			}
+
 			const { checkoutLink } =
 				await createCheckoutLinkMutation.mutateAsync({
 					planId,
@@ -275,9 +301,13 @@ export function PricingTable({
 										}
 										loading={loading === planId}
 									>
-										{userId || organizationId
-											? t("pricing.choosePlan")
-											: t("pricing.getStarted")}
+										{!(userId || organizationId)
+											? t("pricing.getStarted")
+											: price &&
+												  "trialPeriodDays" in price &&
+												  price.trialPeriodDays
+												? t("pricing.startTrial")
+												: t("pricing.choosePlan")}
 										<ArrowRightIcon className="ml-2 size-4" />
 									</Button>
 								</div>

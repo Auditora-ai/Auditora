@@ -53,6 +53,12 @@ export function getProviderPriceIdByPlanId(
 }
 
 export function getPlanIdByProviderPriceId(priceId: string) {
+	// Handle trial sentinel priceIds (e.g., "trial:pro:monthly" → "pro")
+	if (priceId.startsWith("trial:")) {
+		const planId = priceId.split(":")[1] as PlanId;
+		return planId in config.plans ? planId : null;
+	}
+
 	return (
 		getProviderPriceMappings().find((entry) => entry.priceId === priceId)
 			?.planId ?? null
@@ -60,6 +66,24 @@ export function getPlanIdByProviderPriceId(priceId: string) {
 }
 
 export function getPlanPriceByProviderPriceId(priceId: string) {
+	// Handle trial sentinel priceIds (e.g., "trial:pro:monthly")
+	if (priceId.startsWith("trial:")) {
+		const parts = priceId.split(":");
+		const planId = parts[1] as PlanId;
+		const interval = parts[2] === "yearly" ? "year" : "month";
+
+		const price = findPriceByPlanId(planId, {
+			type: "subscription",
+			interval: interval as RecurringInterval,
+		});
+
+		if (!price) {
+			return null;
+		}
+
+		return { planId, price };
+	}
+
 	const mapping = getProviderPriceMappings().find(
 		(entry) => entry.priceId === priceId,
 	);

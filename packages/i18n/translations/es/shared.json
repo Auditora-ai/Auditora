@@ -4,6 +4,7 @@
 		"contactSales": "Contactar ventas",
 		"description": "Elige el plan que se adapte a tu práctica. Comienza con 14 días de prueba gratis.",
 		"getStarted": "Comenzar",
+		"startTrial": "Iniciar prueba gratis",
 		"month": "{count, plural, one {mes} other {{count} meses}}",
 		"monthly": "Mensual",
 		"products": {

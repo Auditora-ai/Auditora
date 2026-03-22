@@ -45,7 +45,21 @@ export default async function ChoosePlanPage() {
 
 	const { activePlan } = createPurchasesHelper(purchases);
 
-	if (activePlan) {
+	// Check if this is an expired trial — don't redirect to /
+	let trialExpired = false;
+	if (activePlan?.status === "trialing") {
+		const trialPurchase = purchases.find(
+			(p) => p.type === "SUBSCRIPTION" && p.status === "trialing",
+		);
+		if (trialPurchase) {
+			const TRIAL_DAYS = 14;
+			const trialEnd = new Date(trialPurchase.createdAt);
+			trialEnd.setDate(trialEnd.getDate() + TRIAL_DAYS);
+			trialExpired = new Date() > trialEnd;
+		}
+	}
+
+	if (activePlan && !trialExpired) {
 		redirect("/");
 	}
 
@@ -53,10 +67,10 @@ export default async function ChoosePlanPage() {
 		<AuthWrapper contentClass="max-w-5xl">
 			<div className="mb-4 text-center">
 				<h1 className="text-center font-bold text-2xl lg:text-3xl">
-					{t("title")}
+					{trialExpired ? t("trialExpiredTitle") : t("title")}
 				</h1>
 				<p className="text-muted-foreground text-sm lg:text-base">
-					{t("description")}
+					{trialExpired ? t("trialExpiredDescription") : t("description")}
 				</p>
 			</div>
 
