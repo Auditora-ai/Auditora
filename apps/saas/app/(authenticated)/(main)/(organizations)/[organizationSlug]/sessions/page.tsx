@@ -19,7 +19,7 @@ export default async function SessionsPage({
 	params: Promise<{ organizationSlug: string }>;
 }) {
 	const { organizationSlug } = await params;
-	const t = await getTranslations();
+	const t = await getTranslations("sessions");
 
 	const activeOrganization = await getActiveOrganization(
 		organizationSlug as string,
@@ -35,8 +35,8 @@ export default async function SessionsPage({
 	return (
 		<div>
 			<PageHeader
-				title={t("sessions.title")}
-				subtitle={t("sessions.subtitle")}
+				title={t("title")}
+				subtitle={t("subtitle")}
 			/>
 
 			<div className="mt-6">
@@ -47,15 +47,15 @@ export default async function SessionsPage({
 								<WorkflowIcon className="h-6 w-6 text-primary" />
 							</div>
 							<h3 className="text-lg font-semibold text-foreground">
-								{t("sessions.empty.title")}
+								{t("empty.title")}
 							</h3>
 							<p className="mt-2 max-w-sm text-sm text-muted-foreground">
-								{t("sessions.empty.description")}
+								{t("empty.description")}
 							</p>
 							<Button asChild className="mt-6">
 								<Link href={`/${organizationSlug}/sessions/new`}>
 									<PlusIcon className="mr-2 h-4 w-4" />
-									{t("sessions.newSession")}
+									{t("newSession")}
 								</Link>
 							</Button>
 						</div>

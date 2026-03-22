@@ -16,7 +16,7 @@ export default async function NewSessionPage({
 	params: Promise<{ organizationSlug: string }>;
 }) {
 	const { organizationSlug } = await params;
-	const t = await getTranslations();
+	const t = await getTranslations("sessions.new");
 
 	const activeOrganization = await getActiveOrganization(
 		organizationSlug as string,
@@ -29,8 +29,8 @@ export default async function NewSessionPage({
 	return (
 		<div>
 			<PageHeader
-				title={t("sessions.new.title")}
-				subtitle={t("sessions.new.subtitle")}
+				title={t("title")}
+				subtitle={t("subtitle")}
 			/>
 
 			<div className="mt-6 max-w-2xl">
