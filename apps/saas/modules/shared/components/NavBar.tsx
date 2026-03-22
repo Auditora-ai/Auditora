@@ -21,6 +21,7 @@ import {
 	SettingsIcon,
 	UserCog2Icon,
 	UserCogIcon,
+	WorkflowIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -51,6 +52,16 @@ export function NavBar() {
 			icon: HomeIcon,
 			isActive: pathname === "/" || pathname === basePath,
 		},
+		...(authConfig.organizations.enable && activeOrganization
+			? [
+					{
+						label: t("app.menu.sessions"),
+						href: `${basePath}/sessions`,
+						icon: WorkflowIcon,
+						isActive: pathname.startsWith(`${basePath}/sessions`) || pathname.startsWith(`${basePath}/session/`),
+					},
+				]
+			: []),
 		{
 			label: t("app.menu.aiChatbot"),
 			href: "/chatbot",

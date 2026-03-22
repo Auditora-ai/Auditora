@@ -75,6 +75,7 @@
 			"admin": "Admin",
 			"aiChatbot": "AI Chatbot",
 			"organizationSettings": "Organization settings",
+			"sessions": "Sessions",
 			"start": "Start"
 		},
 		"userMenu": {
