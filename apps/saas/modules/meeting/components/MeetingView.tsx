@@ -123,38 +123,33 @@ export function MeetingView({
 		return () => clearInterval(timer);
 	}, []);
 
-	const handleConfirmNode = (nodeId: string) => {
+	const handleConfirmNode = async (nodeId: string) => {
+		// Optimistic update
 		setNodes((prev) =>
 			prev.map((n) =>
 				n.id === nodeId ? { ...n, state: "confirmed" as const } : n,
 			),
 		);
+		// Persist to DB
+		await fetch(`/api/sessions/${sessionId}/nodes/${nodeId}`, {
+			method: "PATCH",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ action: "confirm" }),
+		});
 	};
 
-	const handleRejectNode = (nodeId: string) => {
-		setNodes((prev) => {
-			const rejectedNode = prev.find((n) => n.id === nodeId);
-			if (!rejectedNode) return prev;
-
-			const childIds = new Set<string>();
-			const findChildren = (parentId: string) => {
-				const parent = prev.find((n) => n.id === parentId);
-				if (parent) {
-					for (const connId of parent.connections) {
-						childIds.add(connId);
-						findChildren(connId);
-					}
-				}
-			};
-			findChildren(nodeId);
-
-			return prev.map((n) => {
-				if (n.id === nodeId)
-					return { ...n, state: "rejected" as const };
-				if (childIds.has(n.id))
-					return { ...n, state: "forming" as const };
-				return n;
-			});
+	const handleRejectNode = async (nodeId: string) => {
+		// Optimistic update
+		setNodes((prev) =>
+			prev.map((n) =>
+				n.id === nodeId ? { ...n, state: "rejected" as const } : n,
+			),
+		);
+		// Persist to DB
+		await fetch(`/api/sessions/${sessionId}/nodes/${nodeId}`, {
+			method: "PATCH",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ action: "reject" }),
 		});
 	};
 
