@@ -1,75 +1,53 @@
 /**
  * Recall.ai Webhook Handler
  *
- * Actual payload format from Recall.ai (transcript.data event):
- * {
- *   "event": "transcript.data",
- *   "data": {
- *     "data": {
- *       "words": [{ "text": "Hello", "start_timestamp": { "relative": 1.23 } }],
- *       "language_code": "en-US",
- *       "participant": { "id": 100, "name": "Oscar Nuñez" }
- *     },
- *     "transcript": { "id": "..." },
- *     "bot_id": "..."
- *   }
- * }
+ * Receives transcript events → stores in DB → triggers AI pipelines:
+ * 1. Process Extraction (every 15s): transcript → BPMN nodes
+ * 2. Teleprompter (every 30s): transcript + diagram → next question
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
+import { extractProcessUpdates, generateNextQuestion } from "@repo/ai";
+
+// Throttle AI calls per session
+const lastExtractionTime = new Map<string, number>();
+const lastTeleprompterTime = new Map<string, number>();
+const EXTRACTION_INTERVAL = 15_000;
+const TELEPROMPTER_INTERVAL = 30_000;
 
 export async function POST(request: NextRequest) {
 	try {
 		const payload = await request.json();
 
-		// Log top-level keys to find bot_id location
-		console.log(
-			"[Recall Webhook] Event:",
-			payload?.event,
-			"Top keys:",
-			Object.keys(payload || {}),
-			"Data keys:",
-			Object.keys(payload?.data || {}),
-		);
-
-		// Only process transcript.data events
 		if (payload?.event !== "transcript.data") {
-			console.log("[Recall Webhook] Non-transcript event, skipping");
 			return NextResponse.json({ ok: true });
 		}
 
-		// Extract from the ACTUAL Recall.ai payload structure
+		// Extract text from Recall.ai payload
 		const wordsData = payload?.data?.data?.words;
 		const participant = payload?.data?.data?.participant;
 
 		if (!wordsData || wordsData.length === 0) {
-			console.log("[Recall Webhook] No words in payload. Raw data keys:", Object.keys(payload?.data?.data || {}));
 			return NextResponse.json({ ok: true });
 		}
 
-		// Build text from words — filter out empty entries
 		const text = wordsData
-			.map((w: any) => w.text || w.word || "")
+			.map((w: any) => w.text || "")
 			.filter((t: string) => t.trim())
 			.join(" ")
 			.trim();
 
-		console.log("[Recall Webhook] Words raw:", JSON.stringify(wordsData).substring(0, 200));
+		if (!text) return NextResponse.json({ ok: true });
+
 		const speaker = participant?.name || "Unknown";
-		const timestamp =
-			wordsData[0]?.start_timestamp?.relative || Date.now() / 1000;
+		const timestamp = wordsData[0]?.start_timestamp?.relative || 0;
 
-		if (!text) {
-			console.log("[Recall Webhook] Empty text after joining words");
-			return NextResponse.json({ ok: true });
-		}
-
-		console.log(`[Recall Webhook] 📝 ${speaker}: "${text}"`);
-
-		// bot_id is at payload.data.bot (object with id) or payload.data.bot_id
-		const botId = payload?.data?.bot?.id || payload?.data?.bot_id || payload?.bot_id;
-		console.log("[Recall Webhook] Bot ID:", botId);
+		// Find session
+		const botId =
+			payload?.data?.bot?.id ||
+			payload?.data?.bot_id ||
+			payload?.bot_id;
 
 		let session;
 		if (botId) {
@@ -77,50 +55,167 @@ export async function POST(request: NextRequest) {
 				where: { recallBotId: botId },
 			});
 		}
-
-		// Fallback: find the most recent active or connecting session
 		if (!session) {
 			session = await db.meetingSession.findFirst({
-				where: {
-					status: { in: ["ACTIVE", "CONNECTING"] },
-				},
+				where: { status: { in: ["ACTIVE", "CONNECTING"] } },
 				orderBy: { createdAt: "desc" },
 			});
 		}
+		if (!session) return NextResponse.json({ ok: true });
 
-		if (!session) {
-			console.log(`[Recall Webhook] No session for bot ${botId}`);
-			return NextResponse.json({ ok: true });
-		}
-
-		// Update session status to ACTIVE if still CONNECTING
+		// Activate session on first transcript
 		if (session.status === "CONNECTING") {
 			await db.meetingSession.update({
 				where: { id: session.id },
 				data: { status: "ACTIVE", startedAt: new Date() },
 			});
-			console.log(
-				`[Recall Webhook] ✅ Session ${session.id} now ACTIVE`,
+		}
+
+		// Store transcript
+		await db.transcriptEntry.create({
+			data: { sessionId: session.id, speaker, text, timestamp },
+		});
+
+		console.log(`[Webhook] 📝 ${speaker}: "${text.substring(0, 60)}"`);
+
+		// --- AI PIPELINES (throttled, run in background) ---
+		const now = Date.now();
+
+		// Process Extraction — every 15s
+		const lastExtraction = lastExtractionTime.get(session.id) || 0;
+		if (now - lastExtraction >= EXTRACTION_INTERVAL) {
+			lastExtractionTime.set(session.id, now);
+			runExtraction(session.id).catch((err) =>
+				console.error("[Webhook] Extraction error:", err),
 			);
 		}
 
-		// Store transcript entry
-		await db.transcriptEntry.create({
-			data: {
-				sessionId: session.id,
-				speaker,
-				text,
-				timestamp,
-			},
-		});
-
-		console.log(
-			`[Recall Webhook] 💾 Stored: "${text.substring(0, 50)}..." for session ${session.id}`,
-		);
+		// Teleprompter — every 30s
+		const lastTeleprompter = lastTeleprompterTime.get(session.id) || 0;
+		if (now - lastTeleprompter >= TELEPROMPTER_INTERVAL) {
+			lastTeleprompterTime.set(session.id, now);
+			runTeleprompter(session.id).catch((err) =>
+				console.error("[Webhook] Teleprompter error:", err),
+			);
+		}
 
 		return NextResponse.json({ ok: true });
 	} catch (error) {
-		console.error("[Recall Webhook] Error:", error);
+		console.error("[Webhook] Error:", error);
 		return NextResponse.json({ ok: true });
 	}
+}
+
+/** Extract BPMN nodes from recent transcript */
+async function runExtraction(sessionId: string) {
+	const transcript = await db.transcriptEntry.findMany({
+		where: { sessionId },
+		orderBy: { timestamp: "desc" },
+		take: 50,
+	});
+
+	const currentNodes = await db.diagramNode.findMany({
+		where: { sessionId, state: { not: "REJECTED" } },
+	});
+
+	const result = await extractProcessUpdates(
+		currentNodes.map((n) => ({
+			id: n.id,
+			type: n.nodeType.toLowerCase().replace(/_([a-z])/g, (_, c) =>
+				c.toUpperCase(),
+			) as any,
+			label: n.label,
+			state: n.state.toLowerCase() as any,
+			lane: n.lane || undefined,
+			connections: n.connections,
+			positionX: n.positionX,
+			positionY: n.positionY,
+		})),
+		transcript.reverse().map((t) => ({
+			speaker: t.speaker,
+			text: t.text,
+			timestamp: t.timestamp,
+		})),
+	);
+
+	// Store new nodes
+	for (const newNode of result.newNodes) {
+		const posX = 200 + currentNodes.length * 200;
+		const posY = 200;
+
+		// Map LLM node type to Prisma enum
+		const typeMap: Record<string, string> = {
+			startEvent: "START_EVENT",
+			endEvent: "END_EVENT",
+			task: "TASK",
+			exclusiveGateway: "EXCLUSIVE_GATEWAY",
+			parallelGateway: "PARALLEL_GATEWAY",
+		};
+
+		await db.diagramNode.create({
+			data: {
+				sessionId,
+				nodeType: (typeMap[newNode.type] || "TASK") as any,
+				label: newNode.label,
+				state: "FORMING",
+				lane: newNode.lane || null,
+				positionX: posX,
+				positionY: posY,
+				connections: newNode.connectTo ? [newNode.connectTo] : [],
+			},
+		});
+
+		console.log(`[Extraction] 🔷 New node: "${newNode.label}"`);
+	}
+
+	if (result.newNodes.length > 0) {
+		console.log(
+			`[Extraction] ✅ Added ${result.newNodes.length} nodes for session ${sessionId}`,
+		);
+	}
+}
+
+/** Generate next teleprompter question */
+async function runTeleprompter(sessionId: string) {
+	const session = await db.meetingSession.findUnique({
+		where: { id: sessionId },
+		include: { processDefinition: true },
+	});
+	if (!session) return;
+
+	const transcript = await db.transcriptEntry.findMany({
+		where: { sessionId },
+		orderBy: { timestamp: "desc" },
+		take: 50,
+	});
+
+	const currentNodes = await db.diagramNode.findMany({
+		where: { sessionId, state: { not: "REJECTED" } },
+	});
+
+	const result = await generateNextQuestion(
+		session.type as "DISCOVERY" | "DEEP_DIVE",
+		currentNodes.map((n) => ({
+			id: n.id,
+			type: n.nodeType.toLowerCase(),
+			label: n.label,
+			lane: n.lane || undefined,
+			connections: n.connections,
+		})),
+		transcript.reverse().map((t) => ({
+			speaker: t.speaker,
+			text: t.text,
+			timestamp: t.timestamp,
+		})),
+		session.processDefinition?.name,
+	);
+
+	await db.teleprompterLog.create({
+		data: {
+			sessionId,
+			question: result.nextQuestion,
+		},
+	});
+
+	console.log(`[Teleprompter] 💡 "${result.nextQuestion.substring(0, 60)}"`);
 }
