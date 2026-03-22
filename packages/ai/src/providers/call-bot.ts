@@ -59,9 +59,19 @@ export class RecallAiProvider implements CallBotProvider {
       body: JSON.stringify({
         meeting_url: meetingUrl,
         bot_name: "Prozea",
-        real_time_transcription: {
-          destination_url: `${process.env.NEXT_PUBLIC_TUNNEL_URL || process.env.NEXT_PUBLIC_SAAS_URL}/api/webhook/recall`,
-          partial_results: false,
+        recording_config: {
+          transcript: {
+            provider: {
+              meeting_captions: {},
+            },
+          },
+          realtime_endpoints: [
+            {
+              type: "webhook",
+              url: `${process.env.NEXT_PUBLIC_TUNNEL_URL || process.env.NEXT_PUBLIC_SAAS_URL}/api/webhook/recall`,
+              events: ["transcript.data"],
+            },
+          ],
         },
       }),
     });
