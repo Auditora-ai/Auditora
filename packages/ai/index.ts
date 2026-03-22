@@ -7,8 +7,8 @@ export const imageModel = openai("dall-e-3");
 export const audioModel = openai("whisper-1");
 
 // Prozea AI models
-export const processExtractionModel = anthropic("claude-sonnet-4-5-20250514");
-export const teleprompterModel = anthropic("claude-sonnet-4-5-20250514");
+export const processExtractionModel = anthropic("claude-sonnet-4-6-20250514");
+export const teleprompterModel = anthropic("claude-sonnet-4-6-20250514");
 
 // Re-export AI SDK
 export * from "ai";
