@@ -103,7 +103,9 @@ export async function generateNextQuestion(
   });
 
   try {
-    const result = JSON.parse(text) as TeleprompterResult;
+    // Strip markdown code fences if present
+    const cleaned = text.replace(/^```json\s*/i, "").replace(/```\s*$/i, "").trim();
+    const result = JSON.parse(cleaned) as TeleprompterResult;
 
     if (!result.nextQuestion) {
       throw new Error("Missing nextQuestion");

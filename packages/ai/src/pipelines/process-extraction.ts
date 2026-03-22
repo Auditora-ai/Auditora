@@ -106,7 +106,9 @@ export async function extractProcessUpdates(
   });
 
   try {
-    const result = JSON.parse(text) as ExtractionResult;
+    // Strip markdown code fences if present
+    const cleaned = text.replace(/^```json\s*/i, "").replace(/```\s*$/i, "").trim();
+    const result = JSON.parse(cleaned) as ExtractionResult;
 
     // Validate structure
     if (!Array.isArray(result.newNodes)) result.newNodes = [];
