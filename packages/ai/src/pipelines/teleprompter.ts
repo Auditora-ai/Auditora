@@ -90,7 +90,7 @@ export async function generateNextQuestion(
   }
 
   const { text } = await generateText({
-    model: anthropic("claude-sonnet-4-6-20250514"),
+    model: anthropic("claude-sonnet-4-6"),
     system: TELEPROMPTER_SYSTEM,
     prompt: TELEPROMPTER_USER(
       sessionType,

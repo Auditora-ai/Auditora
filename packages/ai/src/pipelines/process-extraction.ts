@@ -98,7 +98,7 @@ export async function extractProcessUpdates(
   }));
 
   const { text } = await generateText({
-    model: anthropic("claude-sonnet-4-6-20250514"),
+    model: anthropic("claude-sonnet-4-6"),
     system: PROCESS_EXTRACTION_SYSTEM,
     prompt: PROCESS_EXTRACTION_USER(nodesForPrompt, transcriptText),
     maxTokens: 1024,
