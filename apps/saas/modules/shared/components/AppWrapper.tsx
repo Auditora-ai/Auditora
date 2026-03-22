@@ -4,6 +4,7 @@ import { config } from "@config";
 import { cn } from "@repo/ui";
 import type { PropsWithChildren } from "react";
 import { SidebarProvider, useSidebar } from "../lib/sidebar-context";
+import { CommandPalette } from "./CommandPalette";
 import { NavBar } from "./NavBar";
 
 function AppContent({ children }: PropsWithChildren) {
@@ -13,6 +14,7 @@ function AppContent({ children }: PropsWithChildren) {
 	return (
 		<div className="bg-background">
 			<NavBar />
+			<CommandPalette />
 			<div
 				className={cn("flex min-h-screen", {
 					"md:ml-[280px]": useSidebarLayout && !isCollapsed,

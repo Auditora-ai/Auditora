@@ -46,6 +46,7 @@ export function DiagramEditor({
 	const [gridEnabled, setGridEnabled] = useState(false);
 	const [showShortcuts, setShowShortcuts] = useState(false);
 	const [saving, setSaving] = useState(false);
+	const [initError, setInitError] = useState<string | null>(null);
 
 	// Initialize Modeler
 	useEffect(() => {
@@ -55,48 +56,53 @@ export function DiagramEditor({
 		async function init() {
 			if (!containerRef.current) return;
 
-			const BpmnModeler = (await import("bpmn-js/lib/Modeler")).default;
-			if (destroyed) return;
-
-			const additionalModules: any[] = [];
 			try {
-				const minimapModule = (await import("diagram-js-minimap"))
-					.default;
-				additionalModules.push(minimapModule);
-			} catch {
-				// minimap not available
-			}
+				const BpmnModeler = (await import("bpmn-js/lib/Modeler")).default;
+				if (destroyed) return;
 
-			modeler = new BpmnModeler({
-				container: containerRef.current,
-				additionalModules,
-			});
-			modelerRef.current = modeler;
-
-			// Import existing diagram
-			const xml =
-				bpmnXml ||
-				(nodes.length > 0 ? buildBpmnXml(nodes) : emptyBpmnXml());
-			try {
-				await modeler.importXML(xml);
-				if (destroyed) {
-					modeler.destroy();
-					return;
+				const additionalModules: any[] = [];
+				try {
+					const minimapModule = (await import("diagram-js-minimap"))
+						.default;
+					additionalModules.push(minimapModule);
+				} catch {
+					// minimap not available
 				}
-				modeler.get("canvas").zoom("fit-viewport", "auto");
+
+				modeler = new BpmnModeler({
+					container: containerRef.current,
+					additionalModules,
+				});
+				modelerRef.current = modeler;
+
+				// Import existing diagram
+				const xml =
+					bpmnXml ||
+					(nodes.length > 0 ? buildBpmnXml(nodes) : emptyBpmnXml());
+				try {
+					await modeler.importXML(xml);
+					if (destroyed) {
+						modeler.destroy();
+						return;
+					}
+					modeler.get("canvas").zoom("fit-viewport", "auto");
+				} catch (err) {
+					console.error("[DiagramEditor] Import failed:", err);
+				}
+
+				// Track undo/redo state
+				const commandStack = modeler.get("commandStack");
+				const eventBus = modeler.get("eventBus");
+				eventBus.on("commandStack.changed", () => {
+					setCanUndo(commandStack.canUndo());
+					setCanRedo(commandStack.canRedo());
+				});
+
+				setIsReady(true);
 			} catch (err) {
-				console.error("[DiagramEditor] Import failed:", err);
+				console.error("[DiagramEditor] Initialization failed:", err);
+				setInitError("No se pudo cargar el editor de diagramas.");
 			}
-
-			// Track undo/redo state
-			const commandStack = modeler.get("commandStack");
-			const eventBus = modeler.get("eventBus");
-			eventBus.on("commandStack.changed", () => {
-				setCanUndo(commandStack.canUndo());
-				setCanRedo(commandStack.canRedo());
-			});
-
-			setIsReady(true);
 		}
 
 		init();
@@ -218,15 +224,29 @@ export function DiagramEditor({
 				onShowShortcuts={() => setShowShortcuts(true)}
 			/>
 
-			{/* Canvas */}
-			<div className="relative flex-1">
+			{/* Canvas — always white per dual-temperature UI */}
+			<div className="relative flex-1 bg-white">
 				<div
 					ref={containerRef}
 					className="bpmn-editor-canvas absolute inset-0"
 				/>
-				{!isReady && (
+				{!isReady && !initError && (
 					<div className="absolute inset-0 flex items-center justify-center bg-white">
 						<div className="h-16 w-16 animate-pulse rounded-lg bg-gray-100" />
+					</div>
+				)}
+				{initError && (
+					<div className="absolute inset-0 flex items-center justify-center bg-white">
+						<div className="text-center">
+							<p className="text-sm font-medium text-red-600">{initError}</p>
+							<button
+								type="button"
+								onClick={onClose}
+								className="mt-3 rounded-md border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground hover:bg-accent"
+							>
+								Cerrar
+							</button>
+						</div>
 					</div>
 				)}
 			</div>

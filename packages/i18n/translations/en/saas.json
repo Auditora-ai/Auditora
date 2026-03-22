@@ -78,7 +78,9 @@
 			"analytics": "Analytics",
 			"clients": "Clients",
 			"sessions": "Sessions",
-			"start": "Start"
+			"start": "Start",
+			"dashboard": "Dashboard",
+			"processes": "Processes"
 		},
 		"userMenu": {
 			"accountSettings": "Account settings",
@@ -564,6 +566,72 @@
 	"start": {
 		"subtitle": "See the latest stats of your awesome business.",
 		"welcome": "Welcome {name}!"
+	},
+	"dashboard": {
+		"title": "Dashboard",
+		"subtitle": "Your client engagement overview",
+		"sessionsThisMonth": "Sessions This Month",
+		"processesMapped": "Processes Mapped",
+		"aiAccuracy": "AI Accuracy",
+		"recentActivity": "Recent Activity",
+		"newSession": "New Session",
+		"projects": "Projects",
+		"engagementProgress": "Engagement Progress",
+		"processesGoal": "{mapped} of {goal} processes",
+		"setGoal": "Set goal",
+		"noActivity": "No activity yet. Start a session to begin.",
+		"activity": {
+			"sessionCreated": "Session created",
+			"sessionEnded": "Session ended",
+			"processCreated": "Process created",
+			"nodesConfirmed": "{count} nodes confirmed"
+		}
+	},
+	"processLibrary": {
+		"title": "Process Library",
+		"subtitle": "All mapped business processes",
+		"search": "Search processes...",
+		"filterByStatus": "Filter by status",
+		"filterByLevel": "Filter by level",
+		"filterByProject": "Filter by project",
+		"allStatuses": "All statuses",
+		"allLevels": "All levels",
+		"allProjects": "All projects",
+		"empty": {
+			"title": "No processes mapped yet",
+			"description": "Schedule a discovery session to start mapping processes.",
+			"cta": "New Session"
+		},
+		"export": "Export BPMN",
+		"view": "View",
+		"share": "Share",
+		"versions": "{count} {count, plural, one {version} other {versions}}",
+		"nodes": "{count} {count, plural, one {node} other {nodes}}",
+		"sessions": "{count} {count, plural, one {session} other {sessions}}"
+	},
+	"commandPalette": {
+		"placeholder": "Search clients, processes, sessions...",
+		"newSession": "New Session",
+		"newClient": "New Client",
+		"noResults": "No results found",
+		"sections": {
+			"actions": "Actions",
+			"clients": "Clients",
+			"processes": "Processes",
+			"sessions": "Sessions"
+		}
+	},
+	"clientSelector": {
+		"title": "Your Clients",
+		"subtitle": "Select a client to view their engagement",
+		"newClient": "New Client",
+		"empty": {
+			"title": "No clients yet",
+			"description": "Create your first client to start consulting.",
+			"cta": "New Client"
+		},
+		"sessions": "{count} {count, plural, one {session} other {sessions}}",
+		"processes": "{count} {count, plural, one {process} other {processes}}"
 	},
 	"clients": {
 		"title": "Clients",

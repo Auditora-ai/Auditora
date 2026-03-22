@@ -13,8 +13,6 @@ import {
 } from "@repo/ui/components/tooltip";
 import { UserMenu } from "@shared/components/UserMenu";
 import {
-	BarChart3Icon,
-	Building2Icon,
 	ChevronRightIcon,
 	HomeIcon,
 	PanelLeftCloseIcon,
@@ -48,7 +46,7 @@ export function NavBar() {
 
 	const menuItems = [
 		{
-			label: t("app.menu.start"),
+			label: t("app.menu.dashboard"),
 			href: basePath,
 			icon: HomeIcon,
 			isActive: pathname === "/" || pathname === basePath,
@@ -56,30 +54,10 @@ export function NavBar() {
 		...(authConfig.organizations.enable && activeOrganization
 			? [
 					{
-						label: t("app.menu.clients"),
-						href: `${basePath}/clients`,
-						icon: Building2Icon,
-						isActive: pathname.startsWith(`${basePath}/clients`),
-					},
-				]
-			: []),
-		...(authConfig.organizations.enable && activeOrganization
-			? [
-					{
-						label: t("app.menu.sessions"),
-						href: `${basePath}/sessions`,
+						label: t("app.menu.processes"),
+						href: `${basePath}/procesos`,
 						icon: WorkflowIcon,
-						isActive: pathname.startsWith(`${basePath}/sessions`) || pathname.startsWith(`${basePath}/session/`),
-					},
-				]
-			: []),
-		...(authConfig.organizations.enable && activeOrganization
-			? [
-					{
-						label: t("app.menu.analytics"),
-						href: `${basePath}/analytics`,
-						icon: BarChart3Icon,
-						isActive: pathname.startsWith(`${basePath}/analytics`),
+						isActive: pathname.startsWith(`${basePath}/procesos`),
 					},
 				]
 			: []),

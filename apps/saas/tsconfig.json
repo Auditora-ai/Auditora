@@ -17,7 +17,9 @@
 			"@sessions/*": ["./modules/sessions/*"],
 			"@clients/*": ["./modules/clients/*"],
 			"@projects/*": ["./modules/projects/*"],
-			"@documents/*": ["./modules/documents/*"]
+			"@documents/*": ["./modules/documents/*"],
+			"@dashboard/*": ["./modules/dashboard/*"],
+			"@process-library/*": ["./modules/process-library/*"]
 		}
 	},
 	"include": [

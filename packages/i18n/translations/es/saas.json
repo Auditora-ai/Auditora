@@ -78,7 +78,9 @@
 			"analytics": "Analíticas",
 			"clients": "Clientes",
 			"sessions": "Sesiones",
-			"start": "Inicio"
+			"start": "Inicio",
+			"dashboard": "Panel",
+			"processes": "Procesos"
 		},
 		"userMenu": {
 			"accountSettings": "Configuración de cuenta",
@@ -564,6 +566,72 @@
 	"start": {
 		"subtitle": "Consulta las últimas estadísticas de tu negocio.",
 		"welcome": "¡Bienvenido {name}!"
+	},
+	"dashboard": {
+		"title": "Panel",
+		"subtitle": "Resumen del engagement con tu cliente",
+		"sessionsThisMonth": "Sesiones Este Mes",
+		"processesMapped": "Procesos Mapeados",
+		"aiAccuracy": "Precisión IA",
+		"recentActivity": "Actividad Reciente",
+		"newSession": "Nueva Sesión",
+		"projects": "Proyectos",
+		"engagementProgress": "Progreso del Engagement",
+		"processesGoal": "{mapped} de {goal} procesos",
+		"setGoal": "Establecer meta",
+		"noActivity": "Sin actividad aún. Inicia una sesión para comenzar.",
+		"activity": {
+			"sessionCreated": "Sesión creada",
+			"sessionEnded": "Sesión finalizada",
+			"processCreated": "Proceso creado",
+			"nodesConfirmed": "{count} nodos confirmados"
+		}
+	},
+	"processLibrary": {
+		"title": "Biblioteca de Procesos",
+		"subtitle": "Todos los procesos de negocio mapeados",
+		"search": "Buscar procesos...",
+		"filterByStatus": "Filtrar por estado",
+		"filterByLevel": "Filtrar por nivel",
+		"filterByProject": "Filtrar por proyecto",
+		"allStatuses": "Todos los estados",
+		"allLevels": "Todos los niveles",
+		"allProjects": "Todos los proyectos",
+		"empty": {
+			"title": "Aún no hay procesos mapeados",
+			"description": "Programa una sesión de descubrimiento para empezar a mapear procesos.",
+			"cta": "Nueva Sesión"
+		},
+		"export": "Exportar BPMN",
+		"view": "Ver",
+		"share": "Compartir",
+		"versions": "{count} {count, plural, one {versión} other {versiones}}",
+		"nodes": "{count} {count, plural, one {nodo} other {nodos}}",
+		"sessions": "{count} {count, plural, one {sesión} other {sesiones}}"
+	},
+	"commandPalette": {
+		"placeholder": "Buscar clientes, procesos, sesiones...",
+		"newSession": "Nueva Sesión",
+		"newClient": "Nuevo Cliente",
+		"noResults": "Sin resultados",
+		"sections": {
+			"actions": "Acciones",
+			"clients": "Clientes",
+			"processes": "Procesos",
+			"sessions": "Sesiones"
+		}
+	},
+	"clientSelector": {
+		"title": "Tus Clientes",
+		"subtitle": "Selecciona un cliente para ver su engagement",
+		"newClient": "Nuevo Cliente",
+		"empty": {
+			"title": "Aún no hay clientes",
+			"description": "Crea tu primer cliente para empezar a consultar.",
+			"cta": "Nuevo Cliente"
+		},
+		"sessions": "{count} {count, plural, one {sesión} other {sesiones}}",
+		"processes": "{count} {count, plural, one {proceso} other {procesos}}"
 	},
 	"clients": {
 		"title": "Clientes",

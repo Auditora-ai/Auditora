@@ -75,7 +75,9 @@
 			"admin": "Admin",
 			"aiChatbot": "Chatbot IA",
 			"organizationSettings": "Paramètres de l'organisation",
-			"start": "Démarrage"
+			"start": "Démarrage",
+			"dashboard": "Tableau de bord",
+			"processes": "Processus"
 		},
 		"userMenu": {
 			"accountSettings": "Paramètres du compte",
@@ -559,6 +561,72 @@
 	"start": {
 		"subtitle": "Consultez les dernières statistiques de votre entreprise.",
 		"welcome": "Bienvenue {name} !"
+	},
+	"dashboard": {
+		"title": "Tableau de bord",
+		"subtitle": "Aperçu de l'engagement client",
+		"sessionsThisMonth": "Sessions ce mois",
+		"processesMapped": "Processus cartographiés",
+		"aiAccuracy": "Précision IA",
+		"recentActivity": "Activité récente",
+		"newSession": "Nouvelle session",
+		"projects": "Projets",
+		"engagementProgress": "Progression de l'engagement",
+		"processesGoal": "{mapped} sur {goal} processus",
+		"setGoal": "Définir l'objectif",
+		"noActivity": "Aucune activité. Démarrez une session pour commencer.",
+		"activity": {
+			"sessionCreated": "Session créée",
+			"sessionEnded": "Session terminée",
+			"processCreated": "Processus créé",
+			"nodesConfirmed": "{count} nœuds confirmés"
+		}
+	},
+	"processLibrary": {
+		"title": "Bibliothèque de processus",
+		"subtitle": "Tous les processus métier cartographiés",
+		"search": "Rechercher des processus...",
+		"filterByStatus": "Filtrer par statut",
+		"filterByLevel": "Filtrer par niveau",
+		"filterByProject": "Filtrer par projet",
+		"allStatuses": "Tous les statuts",
+		"allLevels": "Tous les niveaux",
+		"allProjects": "Tous les projets",
+		"empty": {
+			"title": "Aucun processus cartographié",
+			"description": "Planifiez une session de découverte pour commencer la cartographie.",
+			"cta": "Nouvelle session"
+		},
+		"export": "Exporter BPMN",
+		"view": "Voir",
+		"share": "Partager",
+		"versions": "{count} {count, plural, one {version} other {versions}}",
+		"nodes": "{count} {count, plural, one {nœud} other {nœuds}}",
+		"sessions": "{count} {count, plural, one {session} other {sessions}}"
+	},
+	"commandPalette": {
+		"placeholder": "Rechercher clients, processus, sessions...",
+		"newSession": "Nouvelle session",
+		"newClient": "Nouveau client",
+		"noResults": "Aucun résultat",
+		"sections": {
+			"actions": "Actions",
+			"clients": "Clients",
+			"processes": "Processus",
+			"sessions": "Sessions"
+		}
+	},
+	"clientSelector": {
+		"title": "Vos clients",
+		"subtitle": "Sélectionnez un client pour voir son engagement",
+		"newClient": "Nouveau client",
+		"empty": {
+			"title": "Pas encore de clients",
+			"description": "Créez votre premier client pour commencer le conseil.",
+			"cta": "Nouveau client"
+		},
+		"sessions": "{count} {count, plural, one {session} other {sessions}}",
+		"processes": "{count} {count, plural, one {processus} other {processus}}"
 	},
 	"common": {
 		"confirmation": {
