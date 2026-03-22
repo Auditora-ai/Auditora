@@ -1,10 +1,19 @@
 /**
  * Recall.ai Webhook Handler
  *
- * Receives real-time transcription events from Recall.ai and:
- * 1. Logs the raw payload for debugging
- * 2. Stores the transcript entry in the database
- * 3. Triggers the AI process extraction pipeline (throttled)
+ * Actual payload format from Recall.ai (transcript.data event):
+ * {
+ *   "event": "transcript.data",
+ *   "data": {
+ *     "data": {
+ *       "words": [{ "text": "Hello", "start_timestamp": { "relative": 1.23 } }],
+ *       "language_code": "en-US",
+ *       "participant": { "id": 100, "name": "Oscar Nuñez" }
+ *     },
+ *     "transcript": { "id": "..." },
+ *     "bot_id": "..."
+ *   }
+ * }
  */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -14,68 +23,85 @@ export async function POST(request: NextRequest) {
 	try {
 		const payload = await request.json();
 
-		// Log EVERY webhook call for debugging
-		console.log("[Recall Webhook] Received:", JSON.stringify(payload).substring(0, 500));
+		console.log(
+			"[Recall Webhook] Event:",
+			payload?.event,
+			"Bot:",
+			payload?.data?.bot_id,
+		);
 
-		// Recall.ai sends different event types - extract transcript data
-		const transcriptData = payload?.data?.transcript;
-		const botId = payload?.data?.bot_id || payload?.bot_id;
-
-		if (!transcriptData) {
-			console.log("[Recall Webhook] No transcript data in payload, event type:", payload?.event);
+		// Only process transcript.data events
+		if (payload?.event !== "transcript.data") {
+			console.log("[Recall Webhook] Non-transcript event, skipping");
 			return NextResponse.json({ ok: true });
 		}
 
-		// Extract text from transcript
-		const speaker = transcriptData.speaker || transcriptData.participant_name || "Unknown";
-		const text = transcriptData.words
-			? transcriptData.words.map((w: any) => w.text).join(" ")
-			: transcriptData.text || "";
-		const timestamp = transcriptData.words?.[0]?.start_time
-			? Number.parseFloat(transcriptData.words[0].start_time)
-			: Date.now() / 1000;
+		// Extract from the ACTUAL Recall.ai payload structure
+		const wordsData = payload?.data?.data?.words;
+		const participant = payload?.data?.data?.participant;
+		const botId = payload?.data?.bot_id;
 
-		if (!text.trim()) {
-			console.log("[Recall Webhook] Empty transcript text, skipping");
+		if (!wordsData || wordsData.length === 0) {
+			console.log("[Recall Webhook] No words in payload");
+			return NextResponse.json({ ok: true });
+		}
+
+		// Build text from words
+		const text = wordsData.map((w: any) => w.text).join(" ").trim();
+		const speaker = participant?.name || "Unknown";
+		const timestamp =
+			wordsData[0]?.start_timestamp?.relative || Date.now() / 1000;
+
+		if (!text) {
+			console.log("[Recall Webhook] Empty text after joining words");
 			return NextResponse.json({ ok: true });
 		}
 
 		console.log(`[Recall Webhook] 📝 ${speaker}: "${text}"`);
 
 		// Find session by bot ID
-		if (botId) {
-			const session = await db.meetingSession.findFirst({
-				where: { recallBotId: botId },
-			});
-
-			if (session) {
-				// Update session status to ACTIVE if still CONNECTING
-				if (session.status === "CONNECTING") {
-					await db.meetingSession.update({
-						where: { id: session.id },
-						data: { status: "ACTIVE", startedAt: new Date() },
-					});
-					console.log(`[Recall Webhook] Session ${session.id} now ACTIVE`);
-				}
-
-				// Store transcript entry
-				await db.transcriptEntry.create({
-					data: {
-						sessionId: session.id,
-						speaker,
-						text,
-						timestamp,
-					},
-				});
-				console.log(`[Recall Webhook] Stored transcript for session ${session.id}`);
-			} else {
-				console.log(`[Recall Webhook] No session found for bot ${botId}`);
-			}
+		if (!botId) {
+			console.log("[Recall Webhook] No bot_id, can't match session");
+			return NextResponse.json({ ok: true });
 		}
+
+		const session = await db.meetingSession.findFirst({
+			where: { recallBotId: botId },
+		});
+
+		if (!session) {
+			console.log(`[Recall Webhook] No session for bot ${botId}`);
+			return NextResponse.json({ ok: true });
+		}
+
+		// Update session status to ACTIVE if still CONNECTING
+		if (session.status === "CONNECTING") {
+			await db.meetingSession.update({
+				where: { id: session.id },
+				data: { status: "ACTIVE", startedAt: new Date() },
+			});
+			console.log(
+				`[Recall Webhook] ✅ Session ${session.id} now ACTIVE`,
+			);
+		}
+
+		// Store transcript entry
+		await db.transcriptEntry.create({
+			data: {
+				sessionId: session.id,
+				speaker,
+				text,
+				timestamp,
+			},
+		});
+
+		console.log(
+			`[Recall Webhook] 💾 Stored: "${text.substring(0, 50)}..." for session ${session.id}`,
+		);
 
 		return NextResponse.json({ ok: true });
 	} catch (error) {
 		console.error("[Recall Webhook] Error:", error);
-		return NextResponse.json({ ok: true }); // Always 200 to avoid Recall.ai retries
+		return NextResponse.json({ ok: true });
 	}
 }
