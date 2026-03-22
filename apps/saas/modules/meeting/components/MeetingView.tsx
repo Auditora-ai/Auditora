@@ -11,13 +11,13 @@ import { StatusBar } from "./StatusBar";
  *
  * ┌─────────────┬──────────────────┬─────────────┐
  * │ TELEPROMPTER │   LIVE DIAGRAM   │ TRANSCRIPT  │
- * │ (dark, 22%) │   (light, 50%)   │ (dark, 28%) │
+ * │  (card)      │   (card)         │  (card)     │
  * ├─────────────┴──────────────────┴─────────────┤
- * │              STATUS BAR (dark)                │
+ * │              STATUS BAR                       │
  * └───────────────────────────────────────────────┘
  *
+ * Uses supastarter design tokens (bg-card, bg-background, border-border, etc.)
  * Polls /api/sessions/[id]/live-data every 3 seconds for transcript updates.
- * Will be replaced with Supabase Realtime in Phase 2.
  */
 
 type LayoutPreset = "balanced" | "diagram-focus" | "transcript-focus";
@@ -110,11 +110,8 @@ export function MeetingView({
 	}, [sessionId]);
 
 	useEffect(() => {
-		// Poll every 3 seconds
 		const interval = setInterval(fetchLiveData, 3000);
-		// Also fetch immediately
 		fetchLiveData();
-
 		return () => clearInterval(interval);
 	}, [fetchLiveData]);
 
@@ -162,12 +159,12 @@ export function MeetingView({
 	};
 
 	return (
-		<div className="flex h-screen flex-col bg-slate-950">
+		<div className="flex h-[calc(100vh-4rem)] flex-col overflow-hidden rounded-lg border border-border bg-background">
 			{/* Main 3-panel layout */}
 			<div className="flex flex-1 overflow-hidden">
-				{/* Left: Teleprompter (dark) */}
+				{/* Left: Teleprompter */}
 				<div
-					className="flex-shrink-0 border-r border-slate-800 bg-slate-900"
+					className="flex-shrink-0 border-r border-border bg-card"
 					style={{ width: currentLayout.left }}
 				>
 					<TeleprompterPanel
@@ -178,9 +175,9 @@ export function MeetingView({
 					/>
 				</div>
 
-				{/* Center: Live Diagram (light) */}
+				{/* Center: Live Diagram */}
 				<div
-					className="flex-1 bg-white"
+					className="flex-1 bg-card"
 					style={{ width: currentLayout.center }}
 				>
 					<DiagramPanel
@@ -191,9 +188,9 @@ export function MeetingView({
 					/>
 				</div>
 
-				{/* Right: Transcript (dark) */}
+				{/* Right: Transcript */}
 				<div
-					className="flex-shrink-0 border-l border-slate-800 bg-slate-900"
+					className="flex-shrink-0 border-l border-border bg-card"
 					style={{ width: currentLayout.right }}
 				>
 					<TranscriptPanel entries={transcript} />
