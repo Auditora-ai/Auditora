@@ -1,0 +1,41 @@
+import { getActiveOrganization } from "@auth/lib/server";
+import { PageHeader } from "@shared/components/PageHeader";
+import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
+import { NewSessionForm } from "@meeting/components/NewSessionForm";
+
+export async function generateMetadata() {
+	return {
+		title: "New Session",
+	};
+}
+
+export default async function NewSessionPage({
+	params,
+}: {
+	params: Promise<{ organizationSlug: string }>;
+}) {
+	const { organizationSlug } = await params;
+	const t = await getTranslations();
+
+	const activeOrganization = await getActiveOrganization(
+		organizationSlug as string,
+	);
+
+	if (!activeOrganization) {
+		return notFound();
+	}
+
+	return (
+		<div>
+			<PageHeader
+				title={t("sessions.new.title")}
+				subtitle={t("sessions.new.subtitle")}
+			/>
+
+			<div className="mt-6 max-w-2xl">
+				<NewSessionForm organizationSlug={organizationSlug} />
+			</div>
+		</div>
+	);
+}

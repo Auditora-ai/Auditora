@@ -568,6 +568,25 @@
 		"empty": {
 			"title": "Aún no hay sesiones",
 			"description": "Crea una nueva sesión para comenzar a mapear procesos de negocio durante tu próxima llamada."
+		},
+		"new": {
+			"title": "Nueva Sesión",
+			"subtitle": "Configura una nueva reunión de levantamiento de procesos",
+			"form": {
+				"meetingUrl": "URL de la reunión",
+				"meetingUrlPlaceholder": "https://zoom.us/j/... o https://meet.google.com/...",
+				"meetingUrlHint": "Pega el link de tu reunión de Zoom, Google Meet o Teams",
+				"clientName": "Nombre del cliente",
+				"clientNamePlaceholder": "Acme Corp",
+				"projectName": "Nombre del proyecto",
+				"projectNamePlaceholder": "Optimización de Procesos Q1",
+				"sessionType": "Tipo de sesión",
+				"sessionTypeHint": "Discovery mapea el panorama general del negocio. Deep Dive se enfoca en un proceso específico.",
+				"typeDiscovery": "Discovery — Panorama del negocio",
+				"typeDeepDive": "Deep Dive — Proceso específico",
+				"create": "Crear Sesión y Unirse a la Llamada",
+				"creating": "Conectando..."
+			}
 		}
 	},
 	"common": {

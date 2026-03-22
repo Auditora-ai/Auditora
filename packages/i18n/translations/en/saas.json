@@ -568,6 +568,25 @@
 		"empty": {
 			"title": "No sessions yet",
 			"description": "Create a new session to start mapping business processes during your next call."
+		},
+		"new": {
+			"title": "New Session",
+			"subtitle": "Set up a new process elicitation meeting",
+			"form": {
+				"meetingUrl": "Meeting URL",
+				"meetingUrlPlaceholder": "https://zoom.us/j/... or https://meet.google.com/...",
+				"meetingUrlHint": "Paste your Zoom, Google Meet, or Teams meeting link",
+				"clientName": "Client Name",
+				"clientNamePlaceholder": "Acme Corp",
+				"projectName": "Project Name",
+				"projectNamePlaceholder": "Process Optimization Q1",
+				"sessionType": "Session Type",
+				"sessionTypeHint": "Discovery maps the business overview. Deep Dive focuses on a specific process.",
+				"typeDiscovery": "Discovery — Business overview",
+				"typeDeepDive": "Deep Dive — Specific process",
+				"create": "Create Session & Join Call",
+				"creating": "Connecting..."
+			}
 		}
 	},
 	"common": {
