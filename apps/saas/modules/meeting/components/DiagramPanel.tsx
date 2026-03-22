@@ -1,8 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { Button } from "@repo/ui";
-import { CheckIcon, XIcon } from "lucide-react";
+import { useEffect, useRef, useCallback, useState } from "react";
+import { buildBpmnXml } from "../lib/bpmn-builder";
+
+// bpmn-js requires these CSS files for proper rendering
+import "bpmn-js/dist/assets/diagram-js.css";
+import "bpmn-js/dist/assets/bpmn-js.css";
+import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
 
 interface DiagramNode {
 	id: string;
@@ -20,22 +24,125 @@ interface DiagramPanelProps {
 	sessionType: "DISCOVERY" | "DEEP_DIVE";
 }
 
-/**
- * DiagramPanel — Renders BPMN nodes as a simple flow diagram
- *
- * Uses a clean card-based layout instead of raw bpmn-js embed
- * to feel native to the supastarter design system.
- * Each node is a card with confirm/reject actions.
- *
- * bpmn-js will be used for export (XML/PNG) but the live view
- * uses this custom renderer for better UX integration.
- */
 export function DiagramPanel({
 	nodes,
 	onConfirmNode,
 	onRejectNode,
 	sessionType,
 }: DiagramPanelProps) {
+	const containerRef = useRef<HTMLDivElement>(null);
+	const viewerRef = useRef<any>(null);
+	const [isReady, setIsReady] = useState(false);
+	const lastXmlRef = useRef<string>("");
+
+	// Initialize bpmn-js Viewer
+	useEffect(() => {
+		let viewer: any;
+
+		async function init() {
+			if (!containerRef.current) return;
+
+			// Use NavigatedViewer for pan/zoom without editing tools
+			const BpmnViewer = (await import("bpmn-js/lib/NavigatedViewer")).default;
+
+			viewer = new BpmnViewer({
+				container: containerRef.current,
+			});
+
+			viewerRef.current = viewer;
+			setIsReady(true);
+		}
+
+		init();
+
+		return () => {
+			viewer?.destroy();
+			viewerRef.current = null;
+		};
+	}, []);
+
+	// Update diagram when nodes change
+	const updateDiagram = useCallback(async () => {
+		const viewer = viewerRef.current;
+		if (!viewer || !isReady) return;
+
+		const visibleNodes = nodes.filter((n) => n.state !== "rejected");
+		const xml = buildBpmnXml(visibleNodes);
+
+		// Skip if XML hasn't changed
+		if (xml === lastXmlRef.current) return;
+		lastXmlRef.current = xml;
+
+		try {
+			await viewer.importXML(xml);
+
+			// Fit diagram to viewport
+			const canvas = viewer.get("canvas");
+			canvas.zoom("fit-viewport", "auto");
+
+			// Apply visual styling per node state
+			const elementRegistry = viewer.get("elementRegistry");
+			const overlays = viewer.get("overlays");
+
+			// Clear existing overlays
+			overlays.clear();
+
+			for (const node of nodes) {
+				const element = elementRegistry.get(node.id);
+				if (!element) continue;
+
+				const gfx = elementRegistry.getGraphics(node.id);
+				if (!gfx) continue;
+
+				if (node.state === "forming") {
+					// Dashed border + amber tint for forming nodes
+					const visual = gfx.querySelector(".djs-visual rect, .djs-visual polygon, .djs-visual circle");
+					if (visual) {
+						visual.setAttribute("stroke", "#d97706");
+						visual.setAttribute("stroke-dasharray", "5,5");
+						visual.setAttribute("fill", "#fffbeb");
+					}
+
+					// Add confirm/reject overlay
+					const html = document.createElement("div");
+					html.innerHTML = `
+						<div style="display:flex;gap:4px;padding:4px;background:white;border-radius:6px;border:1px solid #e5e5e5;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+							<button data-action="confirm" data-node-id="${node.id}" style="padding:2px 8px;font-size:11px;background:#39a561;color:white;border:none;border-radius:4px;cursor:pointer;">✓ Confirm</button>
+							<button data-action="reject" data-node-id="${node.id}" style="padding:2px 8px;font-size:11px;background:#ef4444;color:white;border:none;border-radius:4px;cursor:pointer;">✗ Reject</button>
+						</div>
+					`;
+
+					html.addEventListener("click", (e) => {
+						const target = e.target as HTMLElement;
+						const action = target.getAttribute("data-action");
+						const nodeId = target.getAttribute("data-node-id");
+						if (action === "confirm" && nodeId) onConfirmNode(nodeId);
+						if (action === "reject" && nodeId) onRejectNode(nodeId);
+					});
+
+					overlays.add(node.id, "node-actions", {
+						position: { bottom: -8, left: 0 },
+						html,
+					});
+				} else if (node.state === "confirmed") {
+					// Solid green border for confirmed
+					const visual = gfx.querySelector(".djs-visual rect, .djs-visual polygon, .djs-visual circle");
+					if (visual) {
+						visual.setAttribute("stroke", "#39a561");
+						visual.setAttribute("stroke-width", "2");
+						visual.setAttribute("fill", "#f0fdf4");
+					}
+				}
+			}
+		} catch (err) {
+			console.error("[DiagramPanel] Failed to render BPMN:", err);
+		}
+	}, [nodes, isReady, onConfirmNode, onRejectNode]);
+
+	useEffect(() => {
+		updateDiagram();
+	}, [updateDiagram]);
+
 	const visibleNodes = nodes.filter((n) => n.state !== "rejected");
 
 	return (
@@ -61,10 +168,13 @@ export function DiagramPanel({
 				)}
 			</div>
 
-			{/* Diagram canvas */}
-			<div className="flex-1 overflow-y-auto bg-card p-6">
-				{visibleNodes.length === 0 ? (
-					<div className="flex h-full items-center justify-center">
+			{/* BPMN Canvas */}
+			<div className="relative flex-1">
+				<div ref={containerRef} className="h-full w-full bg-card" />
+
+				{/* Empty state — shown when no nodes */}
+				{visibleNodes.length === 0 && (
+					<div className="absolute inset-0 flex items-center justify-center bg-card">
 						<div className="text-center">
 							<div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/5">
 								<svg className="h-8 w-8 text-primary/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -77,110 +187,9 @@ export function DiagramPanel({
 									: "Describe the process to begin diagramming"}
 							</p>
 							<p className="mt-2 text-sm text-muted-foreground/60">
-								Nodes will appear as process steps are discussed
+								BPMN diagram will build as process steps are discussed
 							</p>
 						</div>
-					</div>
-				) : (
-					<div className="mx-auto max-w-lg space-y-3">
-						{/* Start indicator */}
-						<div className="flex justify-center">
-							<div className="flex h-8 w-8 items-center justify-center rounded-full bg-success text-success-foreground">
-								<svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-									<circle cx="12" cy="12" r="8" />
-								</svg>
-							</div>
-						</div>
-
-						{visibleNodes.map((node, index) => (
-							<div key={node.id}>
-								{/* Connector line */}
-								<div className="flex justify-center py-1">
-									<div className="h-6 w-px bg-border" />
-								</div>
-
-								{/* Node card */}
-								<div
-									className={`relative rounded-lg border p-4 transition-all ${
-										node.state === "forming"
-											? "border-dashed border-amber-500/50 bg-amber-500/5 animate-pulse"
-											: "border-border bg-card shadow-sm"
-									}`}
-								>
-									{/* Node type badge */}
-									<div className="mb-2 flex items-center justify-between">
-										<span className="rounded bg-accent px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground uppercase">
-											{node.type === "exclusivegateway" || node.type === "exclusive_gateway"
-												? "Decision"
-												: node.type === "startevent" || node.type === "start_event"
-													? "Start"
-													: node.type === "endevent" || node.type === "end_event"
-														? "End"
-														: "Task"}
-										</span>
-										{node.lane && (
-											<span className="text-[10px] text-muted-foreground">
-												{node.lane}
-											</span>
-										)}
-									</div>
-
-									{/* Node label */}
-									<p className="text-sm font-medium text-foreground">
-										{node.label}
-									</p>
-
-									{/* Actions for forming nodes */}
-									{node.state === "forming" && (
-										<div className="mt-3 flex items-center gap-2">
-											<Button
-												size="sm"
-												variant="default"
-												onClick={() => onConfirmNode(node.id)}
-												className="h-7 bg-success px-3 text-xs text-success-foreground hover:bg-success/90"
-											>
-												<CheckIcon className="mr-1 h-3 w-3" />
-												Confirm
-											</Button>
-											<Button
-												size="sm"
-												variant="destructive"
-												onClick={() => onRejectNode(node.id)}
-												className="h-7 px-3 text-xs"
-											>
-												<XIcon className="mr-1 h-3 w-3" />
-												Reject
-											</Button>
-											<span className="ml-auto text-[10px] text-muted-foreground">
-												Auto-confirms in 10s
-											</span>
-										</div>
-									)}
-
-									{/* Confirmed indicator */}
-									{node.state === "confirmed" && (
-										<div className="mt-2 flex items-center gap-1 text-[10px] text-success">
-											<CheckIcon className="h-3 w-3" />
-											Confirmed
-										</div>
-									)}
-								</div>
-							</div>
-						))}
-
-						{/* End indicator (only if we have confirmed nodes) */}
-						{nodes.some((n) => n.state === "confirmed") && (
-							<>
-								<div className="flex justify-center py-1">
-									<div className="h-6 w-px bg-border" />
-								</div>
-								<div className="flex justify-center">
-									<div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-foreground/20">
-										<div className="h-4 w-4 rounded-full border-2 border-foreground/20" />
-									</div>
-								</div>
-							</>
-						)}
 					</div>
 				)}
 			</div>
