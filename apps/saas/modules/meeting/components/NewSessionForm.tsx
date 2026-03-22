@@ -24,10 +24,12 @@ export function NewSessionForm({
 	const t = useTranslations();
 	const router = useRouter();
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [error, setError] = useState<string | null>(null);
 
 	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 		setIsSubmitting(true);
+		setError(null);
 
 		const formData = new FormData(e.currentTarget);
 
@@ -36,22 +38,24 @@ export function NewSessionForm({
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
-					meetingUrl: formData.get("sessions.new.form.meetingUrl"),
-					clientName: formData.get("sessions.new.form.clientName"),
-					projectName: formData.get("sessions.new.form.projectName"),
-					sessionType: formData.get("sessions.new.form.sessionType"),
-					projectId: "temp", // TODO: create/select project
+					meetingUrl: formData.get("meetingUrl"),
+					clientName: formData.get("clientName"),
+					projectName: formData.get("projectName"),
+					sessionType: formData.get("sessionType"),
 				}),
 			});
 
+			const data = await res.json();
+
 			if (res.ok) {
-				const data = await res.json();
 				router.push(
 					`/${organizationSlug}/session/${data.sessionId}/live`,
 				);
+			} else {
+				setError(data.error || "Something went wrong");
 			}
-		} catch (error) {
-			console.error("Failed to create session:", error);
+		} catch (err) {
+			setError("Failed to connect. Please try again.");
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -60,6 +64,11 @@ export function NewSessionForm({
 	return (
 		<Card className="p-6">
 			<form onSubmit={handleSubmit} className="space-y-6">
+				{error && (
+					<div className="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+						{error}
+					</div>
+				)}
 				<div className="space-y-2">
 					<Label htmlFor="meetingUrl">{t("sessions.new.form.meetingUrl")}</Label>
 					<div className="relative">

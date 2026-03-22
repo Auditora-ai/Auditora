@@ -10,101 +10,123 @@ import { db } from "@repo/database";
 import { createCallBotProvider } from "@repo/ai";
 
 export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const { meetingUrl, projectId, sessionType, processDefinitionId } = body;
+	try {
+		const body = await request.json();
+		const { meetingUrl, clientName, projectName, sessionType } = body;
 
-    if (!meetingUrl || !projectId || !sessionType) {
-      return NextResponse.json(
-        { error: "meetingUrl, projectId, and sessionType are required" },
-        { status: 400 },
-      );
-    }
+		if (!meetingUrl || !clientName || !sessionType) {
+			return NextResponse.json(
+				{ error: "meetingUrl, clientName, and sessionType are required" },
+				{ status: 400 },
+			);
+		}
 
-    // TODO: Get authenticated user from better-auth session
-    // For now, use a placeholder
-    const userId = "placeholder-user-id";
+		// TODO: Get authenticated user + org from better-auth session
+		// For now, get first user and org from DB
+		const user = await db.user.findFirst();
+		const org = await db.organization.findFirst();
 
-    // Create session in DB
-    const session = await db.meetingSession.create({
-      data: {
-        type: sessionType,
-        status: "CONNECTING",
-        meetingUrl,
-        projectId,
-        processDefinitionId: processDefinitionId || null,
-        userId,
-      },
-    });
+		if (!user || !org) {
+			return NextResponse.json(
+				{ error: "No user or organization found. Please complete onboarding first." },
+				{ status: 400 },
+			);
+		}
 
-    // Join the meeting via call bot
-    try {
-      const callBot = createCallBotProvider();
-      const { botId } = await callBot.joinMeeting(meetingUrl);
+		// Find or create client
+		let client = await db.client.findFirst({
+			where: { name: clientName, organizationId: org.id },
+		});
+		if (!client) {
+			client = await db.client.create({
+				data: { name: clientName, organizationId: org.id },
+			});
+		}
 
-      await db.meetingSession.update({
-        where: { id: session.id },
-        data: {
-          recallBotId: botId,
-          recallBotStatus: "joining",
-          status: "CONNECTING",
-        },
-      });
+		// Find or create project
+		const projName = projectName || `${clientName} - Process Mapping`;
+		let project = await db.project.findFirst({
+			where: { name: projName, clientId: client.id },
+		});
+		if (!project) {
+			project = await db.project.create({
+				data: { name: projName, clientId: client.id },
+			});
+		}
 
-      return NextResponse.json({
-        sessionId: session.id,
-        botId,
-        shareToken: session.shareToken,
-        status: "connecting",
-      });
-    } catch (botError) {
-      // Bot failed to join — update session status
-      await db.meetingSession.update({
-        where: { id: session.id },
-        data: {
-          status: "FAILED",
-          recallBotStatus: `error: ${botError instanceof Error ? botError.message : "unknown"}`,
-        },
-      });
+		// Create session in DB
+		const session = await db.meetingSession.create({
+			data: {
+				type: sessionType,
+				status: "CONNECTING",
+				meetingUrl,
+				projectId: project.id,
+				userId: user.id,
+			},
+		});
 
-      return NextResponse.json(
-        {
-          error: "Failed to join meeting",
-          detail: botError instanceof Error ? botError.message : "Unknown error",
-          sessionId: session.id,
-        },
-        { status: 502 },
-      );
-    }
-  } catch (error) {
-    console.error("[Sessions API] Error creating session:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
-  }
+		// Join the meeting via call bot
+		try {
+			const callBot = createCallBotProvider();
+			const { botId } = await callBot.joinMeeting(meetingUrl);
+
+			await db.meetingSession.update({
+				where: { id: session.id },
+				data: {
+					recallBotId: botId,
+					recallBotStatus: "joining",
+				},
+			});
+
+			return NextResponse.json({
+				sessionId: session.id,
+				botId,
+				shareToken: session.shareToken,
+				status: "connecting",
+			});
+		} catch (botError) {
+			// Bot failed to join — keep session but mark status
+			await db.meetingSession.update({
+				where: { id: session.id },
+				data: {
+					status: "FAILED",
+					recallBotStatus: `error: ${botError instanceof Error ? botError.message : "unknown"}`,
+				},
+			});
+
+			return NextResponse.json(
+				{
+					error: "Failed to join meeting. Check your meeting URL and try again.",
+					detail: botError instanceof Error ? botError.message : "Unknown error",
+					sessionId: session.id,
+				},
+				{ status: 502 },
+			);
+		}
+	} catch (error) {
+		console.error("[Sessions API] Error creating session:", error);
+		return NextResponse.json(
+			{ error: "Internal server error" },
+			{ status: 500 },
+		);
+	}
 }
 
 export async function GET(request: NextRequest) {
-  try {
-    // TODO: Get authenticated user's organization
-    const searchParams = request.nextUrl.searchParams;
-    const projectId = searchParams.get("projectId");
+	try {
+		const sessions = await db.meetingSession.findMany({
+			include: {
+				project: { include: { client: true } },
+				processDefinition: true,
+				_count: { select: { diagramNodes: true, transcriptEntries: true } },
+			},
+			orderBy: { createdAt: "desc" },
+			take: 50,
+		});
 
-    const where: any = {};
-    if (projectId) where.projectId = projectId;
-
-    const sessions = await db.meetingSession.findMany({
-      where,
-      include: {
-        project: { include: { client: true } },
-        processDefinition: true,
-        _count: { select: { diagramNodes: true, transcriptEntries: true } },
-      },
-      orderBy: { createdAt: "desc" },
-      take: 50,
-    });
-
-    return NextResponse.json(sessions);
-  } catch (error) {
-    console.error("[Sessions API] Error listing sessions:", error);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
-  }
+		return NextResponse.json(sessions);
+	} catch (error) {
+		console.error("[Sessions API] Error listing sessions:", error);
+		return NextResponse.json({ error: "Internal error" }, { status: 500 });
+	}
 }
