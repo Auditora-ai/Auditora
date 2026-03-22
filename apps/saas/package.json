@@ -1,7 +1,6 @@
 {
 	"dependencies": {
 		"@ai-sdk/react": "catalog:",
-		"@repo/i18n": "workspace:*",
 		"@aws-sdk/client-s3": "catalog:",
 		"@bprogress/next": "^3.2.12",
 		"@hookform/resolvers": "catalog:",
@@ -12,6 +11,7 @@
 		"@repo/api": "workspace:*",
 		"@repo/auth": "workspace:*",
 		"@repo/database": "workspace:*",
+		"@repo/i18n": "workspace:*",
 		"@repo/logs": "workspace:*",
 		"@repo/mail": "workspace:*",
 		"@repo/payments": "workspace:*",
@@ -24,6 +24,7 @@
 		"ai": "catalog:",
 		"better-auth": "catalog:",
 		"boring-avatars": "catalog:",
+		"bpmn-js": "^18.13.1",
 		"class-variance-authority": "catalog:",
 		"clsx": "catalog:",
 		"cropperjs": "catalog:",
