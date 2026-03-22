@@ -62,7 +62,10 @@ export class RecallAiProvider implements CallBotProvider {
         recording_config: {
           transcript: {
             provider: {
-              meeting_captions: {},
+              deepgram: {
+                language: "es",
+                model: "nova-3",
+              },
             },
           },
           realtime_endpoints: [
