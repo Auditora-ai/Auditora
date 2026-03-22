@@ -40,6 +40,7 @@ model User {
   purchases                Purchase[]
   members                  Member[]
   twofactors               TwoFactor[]
+  meetingSessions          MeetingSession[]
 
   @@unique([email])
   @@unique([username])
@@ -144,6 +145,7 @@ model Organization {
   members            Member[]
   invitations        Invitation[]
   purchases          Purchase[]
+  clients            Client[]
 
   @@unique([slug])
   @@map("organization")
@@ -181,6 +183,222 @@ model Invitation {
   @@index([email])
   @@map("invitation")
 }
+
+// ============================================
+// PROZEA MODELS
+// ============================================
+
+enum SessionType {
+  DISCOVERY
+  DEEP_DIVE
+}
+
+enum SessionStatus {
+  SCHEDULED
+  CONNECTING
+  ACTIVE
+  ENDED
+  FAILED
+}
+
+enum NodeState {
+  FORMING
+  CONFIRMED
+  REJECTED
+  ARCHIVED
+}
+
+enum NodeType {
+  START_EVENT
+  END_EVENT
+  TASK
+  EXCLUSIVE_GATEWAY
+  PARALLEL_GATEWAY
+}
+
+model Client {
+  id             String       @id @default(cuid())
+  name           String
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  projects       Project[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([organizationId])
+  @@map("client")
+}
+
+model Project {
+  id        String          @id @default(cuid())
+  name      String
+  clientId  String
+  client    Client          @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  sessions  MeetingSession[]
+  architecture ProcessArchitecture?
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  @@index([clientId])
+  @@map("project")
+}
+
+model ProcessArchitecture {
+  id          String              @id @default(cuid())
+  projectId   String              @unique
+  project     Project             @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  definitions ProcessDefinition[]
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  @@map("process_architecture")
+}
+
+model ProcessDefinition {
+  id             String              @id @default(cuid())
+  architectureId String
+  architecture   ProcessArchitecture @relation(fields: [architectureId], references: [id], onDelete: Cascade)
+  name           String
+  description    String?
+  priority       Int                 @default(0)
+  sessions       MeetingSession[]
+  createdAt      DateTime            @default(now())
+
+  @@index([architectureId])
+  @@map("process_definition")
+}
+
+model MeetingSession {
+  id                  String            @id @default(cuid())
+  type                SessionType
+  status              SessionStatus     @default(SCHEDULED)
+  meetingUrl          String
+  projectId           String
+  project             Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  processDefinitionId String?
+  processDefinition   ProcessDefinition? @relation(fields: [processDefinitionId], references: [id])
+  userId              String
+  user                User              @relation(fields: [userId], references: [id])
+
+  // Call bot
+  recallBotId         String?
+  recallBotStatus     String?
+
+  // Timing
+  startedAt           DateTime?
+  endedAt             DateTime?
+
+  // BPMN data
+  bpmnXml             String?           @db.Text
+  diagramNodes        DiagramNode[]
+  transcriptEntries   TranscriptEntry[]
+  correctionLogs      CorrectionLog[]
+  teleprompterLogs    TeleprompterLog[]
+  sessionSummary      SessionSummary?
+
+  // Share
+  shareToken          String?           @unique @default(cuid())
+
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+
+  @@index([projectId])
+  @@index([userId])
+  @@index([shareToken])
+  @@map("meeting_session")
+}
+
+model DiagramNode {
+  id        String         @id @default(cuid())
+  sessionId String
+  session   MeetingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  nodeType  NodeType
+  label     String
+  state     NodeState      @default(FORMING)
+  lane      String?
+  positionX Float          @default(0)
+  positionY Float          @default(0)
+
+  // Connections stored as JSON array of target node IDs
+  connections String[]
+
+  // Timing
+  formedAt    DateTime     @default(now())
+  confirmedAt DateTime?
+  rejectedAt  DateTime?
+
+  // Parent reference for cascade rejection
+  parentId    String?
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([sessionId])
+  @@index([state])
+  @@map("diagram_node")
+}
+
+model TranscriptEntry {
+  id        String         @id @default(cuid())
+  sessionId String
+  session   MeetingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  speaker   String
+  text      String         @db.Text
+  timestamp Float
+  confidence Float?
+
+  createdAt DateTime       @default(now())
+
+  @@index([sessionId])
+  @@index([timestamp])
+  @@map("transcript_entry")
+}
+
+model CorrectionLog {
+  id        String         @id @default(cuid())
+  sessionId String
+  session   MeetingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  nodeId    String
+  action    String         // "confirm", "reject", "edit", "undo"
+  oldState  String?
+  newState  String?
+  oldLabel  String?
+  newLabel  String?
+  createdAt DateTime       @default(now())
+
+  @@index([sessionId])
+  @@map("correction_log")
+}
+
+model TeleprompterLog {
+  id        String         @id @default(cuid())
+  sessionId String
+  session   MeetingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  question  String         @db.Text
+  used      Boolean        @default(false)
+  skipped   Boolean        @default(false)
+  shownAt   DateTime       @default(now())
+
+  @@index([sessionId])
+  @@map("teleprompter_log")
+}
+
+model SessionSummary {
+  id          String         @id @default(cuid())
+  sessionId   String         @unique
+  session     MeetingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  summary     String         @db.Text
+  actionItems String[]
+  emailSentAt DateTime?
+
+  createdAt   DateTime       @default(now())
+
+  @@map("session_summary")
+}
+
+// ============================================
+// SUPASTARTER MODELS (existing)
+// ============================================
 
 enum PurchaseType {
   SUBSCRIPTION
