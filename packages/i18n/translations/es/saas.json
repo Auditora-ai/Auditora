@@ -561,6 +561,15 @@
 		"subtitle": "Consulta las últimas estadísticas de tu negocio.",
 		"welcome": "¡Bienvenido {name}!"
 	},
+	"sessions": {
+		"title": "Sesiones",
+		"subtitle": "Tus reuniones de levantamiento de procesos",
+		"newSession": "Nueva Sesión",
+		"empty": {
+			"title": "Aún no hay sesiones",
+			"description": "Crea una nueva sesión para comenzar a mapear procesos de negocio durante tu próxima llamada."
+		}
+	},
 	"common": {
 		"confirmation": {
 			"cancel": "Cancelar",

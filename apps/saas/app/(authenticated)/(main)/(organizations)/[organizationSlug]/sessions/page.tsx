@@ -1,72 +1,73 @@
 import { getActiveOrganization } from "@auth/lib/server";
 import { PageHeader } from "@shared/components/PageHeader";
+import { Button } from "@repo/ui";
+import { Card } from "@repo/ui/components/card";
+import { WorkflowIcon, PlusIcon } from "lucide-react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
-export const metadata = {
-  title: "Sessions — Prozea",
-};
+export async function generateMetadata() {
+	return {
+		title: "Sessions",
+	};
+}
 
 export default async function SessionsPage({
-  params,
+	params,
 }: {
-  params: Promise<{ organizationSlug: string }>;
+	params: Promise<{ organizationSlug: string }>;
 }) {
-  const { organizationSlug } = await params;
+	const { organizationSlug } = await params;
+	const t = await getTranslations();
 
-  const activeOrganization = await getActiveOrganization(
-    organizationSlug as string,
-  );
+	const activeOrganization = await getActiveOrganization(
+		organizationSlug as string,
+	);
 
-  if (!activeOrganization) {
-    return notFound();
-  }
+	if (!activeOrganization) {
+		return notFound();
+	}
 
-  // TODO: Fetch sessions from DB
-  const sessions: any[] = [];
+	// TODO: Fetch sessions from DB
+	const sessions: any[] = [];
 
-  return (
-    <div>
-      <PageHeader
-        title="Sessions"
-        subtitle="Your process elicitation meetings"
-      />
+	return (
+		<div>
+			<PageHeader
+				title={t("sessions.title")}
+				subtitle={t("sessions.subtitle")}
+			/>
 
-      <div className="mt-6">
-        {sessions.length === 0 ? (
-          <div className="rounded-lg border border-dashed border-slate-200 p-12 text-center">
-            <h3 className="font-serif text-xl text-slate-700">
-              Complete your first session to see results here
-            </h3>
-            <p className="mt-2 text-sm text-slate-500">
-              Create a new session to start mapping business processes during your next call.
-            </p>
-            <a
-              href={`/${organizationSlug}/session/new`}
-              className="mt-4 inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
-            >
-              New Session
-            </a>
-          </div>
-        ) : (
-          <div className="overflow-hidden rounded-lg border border-slate-200">
-            <table className="w-full text-left text-sm">
-              <thead className="border-b border-slate-200 bg-slate-50">
-                <tr>
-                  <th className="px-4 py-3 font-medium text-slate-500">Client</th>
-                  <th className="px-4 py-3 font-medium text-slate-500">Process</th>
-                  <th className="px-4 py-3 font-medium text-slate-500">Type</th>
-                  <th className="px-4 py-3 font-medium text-slate-500">Nodes</th>
-                  <th className="px-4 py-3 font-medium text-slate-500">Date</th>
-                  <th className="px-4 py-3 font-medium text-slate-500">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {/* Session rows will be rendered here */}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+			<div className="mt-6">
+				{sessions.length === 0 ? (
+					<Card>
+						<div className="flex flex-col items-center justify-center p-12 text-center">
+							<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+								<WorkflowIcon className="h-6 w-6 text-primary" />
+							</div>
+							<h3 className="text-lg font-semibold text-foreground">
+								{t("sessions.empty.title")}
+							</h3>
+							<p className="mt-2 max-w-sm text-sm text-muted-foreground">
+								{t("sessions.empty.description")}
+							</p>
+							<Button asChild className="mt-6">
+								<Link href={`/${organizationSlug}/sessions/new`}>
+									<PlusIcon className="mr-2 h-4 w-4" />
+									{t("sessions.newSession")}
+								</Link>
+							</Button>
+						</div>
+					</Card>
+				) : (
+					<Card>
+						<div className="flex h-64 items-center justify-center p-8 text-muted-foreground">
+							Session list will appear here
+						</div>
+					</Card>
+				)}
+			</div>
+		</div>
+	);
 }

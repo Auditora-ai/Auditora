@@ -561,6 +561,15 @@
 		"subtitle": "See the latest stats of your awesome business.",
 		"welcome": "Welcome {name}!"
 	},
+	"sessions": {
+		"title": "Sessions",
+		"subtitle": "Your process elicitation meetings",
+		"newSession": "New Session",
+		"empty": {
+			"title": "No sessions yet",
+			"description": "Create a new session to start mapping business processes during your next call."
+		}
+	},
 	"common": {
 		"confirmation": {
 			"cancel": "Cancel",
