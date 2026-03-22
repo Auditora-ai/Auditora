@@ -1,0 +1,36 @@
+{
+	"name": "supastarter-nextjs",
+	"private": true,
+	"scripts": {
+		"build": "dotenv -c -- turbo build",
+		"dev": "dotenv -c -- turbo dev --concurrency 15",
+		"type-check": "dotenv -c -- turbo type-check",
+		"start": "dotenv -c -- turbo start",
+		"lint": "biome lint",
+		"check": "biome check --write",
+		"clean": "turbo clean",
+		"format": "biome format --write"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"packageManager": "pnpm@10.28.2",
+	"devDependencies": {
+		"@biomejs/biome": "catalog:",
+		"@repo/tsconfig": "workspace:*",
+		"@types/node": "catalog:",
+		"dotenv-cli": "catalog:",
+		"turbo": "^2.8.17",
+		"typescript": "catalog:"
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"@prisma/client",
+			"@prisma/engines",
+			"@swc/core",
+			"prisma",
+			"prisma-zod-generator",
+			"sharp"
+		]
+	}
+}
