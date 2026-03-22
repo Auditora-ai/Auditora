@@ -42,7 +42,6 @@ export async function POST(request: NextRequest) {
 		// Extract from the ACTUAL Recall.ai payload structure
 		const wordsData = payload?.data?.data?.words;
 		const participant = payload?.data?.data?.participant;
-		const botId = payload?.data?.bot_id;
 
 		if (!wordsData || wordsData.length === 0) {
 			console.log("[Recall Webhook] No words in payload. Raw data keys:", Object.keys(payload?.data?.data || {}));
