@@ -1,23 +1,38 @@
+import { db } from "@repo/database";
 import { MeetingView } from "@meeting/components/MeetingView";
+import { notFound } from "next/navigation";
 
 export const metadata = {
-  title: "Live Session — Prozea",
+	title: "Live Session — Prozea",
 };
 
 export default async function LiveSessionPage({
-  params,
+	params,
 }: {
-  params: Promise<{ organizationSlug: string; sessionId: string }>;
+	params: Promise<{ organizationSlug: string; sessionId: string }>;
 }) {
-  const { sessionId } = await params;
+	const { sessionId } = await params;
 
-  // TODO: Fetch session from DB to get type and process name
-  // For now, render with defaults
-  return (
-    <MeetingView
-      sessionId={sessionId}
-      sessionType="DEEP_DIVE"
-      processName="Order Fulfillment"
-    />
-  );
+	const session = await db.meetingSession.findUnique({
+		where: { id: sessionId },
+		include: {
+			processDefinition: true,
+			project: { include: { client: true } },
+		},
+	});
+
+	if (!session) {
+		return notFound();
+	}
+
+	return (
+		<MeetingView
+			sessionId={session.id}
+			sessionType={session.type as "DISCOVERY" | "DEEP_DIVE"}
+			processName={session.processDefinition?.name}
+			clientName={session.project.client.name}
+			botId={session.recallBotId || undefined}
+			shareToken={session.shareToken || undefined}
+		/>
+	);
 }
