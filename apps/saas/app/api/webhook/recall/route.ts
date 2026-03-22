@@ -23,11 +23,14 @@ export async function POST(request: NextRequest) {
 	try {
 		const payload = await request.json();
 
+		// Log top-level keys to find bot_id location
 		console.log(
 			"[Recall Webhook] Event:",
 			payload?.event,
-			"Bot:",
-			payload?.data?.bot_id,
+			"Top keys:",
+			Object.keys(payload || {}),
+			"Data keys:",
+			Object.keys(payload?.data || {}),
 		);
 
 		// Only process transcript.data events
@@ -42,12 +45,18 @@ export async function POST(request: NextRequest) {
 		const botId = payload?.data?.bot_id;
 
 		if (!wordsData || wordsData.length === 0) {
-			console.log("[Recall Webhook] No words in payload");
+			console.log("[Recall Webhook] No words in payload. Raw data keys:", Object.keys(payload?.data?.data || {}));
 			return NextResponse.json({ ok: true });
 		}
 
-		// Build text from words
-		const text = wordsData.map((w: any) => w.text).join(" ").trim();
+		// Build text from words — filter out empty entries
+		const text = wordsData
+			.map((w: any) => w.text || w.word || "")
+			.filter((t: string) => t.trim())
+			.join(" ")
+			.trim();
+
+		console.log("[Recall Webhook] Words raw:", JSON.stringify(wordsData).substring(0, 200));
 		const speaker = participant?.name || "Unknown";
 		const timestamp =
 			wordsData[0]?.start_timestamp?.relative || Date.now() / 1000;
@@ -59,15 +68,26 @@ export async function POST(request: NextRequest) {
 
 		console.log(`[Recall Webhook] 📝 ${speaker}: "${text}"`);
 
-		// Find session by bot ID
-		if (!botId) {
-			console.log("[Recall Webhook] No bot_id, can't match session");
-			return NextResponse.json({ ok: true });
+		// bot_id is at payload.data.bot (object with id) or payload.data.bot_id
+		const botId = payload?.data?.bot?.id || payload?.data?.bot_id || payload?.bot_id;
+		console.log("[Recall Webhook] Bot ID:", botId);
+
+		let session;
+		if (botId) {
+			session = await db.meetingSession.findFirst({
+				where: { recallBotId: botId },
+			});
 		}
 
-		const session = await db.meetingSession.findFirst({
-			where: { recallBotId: botId },
-		});
+		// Fallback: find the most recent active or connecting session
+		if (!session) {
+			session = await db.meetingSession.findFirst({
+				where: {
+					status: { in: ["ACTIVE", "CONNECTING"] },
+				},
+				orderBy: { createdAt: "desc" },
+			});
+		}
 
 		if (!session) {
 			console.log(`[Recall Webhook] No session for bot ${botId}`);
