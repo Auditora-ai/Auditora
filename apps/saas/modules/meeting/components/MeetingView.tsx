@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { TeleprompterPanel } from "./TeleprompterPanel";
 import { DiagramPanel } from "./DiagramPanel";
 import { TranscriptPanel } from "./TranscriptPanel";
@@ -60,6 +61,7 @@ export function MeetingView({
 	clientName,
 	botId,
 }: MeetingViewProps) {
+	const router = useRouter();
 	const [layout, setLayout] = useState<LayoutPreset>("balanced");
 	const [nodes, setNodes] = useState<DiagramNode[]>([]);
 	const [transcript, setTranscript] = useState<TranscriptEntry[]>([]);
@@ -138,6 +140,11 @@ export function MeetingView({
 		});
 	};
 
+	const handleEndSession = async () => {
+		await fetch(`/api/sessions/${sessionId}/end`, { method: "POST" });
+		router.back();
+	};
+
 	const handleRejectNode = async (nodeId: string) => {
 		// Optimistic update
 		setNodes((prev) =>
@@ -207,6 +214,7 @@ export function MeetingView({
 				layout={layout}
 				onLayoutChange={setLayout}
 				sessionId={sessionId}
+				onEndSession={handleEndSession}
 			/>
 		</div>
 	);

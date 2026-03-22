@@ -1,17 +1,39 @@
 import { getActiveOrganization } from "@auth/lib/server";
 import { PageHeader } from "@shared/components/PageHeader";
 import { Button } from "@repo/ui";
+import { Badge } from "@repo/ui/components/badge";
 import { Card } from "@repo/ui/components/card";
-import { WorkflowIcon, PlusIcon } from "lucide-react";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@repo/ui/components/table";
+import { db } from "@repo/database";
+import {
+	WorkflowIcon,
+	PlusIcon,
+	PlayIcon,
+	EyeIcon,
+	ClockIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
 export async function generateMetadata() {
-	return {
-		title: "Sessions",
-	};
+	return { title: "Sessions" };
 }
+
+const STATUS_VARIANT: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+	ACTIVE: "default",
+	CONNECTING: "secondary",
+	ENDED: "outline",
+	FAILED: "destructive",
+	SCHEDULED: "secondary",
+};
 
 export default async function SessionsPage({
 	params,
@@ -29,15 +51,29 @@ export default async function SessionsPage({
 		return notFound();
 	}
 
-	// TODO: Fetch sessions from DB
-	const sessions: any[] = [];
+	const sessions = await db.meetingSession.findMany({
+		include: {
+			project: { include: { client: true } },
+			processDefinition: true,
+			_count: {
+				select: { diagramNodes: true, transcriptEntries: true },
+			},
+		},
+		orderBy: { createdAt: "desc" },
+		take: 50,
+	});
 
 	return (
 		<div>
-			<PageHeader
-				title={t("title")}
-				subtitle={t("subtitle")}
-			/>
+			<div className="flex items-center justify-between">
+				<PageHeader title={t("title")} subtitle={t("subtitle")} />
+				<Button asChild>
+					<Link href={`/${organizationSlug}/sessions/new`}>
+						<PlusIcon className="mr-2 h-4 w-4" />
+						{t("newSession")}
+					</Link>
+				</Button>
+			</div>
 
 			<div className="mt-6">
 				{sessions.length === 0 ? (
@@ -53,7 +89,9 @@ export default async function SessionsPage({
 								{t("empty.description")}
 							</p>
 							<Button asChild className="mt-6">
-								<Link href={`/${organizationSlug}/sessions/new`}>
+								<Link
+									href={`/${organizationSlug}/sessions/new`}
+								>
 									<PlusIcon className="mr-2 h-4 w-4" />
 									{t("newSession")}
 								</Link>
@@ -62,9 +100,98 @@ export default async function SessionsPage({
 					</Card>
 				) : (
 					<Card>
-						<div className="flex h-64 items-center justify-center p-8 text-muted-foreground">
-							Session list will appear here
-						</div>
+						<Table>
+							<TableHeader>
+								<TableRow>
+									<TableHead>Client</TableHead>
+									<TableHead>Type</TableHead>
+									<TableHead>Nodes</TableHead>
+									<TableHead>Status</TableHead>
+									<TableHead>Date</TableHead>
+									<TableHead className="text-right">
+										Actions
+									</TableHead>
+								</TableRow>
+							</TableHeader>
+							<TableBody>
+								{sessions.map((session) => (
+									<TableRow key={session.id}>
+										<TableCell>
+											<div>
+												<p className="font-medium text-foreground">
+													{session.project.client
+														.name}
+												</p>
+												<p className="text-xs text-muted-foreground">
+													{session.project.name}
+												</p>
+											</div>
+										</TableCell>
+										<TableCell>
+											<Badge variant="outline">
+												{session.type === "DISCOVERY"
+													? "Discovery"
+													: "Deep Dive"}
+											</Badge>
+										</TableCell>
+										<TableCell>
+											<span className="tabular-nums">
+												{session._count.diagramNodes}
+											</span>
+										</TableCell>
+										<TableCell>
+											<Badge
+												variant={
+													STATUS_VARIANT[
+														session.status
+													] || "secondary"
+												}
+											>
+												{session.status}
+											</Badge>
+										</TableCell>
+										<TableCell className="text-muted-foreground">
+											<div className="flex items-center gap-1">
+												<ClockIcon className="h-3 w-3" />
+												{new Date(
+													session.createdAt,
+												).toLocaleDateString()}
+											</div>
+										</TableCell>
+										<TableCell className="text-right">
+											{session.status === "ACTIVE" ||
+											session.status === "CONNECTING" ? (
+												<Button
+													size="sm"
+													variant="default"
+													asChild
+												>
+													<Link
+														href={`/${organizationSlug}/session/${session.id}/live`}
+													>
+														<PlayIcon className="mr-1 h-3 w-3" />
+														Join
+													</Link>
+												</Button>
+											) : (
+												<Button
+													size="sm"
+													variant="outline"
+													asChild
+												>
+													<Link
+														href={`/${organizationSlug}/session/${session.id}`}
+													>
+														<EyeIcon className="mr-1 h-3 w-3" />
+														View
+													</Link>
+												</Button>
+											)}
+										</TableCell>
+									</TableRow>
+								))}
+							</TableBody>
+						</Table>
 					</Card>
 				)}
 			</div>

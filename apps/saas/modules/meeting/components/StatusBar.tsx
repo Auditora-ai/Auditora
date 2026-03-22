@@ -13,6 +13,7 @@ interface StatusBarProps {
 	layout: LayoutPreset;
 	onLayoutChange: (layout: LayoutPreset) => void;
 	sessionId: string;
+	onEndSession: () => void;
 }
 
 const STATUS_COLORS: Record<ConnectionStatus, string> = {
@@ -46,6 +47,7 @@ export function StatusBar({
 	elapsedTime,
 	layout,
 	onLayoutChange,
+	onEndSession,
 }: StatusBarProps) {
 	return (
 		<div className="flex items-center gap-4 border-t border-border bg-background px-4 py-1.5 text-[11px] text-muted-foreground">
@@ -115,6 +117,15 @@ export function StatusBar({
 					</button>
 				))}
 			</div>
+
+			{/* End Session button */}
+			<button
+				type="button"
+				onClick={onEndSession}
+				className="ml-2 rounded bg-destructive px-2 py-0.5 text-[10px] font-medium text-destructive-foreground transition-colors hover:bg-destructive/90"
+			>
+				End Session
+			</button>
 		</div>
 	);
 }

@@ -13,7 +13,7 @@ import {
 } from "@repo/ui/components/tooltip";
 import { UserMenu } from "@shared/components/UserMenu";
 import {
-	BotMessageSquareIcon,
+	BarChart3Icon,
 	ChevronRightIcon,
 	HomeIcon,
 	PanelLeftCloseIcon,
@@ -62,12 +62,16 @@ export function NavBar() {
 					},
 				]
 			: []),
-		{
-			label: t("app.menu.aiChatbot"),
-			href: "/chatbot",
-			icon: BotMessageSquareIcon,
-			isActive: pathname.startsWith("/chatbot"),
-		},
+		...(authConfig.organizations.enable && activeOrganization
+			? [
+					{
+						label: t("app.menu.analytics"),
+						href: `${basePath}/analytics`,
+						icon: BarChart3Icon,
+						isActive: pathname.startsWith(`${basePath}/analytics`),
+					},
+				]
+			: []),
 		...(authConfig.organizations.enable &&
 		activeOrganization &&
 		isOrganizationAdmin
