@@ -20,6 +20,12 @@ export type { BpmnNode, ExtractionResult } from "./src/pipelines/process-extract
 export { generateNextQuestion } from "./src/pipelines/teleprompter";
 export type { TeleprompterResult } from "./src/pipelines/teleprompter";
 
+// Prozea providers
+export { createCallBotProvider } from "./src/providers/call-bot";
+export type { CallBotProvider, BotStatus } from "./src/providers/call-bot";
+export { createSTTProvider } from "./src/providers/stt";
+export type { TranscriptionEvent } from "./src/providers/stt";
+
 // Prozea prompts (for testing/eval)
 export { PROCESS_EXTRACTION_SYSTEM } from "./src/prompts/process-extraction";
 export { TELEPROMPTER_SYSTEM } from "./src/prompts/teleprompter";

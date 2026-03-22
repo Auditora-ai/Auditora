@@ -7,7 +7,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
-import { createCallBotProvider } from "@repo/ai/src/providers/call-bot";
+import { createCallBotProvider } from "@repo/ai";
 
 export async function POST(request: NextRequest) {
   try {

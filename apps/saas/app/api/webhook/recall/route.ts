@@ -13,12 +13,14 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
-import { RecallTranscriptionProvider } from "@repo/ai/src/providers/stt";
-import { extractProcessUpdates } from "@repo/ai/src/pipelines/process-extraction";
-import type { BpmnNode } from "@repo/ai/src/pipelines/process-extraction";
-import { generateNextQuestion } from "@repo/ai/src/pipelines/teleprompter";
+import {
+	createSTTProvider,
+	extractProcessUpdates,
+	generateNextQuestion,
+	type BpmnNode,
+} from "@repo/ai";
 
-const sttProvider = new RecallTranscriptionProvider();
+const sttProvider = createSTTProvider();
 
 // Track last extraction time per session to avoid calling LLM too frequently
 const lastExtractionTime = new Map<string, number>();
