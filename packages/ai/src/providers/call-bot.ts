@@ -62,9 +62,9 @@ export class RecallAiProvider implements CallBotProvider {
         recording_config: {
           transcript: {
             provider: {
-              deepgram: {
-                language: "es",
-                model: "nova-3",
+              recallai_streaming: {
+                language_code: "es",
+                mode: "prioritize_low_latency",
               },
             },
           },
