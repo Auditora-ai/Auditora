@@ -64,7 +64,6 @@ export class RecallAiProvider implements CallBotProvider {
             provider: {
               recallai_streaming: {
                 language_code: "es",
-                mode: "prioritize_low_latency",
               },
             },
           },
