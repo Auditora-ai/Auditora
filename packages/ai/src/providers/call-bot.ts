@@ -40,11 +40,13 @@ export interface BotStatus {
 export class RecallAiProvider implements CallBotProvider {
   readonly providerName = "recall.ai";
   private apiKey: string;
-  private baseUrl = "https://api.recall.ai/api/v1";
+  private baseUrl: string;
 
-  constructor(apiKey: string) {
+  constructor(apiKey: string, region?: string) {
     if (!apiKey) throw new Error("RECALL_API_KEY is required");
     this.apiKey = apiKey;
+    const r = region || process.env.RECALL_REGION || "us-west-2";
+    this.baseUrl = `https://${r}.recall.ai/api/v1`;
   }
 
   async joinMeeting(meetingUrl: string): Promise<{ botId: string }> {
@@ -57,13 +59,6 @@ export class RecallAiProvider implements CallBotProvider {
       body: JSON.stringify({
         meeting_url: meetingUrl,
         bot_name: "Prozea",
-        transcription_options: {
-          provider: "default",
-        },
-        real_time_transcription: {
-          destination_url: `${process.env.NEXT_PUBLIC_SAAS_URL}/api/webhook/recall/transcription`,
-        },
-        recording_mode: "audio_only",
       }),
     });
 
