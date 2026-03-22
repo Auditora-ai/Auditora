@@ -76,6 +76,8 @@ export function MeetingView({
 	const [aiSuggestion] = useState<string | null>(null);
 	const [elapsedTime, setElapsedTime] = useState(0);
 
+	const currentLayout = LAYOUT_PRESETS[layout];
+
 	// Poll for live data every 3 seconds
 	const fetchLiveData = useCallback(async () => {
 		try {
