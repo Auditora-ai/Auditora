@@ -73,7 +73,7 @@ export default async function SessionReviewPage({
 			</div>
 
 			<div className="mt-2 flex items-center gap-3">
-				<Badge variant={session.status === "ENDED" ? "outline" : "default"}>
+				<Badge status={session.status === "ENDED" ? "success" : "info"}>
 					{session.status}
 				</Badge>
 				{duration && (

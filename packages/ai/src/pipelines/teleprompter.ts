@@ -98,7 +98,7 @@ export async function generateNextQuestion(
       transcriptText,
       processName,
     ),
-    maxTokens: 512,
+    maxOutputTokens: 512,
     temperature: 0.3, // Slightly more creative than extraction
   });
 

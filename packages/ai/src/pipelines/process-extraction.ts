@@ -101,7 +101,7 @@ export async function extractProcessUpdates(
     model: anthropic("claude-sonnet-4-6"),
     system: PROCESS_EXTRACTION_SYSTEM,
     prompt: PROCESS_EXTRACTION_USER(nodesForPrompt, transcriptText),
-    maxTokens: 1024,
+    maxOutputTokens: 1024,
     temperature: 0.1, // Low temperature for structured output
   });
 

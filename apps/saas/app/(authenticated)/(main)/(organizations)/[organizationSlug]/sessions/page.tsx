@@ -27,12 +27,12 @@ export async function generateMetadata() {
 	return { title: "Sessions" };
 }
 
-const STATUS_VARIANT: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
-	ACTIVE: "default",
-	CONNECTING: "secondary",
-	ENDED: "outline",
-	FAILED: "destructive",
-	SCHEDULED: "secondary",
+const STATUS_VARIANT: Record<string, "success" | "info" | "warning" | "error"> = {
+	ACTIVE: "info",
+	CONNECTING: "warning",
+	ENDED: "success",
+	FAILED: "error",
+	SCHEDULED: "info",
 };
 
 export default async function SessionsPage({
@@ -128,7 +128,7 @@ export default async function SessionsPage({
 											</div>
 										</TableCell>
 										<TableCell>
-											<Badge variant="outline">
+											<Badge status="info">
 												{session.type === "DISCOVERY"
 													? "Discovery"
 													: "Deep Dive"}
@@ -141,10 +141,10 @@ export default async function SessionsPage({
 										</TableCell>
 										<TableCell>
 											<Badge
-												variant={
+												status={
 													STATUS_VARIANT[
 														session.status
-													] || "secondary"
+													] || "info"
 												}
 											>
 												{session.status}
@@ -163,7 +163,7 @@ export default async function SessionsPage({
 											session.status === "CONNECTING" ? (
 												<Button
 													size="sm"
-													variant="default"
+													variant="primary"
 													asChild
 												>
 													<Link
