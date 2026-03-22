@@ -70,6 +70,17 @@
 	stroke-width: 2px !important;
 }
 
+/* Highlight marker — used for transcript↔diagram linking */
+.highlight .djs-visual rect,
+.highlight .djs-visual polygon,
+.highlight .djs-visual circle,
+.highlight .djs-visual ellipse {
+	stroke: #2563eb !important;
+	stroke-width: 3px !important;
+	fill: #dbeafe !important;
+	filter: drop-shadow(0 0 6px rgba(37, 99, 235, 0.4));
+}
+
 /* ═══════════════════════════════════════════
    Palette (left sidebar) — dark chrome
    ═══════════════════════════════════════════ */

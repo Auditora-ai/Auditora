@@ -852,6 +852,9 @@ importers:
       '@ai-sdk/react':
         specifier: 'catalog:'
         version: 3.0.118(react@19.2.4)(zod@4.3.6)
+      '@repo/database':
+        specifier: workspace:*
+        version: link:../database
       ai:
         specifier: 'catalog:'
         version: 6.0.116(zod@4.3.6)

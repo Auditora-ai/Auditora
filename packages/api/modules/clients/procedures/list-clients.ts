@@ -1,3 +1,4 @@
+import { ORPCError } from "@orpc/server";
 import { db } from "@repo/database";
 import { protectedProcedure } from "../../../orpc/procedures";
 
@@ -9,6 +10,10 @@ export const listClients = protectedProcedure
 		summary: "List clients",
 	})
 	.handler(async ({ context: { session } }) => {
+		if (!session.activeOrganizationId) {
+			throw new ORPCError("FORBIDDEN", { message: "No active organization" });
+		}
+
 		const clients = await db.client.findMany({
 			where: {
 				organizationId: session.activeOrganizationId,

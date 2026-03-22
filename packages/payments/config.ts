@@ -1,11 +1,10 @@
 import type { PaymentsConfig } from "./types";
 
 export const config: PaymentsConfig = {
-	billingAttachedTo: "user",
-	requireActiveSubscription: false,
+	billingAttachedTo: "organization",
+	requireActiveSubscription: true,
 	plans: {
 		pro: {
-			recommended: true,
 			prices: [
 				{
 					type: "subscription",
@@ -14,7 +13,7 @@ export const config: PaymentsConfig = {
 					amount: 29,
 					currency: "USD",
 					seatBased: true,
-					trialPeriodDays: 7,
+					trialPeriodDays: 14,
 				},
 				{
 					type: "subscription",
@@ -23,17 +22,28 @@ export const config: PaymentsConfig = {
 					amount: 290,
 					currency: "USD",
 					seatBased: true,
-					trialPeriodDays: 7,
+					trialPeriodDays: 14,
 				},
 			],
 		},
-		lifetime: {
+		team: {
+			recommended: true,
 			prices: [
 				{
-					type: "one-time",
-					priceId: process.env.PRICE_ID_LIFETIME as string,
-					amount: 799,
+					type: "subscription",
+					priceId: process.env.PRICE_ID_TEAM_MONTHLY as string,
+					interval: "month",
+					amount: 79,
 					currency: "USD",
+					trialPeriodDays: 14,
+				},
+				{
+					type: "subscription",
+					priceId: process.env.PRICE_ID_TEAM_YEARLY as string,
+					interval: "year",
+					amount: 790,
+					currency: "USD",
+					trialPeriodDays: 14,
 				},
 			],
 		},

@@ -41,3 +41,14 @@
 @utility font-display {
 	font-family: var(--font-display), serif;
 }
+
+/* Waveform animation for product demo */
+@keyframes waveform {
+	0%, 100% { transform: scaleY(0.3); }
+	50% { transform: scaleY(1); }
+}
+
+@utility animate-waveform {
+	animation: waveform 0.8s ease-in-out infinite;
+	transform-origin: center;
+}

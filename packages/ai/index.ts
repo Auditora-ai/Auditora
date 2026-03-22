@@ -19,6 +19,12 @@ export { extractProcessUpdates } from "./src/pipelines/process-extraction";
 export type { BpmnNode, ExtractionResult } from "./src/pipelines/process-extraction";
 export { generateNextQuestion } from "./src/pipelines/teleprompter";
 export type { TeleprompterResult } from "./src/pipelines/teleprompter";
+export { extractDiscoveryUpdates } from "./src/pipelines/discovery-extraction";
+export type { DiscoveryResult, DiscoveryProcess, BusinessInsights } from "./src/pipelines/discovery-extraction";
+
+// Prozea context
+export { buildSessionContext, clearSessionContextCache } from "./src/context/session-context";
+export type { SessionContext } from "./src/context/session-context";
 
 // Prozea providers
 export { createCallBotProvider } from "./src/providers/call-bot";
@@ -30,5 +36,6 @@ export { generateSessionSummary } from "./src/pipelines/session-summary";
 export type { SummaryResult } from "./src/pipelines/session-summary";
 
 // Prozea prompts (for testing/eval)
-export { PROCESS_EXTRACTION_SYSTEM } from "./src/prompts/process-extraction";
-export { TELEPROMPTER_SYSTEM } from "./src/prompts/teleprompter";
+export { PROCESS_EXTRACTION_SYSTEM, buildExtractionSystemPrompt } from "./src/prompts/process-extraction";
+export { TELEPROMPTER_SYSTEM, buildTeleprompterSystemPrompt } from "./src/prompts/teleprompter";
+export { DISCOVERY_EXTRACTION_SYSTEM } from "./src/prompts/discovery-extraction";

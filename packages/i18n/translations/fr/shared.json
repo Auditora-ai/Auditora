@@ -2,7 +2,7 @@
 	"pricing": {
 		"choosePlan": "Choisir un plan",
 		"contactSales": "Contacter les ventes",
-		"description": "Tarification simple pour consultants indépendants et équipes.",
+		"description": "Choisissez le plan adapté à votre pratique. Commencez avec 14 jours d'essai gratuit.",
 		"getStarted": "Commencer",
 		"month": "{count, plural, one {mois} other {{count} mois}}",
 		"monthly": "Mensuel",
@@ -10,50 +10,52 @@
 			"enterprise": {
 				"description": "Déploiement personnalisé pour votre cabinet",
 				"features": {
-					"customIntegrations": "Intégrations personnalisées",
-					"dedicatedSupport": "Support dédié",
+					"everythingInTeam": "Tout de Team",
+					"unlimitedMembers": "Membres d'équipe illimités",
+					"ssoAuth": "SSO et authentification SAML",
 					"slaGuarantees": "Garanties SLA",
-					"ssoAuth": "SSO et authentification personnalisée"
+					"customIntegrations": "Intégrations personnalisées",
+					"dedicatedManager": "Responsable de compte dédié",
+					"customDeployment": "Déploiement personnalisé"
 				},
 				"title": "Enterprise"
-			},
-			"free": {
-				"description": "Essayez Prozea avec 1 session par mois",
-				"features": {
-					"basicTranscription": "Transcription de base",
-					"bpmnExport": "Export BPMN (avec filigrane)",
-					"oneSession": "1 session par mois"
-				},
-				"title": "Gratuit"
-			},
-			"lifetime": {
-				"description": "Achetez une fois. Utilisez pour toujours.",
-				"features": {
-					"everythingInPro": "Tout de Professional",
-					"lifetimeUpdates": "Mises à jour à vie",
-					"noRecurringCosts": "Aucun coût récurrent",
-					"prioritySupport": "Support prioritaire"
-				},
-				"title": "Lifetime"
 			},
 			"pro": {
 				"description": "Tout ce qu'il faut pour mieux conseiller",
 				"features": {
-					"aiTeleprompter": "Téléprompteur IA",
-					"fiveMembers": "Jusqu'à 5 membres d'équipe",
-					"fullBpmnExport": "Export BPMN complet",
-					"unlimitedSessions": "Sessions illimitées"
+					"freeTrial": "14 jours d'essai gratuit",
+					"unlimitedSessions": "Sessions de réunion illimitées",
+					"aiTeleprompter": "Téléprompteur IA en temps réel",
+					"liveBpmn": "Génération de diagrammes BPMN en direct",
+					"speakerTranscripts": "Transcriptions identifiées par intervenant",
+					"fullBpmnExport": "Export BPMN/XML complet",
+					"fiveMembers": "Jusqu'à 5 membres d'équipe"
 				},
 				"title": "Professional"
+			},
+			"team": {
+				"description": "Pour les cabinets de conseil en croissance",
+				"features": {
+					"everythingInPro": "Tout de Professional",
+					"tenMembers": "Jusqu'à 10 membres d'équipe",
+					"adminDashboard": "Tableau de bord admin et rôles",
+					"prioritySupport": "Support prioritaire",
+					"teamAnalytics": "Analytiques d'équipe",
+					"sharedLibrary": "Bibliothèque de processus partagée"
+				},
+				"title": "Team"
 			}
 		},
 		"purchase": "Acheter",
 		"recommended": "Recommandé",
 		"subscribe": "S'abonner",
-		"title": "Tarifs",
+		"title": "De la conversation au diagramme BPMN",
 		"trialPeriod": "{days} {days, plural, one {jour} other {jours}} d'essai gratuit",
 		"year": "{count, plural, one {an} other {{count} ans}}",
 		"yearly": "Annuel",
-		"perSeat": "place"
+		"perSeat": "place",
+		"savePercent": "Économisez {percent}%",
+		"billedAnnually": "Facturé annuellement",
+		"perMonth": "/mois"
 	}
 }

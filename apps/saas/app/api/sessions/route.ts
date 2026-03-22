@@ -38,36 +38,75 @@ export async function POST(request: NextRequest) {
 		}
 
 		const body = await request.json();
-		const { meetingUrl, clientName, projectName, sessionType } = body;
+		const {
+			meetingUrl,
+			sessionType,
+			// New multi-step form fields (IDs)
+			clientId,
+			projectId,
+			processDefinitionId,
+			continuationOf,
+			// Legacy fields (for backward compatibility)
+			clientName,
+			projectName,
+		} = body;
 
-		if (!meetingUrl || !clientName || !sessionType) {
+		if (!meetingUrl || !sessionType) {
 			return NextResponse.json(
-				{ error: "meetingUrl, clientName, and sessionType are required" },
+				{ error: "meetingUrl and sessionType are required" },
 				{ status: 400 },
 			);
 		}
 
 		const { user, org } = authCtx;
 
-		// Find or create client (scoped to org)
-		let client = await db.client.findFirst({
-			where: { name: clientName, organizationId: org.id },
-		});
-		if (!client) {
-			client = await db.client.create({
-				data: { name: clientName, organizationId: org.id },
+		// Resolve client — by ID or by name (legacy)
+		let resolvedProjectId = projectId;
+
+		if (!resolvedProjectId) {
+			const cName = clientName;
+			if (!cName && !clientId) {
+				return NextResponse.json(
+					{ error: "clientId or clientName is required" },
+					{ status: 400 },
+				);
+			}
+
+			let client = clientId
+				? await db.client.findFirst({ where: { id: clientId, organizationId: org.id } })
+				: await db.client.findFirst({ where: { name: cName, organizationId: org.id } });
+
+			if (!client && cName) {
+				client = await db.client.create({
+					data: { name: cName, organizationId: org.id },
+				});
+			}
+			if (!client) {
+				return NextResponse.json({ error: "Client not found" }, { status: 404 });
+			}
+
+			const projName = projectName || `${client.name} - Process Mapping`;
+			let project = await db.project.findFirst({
+				where: { name: projName, clientId: client.id },
 			});
+			if (!project) {
+				project = await db.project.create({
+					data: { name: projName, clientId: client.id },
+				});
+			}
+			resolvedProjectId = project.id;
 		}
 
-		// Find or create project
-		const projName = projectName || `${clientName} - Process Mapping`;
-		let project = await db.project.findFirst({
-			where: { name: projName, clientId: client.id },
-		});
-		if (!project) {
-			project = await db.project.create({
-				data: { name: projName, clientId: client.id },
+		// For DISCOVERY: auto-create ProcessArchitecture if not exists
+		if (sessionType === "DISCOVERY") {
+			const existingArch = await db.processArchitecture.findUnique({
+				where: { projectId: resolvedProjectId },
 			});
+			if (!existingArch) {
+				await db.processArchitecture.create({
+					data: { projectId: resolvedProjectId },
+				});
+			}
 		}
 
 		// Create session in DB
@@ -76,8 +115,10 @@ export async function POST(request: NextRequest) {
 				type: sessionType,
 				status: "CONNECTING",
 				meetingUrl,
-				projectId: project.id,
+				projectId: resolvedProjectId,
 				userId: user.id,
+				processDefinitionId: processDefinitionId || undefined,
+				continuationOf: continuationOf || undefined,
 			},
 		});
 

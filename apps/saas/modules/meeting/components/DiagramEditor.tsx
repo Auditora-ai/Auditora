@@ -90,7 +90,8 @@ export function DiagramEditor({
 
 			// Track undo/redo state
 			const commandStack = modeler.get("commandStack");
-			commandStack.on("changed", () => {
+			const eventBus = modeler.get("eventBus");
+			eventBus.on("commandStack.changed", () => {
 				setCanUndo(commandStack.canUndo());
 				setCanRedo(commandStack.canRedo());
 			});
@@ -221,7 +222,7 @@ export function DiagramEditor({
 			<div className="relative flex-1">
 				<div
 					ref={containerRef}
-					className="bpmn-editor-canvas h-full w-full"
+					className="bpmn-editor-canvas absolute inset-0"
 				/>
 				{!isReady && (
 					<div className="absolute inset-0 flex items-center justify-center bg-white">

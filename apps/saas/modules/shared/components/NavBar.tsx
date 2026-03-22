@@ -14,6 +14,7 @@ import {
 import { UserMenu } from "@shared/components/UserMenu";
 import {
 	BarChart3Icon,
+	Building2Icon,
 	ChevronRightIcon,
 	HomeIcon,
 	PanelLeftCloseIcon,
@@ -52,6 +53,16 @@ export function NavBar() {
 			icon: HomeIcon,
 			isActive: pathname === "/" || pathname === basePath,
 		},
+		...(authConfig.organizations.enable && activeOrganization
+			? [
+					{
+						label: t("app.menu.clients"),
+						href: `${basePath}/clients`,
+						icon: Building2Icon,
+						isActive: pathname.startsWith(`${basePath}/clients`),
+					},
+				]
+			: []),
 		...(authConfig.organizations.enable && activeOrganization
 			? [
 					{

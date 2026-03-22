@@ -5,7 +5,7 @@
  * Uses sliding window context (last 5 min) + current BPMN state.
  *
  * Pipeline:
- *   AUDIO → [Deepgram STT] → TRANSCRIPT → [This Pipeline] → BPMN DIFF → [Broadcast]
+ *   AUDIO -> [Deepgram STT] -> TRANSCRIPT -> [This Pipeline] -> BPMN DIFF -> [Broadcast]
  *
  * Latency budget: 4-5s for LLM call (within 8s total pipeline budget)
  */
@@ -14,11 +14,18 @@ import { generateText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { z } from "zod";
 import {
-  PROCESS_EXTRACTION_SYSTEM,
+  buildExtractionSystemPrompt,
   PROCESS_EXTRACTION_USER,
 } from "../prompts/process-extraction";
+import type { SessionContext } from "../context/session-context";
 
-const VALID_NODE_TYPES = ["startEvent", "endEvent", "task", "exclusiveGateway", "parallelGateway"] as const;
+const VALID_NODE_TYPES = [
+  "startEvent",
+  "endEvent",
+  "task",
+  "exclusiveGateway",
+  "parallelGateway",
+] as const;
 
 const NewNodeSchema = z.object({
   id: z.string().min(1),
@@ -29,17 +36,32 @@ const NewNodeSchema = z.object({
   connectTo: z.string().nullable().optional(),
 });
 
+const OutOfScopeSchema = z.object({
+  topic: z.string().min(1),
+  likelyProcess: z.string().min(1),
+});
+
 const ExtractionResultSchema = z.object({
   newNodes: z.array(NewNodeSchema).catch([]),
-  updatedNodes: z.array(z.object({
-    id: z.string().min(1),
-    label: z.string().optional(),
-  })).catch([]),
+  updatedNodes: z
+    .array(
+      z.object({
+        id: z.string().min(1),
+        label: z.string().optional(),
+      }),
+    )
+    .catch([]),
+  outOfScope: z.array(OutOfScopeSchema).catch([]),
 });
 
 export interface BpmnNode {
   id: string;
-  type: "startEvent" | "endEvent" | "task" | "exclusiveGateway" | "parallelGateway";
+  type:
+    | "startEvent"
+    | "endEvent"
+    | "task"
+    | "exclusiveGateway"
+    | "parallelGateway";
   label: string;
   state: "forming" | "confirmed" | "rejected";
   lane?: string;
@@ -60,6 +82,10 @@ export interface ExtractionResult {
   updatedNodes: Array<{
     id: string;
     label?: string;
+  }>;
+  outOfScope?: Array<{
+    topic: string;
+    likelyProcess: string;
   }>;
 }
 
@@ -98,10 +124,15 @@ function formatTranscriptWindow(
  *
  * This is the core AI call — called every time we accumulate
  * enough new transcript (typically every 10-15 seconds).
+ *
+ * @param currentNodes - Current BPMN diagram nodes
+ * @param recentTranscript - Recent transcript entries
+ * @param context - Optional session context for business-aware extraction
  */
 export async function extractProcessUpdates(
   currentNodes: BpmnNode[],
   recentTranscript: TranscriptEntry[],
+  context?: SessionContext,
 ): Promise<ExtractionResult> {
   const transcriptText = formatTranscriptWindow(recentTranscript);
 
@@ -119,24 +150,36 @@ export async function extractProcessUpdates(
 
   const { text } = await generateText({
     model: anthropic("claude-sonnet-4-6"),
-    system: PROCESS_EXTRACTION_SYSTEM,
-    prompt: PROCESS_EXTRACTION_USER(nodesForPrompt, transcriptText),
+    system: buildExtractionSystemPrompt(context),
+    prompt: PROCESS_EXTRACTION_USER(nodesForPrompt, transcriptText, context),
     maxOutputTokens: 1024,
     temperature: 0.1, // Low temperature for structured output
   });
 
   try {
     // Strip markdown code fences if present
-    const cleaned = text.replace(/^```json\s*/i, "").replace(/```\s*$/i, "").trim();
+    const cleaned = text
+      .replace(/^```json\s*/i, "")
+      .replace(/```\s*$/i, "")
+      .trim();
     const raw = JSON.parse(cleaned);
 
     // Validate with Zod — catches invalid nodeTypes, missing fields, etc.
     const result = ExtractionResultSchema.parse(raw);
 
-    return result;
+    return {
+      newNodes: result.newNodes,
+      updatedNodes: result.updatedNodes,
+      outOfScope:
+        result.outOfScope.length > 0 ? result.outOfScope : undefined,
+    };
   } catch (error) {
     // LLM returned invalid JSON or failed validation
-    console.error("[ProcessExtraction] Invalid LLM output:", text.substring(0, 200), error instanceof Error ? error.message : "");
+    console.error(
+      "[ProcessExtraction] Invalid LLM output:",
+      text.substring(0, 200),
+      error instanceof Error ? error.message : "",
+    );
     return { newNodes: [], updatedNodes: [] };
   }
 }

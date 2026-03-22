@@ -21,6 +21,7 @@ export const updateProcess = protectedProcedure
 			triggers: z.array(z.string()).optional(),
 			outputs: z.array(z.string()).optional(),
 			processStatus: z.string().optional(),
+			bpmnXml: z.string().optional(),
 		}),
 	)
 	.handler(async ({ context: { session }, input: { processId, ...data } }) => {

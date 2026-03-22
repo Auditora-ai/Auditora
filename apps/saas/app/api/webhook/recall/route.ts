@@ -1,14 +1,19 @@
 /**
  * Recall.ai Webhook Handler
  *
- * Receives transcript events → stores in DB → triggers AI pipelines:
- * 1. Process Extraction (every 15s): transcript → BPMN nodes
- * 2. Teleprompter (every 30s): transcript + diagram → next question
+ * Receives transcript events -> stores in DB -> triggers AI pipelines:
+ * 1. Process Extraction (every 15s): transcript -> BPMN nodes
+ * 2. Teleprompter (every 30s): transcript + diagram -> next question
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
-import { extractProcessUpdates, generateNextQuestion } from "@repo/ai";
+import {
+	extractProcessUpdates,
+	generateNextQuestion,
+	buildSessionContext,
+} from "@repo/ai";
+import type { SessionContext } from "@repo/ai";
 import crypto from "crypto";
 
 // Throttle AI calls per session
@@ -101,7 +106,7 @@ export async function POST(request: NextRequest) {
 			data: { sessionId: session.id, speaker, text, timestamp },
 		});
 
-		console.log(`[Webhook] 📝 ${speaker}: "${text.substring(0, 60)}"`);
+		console.log(`[Webhook] ${speaker}: "${text.substring(0, 60)}"`);
 
 		// --- AI PIPELINES (throttled, run in background) ---
 		const now = Date.now();
@@ -133,6 +138,14 @@ export async function POST(request: NextRequest) {
 
 /** Extract BPMN nodes from recent transcript */
 async function runExtraction(sessionId: string) {
+	// Build business context for context-aware extraction
+	let context: SessionContext | undefined;
+	try {
+		context = await buildSessionContext(sessionId);
+	} catch (err) {
+		console.warn("[Extraction] Could not build session context:", err instanceof Error ? err.message : err);
+	}
+
 	const transcript = await db.transcriptEntry.findMany({
 		where: { sessionId },
 		orderBy: { timestamp: "desc" },
@@ -161,6 +174,7 @@ async function runExtraction(sessionId: string) {
 			text: t.text,
 			timestamp: t.timestamp,
 		})),
+		context,
 	);
 
 	// Store new nodes
@@ -190,12 +204,28 @@ async function runExtraction(sessionId: string) {
 			},
 		});
 
-		console.log(`[Extraction] 🔷 New node: "${newNode.label}"`);
+		console.log(`[Extraction] New node: "${newNode.label}"`);
+	}
+
+	// Log out-of-scope topics
+	if (result.outOfScope && result.outOfScope.length > 0) {
+		for (const item of result.outOfScope) {
+			console.log(
+				`[Extraction] Out of scope: "${item.topic}" -> likely belongs to "${item.likelyProcess}"`,
+			);
+		}
+		// Store out-of-scope items in teleprompter log for consultant awareness
+		await db.teleprompterLog.create({
+			data: {
+				sessionId,
+				question: `[Scope notice] Topic "${result.outOfScope[0].topic}" may belong to the "${result.outOfScope[0].likelyProcess}" process instead.`,
+			},
+		});
 	}
 
 	if (result.newNodes.length > 0) {
 		console.log(
-			`[Extraction] ✅ Added ${result.newNodes.length} nodes for session ${sessionId}`,
+			`[Extraction] Added ${result.newNodes.length} nodes for session ${sessionId}`,
 		);
 	}
 }
@@ -208,6 +238,14 @@ async function runTeleprompter(sessionId: string) {
 	});
 	if (!session) return;
 
+	// Build business context for context-aware question generation
+	let context: SessionContext | undefined;
+	try {
+		context = await buildSessionContext(sessionId);
+	} catch (err) {
+		console.warn("[Teleprompter] Could not build session context:", err instanceof Error ? err.message : err);
+	}
+
 	const transcript = await db.transcriptEntry.findMany({
 		where: { sessionId },
 		orderBy: { timestamp: "desc" },
@@ -219,7 +257,7 @@ async function runTeleprompter(sessionId: string) {
 	});
 
 	const result = await generateNextQuestion(
-		session.type as "DISCOVERY" | "DEEP_DIVE",
+		session.type as "DISCOVERY" | "DEEP_DIVE" | "CONTINUATION",
 		currentNodes.map((n) => ({
 			id: n.id,
 			type: n.nodeType.toLowerCase(),
@@ -233,6 +271,7 @@ async function runTeleprompter(sessionId: string) {
 			timestamp: t.timestamp,
 		})),
 		session.processDefinition?.name,
+		context,
 	);
 
 	await db.teleprompterLog.create({
@@ -242,5 +281,5 @@ async function runTeleprompter(sessionId: string) {
 		},
 	});
 
-	console.log(`[Teleprompter] 💡 "${result.nextQuestion.substring(0, 60)}"`);
+	console.log(`[Teleprompter] "${result.nextQuestion.substring(0, 60)}"`);
 }

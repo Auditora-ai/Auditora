@@ -3,6 +3,7 @@
 		"@ai-sdk/anthropic": "catalog:",
 		"@ai-sdk/openai": "catalog:",
 		"@ai-sdk/react": "catalog:",
+		"@repo/database": "workspace:*",
 		"ai": "catalog:",
 		"openai": "catalog:",
 		"zod": "catalog:"

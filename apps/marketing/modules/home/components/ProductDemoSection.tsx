@@ -132,6 +132,23 @@ export function ProductDemoSection() {
 				// DESKTOP TIMELINE (768px+)
 				// ═══════════════════════════════════════
 				"(min-width: 768px)": () => {
+					// Initial states for elements that start hidden (opacity:0 via inline style)
+					gsap.set(".demo-window", { y: 30, scale: 0.96 });
+					gsap.set(".comparison-before", { x: -20 });
+					gsap.set(".comparison-after", { x: 20 });
+					gsap.set(".demo-cta", { y: 15, scale: 0.9 });
+					gsap.set(".scene2-title", { y: 20 });
+					gsap.set(".scene3-title", { y: 20 });
+					gsap.set(".scene4-title", { y: 20 });
+					gsap.set(".scene5-title", { y: 20 });
+
+					// Hide BPMN connections, labels and node texts initially
+					gsap.set(".bpmn-connection", { strokeDashoffset: 200, opacity: 0 });
+					gsap.set(".bpmn-label", { opacity: 0 });
+					gsap.set(".bpmn-node text", { opacity: 0 });
+					gsap.set(".window-chrome", { opacity: 0 });
+					gsap.set(".stats-bar", { opacity: 0 });
+
 					const tl = gsap.timeline({
 						scrollTrigger: {
 							trigger: sectionRef.current,
@@ -220,15 +237,15 @@ export function ProductDemoSection() {
 					tl.addLabel("scene2", 7);
 
 					// Scene 2 title
-					tl.from(".scene2-title", {
-						opacity: 0,
-						y: 20,
+					tl.to(".scene2-title", {
+						opacity: 1,
+						y: 0,
 						duration: 1,
 					}, "scene2");
 
-					// Transcript panel expands
-					tl.from(".transcript-panel", {
-						clipPath: "inset(0 100% 0 0)",
+					// Transcript panel expands (starts clipped via inline style)
+					tl.to(".transcript-panel", {
+						clipPath: "inset(0 0% 0 0)",
 						duration: 2,
 						ease: "power2.inOut",
 					}, "scene2+=0.3");
@@ -265,30 +282,36 @@ export function ProductDemoSection() {
 						duration: 0.6,
 					}, "+=0");
 
-					// ━━━ TRANSITION 2→3: Split layout ━━━
+					// ━━━ TRANSITION 2→3: Hide transcript, show teleprompter ━━━
 					tl.addLabel("trans23", 12);
 
-					// Transcript slides right
+					// Hide transcript panel
 					tl.to(".transcript-panel", {
-						x: "25%",
-						width: "50%",
-						duration: 2,
+						opacity: 0,
+						duration: 1,
 						ease: "power2.inOut",
+					}, "trans23");
+					tl.set(".transcript-panel", { display: "none" }, "trans23+=1");
+
+					// Hide PiP call window
+					tl.to(".call-window", {
+						opacity: 0,
+						duration: 1,
 					}, "trans23");
 
 					// ━━━ SCENE 3: AI Guides Your Questions (40-55%) ━━━
 					tl.addLabel("scene3", 14);
 
 					// Scene 3 title
-					tl.from(".scene3-title", {
-						opacity: 0,
-						y: 20,
+					tl.to(".scene3-title", {
+						opacity: 1,
+						y: 0,
 						duration: 1,
 					}, "scene3");
 
-					// Teleprompter panel slides in
-					tl.from(".teleprompter-panel", {
-						clipPath: "inset(0 0 0 100%)",
+					// Teleprompter panel slides in (starts clipped via inline style)
+					tl.to(".teleprompter-panel", {
+						clipPath: "inset(0 0 0 0%)",
 						duration: 1.5,
 						ease: "power2.inOut",
 					}, "scene3+=0.3");
@@ -326,28 +349,13 @@ export function ProductDemoSection() {
 						duration: 0.6,
 					}, "+=0");
 
-					// ━━━ TRANSITION 3→4: Morph to 3-panel ━━━
+					// ━━━ TRANSITION 3→4: Hide panels, show demo window ━━━
 					tl.addLabel("trans34", 19);
 
-					// Shrink PiP call completely
-					tl.to(".call-window", {
-						opacity: 0,
-						scale: 0.1,
-						duration: 1,
-					}, "trans34");
-
-					// Transcript becomes narrow sidebar
-					tl.to(".transcript-panel", {
-						x: "0%",
-						width: "100%",
-						duration: 1.5,
-						ease: "power2.inOut",
-					}, "trans34");
-
-					// Teleprompter becomes narrow sidebar
+					// Hide teleprompter panel
 					tl.to(".teleprompter-panel", {
-						width: "100%",
-						duration: 1.5,
+						clipPath: "inset(0 100% 0 0)",
+						duration: 1,
 						ease: "power2.inOut",
 					}, "trans34");
 
@@ -355,17 +363,17 @@ export function ProductDemoSection() {
 					tl.addLabel("scene4", 21);
 
 					// Scene 4 title
-					tl.from(".scene4-title", {
-						opacity: 0,
-						y: 20,
+					tl.to(".scene4-title", {
+						opacity: 1,
+						y: 0,
 						duration: 1,
 					}, "scene4");
 
-					// 3-panel demo window appears
-					tl.from(".demo-window", {
-						opacity: 0,
-						y: 30,
-						scale: 0.96,
+					// 3-panel demo window appears (starts at opacity:0 via inline style)
+					tl.to(".demo-window", {
+						opacity: 1,
+						y: 0,
+						scale: 1,
 						duration: 1.5,
 						ease: "power2.out",
 					}, "scene4+=0.3");
@@ -389,8 +397,9 @@ export function ProductDemoSection() {
 					tl.to(".node-start .node-confirmed", { opacity: 1, duration: 0.4 }, "scene4+=2.3");
 
 					// Connection: Start → Submit
-					tl.from(".conn-start-submit", {
-						strokeDashoffset: 100,
+					tl.to(".conn-start-submit", {
+						strokeDashoffset: 0,
+						opacity: 1,
 						duration: 0.8,
 					}, "scene4+=2.5");
 
@@ -402,12 +411,14 @@ export function ProductDemoSection() {
 						duration: 0.6,
 						ease: "back.out(1.7)",
 					}, "scene4+=2.8");
+					tl.to(".node-submit text", { opacity: 1, duration: 0.4 }, "scene4+=2.8");
 					tl.to(".node-submit .node-forming", { opacity: 0, duration: 0.4 }, "scene4+=3.6");
 					tl.to(".node-submit .node-confirmed", { opacity: 1, duration: 0.4 }, "scene4+=3.6");
 
 					// Connection: Submit → Gateway
-					tl.from(".conn-submit-gw", {
-						strokeDashoffset: 100,
+					tl.to(".conn-submit-gw", {
+						strokeDashoffset: 0,
+						opacity: 1,
 						duration: 0.8,
 					}, "scene4+=3.8");
 
@@ -419,22 +430,24 @@ export function ProductDemoSection() {
 						duration: 0.6,
 						ease: "back.out(1.7)",
 					}, "scene4+=4");
+					tl.to(".node-gateway text", { opacity: 1, duration: 0.4 }, "scene4+=4");
 					tl.to(".node-gateway .node-forming", { opacity: 0, duration: 0.4 }, "scene4+=4.8");
 					tl.to(".node-gateway .node-confirmed", { opacity: 1, duration: 0.4 }, "scene4+=4.8");
 
 					// Branch connections
-					tl.from(".conn-gw-mgr", { strokeDashoffset: 150, duration: 1 }, "scene4+=5");
-					tl.from(".conn-gw-vp", { strokeDashoffset: 150, duration: 1 }, "scene4+=5.3");
+					tl.to(".conn-gw-mgr", { strokeDashoffset: 0, opacity: 1, duration: 1 }, "scene4+=5");
+					tl.to(".conn-gw-vp", { strokeDashoffset: 0, opacity: 1, duration: 1 }, "scene4+=5.3");
 
 					// Labels
-					tl.from(".label-lt", { opacity: 0, duration: 0.4 }, "scene4+=5.5");
-					tl.from(".label-gte", { opacity: 0, duration: 0.4 }, "scene4+=5.8");
+					tl.to(".label-lt", { opacity: 1, duration: 0.4 }, "scene4+=5.5");
+					tl.to(".label-gte", { opacity: 1, duration: 0.4 }, "scene4+=5.8");
 
 					// Mgr Approval
 					tl.from(".node-mgr .node-forming", {
 						opacity: 0, scale: 0.5, transformOrigin: "center center",
 						duration: 0.6, ease: "back.out(1.7)",
 					}, "scene4+=5.5");
+					tl.to(".node-mgr text", { opacity: 1, duration: 0.4 }, "scene4+=5.5");
 					tl.to(".node-mgr .node-forming", { opacity: 0, duration: 0.4 }, "scene4+=6.3");
 					tl.to(".node-mgr .node-confirmed", { opacity: 1, duration: 0.4 }, "scene4+=6.3");
 
@@ -443,11 +456,12 @@ export function ProductDemoSection() {
 						opacity: 0, scale: 0.5, transformOrigin: "center center",
 						duration: 0.6, ease: "back.out(1.7)",
 					}, "scene4+=5.8");
+					tl.to(".node-vp text", { opacity: 1, duration: 0.4 }, "scene4+=5.8");
 					tl.to(".node-vp .node-forming", { opacity: 0, duration: 0.4 }, "scene4+=6.6");
 					tl.to(".node-vp .node-confirmed", { opacity: 1, duration: 0.4 }, "scene4+=6.6");
 
 					// End Event
-					tl.from(".conn-mgr-end", { strokeDashoffset: 100, duration: 0.8 }, "scene4+=6.8");
+					tl.to(".conn-mgr-end", { strokeDashoffset: 0, opacity: 1, duration: 0.8 }, "scene4+=6.8");
 					tl.from(".node-end .node-forming", {
 						opacity: 0, scale: 0, transformOrigin: "center center",
 						duration: 0.6, ease: "back.out(1.7)",
@@ -466,9 +480,9 @@ export function ProductDemoSection() {
 					tl.addLabel("scene5", 29);
 
 					// Scene 5 title
-					tl.from(".scene5-title", {
-						opacity: 0,
-						y: 20,
+					tl.to(".scene5-title", {
+						opacity: 1,
+						y: 0,
 						duration: 1,
 					}, "scene5");
 
@@ -480,23 +494,23 @@ export function ProductDemoSection() {
 						ease: "power2.out",
 					}, "scene5+=0.5");
 
-					// Before/After comparison
-					tl.from(".comparison-before", {
-						opacity: 0,
-						x: -20,
+					// Before/After comparison (starts at opacity:0 inline)
+					tl.to(".comparison-before", {
+						opacity: 1,
+						x: 0,
 						duration: 0.8,
 					}, "scene5+=1");
-					tl.from(".comparison-after", {
-						opacity: 0,
-						x: 20,
+					tl.to(".comparison-after", {
+						opacity: 1,
+						x: 0,
 						duration: 0.8,
 					}, "scene5+=1.3");
 
-					// CTA button
-					tl.from(".demo-cta", {
-						opacity: 0,
-						y: 15,
-						scale: 0.9,
+					// CTA button (starts at opacity:0 inline)
+					tl.to(".demo-cta", {
+						opacity: 1,
+						y: 0,
+						scale: 1,
 						duration: 0.8,
 						ease: "back.out(2)",
 					}, "scene5+=2");
@@ -515,6 +529,20 @@ export function ProductDemoSection() {
 				// MOBILE TIMELINE (<768px)
 				// ═══════════════════════════════════════
 				"(max-width: 767px)": () => {
+					// Initial states
+					gsap.set(".demo-window", { y: 20, scale: 0.96 });
+					gsap.set(".demo-cta", { y: 10, scale: 0.9 });
+					gsap.set(".scene2-title", { y: 15 });
+					gsap.set(".scene4-title", { y: 15 });
+					gsap.set(".scene5-title", { y: 15 });
+
+					// Hide BPMN connections, labels and node texts initially
+					gsap.set(".bpmn-connection", { strokeDashoffset: 200, opacity: 0 });
+					gsap.set(".bpmn-label", { opacity: 0 });
+					gsap.set(".bpmn-node text", { opacity: 0 });
+					gsap.set(".window-chrome", { opacity: 0 });
+					gsap.set(".stats-bar", { opacity: 0 });
+
 					const tl = gsap.timeline({
 						scrollTrigger: {
 							trigger: sectionRef.current,
@@ -537,32 +565,35 @@ export function ProductDemoSection() {
 					// Transition: fade call, show transcript
 					tl.to(".call-window", { opacity: 0, scale: 0.8, duration: 1 });
 					tl.to(".scene1-title", { opacity: 0, duration: 0.5 }, "<");
-					tl.from(".scene2-title", { opacity: 0, y: 15, duration: 0.8 }, "<+0.3");
-					tl.from(".transcript-panel", { clipPath: "inset(0 100% 0 0)", duration: 1.5 }, "<+0.2");
+					tl.to(".scene2-title", { opacity: 1, y: 0, duration: 0.8 }, "<+0.3");
+					// Transcript: reveal via clipPath (starts hidden at inset(0 100% 0 0))
+					tl.to(".transcript-panel", { clipPath: "inset(0 0% 0 0)", duration: 1.5 }, "<+0.2");
 					tl.from(".transcript-panel .t-line", { opacity: 0, x: 20, stagger: 0.3, duration: 0.6 }, "<+0.5");
 					tl.to({}, { duration: 0.5 });
 
 					// Transition to diagram
-					tl.to(".transcript-panel", { opacity: 0, duration: 0.8 });
+					tl.to(".transcript-panel", { clipPath: "inset(0 0 0 100%)", duration: 0.8 });
 					tl.to(".scene2-title", { opacity: 0, duration: 0.5 }, "<");
-					tl.from(".scene4-title", { opacity: 0, y: 15, duration: 0.8 }, "<+0.3");
-					tl.from(".demo-window", { opacity: 0, y: 20, scale: 0.96, duration: 1.5 }, "<+0.2");
+					tl.to(".scene4-title", { opacity: 1, y: 0, duration: 0.8 }, "<+0.3");
+					// Demo window: reveal (starts at opacity:0 inline)
+					tl.to(".demo-window", { opacity: 1, y: 0, scale: 1, duration: 1.5 }, "<+0.2");
 
 					// BPMN nodes batch
 					tl.from(".bpmn-node .node-forming", {
 						opacity: 0, scale: 0.5, transformOrigin: "center center",
 						stagger: 0.2, duration: 0.4, ease: "back.out(1.7)",
 					}, "+=0.3");
+					tl.to(".bpmn-node text", { opacity: 1, stagger: 0.1, duration: 0.3 }, "<+0.1");
 					tl.to(".bpmn-node .node-forming", { opacity: 0, stagger: 0.1, duration: 0.3 }, "+=0.2");
 					tl.to(".bpmn-node .node-confirmed", { opacity: 1, stagger: 0.1, duration: 0.3 }, "<");
-					tl.from(".bpmn-connection", { strokeDashoffset: 200, stagger: 0.1, duration: 0.3 }, "<+0.1");
-					tl.from(".bpmn-label", { opacity: 0, stagger: 0.1, duration: 0.2 }, "<+0.1");
+					tl.to(".bpmn-connection", { strokeDashoffset: 0, opacity: 1, stagger: 0.1, duration: 0.3 }, "<+0.1");
+					tl.to(".bpmn-label", { opacity: 1, stagger: 0.1, duration: 0.2 }, "<+0.1");
 
 					// Scene 5
 					tl.to(".scene4-title", { opacity: 0, duration: 0.5 }, "+=0.3");
-					tl.from(".scene5-title", { opacity: 0, y: 15, duration: 0.8 }, "<+0.2");
+					tl.to(".scene5-title", { opacity: 1, y: 0, duration: 0.8 }, "<+0.2");
 					tl.from(".stats-bar", { opacity: 0, y: 15, duration: 0.8 }, "+=0.2");
-					tl.from(".demo-cta", { opacity: 0, y: 10, scale: 0.9, duration: 0.6 }, "+=0.2");
+					tl.to(".demo-cta", { opacity: 1, y: 0, scale: 1, duration: 0.6 }, "+=0.2");
 					tl.to({}, { duration: 1 });
 				},
 			});
@@ -575,23 +606,23 @@ export function ProductDemoSection() {
 			{/* Ambient background glow */}
 			<div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(37,99,235,0.05),transparent_70%)] pointer-events-none" />
 
-			<div className="container max-w-6xl relative min-h-screen flex flex-col items-center justify-center py-12">
+			<div className="container max-w-6xl relative min-h-screen flex flex-col items-center pt-28 md:pt-36 pb-12">
 
 				{/* ══════════ SCENE TITLES (positioned absolutely, fade in/out) ══════════ */}
-				<div className="absolute top-8 md:top-12 left-0 right-0 text-center z-20 pointer-events-none">
+				<div className="absolute top-16 md:top-20 left-0 right-0 text-center z-20 pointer-events-none">
 					<h2 className="scene1-title font-display text-2xl md:text-3xl lg:text-4xl text-foreground absolute inset-x-0">
 						{t("home.demo.scene1.title")}
 					</h2>
-					<h2 className="scene2-title font-display text-2xl md:text-3xl lg:text-4xl text-foreground absolute inset-x-0 opacity-0">
+					<h2 className="scene2-title font-display text-2xl md:text-3xl lg:text-4xl text-foreground absolute inset-x-0" style={{ opacity: 0 }}>
 						{t("home.demo.scene2.title")}
 					</h2>
-					<h2 className="scene3-title font-display text-2xl md:text-3xl lg:text-4xl text-foreground absolute inset-x-0 opacity-0">
+					<h2 className="scene3-title font-display text-2xl md:text-3xl lg:text-4xl text-foreground absolute inset-x-0" style={{ opacity: 0 }}>
 						{t("home.demo.scene3.title")}
 					</h2>
-					<h2 className="scene4-title font-display text-2xl md:text-3xl lg:text-4xl text-foreground absolute inset-x-0 opacity-0">
+					<h2 className="scene4-title font-display text-2xl md:text-3xl lg:text-4xl text-foreground absolute inset-x-0" style={{ opacity: 0 }}>
 						{t("home.demo.scene4.title")}
 					</h2>
-					<h2 className="scene5-title font-display text-2xl md:text-3xl lg:text-4xl text-foreground absolute inset-x-0 opacity-0">
+					<h2 className="scene5-title font-display text-2xl md:text-3xl lg:text-4xl text-foreground absolute inset-x-0" style={{ opacity: 0 }}>
 						{t("home.demo.scene5.title")}
 					</h2>
 				</div>
@@ -691,7 +722,7 @@ export function ProductDemoSection() {
 				</div>
 
 				{/* ══════════ SCENE 2: Transcript Panel ══════════ */}
-				<div className="transcript-panel absolute inset-x-0 top-20 md:top-24 bottom-0 mx-auto w-full max-w-3xl rounded-2xl border border-border overflow-hidden bg-[#0F172A] shadow-2xl z-10" style={{ clipPath: "inset(0 0% 0 0)" }}>
+				<div className="transcript-panel absolute inset-x-0 top-36 md:top-44 mx-auto w-full max-w-3xl max-h-[60vh] rounded-2xl border border-border overflow-hidden bg-[#0F172A] shadow-2xl z-10" style={{ clipPath: "inset(0 100% 0 0)" }}>
 					{/* Waveform header */}
 					<div className="waveform-header flex items-center gap-3 px-5 py-3 border-b border-[#334155]">
 						<div className="w-2 h-2 rounded-full bg-[#16A34A] animate-pulse" />
@@ -749,7 +780,7 @@ export function ProductDemoSection() {
 				</div>
 
 				{/* ══════════ SCENE 3: Teleprompter Panel ══════════ */}
-				<div className="teleprompter-panel hidden md:block absolute left-0 top-20 md:top-24 bottom-0 w-[45%] max-w-md ml-[calc(50%-24rem)] rounded-2xl border border-border overflow-hidden bg-[#0F172A] shadow-2xl z-10" style={{ clipPath: "inset(0 0 0 0%)" }}>
+				<div className="teleprompter-panel hidden md:block absolute left-0 top-36 md:top-44 w-[45%] max-w-md max-h-[60vh] ml-[calc(50%-24rem)] rounded-2xl border border-border overflow-hidden bg-[#0F172A] shadow-2xl z-10" style={{ clipPath: "inset(0 0 0 100%)" }}>
 					<div className="flex items-center gap-2 px-5 py-3 border-b border-[#334155]">
 						<div className="w-2 h-2 rounded-full bg-[#2563EB] animate-pulse" />
 						<span className="text-xs font-medium text-[#94A3B8] uppercase tracking-wider">
@@ -786,7 +817,7 @@ export function ProductDemoSection() {
 				</div>
 
 				{/* ══════════ SCENE 4: Demo Window (3-panel BPMN) ══════════ */}
-				<div className="demo-window absolute inset-x-0 top-16 md:top-20 mx-auto w-full max-w-5xl rounded-2xl border border-border overflow-hidden shadow-2xl shadow-primary/5 z-10 opacity-0">
+				<div className="demo-window absolute inset-x-0 top-36 md:top-44 mx-auto w-full max-w-5xl rounded-2xl border border-border overflow-hidden shadow-2xl shadow-primary/5 z-10" style={{ opacity: 0 }}>
 					{/* Window chrome */}
 					<div className="window-chrome flex items-center gap-2 px-4 py-3 bg-[#0F172A] border-b border-[#334155]">
 						<div className="flex gap-1.5">
@@ -1027,20 +1058,20 @@ export function ProductDemoSection() {
 				</div>
 
 				{/* ══════════ SCENE 5: Comparison + CTA ══════════ */}
-				<div className="absolute bottom-12 md:bottom-16 inset-x-0 z-20 pointer-events-none">
+				<div className="absolute bottom-6 md:bottom-8 inset-x-0 z-20 pointer-events-none">
 					<div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 mb-6">
-						<div className="comparison-before text-center md:text-right opacity-0">
+						<div className="comparison-before text-center md:text-right" style={{ opacity: 0 }}>
 							<span className="text-xs font-medium text-[#DC2626]/80 uppercase tracking-wider block mb-1">Before</span>
 							<p className="text-sm text-muted-foreground">{t("home.demo.scene5.before")}</p>
 						</div>
 						<div className="hidden md:block w-px h-10 bg-border" />
-						<div className="comparison-after text-center md:text-left opacity-0">
+						<div className="comparison-after text-center md:text-left" style={{ opacity: 0 }}>
 							<span className="text-xs font-medium text-[#16A34A] uppercase tracking-wider block mb-1">Now</span>
 							<p className="text-sm text-foreground font-medium">{t("home.demo.scene5.after")}</p>
 						</div>
 					</div>
 
-					<div className="demo-cta flex justify-center opacity-0 pointer-events-auto">
+					<div className="demo-cta flex justify-center pointer-events-auto" style={{ opacity: 0 }}>
 						<Button size="lg" variant="primary" asChild>
 							<a href={config.saasUrl}>
 								{t("home.demo.scene5.cta")}
@@ -1051,17 +1082,6 @@ export function ProductDemoSection() {
 				</div>
 			</div>
 
-			{/* Waveform animation keyframes */}
-			<style jsx>{`
-				@keyframes waveform {
-					0%, 100% { transform: scaleY(0.3); }
-					50% { transform: scaleY(1); }
-				}
-				:global(.animate-waveform) {
-					animation: waveform 0.8s ease-in-out infinite;
-					transform-origin: center;
-				}
-			`}</style>
 		</section>
 	);
 }

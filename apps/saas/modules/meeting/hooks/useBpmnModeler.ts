@@ -94,13 +94,11 @@ export function useBpmnModeler({
 
 			// Listen for command stack changes (undo/redo state)
 			const commandStack = modeler.get("commandStack");
-			commandStack.on("changed", () => {
+			const eventBus = modeler.get("eventBus");
+			eventBus.on("commandStack.changed", () => {
 				setCanUndo(commandStack.canUndo());
 				setCanRedo(commandStack.canRedo());
 			});
-
-			// Track element selection for properties panel
-			const eventBus = modeler.get("eventBus");
 			eventBus.on("selection.changed", (e: any) => {
 				const selected = e.newSelection?.[0] || null;
 				setSelectedElement(selected);

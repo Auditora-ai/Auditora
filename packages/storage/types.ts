@@ -3,6 +3,10 @@ export interface StorageBucketNamesConfig {
 	 * Bucket used for user and organization avatar uploads.
 	 */
 	avatars: string;
+	/**
+	 * Bucket used for document uploads.
+	 */
+	documents: string;
 }
 
 export interface StorageConfig {

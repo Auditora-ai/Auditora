@@ -225,11 +225,7 @@
 			}
 		},
 		"integrations": {
-			"poweredBy": "Powered by",
 			"worksWithTitle": "Works with your tools",
-			"deepgram": "Deepgram",
-			"anthropic": "Anthropic Claude",
-			"recall": "Recall.ai",
 			"zoom": "Zoom",
 			"teams": "Microsoft Teams",
 			"meet": "Google Meet"

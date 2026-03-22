@@ -8,36 +8,6 @@ import { useRef } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-function DeepgramLogo() {
-	return (
-		<svg viewBox="0 0 120 24" className="h-6 w-auto" fill="currentColor">
-			<rect x="0" y="4" width="16" height="16" rx="3" fill="currentColor" opacity="0.8" />
-			<rect x="3" y="7" width="4" height="10" rx="1" fill="white" />
-			<rect x="9" y="10" width="4" height="4" rx="1" fill="white" />
-			<text x="22" y="18" className="text-[14px]" fontFamily="system-ui" fontWeight="600">Deepgram</text>
-		</svg>
-	);
-}
-
-function AnthropicLogo() {
-	return (
-		<svg viewBox="0 0 120 24" className="h-6 w-auto" fill="currentColor">
-			<path d="M6 20L12 4L18 20H15L12 11L9 20H6Z" fill="currentColor" opacity="0.8" />
-			<text x="24" y="18" className="text-[14px]" fontFamily="system-ui" fontWeight="600">Anthropic</text>
-		</svg>
-	);
-}
-
-function RecallLogo() {
-	return (
-		<svg viewBox="0 0 100 24" className="h-6 w-auto" fill="currentColor">
-			<circle cx="10" cy="12" r="8" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.8" />
-			<circle cx="10" cy="12" r="3" fill="currentColor" opacity="0.8" />
-			<text x="24" y="18" className="text-[14px]" fontFamily="system-ui" fontWeight="600">Recall.ai</text>
-		</svg>
-	);
-}
-
 function ZoomLogo() {
 	return (
 		<svg viewBox="0 0 580 140" className="h-7 w-auto opacity-50" aria-label="Zoom">
@@ -110,40 +80,15 @@ export function IntegrationsSection() {
 				},
 			});
 
-			// "Powered by" logos stagger from center with blur
-			tl.from(".powered-logo", {
+			// "Works with" logos stagger from center with blur
+			tl.from(".works-with-logo", {
 				scale: 0.7,
 				opacity: 0,
 				filter: "blur(4px)",
-				stagger: { from: "center", each: 0.12 },
-				duration: 0.6,
+				stagger: { from: "center", each: 0.1 },
+				duration: 0.5,
 				ease: "power3.out",
 			});
-
-			// Divider line draws from center
-			tl.from(
-				".integrations-divider",
-				{
-					scaleX: 0,
-					duration: 0.4,
-					ease: "power2.inOut",
-				},
-				"-=0.2",
-			);
-
-			// "Works with" logos stagger from center
-			tl.from(
-				".works-with-logo",
-				{
-					scale: 0.7,
-					opacity: 0,
-					filter: "blur(4px)",
-					stagger: { from: "center", each: 0.1 },
-					duration: 0.5,
-					ease: "power3.out",
-				},
-				"-=0.1",
-			);
 		},
 		{ scope: sectionRef },
 	);
@@ -151,20 +96,7 @@ export function IntegrationsSection() {
 	return (
 		<section ref={sectionRef} className="py-16 lg:py-24 border-y border-border">
 			<div className="container max-w-4xl">
-				<div className="flex flex-col items-center gap-8">
-					<div className="text-center">
-						<p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-6">
-							{t("home.integrations.poweredBy")}
-						</p>
-						<div className="flex flex-wrap items-center justify-center gap-10 md:gap-16 text-foreground">
-							<span className="powered-logo"><DeepgramLogo /></span>
-							<span className="powered-logo"><AnthropicLogo /></span>
-							<span className="powered-logo"><RecallLogo /></span>
-						</div>
-					</div>
-
-					<div className="integrations-divider w-16 h-px bg-border origin-center" />
-
+				<div className="flex flex-col items-center">
 					<div className="text-center">
 						<p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-6">
 							{t("home.integrations.worksWithTitle")}

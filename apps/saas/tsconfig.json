@@ -14,7 +14,10 @@
 			"@onboarding/*": ["./modules/onboarding/*"],
 			"@shared/*": ["./modules/shared/*"],
 			"@meeting/*": ["./modules/meeting/*"],
-			"@sessions/*": ["./modules/sessions/*"]
+			"@sessions/*": ["./modules/sessions/*"],
+			"@clients/*": ["./modules/clients/*"],
+			"@projects/*": ["./modules/projects/*"],
+			"@documents/*": ["./modules/documents/*"]
 		}
 	},
 	"include": [

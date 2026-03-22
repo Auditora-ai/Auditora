@@ -2,7 +2,7 @@
 	"pricing": {
 		"choosePlan": "Choose plan",
 		"contactSales": "Contact sales",
-		"description": "Simple pricing for solo consultants and teams.",
+		"description": "Pick the plan that fits your practice. Start with a 14-day free trial.",
 		"getStarted": "Get started",
 		"month": "{count, plural, one {month} other {{count} months}}",
 		"monthly": "Monthly",
@@ -10,50 +10,52 @@
 			"enterprise": {
 				"description": "Custom deployment for your firm",
 				"features": {
-					"customIntegrations": "Custom integrations",
-					"dedicatedSupport": "Dedicated support",
+					"everythingInTeam": "Everything in Team",
+					"unlimitedMembers": "Unlimited team members",
+					"ssoAuth": "SSO & SAML authentication",
 					"slaGuarantees": "SLA guarantees",
-					"ssoAuth": "SSO & custom auth"
+					"customIntegrations": "Custom integrations",
+					"dedicatedManager": "Dedicated account manager",
+					"customDeployment": "Custom deployment"
 				},
 				"title": "Enterprise"
-			},
-			"free": {
-				"description": "Try Prozea with 1 session per month",
-				"features": {
-					"basicTranscription": "Basic transcription",
-					"bpmnExport": "BPMN export (watermarked)",
-					"oneSession": "1 session per month"
-				},
-				"title": "Free"
-			},
-			"lifetime": {
-				"description": "Buy once. Use forever.",
-				"features": {
-					"everythingInPro": "Everything in Professional",
-					"lifetimeUpdates": "Lifetime updates",
-					"noRecurringCosts": "No recurring costs",
-					"prioritySupport": "Priority support"
-				},
-				"title": "Lifetime"
 			},
 			"pro": {
 				"description": "Everything you need to consult smarter",
 				"features": {
-					"aiTeleprompter": "AI teleprompter",
-					"fiveMembers": "Up to 5 team members",
-					"fullBpmnExport": "Full BPMN export",
-					"unlimitedSessions": "Unlimited sessions"
+					"freeTrial": "14-day free trial",
+					"unlimitedSessions": "Unlimited meeting sessions",
+					"aiTeleprompter": "Real-time AI teleprompter",
+					"liveBpmn": "Live BPMN diagram generation",
+					"speakerTranscripts": "Speaker-identified transcripts",
+					"fullBpmnExport": "Full BPMN/XML export",
+					"fiveMembers": "Up to 5 team members"
 				},
 				"title": "Professional"
+			},
+			"team": {
+				"description": "For growing consulting firms",
+				"features": {
+					"everythingInPro": "Everything in Professional",
+					"tenMembers": "Up to 10 team members",
+					"adminDashboard": "Admin dashboard & roles",
+					"prioritySupport": "Priority support",
+					"teamAnalytics": "Team analytics",
+					"sharedLibrary": "Shared process library"
+				},
+				"title": "Team"
 			}
 		},
 		"purchase": "Purchase",
 		"recommended": "Recommended",
 		"subscribe": "Subscribe",
-		"title": "Pricing",
+		"title": "From conversation to BPMN diagram",
 		"trialPeriod": "{days} {days, plural, one {day} other {days}} free trial",
 		"year": "{count, plural, one {year} other {{count} years}}",
 		"yearly": "Yearly",
-		"perSeat": "seat"
+		"perSeat": "seat",
+		"savePercent": "Save {percent}%",
+		"billedAnnually": "Billed annually",
+		"perMonth": "/mo"
 	}
 }
