@@ -9,6 +9,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
 import { extractProcessUpdates, generateNextQuestion } from "@repo/ai";
+import crypto from "crypto";
 
 // Throttle AI calls per session
 const lastExtractionTime = new Map<string, number>();
@@ -16,9 +17,33 @@ const lastTeleprompterTime = new Map<string, number>();
 const EXTRACTION_INTERVAL = 15_000;
 const TELEPROMPTER_INTERVAL = 30_000;
 
+function verifyWebhookSignature(body: string, signature: string | null): boolean {
+	const secret = process.env.RECALL_WEBHOOK_SECRET;
+	if (!secret) return true; // Skip verification if secret not configured
+	if (!signature) return false;
+
+	const expected = crypto
+		.createHmac("sha256", secret)
+		.update(body)
+		.digest("hex");
+	return crypto.timingSafeEqual(
+		Buffer.from(signature),
+		Buffer.from(expected),
+	);
+}
+
 export async function POST(request: NextRequest) {
 	try {
-		const payload = await request.json();
+		const bodyText = await request.text();
+
+		// Verify webhook signature if secret is configured
+		const signature = request.headers.get("x-recall-signature");
+		if (process.env.RECALL_WEBHOOK_SECRET && !verifyWebhookSignature(bodyText, signature)) {
+			console.warn("[Webhook] Invalid signature — rejecting request");
+			return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
+		}
+
+		const payload = JSON.parse(bodyText);
 
 		if (payload?.event !== "transcript.data") {
 			return NextResponse.json({ ok: true });

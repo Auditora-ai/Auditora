@@ -1,61 +1,59 @@
 {
 	"pricing": {
-		"choosePlan": "Plan auswählen",
+		"choosePlan": "Plan wählen",
 		"contactSales": "Vertrieb kontaktieren",
-		"description": "Wähle das passende Paket für dich aus.",
-		"getStarted": "Jetzt loslegen",
-		"month": "Monat",
+		"description": "Einfache Preise für Einzelberater und Teams.",
+		"getStarted": "Loslegen",
+		"month": "{count, plural, one {Monat} other {{count} Monate}}",
 		"monthly": "Monatlich",
 		"products": {
-			"basic": {
-				"description": "Perfekt für den Einstieg",
-				"features": {
-					"anotherFeature": "Ein weiteres erstaunliches Merkmal",
-					"limitedSupport": "Begrenzter Support"
-				},
-				"title": "Basic"
-			},
 			"enterprise": {
-				"description": "Maßgeschneiderter Plan für deine Anforderungen",
+				"description": "Individuelle Bereitstellung für Ihre Firma",
 				"features": {
-					"enterpriseSupport": "Support für Unternehmen",
-					"unlimitedProjects": "Unbegrenzte Projekte"
+					"customIntegrations": "Individuelle Integrationen",
+					"dedicatedSupport": "Dedizierter Support",
+					"slaGuarantees": "SLA-Garantien",
+					"ssoAuth": "SSO & individuelle Authentifizierung"
 				},
 				"title": "Enterprise"
 			},
 			"free": {
-				"description": "Kostenloser Start",
+				"description": "Testen Sie Prozea mit 1 Sitzung pro Monat",
 				"features": {
-					"anotherFeature": "Ein weiteres erstaunliches Merkmal",
-					"limitedSupport": "Begrenzter Support"
+					"basicTranscription": "Basis-Transkription",
+					"bpmnExport": "BPMN-Export (mit Wasserzeichen)",
+					"oneSession": "1 Sitzung pro Monat"
 				},
-				"title": "Free"
+				"title": "Kostenlos"
 			},
 			"lifetime": {
-				"description": "Einmal kaufen. Für immer verwenden.",
+				"description": "Einmal kaufen. Für immer nutzen.",
 				"features": {
-					"extendSupport": "Erweiterter Support",
-					"noRecurringCosts": "Keine wiederkehrenden Kosten"
+					"everythingInPro": "Alles aus Professional",
+					"lifetimeUpdates": "Lebenslange Updates",
+					"noRecurringCosts": "Keine wiederkehrenden Kosten",
+					"prioritySupport": "Prioritäts-Support"
 				},
 				"title": "Lifetime"
 			},
 			"pro": {
-				"description": "Am besten für Teams",
+				"description": "Alles, was Sie für bessere Beratung brauchen",
 				"features": {
-					"anotherFeature": "Ein weiteres erstaunliches Merkmal",
-					"fiveMembers": "Bis zu 5 Mitglieder",
-					"fullSupport": "Voller Support"
+					"aiTeleprompter": "KI-Teleprompter",
+					"fiveMembers": "Bis zu 5 Teammitglieder",
+					"fullBpmnExport": "Vollständiger BPMN-Export",
+					"unlimitedSessions": "Unbegrenzte Sitzungen"
 				},
-				"title": "Pro"
+				"title": "Professional"
 			}
 		},
 		"purchase": "Kaufen",
 		"recommended": "Empfohlen",
 		"subscribe": "Abonnieren",
 		"title": "Preise",
-		"trialPeriod": "{days} {days, plural, one {Tag} other {Tage}} kostenlose Testphase",
-		"year": "Jahr",
+		"trialPeriod": "{days} {days, plural, one {Tag} other {Tage}} kostenlos testen",
+		"year": "{count, plural, one {Jahr} other {{count} Jahre}}",
 		"yearly": "Jährlich",
-		"perSeat": "Sitz"
+		"perSeat": "Platz"
 	}
 }

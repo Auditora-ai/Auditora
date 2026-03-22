@@ -47,51 +47,51 @@
 
 @layer base {
 	:root {
-		--border: #e5e5e5;
-		--input: #e0e0e0;
-		--ring: #3875c8;
-		--background: #f5f5f5;
-		--foreground: #262626;
-		--primary: #3875c8;
+		--border: #E2E8F0;
+		--input: #E2E8F0;
+		--ring: #2563EB;
+		--background: #FFFFFF;
+		--foreground: #0F172A;
+		--primary: #2563EB;
 		--primary-foreground: #ffffff;
-		--secondary: #e5e5e5;
-		--secondary-foreground: #262626;
-		--destructive: #ef4444;
+		--secondary: #F8FAFC;
+		--secondary-foreground: #0F172A;
+		--destructive: #DC2626;
 		--destructive-foreground: #ffffff;
-		--success: #39a561;
+		--success: #16A34A;
 		--success-foreground: #ffffff;
-		--muted: #ebebeb;
-		--muted-foreground: #525252;
-		--accent: #e5e5e5;
-		--accent-foreground: #262626;
+		--muted: #F8FAFC;
+		--muted-foreground: #64748B;
+		--accent: #EFF6FF;
+		--accent-foreground: #0F172A;
 		--popover: #ffffff;
-		--popover-foreground: #262626;
+		--popover-foreground: #0F172A;
 		--card: #ffffff;
-		--card-foreground: #262626;
+		--card-foreground: #0F172A;
 		--radius: 0.75rem;
 	}
 
 	.dark {
-		--border: #262626;
-		--input: #333333;
-		--ring: #528ad7;
-		--background: #141414;
-		--foreground: #e5e5e5;
-		--primary: #528ad7;
+		--border: #334155;
+		--input: #334155;
+		--ring: #3B82F6;
+		--background: #0F172A;
+		--foreground: #F1F5F9;
+		--primary: #3B82F6;
 		--primary-foreground: #ffffff;
-		--secondary: #1f1f1f;
-		--secondary-foreground: #e5e5e5;
-		--destructive: #ef4444;
+		--secondary: #1E293B;
+		--secondary-foreground: #F1F5F9;
+		--destructive: #DC2626;
 		--destructive-foreground: #ffffff;
-		--success: #39a561;
+		--success: #16A34A;
 		--success-foreground: #ffffff;
-		--muted: #1a1a1a;
-		--muted-foreground: #a3a3a3;
-		--accent: #262626;
-		--accent-foreground: #e5e5e5;
-		--popover: #1a1a1a;
-		--popover-foreground: #e5e5e5;
-		--card: #1a1a1a;
-		--card-foreground: #e5e5e5;
+		--muted: #1E293B;
+		--muted-foreground: #94A3B8;
+		--accent: #1E293B;
+		--accent-foreground: #F1F5F9;
+		--popover: #1E293B;
+		--popover-foreground: #F1F5F9;
+		--card: #1E293B;
+		--card-foreground: #F1F5F9;
 	}
 }

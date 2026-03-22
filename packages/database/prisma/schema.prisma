@@ -191,6 +191,20 @@ model Invitation {
 enum SessionType {
   DISCOVERY
   DEEP_DIVE
+  CONTINUATION
+}
+
+enum ProcessLevel {
+  PROCESS
+  SUBPROCESS
+  TASK
+  PROCEDURE
+}
+
+enum ProjectStatus {
+  ACTIVE
+  COMPLETED
+  ON_HOLD
 }
 
 enum SessionStatus {
@@ -217,39 +231,50 @@ enum NodeType {
 }
 
 model Client {
-  id             String       @id @default(cuid())
-  name           String
-  organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  projects       Project[]
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  id                String       @id @default(cuid())
+  name              String
+  organizationId    String
+  organization      Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  industry          String?
+  operationsProfile String?      @db.Text
+  businessModel     String?      @db.Text
+  employeeCount     String?
+  notes             String?      @db.Text
+  projects          Project[]
+  documents         Document[]
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
 
   @@index([organizationId])
   @@map("client")
 }
 
 model Project {
-  id        String          @id @default(cuid())
-  name      String
-  clientId  String
-  client    Client          @relation(fields: [clientId], references: [id], onDelete: Cascade)
-  sessions  MeetingSession[]
+  id           String               @id @default(cuid())
+  name         String
+  description  String?              @db.Text
+  goals        String[]
+  status       ProjectStatus        @default(ACTIVE)
+  clientId     String
+  client       Client               @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  sessions     MeetingSession[]
   architecture ProcessArchitecture?
-  createdAt DateTime        @default(now())
-  updatedAt DateTime        @updatedAt
+  documents    Document[]
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
 
   @@index([clientId])
   @@map("project")
 }
 
 model ProcessArchitecture {
-  id          String              @id @default(cuid())
-  projectId   String              @unique
-  project     Project             @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  id          String                @id @default(cuid())
+  projectId   String                @unique
+  project     Project               @relation(fields: [projectId], references: [id], onDelete: Cascade)
   definitions ProcessDefinition[]
-  createdAt   DateTime            @default(now())
-  updatedAt   DateTime            @updatedAt
+  versions    ArchitectureVersion[]
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
 
   @@map("process_architecture")
 }
@@ -259,12 +284,24 @@ model ProcessDefinition {
   architectureId String
   architecture   ProcessArchitecture @relation(fields: [architectureId], references: [id], onDelete: Cascade)
   name           String
-  description    String?
+  description    String?             @db.Text
+  level          ProcessLevel        @default(PROCESS)
+  parentId       String?
+  parent         ProcessDefinition?  @relation("ProcessHierarchy", fields: [parentId], references: [id])
+  children       ProcessDefinition[] @relation("ProcessHierarchy")
+  owner          String?
+  goals          String[]
+  triggers       String[]
+  outputs        String[]
+  processStatus  String              @default("DRAFT")
+  bpmnXml        String?             @db.Text
   priority       Int                 @default(0)
   sessions       MeetingSession[]
+  versions       ProcessVersion[]
   createdAt      DateTime            @default(now())
 
   @@index([architectureId])
+  @@index([parentId])
   @@map("process_definition")
 }
 
@@ -279,6 +316,11 @@ model MeetingSession {
   processDefinition   ProcessDefinition? @relation(fields: [processDefinitionId], references: [id])
   userId              String
   user                User              @relation(fields: [userId], references: [id])
+
+  // Session continuation
+  continuationOf      String?
+  previousSession     MeetingSession?   @relation("SessionContinuation", fields: [continuationOf], references: [id])
+  nextSessions        MeetingSession[]  @relation("SessionContinuation")
 
   // Call bot
   recallBotId         String?
@@ -394,6 +436,88 @@ model SessionSummary {
   createdAt   DateTime       @default(now())
 
   @@map("session_summary")
+}
+
+// ============================================
+// VERSIONING MODELS
+// ============================================
+
+model ProcessVersion {
+  id                  String            @id @default(cuid())
+  processDefinitionId String
+  processDefinition   ProcessDefinition @relation(fields: [processDefinitionId], references: [id], onDelete: Cascade)
+  version             Int
+  name                String
+  description         String?           @db.Text
+  bpmnXml             String?           @db.Text
+  goals               String[]
+  triggers            String[]
+  outputs             String[]
+  changeNote          String?
+  createdBy           String
+  createdAt           DateTime          @default(now())
+
+  @@unique([processDefinitionId, version])
+  @@index([processDefinitionId])
+  @@map("process_version")
+}
+
+model ArchitectureVersion {
+  id             String              @id @default(cuid())
+  architectureId String
+  architecture   ProcessArchitecture @relation(fields: [architectureId], references: [id], onDelete: Cascade)
+  version        Int
+  snapshot       Json
+  changeNote     String?
+  createdBy      String
+  createdAt      DateTime            @default(now())
+
+  @@unique([architectureId, version])
+  @@index([architectureId])
+  @@map("architecture_version")
+}
+
+// ============================================
+// DOCUMENT MODELS
+// ============================================
+
+model Document {
+  id            String            @id @default(cuid())
+  name          String
+  description   String?
+  mimeType      String
+  filePath      String
+  fileSize      Int
+  clientId      String?
+  client        Client?           @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  projectId     String?
+  project       Project?          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  extractedText String?           @db.Text
+  isProcessed   Boolean           @default(false)
+  versions      DocumentVersion[]
+  createdBy     String
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@index([clientId])
+  @@index([projectId])
+  @@map("document")
+}
+
+model DocumentVersion {
+  id         String   @id @default(cuid())
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  version    Int
+  filePath   String
+  fileSize   Int
+  changeNote String?
+  createdBy  String
+  createdAt  DateTime @default(now())
+
+  @@unique([documentId, version])
+  @@index([documentId])
+  @@map("document_version")
 }
 
 // ============================================

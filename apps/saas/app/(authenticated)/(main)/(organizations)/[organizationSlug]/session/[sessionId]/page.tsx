@@ -2,16 +2,22 @@ import { getActiveOrganization } from "@auth/lib/server";
 import { PageHeader } from "@shared/components/PageHeader";
 import { Button } from "@repo/ui";
 import { Badge } from "@repo/ui/components/badge";
-import { Card } from "@repo/ui/components/card";
 import { db } from "@repo/database";
 import { DownloadIcon, ShareIcon, ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { SessionDiagram } from "@meeting/components/SessionDiagram";
+import { SessionReviewClient } from "@meeting/components/SessionReviewClient";
 
 export async function generateMetadata() {
 	return { title: "Session Review" };
 }
+
+const STATUS_LABELS: Record<string, string> = {
+	ACTIVE: "In Progress",
+	ENDED: "Completed",
+	SCHEDULED: "Scheduled",
+	CANCELLED: "Cancelled",
+};
 
 export default async function SessionReviewPage({
 	params,
@@ -28,17 +34,29 @@ export default async function SessionReviewPage({
 		include: {
 			project: { include: { client: true } },
 			processDefinition: true,
-			diagramNodes: { where: { state: { not: "REJECTED" } } },
+			diagramNodes: true,
 			transcriptEntries: { orderBy: { timestamp: "asc" } },
-			_count: { select: { diagramNodes: true } },
 		},
 	});
 
 	if (!session) return notFound();
 
-	const duration = session.startedAt && session.endedAt
-		? Math.round((session.endedAt.getTime() - session.startedAt.getTime()) / 60000)
-		: null;
+	const duration =
+		session.startedAt && session.endedAt
+			? Math.round(
+					(session.endedAt.getTime() - session.startedAt.getTime()) /
+						60000,
+				)
+			: null;
+
+	const allNodes = session.diagramNodes;
+	const visibleNodes = allNodes.filter((n) => n.state !== "REJECTED");
+	const confirmedCount = allNodes.filter(
+		(n) => n.state === "CONFIRMED",
+	).length;
+	const rejectedCount = allNodes.filter(
+		(n) => n.state === "REJECTED",
+	).length;
 
 	return (
 		<div>
@@ -58,13 +76,20 @@ export default async function SessionReviewPage({
 				/>
 				<div className="flex items-center gap-2">
 					<Button variant="outline" size="sm" asChild>
-						<a href={`/api/sessions/${sessionId}/export?format=xml`} download>
+						<a
+							href={`/api/sessions/${sessionId}/export?format=xml`}
+							download
+						>
 							<DownloadIcon className="mr-1 h-3 w-3" />
 							BPMN XML
 						</a>
 					</Button>
 					<Button variant="outline" size="sm" asChild>
-						<a href={`/share/${session.shareToken}`} target="_blank" rel="noreferrer">
+						<a
+							href={`/share/${session.shareToken}`}
+							target="_blank"
+							rel="noreferrer"
+						>
 							<ShareIcon className="mr-1 h-3 w-3" />
 							Share
 						</a>
@@ -73,57 +98,47 @@ export default async function SessionReviewPage({
 			</div>
 
 			<div className="mt-2 flex items-center gap-3">
-				<Badge status={session.status === "ENDED" ? "success" : "info"}>
-					{session.status}
+				<Badge
+					status={session.status === "ENDED" ? "success" : "info"}
+				>
+					{STATUS_LABELS[session.status] || session.status}
 				</Badge>
 				{duration && (
-					<span className="text-sm text-muted-foreground">{duration} min</span>
+					<span className="text-sm text-muted-foreground">
+						{duration} min
+					</span>
 				)}
 				<span className="text-sm text-muted-foreground">
-					{session._count.diagramNodes} nodes
+					{allNodes.length} nodes
 				</span>
 				<span className="text-sm text-muted-foreground">
 					{new Date(session.createdAt).toLocaleDateString()}
 				</span>
 			</div>
 
-			{/* Diagram */}
-			<Card className="mt-6">
-				<div className="h-[500px]">
-					<SessionDiagram
-						nodes={session.diagramNodes.map((n) => ({
-							id: n.id,
-							type: n.nodeType.toLowerCase(),
-							label: n.label,
-							state: n.state.toLowerCase() as any,
-							lane: n.lane || undefined,
-							connections: n.connections,
-						}))}
-					/>
-				</div>
-			</Card>
-
-			{/* Transcript */}
-			<Card className="mt-6 p-6">
-				<h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-					Transcript
-				</h3>
-				<div className="max-h-96 space-y-2 overflow-y-auto">
-					{session.transcriptEntries.map((entry) => (
-						<div key={entry.id} className="border-b border-border/30 pb-2">
-							<div className="flex items-baseline justify-between">
-								<span className="text-xs font-semibold text-primary">
-									{entry.speaker}
-								</span>
-								<span className="text-[10px] text-muted-foreground">
-									{Math.floor(entry.timestamp / 60)}:{Math.floor(entry.timestamp % 60).toString().padStart(2, "0")}
-								</span>
-							</div>
-							<p className="mt-0.5 text-sm text-foreground">{entry.text}</p>
-						</div>
-					))}
-				</div>
-			</Card>
+			{/* Client-side interactive components */}
+			<SessionReviewClient
+				sessionId={sessionId}
+				nodes={visibleNodes.map((n) => ({
+					id: n.id,
+					type: n.nodeType.toLowerCase(),
+					label: n.label,
+					state: n.state.toLowerCase() as any,
+					lane: n.lane || undefined,
+					connections: n.connections,
+					formedAt: n.formedAt.toISOString(),
+				}))}
+				transcriptEntries={session.transcriptEntries.map((e) => ({
+					id: e.id,
+					speaker: e.speaker,
+					text: e.text,
+					timestamp: e.timestamp,
+				}))}
+				bpmnXml={session.bpmnXml}
+				totalNodeCount={allNodes.length}
+				confirmedCount={confirmedCount}
+				rejectedCount={rejectedCount}
+			/>
 		</div>
 	);
 }

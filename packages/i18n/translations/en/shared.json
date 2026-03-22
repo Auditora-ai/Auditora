@@ -2,51 +2,49 @@
 	"pricing": {
 		"choosePlan": "Choose plan",
 		"contactSales": "Contact sales",
-		"description": "Choose the plan that works best for you.",
+		"description": "Simple pricing for solo consultants and teams.",
 		"getStarted": "Get started",
 		"month": "{count, plural, one {month} other {{count} months}}",
 		"monthly": "Monthly",
 		"products": {
-			"basic": {
-				"description": "Perfect to small teams.",
-				"features": {
-					"anotherFeature": "Another amazing feature",
-					"limitedSupport": "Limited support"
-				},
-				"title": "Basic"
-			},
 			"enterprise": {
-				"description": "Custom plan tailored to your requirements",
+				"description": "Custom deployment for your firm",
 				"features": {
-					"enterpriseSupport": "Enterprise support",
-					"unlimitedProjects": "Unlimited projects"
+					"customIntegrations": "Custom integrations",
+					"dedicatedSupport": "Dedicated support",
+					"slaGuarantees": "SLA guarantees",
+					"ssoAuth": "SSO & custom auth"
 				},
 				"title": "Enterprise"
 			},
 			"free": {
-				"description": "Start for free",
+				"description": "Try Prozea with 1 session per month",
 				"features": {
-					"anotherFeature": "Another amazing feature",
-					"limitedSupport": "Limited support"
+					"basicTranscription": "Basic transcription",
+					"bpmnExport": "BPMN export (watermarked)",
+					"oneSession": "1 session per month"
 				},
 				"title": "Free"
 			},
 			"lifetime": {
 				"description": "Buy once. Use forever.",
 				"features": {
-					"extendSupport": "Extended support",
-					"noRecurringCosts": "No recurring costs"
+					"everythingInPro": "Everything in Professional",
+					"lifetimeUpdates": "Lifetime updates",
+					"noRecurringCosts": "No recurring costs",
+					"prioritySupport": "Priority support"
 				},
 				"title": "Lifetime"
 			},
 			"pro": {
-				"description": "Best for teams",
+				"description": "Everything you need to consult smarter",
 				"features": {
-					"anotherFeature": "Another amazing feature",
-					"fiveMembers": "Up to 5 members",
-					"fullSupport": "Full support"
+					"aiTeleprompter": "AI teleprompter",
+					"fiveMembers": "Up to 5 team members",
+					"fullBpmnExport": "Full BPMN export",
+					"unlimitedSessions": "Unlimited sessions"
 				},
-				"title": "Pro"
+				"title": "Professional"
 			}
 		},
 		"purchase": "Purchase",

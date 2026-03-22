@@ -8,9 +8,35 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
 import { createCallBotProvider } from "@repo/ai";
+import { auth } from "@repo/auth";
+import { headers } from "next/headers";
+
+async function getAuthContext() {
+	const session = await auth.api.getSession({
+		headers: await headers(),
+		query: { disableCookieCache: true },
+	});
+	if (!session?.user) return null;
+
+	const orgs = await auth.api.listOrganizations({
+		headers: await headers(),
+	});
+	const activeOrg = orgs?.[0];
+	if (!activeOrg) return null;
+
+	return { user: session.user, org: activeOrg };
+}
 
 export async function POST(request: NextRequest) {
 	try {
+		const authCtx = await getAuthContext();
+		if (!authCtx) {
+			return NextResponse.json(
+				{ error: "Unauthorized. Please log in." },
+				{ status: 401 },
+			);
+		}
+
 		const body = await request.json();
 		const { meetingUrl, clientName, projectName, sessionType } = body;
 
@@ -21,19 +47,9 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		// TODO: Get authenticated user + org from better-auth session
-		// For now, get first user and org from DB
-		const user = await db.user.findFirst();
-		const org = await db.organization.findFirst();
+		const { user, org } = authCtx;
 
-		if (!user || !org) {
-			return NextResponse.json(
-				{ error: "No user or organization found. Please complete onboarding first." },
-				{ status: 400 },
-			);
-		}
-
-		// Find or create client
+		// Find or create client (scoped to org)
 		let client = await db.client.findFirst({
 			where: { name: clientName, organizationId: org.id },
 		});
@@ -114,7 +130,18 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
 	try {
+		const authCtx = await getAuthContext();
+		if (!authCtx) {
+			return NextResponse.json(
+				{ error: "Unauthorized" },
+				{ status: 401 },
+			);
+		}
+
 		const sessions = await db.meetingSession.findMany({
+			where: {
+				project: { client: { organizationId: authCtx.org.id } },
+			},
 			include: {
 				project: { include: { client: true } },
 				processDefinition: true,

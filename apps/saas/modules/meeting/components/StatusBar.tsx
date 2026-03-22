@@ -1,6 +1,6 @@
 "use client";
 
-type LayoutPreset = "balanced" | "diagram-focus" | "transcript-focus";
+type LayoutPreset = "balanced" | "diagram-focus" | "transcript-focus" | "fullscreen";
 type ConnectionStatus = "connected" | "degraded" | "disconnected";
 
 interface StatusBarProps {

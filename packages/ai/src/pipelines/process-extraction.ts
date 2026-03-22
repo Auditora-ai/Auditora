@@ -12,10 +12,30 @@
 
 import { generateText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
+import { z } from "zod";
 import {
   PROCESS_EXTRACTION_SYSTEM,
   PROCESS_EXTRACTION_USER,
 } from "../prompts/process-extraction";
+
+const VALID_NODE_TYPES = ["startEvent", "endEvent", "task", "exclusiveGateway", "parallelGateway"] as const;
+
+const NewNodeSchema = z.object({
+  id: z.string().min(1),
+  type: z.enum(VALID_NODE_TYPES).catch("task"),
+  label: z.string().min(1),
+  lane: z.string().optional(),
+  connectFrom: z.string().nullable().optional(),
+  connectTo: z.string().nullable().optional(),
+});
+
+const ExtractionResultSchema = z.object({
+  newNodes: z.array(NewNodeSchema).catch([]),
+  updatedNodes: z.array(z.object({
+    id: z.string().min(1),
+    label: z.string().optional(),
+  })).catch([]),
+});
 
 export interface BpmnNode {
   id: string;
@@ -108,21 +128,15 @@ export async function extractProcessUpdates(
   try {
     // Strip markdown code fences if present
     const cleaned = text.replace(/^```json\s*/i, "").replace(/```\s*$/i, "").trim();
-    const result = JSON.parse(cleaned) as ExtractionResult;
+    const raw = JSON.parse(cleaned);
 
-    // Validate structure
-    if (!Array.isArray(result.newNodes)) result.newNodes = [];
-    if (!Array.isArray(result.updatedNodes)) result.updatedNodes = [];
-
-    // Ensure all new nodes have required fields
-    result.newNodes = result.newNodes.filter(
-      (n) => n.id && n.type && n.label,
-    );
+    // Validate with Zod — catches invalid nodeTypes, missing fields, etc.
+    const result = ExtractionResultSchema.parse(raw);
 
     return result;
-  } catch {
-    // LLM returned invalid JSON — log and return empty
-    console.error("[ProcessExtraction] Invalid JSON from LLM:", text.substring(0, 200));
+  } catch (error) {
+    // LLM returned invalid JSON or failed validation
+    console.error("[ProcessExtraction] Invalid LLM output:", text.substring(0, 200), error instanceof Error ? error.message : "");
     return { newNodes: [], updatedNodes: [] };
   }
 }

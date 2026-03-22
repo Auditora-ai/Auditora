@@ -1,52 +1,50 @@
 {
 	"pricing": {
-		"choosePlan": "Choisir un forfait",
+		"choosePlan": "Choisir un plan",
 		"contactSales": "Contacter les ventes",
-		"description": "Choisissez le forfait qui vous convient le mieux.",
+		"description": "Tarification simple pour consultants indépendants et équipes.",
 		"getStarted": "Commencer",
 		"month": "{count, plural, one {mois} other {{count} mois}}",
 		"monthly": "Mensuel",
 		"products": {
-			"basic": {
-				"description": "Parfait pour les petites équipes.",
-				"features": {
-					"anotherFeature": "Une autre fonctionnalité incroyable",
-					"limitedSupport": "Support limité"
-				},
-				"title": "Basique"
-			},
 			"enterprise": {
-				"description": "Forfait personnalisé adapté à vos besoins",
+				"description": "Déploiement personnalisé pour votre cabinet",
 				"features": {
-					"enterpriseSupport": "Support entreprise",
-					"unlimitedProjects": "Projets illimités"
+					"customIntegrations": "Intégrations personnalisées",
+					"dedicatedSupport": "Support dédié",
+					"slaGuarantees": "Garanties SLA",
+					"ssoAuth": "SSO et authentification personnalisée"
 				},
-				"title": "Entreprise"
+				"title": "Enterprise"
 			},
 			"free": {
-				"description": "Commencez gratuitement",
+				"description": "Essayez Prozea avec 1 session par mois",
 				"features": {
-					"anotherFeature": "Une autre fonctionnalité incroyable",
-					"limitedSupport": "Support limité"
+					"basicTranscription": "Transcription de base",
+					"bpmnExport": "Export BPMN (avec filigrane)",
+					"oneSession": "1 session par mois"
 				},
 				"title": "Gratuit"
 			},
 			"lifetime": {
 				"description": "Achetez une fois. Utilisez pour toujours.",
 				"features": {
-					"extendSupport": "Support étendu",
-					"noRecurringCosts": "Pas de frais récurrents"
+					"everythingInPro": "Tout de Professional",
+					"lifetimeUpdates": "Mises à jour à vie",
+					"noRecurringCosts": "Aucun coût récurrent",
+					"prioritySupport": "Support prioritaire"
 				},
-				"title": "À vie"
+				"title": "Lifetime"
 			},
 			"pro": {
-				"description": "Idéal pour les équipes",
+				"description": "Tout ce qu'il faut pour mieux conseiller",
 				"features": {
-					"anotherFeature": "Une autre fonctionnalité incroyable",
-					"fiveMembers": "Jusqu'à 5 membres",
-					"fullSupport": "Support complet"
+					"aiTeleprompter": "Téléprompteur IA",
+					"fiveMembers": "Jusqu'à 5 membres d'équipe",
+					"fullBpmnExport": "Export BPMN complet",
+					"unlimitedSessions": "Sessions illimitées"
 				},
-				"title": "Pro"
+				"title": "Professional"
 			}
 		},
 		"purchase": "Acheter",

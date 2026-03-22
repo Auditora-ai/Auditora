@@ -26,6 +26,9 @@ export type { CallBotProvider, BotStatus } from "./src/providers/call-bot";
 export { createSTTProvider } from "./src/providers/stt";
 export type { TranscriptionEvent } from "./src/providers/stt";
 
+export { generateSessionSummary } from "./src/pipelines/session-summary";
+export type { SummaryResult } from "./src/pipelines/session-summary";
+
 // Prozea prompts (for testing/eval)
 export { PROCESS_EXTRACTION_SYSTEM } from "./src/prompts/process-extraction";
 export { TELEPROMPTER_SYSTEM } from "./src/prompts/teleprompter";

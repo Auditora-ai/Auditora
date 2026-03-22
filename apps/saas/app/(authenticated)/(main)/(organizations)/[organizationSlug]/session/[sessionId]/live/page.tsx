@@ -33,6 +33,7 @@ export default async function LiveSessionPage({
 			clientName={session.project.client.name}
 			botId={session.recallBotId || undefined}
 			shareToken={session.shareToken || undefined}
+			startedAt={session.startedAt?.toISOString()}
 		/>
 	);
 }

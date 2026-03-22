@@ -10,20 +10,43 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@repo/ui/components/sheet";
+import { useGSAP } from "@gsap/react";
 import { ColorModeToggle } from "@shared/components/ColorModeToggle";
 import { LocaleSwitch } from "@shared/components/LocaleSwitch";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MenuIcon } from "lucide-react";
 import NextLink from "next/link";
 import { useTranslations } from "next-intl";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useDebounceCallback } from "usehooks-ts";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function NavBar() {
 	const t = useTranslations();
 	const localePathname = useLocalePathname();
+	const navRef = useRef<HTMLElement>(null);
 
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const [isTop, setIsTop] = useState(true);
+
+	// GSAP scroll morphing: backdrop blur + bg opacity over first 100px
+	useGSAP(() => {
+		if (!navRef.current) return;
+
+		ScrollTrigger.create({
+			start: 0,
+			end: 100,
+			onUpdate: (self) => {
+				if (!navRef.current) return;
+				const p = self.progress;
+				const blur = `blur(${p * 12}px)`;
+				navRef.current.style.backdropFilter = blur;
+				navRef.current.style.setProperty("-webkit-backdrop-filter", blur);
+			},
+		});
+	});
 
 	const handleMobileMenuClose = () => {
 		setMobileMenuOpen(false);
@@ -56,6 +79,10 @@ export function NavBar() {
 		href: string;
 	}[] = [
 		{
+			label: t("common.menu.howItWorks"),
+			href: "/#how-it-works",
+		},
+		{
 			label: t("common.menu.pricing"),
 			href: "/#pricing",
 		},
@@ -64,33 +91,18 @@ export function NavBar() {
 			href: "/#faq",
 		},
 		{
-			label: t("common.menu.blog"),
-			href: "/blog",
-		},
-		{
-			label: t("common.menu.changelog"),
-			href: "/changelog",
-		},
-		{
 			label: t("common.menu.contact"),
 			href: "/contact",
 		},
-		...(config.docsUrl
-			? [
-					{
-						label: t("common.menu.docs"),
-						href: config.docsUrl,
-					},
-				]
-			: []),
 	];
 
 	const isMenuItemActive = (href: string) => localePathname.startsWith(href);
 
 	return (
 		<nav
+			ref={navRef}
 			className={cn(
-				"sticky top-0 z-50 w-full transition-shadow duration-200 bg-background",
+				"sticky top-0 z-50 w-full transition-shadow duration-200 bg-background/80",
 				{ "border-b": !isTop },
 			)}
 			data-test="navigation"
@@ -184,15 +196,26 @@ export function NavBar() {
 						</Sheet>
 
 						{config.saasUrl && (
-							<Button
-								className="hidden lg:flex"
-								asChild
-								variant="secondary"
-							>
-								<NextLink href={config.saasUrl} prefetch>
-									{t("common.menu.login")}
-								</NextLink>
-							</Button>
+							<>
+								<Button
+									className="hidden lg:flex"
+									asChild
+									variant="ghost"
+								>
+									<NextLink href={config.saasUrl} prefetch>
+										{t("common.menu.login")}
+									</NextLink>
+								</Button>
+								<Button
+									className="hidden lg:flex"
+									asChild
+									variant="primary"
+								>
+									<NextLink href={config.saasUrl} prefetch>
+										{t("common.menu.trial")}
+									</NextLink>
+								</Button>
+							</>
 						)}
 					</div>
 				</div>

@@ -6,6 +6,7 @@ import { TeleprompterPanel } from "./TeleprompterPanel";
 import { DiagramPanel } from "./DiagramPanel";
 import { TranscriptPanel } from "./TranscriptPanel";
 import { StatusBar } from "./StatusBar";
+import type { DiagramNode } from "../types";
 
 /**
  * MeetingView — Core 3-panel layout for live process elicitation
@@ -21,22 +22,14 @@ import { StatusBar } from "./StatusBar";
  * Polls /api/sessions/[id]/live-data every 3 seconds for transcript updates.
  */
 
-type LayoutPreset = "balanced" | "diagram-focus" | "transcript-focus";
+type LayoutPreset = "balanced" | "diagram-focus" | "transcript-focus" | "fullscreen";
 
 const LAYOUT_PRESETS: Record<LayoutPreset, { left: string; center: string; right: string }> = {
 	balanced: { left: "22%", center: "50%", right: "28%" },
 	"diagram-focus": { left: "15%", center: "70%", right: "15%" },
 	"transcript-focus": { left: "20%", center: "40%", right: "40%" },
+	fullscreen: { left: "0%", center: "100%", right: "0%" },
 };
-
-interface DiagramNode {
-	id: string;
-	type: "startEvent" | "endEvent" | "task" | "exclusiveGateway" | "parallelGateway";
-	label: string;
-	state: "forming" | "confirmed" | "rejected";
-	lane?: string;
-	connections: string[];
-}
 
 interface TranscriptEntry {
 	id: string;
@@ -52,6 +45,7 @@ interface MeetingViewProps {
 	clientName?: string;
 	botId?: string;
 	shareToken?: string;
+	startedAt?: string;
 }
 
 export function MeetingView({
@@ -60,6 +54,7 @@ export function MeetingView({
 	processName,
 	clientName,
 	botId,
+	startedAt,
 }: MeetingViewProps) {
 	const router = useRouter();
 	const [layout, setLayout] = useState<LayoutPreset>("balanced");
@@ -70,15 +65,40 @@ export function MeetingView({
 			? "Walk me through your company's main business areas and core operations."
 			: `Let's map the "${processName}" process. Where does it start?`,
 	);
-	const [questionQueue] = useState<string[]>([]);
+	const [questionQueue, setQuestionQueue] = useState<string[]>([]);
 	const [connectionStatus, setConnectionStatus] = useState<
 		"connected" | "degraded" | "disconnected"
 	>(botId ? "connected" : "disconnected");
 	const [isRecording, setIsRecording] = useState(!!botId);
 	const [aiSuggestion] = useState<string | null>(null);
-	const [elapsedTime, setElapsedTime] = useState(0);
+	const [elapsedTime, setElapsedTime] = useState(() => {
+		if (!startedAt) return 0;
+		return Math.max(0, Math.floor((Date.now() - new Date(startedAt).getTime()) / 1000));
+	});
+	const [isFullscreen, setIsFullscreen] = useState(false);
+	const [sessionStatus, setSessionStatus] = useState<"ACTIVE" | "ENDED">("ACTIVE");
 
-	const currentLayout = LAYOUT_PRESETS[layout];
+	// Save previous layout when entering fullscreen, restore on exit
+	const [prevLayout, setPrevLayout] = useState<LayoutPreset>("balanced");
+	const currentLayout = LAYOUT_PRESETS[isFullscreen ? "fullscreen" : layout];
+
+	const handleToggleFullscreen = useCallback(() => {
+		setIsFullscreen((prev) => {
+			if (!prev) setPrevLayout(layout);
+			return !prev;
+		});
+	}, [layout]);
+
+	// Exit fullscreen on Escape
+	useEffect(() => {
+		const handler = (e: KeyboardEvent) => {
+			if (e.key === "Escape" && isFullscreen) {
+				setIsFullscreen(false);
+			}
+		};
+		document.addEventListener("keydown", handler);
+		return () => document.removeEventListener("keydown", handler);
+	}, [isFullscreen]);
 
 	// Poll for live data every 3 seconds
 	const fetchLiveData = useCallback(async () => {
@@ -102,9 +122,14 @@ export function MeetingView({
 				setCurrentQuestion(data.teleprompterQuestion);
 			}
 
+			if (data.questionQueue?.length > 0) {
+				setQuestionQueue(data.questionQueue);
+			}
+
 			if (data.status === "ENDED") {
 				setConnectionStatus("disconnected");
 				setIsRecording(false);
+				setSessionStatus("ENDED");
 			}
 		} catch {
 			// Silent fail — next poll will try again
@@ -141,6 +166,10 @@ export function MeetingView({
 	};
 
 	const handleEndSession = async () => {
+		const confirmed = window.confirm(
+			"¿Terminar esta sesión? Se detendrá la grabación y se finalizará el diagrama.",
+		);
+		if (!confirmed) return;
 		await fetch(`/api/sessions/${sessionId}/end`, { method: "POST" });
 		router.back();
 	};
@@ -165,17 +194,19 @@ export function MeetingView({
 			{/* Main 3-panel layout */}
 			<div className="flex flex-1 overflow-hidden">
 				{/* Left: Teleprompter */}
-				<div
-					className="flex-shrink-0 border-r border-border bg-card"
-					style={{ width: currentLayout.left }}
-				>
-					<TeleprompterPanel
-						currentQuestion={currentQuestion}
-						questionQueue={questionQueue}
-						aiSuggestion={aiSuggestion}
-						sessionType={sessionType}
-					/>
-				</div>
+				{!isFullscreen && (
+					<div
+						className="flex-shrink-0 border-r border-border bg-card"
+						style={{ width: currentLayout.left }}
+					>
+						<TeleprompterPanel
+							currentQuestion={currentQuestion}
+							questionQueue={questionQueue}
+							aiSuggestion={aiSuggestion}
+							sessionType={sessionType}
+						/>
+					</div>
+				)}
 
 				{/* Center: Live Diagram */}
 				<div
@@ -187,16 +218,21 @@ export function MeetingView({
 						onConfirmNode={handleConfirmNode}
 						onRejectNode={handleRejectNode}
 						sessionType={sessionType}
+						sessionStatus={sessionStatus}
+						isFullscreen={isFullscreen}
+						onToggleFullscreen={handleToggleFullscreen}
 					/>
 				</div>
 
 				{/* Right: Transcript */}
-				<div
-					className="flex-shrink-0 border-l border-border bg-card"
-					style={{ width: currentLayout.right }}
-				>
-					<TranscriptPanel entries={transcript} />
-				</div>
+				{!isFullscreen && (
+					<div
+						className="flex-shrink-0 border-l border-border bg-card"
+						style={{ width: currentLayout.right }}
+					>
+						<TranscriptPanel entries={transcript} />
+					</div>
+				)}
 			</div>
 
 			{/* Status Bar */}

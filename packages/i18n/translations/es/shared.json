@@ -2,51 +2,49 @@
 	"pricing": {
 		"choosePlan": "Elegir plan",
 		"contactSales": "Contactar ventas",
-		"description": "Elige el plan que mejor te funcione.",
+		"description": "Precios simples para consultores independientes y equipos.",
 		"getStarted": "Comenzar",
 		"month": "{count, plural, one {mes} other {{count} meses}}",
 		"monthly": "Mensual",
 		"products": {
-			"basic": {
-				"description": "Perfecto para equipos pequeños.",
-				"features": {
-					"anotherFeature": "Otra función increíble",
-					"limitedSupport": "Soporte limitado"
-				},
-				"title": "Básico"
-			},
 			"enterprise": {
-				"description": "Plan personalizado según tus necesidades",
+				"description": "Despliegue personalizado para tu firma",
 				"features": {
-					"enterpriseSupport": "Soporte empresarial",
-					"unlimitedProjects": "Proyectos ilimitados"
+					"customIntegrations": "Integraciones personalizadas",
+					"dedicatedSupport": "Soporte dedicado",
+					"slaGuarantees": "Garantías de SLA",
+					"ssoAuth": "SSO y autenticación personalizada"
 				},
-				"title": "Empresa"
+				"title": "Enterprise"
 			},
 			"free": {
-				"description": "Comienza gratis",
+				"description": "Prueba Prozea con 1 sesión al mes",
 				"features": {
-					"anotherFeature": "Otra función increíble",
-					"limitedSupport": "Soporte limitado"
+					"basicTranscription": "Transcripción básica",
+					"bpmnExport": "Exportación BPMN (con marca de agua)",
+					"oneSession": "1 sesión por mes"
 				},
 				"title": "Gratis"
 			},
 			"lifetime": {
 				"description": "Compra una vez. Úsalo para siempre.",
 				"features": {
-					"extendSupport": "Soporte extendido",
-					"noRecurringCosts": "Sin costos recurrentes"
+					"everythingInPro": "Todo lo de Profesional",
+					"lifetimeUpdates": "Actualizaciones de por vida",
+					"noRecurringCosts": "Sin costos recurrentes",
+					"prioritySupport": "Soporte prioritario"
 				},
 				"title": "De por vida"
 			},
 			"pro": {
-				"description": "Ideal para equipos",
+				"description": "Todo lo que necesitas para consultar mejor",
 				"features": {
-					"anotherFeature": "Otra función increíble",
-					"fiveMembers": "Hasta 5 miembros",
-					"fullSupport": "Soporte completo"
+					"aiTeleprompter": "Teleprompter de IA",
+					"fiveMembers": "Hasta 5 miembros del equipo",
+					"fullBpmnExport": "Exportación BPMN completa",
+					"unlimitedSessions": "Sesiones ilimitadas"
 				},
-				"title": "Pro"
+				"title": "Profesional"
 			}
 		},
 		"purchase": "Comprar",
@@ -56,6 +54,6 @@
 		"trialPeriod": "{days} {days, plural, one {día} other {días}} de prueba gratis",
 		"year": "{count, plural, one {año} other {{count} años}}",
 		"yearly": "Anual",
-		"perSeat": "asiento"
+		"perSeat": "puesto"
 	}
 }

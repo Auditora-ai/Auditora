@@ -1,22 +1,22 @@
 {
 	"blog": {
-		"description": "In diesem Blog schreibe ich über alles mögliche.",
-		"title": "Mein toller Blog",
+		"description": "Einblicke in Prozessberatung, BPM-Automatisierung und KI-gestützte Erhebung",
+		"title": "Blog",
 		"back": "Zurück zum Blog"
 	},
 	"changelog": {
-		"description": "Bleibe über die neuesten Änderungen in unserem Produkt auf dem Laufenden.",
+		"description": "Bleiben Sie über die neuesten Änderungen in Prozea auf dem Laufenden.",
 		"title": "Changelog"
 	},
 	"contact": {
-		"description": "Wir sind hier, um dir zu helfen. Bitte verwende das untenstehende Formular, um mit uns in Kontakt zu treten.",
+		"description": "Haben Sie Fragen zu Prozea? Wir freuen uns auf Ihre Nachricht.",
 		"form": {
 			"email": "E-Mail",
 			"message": "Nachricht",
 			"name": "Name",
 			"notifications": {
-				"error": "Es tut uns leid, aber wir konnten deine Nachricht nicht senden. Bitte versuche es später noch einmal.",
-				"success": "Deine Nachricht wurde erfolgreich abgeschickt. Wir werden uns so schnell wie möglich bei dir melden."
+				"error": "Ihre Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.",
+				"success": "Nachricht gesendet. Wir melden uns innerhalb von 24 Stunden bei Ihnen."
 			},
 			"submit": "Nachricht senden"
 		},
@@ -26,97 +26,241 @@
 		"title": "Dokumentation"
 	},
 	"faq": {
-		"description": "Hast du irgendwelche Fragen? \nWir sind für dich da.",
+		"description": "Alles, was Sie über Prozea wissen müssen.",
 		"title": "Häufig gestellte Fragen",
 		"items": {
-			"refundPolicy": {
-				"question": "Wie ist die Rückerstattungsrichtlinie?",
-				"answer": "Wir bieten eine 30-tägige Geld-zurück-Garantie, wenn du mit unserem Produkt nicht zufrieden bist."
+			"joinCall": {
+				"question": "Wie tritt Prozea meinem Anruf bei?",
+				"answer": "Prozea nutzt Recall.ai, um als Bot-Teilnehmer an Zoom-, Google Meet- oder Microsoft Teams-Meetings teilzunehmen. Teilen Sie einfach einen Meeting-Link oder laden Sie Prozea direkt ein — es tritt leise bei und beginnt mit der Echtzeit-Transkription."
 			},
-			"cancelSubscription": {
-				"question": "Wie kann ich mein Abonnement kündigen?",
-				"answer": "Du kannst dein Abonnement auf der Rechnungsseite kündigen."
+			"dataSecurity": {
+				"question": "Sind die Gesprächsdaten meiner Kunden sicher?",
+				"answer": "Alle Transkriptionen werden in Echtzeit verarbeitet und sowohl bei der Übertragung als auch im Ruhezustand verschlüsselt. Wir verwenden Ihre Kundendaten niemals zum Training von KI-Modellen. Ihre Daten gehören vollständig Ihnen."
 			},
-			"changePlan": {
-				"question": "Kann ich meinen Plan ändern?",
-				"answer": "Ja, du kannst deinen Plan jederzeit auf der Rechnungsseite ändern."
+			"bpmnStandard": {
+				"question": "Welchen BPMN-Standard unterstützen Sie?",
+				"answer": "Prozea erstellt BPMN 2.0-konforme Diagramme. Sie können diese exportieren und in jedem standardkonformen Tool wie Camunda, Signavio oder Visio öffnen."
 			},
-			"freeTrial": {
-				"question": "Bietet ihr eine kostenlose Testversion an?",
-				"answer": "Ja, wir bieten eine 14-tägige kostenlose Testversion an."
+			"liveEditing": {
+				"question": "Kann ich das Diagramm während des Meetings bearbeiten?",
+				"answer": "Ja. Die BPMN-Leinwand ist vollständig interaktiv. Sie können Knoten verschieben, Anmerkungen hinzufügen, KI-Vorschläge bestätigen oder ablehnen und das Diagramm verfeinern, während Sie noch im Gespräch mit Ihrem Kunden sind."
+			},
+			"aiAccuracy": {
+				"question": "Was passiert, wenn die KI einen Prozessschritt falsch erkennt?",
+				"answer": "Knoten erscheinen zunächst im Zustand 'In Entstehung' mit gestricheltem Rand. Sie bestätigen, bearbeiten oder lehnen jeden Schritt ab, bevor er permanent wird. Sie behalten stets die Kontrolle über das Endergebnis."
 			}
 		}
 	},
 	"home": {
 		"hero": {
-			"new": "Neu:",
-			"featureBadge": "Tolle Funktion deines SaaS",
-			"title": "Dein revolutionäres SaaS mit Next.js",
-			"subtitle": "Dies ist eine Demo-Anwendung, die mit supastarter erstellt wurde. Sie spart dir viel Zeit und Aufwand beim Aufbau deiner nächsten SaaS.",
-			"getStarted": "Loslegen",
-			"documentation": "Dokumentation",
-			"imageAlt": "Unsere Anwendung",
-			"builtWith": "Erstellt & ausgeliefert mit diesen tollen Tools"
+			"badge": "KI-gestützte Prozesserhebung",
+			"title": "Verwandeln Sie jedes Kundenmeeting in eine fertige Prozesskarte",
+			"subtitle": "Prozea nimmt an Ihrem Videoanruf teil, leitet Ihre Fragen mit einem KI-Teleprompter und erstellt automatisch Geschäftsprozessdiagramme in Echtzeit. Verlassen Sie jedes Meeting mit einem kundenfertigen BPMN-Ergebnis.",
+			"cta": "Kostenlos testen",
+			"ctaSecondary": "So funktioniert es"
+		},
+		"problem": {
+			"title": "Prozessberater ertrinken in Dokumentation",
+			"stat1": {
+				"number": "60",
+				"unit": "%",
+				"label": "der Beratungszeit für Nachbereitung und Dokumentation"
+			},
+			"stat2": {
+				"number": "3",
+				"unit": "Std",
+				"label": "durchschnittliche Zeit zur Rekonstruktion einer Prozesskarte aus Notizen"
+			},
+			"stat3": {
+				"number": "40",
+				"unit": "%",
+				"label": "der Prozessschritte werden übersehen oder falsch erinnert"
+			},
+			"description": "Sie machen sich während des Anrufs Notizen. Sie bitten den Kunden, Dinge zu wiederholen. Sie verbringen Stunden danach in Visio oder Lucidchart, um das Gesagte zu rekonstruieren. Schritte gehen verloren. Details gehen verloren. Ihr Kunde erhält das Ergebnis Tage statt Minuten später."
+		},
+		"howItWorks": {
+			"title": "Drei Schritte. Null Nachbereitung.",
+			"stepLabel": "Schritt {number}",
+			"step1": {
+				"title": "Prozea tritt Ihrem Anruf bei",
+				"description": "Laden Sie Prozea zu jeder Zoom-, Teams- oder Meet-Sitzung ein. Es tritt als stiller Teilnehmer bei und beginnt die Echtzeit-Transkription mit Sprecheridentifikation."
+			},
+			"step2": {
+				"title": "KI leitet Ihre Fragen",
+				"description": "Ein privater Teleprompter zeigt Ihnen genau, was Sie als Nächstes fragen sollten, basierend auf dem bisherigen Gespräch. Verpassen Sie nie wieder einen kritischen Prozessschritt."
+			},
+			"step3": {
+				"title": "Das Diagramm erstellt sich selbst",
+				"description": "Beobachten Sie, wie BPMN-Aufgaben, Gateways und Flüsse in Echtzeit auf der Leinwand erscheinen. Überprüfen und verfeinern Sie mit Ihrem Kunden, während Sie noch im Gespräch sind."
+			}
 		},
 		"features": {
-			"badge": "Unglaubliche Funktionen",
-			"title": "Funktionen, die deine Kunden lieben werden",
-			"description": "In diesem Abschnitt kannst du alle Funktionen deines SaaS präsentieren und zeigen, wie sie deinen Kunden zugute kommen.",
+			"badge": "Kernfunktionen",
+			"title": "Alles, was Sie brauchen, um Prozesse zu erheben — nicht zu dokumentieren",
+			"description": "Prozea übernimmt die Dokumentation, damit Sie sich auf das konzentrieren können, was Sie am besten können — das Geschäft Ihres Kunden verstehen.",
 			"feature1": {
-				"title": "Funktion 1",
-				"subtitle": "Erledige mehr mit unserem tollen SaaS.",
-				"description": "Dies ist eine brillante Funktion. Unten siehst du einige Gründe warum. Dies ist im Grunde nur ein Platzhaltertext.",
+				"title": "Echtzeit-Transkription",
+				"subtitle": "Jedes Wort erfasst, jeder Sprecher identifiziert.",
+				"description": "Angetrieben von Deepgram erfasst Prozea jedes Wort mit Sprecherdiarisierung. Es weiß genau, wer was gesagt hat, damit Ihre Prozesskarte die richtigen Rollen und Verantwortlichkeiten widerspiegelt.",
 				"benefit1": {
-					"title": "Vorteil 1",
-					"description": "Dies ist ein toller Vorteil. Unten siehst du einige Gründe warum. Dies ist im Grunde nur ein Platzhaltertext."
+					"title": "Sprecherdiarisierung",
+					"description": "Erkennt automatisch, wer spricht, und ordnet Stimmen den Rollen in Ihrem Prozessdiagramm zu."
 				},
 				"benefit2": {
-					"title": "Vorteil 2",
-					"description": "Dies ist ein toller Vorteil. Unten siehst du einige Gründe warum. Dies ist im Grunde nur ein Platzhaltertext."
+					"title": "Mehrsprachige Unterstützung",
+					"description": "Transkribieren Sie Meetings in mehreren Sprachen mit hoher Genauigkeit und geringer Latenz."
 				},
 				"benefit3": {
-					"title": "Vorteil 3",
-					"description": "Dies ist ein toller Vorteil. Unten siehst du einige Gründe warum. Dies ist im Grunde nur ein Platzhaltertext."
+					"title": "Durchsuchbarer Verlauf",
+					"description": "Jede Transkription wird gespeichert und ist durchsuchbar. Greifen Sie auf jeden Moment vergangener Sitzungen zurück."
 				}
 			},
 			"feature2": {
-				"title": "Funktion 2",
-				"subtitle": "Dein SaaS kann auch das.",
-				"description": "Ein weiterer Platzhaltertext für eine weitere Funktion.",
+				"title": "KI-Teleprompter",
+				"subtitle": "Ihr Experten-Copilot für jedes Meeting.",
+				"description": "Claude analysiert das Gespräch in Echtzeit und schlägt die nächste Frage vor, die Sie stellen sollten. Deckt Sonderfälle, Ausnahmeflüsse und Übergaben ab, die Berater typischerweise übersehen.",
 				"benefit1": {
-					"title": "Vorteil 1",
-					"description": "Dies ist ein toller Vorteil. Unten siehst du einige Gründe warum. Dies ist im Grunde nur ein Platzhaltertext."
+					"title": "Kontextbezogene Fragen",
+					"description": "Fragen passen sich an das Besprochene an. Keine generischen Skripte — jeder Vorschlag ist auf das Gespräch zugeschnitten."
 				},
 				"benefit2": {
-					"title": "Vorteil 2",
-					"description": "Dies ist ein toller Vorteil. Unten siehst du einige Gründe warum. Dies ist im Grunde nur ein Platzhaltertext."
+					"title": "Lückenerkennung",
+					"description": "Identifiziert fehlende Informationen — Ausnahmepfade, Genehmigungsketten, Übergabepunkte — bevor das Meeting endet."
 				},
 				"benefit3": {
-					"title": "Vorteil 3",
-					"description": "Dies ist ein toller Vorteil. Unten siehst du einige Gründe warum. Dies ist im Grunde nur ein Platzhaltertext."
+					"title": "Nur für Sie sichtbar",
+					"description": "Der Teleprompter ist Ihre private Ansicht. Ihr Kunde sieht nichts — nur einen Berater, der brillante Fragen stellt."
+				}
+			},
+			"feature3": {
+				"title": "Live-BPMN-Diagrammerstellung",
+				"subtitle": "Prozesskarten, die sich selbst zeichnen.",
+				"description": "Aufgaben, Gateways, Ereignisse und Schwimmbahnen erscheinen, während das Gespräch fortschreitet. BPMN 2.0-konform und exportbereit, sobald Ihr Meeting endet.",
+				"benefit1": {
+					"title": "BPMN 2.0-Standard",
+					"description": "Branchenstandard-Notation, die sich in Camunda, Signavio, Visio und jedem konformen Tool öffnen lässt."
+				},
+				"benefit2": {
+					"title": "Echtzeit-Zusammenarbeit",
+					"description": "Teilen Sie die Diagramm-Leinwand während des Anrufs mit Ihrem Kunden. Erstellen Sie den Prozess gemeinsam."
+				},
+				"benefit3": {
+					"title": "Bestätigen & Ablehnen",
+					"description": "Jeder KI-generierte Knoten beginnt als Vorschlag. Sie entscheiden, was bleibt und was geht."
 				}
 			}
+		},
+		"demo": {
+			"windowTitle": "Prozea — Live-Sitzung",
+			"rec": "REC",
+			"teleprompterLabel": "Teleprompter",
+			"askNow": "Jetzt fragen",
+			"transcriptLabel": "Live-Transkription",
+			"consultantLabel": "Berater",
+			"clientLabel": "Kunde",
+			"q1": "Was löst diesen Prozess aus?",
+			"q2": "Wer ist für die Genehmigung verantwortlich?",
+			"q3": "Was passiert bei Ablehnung?",
+			"q4": "Gibt es Ausnahmepfade?",
+			"q5": "Wie lange dauert jeder Schritt?",
+			"t1": "Erklären Sie mir, was nach Einreichung einer Bestellung passiert.",
+			"t2": "Sie geht zuerst zur Genehmigung an den Abteilungsleiter.",
+			"t3": "Ab $5.000 braucht es auch die Unterschrift des VP.",
+			"t4": "Was passiert, wenn der VP ablehnt?",
+			"t5": "Sie geht mit Anmerkungen zur Überarbeitung an den Antragsteller zurück.",
+			"nodeSubmit": "Bestellung",
+			"nodeGateway": "$5k?",
+			"nodeMgr": "Leiter-Freigabe",
+			"nodeVp": "VP-Freigabe",
+			"labelLt": "< $5k",
+			"labelGte": "≥ $5k",
+			"t6": "Und sobald die Überarbeitung eingereicht wird, beginnt der Genehmigungszyklus erneut?",
+			"t7": "Genau. Es durchläuft denselben Prozess erneut.",
+			"q6": "Wie hoch sind die Schwellenwerte?",
+			"q7": "Wer wird in jeder Phase benachrichtigt?",
+			"nodeRevise": "Überarbeiten",
+			"labelRejected": "Abgelehnt",
+			"labelApproved": "Genehmigt",
+			"caption": {
+				"listening": "Zuhören…",
+				"understanding": "Verstehen…",
+				"aiGuides": "KI leitet das Gespräch",
+				"loopCloses": "Der Kreislauf schließt sich",
+				"ready": "Lieferobjekt bereit"
+			},
+			"stats": {
+				"duration": "45 Min.",
+				"steps": "8 Schritte",
+				"confidence": "94%",
+				"durationLabel": "Meeting",
+				"stepsLabel": "Erfasst",
+				"confidenceLabel": "Konfidenz",
+				"export": "Exportbereit"
+			},
+			"scene1": {
+				"title": "Prozea tritt Ihrem Anruf bei",
+				"joining": "Prozea tritt dem Meeting bei…",
+				"participant1": "Ana López",
+				"participant2": "Marco Díaz",
+				"participant3": "Sarah Chen",
+				"you": "Sie (Berater)",
+				"prozea": "Prozea AI"
+			},
+			"scene2": {
+				"title": "Jedes Wort, erfasst",
+				"waveformLabel": "Echtzeit-Transkription"
+			},
+			"scene3": {
+				"title": "KI leitet Ihre Fragen",
+				"aiSuggestion": "Basierend auf der Kundenantwort"
+			},
+			"scene4": {
+				"title": "Das Diagramm baut sich selbst"
+			},
+			"scene5": {
+				"title": "Gehen Sie mit einem Ergebnis",
+				"before": "Vorher: 3 Stunden Nacharbeit aus Notizen",
+				"after": "Jetzt: Fertig bevor das Meeting endet",
+				"cta": "Kostenlos testen"
+			}
+		},
+		"integrations": {
+			"poweredBy": "Angetrieben von",
+			"worksWithTitle": "Funktioniert mit Ihren Tools",
+			"deepgram": "Deepgram",
+			"anthropic": "Anthropic Claude",
+			"recall": "Recall.ai",
+			"zoom": "Zoom",
+			"teams": "Microsoft Teams",
+			"meet": "Google Meet"
 		}
 	},
 	"newsletter": {
-		"email": "Email",
+		"email": "E-Mail",
 		"hints": {
 			"error": {
-				"message": "Der Newsletter konnte nicht abonniert werden. Bitte versuche es später noch einmal."
+				"message": "Anmeldung fehlgeschlagen. Bitte versuchen Sie es später erneut."
 			},
 			"success": {
-				"message": "Danke, dass du unseren Newsletter abonniert hast. \nWir werden dich auf dem Laufenden halten.",
-				"title": "Erfolgreich angemeldet!"
+				"message": "Sie sind auf der Liste. Wir benachrichtigen Sie, wenn Prozea startet.",
+				"title": "Angemeldet"
 			}
 		},
-		"submit": "Abonnieren",
-		"subtitle": "Gehöre zu den Ersten, die Zugriff auf supastarter.nextjs erhalten.",
-		"title": "Erhalte frühen Zugang"
+		"submit": "Anmelden",
+		"subtitle": "Gehören Sie zu den Ersten, die Zugang zu Prozea erhalten.",
+		"title": "Frühzugang sichern"
+	},
+	"cta": {
+		"title": "Hören Sie auf zu dokumentieren. Fangen Sie an zu beraten.",
+		"subtitle": "Schließen Sie sich den Beratern an, die jedes Meeting mit einer fertigen Prozesskarte verlassen.",
+		"button": "Kostenlos testen",
+		"note": "Keine Kreditkarte erforderlich"
 	},
 	"notFound": {
 		"code": "404",
 		"title": "Seite nicht gefunden",
-		"goToDashboard": "Zum Dashboard gehen"
+		"goToDashboard": "Zum Dashboard",
+		"goToHomepage": "Zur Startseite"
 	},
 	"common": {
 		"footer": {
@@ -124,18 +268,20 @@
 			"features": "Funktionen",
 			"pricing": "Preise",
 			"privacyPolicy": "Datenschutz",
-			"termsAndConditions": "Allgemeine Geschäftsbedingungen",
-			"builtWith": "Erstellt mit supastarter"
+			"termsAndConditions": "AGB",
+			"builtWith": "Prozea"
 		},
 		"menu": {
 			"blog": "Blog",
 			"changelog": "Changelog",
 			"contact": "Kontakt",
 			"dashboard": "Dashboard",
-			"docs": "Dokumentation",
+			"docs": "Docs",
 			"faq": "FAQ",
+			"howItWorks": "So funktioniert es",
 			"login": "Anmelden",
-			"pricing": "Preise"
+			"pricing": "Preise",
+			"trial": "Kostenlos testen"
 		},
 		"aria": {
 			"menu": "Menü",
@@ -143,6 +289,11 @@
 		},
 		"tableOfContents": {
 			"title": "Auf dieser Seite"
+		},
+		"colorMode": {
+			"system": "System",
+			"light": "Hell",
+			"dark": "Dunkel"
 		}
 	}
 }

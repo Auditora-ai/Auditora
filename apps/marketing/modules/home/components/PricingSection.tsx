@@ -1,12 +1,15 @@
 "use client";
 
 import { config } from "@config";
+import { useGSAP } from "@gsap/react";
 import { LocaleLink } from "@i18n/routing";
 import { config as paymentsConfig } from "@repo/payments/config";
 import type { PaidPlan } from "@repo/payments/types";
 import { cn } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
 import { Tabs, TabsList, TabsTrigger } from "@repo/ui/components/tabs";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
 	ArrowRightIcon,
 	BadgePercentIcon,
@@ -14,12 +17,16 @@ import {
 	StarIcon,
 } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export function PricingSection() {
 	const t = useTranslations();
 	const format = useFormatter();
 	const [interval, setBillingInterval] = useState<"month" | "year">("month");
+	const sectionRef = useRef<HTMLElement>(null);
+	const cardsContainerRef = useRef<HTMLDivElement>(null);
 
 	const signupUrl = useMemo(
 		() =>
@@ -89,13 +96,91 @@ export function PricingSection() {
 		p.prices?.some((price) => price.type === "subscription"),
 	);
 
+	useGSAP(
+		() => {
+			if (!sectionRef.current) return;
+
+			// Header reveal
+			const header = sectionRef.current.querySelector(".pricing-header");
+			if (header) {
+				gsap.from(header.children, {
+					opacity: 0,
+					y: 30,
+					stagger: 0.1,
+					duration: 0.7,
+					ease: "power3.out",
+					scrollTrigger: {
+						trigger: header,
+						start: "top 85%",
+						once: true,
+					},
+				});
+			}
+
+			// Cards cascade with 3D tilt
+			const cards = sectionRef.current.querySelectorAll(".pricing-card");
+			const recommendedBadge = sectionRef.current.querySelector(".pricing-recommended-badge");
+
+			if (cards.length) {
+				const tl = gsap.timeline({
+					scrollTrigger: {
+						trigger: cardsContainerRef.current,
+						start: "top 75%",
+						once: true,
+					},
+				});
+
+				// Regular cards cascade
+				tl.from(cards, {
+					y: 60,
+					opacity: 0,
+					scale: 0.95,
+					rotateX: 5,
+					stagger: 0.15,
+					duration: 0.7,
+					ease: "power3.out",
+				});
+
+				// Recommended badge clip-path wipe
+				if (recommendedBadge) {
+					tl.from(
+						recommendedBadge,
+						{
+							clipPath: "inset(0 100% 0 0)",
+							duration: 0.4,
+							ease: "power2.inOut",
+						},
+						"-=0.2",
+					);
+				}
+
+				// Feature checkmarks micro-stagger
+				const checkmarks = sectionRef.current.querySelectorAll(".pricing-feature");
+				if (checkmarks.length) {
+					tl.from(
+						checkmarks,
+						{
+							opacity: 0,
+							x: -10,
+							stagger: 0.04,
+							duration: 0.3,
+							ease: "power3.out",
+						},
+						"-=0.3",
+					);
+				}
+			}
+		},
+		{ scope: sectionRef },
+	);
+
 	return (
-		<section id="pricing" className="scroll-mt-16 py-12 lg:py-16 border-y">
+		<section ref={sectionRef} id="pricing" className="scroll-mt-16 py-12 lg:py-16 border-y">
 			<div className="container">
-				<div className="mb-6 max-w-3xl mx-auto text-center">
-					<h1 className="font-medium text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-tight text-foreground">
+				<div className="pricing-header mb-6 max-w-3xl mx-auto text-center">
+					<h2 className="font-display text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-tight text-foreground">
 						{t("pricing.title")}
-					</h1>
+					</h2>
 					<p className="mt-2 text-foreground/60 text-sm sm:text-lg">
 						{t("pricing.description")}
 					</p>
@@ -125,12 +210,14 @@ export function PricingSection() {
 						</div>
 					)}
 					<div
+						ref={cardsContainerRef}
 						className={cn(
 							"grid grid-cols-1 gap-4",
 							plans.length >= 2 && "@xl:grid-cols-2",
 							plans.length >= 3 && "@3xl:grid-cols-3",
 							plans.length >= 4 && "@4xl:grid-cols-4",
 						)}
+						style={{ perspective: "1000px" }}
 					>
 						{plans.map((plan) => {
 							const isFree = !plan.prices && !plan.isEnterprise;
@@ -152,7 +239,7 @@ export function PricingSection() {
 								<div
 									key={plan.id}
 									className={cn(
-										"relative rounded-3xl bg-card border p-6",
+										"pricing-card relative rounded-3xl bg-card border p-6",
 										plan.recommended
 											? "border-primary"
 											: "border-primary/20",
@@ -160,7 +247,10 @@ export function PricingSection() {
 									data-test="price-table-plan"
 								>
 									{plan.recommended && (
-										<div className="flex items-center justify-center absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-2 py-1 text-center font-semibold text-primary-foreground text-xs">
+										<div
+											className="pricing-recommended-badge flex items-center justify-center absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-2 py-1 text-center font-semibold text-primary-foreground text-xs"
+											style={{ clipPath: "inset(0 0% 0 0)" }}
+										>
 											<StarIcon className="mr-1.5 inline-block size-3" />
 											{t("pricing.recommended")}
 										</div>
@@ -182,7 +272,7 @@ export function PricingSection() {
 														(feature, key) => (
 															<li
 																key={key}
-																className="flex items-center justify-start"
+																className="pricing-feature flex items-center justify-start"
 															>
 																<CheckIcon className="mr-2 size-4 text-primary" />
 																<span>

@@ -6,8 +6,10 @@ import { ClientProviders } from "@shared/components/ClientProviders";
 import { ConsentBanner } from "@shared/components/ConsentBanner";
 import { ConsentProvider } from "@shared/components/ConsentProvider";
 import { Footer } from "@shared/components/Footer";
+import { LenisProvider } from "@shared/components/LenisProvider";
 import { NavBar } from "@shared/components/NavBar";
-import { Figtree } from "next/font/google";
+import { Geist } from "next/font/google";
+import { Instrument_Serif } from "next/font/google";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
@@ -15,10 +17,17 @@ import { getMessages, setRequestLocale } from "next-intl/server";
 import { ThemeProvider } from "next-themes";
 import type { PropsWithChildren } from "react";
 
-const sansFont = Figtree({
+const sansFont = Geist({
 	weight: ["300", "400", "500", "600", "700"],
 	subsets: ["latin"],
 	variable: "--font-sans",
+});
+
+const displayFont = Instrument_Serif({
+	weight: "400",
+	subsets: ["latin"],
+	variable: "--font-display",
+	style: ["normal", "italic"],
 });
 
 const locales = Object.keys(i18nConfig.locales) as string[];
@@ -48,7 +57,7 @@ export default async function MarketingLayout({
 		<html
 			lang={locale}
 			suppressHydrationWarning
-			className={sansFont.variable}
+			className={`${sansFont.variable} ${displayFont.variable}`}
 		>
 			<body
 				className={cn(
@@ -67,11 +76,13 @@ export default async function MarketingLayout({
 								defaultTheme={config.defaultTheme}
 								themes={Array.from(config.enabledThemes)}
 							>
-								<NavBar />
+								<LenisProvider>
+									<NavBar />
 
-								<main className="min-h-screen">{children}</main>
+									<main className="min-h-screen">{children}</main>
 
-								<Footer />
+									<Footer />
+								</LenisProvider>
 
 								<ConsentBanner />
 								<AnalyticsScript />

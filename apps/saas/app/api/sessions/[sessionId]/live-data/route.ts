@@ -55,12 +55,16 @@ export async function GET(
 			},
 		});
 
-		// Fetch latest teleprompter question
-		const latestQuestion = await db.teleprompterLog.findFirst({
+		// Fetch last 6 teleprompter questions (latest = current, rest = queue)
+		const recentQuestions = await db.teleprompterLog.findMany({
 			where: { sessionId },
 			orderBy: { shownAt: "desc" },
+			take: 6,
 			select: { question: true },
 		});
+
+		const teleprompterQuestion = recentQuestions[0]?.question || null;
+		const questionQueue = recentQuestions.slice(1).map((q) => q.question);
 
 		return NextResponse.json({
 			status: session.status,
@@ -78,7 +82,8 @@ export async function GET(
 				lane: n.lane,
 				connections: n.connections,
 			})),
-			teleprompterQuestion: latestQuestion?.question || null,
+			teleprompterQuestion,
+			questionQueue,
 		});
 	} catch (error) {
 		console.error("[LiveData] Error:", error);

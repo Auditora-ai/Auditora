@@ -176,7 +176,7 @@ export default async function SessionsPage({
 											) : (
 												<Button
 													size="sm"
-													variant="outline"
+													variant="secondary"
 													asChild
 												>
 													<Link

@@ -1,22 +1,22 @@
 {
 	"blog": {
-		"description": "Lee las últimas noticias de nuestra empresa",
-		"title": "Mi increíble blog",
+		"description": "Artículos sobre consultoría de procesos, automatización BPM y elicitación con IA",
+		"title": "Blog",
 		"back": "Volver al blog"
 	},
 	"changelog": {
-		"description": "Últimos cambios.",
-		"title": "Registro"
+		"description": "Mantente al día con los últimos cambios en Prozea.",
+		"title": "Changelog"
 	},
 	"contact": {
-		"description": "Estamos aquí para ayudarte. Por favor, usa el formulario de abajo para ponerte en contacto con nosotros.",
+		"description": "¿Tienes preguntas sobre Prozea? Nos encantaría saber de ti.",
 		"form": {
 			"email": "Correo electrónico",
 			"message": "Mensaje",
 			"name": "Nombre",
 			"notifications": {
-				"error": "Lo sentimos, no pudimos enviar tu mensaje. Por favor, inténtalo más tarde.",
-				"success": "Tu mensaje se ha enviado correctamente. Nos pondremos en contacto contigo lo antes posible."
+				"error": "No pudimos enviar tu mensaje. Inténtalo de nuevo más tarde.",
+				"success": "Mensaje enviado. Te responderemos en menos de 24 horas."
 			},
 			"submit": "Enviar mensaje"
 		},
@@ -26,92 +26,235 @@
 		"title": "Documentación"
 	},
 	"faq": {
-		"description": "¿Tienes alguna pregunta? Te tenemos cubierto.",
+		"description": "Todo lo que necesitas saber sobre Prozea.",
 		"title": "Preguntas frecuentes",
 		"items": {
-			"refundPolicy": {
-				"question": "¿Cuál es la política de reembolso?",
-				"answer": "Ofrecemos una garantía de devolución de 30 días si no estás satisfecho con nuestro producto."
+			"joinCall": {
+				"question": "¿Cómo se une Prozea a mi llamada?",
+				"answer": "Prozea usa Recall.ai para unirse como participante bot en Zoom, Google Meet o Microsoft Teams. Simplemente comparte el enlace de la reunión o invita a Prozea directamente — se une de forma silenciosa y comienza la transcripción en tiempo real."
 			},
-			"cancelSubscription": {
-				"question": "¿Cómo cancelo mi suscripción?",
-				"answer": "Puedes cancelar tu suscripción visitando la página de facturación."
+			"dataSecurity": {
+				"question": "¿Los datos de conversación de mi cliente están seguros?",
+				"answer": "Toda la transcripción se procesa en tiempo real y está cifrada en tránsito y en reposo. Nunca usamos los datos de tus clientes para entrenar modelos de IA. Tú eres dueño de tus datos."
 			},
-			"changePlan": {
-				"question": "¿Puedo cambiar mi plan?",
-				"answer": "Sí, puedes cambiar tu plan en cualquier momento visitando la página de facturación."
+			"bpmnStandard": {
+				"question": "¿Qué estándar BPMN soportan?",
+				"answer": "Prozea genera diagramas compatibles con BPMN 2.0. Puedes exportarlos y abrirlos en cualquier herramienta compatible como Camunda, Signavio o Visio."
 			},
-			"freeTrial": {
-				"question": "¿Ofrecen una prueba gratuita?",
-				"answer": "Sí, ofrecemos una prueba gratuita de 14 días."
+			"liveEditing": {
+				"question": "¿Puedo editar el diagrama durante la reunión?",
+				"answer": "Sí. El canvas BPMN es completamente interactivo. Puedes mover nodos, agregar anotaciones, confirmar o rechazar sugerencias de la IA, y refinar el diagrama mientras sigues en la llamada con tu cliente."
+			},
+			"aiAccuracy": {
+				"question": "¿Qué pasa si la IA se equivoca en un paso del proceso?",
+				"answer": "Los nodos aparecen primero en estado 'formación' con borde punteado. Tú confirmas, editas o rechazas cada paso antes de que sea permanente. Siempre tienes el control del entregable final."
 			}
 		}
 	},
 	"home": {
 		"hero": {
-			"new": "Nuevo:",
-			"featureBadge": "Increíble función de tu SaaS",
-			"title": "Tu SaaS revolucionario construido con Next.js",
-			"subtitle": "Esta es una aplicación de demostración construida con supastarter. Te ahorrará mucho tiempo y esfuerzo al construir tu próximo SaaS.",
-			"getStarted": "Comenzar",
-			"documentation": "Documentación",
-			"imageAlt": "Nuestra aplicación",
-			"builtWith": "Construido y enviado con estas increíbles herramientas"
+			"badge": "Elicitación de Procesos con IA",
+			"title": "Convierte cada reunión con tu cliente en un mapa de procesos terminado",
+			"subtitle": "Prozea se une a tu videollamada, guía tus preguntas con un teleprompter de IA, y auto-diagrama procesos de negocio en tiempo real. Sal de cada reunión con un entregable BPMN listo para el cliente.",
+			"cta": "Prueba gratis",
+			"ctaSecondary": "Ver cómo funciona"
+		},
+		"problem": {
+			"title": "Los consultores de procesos se ahogan en documentación",
+			"stat1": {
+				"number": "60",
+				"unit": "%",
+				"label": "del tiempo de consultoría dedicado a documentación post-reunión"
+			},
+			"stat2": {
+				"number": "3",
+				"unit": "hrs",
+				"label": "tiempo promedio para reconstruir un mapa de procesos desde notas"
+			},
+			"stat3": {
+				"number": "40",
+				"unit": "%",
+				"label": "de pasos del proceso omitidos o mal recordados"
+			},
+			"description": "Tomas notas durante la llamada. Le pides al cliente que repita cosas. Pasas horas después en Visio o Lucidchart reconstruyendo lo que se dijo. Se pierden pasos. Se pierden detalles. Tu cliente recibe el entregable días después en vez de minutos."
+		},
+		"howItWorks": {
+			"title": "Tres pasos. Cero documentación post-reunión.",
+			"stepLabel": "Paso {number}",
+			"step1": {
+				"title": "Prozea se une a tu llamada",
+				"description": "Invita a Prozea a cualquier sesión de Zoom, Teams o Meet. Se une como participante silencioso y comienza la transcripción en tiempo real con identificación de hablantes."
+			},
+			"step2": {
+				"title": "La IA guía tus preguntas",
+				"description": "Un teleprompter privado te muestra exactamente qué preguntar a continuación, basándose en lo que se ha discutido. Nunca más te pierdas un paso crítico del proceso."
+			},
+			"step3": {
+				"title": "El diagrama se construye solo",
+				"description": "Observa cómo las tareas BPMN, compuertas y flujos aparecen en el canvas en tiempo real. Revisa y refina con tu cliente mientras sigues en la llamada."
+			}
 		},
 		"features": {
-			"badge": "Funciones increíbles",
-			"title": "Funciones que tus clientes adorarán",
-			"description": "En esta sección puedes mostrar todas las funciones que ofrece tu SaaS y cómo pueden beneficiar a tus clientes.",
+			"badge": "Capacidades principales",
+			"title": "Todo lo que necesitas para elicitar procesos, no documentarlos",
+			"description": "Prozea se encarga de la documentación para que puedas enfocarte en lo que mejor haces — entender el negocio de tu cliente.",
 			"feature1": {
-				"title": "Función 1",
-				"subtitle": "Haz más con nuestro increíble SaaS.",
-				"description": "Esta es una función brillante. Y abajo puedes ver algunas razones por las que. Básicamente es solo un texto de ejemplo.",
+				"title": "Transcripción en Tiempo Real",
+				"subtitle": "Cada palabra capturada, cada hablante identificado.",
+				"description": "Impulsado por Deepgram, Prozea captura cada palabra con diarización de hablantes. Sabe exactamente quién dijo qué, para que tu mapa de procesos refleje los roles y responsabilidades correctos.",
 				"benefit1": {
-					"title": "Beneficio 1",
-					"description": "Este es un beneficio increíble. Y abajo puedes ver algunas razones por las que. Básicamente es solo un texto de ejemplo."
+					"title": "Diarización de Hablantes",
+					"description": "Identifica automáticamente quién está hablando, mapeando voces a roles en tu diagrama de procesos."
 				},
 				"benefit2": {
-					"title": "Beneficio 2",
-					"description": "Este es un beneficio increíble. Y abajo puedes ver algunas razones por las que. Básicamente es solo un texto de ejemplo."
+					"title": "Soporte Multilenguaje",
+					"description": "Transcribe reuniones en múltiples idiomas con alta precisión y baja latencia."
 				},
 				"benefit3": {
-					"title": "Beneficio 3",
-					"description": "Este es un beneficio increíble. Y abajo puedes ver algunas razones por las que. Básicamente es solo un texto de ejemplo."
+					"title": "Historial Buscable",
+					"description": "Cada transcripción se guarda y es buscable. Revisita cualquier momento de cualquier sesión pasada."
 				}
 			},
 			"feature2": {
-				"title": "Función 2",
-				"subtitle": "Tu SaaS también puede hacer esto.",
-				"description": "Otro texto de ejemplo para otra función.",
+				"title": "Teleprompter de IA",
+				"subtitle": "Tu copiloto experto para cada reunión.",
+				"description": "Claude analiza la conversación en tiempo real y te sugiere la siguiente pregunta que deberías hacer. Cubre casos extremos, flujos de excepción y traspasos que los consultores normalmente pasan por alto.",
 				"benefit1": {
-					"title": "Beneficio 1",
-					"description": "Este es un beneficio increíble. Y abajo puedes ver algunas razones por las que. Básicamente es solo un texto de ejemplo."
+					"title": "Preguntas Contextuales",
+					"description": "Las preguntas se adaptan según lo discutido. Sin scripts genéricos — cada sugerencia está adaptada a la conversación."
 				},
 				"benefit2": {
-					"title": "Beneficio 2",
-					"description": "Este es un beneficio increíble. Y abajo puedes ver algunas razones por las que. Básicamente es solo un texto de ejemplo."
+					"title": "Detección de Vacíos",
+					"description": "Identifica información faltante — rutas de excepción, cadenas de aprobación, puntos de traspaso — antes de que termine la reunión."
 				},
 				"benefit3": {
-					"title": "Beneficio 3",
-					"description": "Este es un beneficio increíble. Y abajo puedes ver algunas razones por las que. Básicamente es solo un texto de ejemplo."
+					"title": "Privado para Ti",
+					"description": "El teleprompter es tu vista privada. Tu cliente no ve nada — solo un consultor haciendo preguntas brillantes."
+				}
+			},
+			"feature3": {
+				"title": "Diagramación BPMN en Vivo",
+				"subtitle": "Mapas de procesos que se dibujan solos.",
+				"description": "Tareas, compuertas, eventos y carriles aparecen mientras la conversación avanza. Compatible con BPMN 2.0 y listo para exportar en el momento que termina tu reunión.",
+				"benefit1": {
+					"title": "Estándar BPMN 2.0",
+					"description": "Notación estándar de la industria que se abre en Camunda, Signavio, Visio y cualquier herramienta compatible."
+				},
+				"benefit2": {
+					"title": "Colaboración en Tiempo Real",
+					"description": "Comparte el canvas del diagrama con tu cliente durante la llamada. Construyan el proceso juntos."
+				},
+				"benefit3": {
+					"title": "Confirmar y Rechazar",
+					"description": "Cada nodo generado por IA comienza como sugerencia. Tú decides qué se queda y qué se va."
 				}
 			}
+		},
+		"demo": {
+			"windowTitle": "Prozea — Sesión en Vivo",
+			"rec": "REC",
+			"teleprompterLabel": "Teleprompter",
+			"askNow": "Preguntar ahora",
+			"transcriptLabel": "Transcripción en Vivo",
+			"consultantLabel": "Consultor",
+			"clientLabel": "Cliente",
+			"q1": "¿Qué inicia este proceso?",
+			"q2": "¿Quién es responsable de la aprobación?",
+			"q3": "¿Qué pasa cuando se rechaza?",
+			"q4": "¿Hay rutas de excepción?",
+			"q5": "¿Cuánto tiempo toma cada paso?",
+			"t1": "Explícame qué pasa después de que se envía una orden de compra.",
+			"t2": "Va al gerente del departamento para aprobación primero.",
+			"t3": "Si supera los $5,000, también necesita la firma del VP.",
+			"t4": "¿Qué pasa si el VP la rechaza?",
+			"t5": "Regresa al solicitante con notas para revisión.",
+			"nodeSubmit": "Enviar OC",
+			"nodeGateway": "¿$5k?",
+			"nodeMgr": "Aprob. Gerente",
+			"nodeVp": "Aprob. VP",
+			"labelLt": "< $5k",
+			"labelGte": "≥ $5k",
+			"t6": "¿Y una vez que se envía la revisión, comienza el ciclo de aprobación de nuevo?",
+			"t7": "Exacto. Vuelve a pasar por el mismo proceso.",
+			"q6": "¿Cuáles son los montos límite?",
+			"q7": "¿Quién es notificado en cada etapa?",
+			"nodeRevise": "Revisar y Reenviar",
+			"labelRejected": "Rechazado",
+			"labelApproved": "Aprobado",
+			"caption": {
+				"listening": "Escuchando…",
+				"understanding": "Comprendiendo…",
+				"aiGuides": "La IA guía la conversación",
+				"loopCloses": "El ciclo se cierra",
+				"ready": "Entregable listo"
+			},
+			"stats": {
+				"duration": "45 min",
+				"steps": "8 pasos",
+				"confidence": "94%",
+				"durationLabel": "Reunión",
+				"stepsLabel": "Capturados",
+				"confidenceLabel": "Confianza",
+				"export": "Listo para exportar"
+			},
+			"scene1": {
+				"title": "Prozea se une a tu llamada",
+				"joining": "Prozea se está uniendo a la reunión…",
+				"participant1": "Ana López",
+				"participant2": "Marco Díaz",
+				"participant3": "Sarah Chen",
+				"you": "Tú (Consultor)",
+				"prozea": "Prozea AI"
+			},
+			"scene2": {
+				"title": "Cada palabra, capturada",
+				"waveformLabel": "Transcripción en tiempo real"
+			},
+			"scene3": {
+				"title": "La IA guía tus preguntas",
+				"aiSuggestion": "Basado en la respuesta del cliente"
+			},
+			"scene4": {
+				"title": "El diagrama se construye solo"
+			},
+			"scene5": {
+				"title": "Sal con un entregable listo",
+				"before": "Antes: 3 horas reconstruyendo desde notas",
+				"after": "Ahora: Listo antes de que termine la reunión",
+				"cta": "Prueba gratis"
+			}
+		},
+		"integrations": {
+			"poweredBy": "Impulsado por",
+			"worksWithTitle": "Funciona con tus herramientas",
+			"deepgram": "Deepgram",
+			"anthropic": "Anthropic Claude",
+			"recall": "Recall.ai",
+			"zoom": "Zoom",
+			"teams": "Microsoft Teams",
+			"meet": "Google Meet"
 		}
 	},
 	"newsletter": {
 		"email": "Correo electrónico",
 		"hints": {
 			"error": {
-				"message": "No se pudo suscribir al boletín. Por favor, inténtalo más tarde."
+				"message": "No se pudo suscribir. Inténtalo de nuevo más tarde."
 			},
 			"success": {
-				"message": "Gracias por suscribirte a nuestro boletín. Te mantendremos informado.",
+				"message": "Estás en la lista. Te notificaremos cuando Prozea se lance.",
 				"title": "Suscrito"
 			}
 		},
 		"submit": "Suscribirse",
-		"subtitle": "Sé de los primeros en obtener acceso a supastarter.nextjs.",
-		"title": "Obtén acceso anticipado"
+		"subtitle": "Sé de los primeros en acceder a Prozea.",
+		"title": "Acceso anticipado"
+	},
+	"cta": {
+		"title": "Deja de documentar. Empieza a consultar.",
+		"subtitle": "Únete a los consultores que salen de cada reunión con un mapa de procesos terminado.",
+		"button": "Empieza tu prueba gratis",
+		"note": "No se requiere tarjeta de crédito"
 	},
 	"notFound": {
 		"code": "404",
@@ -126,17 +269,19 @@
 			"pricing": "Precios",
 			"privacyPolicy": "Política de privacidad",
 			"termsAndConditions": "Términos y condiciones",
-			"builtWith": "Construido con supastarter"
+			"builtWith": "Prozea"
 		},
 		"menu": {
 			"blog": "Blog",
-			"changelog": "Registro",
+			"changelog": "Changelog",
 			"contact": "Contacto",
 			"dashboard": "Panel",
 			"docs": "Docs",
 			"faq": "FAQ",
+			"howItWorks": "Cómo funciona",
 			"login": "Iniciar sesión",
-			"pricing": "Precios"
+			"pricing": "Precios",
+			"trial": "Prueba gratis"
 		},
 		"aria": {
 			"menu": "Menú",

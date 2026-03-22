@@ -1,154 +1,165 @@
 "use client";
 
 import { useEffect, useRef, useCallback, useState } from "react";
-import { buildBpmnXml } from "../lib/bpmn-builder";
+import type { DiagramNode } from "../types";
+import { useBpmnModeler } from "../hooks/useBpmnModeler";
+import { BpmnToolbar } from "./BpmnToolbar";
+import { BpmnPropertiesPanel } from "./BpmnPropertiesPanel";
+import { KeyboardShortcutsModal } from "./KeyboardShortcutsModal";
+import { exportSVG, exportPNG } from "../lib/bpmn-export";
 
-// bpmn-js requires these CSS files for proper rendering
+// bpmn-js CSS
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-js.css";
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
 
-interface DiagramNode {
-	id: string;
-	type: string;
-	label: string;
-	state: "forming" | "confirmed" | "rejected";
-	lane?: string;
-	connections: string[];
-}
+// Custom styles (dark toolbar, light canvas, state markers)
+import "../styles/bpmn-editor.css";
 
 interface DiagramPanelProps {
 	nodes: DiagramNode[];
 	onConfirmNode: (nodeId: string) => void;
 	onRejectNode: (nodeId: string) => void;
 	sessionType: "DISCOVERY" | "DEEP_DIVE";
+	sessionStatus?: "ACTIVE" | "ENDED";
+	isFullscreen?: boolean;
+	onToggleFullscreen?: () => void;
 }
 
+/**
+ * DiagramPanel — Professional BPMN editor powered by bpmn-js Modeler
+ *
+ * ┌─────────────────────────────────────┐
+ * │        BpmnToolbar (dark)           │
+ * ├──────────────────────────┬──────────┤
+ * │                          │ Props    │
+ * │   bpmn-js Modeler        │ Panel    │
+ * │   (light canvas)         │ (dark)   │
+ * │                          │          │
+ * │              ┌──────┐    │          │
+ * │              │Minimap│    │          │
+ * │              └──────┘    │          │
+ * └──────────────────────────┴──────────┘
+ *
+ * Uses useBpmnModeler hook for all Modeler lifecycle management.
+ * AI nodes merge incrementally via canvas.addShape() (non-undoable).
+ */
 export function DiagramPanel({
 	nodes,
 	onConfirmNode,
 	onRejectNode,
 	sessionType,
+	sessionStatus = "ACTIVE",
+	isFullscreen = false,
+	onToggleFullscreen,
 }: DiagramPanelProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
-	const viewerRef = useRef<any>(null);
-	const [isReady, setIsReady] = useState(false);
-	const lastXmlRef = useRef<string>("");
+	const propertiesPanelRef = useRef<HTMLDivElement>(null);
+	const [showShortcuts, setShowShortcuts] = useState(false);
+	const [propertiesOpen, setPropertiesOpen] = useState(false);
 
-	// Initialize bpmn-js Viewer
+	const {
+		isReady,
+		mergeAiNodes,
+		zoomIn,
+		zoomOut,
+		zoomFit,
+		undo,
+		redo,
+		canUndo,
+		canRedo,
+		toggleGrid,
+		gridEnabled,
+		getModeler,
+		selectedElement,
+	} = useBpmnModeler({
+		containerRef,
+		onConfirmNode,
+		onRejectNode,
+		sessionStatus,
+	});
+
+	// Merge AI nodes when they change
 	useEffect(() => {
-		let viewer: any;
+		if (!isReady) return;
+		mergeAiNodes(nodes);
+	}, [nodes, isReady, mergeAiNodes]);
 
-		async function init() {
-			if (!containerRef.current) return;
-
-			// Use NavigatedViewer for pan/zoom without editing tools
-			const BpmnViewer = (await import("bpmn-js/lib/NavigatedViewer")).default;
-
-			viewer = new BpmnViewer({
-				container: containerRef.current,
-			});
-
-			viewerRef.current = viewer;
-			setIsReady(true);
+	// Auto-open properties panel on element selection in post-meeting mode
+	useEffect(() => {
+		if (sessionStatus === "ENDED" && selectedElement) {
+			setPropertiesOpen(true);
 		}
+	}, [selectedElement, sessionStatus]);
 
-		init();
+	// Keyboard shortcuts: ? and F (only when not in text input)
+	useEffect(() => {
+		const handler = (e: KeyboardEvent) => {
+			const target = e.target as HTMLElement;
+			const isTextInput =
+				target.tagName === "INPUT" ||
+				target.tagName === "TEXTAREA" ||
+				target.isContentEditable;
+			if (isTextInput) return;
 
-		return () => {
-			viewer?.destroy();
-			viewerRef.current = null;
-		};
-	}, []);
-
-	// Update diagram when nodes change
-	const updateDiagram = useCallback(async () => {
-		const viewer = viewerRef.current;
-		if (!viewer || !isReady) return;
-
-		const visibleNodes = nodes.filter((n) => n.state !== "rejected");
-		const xml = buildBpmnXml(visibleNodes);
-
-		// Skip if XML hasn't changed
-		if (xml === lastXmlRef.current) return;
-		lastXmlRef.current = xml;
-
-		try {
-			await viewer.importXML(xml);
-
-			// Fit diagram to viewport
-			const canvas = viewer.get("canvas");
-			canvas.zoom("fit-viewport", "auto");
-
-			// Apply visual styling per node state
-			const elementRegistry = viewer.get("elementRegistry");
-			const overlays = viewer.get("overlays");
-
-			// Clear existing overlays
-			overlays.clear();
-
-			for (const node of nodes) {
-				const element = elementRegistry.get(node.id);
-				if (!element) continue;
-
-				const gfx = elementRegistry.getGraphics(node.id);
-				if (!gfx) continue;
-
-				if (node.state === "forming") {
-					// Dashed border + amber tint for forming nodes
-					const visual = gfx.querySelector(".djs-visual rect, .djs-visual polygon, .djs-visual circle");
-					if (visual) {
-						visual.setAttribute("stroke", "#d97706");
-						visual.setAttribute("stroke-dasharray", "5,5");
-						visual.setAttribute("fill", "#fffbeb");
-					}
-
-					// Add confirm/reject overlay
-					const html = document.createElement("div");
-					html.innerHTML = `
-						<div style="display:flex;gap:4px;padding:4px;background:white;border-radius:6px;border:1px solid #e5e5e5;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
-							<button data-action="confirm" data-node-id="${node.id}" style="padding:2px 8px;font-size:11px;background:#39a561;color:white;border:none;border-radius:4px;cursor:pointer;">✓ Confirm</button>
-							<button data-action="reject" data-node-id="${node.id}" style="padding:2px 8px;font-size:11px;background:#ef4444;color:white;border:none;border-radius:4px;cursor:pointer;">✗ Reject</button>
-						</div>
-					`;
-
-					html.addEventListener("click", (e) => {
-						const target = e.target as HTMLElement;
-						const action = target.getAttribute("data-action");
-						const nodeId = target.getAttribute("data-node-id");
-						if (action === "confirm" && nodeId) onConfirmNode(nodeId);
-						if (action === "reject" && nodeId) onRejectNode(nodeId);
-					});
-
-					overlays.add(node.id, "node-actions", {
-						position: { bottom: -8, left: 0 },
-						html,
-					});
-				} else if (node.state === "confirmed") {
-					// Solid green border for confirmed
-					const visual = gfx.querySelector(".djs-visual rect, .djs-visual polygon, .djs-visual circle");
-					if (visual) {
-						visual.setAttribute("stroke", "#39a561");
-						visual.setAttribute("stroke-width", "2");
-						visual.setAttribute("fill", "#f0fdf4");
-					}
-				}
+			if (e.key === "?" && !e.ctrlKey && !e.metaKey) {
+				e.preventDefault();
+				setShowShortcuts(true);
 			}
-		} catch (err) {
-			console.error("[DiagramPanel] Failed to render BPMN:", err);
-		}
-	}, [nodes, isReady, onConfirmNode, onRejectNode]);
+			if (e.key === "f" && !e.ctrlKey && !e.metaKey) {
+				e.preventDefault();
+				onToggleFullscreen?.();
+			}
+		};
+		document.addEventListener("keydown", handler);
+		return () => document.removeEventListener("keydown", handler);
+	}, [onToggleFullscreen]);
 
-	useEffect(() => {
-		updateDiagram();
-	}, [updateDiagram]);
+	const handleExportSVG = useCallback(async () => {
+		const modeler = getModeler();
+		if (!modeler) return;
+		try {
+			await exportSVG(modeler);
+		} catch (err) {
+			console.error("[DiagramPanel] SVG export failed:", err);
+		}
+	}, [getModeler]);
+
+	const handleExportPNG = useCallback(async () => {
+		const modeler = getModeler();
+		if (!modeler) return;
+		try {
+			await exportPNG(modeler);
+		} catch (err) {
+			console.error("[DiagramPanel] PNG export failed:", err);
+		}
+	}, [getModeler]);
 
 	const visibleNodes = nodes.filter((n) => n.state !== "rejected");
 
 	return (
 		<div className="flex h-full flex-col">
+			{/* Toolbar */}
+			<BpmnToolbar
+				canUndo={canUndo}
+				canRedo={canRedo}
+				gridEnabled={gridEnabled}
+				isFullscreen={isFullscreen}
+				hasElements={visibleNodes.length > 0}
+				onUndo={undo}
+				onRedo={redo}
+				onZoomIn={zoomIn}
+				onZoomOut={zoomOut}
+				onZoomFit={zoomFit}
+				onToggleGrid={toggleGrid}
+				onExportSVG={handleExportSVG}
+				onExportPNG={handleExportPNG}
+				onToggleFullscreen={() => onToggleFullscreen?.()}
+				onShowShortcuts={() => setShowShortcuts(true)}
+			/>
+
 			{/* Panel header */}
-			<div className="flex items-center justify-between border-b border-border px-3 py-2.5">
+			<div className="flex items-center justify-between border-b border-border px-3 py-2">
 				<span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
 					{sessionType === "DISCOVERY"
 						? "Process Architecture"
@@ -164,21 +175,57 @@ export function DiagramPanel({
 								{nodes.filter((n) => n.state === "forming").length} forming
 							</span>
 						)}
+						{/* Properties toggle */}
+						<button
+							type="button"
+							onClick={() => setPropertiesOpen(!propertiesOpen)}
+							className={`rounded px-1.5 py-0.5 text-[10px] transition-colors ${
+								propertiesOpen
+									? "bg-primary/10 text-primary"
+									: "text-muted-foreground hover:bg-accent/50"
+							}`}
+						>
+							Properties
+						</button>
 					</div>
 				)}
 			</div>
 
-			{/* BPMN Canvas */}
+			{/* Canvas + Properties Panel */}
 			<div className="relative flex-1">
-				<div ref={containerRef} className="h-full w-full bg-card" />
+				<div ref={containerRef} className="bpmn-editor-canvas h-full w-full" />
 
-				{/* Empty state — shown when no nodes */}
-				{visibleNodes.length === 0 && (
-					<div className="absolute inset-0 flex items-center justify-center bg-card">
+				{/* Properties Panel (slide-in drawer) */}
+				<BpmnPropertiesPanel
+					modeler={getModeler()}
+					selectedElement={selectedElement}
+					isOpen={propertiesOpen}
+					onClose={() => setPropertiesOpen(false)}
+				/>
+
+				{/* Empty state */}
+				{!isReady && (
+					<div className="absolute inset-0 flex items-center justify-center bg-white">
+						<div className="h-16 w-16 animate-pulse rounded-lg bg-gray-100" />
+					</div>
+				)}
+
+				{isReady && visibleNodes.length === 0 && (
+					<div className="absolute inset-0 flex items-center justify-center bg-white">
 						<div className="text-center">
 							<div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/5">
-								<svg className="h-8 w-8 text-primary/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-									<path strokeLinecap="round" strokeLinejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z" />
+								<svg
+									className="h-8 w-8 text-primary/30"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+									strokeWidth={1.5}
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z"
+									/>
 								</svg>
 							</div>
 							<p className="text-lg text-muted-foreground">
@@ -193,6 +240,12 @@ export function DiagramPanel({
 					</div>
 				)}
 			</div>
+
+			{/* Keyboard Shortcuts Modal */}
+			<KeyboardShortcutsModal
+				isOpen={showShortcuts}
+				onClose={() => setShowShortcuts(false)}
+			/>
 		</div>
 	);
 }

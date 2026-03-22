@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
-import { createCallBotProvider } from "@repo/ai";
+import { createCallBotProvider, generateSessionSummary } from "@repo/ai";
 
 export async function POST(
 	request: NextRequest,
@@ -42,9 +42,57 @@ export async function POST(
 			data: { status: "ENDED", endedAt: new Date() },
 		});
 
+		// Generate session summary async (non-blocking)
+		generateSummaryInBackground(sessionId, session.type).catch((err) =>
+			console.error("[EndSession] Summary generation failed:", err),
+		);
+
 		return NextResponse.json({ ok: true, sessionId });
 	} catch (error) {
 		console.error("[EndSession] Error:", error);
 		return NextResponse.json({ error: "Internal error" }, { status: 500 });
 	}
+}
+
+async function generateSummaryInBackground(
+	sessionId: string,
+	sessionType: string,
+) {
+	const [nodes, transcriptEntries] = await Promise.all([
+		db.diagramNode.findMany({
+			where: { sessionId, state: "CONFIRMED" },
+		}),
+		db.transcriptEntry.findMany({
+			where: { sessionId },
+			orderBy: { timestamp: "asc" },
+		}),
+	]);
+
+	const result = await generateSessionSummary(
+		sessionType,
+		nodes.map((n) => ({
+			id: n.id,
+			type: n.nodeType,
+			label: n.label,
+			lane: n.lane || undefined,
+		})),
+		transcriptEntries.map((e) => ({
+			speaker: e.speaker,
+			text: e.text,
+			timestamp: e.timestamp,
+		})),
+	);
+
+	await db.sessionSummary.upsert({
+		where: { sessionId },
+		create: {
+			sessionId,
+			summary: result.summary,
+			actionItems: result.actionItems,
+		},
+		update: {
+			summary: result.summary,
+			actionItems: result.actionItems,
+		},
+	});
 }

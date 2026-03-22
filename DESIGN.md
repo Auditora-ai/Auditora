@@ -58,13 +58,23 @@
 - **Error:** `#DC2626` — rejected nodes, disconnected, critical alerts
 - **Info:** `#0EA5E9` — informational banners, tips, help text
 
-### Node-Specific Colors (BPMN diagram)
-- **Node forming:** `#D97706` border (dashed) with `#FFFBEB` background
-- **Node confirmed:** `#0F172A` border (solid) with `#FFFFFF` background
+### Node Colors — Type-Based (BPMN diagram, confirmed state)
+Type-based coloring makes diagrams instantly readable and screenshot-worthy.
+- **Task:** `#2563EB` border (2px solid), `#EFF6FF` fill (blue)
+- **Exclusive Gateway:** `#D97706` border, `#FFFBEB` fill (amber diamond)
+- **Parallel Gateway:** `#7C3AED` border, `#F5F3FF` fill (purple diamond)
+- **Start Event:** `#16A34A` border, `#F0FDF4` fill (green circle)
+- **End Event:** `#DC2626` border, `#FEF2F2` fill (red circle)
+- **Intermediate Event:** `#0EA5E9` border, `#F0F9FF` fill (sky circle)
+- **Sub-Process:** `#7C3AED` border, `#F5F3FF` fill (purple)
+- **Connection lines:** `#64748B`
+
+### Node Colors — State Overrides (override type colors when active)
+State-based coloring takes priority over type-based colors via CSS markers.
+- **Node forming:** `#D97706` border (dashed) with `#FFFBEB` background, pulse animation
+- **Node confirmed:** Uses type-based colors above (no override)
 - **Node rejected:** `#DC2626` border (solid, fading) with `#FEF2F2` background
-- **Node active (discussing now):** `#2563EB` border (solid, 2px) with `#EFF6FF` background
-- **Connection lines:** `#94A3B8`
-- **Gateway (decision):** `#0F172A` border, diamond shape, `#F8FAFC` fill
+- **Node active (discussing now):** `#2563EB` border (3px solid) with `#DBEAFE` background — thicker border + darker fill than confirmed tasks for visual distinction
 
 ### Speaker Colors (transcript)
 - **Consultant:** `#2563EB` — matches primary, "you" are the brand
@@ -161,3 +171,5 @@
 | 2026-03-22 | Instrument Serif for display | Serif in SaaS is a deliberate risk — signals authority and consulting expertise. Differentiates from geometric-sans-serif competition. |
 | 2026-03-22 | Restrained color | BPMN node states (forming/confirmed/rejected) ARE the color in the product. Chrome is almost monochrome so diagram colors pop. |
 | 2026-03-22 | Geist for body/UI | Modern, excellent at small sizes, pairs with Instrument Serif. Vercel ecosystem alignment (Next.js project). |
+| 2026-03-22 | Type-based node colors | Confirmed nodes use type-based colors (tasks=blue, gateways=amber, events=green/red) instead of monochrome. State overrides type (forming=amber dashed, active=thicker blue). Makes diagrams Bizagi-level readable. |
+| 2026-03-22 | Dark chrome toolbar | Professional BPMN toolbar with edit/view/export sections. Dark (#0F172A) to match consultant chrome. Light canvas preserved for screenshot-ready diagrams. |

@@ -4,7 +4,8 @@
 		"@ai-sdk/openai": "catalog:",
 		"@ai-sdk/react": "catalog:",
 		"ai": "catalog:",
-		"openai": "catalog:"
+		"openai": "catalog:",
+		"zod": "catalog:"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "catalog:",

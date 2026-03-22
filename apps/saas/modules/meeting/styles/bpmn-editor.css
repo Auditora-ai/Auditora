@@ -1,0 +1,207 @@
+/**
+ * BPMN Editor Styles
+ *
+ * Dual-temperature UI per DESIGN.md:
+ * - Toolbar & properties panel: dark chrome (#0F172A)
+ * - Canvas: light white (#FFFFFF)
+ *
+ * State-based markers override type-based colors via CSS specificity.
+ */
+
+/* ═══════════════════════════════════════════
+   Canvas
+   ═══════════════════════════════════════════ */
+
+.bpmn-editor-canvas {
+	background: #ffffff;
+	position: relative;
+	flex: 1;
+}
+
+.bpmn-editor-canvas .djs-container {
+	background: #ffffff !important;
+}
+
+/* ═══════════════════════════════════════════
+   State Markers — applied via canvas.addMarker()
+   These override type-based colors from CustomColorRenderer
+   ═══════════════════════════════════════════ */
+
+/* Forming: amber dashed border with pulse animation */
+.state-forming .djs-visual rect,
+.state-forming .djs-visual polygon,
+.state-forming .djs-visual circle,
+.state-forming .djs-visual ellipse {
+	stroke: #d97706 !important;
+	stroke-dasharray: 5, 5 !important;
+	fill: #fffbeb !important;
+	animation: forming-pulse 2s ease-in-out infinite;
+}
+
+@keyframes forming-pulse {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0.7; }
+}
+
+/* Confirmed: uses type-based colors (no override needed) */
+.state-confirmed .djs-visual rect,
+.state-confirmed .djs-visual polygon,
+.state-confirmed .djs-visual circle,
+.state-confirmed .djs-visual ellipse {
+	stroke-width: 2px !important;
+}
+
+/* Active (currently discussing): thicker blue border + darker fill */
+.state-active .djs-visual rect,
+.state-active .djs-visual polygon,
+.state-active .djs-visual circle,
+.state-active .djs-visual ellipse {
+	stroke: #2563eb !important;
+	stroke-width: 3px !important;
+	fill: #dbeafe !important;
+}
+
+/* ═══════════════════════════════════════════
+   Selection highlight
+   ═══════════════════════════════════════════ */
+
+.djs-outline {
+	stroke: #2563eb !important;
+	stroke-width: 2px !important;
+}
+
+/* ═══════════════════════════════════════════
+   Palette (left sidebar) — dark chrome
+   ═══════════════════════════════════════════ */
+
+.djs-palette {
+	background: #0f172a !important;
+	border: 1px solid #334155 !important;
+	border-radius: 6px !important;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+.djs-palette .entry {
+	color: #f1f5f9 !important;
+}
+
+.djs-palette .entry:hover {
+	background: #334155 !important;
+	border-radius: 4px;
+}
+
+.djs-palette .separator {
+	border-color: #334155 !important;
+}
+
+/* ═══════════════════════════════════════════
+   Context Pad — branded styling
+   ═══════════════════════════════════════════ */
+
+.djs-context-pad {
+	background: #0f172a !important;
+	border: 1px solid #334155 !important;
+	border-radius: 6px !important;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+	padding: 2px !important;
+}
+
+.djs-context-pad .entry {
+	color: #f1f5f9 !important;
+	border-radius: 4px !important;
+}
+
+.djs-context-pad .entry:hover {
+	background: #334155 !important;
+}
+
+/* ═══════════════════════════════════════════
+   Popup Menu (element type change)
+   ═══════════════════════════════════════════ */
+
+.djs-popup {
+	background: #0f172a !important;
+	border: 1px solid #334155 !important;
+	border-radius: 6px !important;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+	color: #f1f5f9 !important;
+}
+
+.djs-popup .entry:hover {
+	background: #334155 !important;
+}
+
+/* ═══════════════════════════════════════════
+   Minimap
+   ═══════════════════════════════════════════ */
+
+.djs-minimap {
+	border: 1px solid #334155 !important;
+	border-radius: 6px !important;
+	background: #f8fafc !important;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.djs-minimap .map {
+	border-radius: 4px;
+}
+
+.djs-minimap .viewport-dom {
+	border: 2px solid #2563eb !important;
+	background: rgba(37, 99, 235, 0.05) !important;
+}
+
+/* ═══════════════════════════════════════════
+   Node Action Overlays (confirm/reject buttons)
+   ═══════════════════════════════════════════ */
+
+.bpmn-node-actions {
+	display: flex;
+	gap: 4px;
+	padding: 4px;
+	background: white;
+	border-radius: 6px;
+	border: 1px solid #e2e8f0;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bpmn-action-btn {
+	padding: 2px 8px;
+	font-size: 11px;
+	font-family: 'Geist', -apple-system, sans-serif;
+	font-weight: 500;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: opacity 75ms;
+}
+
+.bpmn-action-btn:hover {
+	opacity: 0.9;
+}
+
+.bpmn-action-confirm {
+	background: #16a34a;
+	color: white;
+}
+
+.bpmn-action-reject {
+	background: #dc2626;
+	color: white;
+}
+
+/* ═══════════════════════════════════════════
+   Label editing
+   ═══════════════════════════════════════════ */
+
+.djs-direct-editing-parent {
+	font-family: 'Geist', -apple-system, sans-serif !important;
+}
+
+.djs-direct-editing-content {
+	font-size: 12px !important;
+	padding: 4px 8px !important;
+	border: 2px solid #2563eb !important;
+	border-radius: 4px !important;
+	background: white !important;
+}

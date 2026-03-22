@@ -1,22 +1,22 @@
 {
 	"blog": {
-		"description": "Read the latest news from our company",
-		"title": "My awesome blog",
+		"description": "Insights on process consulting, BPM automation, and AI-powered elicitation",
+		"title": "Blog",
 		"back": "Back to blog"
 	},
 	"changelog": {
-		"description": "Stay up to date with the latest changes in our product.",
+		"description": "Stay up to date with the latest changes in Prozea.",
 		"title": "Changelog"
 	},
 	"contact": {
-		"description": "We are here to help you. Please use the form below to get in touch with us.",
+		"description": "Have questions about Prozea? We'd love to hear from you.",
 		"form": {
 			"email": "Email",
 			"message": "Message",
 			"name": "Name",
 			"notifications": {
-				"error": "We are sorry, but we were unable to send your message. Please try again later.",
-				"success": "Your message has been sent successfully. We will get back to you as soon as possible."
+				"error": "We couldn't send your message. Please try again later.",
+				"success": "Message sent. We'll get back to you within 24 hours."
 			},
 			"submit": "Send message"
 		},
@@ -26,92 +26,235 @@
 		"title": "Documentation"
 	},
 	"faq": {
-		"description": "Do you have any questions? We have got you covered.",
+		"description": "Everything you need to know about Prozea.",
 		"title": "Frequently asked questions",
 		"items": {
-			"refundPolicy": {
-				"question": "What is the refund policy?",
-				"answer": "We offer a 30-day money-back guarantee if you're not happy with our product."
+			"joinCall": {
+				"question": "How does Prozea join my call?",
+				"answer": "Prozea uses Recall.ai to join as a bot participant in Zoom, Google Meet, or Microsoft Teams. You simply share a meeting link or invite Prozea directly — it joins silently and begins real-time transcription."
 			},
-			"cancelSubscription": {
-				"question": "How do I cancel my subscription?",
-				"answer": "You can cancel your subscription by visiting the billing page."
+			"dataSecurity": {
+				"question": "Is my client conversation data secure?",
+				"answer": "All transcription is processed in real-time and encrypted in transit and at rest. We never use your client data to train AI models. You own your data completely."
 			},
-			"changePlan": {
-				"question": "Can I change my plan?",
-				"answer": "Yes, you can change your plan at any time by visiting the billing page."
+			"bpmnStandard": {
+				"question": "What BPMN standard do you support?",
+				"answer": "Prozea generates BPMN 2.0 compliant diagrams. You can export and open them in any standards-compliant tool like Camunda, Signavio, or Visio."
 			},
-			"freeTrial": {
-				"question": "Do you offer a free trial?",
-				"answer": "Yes, we offer a 14-day free trial."
+			"liveEditing": {
+				"question": "Can I edit the diagram during the meeting?",
+				"answer": "Yes. The BPMN canvas is fully interactive. You can move nodes, add annotations, confirm or reject AI suggestions, and refine the diagram while still on the call with your client."
+			},
+			"aiAccuracy": {
+				"question": "What if the AI gets a process step wrong?",
+				"answer": "Nodes appear in a 'forming' state first with a dashed border. You confirm, edit, or reject each step before it becomes permanent. You're always in control of the final deliverable."
 			}
 		}
 	},
 	"home": {
 		"hero": {
-			"new": "New:",
-			"featureBadge": "Amazing feature of your SaaS",
-			"title": "Your revolutionary SaaS built with Next.js",
-			"subtitle": "This is a demo application built with supastarter. It will save you a lot of time and effort building your next SaaS.",
-			"getStarted": "Get started",
-			"documentation": "Documentation",
-			"imageAlt": "Our application",
-			"builtWith": "Built & shipped with these awesome tools"
+			"badge": "AI-Powered Process Elicitation",
+			"title": "Turn every client meeting into a finished process map",
+			"subtitle": "Prozea joins your video call, guides your questions with an AI teleprompter, and auto-diagrams business processes in real-time. Walk out of every meeting with a client-ready BPMN deliverable.",
+			"cta": "Start free trial",
+			"ctaSecondary": "See how it works"
+		},
+		"problem": {
+			"title": "Process consultants are drowning in documentation",
+			"stat1": {
+				"number": "60",
+				"unit": "%",
+				"label": "of consulting time spent on post-meeting documentation"
+			},
+			"stat2": {
+				"number": "3",
+				"unit": "hrs",
+				"label": "average time to reconstruct one process map from notes"
+			},
+			"stat3": {
+				"number": "40",
+				"unit": "%",
+				"label": "of process steps missed or misremembered"
+			},
+			"description": "You take notes during the call. You ask the client to repeat things. You spend hours afterward in Visio or Lucidchart reconstructing what was said. Steps get missed. Details get lost. Your client gets a deliverable days later instead of minutes."
+		},
+		"howItWorks": {
+			"title": "Three steps. Zero post-meeting documentation.",
+			"stepLabel": "Step {number}",
+			"step1": {
+				"title": "Prozea joins your call",
+				"description": "Invite Prozea to any Zoom, Teams, or Meet session. It joins as a silent participant and begins real-time transcription with speaker identification."
+			},
+			"step2": {
+				"title": "AI guides your questions",
+				"description": "A private teleprompter shows you exactly what to ask next, based on what's been discussed. Never miss a critical process step again."
+			},
+			"step3": {
+				"title": "Diagram builds itself",
+				"description": "Watch as BPMN tasks, gateways, and flows appear on the canvas in real-time. Review and refine with your client while still on the call."
+			}
 		},
 		"features": {
-			"badge": "Incredible features",
-			"title": "Features your clients will love",
-			"description": "In this section you can showcase all the features of your SaaS provides and how they can benefit your clients.",
+			"badge": "Core capabilities",
+			"title": "Everything you need to elicit processes, not document them",
+			"description": "Prozea handles the documentation so you can focus on what you do best — understanding your client's business.",
 			"feature1": {
-				"title": "Feature 1",
-				"subtitle": "Do more with our amazing SaaS.",
-				"description": "This is a brilliant feature. And below you can see some reasons why. This is basically just a dummy text.",
+				"title": "Real-Time Transcription",
+				"subtitle": "Every word captured, every speaker identified.",
+				"description": "Powered by Deepgram, Prozea captures every word with speaker diarization. Know exactly who said what, so your process map reflects the right roles and responsibilities.",
 				"benefit1": {
-					"title": "Benefit 1",
-					"description": "This is an awesome benefit. And below you can see some reasons why. This is basically just a dummy text."
+					"title": "Speaker Diarization",
+					"description": "Automatically identifies who is speaking, mapping voices to roles in your process diagram."
 				},
 				"benefit2": {
-					"title": "Benefit 2",
-					"description": "This is an awesome benefit. And below you can see some reasons why. This is basically just a dummy text."
+					"title": "Multi-Language Support",
+					"description": "Transcribe meetings in multiple languages with high accuracy and low latency."
 				},
 				"benefit3": {
-					"title": "Benefit 3",
-					"description": "This is an awesome benefit. And below you can see some reasons why. This is basically just a dummy text."
+					"title": "Searchable History",
+					"description": "Every transcript is saved and searchable. Revisit any moment from any past session."
 				}
 			},
 			"feature2": {
-				"title": "Feature 2",
-				"subtitle": "Your SaaS can also do this.",
-				"description": "Another dummy text for another feature.",
+				"title": "AI Teleprompter",
+				"subtitle": "Your expert co-pilot for every meeting.",
+				"description": "Claude analyzes the conversation in real-time and surfaces the next question you should ask. Covers edge cases, exception flows, and handoffs that consultants typically miss.",
 				"benefit1": {
-					"title": "Benefit 1",
-					"description": "This is an awesome benefit. And below you can see some reasons why. This is basically just a dummy text."
+					"title": "Context-Aware Questions",
+					"description": "Questions adapt based on what's been discussed. No generic scripts — every prompt is tailored to the conversation."
 				},
 				"benefit2": {
-					"title": "Benefit 2",
-					"description": "This is an awesome benefit. And below you can see some reasons why. This is basically just a dummy text."
+					"title": "Gap Detection",
+					"description": "Identifies missing information — exception paths, approval chains, handoff points — before the meeting ends."
 				},
 				"benefit3": {
-					"title": "Benefit 3",
-					"description": "This is an awesome benefit. And below you can see some reasons why. This is basically just a dummy text."
+					"title": "Private to You",
+					"description": "The teleprompter is your private view. Your client sees nothing — just a consultant asking brilliant questions."
+				}
+			},
+			"feature3": {
+				"title": "Live BPMN Diagramming",
+				"subtitle": "Process maps that draw themselves.",
+				"description": "Tasks, gateways, events, and swim lanes appear as the conversation unfolds. BPMN 2.0 compliant and ready to export the moment your meeting ends.",
+				"benefit1": {
+					"title": "BPMN 2.0 Standard",
+					"description": "Industry-standard notation that opens in Camunda, Signavio, Visio, and any compliant tool."
+				},
+				"benefit2": {
+					"title": "Real-Time Collaboration",
+					"description": "Share the diagram canvas with your client during the call. Build the process together."
+				},
+				"benefit3": {
+					"title": "Confirm & Reject",
+					"description": "Every AI-generated node starts as a suggestion. You decide what stays and what goes."
 				}
 			}
+		},
+		"demo": {
+			"windowTitle": "Prozea — Live Session",
+			"rec": "REC",
+			"teleprompterLabel": "Teleprompter",
+			"askNow": "Ask now",
+			"transcriptLabel": "Live Transcript",
+			"consultantLabel": "Consultant",
+			"clientLabel": "Client",
+			"q1": "What triggers this process?",
+			"q2": "Who is responsible for approval?",
+			"q3": "What happens when it's rejected?",
+			"q4": "Are there any exception paths?",
+			"q5": "How long does each step take?",
+			"t1": "Walk me through what happens after a purchase order is submitted.",
+			"t2": "It goes to the department manager for approval first.",
+			"t3": "If it's over $5,000, it also needs VP sign-off.",
+			"t4": "What happens if the VP rejects it?",
+			"t5": "It goes back to the requestor with notes for revision.",
+			"nodeSubmit": "Submit PO",
+			"nodeGateway": "$5k?",
+			"nodeMgr": "Mgr Approval",
+			"nodeVp": "VP Approval",
+			"labelLt": "< $5k",
+			"labelGte": "≥ $5k",
+			"t6": "And once the revision is submitted, it starts the approval cycle again?",
+			"t7": "Exactly. It loops back through the same process.",
+			"q6": "What are the dollar thresholds?",
+			"q7": "Who gets notified at each stage?",
+			"nodeRevise": "Revise & Resubmit",
+			"labelRejected": "Rejected",
+			"labelApproved": "Approved",
+			"caption": {
+				"listening": "Listening…",
+				"understanding": "Understanding…",
+				"aiGuides": "AI guides the conversation",
+				"loopCloses": "The loop closes",
+				"ready": "Deliverable ready"
+			},
+			"stats": {
+				"duration": "45 min",
+				"steps": "8 steps",
+				"confidence": "94%",
+				"durationLabel": "Meeting",
+				"stepsLabel": "Captured",
+				"confidenceLabel": "Confidence",
+				"export": "Ready to export"
+			},
+			"scene1": {
+				"title": "Prozea joins your call",
+				"joining": "Prozea is joining the meeting…",
+				"participant1": "Ana López",
+				"participant2": "Marco Díaz",
+				"participant3": "Sarah Chen",
+				"you": "You (Consultant)",
+				"prozea": "Prozea AI"
+			},
+			"scene2": {
+				"title": "Every word, captured",
+				"waveformLabel": "Real-time transcription"
+			},
+			"scene3": {
+				"title": "AI guides your questions",
+				"aiSuggestion": "Based on client's response"
+			},
+			"scene4": {
+				"title": "The diagram builds itself"
+			},
+			"scene5": {
+				"title": "Walk out with a deliverable",
+				"before": "Before: 3 hours reconstructing from notes",
+				"after": "Now: Done before the meeting ends",
+				"cta": "Start free trial"
+			}
+		},
+		"integrations": {
+			"poweredBy": "Powered by",
+			"worksWithTitle": "Works with your tools",
+			"deepgram": "Deepgram",
+			"anthropic": "Anthropic Claude",
+			"recall": "Recall.ai",
+			"zoom": "Zoom",
+			"teams": "Microsoft Teams",
+			"meet": "Google Meet"
 		}
 	},
 	"newsletter": {
 		"email": "Email",
 		"hints": {
 			"error": {
-				"message": "Could not subscribe to newsletter. Please try again later."
+				"message": "Could not subscribe. Please try again later."
 			},
 			"success": {
-				"message": "Thank you for subscribing to our newsletter. We will keep you posted.",
+				"message": "You're on the list. We'll notify you when Prozea launches.",
 				"title": "Subscribed"
 			}
 		},
 		"submit": "Subscribe",
-		"subtitle": "Be among the first to get access to supastarter.nextjs.",
+		"subtitle": "Be among the first to get access to Prozea.",
 		"title": "Get early access"
+	},
+	"cta": {
+		"title": "Stop documenting. Start consulting.",
+		"subtitle": "Join the consultants who walk out of every meeting with a finished process map.",
+		"button": "Start your free trial",
+		"note": "No credit card required"
 	},
 	"notFound": {
 		"code": "404",
@@ -126,7 +269,7 @@
 			"pricing": "Pricing",
 			"privacyPolicy": "Privacy policy",
 			"termsAndConditions": "Terms and conditions",
-			"builtWith": "Built with supastarter"
+			"builtWith": "Prozea"
 		},
 		"menu": {
 			"blog": "Blog",
@@ -135,8 +278,10 @@
 			"dashboard": "Dashboard",
 			"docs": "Docs",
 			"faq": "FAQ",
-			"login": "Login",
-			"pricing": "Pricing"
+			"howItWorks": "How it works",
+			"login": "Sign in",
+			"pricing": "Pricing",
+			"trial": "Start free trial"
 		},
 		"aria": {
 			"menu": "Menu",
