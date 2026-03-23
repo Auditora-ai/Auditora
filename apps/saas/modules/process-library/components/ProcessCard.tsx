@@ -21,6 +21,7 @@ export type ProcessCardData = {
 	description?: string | null;
 	level: string;
 	processStatus: string;
+	category?: string | null;
 	projectName: string;
 	projectId: string;
 	nodesCount: number;

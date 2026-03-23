@@ -257,11 +257,12 @@ model Project {
   status       ProjectStatus        @default(ACTIVE)
   clientId     String
   client       Client               @relation(fields: [clientId], references: [id], onDelete: Cascade)
-  sessions     MeetingSession[]
-  architecture ProcessArchitecture?
-  documents    Document[]
-  createdAt    DateTime             @default(now())
-  updatedAt    DateTime             @updatedAt
+  sessions         MeetingSession[]
+  architecture     ProcessArchitecture?
+  documents        Document[]
+  discoveryThreads DiscoveryThread[]
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
 
   @@index([clientId])
   @@map("project")
@@ -294,6 +295,7 @@ model ProcessDefinition {
   triggers       String[]
   outputs        String[]
   processStatus  String              @default("DRAFT")
+  category       String?             // 'strategic' | 'core' | 'support'
   bpmnXml        String?             @db.Text
   priority       Int                 @default(0)
   sessions       MeetingSession[]
@@ -436,6 +438,37 @@ model SessionSummary {
   createdAt   DateTime       @default(now())
 
   @@map("session_summary")
+}
+
+// ============================================
+// DISCOVERY CHAT MODELS
+// ============================================
+
+model DiscoveryThread {
+  id        String             @id @default(cuid())
+  projectId String
+  project   Project            @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdBy String
+  messages  DiscoveryMessage[]
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  @@index([projectId])
+  @@map("discovery_thread")
+}
+
+model DiscoveryMessage {
+  id                 String          @id @default(cuid())
+  threadId           String
+  thread             DiscoveryThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  role               String          // 'user' | 'assistant'
+  content            String          @db.Text
+  audioFileUrl       String?
+  extractedProcesses Json?           // snapshot of processes extracted in this message
+  createdAt          DateTime        @default(now())
+
+  @@index([threadId])
+  @@map("discovery_message")
 }
 
 // ============================================

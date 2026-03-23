@@ -2,17 +2,18 @@
 
 import { useEffect, useRef, useCallback, useState } from "react";
 import type { DiagramNode } from "../types";
-import { buildBpmnXml } from "../lib/bpmn-builder";
+import { buildBpmnXml, bpmnType, dims, bpmnTag } from "../lib/bpmn-builder";
 
 /**
  * useBpmnModeler — Custom hook for bpmn-js Modeler lifecycle
  *
  * Handles:
  * - Modeler initialization and destruction (SSR-safe via dynamic import)
- * - AI node rendering via importXML() with buildBpmnXml() (proven approach)
+ * - AI node rendering via incremental Modeling API (createShape, connect, etc.)
+ * - First render uses importXML bootstrap; subsequent updates use Modeling API
  * - State-based overlays (confirm/reject for forming nodes)
  * - CSS markers for state-based coloring
- * - Full editing tools (palette, context-pad, undo/redo) via Modeler
+ * - Full editing tools (palette, context-pad, undo/redo) preserved across AI updates
  */
 
 interface UseBpmnModelerOptions {
@@ -40,6 +41,12 @@ interface ModelerAPI {
 	selectedElement: any;
 }
 
+// Layout constants for incremental placement
+const X_GAP = 180;
+const Y_PAD = 50;
+const LANE_H = 150;
+const CONTENT_X = 160;
+
 export function useBpmnModeler({
 	containerRef,
 	onConfirmNode,
@@ -53,7 +60,12 @@ export function useBpmnModeler({
 	const [canRedo, setCanRedo] = useState(false);
 	const [gridEnabled, setGridEnabled] = useState(false);
 	const [selectedElement, setSelectedElement] = useState<any>(null);
-	const lastXmlRef = useRef<string>("");
+
+	// Incremental merge state
+	const bootstrappedRef = useRef(false);
+	const knownNodesRef = useRef<Map<string, DiagramNode>>(new Map());
+	const knownConnectionsRef = useRef<Set<string>>(new Set());
+	const layoutXRef = useRef<Map<string, number>>(new Map()); // lane -> next X
 	const importingRef = useRef(false);
 
 	// Initialize Modeler
@@ -117,79 +129,377 @@ export function useBpmnModeler({
 			modeler?.destroy();
 			modelerRef.current = null;
 			setIsReady(false);
+			bootstrappedRef.current = false;
+			knownNodesRef.current.clear();
+			knownConnectionsRef.current.clear();
+			layoutXRef.current.clear();
 		};
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	/**
-	 * Import AI-generated nodes into the Modeler via importXML.
+	 * Merge AI-generated nodes into the Modeler.
 	 *
-	 * Uses buildBpmnXml() to generate valid BPMN 2.0 XML, then imports it.
-	 * After import, applies state-based overlays (confirm/reject for forming nodes)
-	 * and CSS markers for coloring.
+	 * First call: bootstrap via importXML (full XML render).
+	 * Subsequent calls: use Modeling API for incremental diff/apply.
+	 * This preserves undo/redo stack and manual user edits.
 	 */
 	const mergeAiNodes = useCallback(
 		async (nodes: DiagramNode[]) => {
 			const modeler = modelerRef.current;
 			if (!modeler || !isReady) return;
-			if (importingRef.current) return; // Prevent concurrent imports
+			if (importingRef.current) return;
 
 			const visibleNodes = nodes.filter((n) => n.state !== "rejected");
-			const xml = buildBpmnXml(visibleNodes);
-
-			// Skip if XML hasn't changed
-			if (xml === lastXmlRef.current) return;
 
 			importingRef.current = true;
 			try {
-				await modeler.importXML(xml);
-				lastXmlRef.current = xml; // Only cache after successful import
-
-				// Fit diagram to viewport
-				const canvas = modeler.get("canvas");
-				canvas.zoom("fit-viewport", "auto");
-
-				setRenderError(null);
-
-				// Apply state-based styling and overlays
-				const elementRegistry = modeler.get("elementRegistry");
-				const overlays = modeler.get("overlays");
-
-				overlays.clear();
-
-				for (const node of nodes) {
-					const element = elementRegistry.get(node.id);
-					if (!element) continue;
-
-					// Apply CSS state markers
-					try {
-						canvas.addMarker(node.id, `state-${node.state}`);
-					} catch {
-						// Element may not support markers
+				if (!bootstrappedRef.current) {
+					// --- Bootstrap: first render via importXML ---
+					if (visibleNodes.length === 0) {
+						importingRef.current = false;
+						return;
 					}
 
-					// Apply type-based coloring to the SVG element
-					const gfx = elementRegistry.getGraphics(node.id);
-					if (gfx) {
-						applyTypeColors(gfx, node, element);
+					const xml = buildBpmnXml(visibleNodes);
+					await modeler.importXML(xml);
+
+					const canvas = modeler.get("canvas");
+					canvas.zoom("fit-viewport", "auto");
+
+					// Populate known state from bootstrap
+					knownNodesRef.current.clear();
+					knownConnectionsRef.current.clear();
+					for (const node of visibleNodes) {
+						knownNodesRef.current.set(node.id, { ...node });
+						for (const target of node.connections) {
+							knownConnectionsRef.current.add(`${node.id}->${target}`);
+						}
 					}
 
-					// Add confirm/reject overlay for forming nodes
-					if (node.state === "forming") {
-						addFormingOverlay(overlays, node, onConfirmNode, onRejectNode);
-					}
+					// Apply state-based styling
+					applyAllStyling(modeler, nodes, onConfirmNode, onRejectNode);
+
+					bootstrappedRef.current = true;
+					setRenderError(null);
+				} else {
+					// --- Incremental update via Modeling API ---
+					incrementalUpdate(modeler, visibleNodes, nodes);
+					setRenderError(null);
 				}
 			} catch (err) {
 				console.error("[useBpmnModeler] Failed to render BPMN:", err);
 				setRenderError(
 					`Diagram render failed: ${err instanceof Error ? err.message : "unknown error"}`,
 				);
-				// Don't cache failed XML — next poll will retry
 			} finally {
 				importingRef.current = false;
 			}
 		},
 		[isReady, onConfirmNode, onRejectNode],
 	);
+
+	/**
+	 * Incremental update: diff known nodes vs incoming nodes,
+	 * then apply changes via Modeling API.
+	 */
+	function incrementalUpdate(
+		modeler: any,
+		visibleNodes: DiagramNode[],
+		allNodes: DiagramNode[],
+	) {
+		const elementRegistry = modeler.get("elementRegistry");
+		const elementFactory = modeler.get("elementFactory");
+		const modeling = modeler.get("modeling");
+		const bpmnFactory = modeler.get("bpmnFactory");
+		const canvas = modeler.get("canvas");
+		const overlays = modeler.get("overlays");
+
+		const known = knownNodesRef.current;
+		const knownConnections = knownConnectionsRef.current;
+		const incomingMap = new Map(visibleNodes.map((n) => [n.id, n]));
+
+		// --- Detect changes ---
+		const newNodes: DiagramNode[] = [];
+		const updatedNodes: DiagramNode[] = [];
+		const removedIds: string[] = [];
+
+		// Find new and updated nodes
+		for (const node of visibleNodes) {
+			const tag = bpmnTag(node.type);
+			if (tag === "startEvent" || tag === "endEvent") continue;
+
+			const prev = known.get(node.id);
+			if (!prev) {
+				newNodes.push(node);
+			} else if (
+				prev.label !== node.label ||
+				prev.state !== node.state ||
+				prev.connections.join(",") !== node.connections.join(",")
+			) {
+				updatedNodes.push(node);
+			}
+		}
+
+		// Find removed nodes
+		for (const [id, prev] of known) {
+			if (!incomingMap.has(id)) {
+				removedIds.push(id);
+			}
+		}
+
+		// Track if topology changed (needs fit-viewport)
+		let topologyChanged = newNodes.length > 0 || removedIds.length > 0;
+
+		// --- Apply removals ---
+		for (const id of removedIds) {
+			const element = elementRegistry.get(id);
+			if (element) {
+				try {
+					// Remove overlays first
+					try {
+						overlays.remove({ element: id });
+					} catch {
+						// ok
+					}
+					modeling.removeShape(element);
+				} catch (err) {
+					console.warn(`[useBpmnModeler] Failed to remove ${id}:`, err);
+				}
+			}
+			known.delete(id);
+			// Clean up connections involving this node
+			for (const key of knownConnections) {
+				if (key.startsWith(`${id}->`) || key.endsWith(`->${id}`)) {
+					knownConnections.delete(key);
+				}
+			}
+		}
+
+		// --- Apply new nodes ---
+		for (const node of newNodes) {
+			try {
+				const type = bpmnType(node.type);
+
+				// Find parent element (the process within the pool)
+				// After bootstrap, elements live inside the participant
+				let parent = elementRegistry.get("Pool");
+				if (!parent) {
+					parent = elementRegistry.get("Process_1");
+				}
+				if (!parent) {
+					// Fallback: find any process-like root
+					const roots = elementRegistry.filter(
+						(e: any) =>
+							e.type === "bpmn:Participant" || e.type === "bpmn:Process",
+					);
+					parent = roots[0];
+				}
+
+				// Calculate position
+				const lane = node.lane || "General";
+				const currentX = layoutXRef.current.get(lane) || CONTENT_X;
+				const newX = currentX + X_GAP;
+				layoutXRef.current.set(lane, newX);
+
+				// Find lane index for Y position
+				const allLanes = [
+					...new Set(
+						[...known.values(), ...newNodes].map(
+							(n) => n.lane || "General",
+						),
+					),
+				];
+				const laneIndex = allLanes.indexOf(lane);
+				const d = dims(node.type);
+				const y = Y_PAD + laneIndex * LANE_H + (LANE_H - d.h) / 2;
+
+				// Create business object with stable ID
+				const bo = bpmnFactory.create(type.replace("bpmn:", "bpmn:"), {
+					id: node.id,
+					name: node.label || undefined,
+				});
+
+				const shape = elementFactory.createShape({
+					type,
+					businessObject: bo,
+				});
+
+				modeling.createShape(shape, { x: newX, y }, parent);
+
+				known.set(node.id, { ...node });
+			} catch (err) {
+				console.warn(
+					`[useBpmnModeler] Failed to add node ${node.id}:`,
+					err,
+				);
+			}
+		}
+
+		// --- Apply updates to existing nodes ---
+		for (const node of updatedNodes) {
+			const element = elementRegistry.get(node.id);
+			if (!element) continue;
+
+			const prev = known.get(node.id)!;
+
+			// Update label if changed
+			if (prev.label !== node.label) {
+				try {
+					modeling.updateLabel(element, node.label);
+				} catch {
+					try {
+						modeling.updateProperties(element, {
+							name: node.label,
+						});
+					} catch (err) {
+						console.warn(
+							`[useBpmnModeler] Failed to update label for ${node.id}:`,
+							err,
+						);
+					}
+				}
+			}
+
+			// Update state markers if changed
+			if (prev.state !== node.state) {
+				try {
+					canvas.removeMarker(node.id, `state-${prev.state}`);
+				} catch {
+					// ok
+				}
+				try {
+					canvas.addMarker(node.id, `state-${node.state}`);
+				} catch {
+					// ok
+				}
+
+				// Update type colors
+				const gfx = elementRegistry.getGraphics(node.id);
+				if (gfx) {
+					applyTypeColors(gfx, node, element);
+				}
+
+				// Update overlay (remove old, add new if forming)
+				try {
+					overlays.remove({ element: node.id });
+				} catch {
+					// ok
+				}
+				if (node.state === "forming") {
+					addFormingOverlay(
+						overlays,
+						node,
+						onConfirmNode,
+						onRejectNode,
+					);
+				}
+			}
+
+			// Handle connection changes
+			const prevConns = new Set(prev.connections);
+			const newConns = new Set(node.connections);
+
+			// Add new connections
+			for (const target of newConns) {
+				const connKey = `${node.id}->${target}`;
+				if (!knownConnections.has(connKey)) {
+					const targetElement = elementRegistry.get(target);
+					if (targetElement) {
+						try {
+							modeling.connect(element, targetElement);
+							knownConnections.add(connKey);
+							topologyChanged = true;
+						} catch (err) {
+							console.warn(
+								`[useBpmnModeler] Failed to connect ${node.id}->${target}:`,
+								err,
+							);
+						}
+					}
+				}
+			}
+
+			// Remove old connections
+			for (const target of prevConns) {
+				if (!newConns.has(target)) {
+					const connKey = `${node.id}->${target}`;
+					// Find the connection element
+					const connections =
+						element.outgoing?.filter(
+							(c: any) => c.target?.id === target,
+						) || [];
+					for (const conn of connections) {
+						try {
+							modeling.removeConnection(conn);
+						} catch (err) {
+							console.warn(
+								`[useBpmnModeler] Failed to remove connection ${connKey}:`,
+								err,
+							);
+						}
+					}
+					knownConnections.delete(connKey);
+					topologyChanged = true;
+				}
+			}
+
+			known.set(node.id, { ...node });
+		}
+
+		// --- Connect new nodes to the graph ---
+		for (const node of newNodes) {
+			const element = elementRegistry.get(node.id);
+			if (!element) continue;
+
+			for (const targetId of node.connections) {
+				const targetElement = elementRegistry.get(targetId);
+				if (targetElement) {
+					const connKey = `${node.id}->${targetId}`;
+					if (!knownConnections.has(connKey)) {
+						try {
+							modeling.connect(element, targetElement);
+							knownConnections.add(connKey);
+						} catch (err) {
+							console.warn(
+								`[useBpmnModeler] Failed to connect new node ${node.id}->${targetId}:`,
+								err,
+							);
+						}
+					}
+				}
+			}
+
+			// Check if any existing node should connect TO this new node
+			for (const [existingId, existingNode] of known) {
+				if (existingNode.connections.includes(node.id)) {
+					const connKey = `${existingId}->${node.id}`;
+					if (!knownConnections.has(connKey)) {
+						const existingElement = elementRegistry.get(existingId);
+						if (existingElement && element) {
+							try {
+								modeling.connect(existingElement, element);
+								knownConnections.add(connKey);
+							} catch (err) {
+								console.warn(
+									`[useBpmnModeler] Failed to connect ${existingId}->${node.id}:`,
+									err,
+								);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		// Fit viewport if topology changed
+		if (topologyChanged) {
+			try {
+				canvas.zoom("fit-viewport", "auto");
+			} catch {
+				// ok
+			}
+		}
+	}
 
 	const zoomIn = useCallback(() => {
 		const canvas = modelerRef.current?.get("canvas");
@@ -262,7 +572,10 @@ const TYPE_COLORS: Record<string, { stroke: string; fill: string }> = {
 	endEvent: { stroke: "#DC2626", fill: "#FEF2F2" },
 };
 
-const STATE_COLORS: Record<string, { stroke: string; fill: string; dash?: string }> = {
+const STATE_COLORS: Record<
+	string,
+	{ stroke: string; fill: string; dash?: string }
+> = {
 	forming: { stroke: "#D97706", fill: "#FFFBEB", dash: "5,5" },
 	confirmed: { stroke: "", fill: "" }, // Use type colors
 	active: { stroke: "#2563EB", fill: "#DBEAFE" },
@@ -295,6 +608,49 @@ function applyTypeColors(gfx: any, node: DiagramNode, element: any) {
 		visual.setAttribute("stroke", typeColors.stroke);
 		visual.setAttribute("stroke-width", "2");
 		visual.setAttribute("fill", typeColors.fill);
+	}
+}
+
+/**
+ * Apply styling to all nodes after bootstrap importXML.
+ */
+function applyAllStyling(
+	modeler: any,
+	allNodes: DiagramNode[],
+	onConfirmNode: (nodeId: string) => void,
+	onRejectNode: (nodeId: string) => void,
+) {
+	const canvas = modeler.get("canvas");
+	const elementRegistry = modeler.get("elementRegistry");
+	const overlays = modeler.get("overlays");
+
+	try {
+		overlays.clear();
+	} catch {
+		// ok
+	}
+
+	for (const node of allNodes) {
+		const element = elementRegistry.get(node.id);
+		if (!element) continue;
+
+		// Apply CSS state markers
+		try {
+			canvas.addMarker(node.id, `state-${node.state}`);
+		} catch {
+			// Element may not support markers
+		}
+
+		// Apply type-based coloring to the SVG element
+		const gfx = elementRegistry.getGraphics(node.id);
+		if (gfx) {
+			applyTypeColors(gfx, node, element);
+		}
+
+		// Add confirm/reject overlay for forming nodes
+		if (node.state === "forming") {
+			addFormingOverlay(overlays, node, onConfirmNode, onRejectNode);
+		}
 	}
 }
 

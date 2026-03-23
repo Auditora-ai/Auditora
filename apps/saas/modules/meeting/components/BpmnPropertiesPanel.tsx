@@ -12,13 +12,11 @@ interface BpmnPropertiesPanelProps {
 /**
  * BpmnPropertiesPanel — Collapsible right-side drawer
  *
- * @bpmn-io/properties-panel is NOT a React component.
- * We mount it imperatively via useEffect into a div ref.
- * Selection sync happens via bpmn-js eventBus.
+ * Simple properties panel using the Modeling API (updateProperties, updateLabel).
+ * Shows element name, type, and documentation for the selected element.
  *
  * - 280px wide slide-in drawer within the diagram area
  * - Dark chrome background matching toolbar
- * - Shows element name, type, documentation on selection
  * - Collapsed by default during live meeting
  * - Auto-opens on selection in post-meeting mode
  */
@@ -29,50 +27,11 @@ export function BpmnPropertiesPanel({
 	onClose,
 }: BpmnPropertiesPanelProps) {
 	const panelRef = useRef<HTMLDivElement>(null);
-	const instanceRef = useRef<any>(null);
 
-	// Mount properties panel imperatively
+	// Update panel content on selection change or open/close
 	useEffect(() => {
-		if (!modeler || !panelRef.current || !isOpen) return;
-
-		let panel: any;
-
-		async function mount() {
-			try {
-				const { BpmnPropertiesPanelModule, BpmnPropertiesProviderModule } =
-					await import("bpmn-js-properties-panel");
-
-				// The properties panel attaches to an existing modeler instance
-				// We need to register it as an additional module
-				if (!instanceRef.current && panelRef.current) {
-					// Simple fallback: show element info manually
-					updateSimplePanel(panelRef.current, selectedElement, modeler);
-					instanceRef.current = "simple";
-				}
-			} catch {
-				// Fallback to simple panel if properties-panel module fails
-				if (panelRef.current) {
-					updateSimplePanel(panelRef.current, selectedElement, modeler);
-					instanceRef.current = "simple";
-				}
-			}
-		}
-
-		mount();
-
-		return () => {
-			if (panel && typeof panel.destroy === "function") {
-				panel.destroy();
-			}
-			instanceRef.current = null;
-		};
-	}, [modeler, isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
-
-	// Update simple panel on selection change
-	useEffect(() => {
-		if (instanceRef.current === "simple" && panelRef.current && isOpen) {
-			updateSimplePanel(panelRef.current, selectedElement, modeler);
-		}
+		if (!panelRef.current || !isOpen) return;
+		updateSimplePanel(panelRef.current, selectedElement, modeler);
 	}, [selectedElement, isOpen, modeler]);
 
 	return (
@@ -104,8 +63,8 @@ export function BpmnPropertiesPanel({
 }
 
 /**
- * Simple fallback properties panel — shows element metadata
- * without the full @bpmn-io/properties-panel dependency complexity.
+ * Simple properties panel — shows element metadata and allows editing
+ * name and documentation via the Modeling API.
  */
 function updateSimplePanel(
 	container: HTMLElement,
@@ -160,15 +119,46 @@ function updateSimplePanel(
 		</div>
 	`;
 
-	// Wire up name input
-	const nameInput = container.querySelector('input[data-field="name"]') as HTMLInputElement;
+	// Wire up name input via Modeling API
+	const nameInput = container.querySelector(
+		'input[data-field="name"]',
+	) as HTMLInputElement;
 	if (nameInput && modeler) {
 		nameInput.addEventListener("change", () => {
 			try {
 				const modeling = modeler.get("modeling");
-				modeling.updateLabel(selectedElement, nameInput.value);
+				modeling.updateProperties(selectedElement, {
+					name: nameInput.value,
+				});
 			} catch {
-				// Element may not support label update
+				// Fallback to updateLabel
+				try {
+					const modeling = modeler.get("modeling");
+					modeling.updateLabel(selectedElement, nameInput.value);
+				} catch {
+					// Element may not support property updates
+				}
+			}
+		});
+	}
+
+	// Wire up documentation textarea via Modeling API
+	const docTextarea = container.querySelector(
+		'textarea[data-field="documentation"]',
+	) as HTMLTextAreaElement;
+	if (docTextarea && modeler) {
+		docTextarea.addEventListener("change", () => {
+			try {
+				const modeling = modeler.get("modeling");
+				const bpmnFactory = modeler.get("bpmnFactory");
+				const doc = bpmnFactory.create("bpmn:Documentation", {
+					text: docTextarea.value,
+				});
+				modeling.updateProperties(selectedElement, {
+					documentation: [doc],
+				});
+			} catch {
+				// Element may not support documentation
 			}
 		});
 	}

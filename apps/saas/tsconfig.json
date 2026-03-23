@@ -19,7 +19,8 @@
 			"@projects/*": ["./modules/projects/*"],
 			"@documents/*": ["./modules/documents/*"],
 			"@dashboard/*": ["./modules/dashboard/*"],
-			"@process-library/*": ["./modules/process-library/*"]
+			"@process-library/*": ["./modules/process-library/*"],
+			"@discovery/*": ["./modules/discovery/*"]
 		}
 	},
 	"include": [

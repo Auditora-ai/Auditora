@@ -3,21 +3,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { BpmnToolbar } from "./BpmnToolbar";
 import { KeyboardShortcutsModal } from "./KeyboardShortcutsModal";
+import type { DiagramNode } from "../types";
 import { buildBpmnXml } from "../lib/bpmn-builder";
 import { exportSVG, exportPNG } from "../lib/bpmn-export";
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-js.css";
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
 import "../styles/bpmn-editor.css";
-
-interface DiagramNode {
-	id: string;
-	type: string;
-	label: string;
-	state: "forming" | "confirmed" | "rejected";
-	lane?: string;
-	connections: string[];
-}
 
 interface DiagramEditorProps {
 	sessionId: string;

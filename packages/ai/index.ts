@@ -21,6 +21,8 @@ export { generateNextQuestion } from "./src/pipelines/teleprompter";
 export type { TeleprompterResult } from "./src/pipelines/teleprompter";
 export { extractDiscoveryUpdates } from "./src/pipelines/discovery-extraction";
 export type { DiscoveryResult, DiscoveryProcess, BusinessInsights } from "./src/pipelines/discovery-extraction";
+export { extractFromChat } from "./src/pipelines/chat-extraction";
+export type { ChatExtractionResult, ExtractedProcess } from "./src/pipelines/chat-extraction";
 
 // Prozea context
 export { buildSessionContext, clearSessionContextCache } from "./src/context/session-context";

@@ -44,7 +44,8 @@ interface DiagramPanelProps {
  * └──────────────────────────┴──────────┘
  *
  * Uses useBpmnModeler hook for all Modeler lifecycle management.
- * AI nodes merge incrementally via canvas.addShape() (non-undoable).
+ * AI nodes merge incrementally via Modeling API (createShape, connect, updateProperties).
+ * First render uses importXML bootstrap; subsequent updates preserve undo/redo.
  */
 export function DiagramPanel({
 	nodes,
