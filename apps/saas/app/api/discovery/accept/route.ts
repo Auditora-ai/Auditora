@@ -33,23 +33,25 @@ export async function POST(request: NextRequest) {
 		}
 
 		const body = await request.json();
-		const { projectId, process } = body;
+		const { process } = body;
 
-		if (!projectId || !process?.name) {
+		if (!process?.name) {
 			return NextResponse.json(
-				{ error: "projectId and process.name are required" },
+				{ error: "process.name is required" },
 				{ status: 400 },
 			);
 		}
 
-		// Get or create architecture for project
+		const orgId = authCtx.org.id;
+
+		// Get or create architecture for organization
 		let architecture = await db.processArchitecture.findUnique({
-			where: { projectId },
+			where: { organizationId: orgId },
 		});
 
 		if (!architecture) {
 			architecture = await db.processArchitecture.create({
-				data: { projectId },
+				data: { organizationId: orgId },
 			});
 		}
 

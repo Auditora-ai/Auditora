@@ -6,6 +6,10 @@ import { useBpmnModeler } from "../hooks/useBpmnModeler";
 import { usePanelFlash } from "../hooks/usePanelFlash";
 import { BpmnToolbar } from "./BpmnToolbar";
 import { BpmnPropertiesPanel } from "./BpmnPropertiesPanel";
+import { BpmnBreadcrumbs } from "./BpmnBreadcrumbs";
+import { BpmnLegend } from "./BpmnLegend";
+import { ProcessCompleteness } from "./ProcessCompleteness";
+import { BpmnIntelligence } from "./BpmnIntelligence";
 import { KeyboardShortcutsModal } from "./KeyboardShortcutsModal";
 import { exportSVG, exportPNG } from "../lib/bpmn-export";
 
@@ -26,6 +30,7 @@ interface DiagramPanelProps {
 	isFullscreen?: boolean;
 	onToggleFullscreen?: () => void;
 	isFlashing?: boolean;
+	processId?: string;
 }
 
 /**
@@ -56,6 +61,7 @@ export function DiagramPanel({
 	isFullscreen = false,
 	onToggleFullscreen,
 	isFlashing = false,
+	processId,
 }: DiagramPanelProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const flashStyle = usePanelFlash(isFlashing, {
@@ -64,6 +70,8 @@ export function DiagramPanel({
 	const propertiesPanelRef = useRef<HTMLDivElement>(null);
 	const [showShortcuts, setShowShortcuts] = useState(false);
 	const [propertiesOpen, setPropertiesOpen] = useState(false);
+	const [showLegend, setShowLegend] = useState(false);
+	const [showIntelligence, setShowIntelligence] = useState(false);
 
 	const {
 		isReady,
@@ -80,6 +88,8 @@ export function DiagramPanel({
 		gridEnabled,
 		getModeler,
 		selectedElement,
+		navigationStack,
+		navigateUp,
 	} = useBpmnModeler({
 		containerRef,
 		onConfirmNode,
@@ -146,7 +156,7 @@ export function DiagramPanel({
 	const visibleNodes = nodes.filter((n) => n.state !== "rejected");
 
 	return (
-		<div className="flex h-full flex-col" style={flashStyle}>
+		<div className="bpmn-dark-chrome flex h-full flex-col" style={flashStyle}>
 			{/* Toolbar */}
 			<BpmnToolbar
 				canUndo={canUndo}
@@ -164,6 +174,10 @@ export function DiagramPanel({
 				onExportPNG={handleExportPNG}
 				onToggleFullscreen={() => onToggleFullscreen?.()}
 				onShowShortcuts={() => setShowShortcuts(true)}
+				onToggleIntelligence={processId ? () => setShowIntelligence(!showIntelligence) : undefined}
+				intelligenceActive={showIntelligence}
+				onToggleLegend={() => setShowLegend(!showLegend)}
+				legendActive={showLegend}
 			/>
 
 			{/* Panel header */}
@@ -199,7 +213,13 @@ export function DiagramPanel({
 				)}
 			</div>
 
-			{/* Canvas + Properties Panel */}
+			{/* Subprocess breadcrumbs */}
+			<BpmnBreadcrumbs
+				stack={navigationStack}
+				onNavigate={navigateUp}
+			/>
+
+			{/* Canvas + Properties Panel + Overlays */}
 			<div className="relative flex-1">
 				<div ref={containerRef} className="bpmn-editor-canvas h-full w-full" />
 
@@ -218,6 +238,27 @@ export function DiagramPanel({
 					onClose={() => setPropertiesOpen(false)}
 				/>
 
+				{/* AI Intelligence Overlays */}
+				{processId && (
+					<BpmnIntelligence
+						processId={processId}
+						modeler={getModeler()}
+						isReady={isReady}
+						visible={showIntelligence}
+					/>
+				)}
+
+				{/* Process Completeness Widget */}
+				{processId && sessionStatus === "ENDED" && (
+					<ProcessCompleteness processId={processId} />
+				)}
+
+				{/* Color Legend */}
+				<BpmnLegend
+					visible={showLegend}
+					onClose={() => setShowLegend(false)}
+				/>
+
 				{/* Empty state */}
 				{!isReady && (
 					<div className="absolute inset-0 flex items-center justify-center bg-white">
@@ -226,8 +267,8 @@ export function DiagramPanel({
 				)}
 
 				{isReady && visibleNodes.length === 0 && (
-					<div className="absolute inset-0 flex items-center justify-center bg-white">
-						<div className="text-center">
+					<div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+						<div className="text-center opacity-40">
 							<div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/5">
 								<svg
 									className="h-8 w-8 text-primary/30"

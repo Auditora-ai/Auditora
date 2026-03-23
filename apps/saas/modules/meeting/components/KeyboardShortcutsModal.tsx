@@ -27,6 +27,12 @@ const SHORTCUTS = [
 		{ keys: "F", action: "Toggle fullscreen" },
 		{ keys: "?", action: "Show shortcuts" },
 	]},
+	{ category: "Workspace", shortcuts: [
+		{ keys: "Ctrl+1", action: "Transcripcion" },
+		{ keys: "Ctrl+2", action: "Chat IA" },
+		{ keys: "Ctrl+3", action: "Documentos" },
+		{ keys: "Ctrl+4", action: "Proceso" },
+	]},
 ];
 
 export function KeyboardShortcutsModal({ isOpen, onClose }: KeyboardShortcutsModalProps) {

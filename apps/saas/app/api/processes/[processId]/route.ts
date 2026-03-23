@@ -37,15 +37,7 @@ export async function GET(
 				},
 				architecture: {
 					select: {
-						projectId: true,
-						project: {
-							select: {
-								id: true,
-								name: true,
-								clientId: true,
-								client: { select: { id: true, name: true } },
-							},
-						},
+						organizationId: true,
 					},
 				},
 			},

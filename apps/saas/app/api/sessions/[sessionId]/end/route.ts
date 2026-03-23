@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
-import { createCallBotProvider, generateSessionSummary } from "@repo/ai";
+import {
+	createCallBotProvider,
+	generateSessionSummary,
+	auditProcess,
+	mergeSnapshotPatch,
+	KnowledgeSnapshotSchema,
+} from "@repo/ai";
 import { sessionActivity } from "../../../webhook/recall/route";
 
 export async function POST(
@@ -56,6 +62,14 @@ export async function POST(
 			console.error("[EndSession] Summary generation failed:", err),
 		);
 
+		// Trigger Process Intelligence audit (non-blocking)
+		if (session.processDefinitionId) {
+			triggerIntelligenceAudit(session.processDefinitionId, sessionId).catch(
+				(err) =>
+					console.error("[EndSession] Intelligence audit failed:", err),
+			);
+		}
+
 		return NextResponse.json({ ok: true, sessionId });
 	} catch (error) {
 		console.error("[EndSession] Error:", error);
@@ -107,27 +121,23 @@ async function autoVersionOnSessionEnd(
 
 	// For DISCOVERY sessions: create an ArchitectureVersion snapshot
 	if (session.type === "DISCOVERY") {
-		const project = await db.project.findUnique({
-			where: { id: session.projectId },
-			include: {
-				architecture: {
-					include: { definitions: true },
-				},
-			},
+		const architecture = await db.processArchitecture.findUnique({
+			where: { organizationId: session.organizationId },
+			include: { definitions: true },
 		});
 
-		if (project?.architecture) {
+		if (architecture) {
 			const lastArchVersion = await db.architectureVersion.findFirst({
-				where: { architectureId: project.architecture.id },
+				where: { architectureId: architecture.id },
 				orderBy: { version: "desc" },
 			});
 			const nextVersion = (lastArchVersion?.version ?? 0) + 1;
 
 			await db.architectureVersion.create({
 				data: {
-					architectureId: project.architecture.id,
+					architectureId: architecture.id,
 					version: nextVersion,
-					snapshot: project.architecture.definitions as any,
+					snapshot: architecture.definitions as any,
 					changeNote: `Auto-saved after discovery session ${sessionId}`,
 					createdBy: session.userId,
 				},
@@ -179,4 +189,186 @@ async function generateSummaryInBackground(
 			actionItems: result.actionItems,
 		},
 	});
+}
+
+async function triggerIntelligenceAudit(
+	processDefinitionId: string,
+	sessionId: string,
+) {
+	// Fetch or create intelligence record
+	let intelligence = await db.processIntelligence.findFirst({
+		where: { processDefinitionId },
+	});
+
+	if (!intelligence) {
+		intelligence = await db.processIntelligence.create({
+			data: { processDefinitionId },
+		});
+	}
+
+	const isInitial = !intelligence.lastAuditAt;
+
+	// Fetch process + session data
+	const processDef = await db.processDefinition.findUnique({
+		where: { id: processDefinitionId },
+		include: {
+			architecture: {
+				include: {
+					organization: { select: { industry: true } },
+					definitions: {
+						select: { name: true },
+						where: { id: { not: processDefinitionId } },
+						take: 10,
+					},
+				},
+			},
+		},
+	});
+
+	if (!processDef) return;
+
+	// Fetch session-specific data
+	const [summary, confirmedNodes, transcriptEntries] = await Promise.all([
+		db.sessionSummary.findUnique({ where: { sessionId } }),
+		db.diagramNode.findMany({
+			where: { sessionId, state: "CONFIRMED" },
+			select: { label: true, nodeType: true, lane: true, state: true },
+		}),
+		db.transcriptEntry.findMany({
+			where: { sessionId },
+			orderBy: { timestamp: "desc" },
+			take: 50,
+		}),
+	]);
+
+	// Fetch existing open items
+	const openItems = await db.intelligenceItem.findMany({
+		where: { intelligenceId: intelligence.id, status: "OPEN" },
+		select: { id: true, question: true, category: true },
+	});
+
+	const existingSnapshot = KnowledgeSnapshotSchema.parse(
+		intelligence.knowledgeSnapshot,
+	);
+
+	const result = await auditProcess({
+		mode: isInitial ? "initial" : "incremental",
+		knowledgeSnapshot: existingSnapshot,
+		confidenceScores:
+			(intelligence.confidenceScores as Record<string, number>) ?? {},
+		processDefinition: {
+			name: processDef.name,
+			description: processDef.description ?? undefined,
+			level: processDef.level,
+			goals: processDef.goals,
+			triggers: processDef.triggers,
+			outputs: processDef.outputs,
+			owner: processDef.owner ?? undefined,
+			bpmnNodeCount: confirmedNodes.length,
+			confirmedNodeCount: confirmedNodes.length,
+		},
+		newData: {
+			sessionSummaries: summary
+				? [
+						{
+							sessionId,
+							summary: summary.summary,
+							actionItems: summary.actionItems,
+						},
+					]
+				: undefined,
+			diagramNodes: confirmedNodes.map((n) => ({
+				label: n.label,
+				type: n.nodeType,
+				lane: n.lane ?? undefined,
+				state: n.state,
+			})),
+			transcriptExcerpts: [
+				{
+					sessionId,
+					text: transcriptEntries
+						.map((t) => `${t.speaker}: ${t.text}`)
+						.join("\n")
+						.substring(0, 2000),
+				},
+			],
+		},
+		organizationContext: processDef.architecture
+			? {
+					industry:
+						processDef.architecture.organization?.industry ?? undefined,
+					siblingProcessNames: processDef.architecture.definitions.map(
+						(d) => d.name,
+					),
+				}
+			: undefined,
+		existingOpenItems: openItems,
+	});
+
+	// Apply delta
+	const mergedSnapshot = mergeSnapshotPatch(
+		existingSnapshot,
+		result.snapshotPatch,
+	);
+
+	await db.processIntelligence.update({
+		where: { id: intelligence.id, version: intelligence.version },
+		data: {
+			knowledgeSnapshot: mergedSnapshot as any,
+			confidenceScores: result.updatedScores,
+			completenessScore: result.completenessScore,
+			lastAuditAt: new Date(),
+			version: { increment: 1 },
+		},
+	});
+
+	// Create new items
+	if (result.newGaps.length > 0) {
+		await db.intelligenceItem.createMany({
+			data: result.newGaps.map((gap) => ({
+				intelligenceId: intelligence!.id,
+				category: gap.category as any,
+				question: gap.question,
+				context: gap.context || null,
+				priority: gap.priority,
+				dependsOn: gap.dependsOn,
+				sourceType: "session_end",
+				sourceId: sessionId,
+				status: "OPEN" as const,
+			})),
+		});
+	}
+
+	// Resolve items
+	if (result.resolvedGapIds.length > 0) {
+		await db.intelligenceItem.updateMany({
+			where: {
+				id: { in: result.resolvedGapIds },
+				intelligenceId: intelligence.id,
+			},
+			data: {
+				status: "RESOLVED",
+				resolvedAt: new Date(),
+				resolvedBy: `session:${sessionId}`,
+			},
+		});
+	}
+
+	// Log audit
+	await db.intelligenceAuditLog.create({
+		data: {
+			intelligenceId: intelligence.id,
+			triggerType: "session_end",
+			triggerId: sessionId,
+			delta: {
+				newGaps: result.newGaps.length,
+				resolved: result.resolvedGapIds.length,
+			},
+			completenessScore: result.completenessScore,
+		},
+	});
+
+	console.log(
+		`[Intelligence] Audit complete for process "${processDef.name}": ${result.completenessScore}% complete, ${result.newGaps.length} new gaps, ${result.resolvedGapIds.length} resolved`,
+	);
 }

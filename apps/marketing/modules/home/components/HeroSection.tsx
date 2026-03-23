@@ -7,11 +7,24 @@ import { SplitWords } from "@shared/components/SplitWords";
 import gsap from "gsap";
 import { ArrowRightIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { BpmnHeroBackground } from "./BpmnHeroBackground";
 
 export function HeroSection() {
 	const t = useTranslations();
 	const sectionRef = useRef<HTMLElement>(null);
+	const [processCount, setProcessCount] = useState<number | null>(null);
+
+	useEffect(() => {
+		fetch(`${config.saasUrl}/api/public/stats`)
+			.then((r) => r.ok ? r.json() : null)
+			.then((data) => {
+				if (data?.processSteps && data.processSteps >= 100) {
+					setProcessCount(data.processSteps);
+				}
+			})
+			.catch(() => {});
+	}, []);
 
 	useGSAP(
 		() => {
@@ -65,16 +78,16 @@ export function HeroSection() {
 				0.6,
 			);
 
-			// Background gradient: ambient scale-in
+			// Counter fade in
 			tl.from(
-				".hero-bg",
+				".hero-counter",
 				{
-					scale: 0.5,
 					opacity: 0,
-					duration: 1.5,
-					ease: "power1.out",
+					y: 10,
+					duration: 0.5,
+					ease: "power2.out",
 				},
-				0,
+				0.8,
 			);
 		},
 		{ scope: sectionRef },
@@ -112,10 +125,22 @@ export function HeroSection() {
 						</a>
 					</Button>
 				</div>
+
+				{processCount !== null && (
+					<div className="hero-counter mt-8 inline-flex items-center gap-2 rounded-full bg-muted/60 px-4 py-2 text-sm text-muted-foreground">
+						<span className="inline-block size-2 rounded-full bg-green-500 animate-pulse" />
+						<span className="font-medium tabular-nums text-foreground">{processCount.toLocaleString()}</span>
+						{t("home.hero.counterLabel")}
+					</div>
+				)}
 			</div>
 
-			{/* Animated radial gradient background */}
-			<div className="hero-bg absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/[0.06] via-primary/[0.02] to-transparent" />
+			{/* Animated BPMN diagram background — hidden on mobile */}
+			<div className="hidden md:block">
+				<BpmnHeroBackground />
+			</div>
+			{/* Fallback gradient for mobile */}
+			<div className="md:hidden absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/[0.06] via-primary/[0.02] to-transparent" />
 		</section>
 	);
 }

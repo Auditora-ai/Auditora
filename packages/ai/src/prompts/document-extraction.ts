@@ -11,8 +11,8 @@ export function buildDocumentExtractionPrompt(
 	existingProcessNames: string[],
 	context?: SessionContext,
 ): string {
-	const industryHint = context?.businessContext?.industry
-		? `\nThe client operates in the ${context.businessContext.industry} industry.`
+	const industryHint = context?.company?.industry
+		? `\nThe client operates in the ${context.company.industry} industry.`
 		: "";
 
 	const existingList =

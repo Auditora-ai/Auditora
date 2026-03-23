@@ -20,7 +20,8 @@
 			"@documents/*": ["./modules/documents/*"],
 			"@dashboard/*": ["./modules/dashboard/*"],
 			"@process-library/*": ["./modules/process-library/*"],
-			"@discovery/*": ["./modules/discovery/*"]
+			"@discovery/*": ["./modules/discovery/*"],
+			"@risk/*": ["./modules/risk/*"]
 		}
 	},
 	"include": [

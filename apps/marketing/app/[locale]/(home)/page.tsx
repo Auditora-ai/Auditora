@@ -1,12 +1,9 @@
 import { CtaSection } from "@home/components/CtaSection";
 import { FaqSection } from "@home/components/FaqSection";
-import { FeaturesSection } from "@home/components/FeaturesSection";
 import { HeroSection } from "@home/components/HeroSection";
-import { HowItWorksSection } from "@home/components/HowItWorksSection";
-import { IntegrationsSection } from "@home/components/IntegrationsSection";
+import { PillarsSection } from "@home/components/PillarsSection";
 import { PricingSection } from "@home/components/PricingSection";
-import { ProblemSection } from "@home/components/ProblemSection";
-import { ProductDemoSection } from "@home/components/ProductDemoSection";
+import { TryItSection } from "@home/components/TryItSection";
 import { setRequestLocale } from "next-intl/server";
 
 export default async function Home({
@@ -20,11 +17,8 @@ export default async function Home({
 	return (
 		<>
 			<HeroSection />
-			<ProductDemoSection />
-			<ProblemSection />
-			<HowItWorksSection />
-			<FeaturesSection />
-			<IntegrationsSection />
+			<TryItSection />
+			<PillarsSection />
 			<PricingSection />
 			<FaqSection />
 			<CtaSection />

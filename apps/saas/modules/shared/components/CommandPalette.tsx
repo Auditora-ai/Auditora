@@ -6,7 +6,6 @@ import {
 } from "@repo/ui/components/dialog";
 import { Input } from "@repo/ui/components/input";
 import {
-	Building2Icon,
 	FileTextIcon,
 	PlusIcon,
 	SearchIcon,
@@ -47,13 +46,6 @@ export function CommandPalette() {
 				action: () => {
 					if (basePath) router.push(`${basePath}/sessions/new`);
 				},
-			},
-			{
-				id: "new-client",
-				label: t("newClient"),
-				section: t("sections.actions"),
-				icon: Building2Icon,
-				action: () => router.push("/new-organization"),
 			},
 		];
 

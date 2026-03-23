@@ -29,13 +29,13 @@
 		"description": "Todo lo que necesitas saber sobre Prozea.",
 		"title": "Preguntas frecuentes",
 		"items": {
-			"joinCall": {
-				"question": "¿Cómo se une Prozea a mi llamada?",
-				"answer": "Prozea usa Recall.ai para unirse como participante bot en Zoom, Google Meet o Microsoft Teams. Simplemente comparte el enlace de la reunión o invita a Prozea directamente — se une de forma silenciosa y comienza la transcripción en tiempo real."
+			"extraction": {
+				"question": "¿Cómo extrae Prozea los procesos?",
+				"answer": "Prozea extrae procesos de negocio de cualquier conversación — chat, grabaciones de audio o videollamadas en vivo. Su IA analiza la conversación, identifica pasos del proceso, roles, decisiones y excepciones, y los presenta como tarjetas de extracción que puedes aceptar, editar o rechazar."
 			},
 			"dataSecurity": {
 				"question": "¿Los datos de conversación de mi cliente están seguros?",
-				"answer": "Toda la transcripción se procesa en tiempo real y está cifrada en tránsito y en reposo. Nunca usamos los datos de tus clientes para entrenar modelos de IA. Tú eres dueño de tus datos."
+				"answer": "Todos los datos están cifrados en tránsito y en reposo. Nunca usamos los datos de tus clientes para entrenar modelos de IA. Tú eres dueño de tus datos. Las transcripciones y los hilos de chat se almacenan en el espacio privado de tu organización."
 			},
 			"bpmnStandard": {
 				"question": "¿Qué estándar BPMN soportan?",
@@ -45,26 +45,39 @@
 				"question": "¿Puedo editar el diagrama durante la reunión?",
 				"answer": "Sí. El canvas BPMN es completamente interactivo. Puedes mover nodos, agregar anotaciones, confirmar o rechazar sugerencias de la IA, y refinar el diagrama mientras sigues en la llamada con tu cliente."
 			},
-			"aiAccuracy": {
-				"question": "¿Qué pasa si la IA se equivoca en un paso del proceso?",
-				"answer": "Los nodos aparecen primero en estado 'formación' con borde punteado. Tú confirmas, editas o rechazas cada paso antes de que sea permanente. Siempre tienes el control del entregable final."
+			"intelligence": {
+				"question": "¿Qué es la Inteligencia de Procesos?",
+				"answer": "La Inteligencia de Procesos es el sistema de auditoría de IA de Prozea. Analiza cada proceso en busca de completitud — identifica rutas faltantes, roles, excepciones, puntos de decisión y traspasos. Califica la completitud y prioriza qué preguntar en tu próxima sesión."
+			},
+			"discoveryChat": {
+				"question": "¿Cómo funciona el chat de discovery?",
+				"answer": "Abre el panel de discovery, describe un proceso escribiendo o sube una grabación de audio. La IA de Prozea analiza la conversación y extrae pasos del proceso como tarjetas. Acepta, edita o rechaza cada una. El chat persiste — puedes cerrar y volver donde lo dejaste."
+			},
+			"sharing": {
+				"question": "¿Puedo compartir diagramas con mis clientes?",
+				"answer": "Sí. Genera un enlace público para cualquier diagrama de procesos. También puedes enviar enlaces de preparación pre-reunión donde los stakeholders responden preguntas dirigidas antes de la reunión — así llegas con contexto ya capturado."
+			},
+			"integrations": {
+				"question": "¿Con qué herramientas se integra Prozea?",
+				"answer": "Prozea se une a videollamadas de Zoom, Microsoft Teams y Google Meet. También puedes usar el chat con IA, subir grabaciones de audio o importar documentos — cada canal alimenta el mismo motor de extracción."
 			}
 		}
 	},
 	"home": {
 		"hero": {
-			"badge": "Elicitación de Procesos con IA",
-			"title": "Convierte cada reunión con tu cliente en un mapa de procesos terminado",
-			"subtitle": "Prozea se une a tu videollamada, guía tus preguntas con un teleprompter de IA, y auto-diagrama procesos de negocio en tiempo real. Sal de cada reunión con un entregable BPMN listo para el cliente.",
+			"badge": "Plataforma de Elicitación BPM con IA",
+			"title": "Extrae procesos de negocio de cualquier conversación",
+			"subtitle": "Chatea, sube audio, o únete a una llamada en vivo — la IA de Prozea extrae, organiza y diagrama los procesos de tu cliente en tiempo real. Sal con entregables BPMN, no con notas de reunión.",
 			"cta": "Prueba gratis",
-			"ctaSecondary": "Ver cómo funciona"
+			"ctaSecondary": "Ver cómo funciona",
+			"counterLabel": "pasos de proceso capturados"
 		},
 		"problem": {
-			"title": "Los consultores de procesos se ahogan en documentación",
+			"title": "Los consultores de procesos merecen mejores herramientas",
 			"stat1": {
 				"number": "60",
 				"unit": "%",
-				"label": "del tiempo de consultoría dedicado a documentación post-reunión"
+				"label": "del tiempo de consultoría dedicado a documentación en vez de análisis"
 			},
 			"stat2": {
 				"number": "3",
@@ -74,158 +87,200 @@
 			"stat3": {
 				"number": "40",
 				"unit": "%",
-				"label": "de pasos del proceso omitidos o mal recordados"
+				"label": "de pasos del proceso omitidos o mal recordados después de una reunión"
 			},
-			"description": "Tomas notas durante la llamada. Le pides al cliente que repita cosas. Pasas horas después en Visio o Lucidchart reconstruyendo lo que se dijo. Se pierden pasos. Se pierden detalles. Tu cliente recibe el entregable días después en vez de minutos."
+			"description": "Tomas notas durante la llamada. Le pides al cliente que repita cosas. Pasas horas después en Visio o Lucidchart reconstruyendo lo que se dijo. Se pierden pasos. Se pierden detalles. Tu cliente recibe el entregable días después en vez de minutos.",
+			"beforeLabel": "Antes: 3 horas reconstruyendo desde notas",
+			"afterLabel": "Después: Listo durante la conversación"
 		},
 		"howItWorks": {
-			"title": "Tres pasos. Cero documentación post-reunión.",
-			"stepLabel": "Paso {number}",
+			"title": "Cuatro fases. De conversación a entregable.",
+			"stepLabel": "Fase {number}",
 			"step1": {
-				"title": "Prozea se une a tu llamada",
-				"description": "Invita a Prozea a cualquier sesión de Zoom, Teams o Meet. Se une como participante silencioso y comienza la transcripción en tiempo real con identificación de hablantes."
+				"title": "Descubre",
+				"description": "Chatea con la IA, sube una grabación de audio, o deja que Prozea se una a tu videollamada. Cada canal de conversación alimenta el mismo motor de extracción."
 			},
 			"step2": {
-				"title": "La IA guía tus preguntas",
-				"description": "Un teleprompter privado te muestra exactamente qué preguntar a continuación, basándose en lo que se ha discutido. Nunca más te pierdas un paso crítico del proceso."
+				"title": "Organiza",
+				"description": "Los procesos extraídos se organizan automáticamente en tu arquitectura de procesos — estratégicos, core y soporte. Construye la visión completa de las operaciones de tu cliente."
 			},
 			"step3": {
-				"title": "El diagrama se construye solo",
-				"description": "Observa cómo las tareas BPMN, compuertas y flujos aparecen en el canvas en tiempo real. Revisa y refina con tu cliente mientras sigues en la llamada."
+				"title": "Profundiza",
+				"description": "Para cada proceso, inicia una sesión en vivo. Un teleprompter de IA privado guía tus preguntas mientras el diagrama BPMN se construye solo en tiempo real."
+			},
+			"step4": {
+				"title": "Entrega",
+				"description": "Exporta diagramas BPMN 2.0, genera enlaces compartibles, y envía cuestionarios de preparación pre-reunión. Sal con entregables listos para el cliente."
 			}
 		},
-		"features": {
-			"badge": "Capacidades principales",
-			"title": "Todo lo que necesitas para elicitar procesos, no documentarlos",
-			"description": "Prozea se encarga de la documentación para que puedas enfocarte en lo que mejor haces — entender el negocio de tu cliente.",
-			"feature1": {
-				"title": "Transcripción en Tiempo Real",
-				"subtitle": "Cada palabra capturada, cada hablante identificado.",
-				"description": "Impulsado por Deepgram, Prozea captura cada palabra con diarización de hablantes. Sabe exactamente quién dijo qué, para que tu mapa de procesos refleje los roles y responsabilidades correctos.",
+		"pillars": {
+			"badge": "La plataforma",
+			"title": "Cuatro pilares de la elicitación moderna de procesos",
+			"description": "Prozea reemplaza herramientas dispersas con una plataforma que cubre todo el flujo de trabajo de consultoría BPM.",
+			"pillar1": {
+				"title": "Discovery Conversacional",
+				"subtitle": "Extrae procesos de cualquier conversación.",
+				"description": "Describe un proceso por chat, sube una reunión grabada, o deja que la IA se una a tu llamada. Cada canal de conversación alimenta el mismo motor de extracción.",
 				"benefit1": {
-					"title": "Diarización de Hablantes",
-					"description": "Identifica automáticamente quién está hablando, mapeando voces a roles en tu diagrama de procesos."
+					"title": "Entrada Multi-Canal",
+					"description": "Chat, subida de audio y videollamadas en vivo — todo alimentando el mismo pipeline de extracción con IA."
 				},
 				"benefit2": {
-					"title": "Soporte Multilenguaje",
-					"description": "Transcribe reuniones en múltiples idiomas con alta precisión y baja latencia."
+					"title": "Tarjetas de Extracción",
+					"description": "Cada proceso extraído aparece como una tarjeta que puedes aceptar, editar o rechazar. Tú controlas el resultado."
 				},
 				"benefit3": {
-					"title": "Historial Buscable",
-					"description": "Cada transcripción se guarda y es buscable. Revisita cualquier momento de cualquier sesión pasada."
+					"title": "Hilos Persistentes",
+					"description": "Las conversaciones de discovery persisten. Cierra y vuelve donde lo dejaste — tu contexto nunca se pierde."
 				}
 			},
-			"feature2": {
-				"title": "Teleprompter de IA",
-				"subtitle": "Tu copiloto experto para cada reunión.",
-				"description": "Claude analiza la conversación en tiempo real y te sugiere la siguiente pregunta que deberías hacer. Cubre casos extremos, flujos de excepción y traspasos que los consultores normalmente pasan por alto.",
+			"pillar2": {
+				"title": "Sesiones en Vivo",
+				"subtitle": "Reuniones guiadas por IA con diagramación en tiempo real.",
+				"description": "Prozea se une a Zoom, Teams o Meet. Un teleprompter privado guía tus preguntas. El diagrama BPMN se construye solo mientras hablas.",
 				"benefit1": {
-					"title": "Preguntas Contextuales",
-					"description": "Las preguntas se adaptan según lo discutido. Sin scripts genéricos — cada sugerencia está adaptada a la conversación."
+					"title": "Transcripción en Tiempo Real",
+					"description": "Cada palabra capturada con diarización de hablantes. Sabe exactamente quién dijo qué."
+				},
+				"benefit2": {
+					"title": "Teleprompter de IA",
+					"description": "Preguntas contextuales aparecen en tiempo real. Cubre casos extremos y excepciones que normalmente pasarías por alto."
+				},
+				"benefit3": {
+					"title": "Canvas BPMN en Vivo",
+					"description": "Tareas, compuertas y flujos aparecen mientras la conversación avanza. Confirma o rechaza cada paso."
+				}
+			},
+			"pillar3": {
+				"title": "Inteligencia de Procesos",
+				"subtitle": "IA que audita tus procesos por completitud.",
+				"description": "La IA audita cada proceso en busca de completitud. Identifica rutas faltantes, roles, excepciones y traspasos. Prioriza qué preguntar después.",
+				"benefit1": {
+					"title": "Puntuación de Completitud",
+					"description": "Cada proceso recibe una puntuación de completitud basada en los vacíos identificados. Rastrea el progreso hacia cobertura completa."
 				},
 				"benefit2": {
 					"title": "Detección de Vacíos",
-					"description": "Identifica información faltante — rutas de excepción, cadenas de aprobación, puntos de traspaso — antes de que termine la reunión."
+					"description": "Rutas de decisión faltantes, flujos de excepción, asignaciones de roles y traspasos — automáticamente identificados y priorizados."
 				},
 				"benefit3": {
-					"title": "Privado para Ti",
-					"description": "El teleprompter es tu vista privada. Tu cliente no ve nada — solo un consultor haciendo preguntas brillantes."
+					"title": "Preparación de Stakeholders",
+					"description": "Comparte enlaces de preparación con stakeholders antes de tu próxima sesión. Llega con respuestas ya capturadas."
 				}
 			},
-			"feature3": {
-				"title": "Diagramación BPMN en Vivo",
-				"subtitle": "Mapas de procesos que se dibujan solos.",
-				"description": "Tareas, compuertas, eventos y carriles aparecen mientras la conversación avanza. Compatible con BPMN 2.0 y listo para exportar en el momento que termina tu reunión.",
+			"pillar4": {
+				"title": "Biblioteca de Procesos",
+				"subtitle": "La arquitectura completa de procesos de tu cliente.",
+				"description": "Organiza procesos como estratégicos, core o soporte. Rastrea versiones. Construye la arquitectura completa de procesos de tu cliente en un solo lugar.",
 				"benefit1": {
-					"title": "Estándar BPMN 2.0",
-					"description": "Notación estándar de la industria que se abre en Camunda, Signavio, Visio y cualquier herramienta compatible."
+					"title": "Árboles de Arquitectura",
+					"description": "Organización jerárquica de procesos con relaciones padre-hijo. Ve la imagen completa de un vistazo."
 				},
 				"benefit2": {
-					"title": "Colaboración en Tiempo Real",
-					"description": "Comparte el canvas del diagrama con tu cliente durante la llamada. Construyan el proceso juntos."
+					"title": "Historial de Versiones",
+					"description": "Cada cambio en un proceso se versiona. Retrocede, compara y rastrea cómo evolucionan los procesos con el tiempo."
 				},
 				"benefit3": {
-					"title": "Confirmar y Rechazar",
-					"description": "Cada nodo generado por IA comienza como sugerencia. Tú decides qué se queda y qué se va."
+					"title": "Exportar y Compartir",
+					"description": "Exporta diagramas BPMN 2.0, genera reportes y comparte enlaces públicos con tus clientes."
 				}
 			}
 		},
 		"demo": {
-			"windowTitle": "Prozea — Sesión en Vivo",
-			"rec": "REC",
-			"teleprompterLabel": "Teleprompter",
-			"askNow": "Preguntar ahora",
-			"transcriptLabel": "Transcripción en Vivo",
-			"consultantLabel": "Consultor",
-			"clientLabel": "Cliente",
-			"q1": "¿Qué inicia este proceso?",
-			"q2": "¿Quién es responsable de la aprobación?",
-			"q3": "¿Qué pasa cuando se rechaza?",
-			"q4": "¿Hay rutas de excepción?",
-			"q5": "¿Cuánto tiempo toma cada paso?",
-			"t1": "Explícame qué pasa después de que se envía una orden de compra.",
-			"t2": "Va al gerente del departamento para aprobación primero.",
-			"t3": "Si supera los $5,000, también necesita la firma del VP.",
-			"t4": "¿Qué pasa si el VP la rechaza?",
-			"t5": "Regresa al solicitante con notas para revisión.",
-			"nodeSubmit": "Enviar OC",
-			"nodeGateway": "¿$5k?",
-			"nodeMgr": "Aprob. Gerente",
-			"nodeVp": "Aprob. VP",
-			"labelLt": "< $5k",
-			"labelGte": "≥ $5k",
-			"t6": "¿Y una vez que se envía la revisión, comienza el ciclo de aprobación de nuevo?",
-			"t7": "Exacto. Vuelve a pasar por el mismo proceso.",
-			"q6": "¿Cuáles son los montos límite?",
-			"q7": "¿Quién es notificado en cada etapa?",
-			"nodeRevise": "Revisar y Reenviar",
-			"labelRejected": "Rechazado",
-			"labelApproved": "Aprobado",
-			"caption": {
-				"listening": "Escuchando…",
-				"understanding": "Comprendiendo…",
-				"aiGuides": "La IA guía la conversación",
-				"loopCloses": "El ciclo se cierra",
-				"ready": "Entregable listo"
-			},
-			"stats": {
-				"duration": "45 min",
-				"steps": "8 pasos",
-				"confidence": "94%",
-				"durationLabel": "Reunión",
-				"stepsLabel": "Capturados",
-				"confidenceLabel": "Confianza",
-				"export": "Listo para exportar"
-			},
+			"windowTitle": "Prozea — Flujo del Consultor",
 			"scene1": {
-				"title": "Prozea se une a tu llamada",
-				"joining": "Prozea se está uniendo a la reunión…",
-				"participant1": "Ana López",
-				"participant2": "Marco Díaz",
-				"participant3": "Sarah Chen",
-				"you": "Tú (Consultor)",
-				"prozea": "Prozea AI"
+				"title": "Descubre a través de la conversación",
+				"chatMessage1": "Recibimos órdenes de compra por correo y la asistente las registra en el sistema.",
+				"chatMessage2": "¿Y qué pasa después de que se registran?",
+				"chatMessage3": "El gerente del departamento revisa y aprueba. Si supera los $5,000, el VP también necesita firmar.",
+				"extractionLabel": "Procesos extraídos",
+				"process1": "Recibir Orden de Compra",
+				"process2": "Aprobación del Gerente",
+				"process3": "Firma del VP",
+				"audioLabel": "O sube audio"
 			},
 			"scene2": {
-				"title": "Cada palabra, capturada",
-				"waveformLabel": "Transcripción en tiempo real"
+				"title": "Organiza en arquitectura",
+				"strategic": "Estratégicos",
+				"core": "Core",
+				"support": "Soporte",
+				"processCount": "{count} procesos"
 			},
 			"scene3": {
-				"title": "La IA guía tus preguntas",
-				"aiSuggestion": "Basado en la respuesta del cliente"
+				"title": "Profundiza con guía de IA",
+				"teleprompterLabel": "Teleprompter",
+				"transcriptLabel": "Transcripción en Vivo",
+				"askNow": "Preguntar ahora",
+				"q1": "¿Qué pasa cuando el VP la rechaza?",
+				"q2": "¿Hay montos límite para la escalación?",
+				"t1": "Regresa al solicitante con notas para revisión.",
+				"t2": "Si supera los $5,000, necesita firma del VP.",
+				"rec": "REC",
+				"consultantLabel": "Consultor",
+				"clientLabel": "Cliente"
 			},
 			"scene4": {
-				"title": "El diagrama se construye solo"
+				"title": "Sal con entregables listos",
+				"stats": {
+					"duration": "38 min",
+					"steps": "12 pasos",
+					"confidence": "94%",
+					"durationLabel": "Sesión",
+					"stepsLabel": "Capturados",
+					"confidenceLabel": "Confianza",
+					"export": "Listo para exportar"
+				},
+				"nodeSubmit": "Recibir OC",
+				"nodeGateway": "¿$5k?",
+				"nodeMgr": "Aprob. Gerente",
+				"nodeVp": "Aprob. VP",
+				"nodeRevise": "Revisar",
+				"labelLt": "< $5k",
+				"labelGte": "≥ $5k",
+				"labelApproved": "Aprobado",
+				"labelRejected": "Rechazado",
+				"shareLink": "Compartir con cliente",
+				"exportBpmn": "Exportar BPMN"
 			},
-			"scene5": {
-				"title": "Sal con un entregable listo",
-				"before": "Antes: 3 horas reconstruyendo desde notas",
-				"after": "Ahora: Listo antes de que termine la reunión",
-				"cta": "Prueba gratis"
+			"caption": {
+				"discover": "La IA extrae de la conversación",
+				"organize": "Los procesos encuentran su lugar",
+				"deepDive": "La IA guía cada pregunta",
+				"deliver": "Entregable listo"
 			}
 		},
+		"tryIt": {
+			"badge": "Pruébalo ahora",
+			"title": "Describe un proceso. Mira cómo cobra vida.",
+			"description": "Habla o escribe la descripción de un proceso. La IA lo extrae y lo diagrama en tiempo real con notación BPMN.",
+			"placeholder": "Describe un proceso de negocio... ej: 'Cuando un cliente envía un ticket de soporte, va al equipo de triaje que lo categoriza por severidad...'",
+			"send": "Extraer",
+			"analyzing": "Analizando...",
+			"extractedTitle": "Procesos extraídos",
+			"accept": "Aceptar",
+			"edit": "Editar",
+			"reject": "Rechazar",
+			"voiceButton": "Hablar",
+			"voiceListening": "Escuchando...",
+			"voiceUnsupported": "Voz no soportada en este navegador",
+			"diagramTitle": "Tu diagrama de procesos",
+			"diagramEmpty": "Describe un proceso para verlo diagramado",
+			"editOverlayTitle": "¿Quieres editar este diagrama?",
+			"editOverlaySubtitle": "Regístrate gratis para personalizar, exportar BPMN 2.0 y compartir con tus clientes",
+			"editOverlayButton": "Regístrate — es gratis",
+			"editOverlayNote": "Tu diagrama está guardado y te estará esperando",
+			"signupPrompt": "¿Quieres seguir?",
+			"signupCta": "Inicia tu prueba gratis para extraer procesos sin límite",
+			"signupButton": "Prueba gratis",
+			"error": "Nuestra IA está ocupada. Inténtalo de nuevo en un momento.",
+			"rateLimited": "Demasiadas solicitudes. Espera un momento.",
+			"messagesRemaining": "{count} mensajes restantes"
+		},
 		"integrations": {
-			"worksWithTitle": "Funciona con tus herramientas",
+			"worksWithTitle": "Funciona con cada canal de conversación",
+			"chat": "Chat con IA",
+			"audio": "Subida de Audio",
+			"documents": "Documentos",
 			"zoom": "Zoom",
 			"teams": "Microsoft Teams",
 			"meet": "Google Meet"
@@ -248,7 +303,7 @@
 	},
 	"cta": {
 		"title": "Deja de documentar. Empieza a consultar.",
-		"subtitle": "Únete a los consultores que salen de cada reunión con un mapa de procesos terminado.",
+		"subtitle": "Únete a los consultores que extraen procesos de conversaciones en vez de reconstruirlos de memoria.",
 		"button": "Empieza tu prueba gratis",
 		"note": "No se requiere tarjeta de crédito"
 	},

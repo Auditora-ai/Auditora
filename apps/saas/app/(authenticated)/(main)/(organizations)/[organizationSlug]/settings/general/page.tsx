@@ -1,5 +1,6 @@
 import { ChangeOrganizationNameForm } from "@organizations/components/ChangeOrganizationNameForm";
 import { OrganizationLogoForm } from "@organizations/components/OrganizationLogoForm";
+import { OrganizationProfileForm } from "@organizations/components/OrganizationProfileForm";
 import { SettingsList } from "@shared/components/SettingsList";
 import { getTranslations } from "next-intl/server";
 
@@ -16,6 +17,7 @@ export default function OrganizationSettingsPage() {
 		<SettingsList>
 			<OrganizationLogoForm />
 			<ChangeOrganizationNameForm />
+			<OrganizationProfileForm />
 		</SettingsList>
 	);
 }

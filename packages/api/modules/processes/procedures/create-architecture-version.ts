@@ -23,13 +23,10 @@ export const createArchitectureVersion = protectedProcedure
 			context: { session, user },
 			input: { architectureId, changeNote },
 		}) => {
-			// Verify org ownership: architecture → project → client → organizationId
+			// Verify org ownership
 			const architecture = await db.processArchitecture.findUnique({
 				where: { id: architectureId },
 				include: {
-					project: {
-						include: { client: true },
-					},
 					definitions: {
 						include: {
 							children: {
@@ -53,7 +50,7 @@ export const createArchitectureVersion = protectedProcedure
 			}
 
 			if (
-				architecture.project.client.organizationId !==
+				architecture.organizationId !==
 				session.activeOrganizationId
 			) {
 				throw new ORPCError("FORBIDDEN");

@@ -18,9 +18,13 @@ import { buildBpmnXml, bpmnType, dims, bpmnTag } from "../lib/bpmn-builder";
 
 interface UseBpmnModelerOptions {
 	containerRef: React.RefObject<HTMLDivElement | null>;
-	onConfirmNode: (nodeId: string) => void;
-	onRejectNode: (nodeId: string) => void;
-	sessionStatus: "ACTIVE" | "ENDED";
+	/** Initial BPMN XML to load. If not provided, starts with empty diagram (for live AI mode). */
+	initialXml?: string | null;
+	/** Callback when user confirms a forming node. Required for live AI mode. */
+	onConfirmNode?: (nodeId: string) => void;
+	/** Callback when user rejects a forming node. Required for live AI mode. */
+	onRejectNode?: (nodeId: string) => void;
+	sessionStatus?: "ACTIVE" | "ENDED";
 }
 
 interface ModelerAPI {
@@ -39,15 +43,21 @@ interface ModelerAPI {
 	gridEnabled: boolean;
 	getModeler: () => any;
 	selectedElement: any;
+	// Subprocess deep-linking
+	navigationStack: { id: string; label: string }[];
+	drillDown: (elementId: string) => void;
+	navigateUp: (level: number) => void;
 }
 
 import { X_GAP, Y_PAD, LANE_H, CONTENT_X } from "../lib/layout-constants";
+import { applyBizagiColors } from "../lib/bpmn-colors";
 
 export function useBpmnModeler({
 	containerRef,
+	initialXml,
 	onConfirmNode,
 	onRejectNode,
-	sessionStatus,
+	sessionStatus = "ACTIVE",
 }: UseBpmnModelerOptions): ModelerAPI {
 	const modelerRef = useRef<any>(null);
 	const [isReady, setIsReady] = useState(false);
@@ -93,11 +103,13 @@ export function useBpmnModeler({
 
 			modelerRef.current = modeler;
 
-			// Import empty diagram to initialize
+			// Import initial XML (or empty diagram for live AI mode)
 			try {
-				await modeler.importXML(emptyBpmnXml());
+				await modeler.importXML(initialXml || emptyBpmnXml());
 				const canvas = modeler.get("canvas");
 				canvas.zoom("fit-viewport", "auto");
+				// Apply Bizagi colors to existing elements + auto-color new ones
+				applyBizagiColors(modeler);
 			} catch (err) {
 				console.error("[useBpmnModeler] Failed to initialize:", err);
 				return;
@@ -172,8 +184,10 @@ export function useBpmnModeler({
 						}
 					}
 
-					// Apply state-based styling
-					applyAllStyling(modeler, nodes, onConfirmNode, onRejectNode);
+					// Apply state-based styling (confirm/reject overlays)
+					if (onConfirmNode && onRejectNode) {
+						applyAllStyling(modeler, nodes, onConfirmNode, onRejectNode);
+					}
 
 					bootstrappedRef.current = true;
 					setRenderError(null);
@@ -534,6 +548,75 @@ export function useBpmnModeler({
 
 	const getModeler = useCallback(() => modelerRef.current, []);
 
+	// ─── Subprocess Deep-Linking ────────────────────────────────────
+	const navigationStackRef = useRef<{ id: string; label: string }[]>([]);
+	const [navigationStack, setNavigationStack] = useState<
+		{ id: string; label: string }[]
+	>([]);
+
+	const drillDown = useCallback((elementId: string) => {
+		const modeler = modelerRef.current;
+		if (!modeler) return;
+
+		const elementRegistry = modeler.get("elementRegistry");
+		const canvas = modeler.get("canvas");
+		const element = elementRegistry.get(elementId);
+
+		if (!element || element.type !== "bpmn:SubProcess") return;
+
+		// Push current root to stack
+		const currentRoot = canvas.getRootElement();
+		navigationStackRef.current = [
+			...navigationStackRef.current,
+			{
+				id: currentRoot.id,
+				label:
+					navigationStackRef.current.length === 0
+						? "Proceso Principal"
+						: currentRoot.businessObject?.name || currentRoot.id,
+			},
+		];
+		setNavigationStack([...navigationStackRef.current]);
+
+		// Drill into subprocess
+		canvas.setRootElement(
+			canvas.findRoot(elementId) || canvas.addRootElement(element),
+		);
+	}, []);
+
+	const navigateUp = useCallback((level: number) => {
+		const modeler = modelerRef.current;
+		if (!modeler) return;
+
+		const canvas = modeler.get("canvas");
+		const stack = navigationStackRef.current;
+
+		if (level < 0 || level >= stack.length) return;
+
+		const target = stack[level];
+		navigationStackRef.current = stack.slice(0, level);
+		setNavigationStack([...navigationStackRef.current]);
+
+		const root = canvas.findRoot(target.id);
+		if (root) canvas.setRootElement(root);
+	}, []);
+
+	// Register double-click handler for subprocesses
+	useEffect(() => {
+		const modeler = modelerRef.current;
+		if (!modeler || !isReady) return;
+
+		const eventBus = modeler.get("eventBus");
+		const handler = (e: any) => {
+			if (e.element?.type === "bpmn:SubProcess") {
+				drillDown(e.element.id);
+			}
+		};
+
+		eventBus.on("element.dblclick", handler);
+		return () => eventBus.off("element.dblclick", handler);
+	}, [isReady, drillDown]);
+
 	return {
 		modeler: modelerRef.current,
 		isReady,
@@ -550,29 +633,37 @@ export function useBpmnModeler({
 		gridEnabled,
 		getModeler,
 		selectedElement,
+		navigationStack,
+		drillDown,
+		navigateUp,
 	};
 }
 
 // ─── Styling helpers ────────────────────────────────────────────────
 
 const TYPE_COLORS: Record<string, { stroke: string; fill: string }> = {
-	"bpmn:Task": { stroke: "#2563EB", fill: "#EFF6FF" },
-	task: { stroke: "#2563EB", fill: "#EFF6FF" },
-	"bpmn:ExclusiveGateway": { stroke: "#D97706", fill: "#FFFBEB" },
-	exclusiveGateway: { stroke: "#D97706", fill: "#FFFBEB" },
+	"bpmn:Task": { stroke: "#3B82F6", fill: "#EFF6FF" },
+	task: { stroke: "#3B82F6", fill: "#EFF6FF" },
+	"bpmn:ExclusiveGateway": { stroke: "#EAB308", fill: "#FEF9C3" },
+	exclusiveGateway: { stroke: "#EAB308", fill: "#FEF9C3" },
 	"bpmn:ParallelGateway": { stroke: "#7C3AED", fill: "#F5F3FF" },
 	parallelGateway: { stroke: "#7C3AED", fill: "#F5F3FF" },
 	"bpmn:StartEvent": { stroke: "#16A34A", fill: "#F0FDF4" },
 	startEvent: { stroke: "#16A34A", fill: "#F0FDF4" },
 	"bpmn:EndEvent": { stroke: "#DC2626", fill: "#FEF2F2" },
 	endEvent: { stroke: "#DC2626", fill: "#FEF2F2" },
+	"bpmn:IntermediateThrowEvent": { stroke: "#A16207", fill: "#FEF3C7" },
+	"bpmn:IntermediateCatchEvent": { stroke: "#A16207", fill: "#FEF3C7" },
+	"bpmn:BoundaryEvent": { stroke: "#A16207", fill: "#FEF3C7" },
+	"bpmn:SubProcess": { stroke: "#7C3AED", fill: "#F5F3FF" },
+	subprocess: { stroke: "#7C3AED", fill: "#F5F3FF" },
 };
 
 const STATE_COLORS: Record<
 	string,
 	{ stroke: string; fill: string; dash?: string }
 > = {
-	forming: { stroke: "#D97706", fill: "#FFFBEB", dash: "5,5" },
+	forming: { stroke: "#EAB308", fill: "#FEF9C3", dash: "5,5" },
 	confirmed: { stroke: "", fill: "" }, // Use type colors
 	active: { stroke: "#2563EB", fill: "#DBEAFE" },
 };

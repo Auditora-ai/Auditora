@@ -15,6 +15,7 @@ import {
 } from "@repo/ai";
 import type { SessionContext } from "@repo/ai";
 import crypto from "crypto";
+import { recordEvent } from "@meeting/lib/session-timeline";
 
 // Throttle AI calls per session
 const lastExtractionTime = new Map<string, number>();
@@ -117,18 +118,22 @@ export async function POST(request: NextRequest) {
 		}
 		if (!session) return NextResponse.json({ ok: true });
 
+		recordEvent(session.id, "webhook_received", `speaker=${speaker}, chars=${text.length}`);
+
 		// Activate session on first transcript
 		if (session.status === "CONNECTING") {
 			await db.meetingSession.update({
 				where: { id: session.id },
 				data: { status: "ACTIVE", startedAt: new Date() },
 			});
+			recordEvent(session.id, "session_activated", "CONNECTING -> ACTIVE");
 		}
 
 		// Store transcript
 		await db.transcriptEntry.create({
 			data: { sessionId: session.id, speaker, text, timestamp },
 		});
+		recordEvent(session.id, "transcript_stored", `speaker=${speaker}`);
 
 		console.log(`[Webhook] ${speaker}: "${text.substring(0, 60)}"`);
 
@@ -139,6 +144,7 @@ export async function POST(request: NextRequest) {
 		const lastExtraction = lastExtractionTime.get(session.id) || 0;
 		if (now - lastExtraction >= EXTRACTION_INTERVAL) {
 			lastExtractionTime.set(session.id, now);
+			recordEvent(session.id, "extraction_triggered");
 			runExtraction(session.id).catch((err) =>
 				console.error("[Webhook] Extraction error:", err),
 			);
@@ -148,6 +154,7 @@ export async function POST(request: NextRequest) {
 		const lastTeleprompter = lastTeleprompterTime.get(session.id) || 0;
 		if (now - lastTeleprompter >= TELEPROMPTER_INTERVAL) {
 			lastTeleprompterTime.set(session.id, now);
+			recordEvent(session.id, "teleprompter_triggered");
 			runTeleprompter(session.id).catch((err) =>
 				console.error("[Webhook] Teleprompter error:", err),
 			);

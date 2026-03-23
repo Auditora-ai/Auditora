@@ -22,7 +22,7 @@ export type { TeleprompterResult } from "./src/pipelines/teleprompter";
 export { extractDiscoveryUpdates } from "./src/pipelines/discovery-extraction";
 export type { DiscoveryResult, DiscoveryProcess, BusinessInsights } from "./src/pipelines/discovery-extraction";
 export { extractFromChat } from "./src/pipelines/chat-extraction";
-export type { ChatExtractionResult, ExtractedProcess } from "./src/pipelines/chat-extraction";
+export type { ChatExtractionResult, ExtractedProcess, ProcessChatContext } from "./src/pipelines/chat-extraction";
 
 // Prozea context
 export { buildSessionContext, clearSessionContextCache } from "./src/context/session-context";
@@ -44,6 +44,14 @@ export { generateRaci } from "./src/pipelines/raci-generator";
 export type { RaciAssignment, RaciGeneratorResult } from "./src/pipelines/raci-generator";
 export { consolidateStakeholders } from "./src/pipelines/stakeholder-consolidation";
 export type { StakeholderConflict, ConsolidationResult } from "./src/pipelines/stakeholder-consolidation";
+
+// Process Intelligence
+export { auditProcess, mergeSnapshotPatch, KnowledgeSnapshotSchema } from "./src/pipelines/process-audit";
+export type { AuditInput, AuditResult, KnowledgeSnapshot } from "./src/pipelines/process-audit";
+
+// Risk & Quality Layer
+export { auditRisks, calculateResidualRisk } from "./src/pipelines/risk-audit";
+export type { RiskAuditInput, RiskAuditResult } from "./src/pipelines/risk-audit";
 
 // Prozea prompts (for testing/eval)
 export { PROCESS_EXTRACTION_SYSTEM, buildExtractionSystemPrompt } from "./src/prompts/process-extraction";

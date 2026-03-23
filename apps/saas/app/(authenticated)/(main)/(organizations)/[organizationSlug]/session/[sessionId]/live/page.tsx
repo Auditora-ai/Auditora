@@ -17,7 +17,7 @@ export default async function LiveSessionPage({
 		where: { id: sessionId },
 		include: {
 			processDefinition: true,
-			project: { include: { client: true } },
+			organization: { select: { name: true } },
 		},
 	});
 
@@ -30,10 +30,12 @@ export default async function LiveSessionPage({
 			sessionId={session.id}
 			sessionType={session.type as "DISCOVERY" | "DEEP_DIVE"}
 			processName={session.processDefinition?.name}
-			clientName={session.project.client.name}
+			clientName={session.organization.name}
 			botId={session.recallBotId || undefined}
 			shareToken={session.shareToken || undefined}
 			startedAt={session.startedAt?.toISOString()}
+			processId={session.processDefinitionId || undefined}
+			organizationId={session.organizationId}
 		/>
 	);
 }

@@ -245,6 +245,76 @@ enum NodeType {
   DATA_OBJECT
 }
 
+enum IntelligenceItemStatus {
+  OPEN
+  RESOLVED
+  SUPERSEDED
+}
+
+enum IntelligenceItemCategory {
+  MISSING_PATH
+  MISSING_ROLE
+  MISSING_EXCEPTION
+  MISSING_DECISION
+  MISSING_TRIGGER
+  MISSING_OUTPUT
+  CONTRADICTION
+  UNCLEAR_HANDOFF
+  MISSING_SLA
+  MISSING_SYSTEM
+  GENERAL_GAP
+}
+
+// ============================================
+// RISK ENUMS
+// ============================================
+
+enum RiskType {
+  OPERATIONAL
+  COMPLIANCE
+  STRATEGIC
+  FINANCIAL
+  TECHNOLOGY
+  HUMAN_RESOURCE
+  REPUTATIONAL
+}
+
+enum RiskStatus {
+  IDENTIFIED
+  ASSESSED
+  MITIGATING
+  ACCEPTED
+  CLOSED
+}
+
+enum RiskSource {
+  AI_AUDIT
+  AI_FMEA
+  INTELLIGENCE_GAP
+  MANUAL
+  CONVERSATION
+}
+
+enum MitigationStatus {
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum ControlType {
+  PREVENTIVE
+  DETECTIVE
+  CORRECTIVE
+}
+
+enum ControlEffectiveness {
+  HIGH
+  MEDIUM
+  LOW
+  UNKNOWN
+}
+
 model ProcessArchitecture {
   id             String                @id @default(cuid())
   organizationId String                @unique
@@ -279,7 +349,11 @@ model ProcessDefinition {
   versions       ProcessVersion[]
   raciEntries    RaciEntry[]
   conflicts      StakeholderConflict[]
-  createdAt      DateTime            @default(now())
+  intelligence   ProcessIntelligence?
+  risks            ProcessRisk[]
+  documents        Document[]
+  discoveryThreads DiscoveryThread[]
+  createdAt        DateTime            @default(now())
 
   @@index([architectureId])
   @@index([parentId])
@@ -364,14 +438,16 @@ model DiagramNode {
 }
 
 model NodeComment {
-  id         String      @id @default(cuid())
-  nodeId     String
-  node       DiagramNode @relation(fields: [nodeId], references: [id], onDelete: Cascade)
-  content    String      @db.Text
-  authorId   String
-  authorName String
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  id            String      @id @default(cuid())
+  nodeId        String
+  node          DiagramNode @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+  content       String      @db.Text
+  authorId      String
+  authorName    String
+  sourceType    String?     // 'manual' | 'transcript' | 'ai'
+  sourceSnippet String?     @db.Text // original transcript text if sourceType='transcript'
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 
   @@index([nodeId])
   @@map("node_comment")
@@ -440,15 +516,19 @@ model SessionSummary {
 // ============================================
 
 model DiscoveryThread {
-  id             String             @id @default(cuid())
-  organizationId String
-  organization   Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  createdBy      String
-  messages       DiscoveryMessage[]
-  createdAt      DateTime           @default(now())
-  updatedAt      DateTime           @updatedAt
+  id                    String              @id @default(cuid())
+  organizationId        String
+  organization          Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  processDefinitionId   String?
+  processDefinition     ProcessDefinition?  @relation(fields: [processDefinitionId], references: [id], onDelete: SetNull)
+  createdBy             String
+  rejectedProcessNames  String[]            @default([])
+  messages              DiscoveryMessage[]
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
 
   @@index([organizationId])
+  @@index([organizationId, processDefinitionId])
   @@map("discovery_thread")
 }
 
@@ -504,6 +584,179 @@ model StakeholderConflict {
 
   @@index([processId])
   @@map("stakeholder_conflict")
+}
+
+// ============================================
+// PROCESS INTELLIGENCE MODELS
+// ============================================
+
+model ProcessIntelligence {
+  id                  String            @id @default(cuid())
+  processDefinitionId String            @unique
+  processDefinition   ProcessDefinition @relation(fields: [processDefinitionId], references: [id], onDelete: Cascade)
+  knowledgeSnapshot   Json              @default("{}")
+  confidenceScores    Json              @default("{}")
+  completenessScore   Int               @default(0)
+  shareToken          String?           @unique @default(cuid())
+  shareExpiresAt      DateTime?
+  riskShareToken      String?           @unique @default(cuid())
+  riskShareExpiresAt  DateTime?
+  version             Int               @default(0)
+  lastAuditAt         DateTime?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  items               IntelligenceItem[]
+  auditLogs           IntelligenceAuditLog[]
+
+  @@map("process_intelligence")
+}
+
+model IntelligenceItem {
+  id               String                   @id @default(cuid())
+  intelligenceId   String
+  intelligence     ProcessIntelligence      @relation(fields: [intelligenceId], references: [id], onDelete: Cascade)
+  category         IntelligenceItemCategory
+  question         String                   @db.Text
+  context          String?                  @db.Text
+  priority         Int                      @default(50)
+  dependsOn        String[]
+  status           IntelligenceItemStatus   @default(OPEN)
+  resolution       String?                  @db.Text
+  resolvedAt       DateTime?
+  resolvedBy       String?
+  sourceType       String
+  sourceId         String?
+  elementRef       String?                  // Stable element reference: "name|type|lane"
+  insightType      String?                  // 'bottleneck' | 'improvement' | 'missing_path' | 'risk'
+  createdAt        DateTime                 @default(now())
+  updatedAt        DateTime                 @updatedAt
+
+  @@index([intelligenceId])
+  @@index([status])
+  @@index([category])
+  @@map("intelligence_item")
+}
+
+model IntelligenceAuditLog {
+  id                String              @id @default(cuid())
+  intelligenceId    String
+  intelligence      ProcessIntelligence @relation(fields: [intelligenceId], references: [id], onDelete: Cascade)
+  triggerType       String
+  triggerId         String?
+  delta             Json
+  completenessScore Int
+  inputTokens       Int?
+  outputTokens      Int?
+  createdAt         DateTime            @default(now())
+
+  @@index([intelligenceId])
+  @@map("intelligence_audit_log")
+}
+
+// ============================================
+// RISK MODELS
+// ============================================
+
+model ProcessRisk {
+  id                  String            @id @default(cuid())
+  processDefinitionId String
+  processDefinition   ProcessDefinition @relation(fields: [processDefinitionId], references: [id], onDelete: Cascade)
+
+  // ISO 31000 core fields
+  title               String
+  description         String            @db.Text
+  riskType            RiskType
+  status              RiskStatus        @default(IDENTIFIED)
+  source              RiskSource
+
+  // 5×5 matrix scores (1-5)
+  severity            Int               @default(3)
+  probability         Int               @default(3)
+  riskScore           Int               @default(9)
+
+  // Residual risk (after controls)
+  residualSeverity    Int?
+  residualProbability Int?
+  residualScore       Int?
+
+  // Context
+  affectedStep        String?
+  affectedRole        String?
+  relatedItemId       String?
+
+  // Opportunity (positive risk)
+  isOpportunity       Boolean           @default(false)
+  opportunityValue    String?           @db.Text
+
+  // FMEA fields
+  failureMode         String?           @db.Text
+  failureEffect       String?           @db.Text
+  detectionDifficulty Int?
+  rpn                 Int?
+
+  // Visibility
+  shareVisible        Boolean           @default(true)
+
+  mitigations         RiskMitigation[]
+  controls            RiskControl[]
+  auditLogs           RiskAuditLog[]
+
+  createdBy           String
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+
+  @@index([processDefinitionId])
+  @@index([status])
+  @@index([riskScore])
+  @@map("process_risk")
+}
+
+model RiskMitigation {
+  id          String           @id @default(cuid())
+  riskId      String
+  risk        ProcessRisk      @relation(fields: [riskId], references: [id], onDelete: Cascade)
+  action      String           @db.Text
+  owner       String?
+  deadline    DateTime?
+  status      MitigationStatus @default(PLANNED)
+  notes       String?          @db.Text
+  completedAt DateTime?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([riskId])
+  @@index([status])
+  @@map("risk_mitigation")
+}
+
+model RiskControl {
+  id            String               @id @default(cuid())
+  riskId        String
+  risk          ProcessRisk          @relation(fields: [riskId], references: [id], onDelete: Cascade)
+  name          String
+  description   String?              @db.Text
+  controlType   ControlType
+  effectiveness ControlEffectiveness @default(UNKNOWN)
+  automated     Boolean              @default(false)
+  system        String?
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+
+  @@index([riskId])
+  @@map("risk_control")
+}
+
+model RiskAuditLog {
+  id        String      @id @default(cuid())
+  riskId    String
+  risk      ProcessRisk @relation(fields: [riskId], references: [id], onDelete: Cascade)
+  action    String
+  delta     Json
+  userId    String?
+  createdAt DateTime    @default(now())
+
+  @@index([riskId])
+  @@map("risk_audit_log")
 }
 
 model ProcessTemplate {
@@ -562,22 +815,25 @@ model ArchitectureVersion {
 // ============================================
 
 model Document {
-  id             String            @id @default(cuid())
-  name           String
-  description    String?
-  mimeType       String
-  filePath       String
-  fileSize       Int
-  organizationId String
-  organization   Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  extractedText  String?           @db.Text
-  isProcessed    Boolean           @default(false)
-  versions       DocumentVersion[]
-  createdBy      String
-  createdAt      DateTime          @default(now())
-  updatedAt      DateTime          @updatedAt
+  id                  String             @id @default(cuid())
+  name                String
+  description         String?
+  mimeType            String
+  filePath            String
+  fileSize            Int
+  organizationId      String
+  organization        Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  processDefinitionId String?
+  processDefinition   ProcessDefinition? @relation(fields: [processDefinitionId], references: [id], onDelete: SetNull)
+  extractedText       String?            @db.Text
+  isProcessed         Boolean            @default(false)
+  versions            DocumentVersion[]
+  createdBy           String
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
 
   @@index([organizationId])
+  @@index([processDefinitionId])
   @@map("document")
 }
 

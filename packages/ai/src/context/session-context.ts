@@ -2,7 +2,7 @@
  * Session Context Builder
  *
  * Builds a rich business context for AI pipelines by fetching
- * all relevant data about the company, project, process architecture,
+ * all relevant data about the organization, process architecture,
  * and target process from the database.
  *
  * Used by both process extraction and teleprompter pipelines to
@@ -17,12 +17,6 @@ export interface SessionContext {
     industry?: string;
     operationsProfile?: string;
     businessModel?: string;
-    documentContext?: string;
-  };
-  project: {
-    name: string;
-    description?: string;
-    goals: string[];
     documentContext?: string;
   };
   architecture: {
@@ -46,6 +40,14 @@ export interface SessionContext {
     previousTranscriptSummary?: string;
   } | null;
   sessionType: "DISCOVERY" | "DEEP_DIVE" | "CONTINUATION";
+  intelligence?: {
+    openItems: Array<{
+      question: string;
+      category: string;
+      priority: number;
+    }>;
+    completenessScore: number;
+  };
 }
 
 // Cache to avoid refetching mid-session
@@ -65,22 +67,14 @@ export async function buildSessionContext(
   const session = await db.meetingSession.findUnique({
     where: { id: sessionId },
     include: {
-      project: {
+      organization: {
         include: {
-          client: {
-            include: {
-              documents: {
-                where: { isProcessed: true },
-                select: { extractedText: true },
-              },
-            },
-          },
-          architecture: {
-            include: { definitions: true },
-          },
           documents: {
             where: { isProcessed: true },
             select: { extractedText: true },
+          },
+          architecture: {
+            include: { definitions: true },
           },
         },
       },
@@ -104,18 +98,13 @@ export async function buildSessionContext(
 
   if (!session) throw new Error(`Session ${sessionId} not found`);
 
-  const client = session.project.client;
-  const project = session.project;
-  const architecture = project.architecture;
+  const org = session.organization;
+  const architecture = org.architecture;
   const allProcesses = architecture?.definitions ?? [];
   const target = session.processDefinition;
 
   // Build document context (concatenated extracted text, truncated)
-  const clientDocs = client.documents
-    .map((d) => d.extractedText)
-    .filter(Boolean)
-    .join("\n\n");
-  const projectDocs = project.documents
+  const orgDocs = org.documents
     .map((d) => d.extractedText)
     .filter(Boolean)
     .join("\n\n");
@@ -142,19 +131,36 @@ export async function buildSessionContext(
     }
   }
 
+  // Fetch intelligence data for target process (top 5 open items)
+  let intelligence: SessionContext["intelligence"] = undefined;
+  if (target) {
+    const intel = await db.processIntelligence.findFirst({
+      where: { processDefinitionId: target.id },
+      select: {
+        completenessScore: true,
+        items: {
+          where: { status: "OPEN" },
+          select: { question: true, category: true, priority: true },
+          orderBy: { priority: "desc" },
+          take: 5,
+        },
+      },
+    });
+    if (intel && intel.items.length > 0) {
+      intelligence = {
+        openItems: intel.items,
+        completenessScore: intel.completenessScore,
+      };
+    }
+  }
+
   const context: SessionContext = {
     company: {
-      name: client.name,
-      industry: client.industry ?? undefined,
-      operationsProfile: client.operationsProfile ?? undefined,
-      businessModel: client.businessModel ?? undefined,
-      documentContext: clientDocs.substring(0, 4000) || undefined,
-    },
-    project: {
-      name: project.name,
-      description: project.description ?? undefined,
-      goals: project.goals,
-      documentContext: projectDocs.substring(0, 2000) || undefined,
+      name: org.name,
+      industry: org.industry ?? undefined,
+      operationsProfile: org.operationsProfile ?? undefined,
+      businessModel: org.businessModel ?? undefined,
+      documentContext: orgDocs.substring(0, 4000) || undefined,
     },
     architecture: {
       processes: allProcesses.map((p) => ({
@@ -179,6 +185,7 @@ export async function buildSessionContext(
         }
       : null,
     sessionType: session.type as SessionContext["sessionType"],
+    intelligence,
   };
 
   contextCache.set(sessionId, context);

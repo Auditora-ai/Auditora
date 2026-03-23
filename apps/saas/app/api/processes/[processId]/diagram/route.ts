@@ -31,9 +31,7 @@ export async function POST(
 			where: { id: processId },
 			include: {
 				architecture: {
-					include: {
-						project: { include: { client: true } },
-					},
+					select: { organizationId: true },
 				},
 			},
 		});

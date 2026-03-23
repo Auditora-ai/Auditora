@@ -32,7 +32,11 @@ export default async function ChoosePlanPage() {
 		authConfig.organizations.enable &&
 		paymentsConfig.billingAttachedTo === "organization"
 	) {
-		const organization = (await getOrganizationList()).at(0);
+		const organizations = await getOrganizationList();
+		const organization =
+			organizations.find(
+				(org) => org.id === session.session.activeOrganizationId,
+			) || organizations.at(0);
 
 		if (!organization) {
 			redirect("/new-organization");

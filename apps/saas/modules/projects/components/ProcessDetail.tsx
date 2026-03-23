@@ -46,6 +46,7 @@ import { useTranslations } from "next-intl";
 import { useCallback, useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ProcessSchedule } from "@projects/components/ProcessSchedule";
+import { IntelligenceTab } from "@projects/components/IntelligenceTab";
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-js.css";
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
@@ -103,11 +104,7 @@ type ProcessData = {
 
 interface ProcessDetailProps {
 	process: ProcessData;
-	projectName: string;
-	clientName: string;
 	organizationSlug: string;
-	clientId: string;
-	projectId: string;
 }
 
 // ─── Constants ──────────────────────────────────────────────────────────────
@@ -142,11 +139,7 @@ const SESSION_STATUS_VARIANT: Record<
 
 export function ProcessDetail({
 	process: initialProcess,
-	projectName,
-	clientName,
 	organizationSlug,
-	clientId,
-	projectId,
 }: ProcessDetailProps) {
 	const t = useTranslations("processes");
 	const router = useRouter();
@@ -157,8 +150,8 @@ export function ProcessDetail({
 	const [saving, setSaving] = useState(false);
 	const [dirty, setDirty] = useState(false);
 
-	const basePath = `/${organizationSlug}/clients/${clientId}/projects/${projectId}`;
-	const processPath = `${basePath}/processes/${process.id}`;
+	const basePath = `/${organizationSlug}/procesos`;
+	const processPath = `${basePath}/${process.id}`;
 
 	// Track edits
 	useEffect(() => {
@@ -189,21 +182,14 @@ export function ProcessDetail({
 		<div>
 			{/* Breadcrumb */}
 			<nav className="mb-4 flex items-center gap-1.5 text-sm text-muted-foreground">
-				<Link
-					href={`/${organizationSlug}/clients/${clientId}`}
-					className="hover:text-foreground"
-				>
-					{clientName}
-				</Link>
-				<ChevronRightIcon className="h-3.5 w-3.5" />
 				<Link href={basePath} className="hover:text-foreground">
-					{projectName}
+					{t("processes")}
 				</Link>
 				{process.parent && (
 					<>
 						<ChevronRightIcon className="h-3.5 w-3.5" />
 						<Link
-							href={`${basePath}/processes/${process.parent.id}`}
+							href={`${basePath}/${process.parent.id}`}
 							className="hover:text-foreground"
 						>
 							{process.parent.name}
@@ -271,6 +257,7 @@ export function ProcessDetail({
 					<TabsTrigger value="children">{t("children")}</TabsTrigger>
 					<TabsTrigger value="sessions">{t("sessions")}</TabsTrigger>
 					<TabsTrigger value="schedule">{t("schedule")}</TabsTrigger>
+					<TabsTrigger value="intelligence">{t("intelligence")}</TabsTrigger>
 				</TabsList>
 
 				{/* ─── Diagram Tab ─────────────────────────────── */}
@@ -310,8 +297,6 @@ export function ProcessDetail({
 					<SessionsTab
 						sessions={process.sessions}
 						organizationSlug={organizationSlug}
-						clientId={clientId}
-						projectId={projectId}
 						processId={process.id}
 					/>
 				</TabsContent>
@@ -321,9 +306,11 @@ export function ProcessDetail({
 					<ProcessSchedule
 						process={process}
 						organizationSlug={organizationSlug}
-						clientId={clientId}
-						projectId={projectId}
 					/>
+				</TabsContent>
+
+				<TabsContent value="intelligence" className="mt-6">
+					<IntelligenceTab processId={process.id} />
 				</TabsContent>
 			</Tabs>
 		</div>
@@ -864,14 +851,10 @@ function ChildrenTab({
 function SessionsTab({
 	sessions,
 	organizationSlug,
-	clientId,
-	projectId,
 	processId,
 }: {
 	sessions: ProcessSession[];
 	organizationSlug: string;
-	clientId: string;
-	projectId: string;
 	processId: string;
 }) {
 	const t = useTranslations("processes");
@@ -886,7 +869,7 @@ function SessionsTab({
 					{lastSession && lastSession.status === "ENDED" && (
 						<Button variant="secondary" size="sm" asChild>
 							<Link
-								href={`/${organizationSlug}/sessions/new?clientId=${clientId}&projectId=${projectId}&processId=${processId}&type=DEEP_DIVE&continuationOf=${lastSession.id}`}
+								href={`/${organizationSlug}/sessions/new?processId=${processId}&type=DEEP_DIVE&continuationOf=${lastSession.id}`}
 							>
 								<PlayIcon className="mr-1.5 h-3.5 w-3.5" />
 								{t("continueLast")}
@@ -895,7 +878,7 @@ function SessionsTab({
 					)}
 					<Button size="sm" asChild>
 						<Link
-							href={`/${organizationSlug}/sessions/new?clientId=${clientId}&projectId=${projectId}&processId=${processId}&type=DEEP_DIVE`}
+							href={`/${organizationSlug}/sessions/new?processId=${processId}&type=DEEP_DIVE`}
 						>
 							<PlayIcon className="mr-1.5 h-3.5 w-3.5" />
 							{t("startDeepDive")}

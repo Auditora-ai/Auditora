@@ -4,16 +4,17 @@ import { useGSAP } from "@gsap/react";
 import { SplitWords } from "@shared/components/SplitWords";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { GitBranch, MessageSquareText, Video } from "lucide-react";
+import { FileOutput, Layers, MessageSquareText, Video } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRef } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const steps = [
-	{ key: "step1", icon: Video },
-	{ key: "step2", icon: MessageSquareText },
-	{ key: "step3", icon: GitBranch },
+	{ key: "step1", icon: MessageSquareText },
+	{ key: "step2", icon: Layers },
+	{ key: "step3", icon: Video },
+	{ key: "step4", icon: FileOutput },
 ] as const;
 
 export function HowItWorksSection() {
@@ -103,13 +104,13 @@ export function HowItWorksSection() {
 					</SplitWords>
 				</h2>
 
-				<div className="steps-grid mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-0 relative">
+				<div className="steps-grid mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0 relative">
 					{steps.map((step, i) => {
 						const Icon = step.icon;
 						return (
 							<div key={step.key} className="step-card relative flex flex-col items-center text-center px-6">
 								{i < steps.length - 1 && (
-									<div className="step-line hidden md:block absolute top-10 left-[calc(50%+40px)] w-[calc(100%-80px)] h-px bg-border origin-left" />
+									<div className="step-line hidden lg:block absolute top-10 left-[calc(50%+40px)] w-[calc(100%-80px)] h-px bg-border origin-left" />
 								)}
 
 								<div className="step-icon-wrapper flex items-center justify-center w-20 h-20 rounded-2xl bg-primary/10 text-primary mb-6">

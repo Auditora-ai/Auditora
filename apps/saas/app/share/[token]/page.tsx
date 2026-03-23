@@ -17,7 +17,8 @@ export default async function SharedDiagramPage({
 	const session = await db.meetingSession.findUnique({
 		where: { shareToken: token },
 		include: {
-			project: { include: { client: true } },
+			organization: { select: { name: true } },
+			processDefinition: { select: { name: true } },
 			diagramNodes: { where: { state: { not: "REJECTED" } } },
 			sessionSummary: true,
 		},
@@ -50,10 +51,10 @@ export default async function SharedDiagramPage({
 					<div className="flex items-center justify-between">
 						<div>
 							<h1 className="text-lg font-semibold text-foreground">
-								{session.project.client.name}
+								{session.organization.name}
 							</h1>
 							<p className="text-sm text-muted-foreground">
-								{session.project.name} — Process Diagram
+								{session.processDefinition?.name || session.type} — Process Diagram
 							</p>
 						</div>
 						<div className="flex items-center gap-3 text-xs text-muted-foreground">

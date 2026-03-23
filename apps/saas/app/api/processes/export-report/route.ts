@@ -6,7 +6,7 @@ import {
 	generateReportHtml,
 	type PdfProcessData,
 	type PdfProjectData,
-} from "../../../lib/export/pdf-generator";
+} from "../../../../lib/export/pdf-generator";
 
 async function getSession() {
 	return auth.api.getSession({

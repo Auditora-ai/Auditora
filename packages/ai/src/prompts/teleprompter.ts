@@ -30,9 +30,9 @@ function buildTeleprompterContextBlock(context?: SessionContext): string {
     );
   }
 
-  // Project goals
-  if (context.project.goals.length > 0) {
-    parts.push(`Project goals: ${context.project.goals.join(", ")}`);
+  // Business model context
+  if (context.company.businessModel) {
+    parts.push(`Business model: ${context.company.businessModel.substring(0, 500)}`);
   }
 
   // Document context (brief)
@@ -75,6 +75,20 @@ function buildTeleprompterContextBlock(context?: SessionContext): string {
   ) {
     parts.push(
       `Previous session notes:\n${context.targetProcess.previousTranscriptSummary.substring(0, 800)}`,
+    );
+  }
+
+  // Intelligence gaps (from Process Intelligence system)
+  if (context.intelligence && context.intelligence.openItems.length > 0) {
+    const gapLines = context.intelligence.openItems
+      .map((item) => {
+        const priorityLabel =
+          item.priority >= 70 ? "HIGH" : item.priority >= 40 ? "MED" : "LOW";
+        return `- [${priorityLabel}] ${item.category}: ${item.question}`;
+      })
+      .join("\n");
+    parts.push(
+      `KNOWN INTELLIGENCE GAPS (prioritize these — identified from previous sessions):\n${gapLines}\nProcess completeness: ${context.intelligence.completenessScore}%`,
     );
   }
 

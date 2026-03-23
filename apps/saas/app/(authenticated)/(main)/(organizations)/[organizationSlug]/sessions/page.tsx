@@ -52,8 +52,8 @@ export default async function SessionsPage({
 	}
 
 	const sessions = await db.meetingSession.findMany({
+		where: { organizationId: activeOrganization.id },
 		include: {
-			project: { include: { client: true } },
 			processDefinition: true,
 			_count: {
 				select: { diagramNodes: true, transcriptEntries: true },
@@ -103,7 +103,7 @@ export default async function SessionsPage({
 						<Table>
 							<TableHeader>
 								<TableRow>
-									<TableHead>Client</TableHead>
+									<TableHead>Process</TableHead>
 									<TableHead>Type</TableHead>
 									<TableHead>Nodes</TableHead>
 									<TableHead>Status</TableHead>
@@ -117,15 +117,10 @@ export default async function SessionsPage({
 								{sessions.map((session) => (
 									<TableRow key={session.id}>
 										<TableCell>
-											<div>
-												<p className="font-medium text-foreground">
-													{session.project.client
-														.name}
-												</p>
-												<p className="text-xs text-muted-foreground">
-													{session.project.name}
-												</p>
-											</div>
+											<p className="font-medium text-foreground">
+												{session.processDefinition
+													?.name ?? "General"}
+											</p>
 										</TableCell>
 										<TableCell>
 											<Badge status="info">

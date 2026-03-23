@@ -25,15 +25,19 @@ interface Message {
 }
 
 interface DiscoveryPanelProps {
-	projectId: string;
+	organizationId: string;
 	clientName?: string;
+	processId?: string;
+	processName?: string;
 	onClose: () => void;
 	onProcessAccepted?: () => void;
 }
 
 export function DiscoveryPanel({
-	projectId,
+	organizationId,
 	clientName,
+	processId,
+	processName,
 	onClose,
 	onProcessAccepted,
 }: DiscoveryPanelProps) {
@@ -43,7 +47,7 @@ export function DiscoveryPanel({
 	const [isTranscribing, setIsTranscribing] = useState(false);
 	const [threadId, setThreadId] = useState<string | null>(null);
 	const [initialLoading, setInitialLoading] = useState(true);
-	const messagesEndRef = useRef<HTMLDivElement>(null);
+	const messagesContainerRef = useRef<HTMLDivElement>(null);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const lastExtractionTime = useRef(0);
 
@@ -51,8 +55,10 @@ export function DiscoveryPanel({
 	useEffect(() => {
 		async function loadThread() {
 			try {
+				const params = new URLSearchParams({ organizationId });
+				if (processId) params.set("processId", processId);
 				const res = await fetch(
-					`/api/discovery/chat?projectId=${projectId}`,
+					`/api/discovery/chat?${params.toString()}`,
 				);
 				if (res.ok) {
 					const data = await res.json();
@@ -83,11 +89,14 @@ export function DiscoveryPanel({
 			}
 		}
 		loadThread();
-	}, [projectId]);
+	}, [organizationId, processId]);
 
-	// Auto-scroll
+	// Auto-scroll (scoped to messages container only)
 	useEffect(() => {
-		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+		const container = messagesContainerRef.current;
+		if (container) {
+			container.scrollTop = container.scrollHeight;
+		}
 	}, [messages]);
 
 	const sendMessage = useCallback(
@@ -115,9 +124,10 @@ export function DiscoveryPanel({
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({
-						projectId,
+						organizationId,
 						message: text,
 						threadId,
+						processId,
 					}),
 				});
 
@@ -155,7 +165,7 @@ export function DiscoveryPanel({
 				setIsLoading(false);
 			}
 		},
-		[isLoading, projectId, threadId],
+		[isLoading, organizationId, threadId],
 	);
 
 	const handleSubmit = (e: React.FormEvent) => {
@@ -229,12 +239,28 @@ export function DiscoveryPanel({
 		}
 	};
 
+	const handleRejectProcess = async (process: ExtractedProcessData) => {
+		if (!threadId) return;
+		try {
+			await fetch("/api/discovery/reject", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					threadId,
+					processName: process.name,
+				}),
+			});
+		} catch (error) {
+			console.error("Reject process error:", error);
+		}
+	};
+
 	const handleAcceptProcess = async (process: ExtractedProcessData) => {
 		try {
 			const res = await fetch("/api/discovery/accept", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ projectId, process }),
+				body: JSON.stringify({ organizationId, process }),
 			});
 
 			if (!res.ok) {
@@ -256,7 +282,9 @@ export function DiscoveryPanel({
 			{/* Header */}
 			<div className="flex items-center justify-between border-b border-slate-700 px-5 py-4">
 				<div>
-					<h2 className="text-base font-semibold">Discovery</h2>
+					<h2 className="text-base font-semibold">
+						{processName ? `Discovery — ${processName}` : "Discovery"}
+					</h2>
 					{clientName && (
 						<p className="text-xs text-slate-400">{clientName}</p>
 					)}
@@ -272,7 +300,7 @@ export function DiscoveryPanel({
 			</div>
 
 			{/* Messages */}
-			<div className="flex-1 overflow-y-auto px-5 py-4">
+			<div ref={messagesContainerRef} className="flex-1 overflow-y-auto px-5 py-4">
 				{initialLoading ? (
 					<div className="flex items-center justify-center py-8">
 						<Loader2Icon className="size-5 animate-spin text-slate-400" />
@@ -310,7 +338,7 @@ export function DiscoveryPanel({
 														onAccept={
 															handleAcceptProcess
 														}
-														onReject={() => {}}
+														onReject={handleRejectProcess}
 														disabled={isLoading}
 													/>
 												),
@@ -338,7 +366,7 @@ export function DiscoveryPanel({
 							</div>
 						)}
 
-						<div ref={messagesEndRef} />
+						<div />
 					</div>
 				)}
 			</div>

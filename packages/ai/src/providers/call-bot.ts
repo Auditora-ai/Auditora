@@ -26,6 +26,7 @@ export interface CallBotProvider {
 
 export interface BotStatus {
   status: "joining" | "in_meeting" | "leaving" | "ended" | "error";
+  rawStatus?: string;
   meetingUrl?: string;
   participants?: number;
   error?: string;
@@ -125,8 +126,11 @@ export class RecallAiProvider implements CallBotProvider {
       fatal: "error",
     };
 
+    const rawCode = data.status_changes?.at(-1)?.code;
+
     return {
-      status: statusMap[data.status_changes?.at(-1)?.code] || "error",
+      status: statusMap[rawCode] || "error",
+      rawStatus: rawCode,
       meetingUrl: data.meeting_url,
       participants: data.meeting_participants?.length,
     };

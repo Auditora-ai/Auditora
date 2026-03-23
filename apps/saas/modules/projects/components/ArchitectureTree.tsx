@@ -71,14 +71,10 @@ function TreeNode({
 	node,
 	depth,
 	organizationSlug,
-	clientId,
-	projectId,
 }: {
 	node: ProcessDefinition & { children: ProcessDefinition[] };
 	depth: number;
 	organizationSlug: string;
-	clientId: string;
-	projectId: string;
 }) {
 	const [expanded, setExpanded] = useState(depth < 2);
 	const t = useTranslations("processes");
@@ -91,7 +87,7 @@ function TreeNode({
 		node.processStatus.toLowerCase() as "draft" | "mapped" | "validated" | "approved",
 	);
 
-	const processDetailPath = `/${organizationSlug}/clients/${clientId}/projects/${projectId}/processes/${node.id}`;
+	const processDetailPath = `/${organizationSlug}/procesos/${node.id}`;
 
 	return (
 		<div>
@@ -164,8 +160,6 @@ function TreeNode({
 							node={child}
 							depth={depth + 1}
 							organizationSlug={organizationSlug}
-							clientId={clientId}
-							projectId={projectId}
 						/>
 					),
 				)}
@@ -176,13 +170,9 @@ function TreeNode({
 export function ArchitectureTree({
 	definitions,
 	organizationSlug,
-	clientId,
-	projectId,
 }: {
 	definitions: ProcessDefinition[];
 	organizationSlug: string;
-	clientId: string;
-	projectId: string;
 }) {
 	const tree = buildTree(definitions);
 
@@ -202,8 +192,6 @@ export function ArchitectureTree({
 					node={node}
 					depth={0}
 					organizationSlug={organizationSlug}
-					clientId={clientId}
-					projectId={projectId}
 				/>
 			))}
 		</div>

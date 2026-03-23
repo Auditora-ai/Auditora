@@ -4,8 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { TeleprompterPanel } from "./TeleprompterPanel";
 import { DiagramPanel } from "./DiagramPanel";
-import { TranscriptPanel } from "./TranscriptPanel";
 import { StatusBar } from "./StatusBar";
+import { WorkspacePanel } from "./WorkspacePanel";
 import type {
 	DiagramNode,
 	BotActivity,
@@ -50,6 +50,8 @@ interface MeetingViewProps {
 	botId?: string;
 	shareToken?: string;
 	startedAt?: string;
+	processId?: string;
+	organizationId: string;
 }
 
 export function MeetingView({
@@ -59,6 +61,8 @@ export function MeetingView({
 	clientName,
 	botId,
 	startedAt,
+	processId,
+	organizationId,
 }: MeetingViewProps) {
 	const router = useRouter();
 	const [layout, setLayout] = useState<LayoutPreset>("balanced");
@@ -126,6 +130,9 @@ export function MeetingView({
 			const data = await res.json();
 
 			if (data.transcript?.length > 0) {
+				if (transcript.length === 0) {
+					console.log(`[DIAG-CLIENT] First transcript received at ${new Date().toISOString()}, entries=${data.transcript.length}`);
+				}
 				setTranscript(data.transcript);
 				setConnectionStatus("connected");
 				setIsRecording(true);
@@ -286,16 +293,25 @@ export function MeetingView({
 						isFullscreen={isFullscreen}
 						onToggleFullscreen={handleToggleFullscreen}
 						isFlashing={newNodesArrived}
+						processId={processId}
 					/>
 				</div>
 
-				{/* Right: Transcript */}
+				{/* Right: Workspace (tabbed panel) */}
 				{!isFullscreen && (
 					<div
-						className="flex-shrink-0 border-l border-border bg-card"
+						className="flex-shrink-0 overflow-hidden border-l border-border bg-card"
 						style={{ width: currentLayout.right }}
 					>
-						<TranscriptPanel entries={transcript} />
+						<WorkspacePanel
+							transcript={transcript}
+							sessionId={sessionId}
+							processId={processId}
+							organizationId={organizationId}
+							sessionStatus={sessionStatus}
+							sessionType={sessionType}
+							compact={layout === "diagram-focus"}
+						/>
 					</div>
 				)}
 			</div>

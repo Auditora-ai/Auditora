@@ -32,7 +32,7 @@ export default async function SessionReviewPage({
 	const session = await db.meetingSession.findUnique({
 		where: { id: sessionId },
 		include: {
-			project: { include: { client: true } },
+			organization: { select: { name: true } },
 			processDefinition: true,
 			diagramNodes: true,
 			transcriptEntries: { orderBy: { timestamp: "asc" } },
@@ -71,8 +71,8 @@ export default async function SessionReviewPage({
 
 			<div className="flex items-start justify-between">
 				<PageHeader
-					title={session.project.client.name}
-					subtitle={`${session.project.name} — ${session.type === "DISCOVERY" ? "Discovery" : "Deep Dive"}`}
+					title={session.organization.name}
+					subtitle={`${session.type === "DISCOVERY" ? "Discovery" : "Deep Dive"}${session.processDefinition ? ` — ${session.processDefinition.name}` : ""}`}
 				/>
 				<div className="flex items-center gap-2">
 					<Button variant="outline" size="sm" asChild>

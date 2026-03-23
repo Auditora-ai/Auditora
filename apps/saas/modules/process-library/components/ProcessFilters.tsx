@@ -15,17 +15,14 @@ export type FilterState = {
 	search: string;
 	status: string;
 	level: string;
-	projectId: string;
 };
 
 export function ProcessFilters({
 	filters,
 	onFiltersChange,
-	projects,
 }: {
 	filters: FilterState;
 	onFiltersChange: (filters: FilterState) => void;
-	projects: { id: string; name: string }[];
 }) {
 	const t = useTranslations("processLibrary");
 
@@ -81,28 +78,6 @@ export function ProcessFilters({
 				</SelectContent>
 			</Select>
 
-			{projects.length > 1 && (
-				<Select
-					value={filters.projectId}
-					onValueChange={(value) =>
-						onFiltersChange({ ...filters, projectId: value })
-					}
-				>
-					<SelectTrigger className="w-full sm:w-[180px]">
-						<SelectValue placeholder={t("filterByProject")} />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectItem value="all">
-							{t("allProjects")}
-						</SelectItem>
-						{projects.map((project) => (
-							<SelectItem key={project.id} value={project.id}>
-								{project.name}
-							</SelectItem>
-						))}
-					</SelectContent>
-				</Select>
-			)}
 		</div>
 	);
 }

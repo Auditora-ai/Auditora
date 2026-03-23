@@ -49,8 +49,6 @@ type ProcessData = {
 interface ProcessScheduleProps {
 	process: ProcessData;
 	organizationSlug: string;
-	clientId: string;
-	projectId: string;
 }
 
 const STATUS_ORDER = ["DRAFT", "MAPPED", "VALIDATED", "APPROVED"];
@@ -72,32 +70,31 @@ const ACTION_TYPES = [
 export function ProcessSchedule({
 	process,
 	organizationSlug,
-	clientId,
-	projectId,
 }: ProcessScheduleProps) {
 	const t = useTranslations("processes");
-	const sessionUrl = `/${organizationSlug}/sessions/new?clientId=${clientId}&projectId=${projectId}&processId=${process.id}&type=DEEP_DIVE`;
+	const sessionUrl = `/${organizationSlug}/sessions/new?processId=${process.id}&type=DEEP_DIVE`;
 
 	const currentStatusIndex = STATUS_ORDER.indexOf(process.processStatus);
 	const nextStatus = currentStatusIndex < STATUS_ORDER.length - 1
 		? STATUS_ORDER[currentStatusIndex + 1]
 		: null;
 
-	const lastSession = process.sessions[0];
-	const hasActiveSessions = process.sessions.some(
+	const sessions = process.sessions ?? [];
+	const lastSession = sessions[0];
+	const hasActiveSessions = sessions.some(
 		(s) => s.status === "ACTIVE" || s.status === "CONNECTING",
 	);
 
 	// Determine next recommended action
 	const getRecommendation = () => {
-		if (process.processStatus === "DRAFT" && process.sessions.length === 0) {
+		if (process.processStatus === "DRAFT" && sessions.length === 0) {
 			return {
 				action: "Start first Deep Dive session",
 				description: "This process has no sessions yet. Schedule a deep dive to begin mapping.",
 				type: "DEEP_DIVE",
 			};
 		}
-		if (process.processStatus === "DRAFT" && process.sessions.length > 0) {
+		if (process.processStatus === "DRAFT" && sessions.length > 0) {
 			return {
 				action: "Continue mapping with another Deep Dive",
 				description: "The process is still in draft. Continue mapping with additional sessions.",
@@ -214,7 +211,7 @@ export function ProcessSchedule({
 									{draftChildren.map((child) => (
 										<Link
 											key={child.id}
-											href={`/${organizationSlug}/clients/${clientId}/projects/${projectId}/processes/${child.id}`}
+											href={`/${organizationSlug}/procesos/${child.id}`}
 											className="flex items-center justify-between rounded-md border border-border px-3 py-2 text-sm transition-colors hover:bg-accent/50"
 										>
 											<span className="font-medium">{child.name}</span>
@@ -235,7 +232,7 @@ export function ProcessSchedule({
 									{mappedChildren.map((child) => (
 										<Link
 											key={child.id}
-											href={`/${organizationSlug}/clients/${clientId}/projects/${projectId}/processes/${child.id}`}
+											href={`/${organizationSlug}/procesos/${child.id}`}
 											className="flex items-center justify-between rounded-md border border-border px-3 py-2 text-sm transition-colors hover:bg-accent/50"
 										>
 											<span className="font-medium">{child.name}</span>
@@ -256,7 +253,7 @@ export function ProcessSchedule({
 				<Card className="border border-border">
 					<CardContent className="p-4 text-center">
 						<p className="text-2xl font-bold text-foreground">
-							{process.sessions.length}
+							{sessions.length}
 						</p>
 						<p className="text-xs text-muted-foreground">Total Sessions</p>
 					</CardContent>

@@ -9,6 +9,15 @@
  */
 
 /* ═══════════════════════════════════════════
+   bpmn.io Watermark — styled to blend (license requires visibility)
+   ═══════════════════════════════════════════ */
+
+.bjs-powered-by {
+	opacity: 0.3 !important;
+	filter: grayscale(100%) !important;
+}
+
+/* ═══════════════════════════════════════════
    Canvas
    ═══════════════════════════════════════════ */
 
@@ -27,14 +36,14 @@
    These override type-based colors from CustomColorRenderer
    ═══════════════════════════════════════════ */
 
-/* Forming: amber dashed border with pulse animation */
+/* Forming: yellow dashed border with pulse animation */
 .state-forming .djs-visual rect,
 .state-forming .djs-visual polygon,
 .state-forming .djs-visual circle,
 .state-forming .djs-visual ellipse {
-	stroke: #d97706 !important;
+	stroke: #eab308 !important;
 	stroke-dasharray: 5, 5 !important;
-	fill: #fffbeb !important;
+	fill: #fef9c3 !important;
 	animation: forming-pulse 2s ease-in-out infinite;
 }
 
@@ -68,6 +77,18 @@
 .djs-outline {
 	stroke: #2563eb !important;
 	stroke-width: 2px !important;
+	fill: none !important;
+}
+
+/* Ensure hit zones are transparent — prevents black overlay */
+.djs-hit {
+	fill: none !important;
+	stroke: transparent !important;
+}
+
+.djs-hit-all {
+	fill: transparent !important;
+	stroke: transparent !important;
 }
 
 /* Highlight marker — used for transcript↔diagram linking */
@@ -82,63 +103,76 @@
 }
 
 /* ═══════════════════════════════════════════
-   Palette (left sidebar) — dark chrome
+   Palette, Context Pad, Popup — default styling
+   Clean look that works with both light and dark themes.
    ═══════════════════════════════════════════ */
 
 .djs-palette {
+	border-radius: 6px !important;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+	z-index: 10 !important;
+}
+
+.djs-context-pad {
+	border-radius: 6px !important;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+	z-index: 15 !important;
+}
+
+.djs-popup {
+	border-radius: 6px !important;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+	z-index: 20 !important;
+}
+
+/* ═══════════════════════════════════════════
+   Dark chrome — ONLY for meeting/live session view
+   Scoped under .bpmn-dark-chrome parent class
+   ═══════════════════════════════════════════ */
+
+.bpmn-dark-chrome .djs-palette {
 	background: #0f172a !important;
 	border: 1px solid #334155 !important;
-	border-radius: 6px !important;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
 }
 
-.djs-palette .entry {
+.bpmn-dark-chrome .djs-palette .entry {
 	color: #f1f5f9 !important;
 }
 
-.djs-palette .entry:hover {
+.bpmn-dark-chrome .djs-palette .entry:hover {
 	background: #334155 !important;
 	border-radius: 4px;
 }
 
-.djs-palette .separator {
+.bpmn-dark-chrome .djs-palette .separator {
 	border-color: #334155 !important;
 }
 
-/* ═══════════════════════════════════════════
-   Context Pad — branded styling
-   ═══════════════════════════════════════════ */
-
-.djs-context-pad {
+.bpmn-dark-chrome .djs-context-pad {
 	background: #0f172a !important;
 	border: 1px solid #334155 !important;
-	border-radius: 6px !important;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
 	padding: 2px !important;
 }
 
-.djs-context-pad .entry {
+.bpmn-dark-chrome .djs-context-pad .entry {
 	color: #f1f5f9 !important;
 	border-radius: 4px !important;
 }
 
-.djs-context-pad .entry:hover {
+.bpmn-dark-chrome .djs-context-pad .entry:hover {
 	background: #334155 !important;
 }
 
-/* ═══════════════════════════════════════════
-   Popup Menu (element type change)
-   ═══════════════════════════════════════════ */
-
-.djs-popup {
+.bpmn-dark-chrome .djs-popup {
 	background: #0f172a !important;
 	border: 1px solid #334155 !important;
-	border-radius: 6px !important;
 	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
 	color: #f1f5f9 !important;
 }
 
-.djs-popup .entry:hover {
+.bpmn-dark-chrome .djs-popup .entry:hover {
 	background: #334155 !important;
 }
 
@@ -199,6 +233,30 @@
 .bpmn-action-reject {
 	background: #dc2626;
 	color: white;
+}
+
+/* ═══════════════════════════════════════════
+   Version Diff Markers
+   ═══════════════════════════════════════════ */
+
+.diff-added .djs-visual rect,
+.diff-added .djs-visual polygon,
+.diff-added .djs-visual circle,
+.diff-added .djs-visual ellipse {
+	stroke: #16a34a !important;
+	stroke-width: 3px !important;
+	fill: #f0fdf4 !important;
+	filter: drop-shadow(0 0 4px rgba(22, 163, 74, 0.3));
+}
+
+.diff-changed .djs-visual rect,
+.diff-changed .djs-visual polygon,
+.diff-changed .djs-visual circle,
+.diff-changed .djs-visual ellipse {
+	stroke: #eab308 !important;
+	stroke-width: 3px !important;
+	fill: #fef9c3 !important;
+	filter: drop-shadow(0 0 4px rgba(234, 179, 8, 0.3));
 }
 
 /* ═══════════════════════════════════════════

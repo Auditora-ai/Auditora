@@ -21,7 +21,7 @@ const ExtractedProcessSchema = z.object({
   name: z.string().min(1),
   description: z.string().optional(),
   suggestedLevel: z
-    .enum(["PROCESS", "SUBPROCESS", "TASK", "PROCEDURE"])
+    .enum(["MACRO_PROCESS", "PROCESS", "SUBPROCESS", "TASK", "PROCEDURE"])
     .catch("PROCESS"),
   suggestedCategory: z
     .enum(["strategic", "core", "support"])
@@ -40,7 +40,7 @@ const ChatExtractionResultSchema = z.object({
 export interface ExtractedProcess {
   name: string;
   description?: string;
-  suggestedLevel: "PROCESS" | "SUBPROCESS" | "TASK" | "PROCEDURE";
+  suggestedLevel: "MACRO_PROCESS" | "PROCESS" | "SUBPROCESS" | "TASK" | "PROCEDURE";
   suggestedCategory: "strategic" | "core" | "support";
   owner?: string;
   triggers: string[];
@@ -51,6 +51,26 @@ export interface ChatExtractionResult {
   extractedProcesses: ExtractedProcess[];
   followUpQuestion?: string;
   conversationalResponse: string;
+}
+
+export interface ProcessChatContext {
+  targetProcess: {
+    name: string;
+    level: string;
+    description?: string;
+    triggers: string[];
+    outputs: string[];
+    goals: string[];
+    owner?: string;
+    siblings: string[];
+  };
+  intelligenceGaps?: Array<{
+    question: string;
+    category: string;
+    priority: number;
+  }>;
+  completenessScore?: number;
+  rejectedNames?: string[];
 }
 
 /**
@@ -71,7 +91,9 @@ export async function extractFromChat(
     clientName?: string;
     clientIndustry?: string;
     projectGoals?: string;
+    liveTranscript?: string;
   },
+  processContext?: ProcessChatContext,
 ): Promise<ChatExtractionResult> {
   if (messages.length === 0) {
     return {
@@ -84,7 +106,7 @@ export async function extractFromChat(
   const { text } = await generateText({
     model: anthropic("claude-sonnet-4-6"),
     system: CHAT_EXTRACTION_SYSTEM,
-    prompt: CHAT_EXTRACTION_USER(messages, existingProcesses, projectContext),
+    prompt: CHAT_EXTRACTION_USER(messages, existingProcesses, projectContext, processContext),
     maxOutputTokens: 2048,
     temperature: 0.2,
   });

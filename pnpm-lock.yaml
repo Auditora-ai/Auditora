@@ -418,6 +418,9 @@ importers:
       '@repo/utils':
         specifier: workspace:*
         version: link:../../packages/utils
+      bpmn-js:
+        specifier: ^18.13.1
+        version: 18.13.1
       class-variance-authority:
         specifier: 'catalog:'
         version: 0.7.1

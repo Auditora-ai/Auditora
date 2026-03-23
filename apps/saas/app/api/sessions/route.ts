@@ -10,6 +10,7 @@ import { db } from "@repo/database";
 import { createCallBotProvider } from "@repo/ai";
 import { auth } from "@repo/auth";
 import { headers } from "next/headers";
+import { recordEvent } from "@meeting/lib/session-timeline";
 
 async function getAuthContext() {
 	const session = await auth.api.getSession({
@@ -41,14 +42,8 @@ export async function POST(request: NextRequest) {
 		const {
 			meetingUrl,
 			sessionType,
-			// New multi-step form fields (IDs)
-			clientId,
-			projectId,
 			processDefinitionId,
 			continuationOf,
-			// Legacy fields (for backward compatibility)
-			clientName,
-			projectName,
 		} = body;
 
 		if (!meetingUrl || !sessionType) {
@@ -60,51 +55,14 @@ export async function POST(request: NextRequest) {
 
 		const { user, org } = authCtx;
 
-		// Resolve client — by ID or by name (legacy)
-		let resolvedProjectId = projectId;
-
-		if (!resolvedProjectId) {
-			const cName = clientName;
-			if (!cName && !clientId) {
-				return NextResponse.json(
-					{ error: "clientId or clientName is required" },
-					{ status: 400 },
-				);
-			}
-
-			let client = clientId
-				? await db.client.findFirst({ where: { id: clientId, organizationId: org.id } })
-				: await db.client.findFirst({ where: { name: cName, organizationId: org.id } });
-
-			if (!client && cName) {
-				client = await db.client.create({
-					data: { name: cName, organizationId: org.id },
-				});
-			}
-			if (!client) {
-				return NextResponse.json({ error: "Client not found" }, { status: 404 });
-			}
-
-			const projName = projectName || `${client.name} - Process Mapping`;
-			let project = await db.project.findFirst({
-				where: { name: projName, clientId: client.id },
-			});
-			if (!project) {
-				project = await db.project.create({
-					data: { name: projName, clientId: client.id },
-				});
-			}
-			resolvedProjectId = project.id;
-		}
-
 		// For DISCOVERY: auto-create ProcessArchitecture if not exists
 		if (sessionType === "DISCOVERY") {
 			const existingArch = await db.processArchitecture.findUnique({
-				where: { projectId: resolvedProjectId },
+				where: { organizationId: org.id },
 			});
 			if (!existingArch) {
 				await db.processArchitecture.create({
-					data: { projectId: resolvedProjectId },
+					data: { organizationId: org.id },
 				});
 			}
 		}
@@ -115,7 +73,7 @@ export async function POST(request: NextRequest) {
 				type: sessionType,
 				status: "CONNECTING",
 				meetingUrl,
-				projectId: resolvedProjectId,
+				organizationId: org.id,
 				userId: user.id,
 				processDefinitionId: processDefinitionId || undefined,
 				continuationOf: continuationOf || undefined,
@@ -125,7 +83,11 @@ export async function POST(request: NextRequest) {
 		// Join the meeting via call bot
 		try {
 			const callBot = createCallBotProvider();
+			recordEvent(session.id, "session_created", `type=${sessionType}`);
+			recordEvent(session.id, "bot_join_requested", meetingUrl);
+
 			const { botId } = await callBot.joinMeeting(meetingUrl);
+			recordEvent(session.id, "bot_join_api_returned", `botId=${botId}`);
 
 			await db.meetingSession.update({
 				where: { id: session.id },
@@ -134,6 +96,41 @@ export async function POST(request: NextRequest) {
 					recallBotStatus: "joining",
 				},
 			});
+
+			// Background: poll Recall.ai bot status until in_meeting (diagnostic)
+			(async () => {
+				const maxPolls = 30; // 5 minutes max
+				for (let i = 0; i < maxPolls; i++) {
+					await new Promise((r) => setTimeout(r, 10_000));
+					try {
+						const status = await callBot.getBotStatus(botId);
+						recordEvent(
+							session.id,
+							"bot_status_check",
+							`raw=${status.rawStatus}, mapped=${status.status}, participants=${status.participants ?? 0}`,
+						);
+						if (
+							status.status === "in_meeting" ||
+							status.status === "ended" ||
+							status.status === "error"
+						) {
+							recordEvent(
+								session.id,
+								"bot_reached_final_status",
+								`raw=${status.rawStatus}`,
+							);
+							break;
+						}
+					} catch (e) {
+						recordEvent(
+							session.id,
+							"bot_status_error",
+							e instanceof Error ? e.message : String(e),
+						);
+						break;
+					}
+				}
+			})();
 
 			return NextResponse.json({
 				sessionId: session.id,
@@ -181,10 +178,9 @@ export async function GET(request: NextRequest) {
 
 		const sessions = await db.meetingSession.findMany({
 			where: {
-				project: { client: { organizationId: authCtx.org.id } },
+				organizationId: authCtx.org.id,
 			},
 			include: {
-				project: { include: { client: true } },
 				processDefinition: true,
 				_count: { select: { diagramNodes: true, transcriptEntries: true } },
 			},

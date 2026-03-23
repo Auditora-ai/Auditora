@@ -16,6 +16,11 @@ interface BpmnToolbarProps {
 	onExportPNG: () => void;
 	onToggleFullscreen: () => void;
 	onShowShortcuts: () => void;
+	// New AI cockpit controls
+	onToggleIntelligence?: () => void;
+	intelligenceActive?: boolean;
+	onToggleLegend?: () => void;
+	legendActive?: boolean;
 }
 
 /**
@@ -44,6 +49,10 @@ export function BpmnToolbar({
 	onExportPNG,
 	onToggleFullscreen,
 	onShowShortcuts,
+	onToggleIntelligence,
+	intelligenceActive,
+	onToggleLegend,
+	legendActive,
 }: BpmnToolbarProps) {
 	return (
 		<div className="flex h-11 items-center gap-0.5 border-b border-[#334155] bg-[#0F172A] px-2">
@@ -111,6 +120,35 @@ export function BpmnToolbar({
 					<span className="text-[10px] font-medium">PNG</span>
 				</ToolbarButton>
 			</ToolbarSection>
+
+			{/* AI & Legend section */}
+			{(onToggleIntelligence || onToggleLegend) && (
+				<>
+					<ToolbarDivider />
+					<ToolbarSection>
+						{onToggleIntelligence && (
+							<ToolbarButton
+								onClick={onToggleIntelligence}
+								title="AI Intelligence Overlays"
+								aria-label="Toggle AI intelligence overlays"
+								active={intelligenceActive}
+							>
+								<span className="text-[10px] font-medium">AI</span>
+							</ToolbarButton>
+						)}
+						{onToggleLegend && (
+							<ToolbarButton
+								onClick={onToggleLegend}
+								title="Color legend"
+								aria-label="Toggle color legend"
+								active={legendActive}
+							>
+								<span className="text-[10px] font-medium">⬤</span>
+							</ToolbarButton>
+						)}
+					</ToolbarSection>
+				</>
+			)}
 
 			{/* Right-aligned actions */}
 			<div className="ml-auto flex items-center gap-0.5">

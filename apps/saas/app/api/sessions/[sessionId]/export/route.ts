@@ -12,7 +12,8 @@ export async function GET(
 		where: { id: sessionId },
 		include: {
 			diagramNodes: { where: { state: { not: "REJECTED" } } },
-			project: { include: { client: true } },
+			organization: { select: { name: true } },
+			processDefinition: { select: { name: true } },
 		},
 	});
 
@@ -33,7 +34,9 @@ export async function GET(
 	}));
 
 	const xml = buildBpmnXml(nodes);
-	const filename = `${session.project.client.name}-${session.project.name}`.replace(/[^a-zA-Z0-9-_]/g, "_");
+	const orgName = session.organization.name;
+	const processName = session.processDefinition?.name || session.type;
+	const filename = `${orgName}-${processName}`.replace(/[^a-zA-Z0-9-_]/g, "_");
 
 	if (format === "xml") {
 		return new NextResponse(xml, {

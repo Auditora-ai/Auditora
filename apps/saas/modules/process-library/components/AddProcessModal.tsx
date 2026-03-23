@@ -14,13 +14,13 @@ import { XIcon } from "lucide-react";
 import { useState } from "react";
 
 interface AddProcessModalProps {
-	projectId: string;
+	organizationId: string;
 	onClose: () => void;
 	onCreated: () => void;
 }
 
 export function AddProcessModal({
-	projectId,
+	organizationId,
 	onClose,
 	onCreated,
 }: AddProcessModalProps) {
@@ -43,7 +43,7 @@ export function AddProcessModal({
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
-					projectId,
+					organizationId,
 					process: {
 						name: name.trim(),
 						description: description.trim() || undefined,

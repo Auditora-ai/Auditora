@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@repo/ui/components/button";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import { RefreshCw, Table2, AlertCircle } from "lucide-react";
 
 interface RaciEntry {
@@ -76,8 +77,10 @@ export function RaciTab({ processId }: RaciTabProps) {
 
 	if (loading) {
 		return (
-			<div className="flex items-center justify-center py-12">
-				<div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+			<div className="space-y-3">
+				<Skeleton className="h-10 w-full" />
+				<Skeleton className="h-48 w-full" />
+				<Skeleton className="h-24 w-full" />
 			</div>
 		);
 	}

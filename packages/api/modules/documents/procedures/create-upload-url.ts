@@ -17,51 +17,16 @@ export const createUploadUrl = protectedProcedure
 		z.object({
 			fileName: z.string(),
 			mimeType: z.string(),
-			clientId: z.string().optional(),
-			projectId: z.string().optional(),
 		}),
 	)
 	.handler(
 		async ({
 			context: { session, user },
-			input: { fileName, mimeType, clientId, projectId },
+			input: { fileName, mimeType },
 		}) => {
-			// Verify org ownership through client
-			if (clientId) {
-				const client = await db.client.findUnique({
-					where: { id: clientId },
-				});
-
-				if (!client) {
-					throw new ORPCError("NOT_FOUND", {
-						message: "Client not found",
-					});
-				}
-
-				if (client.organizationId !== session.activeOrganizationId) {
-					throw new ORPCError("FORBIDDEN");
-				}
-			}
-
-			// Verify org ownership through project → client
-			if (projectId) {
-				const project = await db.project.findUnique({
-					where: { id: projectId },
-					include: { client: true },
-				});
-
-				if (!project) {
-					throw new ORPCError("NOT_FOUND", {
-						message: "Project not found",
-					});
-				}
-
-				if (
-					project.client.organizationId !==
-					session.activeOrganizationId
-				) {
-					throw new ORPCError("FORBIDDEN");
-				}
+			const orgId = session.activeOrganizationId;
+			if (!orgId) {
+				throw new ORPCError("FORBIDDEN");
 			}
 
 			const document = await db.document.create({
@@ -70,13 +35,12 @@ export const createUploadUrl = protectedProcedure
 					mimeType,
 					filePath: "",
 					fileSize: 0,
-					clientId,
-					projectId,
+					organizationId: orgId,
 					createdBy: user.id,
 				},
 			});
 
-			const path = `${session.activeOrganizationId}/${document.id}/${fileName}`;
+			const path = `${orgId}/${document.id}/${fileName}`;
 
 			const signedUploadUrl = await getSignedUploadUrl(path, {
 				bucket: "documents",

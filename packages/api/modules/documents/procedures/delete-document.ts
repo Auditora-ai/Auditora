@@ -19,12 +19,6 @@ export const deleteDocument = protectedProcedure
 	.handler(async ({ context: { session }, input: { documentId } }) => {
 		const document = await db.document.findUnique({
 			where: { id: documentId },
-			include: {
-				client: true,
-				project: {
-					include: { client: true },
-				},
-			},
 		});
 
 		if (!document) {
@@ -33,12 +27,7 @@ export const deleteDocument = protectedProcedure
 			});
 		}
 
-		// Verify org ownership through client or project → client
-		const organizationId =
-			document.client?.organizationId ??
-			document.project?.client.organizationId;
-
-		if (organizationId !== session.activeOrganizationId) {
+		if (document.organizationId !== session.activeOrganizationId) {
 			throw new ORPCError("FORBIDDEN");
 		}
 

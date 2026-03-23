@@ -22,8 +22,6 @@ export type ProcessCardData = {
 	level: string;
 	processStatus: string;
 	category?: string | null;
-	projectName: string;
-	projectId: string;
 	nodesCount: number;
 	versionsCount: number;
 	sessionsCount: number;
@@ -56,9 +54,6 @@ export function ProcessCard({
 						<h3 className="truncate font-semibold text-sm">
 							{process.name}
 						</h3>
-						<p className="mt-1 text-xs text-muted-foreground">
-							{process.projectName}
-						</p>
 					</div>
 					<Badge status={statusBadge[process.processStatus] ?? "info"}>
 						{process.processStatus}

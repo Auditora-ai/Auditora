@@ -48,7 +48,7 @@ export type TwoFactorScalarFieldEnum = z.infer<typeof TwoFactorScalarFieldEnumSc
 
 // File: OrganizationScalarFieldEnum.schema.ts
 
-export const OrganizationScalarFieldEnumSchema = z.enum(['id', 'name', 'slug', 'logo', 'createdAt', 'metadata', 'paymentsCustomerId'])
+export const OrganizationScalarFieldEnumSchema = z.enum(['id', 'name', 'slug', 'logo', 'createdAt', 'metadata', 'paymentsCustomerId', 'industry', 'operationsProfile', 'businessModel', 'employeeCount', 'notes'])
 
 export type OrganizationScalarFieldEnum = z.infer<typeof OrganizationScalarFieldEnumSchema>;
 
@@ -64,33 +64,21 @@ export const InvitationScalarFieldEnumSchema = z.enum(['id', 'organizationId', '
 
 export type InvitationScalarFieldEnum = z.infer<typeof InvitationScalarFieldEnumSchema>;
 
-// File: ClientScalarFieldEnum.schema.ts
-
-export const ClientScalarFieldEnumSchema = z.enum(['id', 'name', 'organizationId', 'industry', 'operationsProfile', 'businessModel', 'employeeCount', 'notes', 'createdAt', 'updatedAt'])
-
-export type ClientScalarFieldEnum = z.infer<typeof ClientScalarFieldEnumSchema>;
-
-// File: ProjectScalarFieldEnum.schema.ts
-
-export const ProjectScalarFieldEnumSchema = z.enum(['id', 'name', 'description', 'goals', 'status', 'clientId', 'createdAt', 'updatedAt'])
-
-export type ProjectScalarFieldEnum = z.infer<typeof ProjectScalarFieldEnumSchema>;
-
 // File: ProcessArchitectureScalarFieldEnum.schema.ts
 
-export const ProcessArchitectureScalarFieldEnumSchema = z.enum(['id', 'projectId', 'createdAt', 'updatedAt'])
+export const ProcessArchitectureScalarFieldEnumSchema = z.enum(['id', 'organizationId', 'createdAt', 'updatedAt'])
 
 export type ProcessArchitectureScalarFieldEnum = z.infer<typeof ProcessArchitectureScalarFieldEnumSchema>;
 
 // File: ProcessDefinitionScalarFieldEnum.schema.ts
 
-export const ProcessDefinitionScalarFieldEnumSchema = z.enum(['id', 'architectureId', 'name', 'description', 'level', 'parentId', 'owner', 'goals', 'triggers', 'outputs', 'processStatus', 'bpmnXml', 'priority', 'createdAt'])
+export const ProcessDefinitionScalarFieldEnumSchema = z.enum(['id', 'architectureId', 'name', 'description', 'level', 'parentId', 'owner', 'goals', 'triggers', 'outputs', 'processStatus', 'category', 'bpmnXml', 'priority', 'createdAt'])
 
 export type ProcessDefinitionScalarFieldEnum = z.infer<typeof ProcessDefinitionScalarFieldEnumSchema>;
 
 // File: MeetingSessionScalarFieldEnum.schema.ts
 
-export const MeetingSessionScalarFieldEnumSchema = z.enum(['id', 'type', 'status', 'meetingUrl', 'projectId', 'processDefinitionId', 'userId', 'continuationOf', 'recallBotId', 'recallBotStatus', 'startedAt', 'endedAt', 'bpmnXml', 'shareToken', 'createdAt', 'updatedAt'])
+export const MeetingSessionScalarFieldEnumSchema = z.enum(['id', 'type', 'status', 'meetingUrl', 'organizationId', 'processDefinitionId', 'userId', 'continuationOf', 'recallBotId', 'recallBotStatus', 'startedAt', 'endedAt', 'bpmnXml', 'shareToken', 'createdAt', 'updatedAt'])
 
 export type MeetingSessionScalarFieldEnum = z.infer<typeof MeetingSessionScalarFieldEnumSchema>;
 
@@ -99,6 +87,12 @@ export type MeetingSessionScalarFieldEnum = z.infer<typeof MeetingSessionScalarF
 export const DiagramNodeScalarFieldEnumSchema = z.enum(['id', 'sessionId', 'nodeType', 'label', 'state', 'lane', 'positionX', 'positionY', 'connections', 'formedAt', 'confirmedAt', 'rejectedAt', 'parentId', 'createdAt', 'updatedAt'])
 
 export type DiagramNodeScalarFieldEnum = z.infer<typeof DiagramNodeScalarFieldEnumSchema>;
+
+// File: NodeCommentScalarFieldEnum.schema.ts
+
+export const NodeCommentScalarFieldEnumSchema = z.enum(['id', 'nodeId', 'content', 'authorId', 'authorName', 'sourceType', 'sourceSnippet', 'createdAt', 'updatedAt'])
+
+export type NodeCommentScalarFieldEnum = z.infer<typeof NodeCommentScalarFieldEnumSchema>;
 
 // File: TranscriptEntryScalarFieldEnum.schema.ts
 
@@ -124,6 +118,78 @@ export const SessionSummaryScalarFieldEnumSchema = z.enum(['id', 'sessionId', 's
 
 export type SessionSummaryScalarFieldEnum = z.infer<typeof SessionSummaryScalarFieldEnumSchema>;
 
+// File: DiscoveryThreadScalarFieldEnum.schema.ts
+
+export const DiscoveryThreadScalarFieldEnumSchema = z.enum(['id', 'organizationId', 'processDefinitionId', 'createdBy', 'rejectedProcessNames', 'createdAt', 'updatedAt'])
+
+export type DiscoveryThreadScalarFieldEnum = z.infer<typeof DiscoveryThreadScalarFieldEnumSchema>;
+
+// File: DiscoveryMessageScalarFieldEnum.schema.ts
+
+export const DiscoveryMessageScalarFieldEnumSchema = z.enum(['id', 'threadId', 'role', 'content', 'audioFileUrl', 'extractedProcesses', 'createdAt'])
+
+export type DiscoveryMessageScalarFieldEnum = z.infer<typeof DiscoveryMessageScalarFieldEnumSchema>;
+
+// File: RaciEntryScalarFieldEnum.schema.ts
+
+export const RaciEntryScalarFieldEnumSchema = z.enum(['id', 'processId', 'activityName', 'role', 'assignment', 'source', 'createdAt'])
+
+export type RaciEntryScalarFieldEnum = z.infer<typeof RaciEntryScalarFieldEnumSchema>;
+
+// File: StakeholderConflictScalarFieldEnum.schema.ts
+
+export const StakeholderConflictScalarFieldEnumSchema = z.enum(['id', 'processId', 'nodeLabel', 'conflictType', 'perspectives', 'resolved', 'resolution', 'createdAt'])
+
+export type StakeholderConflictScalarFieldEnum = z.infer<typeof StakeholderConflictScalarFieldEnumSchema>;
+
+// File: ProcessIntelligenceScalarFieldEnum.schema.ts
+
+export const ProcessIntelligenceScalarFieldEnumSchema = z.enum(['id', 'processDefinitionId', 'knowledgeSnapshot', 'confidenceScores', 'completenessScore', 'shareToken', 'shareExpiresAt', 'riskShareToken', 'riskShareExpiresAt', 'version', 'lastAuditAt', 'createdAt', 'updatedAt'])
+
+export type ProcessIntelligenceScalarFieldEnum = z.infer<typeof ProcessIntelligenceScalarFieldEnumSchema>;
+
+// File: IntelligenceItemScalarFieldEnum.schema.ts
+
+export const IntelligenceItemScalarFieldEnumSchema = z.enum(['id', 'intelligenceId', 'category', 'question', 'context', 'priority', 'dependsOn', 'status', 'resolution', 'resolvedAt', 'resolvedBy', 'sourceType', 'sourceId', 'elementRef', 'insightType', 'createdAt', 'updatedAt'])
+
+export type IntelligenceItemScalarFieldEnum = z.infer<typeof IntelligenceItemScalarFieldEnumSchema>;
+
+// File: IntelligenceAuditLogScalarFieldEnum.schema.ts
+
+export const IntelligenceAuditLogScalarFieldEnumSchema = z.enum(['id', 'intelligenceId', 'triggerType', 'triggerId', 'delta', 'completenessScore', 'inputTokens', 'outputTokens', 'createdAt'])
+
+export type IntelligenceAuditLogScalarFieldEnum = z.infer<typeof IntelligenceAuditLogScalarFieldEnumSchema>;
+
+// File: ProcessRiskScalarFieldEnum.schema.ts
+
+export const ProcessRiskScalarFieldEnumSchema = z.enum(['id', 'processDefinitionId', 'title', 'description', 'riskType', 'status', 'source', 'severity', 'probability', 'riskScore', 'residualSeverity', 'residualProbability', 'residualScore', 'affectedStep', 'affectedRole', 'relatedItemId', 'isOpportunity', 'opportunityValue', 'failureMode', 'failureEffect', 'detectionDifficulty', 'rpn', 'shareVisible', 'createdBy', 'createdAt', 'updatedAt'])
+
+export type ProcessRiskScalarFieldEnum = z.infer<typeof ProcessRiskScalarFieldEnumSchema>;
+
+// File: RiskMitigationScalarFieldEnum.schema.ts
+
+export const RiskMitigationScalarFieldEnumSchema = z.enum(['id', 'riskId', 'action', 'owner', 'deadline', 'status', 'notes', 'completedAt', 'createdAt', 'updatedAt'])
+
+export type RiskMitigationScalarFieldEnum = z.infer<typeof RiskMitigationScalarFieldEnumSchema>;
+
+// File: RiskControlScalarFieldEnum.schema.ts
+
+export const RiskControlScalarFieldEnumSchema = z.enum(['id', 'riskId', 'name', 'description', 'controlType', 'effectiveness', 'automated', 'system', 'createdAt', 'updatedAt'])
+
+export type RiskControlScalarFieldEnum = z.infer<typeof RiskControlScalarFieldEnumSchema>;
+
+// File: RiskAuditLogScalarFieldEnum.schema.ts
+
+export const RiskAuditLogScalarFieldEnumSchema = z.enum(['id', 'riskId', 'action', 'delta', 'userId', 'createdAt'])
+
+export type RiskAuditLogScalarFieldEnum = z.infer<typeof RiskAuditLogScalarFieldEnumSchema>;
+
+// File: ProcessTemplateScalarFieldEnum.schema.ts
+
+export const ProcessTemplateScalarFieldEnumSchema = z.enum(['id', 'framework', 'industry', 'name', 'description', 'structure', 'createdAt'])
+
+export type ProcessTemplateScalarFieldEnum = z.infer<typeof ProcessTemplateScalarFieldEnumSchema>;
+
 // File: ProcessVersionScalarFieldEnum.schema.ts
 
 export const ProcessVersionScalarFieldEnumSchema = z.enum(['id', 'processDefinitionId', 'version', 'name', 'description', 'bpmnXml', 'goals', 'triggers', 'outputs', 'changeNote', 'createdBy', 'createdAt'])
@@ -138,7 +204,7 @@ export type ArchitectureVersionScalarFieldEnum = z.infer<typeof ArchitectureVers
 
 // File: DocumentScalarFieldEnum.schema.ts
 
-export const DocumentScalarFieldEnumSchema = z.enum(['id', 'name', 'description', 'mimeType', 'filePath', 'fileSize', 'clientId', 'projectId', 'extractedText', 'isProcessed', 'createdBy', 'createdAt', 'updatedAt'])
+export const DocumentScalarFieldEnumSchema = z.enum(['id', 'name', 'description', 'mimeType', 'filePath', 'fileSize', 'organizationId', 'processDefinitionId', 'extractedText', 'isProcessed', 'createdBy', 'createdAt', 'updatedAt'])
 
 export type DocumentScalarFieldEnum = z.infer<typeof DocumentScalarFieldEnumSchema>;
 
@@ -159,6 +225,12 @@ export type PurchaseScalarFieldEnum = z.infer<typeof PurchaseScalarFieldEnumSche
 export const SortOrderSchema = z.enum(['asc', 'desc'])
 
 export type SortOrder = z.infer<typeof SortOrderSchema>;
+
+// File: NullableJsonNullValueInput.schema.ts
+
+export const NullableJsonNullValueInputSchema = z.enum(['DbNull', 'JsonNull'])
+
+export type NullableJsonNullValueInput = z.infer<typeof NullableJsonNullValueInputSchema>;
 
 // File: JsonNullValueInput.schema.ts
 
@@ -184,15 +256,9 @@ export const JsonNullValueFilterSchema = z.enum(['DbNull', 'JsonNull', 'AnyNull'
 
 export type JsonNullValueFilter = z.infer<typeof JsonNullValueFilterSchema>;
 
-// File: ProjectStatus.schema.ts
-
-export const ProjectStatusSchema = z.enum(['ACTIVE', 'COMPLETED', 'ON_HOLD'])
-
-export type ProjectStatus = z.infer<typeof ProjectStatusSchema>;
-
 // File: ProcessLevel.schema.ts
 
-export const ProcessLevelSchema = z.enum(['PROCESS', 'SUBPROCESS', 'TASK', 'PROCEDURE'])
+export const ProcessLevelSchema = z.enum(['MACRO_PROCESS', 'PROCESS', 'SUBPROCESS', 'TASK', 'PROCEDURE'])
 
 export type ProcessLevel = z.infer<typeof ProcessLevelSchema>;
 
@@ -210,7 +276,7 @@ export type SessionStatus = z.infer<typeof SessionStatusSchema>;
 
 // File: NodeType.schema.ts
 
-export const NodeTypeSchema = z.enum(['START_EVENT', 'END_EVENT', 'TASK', 'EXCLUSIVE_GATEWAY', 'PARALLEL_GATEWAY'])
+export const NodeTypeSchema = z.enum(['START_EVENT', 'END_EVENT', 'TASK', 'USER_TASK', 'SERVICE_TASK', 'MANUAL_TASK', 'BUSINESS_RULE_TASK', 'SUBPROCESS', 'EXCLUSIVE_GATEWAY', 'PARALLEL_GATEWAY', 'TIMER_EVENT', 'MESSAGE_EVENT', 'SIGNAL_EVENT', 'CONDITIONAL_EVENT', 'TEXT_ANNOTATION', 'DATA_OBJECT'])
 
 export type NodeType = z.infer<typeof NodeTypeSchema>;
 
@@ -219,6 +285,60 @@ export type NodeType = z.infer<typeof NodeTypeSchema>;
 export const NodeStateSchema = z.enum(['FORMING', 'CONFIRMED', 'REJECTED', 'ARCHIVED'])
 
 export type NodeState = z.infer<typeof NodeStateSchema>;
+
+// File: RaciType.schema.ts
+
+export const RaciTypeSchema = z.enum(['RESPONSIBLE', 'ACCOUNTABLE', 'CONSULTED', 'INFORMED'])
+
+export type RaciType = z.infer<typeof RaciTypeSchema>;
+
+// File: IntelligenceItemCategory.schema.ts
+
+export const IntelligenceItemCategorySchema = z.enum(['MISSING_PATH', 'MISSING_ROLE', 'MISSING_EXCEPTION', 'MISSING_DECISION', 'MISSING_TRIGGER', 'MISSING_OUTPUT', 'CONTRADICTION', 'UNCLEAR_HANDOFF', 'MISSING_SLA', 'MISSING_SYSTEM', 'GENERAL_GAP'])
+
+export type IntelligenceItemCategory = z.infer<typeof IntelligenceItemCategorySchema>;
+
+// File: IntelligenceItemStatus.schema.ts
+
+export const IntelligenceItemStatusSchema = z.enum(['OPEN', 'RESOLVED', 'SUPERSEDED'])
+
+export type IntelligenceItemStatus = z.infer<typeof IntelligenceItemStatusSchema>;
+
+// File: RiskType.schema.ts
+
+export const RiskTypeSchema = z.enum(['OPERATIONAL', 'COMPLIANCE', 'STRATEGIC', 'FINANCIAL', 'TECHNOLOGY', 'HUMAN_RESOURCE', 'REPUTATIONAL'])
+
+export type RiskType = z.infer<typeof RiskTypeSchema>;
+
+// File: RiskStatus.schema.ts
+
+export const RiskStatusSchema = z.enum(['IDENTIFIED', 'ASSESSED', 'MITIGATING', 'ACCEPTED', 'CLOSED'])
+
+export type RiskStatus = z.infer<typeof RiskStatusSchema>;
+
+// File: RiskSource.schema.ts
+
+export const RiskSourceSchema = z.enum(['AI_AUDIT', 'AI_FMEA', 'INTELLIGENCE_GAP', 'MANUAL', 'CONVERSATION'])
+
+export type RiskSource = z.infer<typeof RiskSourceSchema>;
+
+// File: MitigationStatus.schema.ts
+
+export const MitigationStatusSchema = z.enum(['PLANNED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'])
+
+export type MitigationStatus = z.infer<typeof MitigationStatusSchema>;
+
+// File: ControlType.schema.ts
+
+export const ControlTypeSchema = z.enum(['PREVENTIVE', 'DETECTIVE', 'CORRECTIVE'])
+
+export type ControlType = z.infer<typeof ControlTypeSchema>;
+
+// File: ControlEffectiveness.schema.ts
+
+export const ControlEffectivenessSchema = z.enum(['HIGH', 'MEDIUM', 'LOW', 'UNKNOWN'])
+
+export type ControlEffectiveness = z.infer<typeof ControlEffectivenessSchema>;
 
 // File: PurchaseType.schema.ts
 
@@ -346,6 +466,11 @@ export const OrganizationSchema = z.object({
   createdAt: z.date(),
   metadata: z.string().nullish(),
   paymentsCustomerId: z.string().nullish(),
+  industry: z.string().nullish(),
+  operationsProfile: z.string().nullish(),
+  businessModel: z.string().nullish(),
+  employeeCount: z.string().nullish(),
+  notes: z.string().nullish(),
 });
 
 export type OrganizationType = z.infer<typeof OrganizationSchema>;
@@ -380,45 +505,11 @@ export const InvitationSchema = z.object({
 export type InvitationType = z.infer<typeof InvitationSchema>;
 
 
-// File: Client.schema.ts
-
-export const ClientSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  organizationId: z.string(),
-  industry: z.string().nullish(),
-  operationsProfile: z.string().nullish(),
-  businessModel: z.string().nullish(),
-  employeeCount: z.string().nullish(),
-  notes: z.string().nullish(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-});
-
-export type ClientType = z.infer<typeof ClientSchema>;
-
-
-// File: Project.schema.ts
-
-export const ProjectSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  description: z.string().nullish(),
-  goals: z.array(z.string()),
-  status: ProjectStatusSchema.default("ACTIVE"),
-  clientId: z.string(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-});
-
-export type ProjectType = z.infer<typeof ProjectSchema>;
-
-
 // File: ProcessArchitecture.schema.ts
 
 export const ProcessArchitectureSchema = z.object({
   id: z.string(),
-  projectId: z.string(),
+  organizationId: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
@@ -440,6 +531,7 @@ export const ProcessDefinitionSchema = z.object({
   triggers: z.array(z.string()),
   outputs: z.array(z.string()),
   processStatus: z.string().default("DRAFT"),
+  category: z.string().nullish(),
   bpmnXml: z.string().nullish(),
   priority: z.number().int(),
   createdAt: z.date(),
@@ -455,7 +547,7 @@ export const MeetingSessionSchema = z.object({
   type: SessionTypeSchema,
   status: SessionStatusSchema.default("SCHEDULED"),
   meetingUrl: z.string(),
-  projectId: z.string(),
+  organizationId: z.string(),
   processDefinitionId: z.string().nullish(),
   userId: z.string(),
   continuationOf: z.string().nullish(),
@@ -493,6 +585,23 @@ export const DiagramNodeSchema = z.object({
 });
 
 export type DiagramNodeType = z.infer<typeof DiagramNodeSchema>;
+
+
+// File: NodeComment.schema.ts
+
+export const NodeCommentSchema = z.object({
+  id: z.string(),
+  nodeId: z.string(),
+  content: z.string(),
+  authorId: z.string(),
+  authorName: z.string(),
+  sourceType: z.string().nullish(),
+  sourceSnippet: z.string().nullish(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type NodeCommentType = z.infer<typeof NodeCommentSchema>;
 
 
 // File: TranscriptEntry.schema.ts
@@ -555,6 +664,229 @@ export const SessionSummarySchema = z.object({
 export type SessionSummaryType = z.infer<typeof SessionSummarySchema>;
 
 
+// File: DiscoveryThread.schema.ts
+
+export const DiscoveryThreadSchema = z.object({
+  id: z.string(),
+  organizationId: z.string(),
+  processDefinitionId: z.string().nullish(),
+  createdBy: z.string(),
+  rejectedProcessNames: z.array(z.string()),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type DiscoveryThreadType = z.infer<typeof DiscoveryThreadSchema>;
+
+
+// File: DiscoveryMessage.schema.ts
+
+export const DiscoveryMessageSchema = z.object({
+  id: z.string(),
+  threadId: z.string(),
+  role: z.string(),
+  content: z.string(),
+  audioFileUrl: z.string().nullish(),
+  extractedProcesses: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  createdAt: z.date(),
+});
+
+export type DiscoveryMessageType = z.infer<typeof DiscoveryMessageSchema>;
+
+
+// File: RaciEntry.schema.ts
+
+export const RaciEntrySchema = z.object({
+  id: z.string(),
+  processId: z.string(),
+  activityName: z.string(),
+  role: z.string(),
+  assignment: RaciTypeSchema,
+  source: z.string().nullish(),
+  createdAt: z.date(),
+});
+
+export type RaciEntryType = z.infer<typeof RaciEntrySchema>;
+
+
+// File: StakeholderConflict.schema.ts
+
+export const StakeholderConflictSchema = z.object({
+  id: z.string(),
+  processId: z.string(),
+  nodeLabel: z.string(),
+  conflictType: z.string(),
+  perspectives: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10"),
+  resolved: z.boolean(),
+  resolution: z.string().nullish(),
+  createdAt: z.date(),
+});
+
+export type StakeholderConflictType = z.infer<typeof StakeholderConflictSchema>;
+
+
+// File: ProcessIntelligence.schema.ts
+
+export const ProcessIntelligenceSchema = z.object({
+  id: z.string(),
+  processDefinitionId: z.string(),
+  knowledgeSnapshot: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").default("{}"),
+  confidenceScores: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").default("{}"),
+  completenessScore: z.number().int(),
+  shareToken: z.string().nullish(),
+  shareExpiresAt: z.date().nullish(),
+  riskShareToken: z.string().nullish(),
+  riskShareExpiresAt: z.date().nullish(),
+  version: z.number().int(),
+  lastAuditAt: z.date().nullish(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type ProcessIntelligenceType = z.infer<typeof ProcessIntelligenceSchema>;
+
+
+// File: IntelligenceItem.schema.ts
+
+export const IntelligenceItemSchema = z.object({
+  id: z.string(),
+  intelligenceId: z.string(),
+  category: IntelligenceItemCategorySchema,
+  question: z.string(),
+  context: z.string().nullish(),
+  priority: z.number().int().default(50),
+  dependsOn: z.array(z.string()),
+  status: IntelligenceItemStatusSchema.default("OPEN"),
+  resolution: z.string().nullish(),
+  resolvedAt: z.date().nullish(),
+  resolvedBy: z.string().nullish(),
+  sourceType: z.string(),
+  sourceId: z.string().nullish(),
+  elementRef: z.string().nullish(),
+  insightType: z.string().nullish(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type IntelligenceItemType = z.infer<typeof IntelligenceItemSchema>;
+
+
+// File: IntelligenceAuditLog.schema.ts
+
+export const IntelligenceAuditLogSchema = z.object({
+  id: z.string(),
+  intelligenceId: z.string(),
+  triggerType: z.string(),
+  triggerId: z.string().nullish(),
+  delta: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10"),
+  completenessScore: z.number().int(),
+  inputTokens: z.number().int().nullish(),
+  outputTokens: z.number().int().nullish(),
+  createdAt: z.date(),
+});
+
+export type IntelligenceAuditLogType = z.infer<typeof IntelligenceAuditLogSchema>;
+
+
+// File: ProcessRisk.schema.ts
+
+export const ProcessRiskSchema = z.object({
+  id: z.string(),
+  processDefinitionId: z.string(),
+  title: z.string(),
+  description: z.string(),
+  riskType: RiskTypeSchema,
+  status: RiskStatusSchema.default("IDENTIFIED"),
+  source: RiskSourceSchema,
+  severity: z.number().int().default(3),
+  probability: z.number().int().default(3),
+  riskScore: z.number().int().default(9),
+  residualSeverity: z.number().int().nullish(),
+  residualProbability: z.number().int().nullish(),
+  residualScore: z.number().int().nullish(),
+  affectedStep: z.string().nullish(),
+  affectedRole: z.string().nullish(),
+  relatedItemId: z.string().nullish(),
+  isOpportunity: z.boolean(),
+  opportunityValue: z.string().nullish(),
+  failureMode: z.string().nullish(),
+  failureEffect: z.string().nullish(),
+  detectionDifficulty: z.number().int().nullish(),
+  rpn: z.number().int().nullish(),
+  shareVisible: z.boolean().default(true),
+  createdBy: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type ProcessRiskType = z.infer<typeof ProcessRiskSchema>;
+
+
+// File: RiskMitigation.schema.ts
+
+export const RiskMitigationSchema = z.object({
+  id: z.string(),
+  riskId: z.string(),
+  action: z.string(),
+  owner: z.string().nullish(),
+  deadline: z.date().nullish(),
+  status: MitigationStatusSchema.default("PLANNED"),
+  notes: z.string().nullish(),
+  completedAt: z.date().nullish(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type RiskMitigationType = z.infer<typeof RiskMitigationSchema>;
+
+
+// File: RiskControl.schema.ts
+
+export const RiskControlSchema = z.object({
+  id: z.string(),
+  riskId: z.string(),
+  name: z.string(),
+  description: z.string().nullish(),
+  controlType: ControlTypeSchema,
+  effectiveness: ControlEffectivenessSchema.default("UNKNOWN"),
+  automated: z.boolean(),
+  system: z.string().nullish(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type RiskControlType = z.infer<typeof RiskControlSchema>;
+
+
+// File: RiskAuditLog.schema.ts
+
+export const RiskAuditLogSchema = z.object({
+  id: z.string(),
+  riskId: z.string(),
+  action: z.string(),
+  delta: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10"),
+  userId: z.string().nullish(),
+  createdAt: z.date(),
+});
+
+export type RiskAuditLogType = z.infer<typeof RiskAuditLogSchema>;
+
+
+// File: ProcessTemplate.schema.ts
+
+export const ProcessTemplateSchema = z.object({
+  id: z.string(),
+  framework: z.string(),
+  industry: z.string(),
+  name: z.string(),
+  description: z.string().nullish(),
+  structure: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10"),
+  createdAt: z.date(),
+});
+
+export type ProcessTemplateType = z.infer<typeof ProcessTemplateSchema>;
+
+
 // File: ProcessVersion.schema.ts
 
 export const ProcessVersionSchema = z.object({
@@ -599,8 +931,8 @@ export const DocumentSchema = z.object({
   mimeType: z.string(),
   filePath: z.string(),
   fileSize: z.number().int(),
-  clientId: z.string().nullish(),
-  projectId: z.string().nullish(),
+  organizationId: z.string(),
+  processDefinitionId: z.string().nullish(),
   extractedText: z.string().nullish(),
   isProcessed: z.boolean(),
   createdBy: z.string(),

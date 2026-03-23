@@ -18,7 +18,7 @@ export interface ExtractedProcessData {
 interface ExtractionCardProps {
 	process: ExtractedProcessData;
 	onAccept: (process: ExtractedProcessData) => void;
-	onReject: () => void;
+	onReject: (process: ExtractedProcessData) => void;
 	disabled?: boolean;
 }
 
@@ -73,7 +73,7 @@ export function ExtractionCard({
 
 	const handleReject = () => {
 		setRejected(true);
-		onReject();
+		onReject(process);
 	};
 
 	return (

@@ -192,7 +192,6 @@ export function NavBar() {
 												isCollapsedEffective,
 										},
 									)}
-									prefetch
 								>
 									<menuItem.icon
 										className={cn(

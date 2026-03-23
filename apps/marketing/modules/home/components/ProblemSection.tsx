@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useTranslations } from "next-intl";
 import { useRef } from "react";
+import { BeforeAfterSlider } from "./BeforeAfterSlider";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -144,6 +145,8 @@ export function ProblemSection() {
 				<p className="problem-description mt-16 text-muted-foreground text-base md:text-lg max-w-2xl mx-auto text-center text-balance leading-relaxed">
 					{t("home.problem.description")}
 				</p>
+
+				<BeforeAfterSlider />
 			</div>
 		</section>
 	);

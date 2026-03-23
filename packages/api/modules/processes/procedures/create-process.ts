@@ -25,14 +25,10 @@ export const createProcess = protectedProcedure
 		}),
 	)
 	.handler(async ({ context: { session }, input }) => {
-		// Verify org ownership: architecture → project → client → organizationId
+		// Verify org ownership
 		const architecture = await db.processArchitecture.findUnique({
 			where: { id: input.architectureId },
-			include: {
-				project: {
-					include: { client: true },
-				},
-			},
+			select: { id: true, organizationId: true },
 		});
 
 		if (!architecture) {
@@ -42,7 +38,7 @@ export const createProcess = protectedProcedure
 		}
 
 		if (
-			architecture.project.client.organizationId !==
+			architecture.organizationId !==
 			session.activeOrganizationId
 		) {
 			throw new ORPCError("FORBIDDEN");

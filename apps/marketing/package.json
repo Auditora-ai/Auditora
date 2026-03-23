@@ -9,6 +9,7 @@
 		"@repo/payments": "workspace:*",
 		"@repo/ui": "workspace:*",
 		"@repo/utils": "workspace:*",
+		"bpmn-js": "^18.13.1",
 		"class-variance-authority": "catalog:",
 		"clsx": "catalog:",
 		"date-fns": "catalog:",

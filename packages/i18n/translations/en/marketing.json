@@ -29,13 +29,13 @@
 		"description": "Everything you need to know about Prozea.",
 		"title": "Frequently asked questions",
 		"items": {
-			"joinCall": {
-				"question": "How does Prozea join my call?",
-				"answer": "Prozea uses Recall.ai to join as a bot participant in Zoom, Google Meet, or Microsoft Teams. You simply share a meeting link or invite Prozea directly — it joins silently and begins real-time transcription."
+			"extraction": {
+				"question": "How does Prozea extract processes?",
+				"answer": "Prozea extracts business processes from any conversation — chat, audio recordings, or live video calls. Its AI analyzes the conversation, identifies process steps, roles, decisions, and exceptions, and presents them as structured extraction cards you can accept, edit, or reject."
 			},
 			"dataSecurity": {
 				"question": "Is my client conversation data secure?",
-				"answer": "All transcription is processed in real-time and encrypted in transit and at rest. We never use your client data to train AI models. You own your data completely."
+				"answer": "All data is encrypted in transit and at rest. We never use your client data to train AI models. You own your data completely. Transcriptions and chat threads are stored in your organization's private workspace."
 			},
 			"bpmnStandard": {
 				"question": "What BPMN standard do you support?",
@@ -45,26 +45,39 @@
 				"question": "Can I edit the diagram during the meeting?",
 				"answer": "Yes. The BPMN canvas is fully interactive. You can move nodes, add annotations, confirm or reject AI suggestions, and refine the diagram while still on the call with your client."
 			},
-			"aiAccuracy": {
-				"question": "What if the AI gets a process step wrong?",
-				"answer": "Nodes appear in a 'forming' state first with a dashed border. You confirm, edit, or reject each step before it becomes permanent. You're always in control of the final deliverable."
+			"intelligence": {
+				"question": "What is Process Intelligence?",
+				"answer": "Process Intelligence is Prozea's AI audit system. It analyzes each process for completeness — identifying missing paths, roles, exceptions, decision points, and handoffs. It scores completeness and prioritizes what to ask in your next session."
+			},
+			"discoveryChat": {
+				"question": "How does the discovery chat work?",
+				"answer": "Open the discovery panel, describe a process by typing or upload an audio recording. Prozea's AI analyzes the conversation and extracts process steps as cards. Accept, edit, or reject each one. The chat persists — you can close and come back where you left off."
+			},
+			"sharing": {
+				"question": "Can I share diagrams with clients?",
+				"answer": "Yes. Generate a public share link for any process diagram. You can also send pre-call preparation links where stakeholders answer targeted questions before the meeting — so you arrive with context already captured."
+			},
+			"integrations": {
+				"question": "What tools does Prozea integrate with?",
+				"answer": "Prozea joins Zoom, Microsoft Teams, and Google Meet video calls. You can also use AI chat, upload audio recordings, or import documents — every channel feeds the same extraction engine."
 			}
 		}
 	},
 	"home": {
 		"hero": {
-			"badge": "AI-Powered Process Elicitation",
-			"title": "Turn every client meeting into a finished process map",
-			"subtitle": "Prozea joins your video call, guides your questions with an AI teleprompter, and auto-diagrams business processes in real-time. Walk out of every meeting with a client-ready BPMN deliverable.",
+			"badge": "AI-Powered BPM Elicitation Platform",
+			"title": "Extract business processes from any conversation",
+			"subtitle": "Chat, upload audio, or join a live call — Prozea's AI extracts, organizes, and diagrams your client's processes in real-time. Walk out with BPMN deliverables, not meeting notes.",
 			"cta": "Start free trial",
-			"ctaSecondary": "See how it works"
+			"ctaSecondary": "See how it works",
+			"counterLabel": "process steps captured"
 		},
 		"problem": {
-			"title": "Process consultants are drowning in documentation",
+			"title": "Process consultants deserve better tools",
 			"stat1": {
 				"number": "60",
 				"unit": "%",
-				"label": "of consulting time spent on post-meeting documentation"
+				"label": "of consulting time spent on documentation instead of analysis"
 			},
 			"stat2": {
 				"number": "3",
@@ -74,158 +87,200 @@
 			"stat3": {
 				"number": "40",
 				"unit": "%",
-				"label": "of process steps missed or misremembered"
+				"label": "of process steps missed or misremembered after a meeting"
 			},
-			"description": "You take notes during the call. You ask the client to repeat things. You spend hours afterward in Visio or Lucidchart reconstructing what was said. Steps get missed. Details get lost. Your client gets a deliverable days later instead of minutes."
+			"description": "You take notes during the call. You ask the client to repeat things. You spend hours afterward in Visio or Lucidchart reconstructing what was said. Steps get missed. Details get lost. Your client gets a deliverable days later instead of minutes.",
+			"beforeLabel": "Before: 3 hours reconstructing from notes",
+			"afterLabel": "After: Done during the conversation"
 		},
 		"howItWorks": {
-			"title": "Three steps. Zero post-meeting documentation.",
-			"stepLabel": "Step {number}",
+			"title": "Four phases. From conversation to deliverable.",
+			"stepLabel": "Phase {number}",
 			"step1": {
-				"title": "Prozea joins your call",
-				"description": "Invite Prozea to any Zoom, Teams, or Meet session. It joins as a silent participant and begins real-time transcription with speaker identification."
+				"title": "Discover",
+				"description": "Chat with the AI, upload an audio recording, or let Prozea join your video call. Every conversation channel feeds the same extraction engine."
 			},
 			"step2": {
-				"title": "AI guides your questions",
-				"description": "A private teleprompter shows you exactly what to ask next, based on what's been discussed. Never miss a critical process step again."
+				"title": "Organize",
+				"description": "Extracted processes automatically organize into your process architecture — strategic, core, and support. Build the full picture of your client's operations."
 			},
 			"step3": {
-				"title": "Diagram builds itself",
-				"description": "Watch as BPMN tasks, gateways, and flows appear on the canvas in real-time. Review and refine with your client while still on the call."
+				"title": "Deep Dive",
+				"description": "For each process, start a live session. A private AI teleprompter guides your questions while the BPMN diagram builds itself in real-time."
+			},
+			"step4": {
+				"title": "Deliver",
+				"description": "Export BPMN 2.0 diagrams, generate shareable links, and send pre-call preparation questionnaires. Walk out with client-ready deliverables."
 			}
 		},
-		"features": {
-			"badge": "Core capabilities",
-			"title": "Everything you need to elicit processes, not document them",
-			"description": "Prozea handles the documentation so you can focus on what you do best — understanding your client's business.",
-			"feature1": {
-				"title": "Real-Time Transcription",
-				"subtitle": "Every word captured, every speaker identified.",
-				"description": "Powered by Deepgram, Prozea captures every word with speaker diarization. Know exactly who said what, so your process map reflects the right roles and responsibilities.",
+		"pillars": {
+			"badge": "The platform",
+			"title": "Four pillars of modern process elicitation",
+			"description": "Prozea replaces scattered tools with one platform that covers the entire BPM consulting workflow.",
+			"pillar1": {
+				"title": "Conversational Discovery",
+				"subtitle": "Extract processes from any conversation.",
+				"description": "Describe a process by chat, upload a recorded meeting, or let the AI join your call. Every conversation channel feeds the same extraction engine.",
 				"benefit1": {
-					"title": "Speaker Diarization",
-					"description": "Automatically identifies who is speaking, mapping voices to roles in your process diagram."
+					"title": "Multi-Channel Input",
+					"description": "Chat, audio upload, and live video calls — all feeding the same AI extraction pipeline."
 				},
 				"benefit2": {
-					"title": "Multi-Language Support",
-					"description": "Transcribe meetings in multiple languages with high accuracy and low latency."
+					"title": "Extraction Cards",
+					"description": "Each extracted process appears as a card you can accept, edit, or reject. You control the output."
 				},
 				"benefit3": {
-					"title": "Searchable History",
-					"description": "Every transcript is saved and searchable. Revisit any moment from any past session."
+					"title": "Persistent Threads",
+					"description": "Discovery conversations persist. Close and come back where you left off — your context is never lost."
 				}
 			},
-			"feature2": {
-				"title": "AI Teleprompter",
-				"subtitle": "Your expert co-pilot for every meeting.",
-				"description": "Claude analyzes the conversation in real-time and surfaces the next question you should ask. Covers edge cases, exception flows, and handoffs that consultants typically miss.",
+			"pillar2": {
+				"title": "Live Sessions",
+				"subtitle": "AI-guided meetings with real-time diagramming.",
+				"description": "Prozea joins Zoom, Teams, or Meet. A private teleprompter guides your questions. The BPMN diagram builds itself while you talk.",
 				"benefit1": {
-					"title": "Context-Aware Questions",
-					"description": "Questions adapt based on what's been discussed. No generic scripts — every prompt is tailored to the conversation."
+					"title": "Real-Time Transcription",
+					"description": "Every word captured with speaker diarization. Know exactly who said what."
+				},
+				"benefit2": {
+					"title": "AI Teleprompter",
+					"description": "Context-aware questions surface in real-time. Covers edge cases and exceptions you'd normally miss."
+				},
+				"benefit3": {
+					"title": "Live BPMN Canvas",
+					"description": "Tasks, gateways, and flows appear as the conversation unfolds. Confirm or reject each step."
+				}
+			},
+			"pillar3": {
+				"title": "Process Intelligence",
+				"subtitle": "AI that audits your processes for completeness.",
+				"description": "AI audits every process for completeness. Identifies missing paths, roles, exceptions, and handoffs. Prioritizes what to ask next.",
+				"benefit1": {
+					"title": "Completeness Scoring",
+					"description": "Each process gets a completeness score based on identified gaps. Track progress toward full coverage."
 				},
 				"benefit2": {
 					"title": "Gap Detection",
-					"description": "Identifies missing information — exception paths, approval chains, handoff points — before the meeting ends."
+					"description": "Missing decision paths, exception flows, role assignments, and handoffs — automatically identified and prioritized."
 				},
 				"benefit3": {
-					"title": "Private to You",
-					"description": "The teleprompter is your private view. Your client sees nothing — just a consultant asking brilliant questions."
+					"title": "Stakeholder Prep",
+					"description": "Share preparation links with stakeholders before your next session. Arrive with answers already captured."
 				}
 			},
-			"feature3": {
-				"title": "Live BPMN Diagramming",
-				"subtitle": "Process maps that draw themselves.",
-				"description": "Tasks, gateways, events, and swim lanes appear as the conversation unfolds. BPMN 2.0 compliant and ready to export the moment your meeting ends.",
+			"pillar4": {
+				"title": "Process Library",
+				"subtitle": "Your client's full process architecture.",
+				"description": "Organize processes as strategic, core, or support. Track versions. Build your client's full process architecture in one place.",
 				"benefit1": {
-					"title": "BPMN 2.0 Standard",
-					"description": "Industry-standard notation that opens in Camunda, Signavio, Visio, and any compliant tool."
+					"title": "Architecture Trees",
+					"description": "Hierarchical process organization with parent-child relationships. See the full picture at a glance."
 				},
 				"benefit2": {
-					"title": "Real-Time Collaboration",
-					"description": "Share the diagram canvas with your client during the call. Build the process together."
+					"title": "Version History",
+					"description": "Every process change is versioned. Roll back, compare, and track how processes evolve over time."
 				},
 				"benefit3": {
-					"title": "Confirm & Reject",
-					"description": "Every AI-generated node starts as a suggestion. You decide what stays and what goes."
+					"title": "Export & Share",
+					"description": "Export BPMN 2.0 diagrams, generate reports, and share public links with your clients."
 				}
 			}
 		},
 		"demo": {
-			"windowTitle": "Prozea — Live Session",
-			"rec": "REC",
-			"teleprompterLabel": "Teleprompter",
-			"askNow": "Ask now",
-			"transcriptLabel": "Live Transcript",
-			"consultantLabel": "Consultant",
-			"clientLabel": "Client",
-			"q1": "What triggers this process?",
-			"q2": "Who is responsible for approval?",
-			"q3": "What happens when it's rejected?",
-			"q4": "Are there any exception paths?",
-			"q5": "How long does each step take?",
-			"t1": "Walk me through what happens after a purchase order is submitted.",
-			"t2": "It goes to the department manager for approval first.",
-			"t3": "If it's over $5,000, it also needs VP sign-off.",
-			"t4": "What happens if the VP rejects it?",
-			"t5": "It goes back to the requestor with notes for revision.",
-			"nodeSubmit": "Submit PO",
-			"nodeGateway": "$5k?",
-			"nodeMgr": "Mgr Approval",
-			"nodeVp": "VP Approval",
-			"labelLt": "< $5k",
-			"labelGte": "≥ $5k",
-			"t6": "And once the revision is submitted, it starts the approval cycle again?",
-			"t7": "Exactly. It loops back through the same process.",
-			"q6": "What are the dollar thresholds?",
-			"q7": "Who gets notified at each stage?",
-			"nodeRevise": "Revise & Resubmit",
-			"labelRejected": "Rejected",
-			"labelApproved": "Approved",
-			"caption": {
-				"listening": "Listening…",
-				"understanding": "Understanding…",
-				"aiGuides": "AI guides the conversation",
-				"loopCloses": "The loop closes",
-				"ready": "Deliverable ready"
-			},
-			"stats": {
-				"duration": "45 min",
-				"steps": "8 steps",
-				"confidence": "94%",
-				"durationLabel": "Meeting",
-				"stepsLabel": "Captured",
-				"confidenceLabel": "Confidence",
-				"export": "Ready to export"
-			},
+			"windowTitle": "Prozea — Consultant Workflow",
 			"scene1": {
-				"title": "Prozea joins your call",
-				"joining": "Prozea is joining the meeting…",
-				"participant1": "Ana López",
-				"participant2": "Marco Díaz",
-				"participant3": "Sarah Chen",
-				"you": "You (Consultant)",
-				"prozea": "Prozea AI"
+				"title": "Discover through conversation",
+				"chatMessage1": "We receive purchase orders via email and the assistant logs them in the system.",
+				"chatMessage2": "Then what happens after they're logged?",
+				"chatMessage3": "The department manager reviews and approves. If it's over $5,000, the VP also needs to sign off.",
+				"extractionLabel": "Extracted processes",
+				"process1": "Receive Purchase Order",
+				"process2": "Manager Approval",
+				"process3": "VP Sign-off",
+				"audioLabel": "Or upload audio"
 			},
 			"scene2": {
-				"title": "Every word, captured",
-				"waveformLabel": "Real-time transcription"
+				"title": "Organize into architecture",
+				"strategic": "Strategic",
+				"core": "Core",
+				"support": "Support",
+				"processCount": "{count} processes"
 			},
 			"scene3": {
-				"title": "AI guides your questions",
-				"aiSuggestion": "Based on client's response"
+				"title": "Deep dive with AI guidance",
+				"teleprompterLabel": "Teleprompter",
+				"transcriptLabel": "Live Transcript",
+				"askNow": "Ask now",
+				"q1": "What happens when the VP rejects it?",
+				"q2": "Are there dollar thresholds for escalation?",
+				"t1": "It goes back to the requestor with notes for revision.",
+				"t2": "If it's over $5,000, it needs VP sign-off.",
+				"rec": "REC",
+				"consultantLabel": "Consultant",
+				"clientLabel": "Client"
 			},
 			"scene4": {
-				"title": "The diagram builds itself"
+				"title": "Walk out with deliverables",
+				"stats": {
+					"duration": "38 min",
+					"steps": "12 steps",
+					"confidence": "94%",
+					"durationLabel": "Session",
+					"stepsLabel": "Captured",
+					"confidenceLabel": "Confidence",
+					"export": "Ready to export"
+				},
+				"nodeSubmit": "Receive PO",
+				"nodeGateway": "$5k?",
+				"nodeMgr": "Mgr Approval",
+				"nodeVp": "VP Approval",
+				"nodeRevise": "Revise",
+				"labelLt": "< $5k",
+				"labelGte": "≥ $5k",
+				"labelApproved": "Approved",
+				"labelRejected": "Rejected",
+				"shareLink": "Share with client",
+				"exportBpmn": "Export BPMN"
 			},
-			"scene5": {
-				"title": "Walk out with a deliverable",
-				"before": "Before: 3 hours reconstructing from notes",
-				"after": "Now: Done before the meeting ends",
-				"cta": "Start free trial"
+			"caption": {
+				"discover": "AI extracts from conversation",
+				"organize": "Processes find their place",
+				"deepDive": "AI guides every question",
+				"deliver": "Deliverable ready"
 			}
 		},
+		"tryIt": {
+			"badge": "Try it now",
+			"title": "Describe a process. Watch it come to life.",
+			"description": "Speak or type a process description. AI extracts it and diagrams it in real-time with BPMN notation.",
+			"placeholder": "Describe a business process... e.g., 'When a customer submits a support ticket, it goes to the triage team who categorizes it by severity...'",
+			"send": "Extract",
+			"analyzing": "Analyzing...",
+			"extractedTitle": "Extracted processes",
+			"accept": "Accept",
+			"edit": "Edit",
+			"reject": "Reject",
+			"voiceButton": "Speak",
+			"voiceListening": "Listening...",
+			"voiceUnsupported": "Voice not supported in this browser",
+			"diagramTitle": "Your process diagram",
+			"diagramEmpty": "Describe a process to see it diagrammed",
+			"editOverlayTitle": "Want to edit this diagram?",
+			"editOverlaySubtitle": "Sign up free to customize, export BPMN 2.0, and share with clients",
+			"editOverlayButton": "Sign up — it's free",
+			"editOverlayNote": "Your diagram is saved and will be waiting for you",
+			"signupPrompt": "Want to keep going?",
+			"signupCta": "Start your free trial to extract unlimited processes",
+			"signupButton": "Start free trial",
+			"error": "Our AI is busy right now. Try again in a moment.",
+			"rateLimited": "Too many requests. Please wait a moment.",
+			"messagesRemaining": "{count} messages remaining"
+		},
 		"integrations": {
-			"worksWithTitle": "Works with your tools",
+			"worksWithTitle": "Works with every conversation channel",
+			"chat": "AI Chat",
+			"audio": "Audio Upload",
+			"documents": "Documents",
 			"zoom": "Zoom",
 			"teams": "Microsoft Teams",
 			"meet": "Google Meet"
@@ -248,7 +303,7 @@
 	},
 	"cta": {
 		"title": "Stop documenting. Start consulting.",
-		"subtitle": "Join the consultants who walk out of every meeting with a finished process map.",
+		"subtitle": "Join the consultants who extract processes from conversations instead of reconstructing them from memory.",
 		"button": "Start your free trial",
 		"note": "No credit card required"
 	},

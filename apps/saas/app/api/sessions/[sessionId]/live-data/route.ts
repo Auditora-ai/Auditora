@@ -12,6 +12,11 @@ import { db } from "@repo/database";
 // WARNING: This import works because both route files run in the same
 // Node.js process on Railway. See webhook route for deployment assumptions.
 import { sessionActivity } from "../../../webhook/recall/route";
+import { recordEvent } from "@meeting/lib/session-timeline";
+
+// One-time guards to avoid spamming diagnostic events
+const firstTranscriptPollRecorded = new Set<string>();
+const firstEmptyPollRecorded = new Set<string>();
 
 export async function GET(
 	request: NextRequest,
@@ -30,6 +35,16 @@ export async function GET(
 				{ error: "Session not found" },
 				{ status: 404 },
 			);
+		}
+
+		// Diagnostic: record first poll events
+		const transcript0 = await db.transcriptEntry.count({ where: { sessionId } });
+		if (transcript0 > 0 && !firstTranscriptPollRecorded.has(sessionId)) {
+			firstTranscriptPollRecorded.add(sessionId);
+			recordEvent(sessionId, "first_poll_with_transcript", `entries=${transcript0}`);
+		} else if (transcript0 === 0 && !firstEmptyPollRecorded.has(sessionId)) {
+			firstEmptyPollRecorded.add(sessionId);
+			recordEvent(sessionId, "first_poll_empty");
 		}
 
 		// Fetch latest transcript entries

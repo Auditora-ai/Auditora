@@ -2,12 +2,13 @@
  * Discovery Chat API
  *
  * POST /api/discovery/chat — Send a message and get AI extraction response
- * GET  /api/discovery/chat?projectId=xxx — Get chat thread for a project
+ * GET  /api/discovery/chat — Get chat thread for the organization (optionally scoped by processId)
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
 import { extractFromChat } from "@repo/ai";
+import type { ProcessChatContext } from "@repo/ai";
 import { auth } from "@repo/auth";
 import { headers } from "next/headers";
 
@@ -27,6 +28,77 @@ async function getAuthContext() {
 	return { user: session.user, org: activeOrg };
 }
 
+/**
+ * Resolve processId from either explicit param or sessionId lookup.
+ */
+async function resolveProcessId(
+	processId?: string,
+	sessionId?: string,
+): Promise<string | null> {
+	if (processId) return processId;
+	if (!sessionId) return null;
+
+	const session = await db.meetingSession.findUnique({
+		where: { id: sessionId },
+		select: { processDefinitionId: true },
+	});
+	return session?.processDefinitionId ?? null;
+}
+
+/**
+ * Build process-specific context for the AI pipeline.
+ */
+async function buildProcessChatContext(
+	processId: string,
+	rejectedNames: string[],
+): Promise<ProcessChatContext | undefined> {
+	const process = await db.processDefinition.findUnique({
+		where: { id: processId },
+		include: {
+			parent: { select: { name: true } },
+			intelligence: {
+				select: {
+					completenessScore: true,
+					items: {
+						where: { status: "OPEN" },
+						select: { question: true, category: true, priority: true },
+						orderBy: { priority: "desc" },
+						take: 5,
+					},
+				},
+			},
+		},
+	});
+
+	if (!process) return undefined;
+
+	// Get siblings (same parent, different id)
+	const siblings = await db.processDefinition.findMany({
+		where: {
+			architectureId: process.architectureId,
+			parentId: process.parentId,
+			id: { not: process.id },
+		},
+		select: { name: true },
+	});
+
+	return {
+		targetProcess: {
+			name: process.name,
+			level: process.level,
+			description: process.description ?? undefined,
+			triggers: process.triggers,
+			outputs: process.outputs,
+			goals: process.goals,
+			owner: process.owner ?? undefined,
+			siblings: siblings.map((s) => s.name),
+		},
+		intelligenceGaps: process.intelligence?.items ?? undefined,
+		completenessScore: process.intelligence?.completenessScore ?? undefined,
+		rejectedNames: rejectedNames.length > 0 ? rejectedNames : undefined,
+	};
+}
+
 export async function GET(request: NextRequest) {
 	try {
 		const authCtx = await getAuthContext();
@@ -34,17 +106,20 @@ export async function GET(request: NextRequest) {
 			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}
 
-		const projectId = request.nextUrl.searchParams.get("projectId");
-		if (!projectId) {
-			return NextResponse.json(
-				{ error: "projectId is required" },
-				{ status: 400 },
-			);
-		}
+		const { searchParams } = new URL(request.url);
+		const explicitProcessId = searchParams.get("processId");
+		const sessionId = searchParams.get("sessionId");
+		const processId = await resolveProcessId(
+			explicitProcessId ?? undefined,
+			sessionId ?? undefined,
+		);
 
-		// Get or create thread for this project
+		// Find thread scoped by org + optional processId
 		let thread = await db.discoveryThread.findFirst({
-			where: { projectId },
+			where: {
+				organizationId: authCtx.org.id,
+				processDefinitionId: processId ?? null,
+			},
 			include: {
 				messages: {
 					orderBy: { createdAt: "asc" },
@@ -56,7 +131,8 @@ export async function GET(request: NextRequest) {
 		if (!thread) {
 			thread = await db.discoveryThread.create({
 				data: {
-					projectId,
+					organizationId: authCtx.org.id,
+					processDefinitionId: processId ?? undefined,
 					createdBy: authCtx.user.id,
 				},
 				include: {
@@ -83,16 +159,24 @@ export async function POST(request: NextRequest) {
 		}
 
 		const body = await request.json();
-		const { projectId, message, threadId } = body;
+		const { message, threadId, sessionId, transcriptContext, processId: explicitProcessId } = body;
 
-		if (!projectId || !message) {
+		if (!message) {
 			return NextResponse.json(
-				{ error: "projectId and message are required" },
+				{ error: "message is required" },
 				{ status: 400 },
 			);
 		}
 
-		// Get or create thread
+		const orgId = authCtx.org.id;
+
+		// Resolve processId: explicit > sessionId lookup > null
+		const resolvedProcessId = await resolveProcessId(
+			explicitProcessId,
+			sessionId,
+		);
+
+		// Get or create thread scoped to org + process
 		let thread;
 		if (threadId) {
 			thread = await db.discoveryThread.findUnique({
@@ -102,12 +186,25 @@ export async function POST(request: NextRequest) {
 		}
 
 		if (!thread) {
+			// Look for existing thread for this org+process combo
+			thread = await db.discoveryThread.findFirst({
+				where: {
+					organizationId: orgId,
+					processDefinitionId: resolvedProcessId ?? null,
+				},
+				include: { messages: { orderBy: { createdAt: "asc" } } },
+				orderBy: { updatedAt: "desc" },
+			});
+		}
+
+		if (!thread) {
 			thread = await db.discoveryThread.create({
 				data: {
-					projectId,
+					organizationId: orgId,
+					processDefinitionId: resolvedProcessId ?? undefined,
 					createdBy: authCtx.user.id,
 				},
-				include: { messages: true },
+				include: { messages: { orderBy: { createdAt: "asc" } } },
 			});
 		}
 
@@ -120,27 +217,26 @@ export async function POST(request: NextRequest) {
 			},
 		});
 
-		// Get existing processes for this project
-		const project = await db.project.findUnique({
-			where: { id: projectId },
+		// Get existing processes and org context
+		const org = await db.organization.findUnique({
+			where: { id: orgId },
+		});
+
+		const architecture = await db.processArchitecture.findUnique({
+			where: { organizationId: orgId },
 			include: {
-				client: true,
-				architecture: {
-					include: {
-						definitions: {
-							select: {
-								name: true,
-								level: true,
-								category: true,
-							},
-						},
+				definitions: {
+					select: {
+						name: true,
+						level: true,
+						category: true,
 					},
 				},
 			},
 		});
 
 		const existingProcesses =
-			project?.architecture?.definitions.map((d) => ({
+			architecture?.definitions.map((d) => ({
 				name: d.name,
 				level: d.level,
 				category: d.category ?? undefined,
@@ -155,12 +251,30 @@ export async function POST(request: NextRequest) {
 			{ role: "user", content: message },
 		];
 
+		// Build process-specific context if we have a processId
+		let processContext: ProcessChatContext | undefined;
+		if (resolvedProcessId) {
+			try {
+				processContext = await buildProcessChatContext(
+					resolvedProcessId,
+					thread.rejectedProcessNames,
+				);
+			} catch (err) {
+				console.warn("[Discovery Chat] Failed to build process context, falling back to org-level:", err);
+			}
+		}
+
 		// Run extraction pipeline
-		const result = await extractFromChat(allMessages, existingProcesses, {
-			clientName: project?.client?.name,
-			clientIndustry: project?.client?.industry ?? undefined,
-			projectGoals: project?.goals?.join(", "),
-		});
+		const result = await extractFromChat(
+			allMessages,
+			existingProcesses,
+			{
+				clientName: org?.name,
+				clientIndustry: org?.industry ?? undefined,
+				liveTranscript: transcriptContext ?? undefined,
+			},
+			processContext,
+		);
 
 		// Save assistant response
 		const assistantMessage = await db.discoveryMessage.create({

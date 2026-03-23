@@ -1,4 +1,5 @@
 import { getActiveOrganization } from "@auth/lib/server";
+import { CrossProcessRiskDashboard } from "@risk/components/CrossProcessRiskDashboard";
 import { PageHeader } from "@shared/components/PageHeader";
 import { StatsTile } from "@shared/components/StatsTile";
 import { Card } from "@repo/ui/components/card";
@@ -33,7 +34,7 @@ export default async function AnalyticsPage({
 	const rejectedNodes = await db.diagramNode.count({
 		where: { state: "REJECTED" },
 	});
-	const totalClients = await db.client.count();
+	const totalProcesses = await db.processDefinition.count();
 
 	const accuracyRate =
 		totalNodes > 0
@@ -62,8 +63,8 @@ export default async function AnalyticsPage({
 						trend={0}
 					/>
 					<StatsTile
-						title="Clients"
-						value={totalClients}
+						title="Processes"
+						value={totalProcesses}
 						valueFormat="number"
 						trend={0}
 					/>
@@ -96,6 +97,8 @@ export default async function AnalyticsPage({
 					Session timeline and trends will appear here as you complete more sessions.
 				</div>
 			</Card>
+
+			<CrossProcessRiskDashboard />
 		</div>
 	);
 }
