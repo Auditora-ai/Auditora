@@ -98,7 +98,7 @@ export function NewSessionForm({
 		fetch("/api/sessions?_clients=1")
 			.catch(() => null);
 		// Use ORPC client list
-		fetch("/api/orpc/clients", { method: "GET" })
+		fetch("/api/clients", { method: "GET" })
 			.then((r) => r.ok ? r.json() : [])
 			.then(setClients)
 			.catch(() => setClients([]));
@@ -110,7 +110,7 @@ export function NewSessionForm({
 			setProjects([]);
 			return;
 		}
-		fetch(`/api/orpc/clients/${selectedClientId}`)
+		fetch(`/api/clients/${selectedClientId}`)
 			.then((r) => r.ok ? r.json() : null)
 			.then((data) => {
 				if (data?.projects) setProjects(data.projects);
@@ -124,7 +124,7 @@ export function NewSessionForm({
 			setProcesses([]);
 			return;
 		}
-		fetch(`/api/orpc/processes/tree?projectId=${selectedProjectId}`)
+		fetch(`/api/processes/tree?projectId=${selectedProjectId}`)
 			.then((r) => r.ok ? r.json() : null)
 			.then((data) => {
 				if (data?.definitions) setProcesses(data.definitions);
@@ -171,7 +171,7 @@ export function NewSessionForm({
 			// Create client if needed
 			let clientId = selectedClientId;
 			if (!clientId && newClientName) {
-				const res = await fetch("/api/orpc/clients", {
+				const res = await fetch("/api/clients", {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({ name: newClientName }),
@@ -183,7 +183,7 @@ export function NewSessionForm({
 			// Create project if needed
 			let projectId = selectedProjectId;
 			if (!projectId && newProjectName) {
-				const res = await fetch(`/api/orpc/clients/${clientId}/projects`, {
+				const res = await fetch(`/api/clients/${clientId}/projects`, {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({ name: newProjectName }),
