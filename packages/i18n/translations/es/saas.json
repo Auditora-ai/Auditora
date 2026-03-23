@@ -601,8 +601,8 @@
 		}
 	},
 	"processLibrary": {
-		"title": "Biblioteca de Procesos",
-		"subtitle": "Todos los procesos de negocio mapeados",
+		"title": "Procesos",
+		"subtitle": "Hub de procesos de negocio",
 		"search": "Buscar procesos...",
 		"filterByStatus": "Filtrar por estado",
 		"filterByLevel": "Filtrar por nivel",

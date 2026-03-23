@@ -170,7 +170,7 @@ export async function POST(request: NextRequest) {
 				content: result.conversationalResponse,
 				extractedProcesses:
 					result.extractedProcesses.length > 0
-						? (result.extractedProcesses as unknown as Record<string, unknown>[])
+						? JSON.parse(JSON.stringify(result.extractedProcesses))
 						: undefined,
 			},
 		});

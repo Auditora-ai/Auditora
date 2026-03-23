@@ -601,8 +601,8 @@
 		}
 	},
 	"processLibrary": {
-		"title": "Process Library",
-		"subtitle": "All mapped business processes",
+		"title": "Processes",
+		"subtitle": "Business process hub",
 		"search": "Search processes...",
 		"filterByStatus": "Filter by status",
 		"filterByLevel": "Filter by level",
