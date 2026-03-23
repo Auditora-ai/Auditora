@@ -6,3 +6,23 @@ export interface DiagramNode {
 	lane?: string;
 	connections: string[];
 }
+
+// Bot activity feedback types
+export type BotActivityType =
+	| "listening"
+	| "extracting"
+	| "diagramming"
+	| "suggesting";
+
+export interface BotActivity {
+	type: BotActivityType;
+	detail: string | null;
+	updatedAt: number | null;
+	stale: boolean;
+}
+
+export interface ActivityLogEntry {
+	type: BotActivityType;
+	detail: string;
+	timestamp: number;
+}

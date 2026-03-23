@@ -5,6 +5,8 @@ import { StatsTile } from "@shared/components/StatsTile";
 import { PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { useState } from "react";
+import { DashboardWelcome } from "@onboarding/components/DashboardWelcome";
 import {
 	ActivityTimeline,
 	type ActivityItem,
@@ -22,6 +24,7 @@ export type ClientDashboardData = {
 	processesGoal: number;
 	activities: ActivityItem[];
 	projects: ProjectCardData[];
+	totalSessions: number;
 };
 
 export function ClientDashboard({
@@ -32,6 +35,22 @@ export function ClientDashboard({
 	basePath: string;
 }) {
 	const t = useTranslations("dashboard");
+	const [welcomeDismissed, setWelcomeDismissed] = useState(() =>
+		typeof window !== "undefined" &&
+		localStorage.getItem("onboarding-welcome-dismissed") === "true",
+	);
+
+	if (data.totalSessions === 0 && !welcomeDismissed) {
+		return (
+			<DashboardWelcome
+				basePath={basePath}
+				onDismiss={() => {
+					localStorage.setItem("onboarding-welcome-dismissed", "true");
+					setWelcomeDismissed(true);
+				}}
+			/>
+		);
+	}
 
 	return (
 		<div className="space-y-6">

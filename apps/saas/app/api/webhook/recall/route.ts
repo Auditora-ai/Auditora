@@ -22,6 +22,30 @@ const lastTeleprompterTime = new Map<string, number>();
 const EXTRACTION_INTERVAL = 15_000;
 const TELEPROMPTER_INTERVAL = 30_000;
 
+// Bot activity state (in-memory, same process as live-data endpoint)
+// WARNING: Only works in single-process deployment (Railway). If scaling
+// to multiple instances, replace with Redis or DB-backed state.
+type BotActivityType = "listening" | "extracting" | "diagramming" | "suggesting";
+interface ActivityState {
+	type: BotActivityType;
+	detail?: string;
+	updatedAt: number;
+}
+export const sessionActivity = new Map<string, ActivityState>();
+
+function setActivity(sessionId: string, type: BotActivityType, detail?: string) {
+	sessionActivity.set(sessionId, { type, detail, updatedAt: Date.now() });
+	console.log(`[Activity] ${sessionId.substring(0, 8)}: ${type}${detail ? ` — ${detail}` : ""}`);
+}
+
+// Cleanup stale entries every 30 minutes (zombie sessions)
+setInterval(() => {
+	const cutoff = Date.now() - 4 * 60 * 60 * 1000;
+	for (const [id, state] of sessionActivity) {
+		if (state.updatedAt < cutoff) sessionActivity.delete(id);
+	}
+}, 30 * 60 * 1000);
+
 function verifyWebhookSignature(body: string, signature: string | null): boolean {
 	const secret = process.env.RECALL_WEBHOOK_SECRET;
 	if (!secret) return true; // Skip verification if secret not configured
@@ -138,148 +162,172 @@ export async function POST(request: NextRequest) {
 
 /** Extract BPMN nodes from recent transcript */
 async function runExtraction(sessionId: string) {
-	// Build business context for context-aware extraction
-	let context: SessionContext | undefined;
+	setActivity(sessionId, "extracting");
+
 	try {
-		context = await buildSessionContext(sessionId);
-	} catch (err) {
-		console.warn("[Extraction] Could not build session context:", err instanceof Error ? err.message : err);
-	}
-
-	const transcript = await db.transcriptEntry.findMany({
-		where: { sessionId },
-		orderBy: { timestamp: "desc" },
-		take: 50,
-	});
-
-	const currentNodes = await db.diagramNode.findMany({
-		where: { sessionId, state: { not: "REJECTED" } },
-	});
-
-	const result = await extractProcessUpdates(
-		currentNodes.map((n) => ({
-			id: n.id,
-			type: n.nodeType.toLowerCase().replace(/_([a-z])/g, (_, c) =>
-				c.toUpperCase(),
-			) as any,
-			label: n.label,
-			state: n.state.toLowerCase() as any,
-			lane: n.lane || undefined,
-			connections: n.connections,
-			positionX: n.positionX,
-			positionY: n.positionY,
-		})),
-		transcript.reverse().map((t) => ({
-			speaker: t.speaker,
-			text: t.text,
-			timestamp: t.timestamp,
-		})),
-		context,
-	);
-
-	// Store new nodes
-	for (const newNode of result.newNodes) {
-		const posX = 200 + currentNodes.length * 200;
-		const posY = 200;
-
-		// Map LLM node type to Prisma enum
-		const typeMap: Record<string, string> = {
-			startEvent: "START_EVENT",
-			endEvent: "END_EVENT",
-			task: "TASK",
-			exclusiveGateway: "EXCLUSIVE_GATEWAY",
-			parallelGateway: "PARALLEL_GATEWAY",
-		};
-
-		await db.diagramNode.create({
-			data: {
-				sessionId,
-				nodeType: (typeMap[newNode.type] || "TASK") as any,
-				label: newNode.label,
-				state: "FORMING",
-				lane: newNode.lane || null,
-				positionX: posX,
-				positionY: posY,
-				connections: newNode.connectTo ? [newNode.connectTo] : [],
-			},
-		});
-
-		console.log(`[Extraction] New node: "${newNode.label}"`);
-	}
-
-	// Log out-of-scope topics
-	if (result.outOfScope && result.outOfScope.length > 0) {
-		for (const item of result.outOfScope) {
-			console.log(
-				`[Extraction] Out of scope: "${item.topic}" -> likely belongs to "${item.likelyProcess}"`,
-			);
+		// Build business context for context-aware extraction
+		let context: SessionContext | undefined;
+		try {
+			context = await buildSessionContext(sessionId);
+		} catch (err) {
+			console.warn("[Extraction] Could not build session context:", err instanceof Error ? err.message : err);
 		}
-		// Store out-of-scope items in teleprompter log for consultant awareness
-		await db.teleprompterLog.create({
-			data: {
-				sessionId,
-				question: `[Scope notice] Topic "${result.outOfScope[0].topic}" may belong to the "${result.outOfScope[0].likelyProcess}" process instead.`,
-			},
-		});
-	}
 
-	if (result.newNodes.length > 0) {
-		console.log(
-			`[Extraction] Added ${result.newNodes.length} nodes for session ${sessionId}`,
+		const transcript = await db.transcriptEntry.findMany({
+			where: { sessionId },
+			orderBy: { timestamp: "desc" },
+			take: 50,
+		});
+
+		const currentNodes = await db.diagramNode.findMany({
+			where: { sessionId, state: { not: "REJECTED" } },
+		});
+
+		const result = await extractProcessUpdates(
+			currentNodes.map((n) => ({
+				id: n.id,
+				type: n.nodeType.toLowerCase().replace(/_([a-z])/g, (_, c) =>
+					c.toUpperCase(),
+				) as any,
+				label: n.label,
+				state: n.state.toLowerCase() as any,
+				lane: n.lane || undefined,
+				connections: n.connections,
+				positionX: n.positionX,
+				positionY: n.positionY,
+			})),
+			transcript.reverse().map((t) => ({
+				speaker: t.speaker,
+				text: t.text,
+				timestamp: t.timestamp,
+			})),
+			context,
 		);
+
+		// Store new nodes
+		for (const newNode of result.newNodes) {
+			const posX = 200 + currentNodes.length * 200;
+			const posY = 200;
+
+			// Map LLM node type to Prisma enum
+			const typeMap: Record<string, string> = {
+				startEvent: "START_EVENT",
+				endEvent: "END_EVENT",
+				task: "TASK",
+				exclusiveGateway: "EXCLUSIVE_GATEWAY",
+				parallelGateway: "PARALLEL_GATEWAY",
+			};
+
+			await db.diagramNode.create({
+				data: {
+					sessionId,
+					nodeType: (typeMap[newNode.type] || "TASK") as any,
+					label: newNode.label,
+					state: "FORMING",
+					lane: newNode.lane || null,
+					positionX: posX,
+					positionY: posY,
+					connections: newNode.connectTo ? [newNode.connectTo] : [],
+				},
+			});
+
+			console.log(`[Extraction] New node: "${newNode.label}"`);
+		}
+
+		// Log out-of-scope topics
+		if (result.outOfScope && result.outOfScope.length > 0) {
+			for (const item of result.outOfScope) {
+				console.log(
+					`[Extraction] Out of scope: "${item.topic}" -> likely belongs to "${item.likelyProcess}"`,
+				);
+			}
+			// Store out-of-scope items in teleprompter log for consultant awareness
+			await db.teleprompterLog.create({
+				data: {
+					sessionId,
+					question: `[Scope notice] Topic "${result.outOfScope[0].topic}" may belong to the "${result.outOfScope[0].likelyProcess}" process instead.`,
+				},
+			});
+		}
+
+		if (result.newNodes.length > 0) {
+			console.log(
+				`[Extraction] Added ${result.newNodes.length} nodes for session ${sessionId}`,
+			);
+			setActivity(sessionId, "diagramming", `${result.newNodes.length} nodos nuevos`);
+			// Hold "diagramming" for 3s so UI catches it on next poll
+			setTimeout(() => setActivity(sessionId, "listening"), 3000);
+		} else {
+			setActivity(sessionId, "listening");
+		}
+	} catch (err) {
+		setActivity(sessionId, "listening");
+		throw err;
 	}
 }
 
 /** Generate next teleprompter question */
 async function runTeleprompter(sessionId: string) {
-	const session = await db.meetingSession.findUnique({
-		where: { id: sessionId },
-		include: { processDefinition: true },
-	});
-	if (!session) return;
+	setActivity(sessionId, "suggesting");
 
-	// Build business context for context-aware question generation
-	let context: SessionContext | undefined;
 	try {
-		context = await buildSessionContext(sessionId);
+		const session = await db.meetingSession.findUnique({
+			where: { id: sessionId },
+			include: { processDefinition: true },
+		});
+		if (!session) {
+			setActivity(sessionId, "listening");
+			return;
+		}
+
+		// Build business context for context-aware question generation
+		let context: SessionContext | undefined;
+		try {
+			context = await buildSessionContext(sessionId);
+		} catch (err) {
+			console.warn("[Teleprompter] Could not build session context:", err instanceof Error ? err.message : err);
+		}
+
+		const transcript = await db.transcriptEntry.findMany({
+			where: { sessionId },
+			orderBy: { timestamp: "desc" },
+			take: 50,
+		});
+
+		const currentNodes = await db.diagramNode.findMany({
+			where: { sessionId, state: { not: "REJECTED" } },
+		});
+
+		const result = await generateNextQuestion(
+			session.type as "DISCOVERY" | "DEEP_DIVE" | "CONTINUATION",
+			currentNodes.map((n) => ({
+				id: n.id,
+				type: n.nodeType.toLowerCase(),
+				label: n.label,
+				lane: n.lane || undefined,
+				connections: n.connections,
+			})),
+			transcript.reverse().map((t) => ({
+				speaker: t.speaker,
+				text: t.text,
+				timestamp: t.timestamp,
+			})),
+			session.processDefinition?.name,
+			context,
+		);
+
+		await db.teleprompterLog.create({
+			data: {
+				sessionId,
+				question: result.nextQuestion,
+			},
+		});
+
+		console.log(`[Teleprompter] "${result.nextQuestion.substring(0, 60)}"`);
+		// Hold "suggesting" for 3s so UI catches it, then return to listening
+		setTimeout(() => setActivity(sessionId, "listening"), 3000);
 	} catch (err) {
-		console.warn("[Teleprompter] Could not build session context:", err instanceof Error ? err.message : err);
+		setActivity(sessionId, "listening");
+		throw err;
 	}
-
-	const transcript = await db.transcriptEntry.findMany({
-		where: { sessionId },
-		orderBy: { timestamp: "desc" },
-		take: 50,
-	});
-
-	const currentNodes = await db.diagramNode.findMany({
-		where: { sessionId, state: { not: "REJECTED" } },
-	});
-
-	const result = await generateNextQuestion(
-		session.type as "DISCOVERY" | "DEEP_DIVE" | "CONTINUATION",
-		currentNodes.map((n) => ({
-			id: n.id,
-			type: n.nodeType.toLowerCase(),
-			label: n.label,
-			lane: n.lane || undefined,
-			connections: n.connections,
-		})),
-		transcript.reverse().map((t) => ({
-			speaker: t.speaker,
-			text: t.text,
-			timestamp: t.timestamp,
-		})),
-		session.processDefinition?.name,
-		context,
-	);
-
-	await db.teleprompterLog.create({
-		data: {
-			sessionId,
-			question: result.nextQuestion,
-		},
-	});
-
-	console.log(`[Teleprompter] "${result.nextQuestion.substring(0, 60)}"`);
 }

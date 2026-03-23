@@ -207,6 +207,18 @@
 		"goToHomepage": "Ir a la página principal"
 	},
 	"onboarding": {
+		"welcome": {
+			"title": "Bienvenido a Prozea",
+			"subtitle": "Tu plataforma de elicitación de procesos con IA",
+			"step1": "Crea un cliente",
+			"step1Desc": "La empresa cuyos procesos vas a mapear",
+			"step2": "Inicia una sesión",
+			"step2Desc": "Únete a una videollamada y deja que la IA te guíe",
+			"step3": "Obtén tu diagrama",
+			"step3Desc": "El proceso se diagrama automáticamente en BPMN",
+			"cta": "Iniciar tu primera sesión",
+			"explore": "Explorar el dashboard primero"
+		},
 		"account": {
 			"avatar": "Avatar",
 			"avatarDescription": "Haz clic en el círculo o arrastra una imagen para subir tu avatar.",
@@ -579,6 +591,7 @@
 		"engagementProgress": "Progreso del Engagement",
 		"processesGoal": "{mapped} de {goal} procesos",
 		"setGoal": "Establecer meta",
+		"emptyProjects": "Tus proyectos aparecerán aquí después de tu primera sesión",
 		"noActivity": "Sin actividad aún. Inicia una sesión para comenzar.",
 		"activity": {
 			"sessionCreated": "Sesión creada",
@@ -703,12 +716,17 @@
 				"meetingUrlHint": "Pega el link de tu reunión de Zoom, Google Meet o Teams",
 				"clientName": "Nombre del cliente",
 				"clientNamePlaceholder": "Acme Corp",
+				"clientHint": "Selecciona o crea la empresa cuyos procesos vas a mapear",
 				"projectName": "Nombre del proyecto",
 				"projectNamePlaceholder": "Optimización de Procesos Q1",
+				"projectHint": "Los proyectos agrupan tus sesiones por departamento o iniciativa",
 				"sessionType": "Tipo de sesión",
 				"sessionTypeHint": "Discovery mapea el panorama general del negocio. Deep Dive se enfoca en un proceso específico.",
 				"typeDiscovery": "Discovery — Panorama del negocio",
 				"typeDeepDive": "Deep Dive — Proceso específico",
+				"typeDiscoveryDesc": "Mapea la arquitectura de procesos de la empresa",
+				"typeDeepDiveDesc": "Profundiza en un proceso específico",
+				"typeContinuationDesc": "Continúa donde quedaste en una sesión anterior",
 				"create": "Crear Sesión y Unirse a la Llamada",
 				"creating": "Conectando..."
 			}

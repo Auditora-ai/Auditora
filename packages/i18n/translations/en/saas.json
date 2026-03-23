@@ -207,6 +207,18 @@
 		"goToHomepage": "Go to homepage"
 	},
 	"onboarding": {
+		"welcome": {
+			"title": "Welcome to Prozea",
+			"subtitle": "Your AI-powered process elicitation platform",
+			"step1": "Create a client",
+			"step1Desc": "The company whose processes you'll map",
+			"step2": "Start a session",
+			"step2Desc": "Join a video call and let AI guide you",
+			"step3": "Get your diagram",
+			"step3Desc": "The process is diagrammed automatically in BPMN",
+			"cta": "Start your first session",
+			"explore": "Explore the dashboard first"
+		},
 		"account": {
 			"avatar": "Avatar",
 			"avatarDescription": "Click the circle or drop an image to it to upload your avatar.",
@@ -579,6 +591,7 @@
 		"engagementProgress": "Engagement Progress",
 		"processesGoal": "{mapped} of {goal} processes",
 		"setGoal": "Set goal",
+		"emptyProjects": "Your projects will appear here after your first session",
 		"noActivity": "No activity yet. Start a session to begin.",
 		"activity": {
 			"sessionCreated": "Session created",
@@ -703,12 +716,17 @@
 				"meetingUrlHint": "Paste your Zoom, Google Meet, or Teams meeting link",
 				"clientName": "Client Name",
 				"clientNamePlaceholder": "Acme Corp",
+				"clientHint": "Select or create the company whose processes you'll map",
 				"projectName": "Project Name",
 				"projectNamePlaceholder": "Process Optimization Q1",
+				"projectHint": "Projects group your sessions by department or initiative",
 				"sessionType": "Session Type",
 				"sessionTypeHint": "Discovery maps the business overview. Deep Dive focuses on a specific process.",
 				"typeDiscovery": "Discovery — Business overview",
 				"typeDeepDive": "Deep Dive — Specific process",
+				"typeDiscoveryDesc": "Map the company's process architecture",
+				"typeDeepDiveDesc": "Deep dive into a specific process",
+				"typeContinuationDesc": "Continue where you left off in a previous session",
 				"create": "Create Session & Join Call",
 				"creating": "Connecting..."
 			}

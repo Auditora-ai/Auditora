@@ -25,6 +25,7 @@ interface UseBpmnModelerOptions {
 interface ModelerAPI {
 	modeler: any;
 	isReady: boolean;
+	renderError: string | null;
 	mergeAiNodes: (nodes: DiagramNode[]) => void;
 	zoomIn: () => void;
 	zoomOut: () => void;
@@ -47,11 +48,13 @@ export function useBpmnModeler({
 }: UseBpmnModelerOptions): ModelerAPI {
 	const modelerRef = useRef<any>(null);
 	const [isReady, setIsReady] = useState(false);
+	const [renderError, setRenderError] = useState<string | null>(null);
 	const [canUndo, setCanUndo] = useState(false);
 	const [canRedo, setCanRedo] = useState(false);
 	const [gridEnabled, setGridEnabled] = useState(false);
 	const [selectedElement, setSelectedElement] = useState<any>(null);
 	const lastXmlRef = useRef<string>("");
+	const importingRef = useRef(false);
 
 	// Initialize Modeler
 	useEffect(() => {
@@ -128,20 +131,24 @@ export function useBpmnModeler({
 		async (nodes: DiagramNode[]) => {
 			const modeler = modelerRef.current;
 			if (!modeler || !isReady) return;
+			if (importingRef.current) return; // Prevent concurrent imports
 
 			const visibleNodes = nodes.filter((n) => n.state !== "rejected");
 			const xml = buildBpmnXml(visibleNodes);
 
 			// Skip if XML hasn't changed
 			if (xml === lastXmlRef.current) return;
-			lastXmlRef.current = xml;
 
+			importingRef.current = true;
 			try {
 				await modeler.importXML(xml);
+				lastXmlRef.current = xml; // Only cache after successful import
 
 				// Fit diagram to viewport
 				const canvas = modeler.get("canvas");
 				canvas.zoom("fit-viewport", "auto");
+
+				setRenderError(null);
 
 				// Apply state-based styling and overlays
 				const elementRegistry = modeler.get("elementRegistry");
@@ -173,6 +180,12 @@ export function useBpmnModeler({
 				}
 			} catch (err) {
 				console.error("[useBpmnModeler] Failed to render BPMN:", err);
+				setRenderError(
+					`Diagram render failed: ${err instanceof Error ? err.message : "unknown error"}`,
+				);
+				// Don't cache failed XML — next poll will retry
+			} finally {
+				importingRef.current = false;
 			}
 		},
 		[isReady, onConfirmNode, onRejectNode],
@@ -218,6 +231,7 @@ export function useBpmnModeler({
 	return {
 		modeler: modelerRef.current,
 		isReady,
+		renderError,
 		mergeAiNodes,
 		zoomIn,
 		zoomOut,

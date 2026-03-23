@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
 import { createCallBotProvider, generateSessionSummary } from "@repo/ai";
+import { sessionActivity } from "../../../webhook/recall/route";
 
 export async function POST(
 	request: NextRequest,
@@ -41,6 +42,9 @@ export async function POST(
 			where: { id: sessionId },
 			data: { status: "ENDED", endedAt: new Date() },
 		});
+
+		// Clean up in-memory activity state
+		sessionActivity.delete(sessionId);
 
 		// Auto-version process and architecture (non-blocking)
 		autoVersionOnSessionEnd(sessionId, session).catch((err) =>

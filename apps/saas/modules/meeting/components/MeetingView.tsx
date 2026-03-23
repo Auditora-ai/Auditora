@@ -1,12 +1,16 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { TeleprompterPanel } from "./TeleprompterPanel";
 import { DiagramPanel } from "./DiagramPanel";
 import { TranscriptPanel } from "./TranscriptPanel";
 import { StatusBar } from "./StatusBar";
-import type { DiagramNode } from "../types";
+import type {
+	DiagramNode,
+	BotActivity,
+	ActivityLogEntry,
+} from "../types";
 
 /**
  * MeetingView — Core 3-panel layout for live process elicitation
@@ -78,6 +82,19 @@ export function MeetingView({
 	const [isFullscreen, setIsFullscreen] = useState(false);
 	const [sessionStatus, setSessionStatus] = useState<"ACTIVE" | "ENDED">("ACTIVE");
 
+	// Bot activity feedback state
+	const [botActivity, setBotActivity] = useState<BotActivity>({
+		type: "listening",
+		detail: null,
+		updatedAt: null,
+		stale: true,
+	});
+	const [activityLog, setActivityLog] = useState<ActivityLogEntry[]>([]);
+	const prevNodeCountRef = useRef(0);
+	const prevQuestionRef = useRef<string | null>(null);
+	const [newNodesArrived, setNewNodesArrived] = useState(false);
+	const [newQuestionArrived, setNewQuestionArrived] = useState(false);
+
 	// Save previous layout when entering fullscreen, restore on exit
 	const [prevLayout, setPrevLayout] = useState<LayoutPreset>("balanced");
 	const currentLayout = LAYOUT_PRESETS[isFullscreen ? "fullscreen" : layout];
@@ -118,12 +135,37 @@ export function MeetingView({
 				setNodes(data.nodes);
 			}
 
+			// Detect new nodes for panel flash + sound
+			const nodeCount = data.nodes?.length ?? 0;
+			if (nodeCount > prevNodeCountRef.current && prevNodeCountRef.current > 0) {
+				setNewNodesArrived(true);
+				setTimeout(() => setNewNodesArrived(false), 100);
+			}
+			prevNodeCountRef.current = nodeCount;
+
+			// Detect new teleprompter question for panel flash
 			if (data.teleprompterQuestion) {
+				if (
+					prevQuestionRef.current &&
+					data.teleprompterQuestion !== prevQuestionRef.current
+				) {
+					setNewQuestionArrived(true);
+					setTimeout(() => setNewQuestionArrived(false), 100);
+				}
+				prevQuestionRef.current = data.teleprompterQuestion;
 				setCurrentQuestion(data.teleprompterQuestion);
 			}
 
 			if (data.questionQueue?.length > 0) {
 				setQuestionQueue(data.questionQueue);
+			}
+
+			// Bot activity state
+			if (data.botActivity) {
+				const activity = data.botActivity.stale
+					? { ...data.botActivity, type: "listening" as const }
+					: data.botActivity;
+				setBotActivity(activity);
 			}
 
 			if (data.status === "ENDED") {
@@ -141,6 +183,27 @@ export function MeetingView({
 		fetchLiveData();
 		return () => clearInterval(interval);
 	}, [fetchLiveData]);
+
+	// Activity log — append on activity changes (deduplicated)
+	useEffect(() => {
+		if (botActivity.type === "listening" || !botActivity.detail) return;
+		setActivityLog((prev) => {
+			const last = prev.at(-1);
+			if (
+				last &&
+				last.type === botActivity.type &&
+				Date.now() - last.timestamp < 5000
+			) {
+				return prev;
+			}
+			const entry: ActivityLogEntry = {
+				type: botActivity.type,
+				detail: botActivity.detail!,
+				timestamp: Date.now(),
+			};
+			return [...prev.slice(-2), entry];
+		});
+	}, [botActivity]);
 
 	// Elapsed time counter
 	useEffect(() => {
@@ -204,6 +267,7 @@ export function MeetingView({
 							questionQueue={questionQueue}
 							aiSuggestion={aiSuggestion}
 							sessionType={sessionType}
+							isFlashing={newQuestionArrived}
 						/>
 					</div>
 				)}

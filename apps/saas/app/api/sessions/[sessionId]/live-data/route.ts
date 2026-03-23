@@ -9,6 +9,9 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
+// WARNING: This import works because both route files run in the same
+// Node.js process on Railway. See webhook route for deployment assumptions.
+import { sessionActivity } from "../../../webhook/recall/route";
 
 export async function GET(
 	request: NextRequest,
@@ -66,6 +69,10 @@ export async function GET(
 		const teleprompterQuestion = recentQuestions[0]?.question || null;
 		const questionQueue = recentQuestions.slice(1).map((q) => q.question);
 
+		// Bot activity state from in-memory Map
+		const activity = sessionActivity.get(sessionId);
+		const STALE_THRESHOLD = 60_000; // 60s
+
 		return NextResponse.json({
 			status: session.status,
 			transcript: transcript.map((t) => ({
@@ -84,6 +91,14 @@ export async function GET(
 			})),
 			teleprompterQuestion,
 			questionQueue,
+			botActivity: {
+				type: activity?.type ?? "listening",
+				detail: activity?.detail ?? null,
+				updatedAt: activity?.updatedAt ?? null,
+				stale: activity
+					? Date.now() - activity.updatedAt > STALE_THRESHOLD
+					: true,
+			},
 		});
 	} catch (error) {
 		console.error("[LiveData] Error:", error);

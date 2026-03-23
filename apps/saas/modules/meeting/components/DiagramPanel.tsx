@@ -60,6 +60,7 @@ export function DiagramPanel({
 
 	const {
 		isReady,
+		renderError,
 		mergeAiNodes,
 		zoomIn,
 		zoomOut,
@@ -194,6 +195,13 @@ export function DiagramPanel({
 			{/* Canvas + Properties Panel */}
 			<div className="relative flex-1">
 				<div ref={containerRef} className="bpmn-editor-canvas h-full w-full" />
+
+				{/* Render error banner */}
+				{renderError && (
+					<div className="absolute left-1/2 top-2 z-10 -translate-x-1/2 rounded-md border border-amber-300 bg-amber-50 px-3 py-1.5 text-xs text-amber-800 shadow-sm">
+						{renderError}
+					</div>
+				)}
 
 				{/* Properties Panel (slide-in drawer) */}
 				<BpmnPropertiesPanel
