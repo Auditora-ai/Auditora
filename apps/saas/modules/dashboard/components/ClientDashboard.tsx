@@ -158,7 +158,7 @@ export function ClientDashboard({
 										<span className="font-medium text-sm truncate">{p.name}</span>
 										<div className="flex items-center gap-1.5 shrink-0">
 											{p.category && (
-												<Badge variant="outline" className="text-xs">
+												<Badge className="text-xs">
 													{p.category}
 												</Badge>
 											)}

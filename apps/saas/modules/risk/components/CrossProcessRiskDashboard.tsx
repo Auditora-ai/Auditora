@@ -121,7 +121,7 @@ export function CrossProcessRiskDashboard() {
           <ShieldAlertIcon className="h-5 w-5" />
           Riesgos por Proceso
           {orgSummary && (
-            <Badge variant="secondary" className="ml-2 font-normal">
+            <Badge status="info" className="ml-2 font-normal">
               {orgSummary.totalRisks} riesgos totales
             </Badge>
           )}
@@ -229,7 +229,7 @@ export function CrossProcessRiskDashboard() {
             </p>
             <div className="flex flex-wrap gap-2">
               {orgSummary.topRiskTypes.slice(0, 5).map((rt) => (
-                <Badge key={rt.type} variant="secondary">
+                <Badge key={rt.type} status="info">
                   {rt.type} ({rt.count})
                 </Badge>
               ))}

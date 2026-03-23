@@ -19,7 +19,7 @@ export async function generateMetadata({
 function generateInsight(
 	processCount: number,
 	stats: { core: number; strategic: number; support: number },
-	t: (key: string, values?: Record<string, unknown>) => string,
+	t: (key: string, values?: Record<string, string | number>) => string,
 ): string {
 	if (processCount === 0) {
 		return t("insight.empty");
@@ -95,7 +95,7 @@ export default async function OrganizationPage({
 				architecture: { organizationId: orgId },
 				bpmnXml: { not: null },
 			},
-			orderBy: { updatedAt: "desc" },
+			orderBy: { createdAt: "desc" },
 			select: { id: true, name: true, bpmnXml: true },
 		}),
 		// Recent processes

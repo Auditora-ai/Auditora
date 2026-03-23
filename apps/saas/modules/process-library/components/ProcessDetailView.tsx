@@ -1220,12 +1220,11 @@ function DocumentsTab({ organizationSlug }: { organizationSlug: string }) {
 		try {
 			for (const file of Array.from(files)) {
 				const { orpcClient } = await import("@shared/lib/orpc-client");
-				const { url, documentId } = await orpcClient.documents.createUploadUrl({
+				const { signedUploadUrl, documentId } = await orpcClient.documents.createUploadUrl({
 					fileName: file.name,
 					mimeType: file.type,
-					fileSize: file.size,
 				});
-				await fetch(url, { method: "PUT", body: file, headers: { "Content-Type": file.type } });
+				await fetch(signedUploadUrl, { method: "PUT", body: file, headers: { "Content-Type": file.type } });
 			}
 			await fetchDocs();
 		} catch (err) {

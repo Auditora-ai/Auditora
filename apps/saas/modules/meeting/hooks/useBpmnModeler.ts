@@ -395,7 +395,7 @@ export function useBpmnModeler({
 				} catch {
 					// ok
 				}
-				if (node.state === "forming") {
+				if (node.state === "forming" && onConfirmNode && onRejectNode) {
 					addFormingOverlay(
 						overlays,
 						node,
