@@ -17,6 +17,7 @@ import {
 	DownloadIcon,
 	TrashIcon,
 } from "lucide-react";
+import { ExtractProcessesButton } from "./ExtractProcessesButton";
 
 type Document = {
 	id: string;
@@ -24,6 +25,8 @@ type Document = {
 	mimeType: string;
 	fileSize: number;
 	createdAt: Date;
+	isProcessed?: boolean;
+	extractedText?: string | null;
 };
 
 function formatFileSize(bytes: number): string {
@@ -47,10 +50,14 @@ export function DocumentList({
 	documents,
 	onDownload,
 	onDelete,
+	showExtract = false,
+	onExtracted,
 }: {
 	documents: Document[];
 	onDownload?: (id: string) => void;
 	onDelete?: (id: string) => void;
+	showExtract?: boolean;
+	onExtracted?: () => void;
 }) {
 	if (documents.length === 0) {
 		return (
@@ -104,7 +111,14 @@ export function DocumentList({
 									).toLocaleDateString()}
 								</TableCell>
 								<TableCell className="text-right">
-									<div className="flex items-center justify-end gap-1">
+									<div className="flex items-center justify-end gap-2">
+										{showExtract && (
+											<ExtractProcessesButton
+												documentId={doc.id}
+												hasExtractedText={!!doc.extractedText}
+												onExtracted={() => onExtracted?.()}
+											/>
+										)}
 										{onDownload && (
 											<Button
 												variant="ghost"

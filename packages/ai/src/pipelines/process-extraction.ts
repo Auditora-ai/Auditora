@@ -23,8 +23,19 @@ const VALID_NODE_TYPES = [
   "startEvent",
   "endEvent",
   "task",
+  "userTask",
+  "serviceTask",
+  "manualTask",
+  "businessRuleTask",
+  "subProcess",
   "exclusiveGateway",
   "parallelGateway",
+  "timerEvent",
+  "messageEvent",
+  "signalEvent",
+  "conditionalEvent",
+  "textAnnotation",
+  "dataObject",
 ] as const;
 
 const NewNodeSchema = z.object({
@@ -56,18 +67,13 @@ const ExtractionResultSchema = z.object({
 
 export interface BpmnNode {
   id: string;
-  type:
-    | "startEvent"
-    | "endEvent"
-    | "task"
-    | "exclusiveGateway"
-    | "parallelGateway";
+  type: string;
   label: string;
   state: "forming" | "confirmed" | "rejected";
   lane?: string;
   connections: string[];
-  positionX: number;
-  positionY: number;
+  positionX?: number;
+  positionY?: number;
 }
 
 export interface ExtractionResult {

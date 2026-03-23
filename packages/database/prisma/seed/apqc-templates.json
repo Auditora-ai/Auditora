@@ -1,0 +1,104 @@
+[
+  {
+    "framework": "APQC",
+    "industry": "Manufacturing",
+    "name": "Manufacturing Process Framework",
+    "description": "APQC Process Classification Framework adapted for manufacturing companies",
+    "structure": {
+      "processes": [
+        { "name": "Develop Vision and Strategy", "description": "Define business concept, organizational strategy, and strategic initiatives", "category": "strategic" },
+        { "name": "Develop and Manage Products and Services", "description": "Design, prototype, and manage product lifecycle including new product development", "category": "core" },
+        { "name": "Market and Sell Products and Services", "description": "Marketing strategy, lead generation, sales management, and customer acquisition", "category": "core" },
+        { "name": "Deliver Physical Products", "description": "Plan and manage supply chain, production, warehousing, and logistics", "category": "core" },
+        { "name": "Manage Customer Service", "description": "Handle customer inquiries, complaints, returns, and after-sales support", "category": "core" },
+        { "name": "Develop and Manage Human Capital", "description": "Recruit, develop, retain employees and manage workforce planning", "category": "support" },
+        { "name": "Manage Information Technology", "description": "IT strategy, infrastructure, applications, data management, and cybersecurity", "category": "support" },
+        { "name": "Manage Financial Resources", "description": "Financial planning, accounting, treasury, tax, and internal audit", "category": "support" },
+        { "name": "Acquire, Construct, and Manage Assets", "description": "Capital planning, facility management, and equipment maintenance", "category": "support" },
+        { "name": "Manage Enterprise Risk and Compliance", "description": "Risk management, regulatory compliance, quality management, and EHS", "category": "strategic" },
+        { "name": "Manage External Relationships", "description": "Government relations, community engagement, and stakeholder management", "category": "support" },
+        { "name": "Develop and Manage Business Capabilities", "description": "Process improvement, change management, and organizational knowledge", "category": "strategic" }
+      ]
+    }
+  },
+  {
+    "framework": "APQC",
+    "industry": "Financial Services",
+    "name": "Financial Services Process Framework",
+    "description": "APQC Process Classification Framework adapted for banks and financial institutions",
+    "structure": {
+      "processes": [
+        { "name": "Develop Vision and Strategy", "description": "Define strategic direction, business model, and competitive positioning", "category": "strategic" },
+        { "name": "Develop and Manage Financial Products", "description": "Design, price, and manage financial products (loans, deposits, investments)", "category": "core" },
+        { "name": "Market and Sell Financial Services", "description": "Marketing, customer acquisition, relationship management, and cross-selling", "category": "core" },
+        { "name": "Process Financial Transactions", "description": "Transaction processing, payment clearing, settlement, and reconciliation", "category": "core" },
+        { "name": "Manage Risk and Compliance", "description": "Credit risk, market risk, operational risk, AML/KYC, and regulatory compliance", "category": "core" },
+        { "name": "Manage Customer Service", "description": "Account servicing, dispute resolution, claims processing, and customer support", "category": "core" },
+        { "name": "Manage Credit and Lending", "description": "Credit assessment, loan origination, underwriting, and collections", "category": "core" },
+        { "name": "Develop and Manage Human Capital", "description": "Talent management, training, compensation, and workforce planning", "category": "support" },
+        { "name": "Manage Information Technology", "description": "Core banking systems, digital channels, cybersecurity, and data management", "category": "support" },
+        { "name": "Manage Financial Resources", "description": "Treasury, capital management, financial reporting, and audit", "category": "support" }
+      ]
+    }
+  },
+  {
+    "framework": "APQC",
+    "industry": "Healthcare",
+    "name": "Healthcare Process Framework",
+    "description": "APQC Process Classification Framework adapted for healthcare organizations",
+    "structure": {
+      "processes": [
+        { "name": "Develop Vision and Strategy", "description": "Healthcare strategy, service line planning, and quality improvement initiatives", "category": "strategic" },
+        { "name": "Manage Patient Access", "description": "Scheduling, registration, insurance verification, and patient intake", "category": "core" },
+        { "name": "Provide Clinical Care", "description": "Diagnosis, treatment, care coordination, and clinical documentation", "category": "core" },
+        { "name": "Manage Pharmacy and Medications", "description": "Medication management, dispensing, formulary management, and drug safety", "category": "core" },
+        { "name": "Manage Revenue Cycle", "description": "Charge capture, coding, billing, collections, and payer management", "category": "core" },
+        { "name": "Manage Quality and Patient Safety", "description": "Clinical quality measures, patient safety programs, and accreditation", "category": "core" },
+        { "name": "Manage Supply Chain", "description": "Procurement, inventory, equipment management, and vendor relations", "category": "support" },
+        { "name": "Develop and Manage Human Capital", "description": "Credentialing, staffing, training, and workforce management", "category": "support" },
+        { "name": "Manage Health Information Technology", "description": "EHR management, health data exchange, telehealth, and cybersecurity", "category": "support" },
+        { "name": "Manage Compliance and Risk", "description": "HIPAA compliance, clinical risk, regulatory reporting, and legal affairs", "category": "strategic" }
+      ]
+    }
+  },
+  {
+    "framework": "APQC",
+    "industry": "Retail",
+    "name": "Retail Process Framework",
+    "description": "APQC Process Classification Framework adapted for retail companies",
+    "structure": {
+      "processes": [
+        { "name": "Develop Vision and Strategy", "description": "Retail strategy, format planning, and market positioning", "category": "strategic" },
+        { "name": "Manage Merchandising", "description": "Category management, assortment planning, pricing, and promotions", "category": "core" },
+        { "name": "Manage Supply Chain and Logistics", "description": "Sourcing, procurement, distribution, inventory management, and fulfillment", "category": "core" },
+        { "name": "Market and Sell Products", "description": "Marketing, omnichannel sales, loyalty programs, and customer engagement", "category": "core" },
+        { "name": "Manage Store Operations", "description": "Store staffing, visual merchandising, POS operations, and loss prevention", "category": "core" },
+        { "name": "Manage E-commerce Operations", "description": "Online storefront, digital marketing, order fulfillment, and returns", "category": "core" },
+        { "name": "Manage Customer Experience", "description": "Customer service, returns, complaints, and satisfaction measurement", "category": "core" },
+        { "name": "Develop and Manage Human Capital", "description": "Store staffing, training, labor scheduling, and employee engagement", "category": "support" },
+        { "name": "Manage Information Technology", "description": "POS systems, e-commerce platform, analytics, and data management", "category": "support" },
+        { "name": "Manage Financial Resources", "description": "Financial planning, accounting, loss prevention analytics, and reporting", "category": "support" }
+      ]
+    }
+  },
+  {
+    "framework": "APQC",
+    "industry": "Technology",
+    "name": "Technology Company Process Framework",
+    "description": "APQC Process Classification Framework adapted for technology and SaaS companies",
+    "structure": {
+      "processes": [
+        { "name": "Develop Vision and Strategy", "description": "Product vision, technology roadmap, and go-to-market strategy", "category": "strategic" },
+        { "name": "Develop Products and Technology", "description": "Product management, engineering, architecture, QA, and release management", "category": "core" },
+        { "name": "Market and Sell Solutions", "description": "Marketing, demand generation, sales, partnerships, and customer acquisition", "category": "core" },
+        { "name": "Deliver and Support Services", "description": "Implementation, onboarding, technical support, and customer success", "category": "core" },
+        { "name": "Manage Platform Operations", "description": "Infrastructure, DevOps, monitoring, incident response, and SLA management", "category": "core" },
+        { "name": "Manage Customer Lifecycle", "description": "Onboarding, adoption, expansion, renewal, and churn prevention", "category": "core" },
+        { "name": "Develop and Manage Human Capital", "description": "Engineering hiring, culture, professional development, and retention", "category": "support" },
+        { "name": "Manage Information Security", "description": "Security architecture, compliance (SOC2, ISO), data privacy, and incident response", "category": "support" },
+        { "name": "Manage Financial Resources", "description": "Revenue recognition, SaaS metrics, budgeting, and investor relations", "category": "support" },
+        { "name": "Manage Enterprise Risk", "description": "IP protection, vendor risk, regulatory compliance, and business continuity", "category": "strategic" }
+      ]
+    }
+  }
+]

@@ -9,20 +9,32 @@
  */
 
 import type { DiagramNode } from "../types";
-
-const TASK_W = 100;
-const TASK_H = 80;
-const GW_SIZE = 50;
-const EVENT_SIZE = 36;
-const LANE_H = 150;
-const X_GAP = 180;
-const Y_PAD = 50;
-const POOL_X = 0;
-const CONTENT_X = 160;
+import {
+	TASK_W,
+	TASK_H,
+	GW_SIZE,
+	EVENT_SIZE,
+	LANE_H,
+	X_GAP,
+	Y_PAD,
+	POOL_X,
+	CONTENT_X,
+} from "./layout-constants";
+import { escapeHtml as esc } from "./html-utils";
 
 export function bpmnTag(type: string): string {
 	const map: Record<string, string> = {
 		task: "task",
+		user_task: "userTask",
+		usertask: "userTask",
+		service_task: "serviceTask",
+		servicetask: "serviceTask",
+		manual_task: "manualTask",
+		manualtask: "manualTask",
+		business_rule_task: "businessRuleTask",
+		businessruletask: "businessRuleTask",
+		subprocess: "subProcess",
+		sub_process: "subProcess",
 		start_event: "startEvent",
 		startevent: "startEvent",
 		end_event: "endEvent",
@@ -31,6 +43,18 @@ export function bpmnTag(type: string): string {
 		exclusivegateway: "exclusiveGateway",
 		parallel_gateway: "parallelGateway",
 		parallelgateway: "parallelGateway",
+		timer_event: "intermediateCatchEvent",
+		timerevent: "intermediateCatchEvent",
+		message_event: "intermediateCatchEvent",
+		messageevent: "intermediateCatchEvent",
+		signal_event: "intermediateCatchEvent",
+		signalevent: "intermediateCatchEvent",
+		conditional_event: "intermediateCatchEvent",
+		conditionalevent: "intermediateCatchEvent",
+		text_annotation: "textAnnotation",
+		textannotation: "textAnnotation",
+		data_object: "dataObjectReference",
+		dataobject: "dataObjectReference",
 	};
 	return map[type.toLowerCase()] || "task";
 }
@@ -38,7 +62,11 @@ export function bpmnTag(type: string): string {
 export function dims(type: string) {
 	const tag = bpmnTag(type);
 	if (tag.includes("Gateway")) return { w: GW_SIZE, h: GW_SIZE };
-	if (tag.includes("Event")) return { w: EVENT_SIZE, h: EVENT_SIZE };
+	if (tag.includes("Event") || tag === "intermediateCatchEvent")
+		return { w: EVENT_SIZE, h: EVENT_SIZE };
+	if (tag === "subProcess") return { w: 120, h: 100 };
+	if (tag === "textAnnotation") return { w: 100, h: 30 };
+	if (tag === "dataObjectReference") return { w: 36, h: 50 };
 	return { w: TASK_W, h: TASK_H };
 }
 
@@ -47,20 +75,20 @@ export function bpmnType(type: string): string {
 	const tag = bpmnTag(type);
 	const map: Record<string, string> = {
 		task: "bpmn:Task",
+		userTask: "bpmn:UserTask",
+		serviceTask: "bpmn:ServiceTask",
+		manualTask: "bpmn:ManualTask",
+		businessRuleTask: "bpmn:BusinessRuleTask",
+		subProcess: "bpmn:SubProcess",
 		startEvent: "bpmn:StartEvent",
 		endEvent: "bpmn:EndEvent",
 		exclusiveGateway: "bpmn:ExclusiveGateway",
 		parallelGateway: "bpmn:ParallelGateway",
+		intermediateCatchEvent: "bpmn:IntermediateCatchEvent",
+		textAnnotation: "bpmn:TextAnnotation",
+		dataObjectReference: "bpmn:DataObjectReference",
 	};
 	return map[tag] || "bpmn:Task";
-}
-
-function esc(s: string): string {
-	return s
-		.replace(/&/g, "&amp;")
-		.replace(/</g, "&lt;")
-		.replace(/>/g, "&gt;")
-		.replace(/"/g, "&quot;");
 }
 
 /**

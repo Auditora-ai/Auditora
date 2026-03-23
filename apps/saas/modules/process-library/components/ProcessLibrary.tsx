@@ -9,6 +9,10 @@ import { ProcessCard, type ProcessCardData } from "./ProcessCard";
 import { ProcessFilters, type FilterState } from "./ProcessFilters";
 import { DiscoveryPanel } from "@discovery/components/DiscoveryPanel";
 import { AddProcessModal } from "./AddProcessModal";
+import { ImportBpmnDialog } from "./ImportBpmnDialog";
+import { TemplatePicker } from "./TemplatePicker";
+import { ExportReportButton } from "./ExportReportButton";
+import { Upload, Layers } from "lucide-react";
 
 const CATEGORY_TABS = [
 	{ key: "all", label: "Todos" },
@@ -19,16 +23,12 @@ const CATEGORY_TABS = [
 
 export function ProcessLibrary({
 	processes,
-	projects,
 	basePath,
-	activeProjectId,
-	clientName,
+	organizationId,
 }: {
 	processes: ProcessCardData[];
-	projects: { id: string; name: string }[];
 	basePath: string;
-	activeProjectId?: string;
-	clientName?: string;
+	organizationId: string;
 }) {
 	const t = useTranslations("processLibrary");
 	const router = useRouter();
@@ -36,11 +36,12 @@ export function ProcessLibrary({
 		search: "",
 		status: "all",
 		level: "all",
-		projectId: "all",
 	});
 	const [categoryTab, setCategoryTab] = useState<string>("all");
 	const [showDiscovery, setShowDiscovery] = useState(false);
 	const [showAddModal, setShowAddModal] = useState(false);
+	const [showImport, setShowImport] = useState(false);
+	const [showTemplates, setShowTemplates] = useState(false);
 
 	const filteredProcesses = useMemo(() => {
 		return processes.filter((p) => {
@@ -54,12 +55,6 @@ export function ProcessLibrary({
 				return false;
 			}
 			if (filters.level !== "all" && p.level !== filters.level) {
-				return false;
-			}
-			if (
-				filters.projectId !== "all" &&
-				p.projectId !== filters.projectId
-			) {
 				return false;
 			}
 			if (categoryTab !== "all" && p.category !== categoryTab) {
@@ -110,6 +105,23 @@ export function ProcessLibrary({
 				</div>
 
 				<div className="flex gap-2">
+					<ExportReportButton />
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => setShowImport(true)}
+					>
+						<Upload className="mr-1.5 size-4" />
+						Importar
+					</Button>
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => setShowTemplates(true)}
+					>
+						<Layers className="mr-1.5 size-4" />
+						Templates
+					</Button>
 					<Button
 						variant="outline"
 						size="sm"
@@ -118,22 +130,19 @@ export function ProcessLibrary({
 						<PlusIcon className="mr-1.5 size-4" />
 						Manual
 					</Button>
-					{activeProjectId && (
-						<Button
-							size="sm"
-							onClick={() => setShowDiscovery(true)}
-						>
-							<SparklesIcon className="mr-1.5 size-4" />
-							Discovery con IA
-						</Button>
-					)}
+					<Button
+						size="sm"
+						onClick={() => setShowDiscovery(true)}
+					>
+						<SparklesIcon className="mr-1.5 size-4" />
+						Discovery con IA
+					</Button>
 				</div>
 			</div>
 
 			<ProcessFilters
 				filters={filters}
 				onFiltersChange={setFilters}
-				projects={projects}
 			/>
 
 			{filteredProcesses.length === 0 ? (
@@ -157,14 +166,12 @@ export function ProcessLibrary({
 							<PlusIcon className="mr-2 size-4" />
 							Agregar manual
 						</Button>
-						{activeProjectId && (
-							<Button
-								onClick={() => setShowDiscovery(true)}
-							>
-								<SparklesIcon className="mr-2 size-4" />
-								Discovery con IA
-							</Button>
-						)}
+						<Button
+							onClick={() => setShowDiscovery(true)}
+						>
+							<SparklesIcon className="mr-2 size-4" />
+							Discovery con IA
+						</Button>
 					</div>
 				</div>
 			) : (
@@ -195,23 +202,37 @@ export function ProcessLibrary({
 			)}
 
 			{/* Discovery panel */}
-			{showDiscovery && activeProjectId && (
+			{showDiscovery && (
 				<DiscoveryPanel
-					projectId={activeProjectId}
-					clientName={clientName}
+					organizationId={organizationId}
 					onClose={() => setShowDiscovery(false)}
 					onProcessAccepted={handleProcessAccepted}
 				/>
 			)}
 
 			{/* Add process modal */}
-			{showAddModal && activeProjectId && (
+			{showAddModal && (
 				<AddProcessModal
-					projectId={activeProjectId}
+					organizationId={organizationId}
 					onClose={() => setShowAddModal(false)}
 					onCreated={handleProcessAccepted}
 				/>
 			)}
+
+			{/* Import BPMN dialog */}
+			<ImportBpmnDialog
+				open={showImport}
+				onOpenChange={setShowImport}
+				architectureId={organizationId}
+				onImported={handleProcessAccepted}
+			/>
+
+			{/* Template picker */}
+			<TemplatePicker
+				open={showTemplates}
+				onOpenChange={setShowTemplates}
+				onApplied={handleProcessAccepted}
+			/>
 		</div>
 	);
 }

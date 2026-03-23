@@ -1,6 +1,7 @@
 import { getActiveOrganization } from "@auth/lib/server";
 import { db } from "@repo/database";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
+import { ProcessDetailView } from "@process-library/components/ProcessDetailView";
 
 export async function generateMetadata({
 	params,
@@ -28,28 +29,37 @@ export default async function ProcessDetailPage({
 	const process = await db.processDefinition.findUnique({
 		where: { id: processId },
 		include: {
-			architecture: {
-				include: {
-					project: {
-						include: { client: true },
-					},
-				},
+			_count: {
+				select: { sessions: true, versions: true, raciEntries: true, conflicts: true },
 			},
 		},
 	});
 
 	if (!process) return notFound();
+	if (process.organizationId !== activeOrganization.id) return notFound();
 
-	// Verify the process belongs to this organization
-	if (process.architecture.project.client.organizationId !== activeOrganization.id) {
-		return notFound();
-	}
+	const sessionCount = process._count.sessions;
 
-	// Redirect to the full nested route where ProcessDetail component lives
-	const clientId = process.architecture.project.clientId;
-	const projectId = process.architecture.projectId;
-
-	redirect(
-		`/${organizationSlug}/clients/${clientId}/projects/${projectId}/processes/${processId}`,
+	return (
+		<ProcessDetailView
+			process={{
+				id: process.id,
+				name: process.name,
+				description: process.description,
+				level: process.level,
+				processStatus: process.processStatus,
+				category: process.category,
+				owner: process.owner,
+				goals: process.goals,
+				triggers: process.triggers,
+				outputs: process.outputs,
+				bpmnXml: process.bpmnXml,
+				sessionsCount: sessionCount,
+				versionsCount: process._count.versions,
+				raciCount: process._count.raciEntries,
+				conflictsCount: process._count.conflicts,
+			}}
+			basePath={`/${organizationSlug}`}
+		/>
 	);
 }

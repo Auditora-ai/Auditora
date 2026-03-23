@@ -142,10 +142,19 @@ model Organization {
   createdAt          DateTime
   metadata           String?
   paymentsCustomerId String?
+  // Client profile fields (migrated from Client model)
+  industry           String?
+  operationsProfile  String?      @db.Text
+  businessModel      String?      @db.Text
+  employeeCount      String?
+  notes              String?      @db.Text
   members            Member[]
   invitations        Invitation[]
   purchases          Purchase[]
-  clients            Client[]
+  sessions           MeetingSession[]
+  architecture       ProcessArchitecture?
+  documents          Document[]
+  discoveryThreads   DiscoveryThread[]
 
   @@unique([slug])
   @@map("organization")
@@ -195,16 +204,11 @@ enum SessionType {
 }
 
 enum ProcessLevel {
+  MACRO_PROCESS
   PROCESS
   SUBPROCESS
   TASK
   PROCEDURE
-}
-
-enum ProjectStatus {
-  ACTIVE
-  COMPLETED
-  ON_HOLD
 }
 
 enum SessionStatus {
@@ -226,56 +230,29 @@ enum NodeType {
   START_EVENT
   END_EVENT
   TASK
+  USER_TASK
+  SERVICE_TASK
+  MANUAL_TASK
+  BUSINESS_RULE_TASK
+  SUBPROCESS
   EXCLUSIVE_GATEWAY
   PARALLEL_GATEWAY
-}
-
-model Client {
-  id                String       @id @default(cuid())
-  name              String
-  organizationId    String
-  organization      Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  industry          String?
-  operationsProfile String?      @db.Text
-  businessModel     String?      @db.Text
-  employeeCount     String?
-  notes             String?      @db.Text
-  projects          Project[]
-  documents         Document[]
-  createdAt         DateTime     @default(now())
-  updatedAt         DateTime     @updatedAt
-
-  @@index([organizationId])
-  @@map("client")
-}
-
-model Project {
-  id           String               @id @default(cuid())
-  name         String
-  description  String?              @db.Text
-  goals        String[]
-  status       ProjectStatus        @default(ACTIVE)
-  clientId     String
-  client       Client               @relation(fields: [clientId], references: [id], onDelete: Cascade)
-  sessions         MeetingSession[]
-  architecture     ProcessArchitecture?
-  documents        Document[]
-  discoveryThreads DiscoveryThread[]
-  createdAt        DateTime             @default(now())
-  updatedAt        DateTime             @updatedAt
-
-  @@index([clientId])
-  @@map("project")
+  TIMER_EVENT
+  MESSAGE_EVENT
+  SIGNAL_EVENT
+  CONDITIONAL_EVENT
+  TEXT_ANNOTATION
+  DATA_OBJECT
 }
 
 model ProcessArchitecture {
-  id          String                @id @default(cuid())
-  projectId   String                @unique
-  project     Project               @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  definitions ProcessDefinition[]
-  versions    ArchitectureVersion[]
-  createdAt   DateTime              @default(now())
-  updatedAt   DateTime              @updatedAt
+  id             String                @id @default(cuid())
+  organizationId String                @unique
+  organization   Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  definitions    ProcessDefinition[]
+  versions       ArchitectureVersion[]
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
 
   @@map("process_architecture")
 }
@@ -300,6 +277,8 @@ model ProcessDefinition {
   priority       Int                 @default(0)
   sessions       MeetingSession[]
   versions       ProcessVersion[]
+  raciEntries    RaciEntry[]
+  conflicts      StakeholderConflict[]
   createdAt      DateTime            @default(now())
 
   @@index([architectureId])
@@ -312,8 +291,8 @@ model MeetingSession {
   type                SessionType
   status              SessionStatus     @default(SCHEDULED)
   meetingUrl          String
-  projectId           String
-  project             Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  organizationId      String
+  organization        Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   processDefinitionId String?
   processDefinition   ProcessDefinition? @relation(fields: [processDefinitionId], references: [id])
   userId              String
@@ -346,7 +325,7 @@ model MeetingSession {
   createdAt           DateTime          @default(now())
   updatedAt           DateTime          @updatedAt
 
-  @@index([projectId])
+  @@index([organizationId])
   @@index([userId])
   @@index([shareToken])
   @@map("meeting_session")
@@ -374,12 +353,28 @@ model DiagramNode {
   // Parent reference for cascade rejection
   parentId    String?
 
+  comments    NodeComment[]
+
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
   @@index([sessionId])
   @@index([state])
   @@map("diagram_node")
+}
+
+model NodeComment {
+  id         String      @id @default(cuid())
+  nodeId     String
+  node       DiagramNode @relation(fields: [nodeId], references: [id], onDelete: Cascade)
+  content    String      @db.Text
+  authorId   String
+  authorName String
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@index([nodeId])
+  @@map("node_comment")
 }
 
 model TranscriptEntry {
@@ -445,15 +440,15 @@ model SessionSummary {
 // ============================================
 
 model DiscoveryThread {
-  id        String             @id @default(cuid())
-  projectId String
-  project   Project            @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  createdBy String
-  messages  DiscoveryMessage[]
-  createdAt DateTime           @default(now())
-  updatedAt DateTime           @updatedAt
+  id             String             @id @default(cuid())
+  organizationId String
+  organization   Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdBy      String
+  messages       DiscoveryMessage[]
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
 
-  @@index([projectId])
+  @@index([organizationId])
   @@map("discovery_thread")
 }
 
@@ -469,6 +464,58 @@ model DiscoveryMessage {
 
   @@index([threadId])
   @@map("discovery_message")
+}
+
+// ============================================
+// RACI & COLLABORATION MODELS
+// ============================================
+
+enum RaciType {
+  RESPONSIBLE
+  ACCOUNTABLE
+  CONSULTED
+  INFORMED
+}
+
+model RaciEntry {
+  id           String            @id @default(cuid())
+  processId    String
+  process      ProcessDefinition @relation(fields: [processId], references: [id], onDelete: Cascade)
+  activityName String
+  role         String
+  assignment   RaciType
+  source       String?
+  createdAt    DateTime          @default(now())
+
+  @@index([processId])
+  @@map("raci_entry")
+}
+
+model StakeholderConflict {
+  id           String            @id @default(cuid())
+  processId    String
+  process      ProcessDefinition @relation(fields: [processId], references: [id], onDelete: Cascade)
+  nodeLabel    String
+  conflictType String
+  perspectives Json
+  resolved     Boolean           @default(false)
+  resolution   String?           @db.Text
+  createdAt    DateTime          @default(now())
+
+  @@index([processId])
+  @@map("stakeholder_conflict")
+}
+
+model ProcessTemplate {
+  id          String   @id @default(cuid())
+  framework   String
+  industry    String
+  name        String
+  description String?  @db.Text
+  structure   Json
+  createdAt   DateTime @default(now())
+
+  @@map("process_template")
 }
 
 // ============================================
@@ -515,25 +562,22 @@ model ArchitectureVersion {
 // ============================================
 
 model Document {
-  id            String            @id @default(cuid())
-  name          String
-  description   String?
-  mimeType      String
-  filePath      String
-  fileSize      Int
-  clientId      String?
-  client        Client?           @relation(fields: [clientId], references: [id], onDelete: Cascade)
-  projectId     String?
-  project       Project?          @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  extractedText String?           @db.Text
-  isProcessed   Boolean           @default(false)
-  versions      DocumentVersion[]
-  createdBy     String
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
+  id             String            @id @default(cuid())
+  name           String
+  description    String?
+  mimeType       String
+  filePath       String
+  fileSize       Int
+  organizationId String
+  organization   Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  extractedText  String?           @db.Text
+  isProcessed    Boolean           @default(false)
+  versions       DocumentVersion[]
+  createdBy      String
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
 
-  @@index([clientId])
-  @@index([projectId])
+  @@index([organizationId])
   @@map("document")
 }
 

@@ -41,11 +41,7 @@ interface ModelerAPI {
 	selectedElement: any;
 }
 
-// Layout constants for incremental placement
-const X_GAP = 180;
-const Y_PAD = 50;
-const LANE_H = 150;
-const CONTENT_X = 160;
+import { X_GAP, Y_PAD, LANE_H, CONTENT_X } from "../lib/layout-constants";
 
 export function useBpmnModeler({
 	containerRef,

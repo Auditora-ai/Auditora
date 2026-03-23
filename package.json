@@ -21,7 +21,8 @@
 		"@types/node": "catalog:",
 		"dotenv-cli": "catalog:",
 		"turbo": "^2.8.17",
-		"typescript": "catalog:"
+		"typescript": "catalog:",
+		"vitest": "^4.1.0"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [

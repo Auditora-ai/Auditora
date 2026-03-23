@@ -37,6 +37,14 @@ export type { TranscriptionEvent } from "./src/providers/stt";
 export { generateSessionSummary } from "./src/pipelines/session-summary";
 export type { SummaryResult } from "./src/pipelines/session-summary";
 
+// Prozea new pipelines (Caballo de Troya)
+export { extractFromDocument } from "./src/pipelines/document-extraction";
+export type { DocumentExtractionResult } from "./src/pipelines/document-extraction";
+export { generateRaci } from "./src/pipelines/raci-generator";
+export type { RaciAssignment, RaciGeneratorResult } from "./src/pipelines/raci-generator";
+export { consolidateStakeholders } from "./src/pipelines/stakeholder-consolidation";
+export type { StakeholderConflict, ConsolidationResult } from "./src/pipelines/stakeholder-consolidation";
+
 // Prozea prompts (for testing/eval)
 export { PROCESS_EXTRACTION_SYSTEM, buildExtractionSystemPrompt } from "./src/prompts/process-extraction";
 export { TELEPROMPTER_SYSTEM, buildTeleprompterSystemPrompt } from "./src/prompts/teleprompter";
