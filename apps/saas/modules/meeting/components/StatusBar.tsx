@@ -1,5 +1,8 @@
 "use client";
 
+import { BotActivityIndicator } from "./BotActivityIndicator";
+import type { BotActivity, ActivityLogEntry } from "../types";
+
 type LayoutPreset = "balanced" | "diagram-focus" | "transcript-focus" | "fullscreen";
 type ConnectionStatus = "connected" | "degraded" | "disconnected";
 
@@ -14,6 +17,9 @@ interface StatusBarProps {
 	onLayoutChange: (layout: LayoutPreset) => void;
 	sessionId: string;
 	onEndSession: () => void;
+	botActivity: BotActivity;
+	activityLog: ActivityLogEntry[];
+	onNewNodes?: boolean;
 }
 
 const STATUS_COLORS: Record<ConnectionStatus, string> = {
@@ -48,6 +54,9 @@ export function StatusBar({
 	layout,
 	onLayoutChange,
 	onEndSession,
+	botActivity,
+	activityLog,
+	onNewNodes,
 }: StatusBarProps) {
 	return (
 		<div className="flex items-center gap-4 border-t border-border bg-background px-4 py-1.5 text-[11px] text-muted-foreground">
@@ -88,6 +97,15 @@ export function StatusBar({
 					</span>
 				)}
 			</span>
+
+			<span className="text-border">|</span>
+
+			{/* Bot activity indicator */}
+			<BotActivityIndicator
+				activity={botActivity}
+				activityLog={activityLog}
+				onNewNodes={onNewNodes}
+			/>
 
 			{/* Layout presets — right aligned */}
 			<div className="ml-auto flex items-center gap-1">

@@ -34,7 +34,7 @@ export default async function OrganizationPage({
 	startOfMonth.setHours(0, 0, 0, 0);
 
 	// Fetch metrics
-	const [sessionsThisMonth, processesMapped, confirmedNodes, rejectedNodes] =
+	const [sessionsThisMonth, processesMapped, confirmedNodes, rejectedNodes, totalSessions] =
 		await Promise.all([
 			db.meetingSession.count({
 				where: {
@@ -63,6 +63,11 @@ export default async function OrganizationPage({
 					session: {
 						project: { client: { organizationId: orgId } },
 					},
+				},
+			}),
+			db.meetingSession.count({
+				where: {
+					project: { client: { organizationId: orgId } },
 				},
 			}),
 		]);
@@ -162,6 +167,7 @@ export default async function OrganizationPage({
 						processesGoal: 10,
 						activities,
 						projects,
+						totalSessions,
 					}}
 					basePath={`/${organizationSlug}`}
 				/>

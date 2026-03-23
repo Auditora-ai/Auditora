@@ -248,6 +248,7 @@ export function NewSessionForm({
 						<Building2Icon className="size-5 text-muted-foreground" />
 						<h3 className="text-lg font-semibold">{t("sessions.new.form.clientName")}</h3>
 					</div>
+					<p className="text-sm text-muted-foreground">{t("sessions.new.form.clientHint")}</p>
 
 					{!isCreatingClient ? (
 						<>
@@ -326,6 +327,7 @@ export function NewSessionForm({
 						<FolderIcon className="size-5 text-muted-foreground" />
 						<h3 className="text-lg font-semibold">{t("sessions.new.form.projectName")}</h3>
 					</div>
+					<p className="text-sm text-muted-foreground">{t("sessions.new.form.projectHint")}</p>
 
 					{!isCreatingProject ? (
 						<>
@@ -421,9 +423,9 @@ export function NewSessionForm({
 									)}
 								</div>
 								<span className="mt-1 text-xs text-muted-foreground">
-									{type === "DISCOVERY" && "Map the company's process architecture"}
-									{type === "DEEP_DIVE" && "Deep dive into a specific process"}
-									{type === "CONTINUATION" && "Continue working on a previous session"}
+									{type === "DISCOVERY" && t("sessions.new.form.typeDiscoveryDesc")}
+									{type === "DEEP_DIVE" && t("sessions.new.form.typeDeepDiveDesc")}
+									{type === "CONTINUATION" && t("sessions.new.form.typeContinuationDesc")}
 								</span>
 							</button>
 						))}

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useCallback, useState } from "react";
 import type { DiagramNode } from "../types";
 import { useBpmnModeler } from "../hooks/useBpmnModeler";
+import { usePanelFlash } from "../hooks/usePanelFlash";
 import { BpmnToolbar } from "./BpmnToolbar";
 import { BpmnPropertiesPanel } from "./BpmnPropertiesPanel";
 import { KeyboardShortcutsModal } from "./KeyboardShortcutsModal";
@@ -24,6 +25,7 @@ interface DiagramPanelProps {
 	sessionStatus?: "ACTIVE" | "ENDED";
 	isFullscreen?: boolean;
 	onToggleFullscreen?: () => void;
+	isFlashing?: boolean;
 }
 
 /**
@@ -52,8 +54,12 @@ export function DiagramPanel({
 	sessionStatus = "ACTIVE",
 	isFullscreen = false,
 	onToggleFullscreen,
+	isFlashing = false,
 }: DiagramPanelProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
+	const flashStyle = usePanelFlash(isFlashing, {
+		color: "rgba(37, 99, 235, 0.4)",
+	});
 	const propertiesPanelRef = useRef<HTMLDivElement>(null);
 	const [showShortcuts, setShowShortcuts] = useState(false);
 	const [propertiesOpen, setPropertiesOpen] = useState(false);
@@ -139,7 +145,7 @@ export function DiagramPanel({
 	const visibleNodes = nodes.filter((n) => n.state !== "rejected");
 
 	return (
-		<div className="flex h-full flex-col">
+		<div className="flex h-full flex-col" style={flashStyle}>
 			{/* Toolbar */}
 			<BpmnToolbar
 				canUndo={canUndo}

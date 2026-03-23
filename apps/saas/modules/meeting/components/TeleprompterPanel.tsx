@@ -1,10 +1,13 @@
 "use client";
 
+import { usePanelFlash } from "../hooks/usePanelFlash";
+
 interface TeleprompterPanelProps {
 	currentQuestion: string;
 	questionQueue: string[];
 	aiSuggestion: string | null;
 	sessionType: "DISCOVERY" | "DEEP_DIVE";
+	isFlashing?: boolean;
 }
 
 export function TeleprompterPanel({
@@ -12,9 +15,14 @@ export function TeleprompterPanel({
 	questionQueue,
 	aiSuggestion,
 	sessionType,
+	isFlashing = false,
 }: TeleprompterPanelProps) {
+	const flashStyle = usePanelFlash(isFlashing, {
+		color: "rgba(14, 165, 233, 0.4)",
+	});
+
 	return (
-		<div className="flex h-full flex-col">
+		<div className="flex h-full flex-col" style={flashStyle}>
 			{/* Panel header */}
 			<div className="border-b border-border px-3 py-2.5">
 				<span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">

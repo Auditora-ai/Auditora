@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
 	Headphones,
 	Brain,
@@ -64,31 +64,46 @@ export function BotActivityIndicator({
 
 	// Mute state — owned internally, persisted to localStorage
 	const [isMuted, setIsMuted] = useState(true);
-	const audioRef = useRef<HTMLAudioElement | null>(null);
+	const audioCtxRef = useRef<AudioContext | null>(null);
 
 	useEffect(() => {
 		const stored = localStorage.getItem("prozea-mute-sounds");
 		if (stored === "false") setIsMuted(false);
 	}, []);
 
-	useEffect(() => {
-		audioRef.current = new Audio("/sounds/node-added.mp3");
-		audioRef.current.volume = 0.3;
+	// Play a subtle notification tone using Web Audio API
+	const playNotificationSound = useCallback(() => {
+		try {
+			if (!audioCtxRef.current) {
+				audioCtxRef.current = new AudioContext();
+			}
+			const ctx = audioCtxRef.current;
+			const oscillator = ctx.createOscillator();
+			const gainNode = ctx.createGain();
+
+			oscillator.connect(gainNode);
+			gainNode.connect(ctx.destination);
+
+			oscillator.frequency.setValueAtTime(880, ctx.currentTime); // A5
+			oscillator.frequency.setValueAtTime(1047, ctx.currentTime + 0.08); // C6
+			oscillator.type = "sine";
+
+			gainNode.gain.setValueAtTime(0.15, ctx.currentTime);
+			gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+
+			oscillator.start(ctx.currentTime);
+			oscillator.stop(ctx.currentTime + 0.2);
+		} catch {
+			// Web Audio API unavailable — silent fail
+		}
 	}, []);
 
 	// Play sound on new nodes
 	useEffect(() => {
-		if (onNewNodes && !isMuted && audioRef.current) {
-			try {
-				audioRef.current.currentTime = 0;
-				audioRef.current.play().catch(() => {
-					// Autoplay blocked — silent fail
-				});
-			} catch {
-				// Silent fail
-			}
+		if (onNewNodes && !isMuted) {
+			playNotificationSound();
 		}
-	}, [onNewNodes, isMuted]);
+	}, [onNewNodes, isMuted, playNotificationSound]);
 
 	const toggleMute = () => {
 		setIsMuted((prev) => {

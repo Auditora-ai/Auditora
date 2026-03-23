@@ -24,7 +24,17 @@ export function ProjectsGrid({
 	const t = useTranslations("dashboard");
 
 	if (projects.length === 0) {
-		return null;
+		return (
+			<div>
+				<h3 className="mb-3 text-sm font-semibold">{t("projects")}</h3>
+				<div className="flex items-center gap-3 rounded-md border border-dashed border-border p-6">
+					<FolderIcon className="size-5 text-muted-foreground" />
+					<p className="text-sm text-muted-foreground">
+						{t("emptyProjects")}
+					</p>
+				</div>
+			</div>
+		);
 	}
 
 	return (

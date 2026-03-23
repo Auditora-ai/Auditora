@@ -285,6 +285,7 @@ export function MeetingView({
 						sessionStatus={sessionStatus}
 						isFullscreen={isFullscreen}
 						onToggleFullscreen={handleToggleFullscreen}
+						isFlashing={newNodesArrived}
 					/>
 				</div>
 
@@ -315,6 +316,9 @@ export function MeetingView({
 				onLayoutChange={setLayout}
 				sessionId={sessionId}
 				onEndSession={handleEndSession}
+				botActivity={botActivity}
+				activityLog={activityLog}
+				onNewNodes={newNodesArrived}
 			/>
 		</div>
 	);
