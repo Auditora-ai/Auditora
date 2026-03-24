@@ -5,6 +5,8 @@ export interface DiagramNode {
 	state: "forming" | "confirmed" | "rejected";
 	lane?: string;
 	connections: string[];
+	/** Flow condition labels for each connection (same index as connections array). E.g. ["Sí", "No"] */
+	connectionLabels?: string[];
 	confidence?: number | null;
 }
 

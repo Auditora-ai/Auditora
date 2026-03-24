@@ -196,7 +196,7 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 	ordered.push({
 		id: "_start",
 		type: "start_event",
-		label: "",
+		label: "Inicio",
 		state: "confirmed",
 		lane: lanes[0],
 		connections: [],
@@ -216,7 +216,7 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 	ordered.push({
 		id: "_end",
 		type: "end_event",
-		label: "",
+		label: "Fin",
 		state: "confirmed",
 		lane: lanes[lanes.length - 1] || "General",
 		connections: [],
@@ -330,7 +330,8 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
     </bpmndi:BPMNShape>\n`;
 
 		// Flows
-		for (const targetId of n.connections) {
+		for (let ci = 0; ci < n.connections.length; ci++) {
+			const targetId = n.connections[ci];
 			flowId++;
 			const fid = `flow_${flowId}`;
 			const target = ordered.find((t) => t.id === targetId);
@@ -343,7 +344,10 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 			const tx = CONTENT_X + tCol * X_GAP;
 			const ty = Y_PAD + tli * LANE_H + (LANE_H - td.h) / 2 + tYOffset;
 
-			flowsXml += `    <bpmn:sequenceFlow id="${fid}" sourceRef="${n.id}" targetRef="${targetId}" />\n`;
+			// Add flow condition label (name) for gateway outgoing flows
+			const condLabel = (n as any).connectionLabels?.[ci];
+			const nameAttr = condLabel ? ` name="${esc(condLabel)}"` : "";
+			flowsXml += `    <bpmn:sequenceFlow id="${fid}"${nameAttr} sourceRef="${n.id}" targetRef="${targetId}" />\n`;
 			edgesXml += `    <bpmndi:BPMNEdge id="${fid}_di" bpmnElement="${fid}">
       <di:waypoint x="${x + d.w}" y="${y + d.h / 2}" />
       <di:waypoint x="${tx}" y="${ty + td.h / 2}" />
