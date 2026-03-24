@@ -85,11 +85,10 @@ export async function POST(
 	});
 
 	// Trigger extraction directly (bypass 15s throttle — user explicitly requested)
-	if (session.status === "ACTIVE") {
-		runManualExtraction(sessionId).catch((err) => {
-			console.error(`[Transcript] Manual extraction failed for ${sessionId.substring(0, 8)}:`, err);
-		});
-	}
+	// Run for ANY session status (ACTIVE, ENDED, CONNECTING) so manual input always works
+	runManualExtraction(sessionId).catch((err) => {
+		console.error(`[Transcript] Manual extraction failed for ${sessionId.substring(0, 8)}:`, err);
+	});
 
 	return NextResponse.json({ ok: true, entry }, { status: 202 });
 }
@@ -139,6 +138,12 @@ async function runManualExtraction(sessionId: string) {
 		context,
 	);
 
+	console.log(`[Transcript] Extraction result for ${sessionId.substring(0, 8)}:`, {
+		newNodes: result.newNodes?.length ?? 0,
+		updatedNodes: result.updatedNodes?.length ?? 0,
+		outOfScope: result.outOfScope?.length ?? 0,
+	});
+
 	// Create new diagram nodes
 	if (result.newNodes && result.newNodes.length > 0) {
 		for (const node of result.newNodes) {
@@ -152,7 +157,31 @@ async function runManualExtraction(sessionId: string) {
 					connections: [node.connectTo].filter(Boolean) as string[],
 				},
 			});
+			console.log(`[Transcript] +Node: [${node.type}] "${node.label}" (lane: ${node.lane || "none"})`);
 		}
-		console.log(`[Transcript] Manual extraction created ${result.newNodes.length} nodes for ${sessionId.substring(0, 8)}`);
+	}
+
+	// Apply updates to existing nodes
+	if (result.updatedNodes && result.updatedNodes.length > 0) {
+		for (const update of result.updatedNodes) {
+			const updateData: Record<string, any> = {};
+			if (update.label) updateData.label = update.label;
+			// updatedNodes may also include type/lane from extended extraction
+			const u = update as any;
+			if (u.type) updateData.nodeType = u.type.toUpperCase();
+			if (u.lane) updateData.lane = u.lane;
+
+			if (Object.keys(updateData).length > 0) {
+				await db.diagramNode.updateMany({
+					where: { id: update.id, sessionId },
+					data: updateData,
+				});
+				console.log(`[Transcript] ~Updated: "${update.id}" → ${JSON.stringify(updateData)}`);
+			}
+		}
+	}
+
+	if (!result.newNodes?.length && !result.updatedNodes?.length) {
+		console.log(`[Transcript] No changes from extraction for ${sessionId.substring(0, 8)}`);
 	}
 }
