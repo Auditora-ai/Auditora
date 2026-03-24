@@ -43,11 +43,18 @@ export function CentralCanvas({ containerRef }: CentralCanvasProps) {
 
 			if (res.ok && data.nodes && data.nodes.length > 0) {
 				await modelerApi.rebuildFromNodes(data.nodes);
-				const removed = data.removed || 0;
-				const msg = removed > 0
-					? `${removed} nodos eliminados. ${data.reasoning?.substring(0, 80) || ""}`
-					: data.reasoning?.substring(0, 100) || "Diagrama reorganizado";
-				toast.success(msg);
+
+				// Show narrative as detailed toast
+				if (data.narrative) {
+					toast.success(data.narrative, { duration: 10000 });
+				} else {
+					toast.success("Diagrama reorganizado");
+				}
+
+				// Show gap count
+				if (data.gaps?.length > 0) {
+					toast.info(`${data.gaps.length} preguntas nuevas en Sugerencias IA`, { duration: 5000 });
+				}
 			} else if (data.error) {
 				console.warn("[CentralCanvas] Reorganize error:", data.error);
 				toast.info("Reorganizando con datos actuales...");

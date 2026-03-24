@@ -97,7 +97,7 @@ REGLAS DE CONEXIÓN:
 - DEBE haber un camino completo de inicio a fin
 - Los gateways que dividen DEBEN tener un gateway que reúne los caminos
 
-CRITICAL: Output ONLY a JSON object. NO text before or after. NO markdown. NO explanations. Start your response with { and end with }.
+CRITICAL: Output ONLY a JSON object. NO text before or after. NO markdown. Start with { end with }.
 
 JSON format:
 {
@@ -111,7 +111,15 @@ JSON format:
       "targetLabels": ["", ""]
     }
   ],
-  "remove": ["id_de_nodo_a_eliminar", ...],
+  "remove": ["id_de_nodo_a_eliminar"],
+  "narrative": "Cuenta la historia del proceso en 3-5 oraciones como si se la explicaras a alguien que no lo conoce. Ejemplo: 'El proceso inicia cuando el proveedor envía una factura vencida. El área de Compras la recibe y verifica que los datos sean correctos...'",
+  "gaps": [
+    {
+      "question": "Pregunta específica sobre algo que falta o no tiene sentido en el proceso",
+      "dimension": "S|I|P|O|C (dimensión SIPOC que cubre)",
+      "priority": "alta|media|baja"
+    }
+  ],
   "reasoning": "Explicación breve de los cambios"
 }
 
@@ -120,7 +128,14 @@ IMPORTANTE:
 - "remove" incluye los IDs de nodos que no pertenecen al proceso
 - Cada nodo en "keep" debe tener "targets" (excepto el evento de fin)
 - Los targets deben referenciar IDs de nodos que están en "keep"
-- targetLabels son las etiquetas de los flujos (solo para gateways: "Sí", "No", etc)`,
+- targetLabels son las etiquetas de los flujos (solo para gateways: "Sí", "No", etc)
+- "narrative" es la historia del proceso en lenguaje natural (como la contaría un consultor)
+- "gaps" son las preguntas que un consultor BPM haría para completar el proceso:
+  - Caminos sin resolver (¿qué pasa si la corrección falla 3 veces?)
+  - Roles faltantes (¿quién autoriza montos mayores a X?)
+  - Excepciones no cubiertas (¿qué pasa si el proveedor no responde?)
+  - Tiempos/SLAs (¿cuánto tiempo tiene Compras para revisar?)
+  - Sistemas involucrados (¿en qué sistema se registra la factura?)`,
 			prompt: `NODOS ACTUALES DEL DIAGRAMA:
 ${nodeList}
 
@@ -213,9 +228,23 @@ Revisa cada nodo, elimina lo que no pertenece, corrige lo que esté mal, y organ
 		}
 
 		console.log(`[Reorganize] Updated ${updated} nodes, removed ${removeIds.length + notKept.length}`);
-		console.log(`[Reorganize] Reasoning: ${result.reasoning}`);
+		console.log(`[Reorganize] Narrative: ${result.narrative?.substring(0, 100)}`);
+		console.log(`[Reorganize] Gaps: ${result.gaps?.length || 0} questions`);
 
-		// Return cleaned nodes
+		// Save gap questions as teleprompter entries
+		if (result.gaps && result.gaps.length > 0) {
+			for (const gap of result.gaps.slice(0, 5)) {
+				await db.teleprompterLog.create({
+					data: {
+						sessionId,
+						question: gap.question,
+						gapType: gap.dimension || "P",
+					},
+				}).catch(() => {});
+			}
+		}
+
+		// Return cleaned nodes + narrative + gaps
 		const finalNodes = await db.diagramNode.findMany({
 			where: { sessionId, state: { not: "REJECTED" } },
 		});
@@ -225,6 +254,8 @@ Revisa cada nodo, elimina lo que no pertenece, corrige lo que esté mal, y organ
 			updated,
 			removed: removeIds.length + notKept.length,
 			reasoning: result.reasoning,
+			narrative: result.narrative || null,
+			gaps: result.gaps || [],
 			nodes: finalNodes.map((n) => ({
 				id: n.id,
 				type: n.nodeType.toLowerCase(),
