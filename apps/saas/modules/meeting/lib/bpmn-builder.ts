@@ -145,16 +145,44 @@ function computeColumns(ordered: DiagramNode[]): Map<string, number> {
 }
 
 /**
+ * Compute dynamic lane heights based on how many elements each lane has.
+ * Professional BPMN: lanes expand to fit their content.
+ */
+function computeLaneHeights(
+	ordered: DiagramNode[],
+	lanes: string[],
+	columns: Map<string, number>,
+): Map<string, number> {
+	const heights = new Map<string, number>();
+
+	for (const lane of lanes) {
+		// Count max nodes in any single column for this lane
+		const colCounts = new Map<number, number>();
+		for (const n of ordered) {
+			if ((n.lane || "General") !== lane) continue;
+			const col = columns.get(n.id) || 0;
+			colCounts.set(col, (colCounts.get(col) || 0) + 1);
+		}
+		const maxInColumn = Math.max(1, ...colCounts.values());
+		// Each element needs ~100px vertical space, min LANE_H
+		const height = Math.max(LANE_H, maxInColumn * 110 + 60);
+		heights.set(lane, height);
+	}
+
+	return heights;
+}
+
+/**
  * For nodes sharing the same column AND lane, offset them vertically
- * to avoid overlaps. Returns a per-node Y offset (0 for the first, +-offset for extras).
+ * to avoid overlaps. Uses dynamic lane heights.
  */
 function computeVerticalOffsets(
 	ordered: DiagramNode[],
 	columns: Map<string, number>,
 	lanes: string[],
+	laneHeights: Map<string, number>,
 ): Map<string, number> {
 	const offsets = new Map<string, number>();
-	// Group by (column, lane)
 	const groups = new Map<string, string[]>();
 
 	for (const n of ordered) {
@@ -165,15 +193,18 @@ function computeVerticalOffsets(
 		groups.get(key)!.push(n.id);
 	}
 
-	for (const [, ids] of groups) {
+	for (const [key, ids] of groups) {
+		const lane = key.split(":").slice(1).join(":");
+		const laneH = laneHeights.get(lane) || LANE_H;
+
 		if (ids.length <= 1) {
 			for (const id of ids) offsets.set(id, 0);
 			continue;
 		}
-		// Spread them vertically within the lane
-		const spread = LANE_H / (ids.length + 1);
+		// Spread evenly within the lane height
+		const spacing = Math.min(100, laneH / (ids.length + 1));
 		for (let i = 0; i < ids.length; i++) {
-			offsets.set(ids[i], spread * (i + 1) - LANE_H / 2);
+			offsets.set(ids[i], spacing * (i + 1) - laneH / 2);
 		}
 	}
 
@@ -273,7 +304,8 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 	// --- Compute layout ---
 
 	const columns = computeColumns(ordered);
-	const verticalOffsets = computeVerticalOffsets(ordered, columns, lanes);
+	const laneHeights = computeLaneHeights(ordered, lanes, columns);
+	const verticalOffsets = computeVerticalOffsets(ordered, columns, lanes, laneHeights);
 
 	// Find max column to compute total width
 	let maxCol = 0;
@@ -281,9 +313,17 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 		if (col > maxCol) maxCol = col;
 	}
 
+	// Compute cumulative lane Y positions
+	const laneYStart = new Map<string, number>();
+	let cumulativeY = Y_PAD;
+	for (const lane of lanes) {
+		laneYStart.set(lane, cumulativeY);
+		cumulativeY += laneHeights.get(lane) || LANE_H;
+	}
+
 	// Build XML
-	const totalW = CONTENT_X + (maxCol + 1) * X_GAP + 60;
-	const totalH = lanes.length * LANE_H + Y_PAD * 2;
+	const totalW = CONTENT_X + (maxCol + 1) * X_GAP + 100;
+	const totalH = cumulativeY + Y_PAD;
 
 	let processXml = "";
 	let flowsXml = "";
@@ -294,15 +334,17 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 	// Lane set
 	let laneSetXml = "    <bpmn:laneSet>\n";
 	for (let li = 0; li < lanes.length; li++) {
+		const laneName = lanes[li];
 		const refs = ordered
-			.filter((n) => (n.lane || "General") === lanes[li])
+			.filter((n) => (n.lane || "General") === laneName)
 			.map((n) => `        <bpmn:flowNodeRef>${n.id}</bpmn:flowNodeRef>`)
 			.join("\n");
-		laneSetXml += `      <bpmn:lane id="Lane_${li}" name="${esc(lanes[li])}">\n${refs}\n      </bpmn:lane>\n`;
+		laneSetXml += `      <bpmn:lane id="Lane_${li}" name="${esc(laneName)}">\n${refs}\n      </bpmn:lane>\n`;
 
-		// Lane shape
+		const laneH = laneHeights.get(laneName) || LANE_H;
+		const laneY = laneYStart.get(laneName) || (Y_PAD + li * LANE_H);
 		shapesXml += `    <bpmndi:BPMNShape id="Lane_${li}_di" bpmnElement="Lane_${li}" isHorizontal="true">
-      <dc:Bounds x="${CONTENT_X - 130}" y="${Y_PAD + li * LANE_H}" width="${totalW - CONTENT_X + 130}" height="${LANE_H}" />
+      <dc:Bounds x="${CONTENT_X - 130}" y="${laneY}" width="${totalW - CONTENT_X + 130}" height="${laneH}" />
     </bpmndi:BPMNShape>\n`;
 	}
 	laneSetXml += "    </bpmn:laneSet>\n";
@@ -311,11 +353,13 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 	for (const n of ordered) {
 		const tag = bpmnTag(n.type);
 		const d = dims(n.type);
-		const li = lanes.indexOf(n.lane || "General");
+		const laneName = n.lane || "General";
+		const laneH = laneHeights.get(laneName) || LANE_H;
+		const laneY = laneYStart.get(laneName) || Y_PAD;
 		const col = columns.get(n.id) || 0;
 		const yOffset = verticalOffsets.get(n.id) || 0;
 		const x = CONTENT_X + col * X_GAP;
-		const y = Y_PAD + li * LANE_H + (LANE_H - d.h) / 2 + yOffset;
+		const y = laneY + (laneH - d.h) / 2 + yOffset;
 
 		// Element XML with incoming/outgoing refs
 		const nameAttr = n.label ? ` name="${esc(n.label)}"` : "";
@@ -355,11 +399,13 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 			if (!target) continue;
 
 			const td = dims(target.type);
-			const tli = lanes.indexOf(target.lane || "General");
+			const tLaneName = target.lane || "General";
+			const tLaneH = laneHeights.get(tLaneName) || LANE_H;
+			const tLaneY = laneYStart.get(tLaneName) || Y_PAD;
 			const tCol = columns.get(target.id) || 0;
 			const tYOffset = verticalOffsets.get(target.id) || 0;
 			const tx = CONTENT_X + tCol * X_GAP;
-			const ty = Y_PAD + tli * LANE_H + (LANE_H - td.h) / 2 + tYOffset;
+			const ty = tLaneY + (tLaneH - td.h) / 2 + tYOffset;
 
 			// Add flow condition label (name) for gateway outgoing flows
 			const condLabel = (n as any).connectionLabels?.[ci];
