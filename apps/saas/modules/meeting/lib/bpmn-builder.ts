@@ -12,7 +12,7 @@
 
 import type { DiagramNode } from "../types";
 import { escapeHtml as esc } from "./html-utils";
-import ELK from "elkjs";
+import ELK from "elkjs/lib/elk.bundled.js";
 
 // Re-export layout constants for useBpmnModeler incremental placement
 export { TASK_W, TASK_H, GW_SIZE, EVENT_SIZE, LANE_H, X_GAP, Y_PAD, POOL_X, CONTENT_X } from "./layout-constants";
