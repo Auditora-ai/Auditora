@@ -378,16 +378,32 @@ export function useBpmnModeler({
 					}
 				}
 
-				// Step 5: Create all shapes inside the participant
+				// Build lane name → lane element map
+				const allLaneElements = elementRegistry.filter((e: any) => e.type === "bpmn:Lane");
+				const laneMap = new Map<string, any>();
+				for (const laneEl of allLaneElements) {
+					const name = laneEl.businessObject?.name;
+					if (name) laneMap.set(name, laneEl);
+				}
+
+				// Step 5: Create all shapes inside the CORRECT lane
 				const createdElements = new Map<string, any>();
 				for (const n of allNodes) {
 					const type = bpmnType(n.type);
 					const pos = positions.get(n.id) || { x: 200, y: 200 };
 					const d = dims(n.type);
 
+					// Find the lane this node belongs to
+					const nodeLane = n.lane || "General";
+					const targetLane = laneMap.get(nodeLane) || participant;
+
 					try {
 						const shape = elementFactory.createShape({ type });
-						const created = modeling.createShape(shape, { x: pos.x + d.w / 2, y: pos.y + d.h / 2 }, participant);
+						const created = modeling.createShape(
+							shape,
+							{ x: pos.x + d.w / 2, y: pos.y + d.h / 2 },
+							targetLane,
+						);
 						if (created) {
 							modeling.updateProperties(created, { name: n.label || undefined });
 							createdElements.set(n.id, created);
