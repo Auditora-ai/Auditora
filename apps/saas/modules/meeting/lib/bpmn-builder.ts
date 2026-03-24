@@ -89,8 +89,19 @@ export function bpmnType(type: string): string {
  * Call layoutBpmnXml() on the result to add professional layout.
  */
 export function buildBpmnXml(inputNodes: DiagramNode[]): string {
-	const visible = inputNodes.filter((n) => n.state !== "rejected");
+	// Filter: no rejected, no orphans without connections AND without incoming
+	let visible = inputNodes.filter((n) => n.state !== "rejected");
 	if (visible.length === 0) return emptyXml();
+
+	// Remove completely disconnected nodes (no connections AND no other node points to them)
+	const allConnTargets = new Set(visible.flatMap((n) => n.connections));
+	visible = visible.filter((n) => {
+		const tag = bpmnTag(n.type);
+		// Always keep start/end events
+		if (tag === "startEvent" || tag === "endEvent") return true;
+		// Keep if node has connections OR is targeted by another node
+		return n.connections.length > 0 || allConnTargets.has(n.id);
+	});
 
 	const validIds = new Set(visible.map((n) => n.id));
 	const lanes = [...new Set(visible.map((n) => n.lane || "General"))];
