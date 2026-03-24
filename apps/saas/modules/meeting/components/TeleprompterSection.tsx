@@ -14,11 +14,22 @@ interface TeleprompterSectionProps {
 }
 
 const SIPOC_DIMENSIONS = [
-	{ key: "suppliers", label: "S", color: "#3B82F6" },
-	{ key: "inputs", label: "I", color: "#7C3AED" },
-	{ key: "process", label: "P", color: "#16A34A" },
-	{ key: "outputs", label: "O", color: "#EAB308" },
-	{ key: "customers", label: "C", color: "#DC2626" },
+	{ key: "suppliers", label: "S", fullLabel: "Proveedores", color: "#3B82F6" },
+	{ key: "inputs", label: "I", fullLabel: "Entradas", color: "#7C3AED" },
+	{ key: "process", label: "P", fullLabel: "Proceso", color: "#16A34A" },
+	{ key: "outputs", label: "O", fullLabel: "Salidas", color: "#EAB308" },
+	{ key: "customers", label: "C", fullLabel: "Clientes", color: "#DC2626" },
+];
+
+const DEFAULT_SIPOC_QUESTIONS = [
+	{ dimension: "S", question: "¿Quienes son los proveedores o areas que inician este proceso?", color: "#3B82F6" },
+	{ dimension: "I", question: "¿Que informacion, documentos o materiales se necesitan para comenzar?", color: "#7C3AED" },
+	{ dimension: "P", question: "¿Cuales son los pasos principales del proceso de inicio a fin?", color: "#16A34A" },
+	{ dimension: "O", question: "¿Que entregables o resultados produce este proceso?", color: "#EAB308" },
+	{ dimension: "C", question: "¿Quienes son los clientes o areas que reciben el resultado?", color: "#DC2626" },
+	{ dimension: "P", question: "¿Que decisiones se toman durante el proceso y quien las toma?", color: "#16A34A" },
+	{ dimension: "P", question: "¿Que excepciones o caminos alternativos existen?", color: "#16A34A" },
+	{ dimension: "I", question: "¿Que sistemas o herramientas se utilizan?", color: "#7C3AED" },
 ];
 
 export function TeleprompterSection({
@@ -30,23 +41,28 @@ export function TeleprompterSection({
 }: TeleprompterSectionProps) {
 	const { sessionId } = useLiveSessionContext();
 	const [addingToDiagram, setAddingToDiagram] = useState(false);
+	const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
+	const [expandedQ, setExpandedQ] = useState<number | null>(null);
+	const [answerText, setAnswerText] = useState("");
 
-	const handleCopy = useCallback(() => {
-		if (currentQuestion) {
-			navigator.clipboard.writeText(currentQuestion);
-			toast.success("Pregunta copiada al portapapeles");
+	const handleCopy = useCallback((text: string, idx?: number) => {
+		navigator.clipboard.writeText(text);
+		toast.success("Pregunta copiada al portapapeles");
+		if (idx !== undefined) {
+			setCopiedIdx(idx);
+			setTimeout(() => setCopiedIdx(null), 2000);
 		}
-	}, [currentQuestion]);
+	}, []);
 
-	const handleAddToDiagram = useCallback(async () => {
-		if (!currentQuestion || !sessionId) return;
+	const handleAddToDiagram = useCallback(async (text: string) => {
+		if (!sessionId) return;
 		setAddingToDiagram(true);
 		try {
 			const res = await fetch(`/api/sessions/${sessionId}/nodes/bulk`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
-					nodes: [{ type: "task", label: currentQuestion, connections: [] }],
+					nodes: [{ type: "task", label: text, connections: [] }],
 				}),
 			});
 			if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -57,7 +73,29 @@ export function TeleprompterSection({
 		} finally {
 			setAddingToDiagram(false);
 		}
-	}, [currentQuestion, sessionId]);
+	}, [sessionId]);
+
+	const handleAnswer = useCallback(async (questionIdx: number) => {
+		if (!sessionId || !answerText.trim()) return;
+		try {
+			await fetch(`/api/sessions/${sessionId}/nodes/bulk`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					nodes: [{ type: "task", label: answerText.trim(), connections: [] }],
+				}),
+			});
+			toast.success("Respuesta agregada al diagrama");
+			setAnswerText("");
+			setExpandedQ(null);
+		} catch {
+			toast.error("Error al agregar respuesta");
+		}
+	}, [sessionId, answerText]);
+
+	// Use real coverage data or show empty SIPOC bars
+	const coverage = sipocCoverage || { suppliers: 0, inputs: 0, process: 0, outputs: 0, customers: 0 };
+	const hasAiSuggestions = !!currentQuestion;
 
 	return (
 		<div className="flex flex-col overflow-hidden">
@@ -72,39 +110,42 @@ export function TeleprompterSection({
 						{gapType}
 					</span>
 				)}
+				{!gapType && (
+					<span className="ml-auto rounded-full bg-[#334155] px-2 py-0.5 text-[10px] font-medium text-[#64748B]">
+						SIPOC
+					</span>
+				)}
 			</div>
 
-			{/* SIPOC Coverage bars */}
-			{sipocCoverage && (
-				<div className="flex items-end gap-1 border-b border-[#334155]/50 px-3 py-2">
-					{SIPOC_DIMENSIONS.map((dim) => {
-						const pct = sipocCoverage[dim.key] ?? 0;
-						return (
-							<div key={dim.key} className="flex flex-1 flex-col items-center gap-1">
-								<div className="h-8 w-full overflow-hidden rounded bg-[#1E293B]">
-									<div
-										className="w-full rounded transition-all duration-500 ease-out"
-										style={{
-											height: `${pct}%`,
-											backgroundColor: dim.color,
-											marginTop: `${100 - pct}%`,
-										}}
-									/>
-								</div>
-								<span className="text-[9px] font-medium text-[#64748B]">
-									{dim.label}
-								</span>
+			{/* SIPOC Coverage bars — always visible */}
+			<div className="flex items-end gap-1 border-b border-[#334155]/50 px-3 py-2">
+				{SIPOC_DIMENSIONS.map((dim) => {
+					const pct = coverage[dim.key] ?? 0;
+					return (
+						<div key={dim.key} className="flex flex-1 flex-col items-center gap-1" title={`${dim.fullLabel}: ${pct}%`}>
+							<div className="h-8 w-full overflow-hidden rounded bg-[#1E293B]">
+								<div
+									className="w-full rounded transition-all duration-500 ease-out"
+									style={{
+										height: `${Math.max(pct, 2)}%`,
+										backgroundColor: pct > 0 ? dim.color : "#334155",
+										marginTop: `${100 - Math.max(pct, 2)}%`,
+									}}
+								/>
 							</div>
-						);
-					})}
-				</div>
-			)}
+							<span className="text-[9px] font-medium" style={{ color: pct > 0 ? dim.color : "#64748B" }}>
+								{dim.label}
+							</span>
+						</div>
+					);
+				})}
+			</div>
 
-			{/* Current question */}
+			{/* Questions */}
 			<div className="flex-1 overflow-y-auto p-3">
-				{currentQuestion ? (
+				{hasAiSuggestions ? (
+					/* AI-generated questions from teleprompter pipeline */
 					<div className="space-y-3">
-						{/* Main question card */}
 						<div className="rounded-xl bg-white/10 p-3 backdrop-blur-sm">
 							<p className="text-sm font-medium leading-relaxed text-[#F1F5F9]">
 								{currentQuestion}
@@ -112,7 +153,7 @@ export function TeleprompterSection({
 							<div className="mt-2.5 flex gap-2">
 								<button
 									type="button"
-									onClick={handleCopy}
+									onClick={() => handleCopy(currentQuestion!)}
 									className="flex items-center gap-1 rounded-lg bg-[#2563EB] px-2.5 py-1.5 text-[10px] font-medium text-white transition-colors hover:bg-[#1D4ED8]"
 								>
 									<ClipboardCopyIcon className="h-3 w-3" />
@@ -120,7 +161,7 @@ export function TeleprompterSection({
 								</button>
 								<button
 									type="button"
-									onClick={handleAddToDiagram}
+									onClick={() => handleAddToDiagram(currentQuestion!)}
 									disabled={addingToDiagram}
 									className="flex items-center gap-1 rounded-lg bg-[#1E293B] px-2.5 py-1.5 text-[10px] font-medium text-[#94A3B8] transition-colors hover:bg-[#334155] hover:text-white disabled:opacity-50"
 								>
@@ -134,7 +175,6 @@ export function TeleprompterSection({
 							</div>
 						</div>
 
-						{/* Past questions (reduced opacity) */}
 						{questionQueue.slice(0, 3).map((q, i) => (
 							<div
 								key={`q-${i}`}
@@ -146,10 +186,58 @@ export function TeleprompterSection({
 						))}
 					</div>
 				) : (
-					<div className="flex h-full items-center justify-center">
-						<p className="text-center text-xs text-[#64748B]">
-							Las sugerencias apareceran conforme avance la conversacion
+					/* Default SIPOC-based questions before AI kicks in */
+					<div className="space-y-1.5">
+						<p className="mb-2 text-[10px] font-medium uppercase tracking-wider text-[#64748B]">
+							Preguntas iniciales SIPOC
 						</p>
+						{DEFAULT_SIPOC_QUESTIONS.map((q, i) => (
+							<div key={i}>
+								<button
+									type="button"
+									onClick={() => {
+										if (expandedQ === i) {
+											setExpandedQ(null);
+										} else {
+											setExpandedQ(i);
+											setAnswerText("");
+										}
+									}}
+									className="group flex w-full items-start gap-2 rounded-lg p-2 text-left transition-colors hover:bg-[#1E293B]"
+								>
+									<span
+										className="mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center rounded text-[9px] font-bold text-white"
+										style={{ backgroundColor: q.color }}
+									>
+										{q.dimension}
+									</span>
+									<span className="text-[11px] leading-relaxed text-[#94A3B8] group-hover:text-[#E2E8F0]">
+										{q.question}
+									</span>
+								</button>
+								{expandedQ === i && (
+									<div className="ml-6 mt-1 flex gap-1.5 pb-1">
+										<input
+											type="text"
+											value={answerText}
+											onChange={(e) => setAnswerText(e.target.value)}
+											onKeyDown={(e) => e.key === "Enter" && handleAnswer(i)}
+											placeholder="Escribe la respuesta..."
+											autoFocus
+											className="flex-1 rounded-lg bg-[#1E293B] px-2.5 py-1.5 text-[11px] text-[#F1F5F9] placeholder-[#64748B] outline-none ring-1 ring-[#334155] focus:ring-[#2563EB]"
+										/>
+										<button
+											type="button"
+											onClick={() => handleAnswer(i)}
+											disabled={!answerText.trim()}
+											className="rounded-lg bg-[#2563EB] px-2 py-1.5 text-[10px] font-medium text-white transition-colors hover:bg-[#1D4ED8] disabled:opacity-40"
+										>
+											+
+										</button>
+									</div>
+								)}
+							</div>
+						))}
 					</div>
 				)}
 			</div>
