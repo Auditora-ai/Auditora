@@ -1,26 +1,22 @@
 /**
  * BPMN XML Builder
  *
- * Converts DiagramNode[] -> valid BPMN 2.0 XML with:
- * - Pool with horizontal lanes (one per role/department)
- * - Tasks, gateways, events with proper branching
- * - Sequence flows preserving the LLM's connection graph
- * - Topological layout that handles parallel/exclusive paths
+ * Converts DiagramNode[] → valid BPMN 2.0 XML.
+ *
+ * ARCHITECTURE:
+ * 1. This module generates semantic BPMN XML (process structure only, NO coordinates)
+ * 2. bpmn-auto-layout adds professional DI (diagram interchange) with proper
+ *    orthogonal routing, spacing, and lane distribution
+ *
+ * This separation means we only care about correct BPMN structure here —
+ * layout is handled by the same engine that powers bpmn.io's professional tools.
  */
 
 import type { DiagramNode } from "../types";
-import {
-	TASK_W,
-	TASK_H,
-	GW_SIZE,
-	EVENT_SIZE,
-	LANE_H,
-	X_GAP,
-	Y_PAD,
-	POOL_X,
-	CONTENT_X,
-} from "./layout-constants";
 import { escapeHtml as esc } from "./html-utils";
+
+// Re-export layout constants for useBpmnModeler incremental placement
+export { TASK_W, TASK_H, GW_SIZE, EVENT_SIZE, LANE_H, X_GAP, Y_PAD, POOL_X, CONTENT_X } from "./layout-constants";
 
 export function bpmnTag(type: string): string {
 	const map: Record<string, string> = {
@@ -43,14 +39,12 @@ export function bpmnTag(type: string): string {
 		exclusivegateway: "exclusiveGateway",
 		parallel_gateway: "parallelGateway",
 		parallelgateway: "parallelGateway",
+		intermediate_event: "intermediateCatchEvent",
+		intermediateevent: "intermediateCatchEvent",
 		timer_event: "intermediateCatchEvent",
 		timerevent: "intermediateCatchEvent",
 		message_event: "intermediateCatchEvent",
 		messageevent: "intermediateCatchEvent",
-		signal_event: "intermediateCatchEvent",
-		signalevent: "intermediateCatchEvent",
-		conditional_event: "intermediateCatchEvent",
-		conditionalevent: "intermediateCatchEvent",
 		text_annotation: "textAnnotation",
 		textannotation: "textAnnotation",
 		data_object: "dataObjectReference",
@@ -61,16 +55,13 @@ export function bpmnTag(type: string): string {
 
 export function dims(type: string) {
 	const tag = bpmnTag(type);
-	if (tag.includes("Gateway")) return { w: GW_SIZE, h: GW_SIZE };
+	if (tag.includes("Gateway")) return { w: 50, h: 50 };
 	if (tag.includes("Event") || tag === "intermediateCatchEvent")
-		return { w: EVENT_SIZE, h: EVENT_SIZE };
+		return { w: 36, h: 36 };
 	if (tag === "subProcess") return { w: 120, h: 100 };
-	if (tag === "textAnnotation") return { w: 100, h: 30 };
-	if (tag === "dataObjectReference") return { w: 36, h: 50 };
-	return { w: TASK_W, h: TASK_H };
+	return { w: 160, h: 80 };
 }
 
-/** Map bpmnTag output to the full bpmn: prefixed type */
 export function bpmnType(type: string): string {
 	const tag = bpmnTag(type);
 	const map: Record<string, string> = {
@@ -92,138 +83,22 @@ export function bpmnType(type: string): string {
 }
 
 /**
- * Compute column (X position) for each node using longest-path-from-start.
- * This handles branching from gateways properly.
+ * Build BPMN 2.0 XML from DiagramNode array.
+ *
+ * Generates semantic XML WITHOUT diagram interchange (DI).
+ * Call layoutBpmnXml() on the result to add professional layout.
  */
-function computeColumns(ordered: DiagramNode[]): Map<string, number> {
-	const columns = new Map<string, number>();
-	const idSet = new Set(ordered.map((n) => n.id));
-
-	// Build adjacency: node -> targets
-	const adj = new Map<string, string[]>();
-	for (const n of ordered) {
-		adj.set(
-			n.id,
-			n.connections.filter((c) => idSet.has(c)),
-		);
-	}
-
-	// BFS/longest-path from _start
-	columns.set("_start", 0);
-	const queue = ["_start"];
-	const visited = new Set<string>();
-
-	while (queue.length > 0) {
-		const current = queue.shift()!;
-		if (visited.has(current)) continue;
-		visited.add(current);
-
-		const currentCol = columns.get(current) || 0;
-		const targets = adj.get(current) || [];
-
-		for (const target of targets) {
-			const existingCol = columns.get(target) || 0;
-			const newCol = currentCol + 1;
-			if (newCol > existingCol) {
-				columns.set(target, newCol);
-			}
-			// Always re-enqueue to propagate longest path
-			if (!visited.has(target)) {
-				queue.push(target);
-			}
-		}
-	}
-
-	// Assign any unvisited nodes to the end
-	for (const n of ordered) {
-		if (!columns.has(n.id)) {
-			columns.set(n.id, (columns.get("_end") || ordered.length - 1) - 1);
-		}
-	}
-
-	return columns;
-}
-
-/**
- * Compute dynamic lane heights based on how many elements each lane has.
- * Professional BPMN: lanes expand to fit their content.
- */
-function computeLaneHeights(
-	ordered: DiagramNode[],
-	lanes: string[],
-	columns: Map<string, number>,
-): Map<string, number> {
-	const heights = new Map<string, number>();
-
-	for (const lane of lanes) {
-		// Count max nodes in any single column for this lane
-		const colCounts = new Map<number, number>();
-		for (const n of ordered) {
-			if ((n.lane || "General") !== lane) continue;
-			const col = columns.get(n.id) || 0;
-			colCounts.set(col, (colCounts.get(col) || 0) + 1);
-		}
-		const maxInColumn = Math.max(1, ...colCounts.values());
-		// Each element needs ~100px vertical space, min LANE_H
-		const height = Math.max(LANE_H, maxInColumn * 110 + 60);
-		heights.set(lane, height);
-	}
-
-	return heights;
-}
-
-/**
- * For nodes sharing the same column AND lane, offset them vertically
- * to avoid overlaps. Uses dynamic lane heights.
- */
-function computeVerticalOffsets(
-	ordered: DiagramNode[],
-	columns: Map<string, number>,
-	lanes: string[],
-	laneHeights: Map<string, number>,
-): Map<string, number> {
-	const offsets = new Map<string, number>();
-	const groups = new Map<string, string[]>();
-
-	for (const n of ordered) {
-		const col = columns.get(n.id) || 0;
-		const lane = n.lane || "General";
-		const key = `${col}:${lane}`;
-		if (!groups.has(key)) groups.set(key, []);
-		groups.get(key)!.push(n.id);
-	}
-
-	for (const [key, ids] of groups) {
-		const lane = key.split(":").slice(1).join(":");
-		const laneH = laneHeights.get(lane) || LANE_H;
-
-		if (ids.length <= 1) {
-			for (const id of ids) offsets.set(id, 0);
-			continue;
-		}
-		// Spread evenly within the lane height
-		const spacing = Math.min(100, laneH / (ids.length + 1));
-		for (let i = 0; i < ids.length; i++) {
-			offsets.set(ids[i], spacing * (i + 1) - laneH / 2);
-		}
-	}
-
-	return offsets;
-}
-
 export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 	const visible = inputNodes.filter((n) => n.state !== "rejected");
 	if (visible.length === 0) return emptyXml();
 
-	// Collect valid node IDs for connection filtering
 	const validIds = new Set(visible.map((n) => n.id));
-
-	// Collect lanes
 	const lanes = [...new Set(visible.map((n) => n.lane || "General"))];
 
-	// Build ordered node list with start/end events
+	// Build ordered node list with auto start/end
 	const ordered: DiagramNode[] = [];
 
+	// Add start event
 	ordered.push({
 		id: "_start",
 		type: "start_event",
@@ -233,17 +108,17 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 		connections: [],
 	});
 
-	// Add visible nodes (filter out any start/end events from LLM since we add our own)
+	// Add visible nodes (skip start/end events from LLM — we add our own)
 	for (const n of visible) {
 		const tag = bpmnTag(n.type);
 		if (tag === "startEvent" || tag === "endEvent") continue;
 		ordered.push({
 			...n,
-			// Remove connections to non-existent nodes
 			connections: n.connections.filter((c) => validIds.has(c)),
 		});
 	}
 
+	// Add end event
 	ordered.push({
 		id: "_end",
 		type: "end_event",
@@ -253,20 +128,21 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 		connections: [],
 	});
 
-	// --- Build connection graph ---
+	// --- Wire connections ---
 	const middleNodes = ordered.filter(
 		(n) => n.id !== "_start" && n.id !== "_end",
 	);
 	const totalConnections = middleNodes.reduce((sum, n) => sum + n.connections.length, 0);
 
-	// If connections are mostly broken (AI ID mismatch), fall back to sequential
 	if (middleNodes.length >= 2 && totalConnections < middleNodes.length * 0.3) {
-		console.log(`[bpmn-builder] Broken connections (${totalConnections}/${middleNodes.length}). Using sequential order.`);
+		// Broken connections — sequential fallback
 		for (let i = 0; i < middleNodes.length - 1; i++) {
 			middleNodes[i].connections = [middleNodes[i + 1].id];
 		}
 		middleNodes[middleNodes.length - 1].connections = ["_end"];
 		ordered[0].connections = [middleNodes[0].id];
+	} else if (middleNodes.length === 0) {
+		ordered[0].connections = ["_end"];
 	} else {
 		// Wire start/end based on graph topology
 		const incoming = new Map<string, string[]>();
@@ -279,235 +155,80 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 		}
 
 		const roots = middleNodes.filter((n) => !incoming.has(n.id));
-		if (roots.length === 0 && middleNodes.length > 0) {
+		if (roots.length === 0) {
 			ordered[0].connections = [middleNodes[0].id];
-		} else if (roots.length === 0) {
-			// No middle nodes — just start → end
-			ordered[0].connections = ["_end"];
-		} else if (roots.length === 1) {
-			ordered[0].connections = [roots[0].id];
 		} else {
-			// Multiple roots — start MUST have only 1 output (BPMN rule)
+			// Start → first root only (BPMN rule: 1 output from events)
 			ordered[0].connections = [roots[0].id];
+			// Chain remaining roots sequentially
 			for (let i = 1; i < roots.length; i++) {
-				// Find the last node in the chain before this root and connect it
-				const prevTerminal = findLastInChain(roots[i - 1], ordered);
-				if (prevTerminal && !isGatewayNode(prevTerminal.type)) {
-					// Insert before _end connection
-					prevTerminal.connections = prevTerminal.connections.filter(c => c !== "_end");
-					prevTerminal.connections.push(roots[i].id);
+				const prev = findLastInChain(roots[i - 1], ordered);
+				if (prev && !prev.type.toLowerCase().includes("gateway")) {
+					prev.connections = prev.connections.filter(c => c !== "_end");
+					prev.connections.push(roots[i].id);
 				}
 			}
 		}
 
 		// Terminal nodes → end
-		const terminals = middleNodes.filter((n) => n.connections.length === 0);
-		for (const t of terminals) {
-			t.connections = ["_end"];
-		}
-	}
-
-	// --- BPMN Rule Enforcement ---
-	// Rule: tasks/events can have max 1 outgoing connection
-	// Multiple outgoing is ONLY allowed from gateways
-	for (const n of ordered) {
-		if (n.connections.length > 1 && !isGatewayNode(n.type)) {
-			// Non-gateway with multiple outputs — keep only the first connection
-			console.log(`[bpmn-builder] BPMN fix: "${n.label}" (${n.type}) had ${n.connections.length} outputs, keeping first only`);
-			n.connections = [n.connections[0]];
-		}
-	}
-
-	// Rule: every gateway must have 2+ outputs (otherwise it's pointless)
-	for (const n of ordered) {
-		if (isGatewayNode(n.type) && n.connections.length < 2) {
-			// Gateway with <2 outputs — find the next unconnected node and add it
-			const nextUnconnected = middleNodes.find((m) =>
-				m.id !== n.id &&
-				!n.connections.includes(m.id) &&
-				!ordered.some((o) => o.connections.includes(m.id) && o.id !== "_start"),
-			);
-			if (nextUnconnected) {
-				n.connections.push(nextUnconnected.id);
+		for (const t of middleNodes) {
+			if (t.connections.length === 0) {
+				t.connections = ["_end"];
 			}
 		}
 	}
 
-	// --- Compute layout ---
-
-	const columns = computeColumns(ordered);
-	const laneHeights = computeLaneHeights(ordered, lanes, columns);
-	const verticalOffsets = computeVerticalOffsets(ordered, columns, lanes, laneHeights);
-
-	// Find max column to compute total width
-	let maxCol = 0;
-	for (const col of columns.values()) {
-		if (col > maxCol) maxCol = col;
+	// --- BPMN Rule Enforcement ---
+	for (const n of ordered) {
+		// Tasks/events: max 1 output
+		if (n.connections.length > 1 && !n.type.toLowerCase().includes("gateway")) {
+			n.connections = [n.connections[0]];
+		}
 	}
 
-	// Compute cumulative lane Y positions
-	const laneYStart = new Map<string, number>();
-	let cumulativeY = Y_PAD;
-	for (const lane of lanes) {
-		laneYStart.set(lane, cumulativeY);
-		cumulativeY += laneHeights.get(lane) || LANE_H;
-	}
-
-	// Build XML
-	const totalW = CONTENT_X + (maxCol + 1) * X_GAP + 100;
-	const totalH = cumulativeY + Y_PAD;
-
+	// --- Generate semantic XML (NO DI coordinates) ---
 	let processXml = "";
 	let flowsXml = "";
-	let shapesXml = "";
-	let edgesXml = "";
 	let flowId = 0;
 
 	// Lane set
 	let laneSetXml = "    <bpmn:laneSet>\n";
 	for (let li = 0; li < lanes.length; li++) {
-		const laneName = lanes[li];
 		const refs = ordered
-			.filter((n) => (n.lane || "General") === laneName)
+			.filter((n) => (n.lane || "General") === lanes[li])
 			.map((n) => `        <bpmn:flowNodeRef>${n.id}</bpmn:flowNodeRef>`)
 			.join("\n");
-		laneSetXml += `      <bpmn:lane id="Lane_${li}" name="${esc(laneName)}">\n${refs}\n      </bpmn:lane>\n`;
-
-		const laneH = laneHeights.get(laneName) || LANE_H;
-		const laneY = laneYStart.get(laneName) || (Y_PAD + li * LANE_H);
-		shapesXml += `    <bpmndi:BPMNShape id="Lane_${li}_di" bpmnElement="Lane_${li}" isHorizontal="true">
-      <dc:Bounds x="${CONTENT_X - 130}" y="${laneY}" width="${totalW - CONTENT_X + 130}" height="${laneH}" />
-    </bpmndi:BPMNShape>\n`;
+		laneSetXml += `      <bpmn:lane id="Lane_${li}" name="${esc(lanes[li])}">\n${refs}\n      </bpmn:lane>\n`;
 	}
 	laneSetXml += "    </bpmn:laneSet>\n";
 
-	// Elements + shapes + flows
+	// Elements + flows
 	for (const n of ordered) {
 		const tag = bpmnTag(n.type);
-		const d = dims(n.type);
-		const laneName = n.lane || "General";
-		const laneH = laneHeights.get(laneName) || LANE_H;
-		const laneY = laneYStart.get(laneName) || Y_PAD;
-		const col = columns.get(n.id) || 0;
-		const yOffset = verticalOffsets.get(n.id) || 0;
-		const x = CONTENT_X + col * X_GAP;
-		const y = laneY + (laneH - d.h) / 2 + yOffset;
-
-		// Element XML with incoming/outgoing refs
 		const nameAttr = n.label ? ` name="${esc(n.label)}"` : "";
 
-		// Collect outgoing flow IDs for this node
-		const outFlowIds: string[] = [];
-		for (let fi = 0; fi < n.connections.length; fi++) {
-			outFlowIds.push(`flow_${flowId + fi + 1}`);
-		}
-
-		// Collect incoming flow IDs for this node
-		const inFlowIds: string[] = [];
-		// We'll track these as we generate flows below — for now, build element XML
-		// with outgoing refs only (incoming refs are added via a second pass or omitted,
-		// since bpmn-js reconstructs them from the flow definitions)
-
-		if (outFlowIds.length > 0) {
-			const outRefs = outFlowIds
-				.map((fid) => `      <bpmn:outgoing>${fid}</bpmn:outgoing>`)
+		// Element XML
+		if (n.connections.length > 0) {
+			const outRefs = n.connections
+				.map((_, i) => `      <bpmn:outgoing>flow_${flowId + i + 1}</bpmn:outgoing>`)
 				.join("\n");
 			processXml += `    <bpmn:${tag} id="${n.id}"${nameAttr}>\n${outRefs}\n    </bpmn:${tag}>\n`;
 		} else {
 			processXml += `    <bpmn:${tag} id="${n.id}"${nameAttr} />\n`;
 		}
 
-		// Shape
-		shapesXml += `    <bpmndi:BPMNShape id="${n.id}_di" bpmnElement="${n.id}">
-      <dc:Bounds x="${x}" y="${y}" width="${d.w}" height="${d.h}" />
-    </bpmndi:BPMNShape>\n`;
-
-		// Flows
+		// Sequence flows
 		for (let ci = 0; ci < n.connections.length; ci++) {
 			const targetId = n.connections[ci];
 			flowId++;
 			const fid = `flow_${flowId}`;
-			const target = ordered.find((t) => t.id === targetId);
-			if (!target) continue;
-
-			const td = dims(target.type);
-			const tLaneName = target.lane || "General";
-			const tLaneH = laneHeights.get(tLaneName) || LANE_H;
-			const tLaneY = laneYStart.get(tLaneName) || Y_PAD;
-			const tCol = columns.get(target.id) || 0;
-			const tYOffset = verticalOffsets.get(target.id) || 0;
-			const tx = CONTENT_X + tCol * X_GAP;
-			const ty = tLaneY + (tLaneH - td.h) / 2 + tYOffset;
-
-			// Add flow condition label (name) for gateway outgoing flows
 			const condLabel = (n as any).connectionLabels?.[ci];
-			const nameAttr = condLabel ? ` name="${esc(condLabel)}"` : "";
-			flowsXml += `    <bpmn:sequenceFlow id="${fid}"${nameAttr} sourceRef="${n.id}" targetRef="${targetId}" />\n`;
-
-			// Orthogonal routing with fan-out for multi-output nodes (gateways)
-			const totalOutputs = n.connections.length;
-			const isMultiOutput = totalOutputs > 1;
-
-			// Source point: distribute exits along right edge for gateways
-			// For diamond gateways: top=first branch, bottom=second branch, right=third
-			let sx: number;
-			let sy: number;
-			if (isMultiOutput && isGatewayNode(n.type)) {
-				// Fan exits: first goes right, second goes bottom, third goes top
-				if (ci === 0) {
-					sx = x + d.w;          // right edge
-					sy = y + d.h / 2;      // center
-				} else if (ci === 1) {
-					sx = x + d.w / 2;      // bottom edge center
-					sy = y + d.h;          // bottom
-				} else {
-					sx = x + d.w / 2;      // top edge center
-					sy = y;                // top
-				}
-			} else {
-				sx = x + d.w;              // right edge
-				sy = y + d.h / 2;          // center
-			}
-
-			const ex = tx;                 // target: left edge
-			const ey = ty + td.h / 2;     // target: vertical center
-
-			let waypoints: string;
-			if (isMultiOutput && isGatewayNode(n.type) && ci > 0) {
-				// Branch exits: go down/up first, then across
-				const branchOffsetY = ci === 1 ? 40 : -40;
-				const exitY = sy + branchOffsetY;
-				const midX = Math.round((sx + ex) / 2);
-				waypoints = [
-					`      <di:waypoint x="${sx}" y="${sy}" />`,
-					`      <di:waypoint x="${sx}" y="${exitY}" />`,
-					`      <di:waypoint x="${midX}" y="${exitY}" />`,
-					`      <di:waypoint x="${midX}" y="${ey}" />`,
-					`      <di:waypoint x="${ex}" y="${ey}" />`,
-				].join("\n");
-			} else if (Math.abs(sy - ey) < 5) {
-				// Same Y — straight horizontal line
-				waypoints = `      <di:waypoint x="${sx}" y="${sy}" />\n      <di:waypoint x="${ex}" y="${ey}" />`;
-			} else {
-				// Different Y — orthogonal L-shape
-				const midX = Math.round((sx + ex) / 2);
-				waypoints = [
-					`      <di:waypoint x="${sx}" y="${sy}" />`,
-					`      <di:waypoint x="${midX}" y="${sy}" />`,
-					`      <di:waypoint x="${midX}" y="${ey}" />`,
-					`      <di:waypoint x="${ex}" y="${ey}" />`,
-				].join("\n");
-			}
-			edgesXml += `    <bpmndi:BPMNEdge id="${fid}_di" bpmnElement="${fid}">\n${waypoints}\n    </bpmndi:BPMNEdge>\n`;
+			const condAttr = condLabel ? ` name="${esc(condLabel)}"` : "";
+			flowsXml += `    <bpmn:sequenceFlow id="${fid}"${condAttr} sourceRef="${n.id}" targetRef="${targetId}" />\n`;
 		}
 	}
 
-	// Pool shape
-	shapesXml =
-		`    <bpmndi:BPMNShape id="Pool_di" bpmnElement="Pool" isHorizontal="true">
-      <dc:Bounds x="${POOL_X}" y="${Y_PAD}" width="${totalW}" height="${totalH - Y_PAD}" />
-    </bpmndi:BPMNShape>\n` + shapesXml;
-
+	// Wrap in collaboration + process (no DI section — bpmn-auto-layout adds it)
 	return `<?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
   xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
@@ -519,16 +240,23 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
   </bpmn:collaboration>
   <bpmn:process id="Process_1" isExecutable="false">
 ${laneSetXml}${processXml}${flowsXml}  </bpmn:process>
-  <bpmndi:BPMNDiagram id="Diagram_1">
-    <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collab">
-${shapesXml}${edgesXml}    </bpmndi:BPMNPlane>
-  </bpmndi:BPMNDiagram>
 </bpmn:definitions>`;
 }
 
-function isGatewayNode(type: string): boolean {
-	const t = type.toLowerCase();
-	return t.includes("gateway");
+/**
+ * Apply professional auto-layout to BPMN XML.
+ * Uses bpmn-auto-layout (from bpmn.io) to add DI with proper
+ * orthogonal routing, lane spacing, and element distribution.
+ */
+export async function layoutBpmnXml(xml: string): Promise<string> {
+	try {
+		const { layoutProcess } = await import("bpmn-auto-layout");
+		const layoutedXml = await layoutProcess(xml);
+		return layoutedXml;
+	} catch (err) {
+		console.warn("[bpmn-builder] Auto-layout failed, returning raw XML:", err);
+		return xml;
+	}
 }
 
 function findLastInChain(startNode: DiagramNode, allNodes: DiagramNode[]): DiagramNode | null {

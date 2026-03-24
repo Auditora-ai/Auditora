@@ -8,7 +8,7 @@ import {
 	KnowledgeSnapshotSchema,
 } from "@repo/ai";
 import { deleteSessionActivity, runPostSessionPipelines } from "../../../webhook/recall/route";
-import { buildBpmnXml } from "@meeting/lib/bpmn-builder";
+import { buildBpmnXml, layoutBpmnXml } from "@meeting/lib/bpmn-builder";
 import type { DiagramNode } from "@meeting/types";
 
 export async function POST(
@@ -113,7 +113,7 @@ async function autoVersionOnSessionEnd(
 				}));
 
 				try {
-					finalBpmnXml = buildBpmnXml(diagramNodes);
+					finalBpmnXml = await layoutBpmnXml(buildBpmnXml(diagramNodes));
 				} catch (err) {
 					console.error("[EndSession] Failed to build BPMN XML from nodes:", err);
 				}

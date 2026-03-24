@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useCallback, useState } from "react";
 import type { DiagramNode } from "../types";
-import { buildBpmnXml, bpmnType, dims, bpmnTag } from "../lib/bpmn-builder";
+import { buildBpmnXml, layoutBpmnXml, bpmnType, dims, bpmnTag } from "../lib/bpmn-builder";
 
 /**
  * useBpmnModeler — Custom hook for bpmn-js Modeler lifecycle
@@ -120,7 +120,7 @@ export function useBpmnModeler({
 
 			// Import initial XML (or empty diagram for live AI mode)
 			try {
-				await modeler.importXML(initialXml || defaultBpmnXml(processName));
+				await modeler.importXML(initialXml || await defaultBpmnXml(processName));
 				const canvas = modeler.get("canvas");
 				canvas.zoom("fit-viewport", "auto");
 				applyBizagiColors(modeler);
@@ -144,13 +144,13 @@ export function useBpmnModeler({
 						setRenderError("El diagrama se regeneró automáticamente desde los datos guardados.");
 					} catch (recoveryErr) {
 						console.error("[useBpmnModeler] Recovery also failed, loading empty diagram:", recoveryErr);
-						await modeler.importXML(defaultBpmnXml());
+						await modeler.importXML(await defaultBpmnXml());
 						setRenderError("El diagrama está corrupto y no se pudo recuperar. Use 'Arreglar con IA' para repararlo.");
 					}
 				} else {
 					// No nodes available — load empty diagram so modeler is usable
 					try {
-						await modeler.importXML(defaultBpmnXml());
+						await modeler.importXML(await defaultBpmnXml());
 						setRenderError("El diagrama no se pudo cargar. Use 'Arreglar con IA' para repararlo.");
 					} catch {
 						console.error("[useBpmnModeler] Even empty diagram failed");
@@ -217,7 +217,7 @@ export function useBpmnModeler({
 						await modeler.importXML(xml);
 					} catch (bootstrapErr) {
 						console.error("[useBpmnModeler] Bootstrap importXML failed, loading empty:", bootstrapErr);
-						await modeler.importXML(defaultBpmnXml());
+						await modeler.importXML(await defaultBpmnXml());
 						setRenderError("El diagrama generado tiene errores. Use 'Arreglar con IA' para repararlo.");
 					}
 
@@ -270,27 +270,10 @@ export function useBpmnModeler({
 			}
 
 			try {
-				const xml = buildBpmnXml(rebuildNodes);
+				const rawXml = buildBpmnXml(rebuildNodes);
+				const xml = await layoutBpmnXml(rawXml);
 				await modeler.importXML(xml);
 				const canvas = modeler.get("canvas");
-				const elementRegistry = modeler.get("elementRegistry");
-				const modeling = modeler.get("modeling");
-
-				// Re-layout all connections using bpmn-js orthogonal router
-				try {
-					const connections = elementRegistry.filter(
-						(el: any) => el.type === "bpmn:SequenceFlow",
-					);
-					for (const conn of connections) {
-						try {
-							modeling.layoutConnection(conn);
-						} catch {
-							// Some connections may not support layout
-						}
-					}
-				} catch {
-					// Layout service may not be available
-				}
 
 				canvas.zoom("fit-viewport", "auto");
 				applyBizagiColors(modeler);
@@ -978,8 +961,7 @@ function addFormingOverlay(
 	}
 }
 
-function defaultBpmnXml(processName?: string): string {
-	// Use buildBpmnXml with a single start event to generate valid Pool XML
+async function defaultBpmnXml(processName?: string): Promise<string> {
 	const startNode: DiagramNode = {
 		id: "start_default",
 		type: "start_event",
@@ -987,10 +969,10 @@ function defaultBpmnXml(processName?: string): string {
 		state: "confirmed",
 		connections: [],
 	};
-	const xml = buildBpmnXml([startNode]);
-	// Replace the hardcoded Pool name "Process" with the actual process name
+	const rawXml = buildBpmnXml([startNode]);
 	const name = processName || "Proceso";
-	return xml.replace('name="Process"', `name="${name.replace(/"/g, "&quot;")}"`);
+	const namedXml = rawXml.replace('name="Process"', `name="${name.replace(/"/g, "&quot;")}"`);
+	return layoutBpmnXml(namedXml);
 }
 
 /**
