@@ -128,7 +128,7 @@ export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 	}, [listening]);
 
 	return (
-		<div className="flex flex-col overflow-hidden">
+		<div className="flex h-full flex-col overflow-hidden">
 			{/* Header */}
 			<div className="flex items-center gap-2 border-b border-[#334155] px-3 py-2">
 				<MessageSquareIcon className="h-3.5 w-3.5 text-[#64748B]" />

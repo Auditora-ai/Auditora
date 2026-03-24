@@ -12,6 +12,8 @@ interface TeleprompterSectionProps {
 	completenessScore: number | null;
 	sipocCoverage: Record<string, number> | null;
 	gapType: string | null;
+	/** Hide the internal header (used when RightPanel provides accordion header) */
+	compact?: boolean;
 }
 
 const SIPOC_DIMENSIONS = [
@@ -142,6 +144,7 @@ export function TeleprompterSection({
 	completenessScore,
 	sipocCoverage,
 	gapType,
+	compact,
 }: TeleprompterSectionProps) {
 	const { sessionId, nodes } = useLiveSessionContext();
 	const [addingToDiagram, setAddingToDiagram] = useState(false);
@@ -255,23 +258,25 @@ export function TeleprompterSection({
 
 	return (
 		<div className="flex flex-col overflow-hidden">
-			{/* Header */}
-			<div className="flex items-center gap-2 border-b border-[#334155] px-3 py-2">
-				<SparklesIcon className="h-3.5 w-3.5 text-[#2563EB]" />
-				<span className="text-xs font-medium text-[#94A3B8]">
-					Sugerencias IA
-				</span>
-				{gapType && (
-					<span className="ml-auto rounded-full bg-[#2563EB]/10 px-2 py-0.5 text-[10px] font-medium text-[#3B82F6]">
-						{gapType}
+			{/* Header — hidden in compact mode (RightPanel provides accordion header) */}
+			{!compact && (
+				<div className="flex items-center gap-2 border-b border-[#334155] px-3 py-2">
+					<SparklesIcon className="h-3.5 w-3.5 text-[#2563EB]" />
+					<span className="text-xs font-medium text-[#94A3B8]">
+						Sugerencias IA
 					</span>
-				)}
-				{!gapType && (
-					<span className="ml-auto rounded-full bg-[#334155] px-2 py-0.5 text-[10px] font-medium text-[#64748B]">
-						SIPOC
-					</span>
-				)}
-			</div>
+					{gapType && (
+						<span className="ml-auto rounded-full bg-[#2563EB]/10 px-2 py-0.5 text-[10px] font-medium text-[#3B82F6]">
+							{gapType}
+						</span>
+					)}
+					{!gapType && (
+						<span className="ml-auto rounded-full bg-[#334155] px-2 py-0.5 text-[10px] font-medium text-[#64748B]">
+							SIPOC
+						</span>
+					)}
+				</div>
+			)}
 
 			{/* SIPOC Coverage bars — always visible */}
 			<div className="flex items-end gap-1 border-b border-[#334155]/50 px-3 py-2">
