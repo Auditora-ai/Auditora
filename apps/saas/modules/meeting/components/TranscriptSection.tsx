@@ -313,9 +313,9 @@ function TranscriptLine({ entry, sessionId }: { entry: TranscriptEntry; sessionI
 	if (hidden) return null;
 
 	return (
-		<div className={`group relative rounded-lg px-2 py-1.5 transition-colors duration-75 hover:bg-[#1E293B] ${
+		<div className={`group rounded-lg px-2 py-1.5 transition-colors duration-75 hover:bg-[#1E293B] ${
 			isManual ? "border-l-2 border-[#2563EB]/50 bg-[#2563EB]/5" : ""
-		} ${isEdited ? "border-l-2 border-amber-500/50" : ""}`}>
+		}`}>
 			<div className="flex items-baseline gap-2">
 				<span
 					className="text-[10px] font-medium"
@@ -329,30 +329,13 @@ function TranscriptLine({ entry, sessionId }: { entry: TranscriptEntry; sessionI
 
 				{/* Action buttons — visible on hover */}
 				<div className="ml-auto flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
-					<button
-						type="button"
-						onClick={() => { setEditing(true); setEditText(displayText); }}
-						className="rounded p-0.5 text-[#64748B] hover:bg-[#334155] hover:text-white"
-						title="Editar texto"
-					>
+					<button type="button" onClick={() => { setEditing(true); setEditText(displayText); }} className="rounded p-0.5 text-[#64748B] hover:text-white" title="Editar">
 						<PencilIcon className="h-2.5 w-2.5" />
 					</button>
-					<button
-						type="button"
-						onClick={handleIgnore}
-						disabled={saving}
-						className="rounded p-0.5 text-[#64748B] hover:bg-amber-500/10 hover:text-amber-400"
-						title="Ignorar (IA no tomara en cuenta)"
-					>
+					<button type="button" onClick={handleIgnore} disabled={saving} className="rounded p-0.5 text-[#64748B] hover:text-amber-400" title="Ignorar">
 						<EyeOffIcon className="h-2.5 w-2.5" />
 					</button>
-					<button
-						type="button"
-						onClick={handleDelete}
-						disabled={saving}
-						className="rounded p-0.5 text-[#64748B] hover:bg-red-500/10 hover:text-red-400"
-						title="Eliminar"
-					>
+					<button type="button" onClick={handleDelete} disabled={saving} className="rounded p-0.5 text-[#64748B] hover:text-red-400" title="Eliminar">
 						<TrashIcon className="h-2.5 w-2.5" />
 					</button>
 				</div>
@@ -371,19 +354,10 @@ function TranscriptLine({ entry, sessionId }: { entry: TranscriptEntry; sessionI
 						autoFocus
 						className="flex-1 rounded bg-[#1E293B] px-2 py-1 text-[11px] text-[#F1F5F9] outline-none ring-1 ring-[#334155] focus:ring-[#2563EB]"
 					/>
-					<button
-						type="button"
-						onClick={handleEdit}
-						disabled={saving}
-						className="rounded bg-[#2563EB] p-1 text-white disabled:opacity-50"
-					>
+					<button type="button" onClick={handleEdit} disabled={saving} className="rounded bg-[#2563EB] p-1 text-white disabled:opacity-50">
 						{saving ? <Loader2Icon className="h-3 w-3 animate-spin" /> : <CheckIcon className="h-3 w-3" />}
 					</button>
-					<button
-						type="button"
-						onClick={() => setEditing(false)}
-						className="rounded bg-[#334155] p-1 text-[#94A3B8]"
-					>
+					<button type="button" onClick={() => setEditing(false)} className="rounded bg-[#334155] p-1 text-[#94A3B8]">
 						<XIcon className="h-3 w-3" />
 					</button>
 				</div>
