@@ -234,15 +234,18 @@ export function TeleprompterSection({
 		return local;
 	}, [answeredQuestions]);
 
-	// Use server data if available, otherwise use local tracking
+	// Server data takes priority (from AI analysis), local only as fallback
 	const coverage = useMemo(() => {
-		const base = sipocCoverage || { suppliers: 0, inputs: 0, process: 0, outputs: 0, customers: 0 };
-		// Take the max of server and local for each dimension
-		const merged: Record<string, number> = {};
-		for (const dim of SIPOC_DIMENSIONS) {
-			merged[dim.key] = Math.max(base[dim.key] ?? 0, localCoverage[dim.key] ?? 0);
+		if (sipocCoverage) {
+			// Server has real analysis — use it directly
+			const merged: Record<string, number> = {};
+			for (const dim of SIPOC_DIMENSIONS) {
+				merged[dim.key] = sipocCoverage[dim.key] ?? 0;
+			}
+			return merged;
 		}
-		return merged;
+		// No server data — use local tracking from answered questions
+		return localCoverage;
 	}, [sipocCoverage, localCoverage]);
 
 	const hasAiSuggestions = !!currentQuestion;
