@@ -897,10 +897,12 @@ function defaultBpmnXml(processName?: string): string {
 		type: "start_event",
 		label: "Inicio",
 		state: "confirmed",
-		lane: processName || "Proceso",
 		connections: [],
 	};
-	return buildBpmnXml([startNode]);
+	const xml = buildBpmnXml([startNode]);
+	// Replace the hardcoded Pool name "Process" with the actual process name
+	const name = processName || "Proceso";
+	return xml.replace('name="Process"', `name="${name.replace(/"/g, "&quot;")}"`);
 }
 
 /**
