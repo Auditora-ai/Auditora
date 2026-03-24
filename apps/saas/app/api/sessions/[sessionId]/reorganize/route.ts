@@ -97,7 +97,9 @@ REGLAS DE CONEXIÓN:
 - DEBE haber un camino completo de inicio a fin
 - Los gateways que dividen DEBEN tener un gateway que reúne los caminos
 
-OUTPUT — JSON válido (sin markdown):
+CRITICAL: Output ONLY a JSON object. NO text before or after. NO markdown. NO explanations. Start your response with { and end with }.
+
+JSON format:
 {
   "keep": [
     {
@@ -130,14 +132,26 @@ Revisa cada nodo, elimina lo que no pertenece, corrige lo que esté mal, y organ
 			temperature: 0.1,
 		});
 
-		// Parse result
+		// Parse result — extract JSON even if AI added text around it
 		let result: any;
 		try {
+			// Try direct parse first
 			const cleaned = text.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
 			result = JSON.parse(cleaned);
 		} catch {
-			console.error("[Reorganize] Failed to parse AI response:", text.substring(0, 300));
-			return NextResponse.json({ error: "AI response parse failed" }, { status: 422 });
+			// Try to find JSON object in the response
+			const jsonMatch = text.match(/\{[\s\S]*"keep"[\s\S]*\}/);
+			if (jsonMatch) {
+				try {
+					result = JSON.parse(jsonMatch[0]);
+				} catch {
+					console.error("[Reorganize] Failed to parse AI response:", text.substring(0, 300));
+					return NextResponse.json({ error: "AI response parse failed" }, { status: 422 });
+				}
+			} else {
+				console.error("[Reorganize] No JSON found in AI response:", text.substring(0, 300));
+				return NextResponse.json({ error: "AI response parse failed" }, { status: 422 });
+			}
 		}
 
 		const validIds = new Set(allNodes.map((n) => n.id));
