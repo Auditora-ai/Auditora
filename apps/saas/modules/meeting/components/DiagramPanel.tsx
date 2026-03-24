@@ -353,57 +353,79 @@ export function DiagramPanel({
 		registerZoomToElement(zoomToElementFn);
 	}, [zoomToElementFn, registerZoomToElement]);
 
-	return (
-		<div className="bpmn-dark-chrome flex h-full flex-col" style={flashStyle}>
-			{/* Toolbar */}
-			<BpmnToolbar
-				canUndo={canUndo}
-				canRedo={canRedo}
-				gridEnabled={gridEnabled}
-				isFullscreen={isFullscreen}
-				hasElements={true}
-				onUndo={undo}
-				onRedo={redo}
-				onZoomIn={zoomIn}
-				onZoomOut={zoomOut}
-				onZoomFit={zoomFit}
-				onToggleGrid={toggleGrid}
-				onExportSVG={handleExportSVG}
-				onExportPNG={handleExportPNG}
-				onExportXML={handleExportXML}
-				onToggleFullscreen={() => onToggleFullscreen?.()}
-				onShowShortcuts={() => setShowShortcuts(true)}
-				onToggleIntelligence={processId ? () => setShowIntelligence(!showIntelligence) : undefined}
-				intelligenceActive={showIntelligence}
-				onToggleLegend={() => setShowLegend(!showLegend)}
-				legendActive={showLegend}
-				onSave={processId ? handleSave : undefined}
-				saving={saving}
-			/>
+	// Internal fullscreen state — uses fixed overlay like DiagramTab in /procesos
+	const [internalFullscreen, setInternalFullscreen] = useState(false);
+	const actualFullscreen = isFullscreen || internalFullscreen;
 
-			{/* Unsaved/saving indicators (inline in toolbar area) */}
+	const toggleFullscreen = useCallback(() => {
+		if (onToggleFullscreen) {
+			onToggleFullscreen();
+		}
+		setInternalFullscreen((f) => !f);
+	}, [onToggleFullscreen]);
+
+	// Re-fit canvas on fullscreen toggle
+	useEffect(() => {
+		if (!isReady) return;
+		const timer = setTimeout(() => zoomFit(), 150);
+		return () => clearTimeout(timer);
+	}, [actualFullscreen, isReady, zoomFit]);
+
+	// Escape exits fullscreen
+	useEffect(() => {
+		const handler = (e: KeyboardEvent) => {
+			if (e.key === "Escape" && internalFullscreen) {
+				setInternalFullscreen(false);
+				onToggleFullscreen?.();
+			}
+		};
+		document.addEventListener("keydown", handler);
+		return () => document.removeEventListener("keydown", handler);
+	}, [internalFullscreen, onToggleFullscreen]);
+
+	const toolbar = (
+		<BpmnToolbar
+			canUndo={canUndo}
+			canRedo={canRedo}
+			gridEnabled={gridEnabled}
+			isFullscreen={actualFullscreen}
+			hasElements={true}
+			onUndo={undo}
+			onRedo={redo}
+			onZoomIn={zoomIn}
+			onZoomOut={zoomOut}
+			onZoomFit={zoomFit}
+			onToggleGrid={toggleGrid}
+			onExportSVG={handleExportSVG}
+			onExportPNG={handleExportPNG}
+			onExportXML={handleExportXML}
+			onToggleFullscreen={toggleFullscreen}
+			onShowShortcuts={() => setShowShortcuts(true)}
+			onToggleIntelligence={processId ? () => setShowIntelligence(!showIntelligence) : undefined}
+			intelligenceActive={showIntelligence}
+			onToggleLegend={() => setShowLegend(!showLegend)}
+			legendActive={showLegend}
+			onSave={processId ? handleSave : undefined}
+			saving={saving}
+		/>
+	);
+
+	const canvasContent = (
+		<>
+			{/* Unsaved/saving indicators */}
 			{(hasUnsavedChanges || saving) && (
 				<div className="flex items-center gap-2 border-b border-border px-3 py-1">
-					{hasUnsavedChanges && (
-						<span className="text-[10px] text-amber-600">Sin guardar</span>
-					)}
-					{saving && (
-						<span className="text-[10px] text-muted-foreground">Guardando...</span>
-					)}
+					{hasUnsavedChanges && <span className="text-[10px] text-amber-600">Sin guardar</span>}
+					{saving && <span className="text-[10px] text-muted-foreground">Guardando...</span>}
 				</div>
 			)}
 
-			{/* Subprocess breadcrumbs */}
-			<BpmnBreadcrumbs
-				stack={navigationStack}
-				onNavigate={navigateUp}
-			/>
+			<BpmnBreadcrumbs stack={navigationStack} onNavigate={navigateUp} />
 
-			{/* Canvas + Properties Panel + Overlays */}
+			{/* Canvas + overlays */}
 			<div
 				className="relative flex-1"
 				onDragOver={(e) => {
-					// Accept drops from suggestion cards
 					if (e.dataTransfer.types.includes("application/prozea-node")) {
 						e.preventDefault();
 						e.dataTransfer.dropEffect = "copy";
@@ -413,25 +435,18 @@ export function DiagramPanel({
 					const data = e.dataTransfer.getData("application/prozea-node");
 					if (data) {
 						e.preventDefault();
-						try {
-							const node = JSON.parse(data);
-							addNodeFromSuggestion(node);
-						} catch {
-							// Invalid data
-						}
+						try { addNodeFromSuggestion(JSON.parse(data)); } catch {}
 					}
 				}}
 			>
 				<div ref={containerRef} className="bpmn-editor-canvas h-full w-full" />
 
-				{/* Render error banner */}
 				{renderError && (
 					<div className="absolute left-1/2 top-2 z-10 -translate-x-1/2 rounded-md border border-amber-300 bg-amber-50 px-3 py-1.5 text-xs text-amber-800 shadow-sm">
 						{renderError}
 					</div>
 				)}
 
-				{/* Properties Panel (slide-in drawer) */}
 				<BpmnPropertiesPanel
 					modeler={getModeler()}
 					selectedElement={selectedElement}
@@ -439,26 +454,35 @@ export function DiagramPanel({
 					onClose={() => setPropertiesOpen(false)}
 				/>
 
-				{/* AI Intelligence Overlays */}
 				{processId && (
-					<BpmnIntelligence
-						processId={processId}
-						modeler={getModeler()}
-						isReady={isReady}
-						visible={showIntelligence}
-					/>
+					<BpmnIntelligence processId={processId} modeler={getModeler()} isReady={isReady} visible={showIntelligence} />
 				)}
 
-				{/* Process Completeness Widget */}
-				{processId && sessionStatus === "ENDED" && (
-					<ProcessCompleteness processId={processId} />
-				)}
+				{processId && sessionStatus === "ENDED" && <ProcessCompleteness processId={processId} />}
+			</div>
+		</>
+	);
 
-				{/* Color Legend */}
-				<BpmnLegend
-					visible={showLegend}
-					onClose={() => setShowLegend(false)}
-				/>
+	// ── Fullscreen: fixed overlay covering entire screen (same pattern as /procesos) ──
+	if (internalFullscreen) {
+		return (
+			<div className="fixed inset-0 z-50 flex flex-col bg-white">
+				{toolbar}
+				<div className="flex flex-1 flex-col overflow-hidden">
+					{canvasContent}
+				</div>
+				<KeyboardShortcutsModal isOpen={showShortcuts} onClose={() => setShowShortcuts(false)} />
+				<BpmnLegend visible={showLegend} onClose={() => setShowLegend(false)} />
+			</div>
+		);
+	}
+
+	// ── Normal (non-fullscreen) render ──
+	return (
+		<div className="bpmn-dark-chrome flex h-full flex-col" style={flashStyle}>
+			{toolbar}
+			<div className="flex flex-1 flex-col overflow-hidden">
+				{canvasContent}
 
 				{/* Loading state */}
 				{!isReady && (
@@ -467,43 +491,11 @@ export function DiagramPanel({
 					</div>
 				)}
 
-				{/* Empty state — shown when editor is ready but no XML was loaded */}
-				{isReady && !bpmnXml && (
-					<div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-						<div className="text-center opacity-40">
-							<div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/5">
-								<svg
-									className="h-8 w-8 text-primary/30"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-									strokeWidth={1.5}
-								>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z"
-									/>
-								</svg>
-							</div>
-							<p className="text-lg text-muted-foreground">
-								{sessionType === "DISCOVERY"
-									? "Usa la paleta para comenzar a diagramar"
-									: "Arrastra elementos de la paleta al canvas"}
-							</p>
-							<p className="mt-2 text-sm text-muted-foreground/60">
-								Las sugerencias de la IA apareceran en el panel lateral
-							</p>
-						</div>
-					</div>
-				)}
+				{/* Color Legend */}
+				<BpmnLegend visible={showLegend} onClose={() => setShowLegend(false)} />
 			</div>
 
-			{/* Keyboard Shortcuts Modal */}
-			<KeyboardShortcutsModal
-				isOpen={showShortcuts}
-				onClose={() => setShowShortcuts(false)}
-			/>
+			<KeyboardShortcutsModal isOpen={showShortcuts} onClose={() => setShowShortcuts(false)} />
 		</div>
 	);
 }
