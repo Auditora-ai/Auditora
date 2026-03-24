@@ -131,16 +131,35 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 		connections: [],
 	});
 
-	// Add visible nodes (skip start/end events from LLM — we add our own)
+	// Collect IDs of LLM start/end events (we add our own _start/_end)
+	const skippedIds = new Set<string>();
+	for (const n of visible) {
+		const tag = bpmnTag(n.type);
+		if (tag === "startEvent" || tag === "endEvent") {
+			skippedIds.add(n.id);
+		}
+	}
+
+	// Add visible nodes (skip LLM start/end events)
 	for (const n of visible) {
 		const tag = bpmnTag(n.type);
 		if (tag === "startEvent" || tag === "endEvent") continue;
 		ordered.push({
 			...n,
 			id: safeId(n.id),
+			// Filter connections: remove refs to skipped events, replace with _end/_start
 			connections: n.connections
-				.filter((c) => validIds.has(c))
-				.map((c) => safeId(c)),
+				.map((c) => {
+					if (skippedIds.has(c)) {
+						// This connected to a LLM end event → connect to our _end
+						const skippedNode = visible.find((v) => v.id === c);
+						if (skippedNode && bpmnTag(skippedNode.type) === "endEvent") return safeId("_end");
+						if (skippedNode && bpmnTag(skippedNode.type) === "startEvent") return safeId("_start");
+						return null;
+					}
+					return validIds.has(c) ? safeId(c) : null;
+				})
+				.filter((c): c is string => c !== null),
 		});
 	}
 
@@ -211,6 +230,31 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 			n.connections = [n.connections[0]];
 		}
 	}
+
+	// Break cycles: if A → B → ... → A, remove the back-edge
+	const visited = new Set<string>();
+	const inStack = new Set<string>();
+	function breakCycles(nodeId: string) {
+		if (inStack.has(nodeId)) return; // cycle detected, already handled
+		if (visited.has(nodeId)) return;
+		visited.add(nodeId);
+		inStack.add(nodeId);
+		const node = ordered.find((n) => n.id === nodeId);
+		if (node) {
+			node.connections = node.connections.filter((targetId) => {
+				if (inStack.has(targetId)) {
+					// Back-edge — break the cycle
+					return false;
+				}
+				return true;
+			});
+			for (const targetId of node.connections) {
+				breakCycles(targetId);
+			}
+		}
+		inStack.delete(nodeId);
+	}
+	breakCycles(ordered[0].id);
 
 	// --- Generate semantic XML (NO DI coordinates) ---
 	let processXml = "";
