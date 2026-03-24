@@ -126,12 +126,7 @@ export function useBpmnModeler({
 				applyBizagiColors(modeler);
 
 				// Force white background on bpmn-js internals (dark theme override)
-				const djsContainer = containerRef.current?.querySelector(".djs-container") as HTMLElement | null;
-				if (djsContainer) {
-					djsContainer.style.background = "#ffffff";
-					const svg = djsContainer.querySelector("svg");
-					if (svg) svg.style.background = "#ffffff";
-				}
+				forceCanvasWhite(containerRef.current);
 			} catch (err) {
 				console.error("[useBpmnModeler] Failed to import initial XML:", err);
 
@@ -906,4 +901,36 @@ function defaultBpmnXml(processName?: string): string {
 		connections: [],
 	};
 	return buildBpmnXml([startNode]);
+}
+
+/**
+ * Force white background on all bpmn-js internal elements.
+ * Injects a <style> tag inside the .djs-container so it has
+ * maximum proximity-based priority over any external CSS.
+ */
+function forceCanvasWhite(container: HTMLElement | null): void {
+	if (!container) return;
+
+	const djsContainer = container.querySelector(".djs-container") as HTMLElement | null;
+	if (!djsContainer) return;
+
+	// Inject a <style> tag directly inside the djs-container
+	const existingStyle = djsContainer.querySelector("style[data-canvas-bg]");
+	if (!existingStyle) {
+		const style = document.createElement("style");
+		style.setAttribute("data-canvas-bg", "true");
+		style.textContent = `
+			.djs-container { background: #ffffff !important; }
+			.djs-container > svg { background: #ffffff !important; }
+			.djs-overlay-container { background: transparent !important; }
+		`;
+		djsContainer.prepend(style);
+	}
+
+	// Also set inline styles as belt-and-suspenders
+	djsContainer.style.setProperty("background", "#ffffff", "important");
+	const svg = djsContainer.querySelector(":scope > svg") as SVGElement | null;
+	if (svg) {
+		svg.style.setProperty("background", "#ffffff", "important");
+	}
 }

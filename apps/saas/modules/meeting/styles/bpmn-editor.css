@@ -36,9 +36,22 @@
 	background: #ffffff !important;
 }
 
-/* Nuclear override: any element inside the canvas that might inherit dark bg */
-.bpmn-editor-canvas * {
-	color-scheme: light;
+/* Force light mode on canvas — override dark theme CSS variables */
+.bpmn-canvas-light {
+	--background: #FFFFFF !important;
+	--foreground: #0F172A !important;
+	--card: #ffffff !important;
+	--card-foreground: #0F172A !important;
+	--border: #E2E8F0 !important;
+	--muted: #F8FAFC !important;
+	--muted-foreground: #64748B !important;
+	color-scheme: light !important;
+	background: #ffffff !important;
+	color: #0F172A !important;
+}
+
+.bpmn-canvas-light * {
+	color-scheme: light !important;
 }
 
 /* Force light mode on canvas SVG elements regardless of app theme */

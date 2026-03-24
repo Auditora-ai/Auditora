@@ -78,28 +78,16 @@ export function CentralCanvas({ containerRef }: CentralCanvasProps) {
 
 	return (
 		<div
-			className="live-session relative overflow-hidden"
-			style={{
-				gridArea: "canvas",
-				colorScheme: "light",
-				// Force light mode CSS variables inside canvas (overrides .dark * inheritance)
-				"--background": "#FFFFFF",
-				"--foreground": "#0F172A",
-				"--card": "#ffffff",
-				"--card-foreground": "#0F172A",
-				"--border": "#E2E8F0",
-				"--muted": "#F8FAFC",
-				"--muted-foreground": "#64748B",
-				background: "#ffffff",
-				color: "#0F172A",
-			} as React.CSSProperties}
+			className="live-session bpmn-canvas-light relative overflow-hidden"
+			style={{ gridArea: "canvas" }}
 			onDragOver={handleDragOver}
 			onDrop={handleDrop}
 		>
-			{/* bpmn-js mounts here — same pattern as DiagramEditor (no extra classes) */}
+			{/* bpmn-js mounts here — matches ProcessDetailView pattern exactly */}
 			<div
 				ref={containerRef}
-				className="bpmn-editor-canvas absolute inset-0"
+				className="bpmn-editor-canvas"
+				style={{ width: "100%", height: "100%" }}
 			/>
 
 			{/* Empty state */}
