@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { SparklesIcon, ClipboardCopyIcon, PlusCircleIcon, Loader2Icon } from "lucide-react";
 import { toast } from "sonner";
 import { useLiveSessionContext } from "../context/LiveSessionContext";
@@ -99,8 +99,38 @@ export function TeleprompterSection({
 		}
 	}, [sessionId, answerText]);
 
-	// Use real coverage data or show empty SIPOC bars
-	const coverage = sipocCoverage || { suppliers: 0, inputs: 0, process: 0, outputs: 0, customers: 0 };
+	// Merge server coverage with local answered questions for immediate feedback
+	const localCoverage = useMemo(() => {
+		const dimMap: Record<string, string> = { S: "suppliers", I: "inputs", P: "process", O: "outputs", C: "customers" };
+		// Count answered questions per dimension
+		const dimAnswered: Record<string, number> = {};
+		const dimTotal: Record<string, number> = {};
+		DEFAULT_SIPOC_QUESTIONS.forEach((q, i) => {
+			const key = dimMap[q.dimension] || q.dimension;
+			dimTotal[key] = (dimTotal[key] || 0) + 1;
+			if (answeredQuestions.has(i)) {
+				dimAnswered[key] = (dimAnswered[key] || 0) + 1;
+			}
+		});
+		// Calculate local coverage percentage per dimension
+		const local: Record<string, number> = {};
+		for (const [key, total] of Object.entries(dimTotal)) {
+			local[key] = Math.round(((dimAnswered[key] || 0) / total) * 100);
+		}
+		return local;
+	}, [answeredQuestions]);
+
+	// Use server data if available, otherwise use local tracking
+	const coverage = useMemo(() => {
+		const base = sipocCoverage || { suppliers: 0, inputs: 0, process: 0, outputs: 0, customers: 0 };
+		// Take the max of server and local for each dimension
+		const merged: Record<string, number> = {};
+		for (const dim of SIPOC_DIMENSIONS) {
+			merged[dim.key] = Math.max(base[dim.key] ?? 0, localCoverage[dim.key] ?? 0);
+		}
+		return merged;
+	}, [sipocCoverage, localCoverage]);
+
 	const hasAiSuggestions = !!currentQuestion;
 
 	return (
