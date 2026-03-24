@@ -78,8 +78,8 @@ export function CentralCanvas({ containerRef }: CentralCanvasProps) {
 
 	return (
 		<div
-			className="relative overflow-hidden bg-white"
-			style={{ gridArea: "canvas" }}
+			className="relative overflow-hidden"
+			style={{ gridArea: "canvas", backgroundColor: "#ffffff" }}
 			onDragOver={handleDragOver}
 			onDrop={handleDrop}
 		>
@@ -87,6 +87,7 @@ export function CentralCanvas({ containerRef }: CentralCanvasProps) {
 			<div
 				ref={containerRef}
 				className="live-session bpmn-editor-canvas absolute inset-0"
+				style={{ backgroundColor: "#ffffff" }}
 			/>
 
 			{/* Empty state */}

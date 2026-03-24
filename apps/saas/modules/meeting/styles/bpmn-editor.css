@@ -430,6 +430,17 @@
 	background-size: 20px 20px !important;
 }
 
+/* Force white on all bpmn-js internal containers in live session */
+.live-session .djs-container,
+.live-session .djs-container svg,
+.live-session .djs-overlay-container,
+.live-session .djs-visual {
+	background-color: #ffffff !important;
+}
+.live-session .djs-container svg {
+	background: #ffffff !important;
+}
+
 /* Drop target feedback */
 .live-session.drag-over {
 	outline: 2px dashed rgba(37, 99, 235, 0.4);
