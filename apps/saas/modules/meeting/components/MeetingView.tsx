@@ -42,6 +42,7 @@ export function MeetingView({
 	const modelerApi = useBpmnModeler({
 		containerRef,
 		initialXml: bpmnXml,
+		processName,
 		onConfirmNode: (nodeId) => handleNodeAction(nodeId, "confirm"),
 		onRejectNode: (nodeId) => handleNodeAction(nodeId, "reject"),
 	});

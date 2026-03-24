@@ -18,8 +18,10 @@ import { buildBpmnXml, bpmnType, dims, bpmnTag } from "../lib/bpmn-builder";
 
 interface UseBpmnModelerOptions {
 	containerRef: React.RefObject<HTMLDivElement | null>;
-	/** Initial BPMN XML to load. If not provided, starts with empty diagram (for live AI mode). */
+	/** Initial BPMN XML to load. If not provided, starts with a default pool. */
 	initialXml?: string | null;
+	/** Process name — used to label the default pool when no initialXml is provided. */
+	processName?: string;
 	/** Callback when user confirms a forming node. Required for live AI mode. */
 	onConfirmNode?: (nodeId: string) => void;
 	/** Callback when user rejects a forming node. Required for live AI mode. */
@@ -63,6 +65,7 @@ import { applyBizagiColors } from "../lib/bpmn-colors";
 export function useBpmnModeler({
 	containerRef,
 	initialXml,
+	processName,
 	onConfirmNode,
 	onRejectNode,
 	sessionStatus = "ACTIVE",
@@ -117,10 +120,18 @@ export function useBpmnModeler({
 
 			// Import initial XML (or empty diagram for live AI mode)
 			try {
-				await modeler.importXML(initialXml || emptyBpmnXml());
+				await modeler.importXML(initialXml || defaultBpmnXml(processName));
 				const canvas = modeler.get("canvas");
 				canvas.zoom("fit-viewport", "auto");
 				applyBizagiColors(modeler);
+
+				// Force white background on bpmn-js internals (dark theme override)
+				const djsContainer = containerRef.current?.querySelector(".djs-container") as HTMLElement | null;
+				if (djsContainer) {
+					djsContainer.style.background = "#ffffff";
+					const svg = djsContainer.querySelector("svg");
+					if (svg) svg.style.background = "#ffffff";
+				}
 			} catch (err) {
 				console.error("[useBpmnModeler] Failed to import initial XML:", err);
 
@@ -138,13 +149,13 @@ export function useBpmnModeler({
 						setRenderError("El diagrama se regeneró automáticamente desde los datos guardados.");
 					} catch (recoveryErr) {
 						console.error("[useBpmnModeler] Recovery also failed, loading empty diagram:", recoveryErr);
-						await modeler.importXML(emptyBpmnXml());
+						await modeler.importXML(defaultBpmnXml());
 						setRenderError("El diagrama está corrupto y no se pudo recuperar. Use 'Arreglar con IA' para repararlo.");
 					}
 				} else {
 					// No nodes available — load empty diagram so modeler is usable
 					try {
-						await modeler.importXML(emptyBpmnXml());
+						await modeler.importXML(defaultBpmnXml());
 						setRenderError("El diagrama no se pudo cargar. Use 'Arreglar con IA' para repararlo.");
 					} catch {
 						console.error("[useBpmnModeler] Even empty diagram failed");
@@ -211,7 +222,7 @@ export function useBpmnModeler({
 						await modeler.importXML(xml);
 					} catch (bootstrapErr) {
 						console.error("[useBpmnModeler] Bootstrap importXML failed, loading empty:", bootstrapErr);
-						await modeler.importXML(emptyBpmnXml());
+						await modeler.importXML(defaultBpmnXml());
 						setRenderError("El diagrama generado tiene errores. Use 'Arreglar con IA' para repararlo.");
 					}
 
@@ -884,14 +895,32 @@ function applyAllStyling(
 	}
 }
 
-function emptyBpmnXml(): string {
+function defaultBpmnXml(processName?: string): string {
+	const name = processName || "Proceso";
+	const escaped = name.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 	return `<?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
   xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
   id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
-  <bpmn:process id="Process_1" isExecutable="false" />
+  <bpmn:collaboration id="Collaboration_1">
+    <bpmn:participant id="Participant_1" name="${escaped}" processRef="Process_1" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_1" isExecutable="false">
+    <bpmn:startEvent id="StartEvent_1" name="Inicio" />
+  </bpmn:process>
   <bpmndi:BPMNDiagram id="Diagram_1">
-    <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Process_1" />
+    <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Collaboration_1">
+      <bpmndi:BPMNShape id="Participant_1_di" bpmnElement="Participant_1" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="800" height="250" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="212" y="187" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="215" y="230" width="30" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>`;
 }

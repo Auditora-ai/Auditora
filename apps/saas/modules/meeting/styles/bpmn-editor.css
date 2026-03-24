@@ -32,6 +32,15 @@
 	background: #ffffff !important;
 }
 
+.bpmn-editor-canvas .djs-container svg {
+	background: #ffffff !important;
+}
+
+/* Nuclear override: any element inside the canvas that might inherit dark bg */
+.bpmn-editor-canvas * {
+	color-scheme: light;
+}
+
 /* Force light mode on canvas SVG elements regardless of app theme */
 .bpmn-editor-canvas .djs-container svg {
 	color: #1e293b;
