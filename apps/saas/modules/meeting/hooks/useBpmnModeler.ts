@@ -272,30 +272,26 @@ export function useBpmnModeler({
 			}
 
 			try {
-				// Step 1: Calculate positions with ELK
+				// Step 1: Calculate positions with ELK (all nodes including start/end)
 				const ELK = (await import("elkjs/lib/elk.bundled.js")).default;
 				const elkInstance = new ELK();
 
-				const visible = rebuildNodes.filter((n) => {
-					const tag = bpmnTag(n.type);
-					return tag !== "startEvent" && tag !== "endEvent";
-				});
-				const lanes = [...new Set(visible.map((n) => n.lane || "General"))];
+				const allNodes = rebuildNodes;
+				const lanes = [...new Set(allNodes.map((n) => n.lane || "General"))];
+				const validIds = new Set(allNodes.map((n) => n.id));
 
-				// Build ELK graph
+				// Build ELK graph with lanes as groups
 				const elkChildren = lanes.map((lane, li) => ({
 					id: `elk_lane_${li}`,
 					layoutOptions: { "elk.padding": "[top=50,left=20,bottom=20,right=20]" },
-					children: visible
+					children: allNodes
 						.filter((n) => (n.lane || "General") === lane)
 						.map((n) => ({ id: n.id, width: dims(n.type).w, height: dims(n.type).h })),
 				}));
 
-				// Build edges from connections
-				const validIds = new Set(visible.map((n) => n.id));
 				const elkEdges: any[] = [];
 				let eIdx = 0;
-				for (const n of visible) {
+				for (const n of allNodes) {
 					for (const target of n.connections) {
 						if (validIds.has(target)) {
 							elkEdges.push({ id: `e${eIdx++}`, sources: [n.id], targets: [target] });
@@ -308,7 +304,7 @@ export function useBpmnModeler({
 					layoutOptions: {
 						"elk.algorithm": "layered",
 						"elk.direction": "RIGHT",
-						"elk.spacing.nodeNode": "40",
+						"elk.spacing.nodeNode": "50",
 						"elk.layered.spacing.nodeNodeBetweenLayers": "80",
 						"elk.edgeRouting": "ORTHOGONAL",
 					},
@@ -316,17 +312,26 @@ export function useBpmnModeler({
 					edges: elkEdges,
 				});
 
-				// Extract coordinates
+				// Extract coordinates + lane dimensions
 				const positions = new Map<string, { x: number; y: number }>();
+				const laneDims: { x: number; y: number; w: number; h: number }[] = [];
+				const poolOffset = 40; // pool header width
+
 				for (const lane of elkResult.children || []) {
-					const lx = (lane.x || 0) + 200; // offset for lane header
-					const ly = (lane.y || 0) + 80;  // offset for pool header
+					const lx = (lane.x || 0) + poolOffset;
+					const ly = (lane.y || 0);
+					laneDims.push({ x: lx, y: ly, w: lane.width || 400, h: lane.height || 200 });
 					for (const child of lane.children || []) {
 						positions.set(child.id, { x: lx + (child.x || 0), y: ly + (child.y || 0) });
 					}
 				}
 
-				// Step 2: Import empty diagram, then create elements with Modeling API
+				// Pool size
+				let poolW = 0, poolH = 0;
+				for (const ld of laneDims) { poolW = Math.max(poolW, ld.x + ld.w); poolH = Math.max(poolH, ld.y + ld.h); }
+				poolW += 40; poolH += 20;
+
+				// Step 2: Import empty diagram
 				const emptyXml = `<?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
   <bpmn:process id="Process_1" isExecutable="false" />
@@ -337,32 +342,63 @@ export function useBpmnModeler({
 				const modeling = modeler.get("modeling");
 				const elementFactory = modeler.get("elementFactory");
 				const elementRegistry = modeler.get("elementRegistry");
-				const bpmnFactory = modeler.get("bpmnFactory");
 
-				const rootElement = canvas.getRootElement();
+				const rootProcess = canvas.getRootElement();
 
-				// Create all shapes first
+				// Step 3: Create Pool (Participant)
+				const participantShape = elementFactory.createParticipantShape({ type: "bpmn:Participant" });
+				modeling.createShape(participantShape, { x: poolW / 2, y: poolH / 2, width: poolW, height: poolH }, rootProcess);
+				const participant = elementRegistry.filter((e: any) => e.type === "bpmn:Participant")[0];
+
+				if (!participant) {
+					throw new Error("Failed to create participant");
+				}
+
+				// Step 4: Create Lanes inside the participant
+				const createdLanes: any[] = [];
+				for (let li = 0; li < lanes.length; li++) {
+					const ld = laneDims[li] || { x: 0, y: li * 200, w: poolW, h: 200 };
+					try {
+						const laneShape = modeling.addLane(participant, "bottom");
+						if (laneShape) {
+							// Rename the lane
+							modeling.updateProperties(laneShape, { name: lanes[li] });
+							createdLanes.push(laneShape);
+						}
+					} catch {
+						// Lane creation may not work as expected
+					}
+				}
+				// Remove the default lane if we created new ones
+				if (createdLanes.length > 0) {
+					// Name the first auto-created lane
+					const existingLanes = elementRegistry.filter((e: any) => e.type === "bpmn:Lane");
+					if (existingLanes.length > 0 && lanes.length > 0) {
+						modeling.updateProperties(existingLanes[0], { name: lanes[0] });
+					}
+				}
+
+				// Step 5: Create all shapes inside the participant
 				const createdElements = new Map<string, any>();
-				for (const n of visible) {
+				for (const n of allNodes) {
 					const type = bpmnType(n.type);
-					const pos = positions.get(n.id) || { x: 200 + Math.random() * 400, y: 200 + Math.random() * 300 };
+					const pos = positions.get(n.id) || { x: 200, y: 200 };
 					const d = dims(n.type);
 
 					try {
-						const bo = bpmnFactory.create(type.replace("bpmn:", "bpmn:"), {
-							id: n.id,
-							name: n.label || undefined,
-						});
-						const shape = elementFactory.createShape({ type, businessObject: bo });
-						modeling.createShape(shape, { x: pos.x + d.w / 2, y: pos.y + d.h / 2 }, rootElement);
-						createdElements.set(n.id, elementRegistry.get(n.id));
+						const shape = elementFactory.createShape({ type });
+						const created = modeling.createShape(shape, { x: pos.x + d.w / 2, y: pos.y + d.h / 2 }, participant);
+						if (created) {
+							modeling.updateProperties(created, { name: n.label || undefined });
+							createdElements.set(n.id, created);
+						}
 					} catch (err) {
 						console.warn(`[rebuildFromNodes] Failed to create ${n.id}:`, err);
 					}
 				}
 
-				// Create connections
-				for (const n of visible) {
+				// Step 6: Create connections
+				for (const n of allNodes) {
 					const sourceEl = createdElements.get(n.id);
 					if (!sourceEl) continue;
 					for (const targetId of n.connections) {
@@ -371,7 +407,7 @@ export function useBpmnModeler({
 						try {
 							modeling.connect(sourceEl, targetEl);
 						} catch {
-							// Connection may already exist or be invalid
+							// ok
 						}
 					}
 				}
