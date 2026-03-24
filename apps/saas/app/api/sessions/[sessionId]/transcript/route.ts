@@ -182,7 +182,7 @@ async function runManualExtraction(sessionId: string, entryId?: string) {
 			await db.diagramNode.create({
 				data: {
 					sessionId,
-					nodeType: (node.type?.toUpperCase() || "TASK") as any,
+					nodeType: toNodeType(node.type),
 					label: node.label,
 					state: "FORMING",
 					lane: node.lane || null,
@@ -244,4 +244,29 @@ async function runManualExtraction(sessionId: string, entryId?: string) {
 			}).catch(() => {});
 		}
 	}
+}
+
+/** Convert camelCase AI node type to UPPER_SNAKE_CASE Prisma enum */
+function toNodeType(type?: string): any {
+	if (!type) return "TASK";
+	const map: Record<string, string> = {
+		startevent: "START_EVENT",
+		endevent: "END_EVENT",
+		task: "TASK",
+		usertask: "USER_TASK",
+		servicetask: "SERVICE_TASK",
+		manualtask: "MANUAL_TASK",
+		businessruletask: "BUSINESS_RULE_TASK",
+		subprocess: "SUBPROCESS",
+		exclusivegateway: "EXCLUSIVE_GATEWAY",
+		parallelgateway: "PARALLEL_GATEWAY",
+		timerevent: "TIMER_EVENT",
+		messageevent: "MESSAGE_EVENT",
+		signalevent: "SIGNAL_EVENT",
+		conditionalevent: "CONDITIONAL_EVENT",
+		textannotation: "TEXT_ANNOTATION",
+		dataobject: "DATA_OBJECT",
+		intermediateevent: "TIMER_EVENT", // closest match
+	};
+	return map[type.toLowerCase()] || "TASK";
 }

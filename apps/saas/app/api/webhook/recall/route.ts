@@ -359,19 +359,27 @@ async function runExtraction(sessionId: string) {
 			const posX = 200 + currentNodes.length * 200;
 			const posY = 200;
 
-			// Map LLM node type to Prisma enum
+			// Map LLM node type (camelCase) to Prisma enum (UPPER_SNAKE_CASE)
 			const typeMap: Record<string, string> = {
-				startEvent: "START_EVENT",
-				endEvent: "END_EVENT",
+				startevent: "START_EVENT",
+				endevent: "END_EVENT",
 				task: "TASK",
-				exclusiveGateway: "EXCLUSIVE_GATEWAY",
-				parallelGateway: "PARALLEL_GATEWAY",
+				usertask: "USER_TASK",
+				servicetask: "SERVICE_TASK",
+				manualtask: "MANUAL_TASK",
+				businessruletask: "BUSINESS_RULE_TASK",
+				subprocess: "SUBPROCESS",
+				exclusivegateway: "EXCLUSIVE_GATEWAY",
+				parallelgateway: "PARALLEL_GATEWAY",
+				timerevent: "TIMER_EVENT",
+				messageevent: "MESSAGE_EVENT",
+				intermediateevent: "TIMER_EVENT",
 			};
 
 			await db.diagramNode.create({
 				data: {
 					sessionId,
-					nodeType: (typeMap[newNode.type] || "TASK") as any,
+					nodeType: (typeMap[newNode.type.toLowerCase()] || "TASK") as any,
 					label: newNode.label,
 					state: "FORMING",
 					lane: newNode.lane || null,
@@ -490,8 +498,23 @@ async function runTeleprompter(sessionId: string) {
  * Run all 4 post-session pipelines and persist results as SessionDeliverables.
  * Each pipeline runs independently — one failure doesn't block the others.
  */
-async function runPostSessionPipelines(sessionId: string, _diagramNodes: any[]) {
+export async function runPostSessionPipelines(sessionId: string, _diagramNodes: any[]) {
 	const pipelineTypes = ["summary", "process_audit", "raci", "risk_audit"] as const;
+
+	// Guard: skip if deliverables already exist with a terminal status (avoid double-run)
+	const existing = await db.sessionDeliverable.findMany({
+		where: { sessionId, type: { in: [...pipelineTypes] } },
+		select: { type: true, status: true },
+	});
+	const terminalStatuses = new Set(["completed", "failed", "skipped"]);
+	const allTerminal = pipelineTypes.every((t) => {
+		const d = existing.find((e) => e.type === t);
+		return d && terminalStatuses.has(d.status);
+	});
+	if (allTerminal) {
+		console.log(`[PostSession] All deliverables already terminal for ${sessionId.substring(0, 8)}, skipping`);
+		return;
+	}
 
 	// Create all deliverable records as "pending"
 	for (const type of pipelineTypes) {
