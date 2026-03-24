@@ -312,7 +312,7 @@ async function triggerIntelligenceAudit(
 	);
 
 	await db.processIntelligence.update({
-		where: { id: intelligence.id, version: intelligence.version },
+		where: { id: intelligence.id },
 		data: {
 			knowledgeSnapshot: mergedSnapshot as any,
 			confidenceScores: result.updatedScores,

@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { useBpmnModeler } from "../hooks/useBpmnModeler";
 import { useLiveSession } from "../hooks/useLiveSession";
 import { LiveSessionProvider, type LiveSessionContextValue } from "../context/LiveSessionContext";
@@ -31,8 +33,10 @@ export function MeetingView({
 	clientName,
 	processId,
 	organizationId,
+	organizationSlug,
 	bpmnXml,
 }: MeetingViewProps) {
+	const router = useRouter();
 	// UI state
 	const [aiEnabled, setAiEnabled] = useState(true);
 	const [selectedTool, setSelectedTool] = useState<"select" | "connect" | "text" | "ai-auto">("select");
@@ -69,11 +73,18 @@ export function MeetingView({
 	// End session
 	const handleEndSession = useCallback(async () => {
 		try {
-			await fetch(`/api/sessions/${sessionId}/end`, { method: "POST" });
+			toast.info("Finalizando sesion...");
+			const res = await fetch(`/api/sessions/${sessionId}/end`, { method: "POST" });
+			if (!res.ok) throw new Error(`HTTP ${res.status}`);
+			toast.success("Sesion finalizada. Generando entregables...");
+			// Navigate to review page
+			const slug = organizationSlug || "default";
+			router.push(`/${slug}/session/${sessionId}/review`);
 		} catch (err) {
 			console.error("[MeetingView] End session failed:", err);
+			toast.error("Error al finalizar la sesion");
 		}
-	}, [sessionId]);
+	}, [sessionId, organizationSlug, router]);
 
 	// Export diagram
 	const handleExport = useCallback(
