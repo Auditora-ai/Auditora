@@ -212,13 +212,14 @@ export function useBpmnModeler({
 						return;
 					}
 
-					const xml = buildBpmnXml(visibleNodes);
+					const rawXml = buildBpmnXml(visibleNodes);
+					const xml = await layoutBpmnXml(rawXml);
 					try {
 						await modeler.importXML(xml);
 					} catch (bootstrapErr) {
 						console.error("[useBpmnModeler] Bootstrap importXML failed, loading empty:", bootstrapErr);
 						await modeler.importXML(await defaultBpmnXml());
-						setRenderError("El diagrama generado tiene errores. Use 'Arreglar con IA' para repararlo.");
+						setRenderError("El diagrama generado tiene errores. Use 'Reorganizar' para corregir.");
 					}
 
 					const canvas = modeler.get("canvas");
@@ -962,17 +963,17 @@ function addFormingOverlay(
 }
 
 async function defaultBpmnXml(processName?: string): Promise<string> {
+	const name = processName || "Proceso";
 	const startNode: DiagramNode = {
 		id: "start_default",
 		type: "start_event",
-		label: "Inicio",
+		label: name,
 		state: "confirmed",
+		lane: name,
 		connections: [],
 	};
 	const rawXml = buildBpmnXml([startNode]);
-	const name = processName || "Proceso";
-	const namedXml = rawXml.replace('name="Process"', `name="${name.replace(/"/g, "&quot;")}"`);
-	return layoutBpmnXml(namedXml);
+	return layoutBpmnXml(rawXml);
 }
 
 /**

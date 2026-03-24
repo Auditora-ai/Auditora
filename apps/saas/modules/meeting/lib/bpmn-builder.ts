@@ -228,18 +228,18 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 		}
 	}
 
-	// Wrap in collaboration + process (no DI section — bpmn-auto-layout adds it)
+	// Generate XML with minimal empty DI (bpmn-auto-layout will fill it)
 	return `<?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
   xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
   xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
   xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
   id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
-  <bpmn:collaboration id="Collab">
-    <bpmn:participant id="Pool" name="Process" processRef="Process_1" />
-  </bpmn:collaboration>
   <bpmn:process id="Process_1" isExecutable="false">
 ${laneSetXml}${processXml}${flowsXml}  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_1">
+    <bpmndi:BPMNPlane id="Plane_1" bpmnElement="Process_1" />
+  </bpmndi:BPMNDiagram>
 </bpmn:definitions>`;
 }
 
