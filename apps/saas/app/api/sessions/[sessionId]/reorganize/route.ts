@@ -120,8 +120,25 @@ JSON format:
       "priority": "alta|media|baja"
     }
   ],
+  "completeness": {
+    "score": 0-100,
+    "suppliers": 0-100,
+    "inputs": 0-100,
+    "process": 0-100,
+    "outputs": 0-100,
+    "customers": 0-100,
+    "summary": "Breve explicación del score. Ej: 'El flujo principal está completo pero faltan excepciones, SLAs y sistemas'"
+  },
   "reasoning": "Explicación breve de los cambios"
 }
+
+SCORING DE COMPLETENESS (evalúa como consultor BPM):
+- suppliers (S): ¿Se identificaron todos los proveedores/áreas que inician el proceso?
+- inputs (I): ¿Se documentaron las entradas (documentos, datos, sistemas)?
+- process (P): ¿El flujo tiene inicio, pasos claros, decisiones, excepciones y fin?
+- outputs (O): ¿Se definieron los entregables/resultados del proceso?
+- customers (C): ¿Se identificaron los receptores/clientes del resultado?
+- score: promedio ponderado (P tiene peso doble por ser el flujo principal)
 
 IMPORTANTE:
 - "keep" incluye SOLO los nodos que deben quedarse, con sus datos CORREGIDOS
@@ -231,17 +248,38 @@ Revisa cada nodo, elimina lo que no pertenece, corrige lo que esté mal, y organ
 		console.log(`[Reorganize] Narrative: ${result.narrative?.substring(0, 100)}`);
 		console.log(`[Reorganize] Gaps: ${result.gaps?.length || 0} questions`);
 
-		// Save gap questions as teleprompter entries
+		// Save gap questions as teleprompter entries with completeness data
+		const completeness = result.completeness || null;
+		const sipocCoverage = completeness ? {
+			suppliers: completeness.suppliers || 0,
+			inputs: completeness.inputs || 0,
+			process: completeness.process || 0,
+			outputs: completeness.outputs || 0,
+			customers: completeness.customers || 0,
+		} : null;
+
 		if (result.gaps && result.gaps.length > 0) {
-			for (const gap of result.gaps.slice(0, 5)) {
+			for (const gap of result.gaps.slice(0, 8)) {
 				await db.teleprompterLog.create({
 					data: {
 						sessionId,
 						question: gap.question,
 						gapType: gap.dimension || "P",
+						completenessScore: completeness?.score || null,
+						sipocCoverage: sipocCoverage || undefined,
 					},
 				}).catch(() => {});
 			}
+		} else if (completeness) {
+			// Save completeness even if no gaps
+			await db.teleprompterLog.create({
+				data: {
+					sessionId,
+					question: completeness.summary || "Proceso evaluado",
+					completenessScore: completeness.score,
+					sipocCoverage: sipocCoverage || undefined,
+				},
+			}).catch(() => {});
 		}
 
 		// Return cleaned nodes + narrative + gaps
@@ -256,6 +294,7 @@ Revisa cada nodo, elimina lo que no pertenece, corrige lo que esté mal, y organ
 			reasoning: result.reasoning,
 			narrative: result.narrative || null,
 			gaps: result.gaps || [],
+			completeness: completeness,
 			nodes: finalNodes.map((n) => ({
 				id: n.id,
 				type: n.nodeType.toLowerCase(),

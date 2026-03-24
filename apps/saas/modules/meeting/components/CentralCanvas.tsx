@@ -45,15 +45,17 @@ export function CentralCanvas({ containerRef }: CentralCanvasProps) {
 				await modelerApi.rebuildFromNodes(data.nodes);
 
 				// Show narrative as detailed toast
-				if (data.narrative) {
-					toast.success(data.narrative, { duration: 10000 });
-				} else {
-					toast.success("Diagrama reorganizado");
+				// Show completeness + narrative
+				const score = data.completeness?.score;
+				if (score !== undefined) {
+					const emoji = score >= 80 ? "🟢" : score >= 50 ? "🟡" : "🔴";
+					toast.success(`${emoji} Completeness: ${score}% — ${data.completeness?.summary || ""}`, { duration: 8000 });
 				}
-
-				// Show gap count
+				if (data.narrative) {
+					toast.info(data.narrative, { duration: 12000 });
+				}
 				if (data.gaps?.length > 0) {
-					toast.info(`${data.gaps.length} preguntas nuevas en Sugerencias IA`, { duration: 5000 });
+					toast.info(`${data.gaps.length} preguntas en Sugerencias IA`, { duration: 4000 });
 				}
 			} else if (data.error) {
 				console.warn("[CentralCanvas] Reorganize error:", data.error);
