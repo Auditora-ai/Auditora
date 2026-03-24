@@ -44,6 +44,7 @@ export function TeleprompterSection({
 	const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
 	const [expandedQ, setExpandedQ] = useState<number | null>(null);
 	const [answerText, setAnswerText] = useState("");
+	const [answeredQuestions, setAnsweredQuestions] = useState<Set<number>>(new Set());
 
 	const handleCopy = useCallback((text: string, idx?: number) => {
 		navigator.clipboard.writeText(text);
@@ -58,18 +59,17 @@ export function TeleprompterSection({
 		if (!sessionId) return;
 		setAddingToDiagram(true);
 		try {
-			const res = await fetch(`/api/sessions/${sessionId}/nodes/bulk`, {
+			// Route through transcript API so AI extraction interprets it
+			const res = await fetch(`/api/sessions/${sessionId}/transcript`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					nodes: [{ type: "task", label: text, connections: [] }],
-				}),
+				body: JSON.stringify({ text: `Agregar al proceso: ${text}` }),
 			});
 			if (!res.ok) throw new Error(`HTTP ${res.status}`);
-			toast.success("Nodo agregado al diagrama");
+			toast.success("IA procesando sugerencia...");
 		} catch (err) {
 			console.error("[TeleprompterSection] Add to diagram failed:", err);
-			toast.error("Error al agregar nodo");
+			toast.error("Error al procesar sugerencia");
 		} finally {
 			setAddingToDiagram(false);
 		}
@@ -77,19 +77,25 @@ export function TeleprompterSection({
 
 	const handleAnswer = useCallback(async (questionIdx: number) => {
 		if (!sessionId || !answerText.trim()) return;
+		const question = DEFAULT_SIPOC_QUESTIONS[questionIdx]?.question || "";
+		const fullText = `[Pregunta: ${question}] Respuesta: ${answerText.trim()}`;
 		try {
-			await fetch(`/api/sessions/${sessionId}/nodes/bulk`, {
+			// Send to transcript API — triggers AI extraction pipeline
+			// The AI understands context and creates the right node types
+			// (tasks, gateways, lanes, etc.) not just raw tasks
+			const res = await fetch(`/api/sessions/${sessionId}/transcript`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					nodes: [{ type: "task", label: answerText.trim(), connections: [] }],
-				}),
+				body: JSON.stringify({ text: fullText }),
 			});
-			toast.success("Respuesta agregada al diagrama");
+			if (!res.ok) throw new Error(`HTTP ${res.status}`);
+			toast.success("IA procesando respuesta...");
 			setAnswerText("");
 			setExpandedQ(null);
+			// Mark question as answered
+			setAnsweredQuestions((prev) => new Set([...prev, questionIdx]));
 		} catch {
-			toast.error("Error al agregar respuesta");
+			toast.error("Error al enviar respuesta");
 		}
 	}, [sessionId, answerText]);
 
@@ -189,9 +195,13 @@ export function TeleprompterSection({
 					/* Default SIPOC-based questions before AI kicks in */
 					<div className="space-y-1.5">
 						<p className="mb-2 text-[10px] font-medium uppercase tracking-wider text-[#64748B]">
-							Preguntas iniciales SIPOC
+							{answeredQuestions.size > 0
+								? `Preguntas SIPOC (${answeredQuestions.size}/${DEFAULT_SIPOC_QUESTIONS.length} respondidas)`
+								: "Preguntas iniciales SIPOC"}
 						</p>
-						{DEFAULT_SIPOC_QUESTIONS.map((q, i) => (
+						{DEFAULT_SIPOC_QUESTIONS.filter((_, i) => !answeredQuestions.has(i)).map((q, filteredIdx) => {
+							const i = DEFAULT_SIPOC_QUESTIONS.indexOf(q);
+							return (
 							<div key={i}>
 								<button
 									type="button"
@@ -237,7 +247,13 @@ export function TeleprompterSection({
 									</div>
 								)}
 							</div>
-						))}
+						);
+						})}
+						{answeredQuestions.size > 0 && answeredQuestions.size === DEFAULT_SIPOC_QUESTIONS.length && (
+							<p className="mt-3 text-center text-[10px] text-[#16A34A]">
+								Todas las preguntas SIPOC respondidas. La IA generara preguntas contextuales.
+							</p>
+						)}
 					</div>
 				)}
 			</div>
