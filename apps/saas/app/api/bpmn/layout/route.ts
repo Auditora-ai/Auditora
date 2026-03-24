@@ -10,7 +10,6 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { layoutProcess } from "bpmn-auto-layout";
 
 export async function POST(request: NextRequest) {
 	try {
@@ -25,16 +24,20 @@ export async function POST(request: NextRequest) {
 
 		let layoutedXml: string;
 		try {
-			layoutedXml = await layoutProcess(xml);
+			// Dynamic import to avoid Turbopack bundling issues
+			const mod = await import("bpmn-auto-layout");
+			const layout = mod.layoutProcess || mod.default?.layoutProcess || mod.default;
+			layoutedXml = await layout(xml);
 		} catch (err) {
-			// Fallback: try without lanes
-			console.warn("[BPMN Layout] Failed with lanes, retrying without:", err);
+			console.warn("[BPMN Layout] Failed. XML length:", xml.length, "Error:", (err as Error).message);
 			const xmlNoLanes = xml.replace(
 				/<bpmn:laneSet>[\s\S]*?<\/bpmn:laneSet>\n?/g,
 				"",
 			);
 			try {
-				layoutedXml = await layoutProcess(xmlNoLanes);
+				const mod2 = await import("bpmn-auto-layout");
+				const layout2 = mod2.layoutProcess || mod2.default?.layoutProcess || mod2.default;
+				layoutedXml = await layout2(xmlNoLanes);
 			} catch (err2) {
 				console.error("[BPMN Layout] Also failed without lanes:", err2);
 				return NextResponse.json(
