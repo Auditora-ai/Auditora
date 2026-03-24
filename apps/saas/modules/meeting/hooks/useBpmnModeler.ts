@@ -264,17 +264,117 @@ export function useBpmnModeler({
 			const modeler = modelerRef.current;
 			if (!modeler) return;
 
-			const rebuildNodes = nodes || fallbackNodesRef.current;
-			if (!rebuildNodes || rebuildNodes.length === 0) {
+			const rebuildNodes = (nodes || fallbackNodesRef.current || [])
+				.filter((n) => n.state !== "rejected");
+			if (rebuildNodes.length === 0) {
 				setRenderError("No hay datos de nodos para regenerar el diagrama.");
 				return;
 			}
 
 			try {
-				const rawXml = await buildBpmnXml(rebuildNodes);
-				const xml = await layoutBpmnXml(rawXml);
-				await modeler.importXML(xml);
+				// Step 1: Calculate positions with ELK
+				const ELK = (await import("elkjs/lib/elk.bundled.js")).default;
+				const elkInstance = new ELK();
+
+				const visible = rebuildNodes.filter((n) => {
+					const tag = bpmnTag(n.type);
+					return tag !== "startEvent" && tag !== "endEvent";
+				});
+				const lanes = [...new Set(visible.map((n) => n.lane || "General"))];
+
+				// Build ELK graph
+				const elkChildren = lanes.map((lane, li) => ({
+					id: `elk_lane_${li}`,
+					layoutOptions: { "elk.padding": "[top=50,left=20,bottom=20,right=20]" },
+					children: visible
+						.filter((n) => (n.lane || "General") === lane)
+						.map((n) => ({ id: n.id, width: dims(n.type).w, height: dims(n.type).h })),
+				}));
+
+				// Build edges from connections
+				const validIds = new Set(visible.map((n) => n.id));
+				const elkEdges: any[] = [];
+				let eIdx = 0;
+				for (const n of visible) {
+					for (const target of n.connections) {
+						if (validIds.has(target)) {
+							elkEdges.push({ id: `e${eIdx++}`, sources: [n.id], targets: [target] });
+						}
+					}
+				}
+
+				const elkResult = await elkInstance.layout({
+					id: "root",
+					layoutOptions: {
+						"elk.algorithm": "layered",
+						"elk.direction": "RIGHT",
+						"elk.spacing.nodeNode": "40",
+						"elk.layered.spacing.nodeNodeBetweenLayers": "80",
+						"elk.edgeRouting": "ORTHOGONAL",
+					},
+					children: elkChildren,
+					edges: elkEdges,
+				});
+
+				// Extract coordinates
+				const positions = new Map<string, { x: number; y: number }>();
+				for (const lane of elkResult.children || []) {
+					const lx = (lane.x || 0) + 200; // offset for lane header
+					const ly = (lane.y || 0) + 80;  // offset for pool header
+					for (const child of lane.children || []) {
+						positions.set(child.id, { x: lx + (child.x || 0), y: ly + (child.y || 0) });
+					}
+				}
+
+				// Step 2: Import empty diagram, then create elements with Modeling API
+				const emptyXml = `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="Process_1" isExecutable="false" />
+  <bpmndi:BPMNDiagram id="Diagram_1"><bpmndi:BPMNPlane id="Plane_1" bpmnElement="Process_1" /></bpmndi:BPMNDiagram>
+</bpmn:definitions>`;
+				await modeler.importXML(emptyXml);
 				const canvas = modeler.get("canvas");
+				const modeling = modeler.get("modeling");
+				const elementFactory = modeler.get("elementFactory");
+				const elementRegistry = modeler.get("elementRegistry");
+				const bpmnFactory = modeler.get("bpmnFactory");
+
+				const rootElement = canvas.getRootElement();
+
+				// Create all shapes first
+				const createdElements = new Map<string, any>();
+				for (const n of visible) {
+					const type = bpmnType(n.type);
+					const pos = positions.get(n.id) || { x: 200 + Math.random() * 400, y: 200 + Math.random() * 300 };
+					const d = dims(n.type);
+
+					try {
+						const bo = bpmnFactory.create(type.replace("bpmn:", "bpmn:"), {
+							id: n.id,
+							name: n.label || undefined,
+						});
+						const shape = elementFactory.createShape({ type, businessObject: bo });
+						modeling.createShape(shape, { x: pos.x + d.w / 2, y: pos.y + d.h / 2 }, rootElement);
+						createdElements.set(n.id, elementRegistry.get(n.id));
+					} catch (err) {
+						console.warn(`[rebuildFromNodes] Failed to create ${n.id}:`, err);
+					}
+				}
+
+				// Create connections
+				for (const n of visible) {
+					const sourceEl = createdElements.get(n.id);
+					if (!sourceEl) continue;
+					for (const targetId of n.connections) {
+						const targetEl = createdElements.get(targetId);
+						if (!targetEl) continue;
+						try {
+							modeling.connect(sourceEl, targetEl);
+						} catch {
+							// Connection may already exist or be invalid
+						}
+					}
+				}
 
 				canvas.zoom("fit-viewport", "auto");
 				applyBizagiColors(modeler);
@@ -284,7 +384,7 @@ export function useBpmnModeler({
 				bootstrappedRef.current = true;
 				knownNodesRef.current.clear();
 				knownConnectionsRef.current.clear();
-				for (const node of rebuildNodes.filter((n) => n.state !== "rejected")) {
+				for (const node of rebuildNodes) {
 					knownNodesRef.current.set(node.id, { ...node });
 					for (const target of node.connections) {
 						knownConnectionsRef.current.add(`${node.id}->${target}`);
@@ -295,7 +395,7 @@ export function useBpmnModeler({
 				setRecovered(true);
 			} catch (err) {
 				console.error("[useBpmnModeler] Rebuild from nodes failed:", err);
-				setRenderError("No se pudo regenerar el diagrama. Intente 'Arreglar con IA'.");
+				setRenderError("No se pudo regenerar el diagrama.");
 			}
 		},
 		[],
