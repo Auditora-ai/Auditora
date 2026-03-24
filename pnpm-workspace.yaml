@@ -84,7 +84,7 @@ catalog:
   streamdown: ^2.5.0
   tailwind-merge: ^3.5.0
   tailwindcss: 4.2.1
-  tsx: ^4.20.6
+  tsx: ^4.21.0
   typescript: 5.9.3
   ufo: ^1.6.3
   use-intl: ^4.8.3

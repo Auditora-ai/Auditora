@@ -15,6 +15,7 @@ import {
 	SESSION_SUMMARY_SYSTEM,
 	SESSION_SUMMARY_USER,
 } from "../prompts/session-summary";
+import { parseLlmJson } from "../utils/parse-llm-json";
 
 const SummaryResultSchema = z.object({
 	summary: z.string().min(1),
@@ -85,23 +86,13 @@ export async function generateSessionSummary(
 		temperature: 0.3,
 	});
 
-	try {
-		const cleaned = text
-			.replace(/^```json\s*/i, "")
-			.replace(/```\s*$/i, "")
-			.trim();
-		const raw = JSON.parse(cleaned);
-		return SummaryResultSchema.parse(raw);
-	} catch (error) {
-		console.error(
-			"[SessionSummary] Invalid LLM output:",
-			text.substring(0, 200),
-			error instanceof Error ? error.message : "",
-		);
+	const result = parseLlmJson(text, SummaryResultSchema, "SessionSummary");
+	if (!result) {
 		return {
 			summary:
 				"Summary generation failed. Please review the transcript manually.",
 			actionItems: [],
 		};
 	}
+	return result;
 }

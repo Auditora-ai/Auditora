@@ -11,6 +11,7 @@
 import { generateText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { z } from "zod";
+import { parseLlmJson } from "../utils/parse-llm-json";
 
 const ConflictSchema = z.object({
 	nodeLabel: z.string().min(1),
@@ -132,19 +133,9 @@ Rules:
 		temperature: 0.2,
 	});
 
-	try {
-		const cleaned = text
-			.replace(/^```json\s*/i, "")
-			.replace(/```\s*$/i, "")
-			.trim();
-		const raw = JSON.parse(cleaned);
-		return ConsolidationResultSchema.parse(raw);
-	} catch (error) {
-		console.error(
-			"[StakeholderConsolidation] Invalid LLM output:",
-			text.substring(0, 200),
-			error instanceof Error ? error.message : "",
-		);
+	const result = parseLlmJson(text, ConsolidationResultSchema, "StakeholderConsolidation");
+	if (!result) {
 		return { conflicts: [], consolidatedSteps: [] };
 	}
+	return result;
 }

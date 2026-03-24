@@ -9,9 +9,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
-// WARNING: This import works because both route files run in the same
-// Node.js process on Railway. See webhook route for deployment assumptions.
-import { sessionActivity } from "../../../webhook/recall/route";
+import { getSessionActivity } from "../../../webhook/recall/route";
 import { recordEvent } from "@meeting/lib/session-timeline";
 
 // One-time guards to avoid spamming diagnostic events
@@ -70,6 +68,7 @@ export async function GET(
 				state: true,
 				lane: true,
 				connections: true,
+				confidence: true,
 			},
 		});
 
@@ -78,14 +77,22 @@ export async function GET(
 			where: { sessionId },
 			orderBy: { shownAt: "desc" },
 			take: 6,
-			select: { question: true },
+			select: {
+				question: true,
+				completenessScore: true,
+				gapType: true,
+				sipocCoverage: true,
+			},
 		});
 
 		const teleprompterQuestion = recentQuestions[0]?.question || null;
+		const completenessScore = recentQuestions[0]?.completenessScore ?? null;
+		const gapType = recentQuestions[0]?.gapType ?? null;
+		const sipocCoverage = recentQuestions[0]?.sipocCoverage ?? null;
 		const questionQueue = recentQuestions.slice(1).map((q) => q.question);
 
-		// Bot activity state from in-memory Map
-		const activity = sessionActivity.get(sessionId);
+		// Bot activity state from Redis (with in-memory fallback)
+		const activity = await getSessionActivity(sessionId);
 		const STALE_THRESHOLD = 60_000; // 60s
 
 		return NextResponse.json({
@@ -103,8 +110,12 @@ export async function GET(
 				state: n.state.toLowerCase(),
 				lane: n.lane,
 				connections: n.connections,
+				confidence: n.confidence,
 			})),
 			teleprompterQuestion,
+			completenessScore,
+			gapType,
+			sipocCoverage,
 			questionQueue,
 			botActivity: {
 				type: activity?.type ?? "listening",

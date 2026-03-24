@@ -61,6 +61,13 @@ export const CHAT_EXTRACTION_USER = (
 		liveTranscript?: string;
 	},
 	processContext?: ProcessChatContext,
+	currentDiagramNodes?: Array<{
+		id: string;
+		type: string;
+		label: string;
+		state: string;
+		lane?: string | null;
+	}>,
 ) => {
 	let contextBlock = "";
 	if (projectContext) {
@@ -157,6 +164,16 @@ export const CHAT_EXTRACTION_USER = (
 					.join("\n")}\n\n`
 			: "";
 
+	// Current diagram nodes context
+	let diagramBlock = "";
+	if (currentDiagramNodes && currentDiagramNodes.length > 0) {
+		const nodeLines = currentDiagramNodes
+			.filter((n) => n.state !== "rejected")
+			.map((n) => `- [${n.type}] "${n.label}"${n.lane ? ` (lane: ${n.lane})` : ""} — ${n.state}`)
+			.join("\n");
+		diagramBlock = `CURRENT BPMN DIAGRAM (these steps already exist on the canvas — reference them when relevant, don't duplicate):\n${nodeLines}\n\n`;
+	}
+
 	// Format recent messages (last 20 for sliding window)
 	const recentMessages = messages.slice(-20);
 	const conversationBlock = recentMessages
@@ -166,5 +183,5 @@ export const CHAT_EXTRACTION_USER = (
 		)
 		.join("\n\n");
 
-	return `${contextBlock}${processBlock}${gapsBlock}${transcriptBlock}${existingBlock}${rejectedBlock}CONVERSATION:\n${conversationBlock}\n\nExtract any NEW business processes from the latest messages. Respond in the same language as the consultant.`;
+	return `${contextBlock}${processBlock}${gapsBlock}${transcriptBlock}${diagramBlock}${existingBlock}${rejectedBlock}CONVERSATION:\n${conversationBlock}\n\nExtract any NEW business processes from the latest messages. Respond in the same language as the consultant.`;
 };

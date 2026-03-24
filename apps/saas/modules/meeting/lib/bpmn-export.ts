@@ -49,20 +49,36 @@ export async function exportPNG(modeler: any): Promise<void> {
 	const canvasWidth = Math.min(totalWidth * scale, MAX_PNG_SIZE);
 	const canvasHeight = Math.min(totalHeight * scale, MAX_PNG_SIZE);
 
-	// Inline fonts into SVG
+	// Modify SVG DOM directly (avoids regex breakage)
 	const fontStyle = await getFontStyle();
-	const svgWithFonts = svg.replace(
-		"</svg>",
-		`<defs><style>${fontStyle}</style></defs></svg>`,
-	);
+	const styleEl = doc.createElementNS("http://www.w3.org/2000/svg", "style");
+	styleEl.textContent = fontStyle;
+	let defsEl = svgEl.querySelector("defs");
+	if (!defsEl) {
+		defsEl = doc.createElementNS("http://www.w3.org/2000/svg", "defs");
+		svgEl.prepend(defsEl);
+	}
+	defsEl.appendChild(styleEl);
 
-	// Wrap SVG with white background and padding
-	const wrappedSvg = `
-		<svg xmlns="http://www.w3.org/2000/svg" width="${canvasWidth}" height="${canvasHeight}" viewBox="${(viewBox?.[0] ?? 0) - padding} ${(viewBox?.[1] ?? 0) - padding} ${totalWidth} ${totalHeight}">
-			<rect width="100%" height="100%" fill="white"/>
-			${svgWithFonts.replace(/<\?xml[^?]*\?>/, "").replace(/<svg[^>]*>/, "").replace(/<\/svg>/, "")}
-		</svg>
-	`;
+	// Add white background rect as first child after defs
+	const bgRect = doc.createElementNS("http://www.w3.org/2000/svg", "rect");
+	bgRect.setAttribute("x", String((viewBox?.[0] ?? 0) - padding));
+	bgRect.setAttribute("y", String((viewBox?.[1] ?? 0) - padding));
+	bgRect.setAttribute("width", String(totalWidth));
+	bgRect.setAttribute("height", String(totalHeight));
+	bgRect.setAttribute("fill", "white");
+	svgEl.insertBefore(bgRect, defsEl.nextSibling);
+
+	// Update viewBox and dimensions to include padding
+	svgEl.setAttribute("viewBox", `${(viewBox?.[0] ?? 0) - padding} ${(viewBox?.[1] ?? 0) - padding} ${totalWidth} ${totalHeight}`);
+	svgEl.setAttribute("width", String(canvasWidth));
+	svgEl.setAttribute("height", String(canvasHeight));
+	// Ensure xmlns is present (required for blob URL loading in <img>)
+	svgEl.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+	svgEl.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+
+	const serializer = new XMLSerializer();
+	const finalSvg = serializer.serializeToString(svgEl);
 
 	// Rasterize to canvas
 	const canvas = document.createElement("canvas");
@@ -72,7 +88,8 @@ export async function exportPNG(modeler: any): Promise<void> {
 	if (!ctx) throw new Error("Canvas 2D context unavailable");
 
 	const img = new Image();
-	const blob = new Blob([wrappedSvg], { type: "image/svg+xml;charset=utf-8" });
+	img.crossOrigin = "anonymous";
+	const blob = new Blob([finalSvg], { type: "image/svg+xml;charset=utf-8" });
 	const url = URL.createObjectURL(blob);
 
 	return new Promise((resolve, reject) => {
@@ -93,8 +110,9 @@ export async function exportPNG(modeler: any): Promise<void> {
 				1.0,
 			);
 		};
-		img.onerror = () => {
+		img.onerror = (e) => {
 			URL.revokeObjectURL(url);
+			console.error("[bpmn-export] SVG load failed. SVG length:", finalSvg.length, "First 200 chars:", finalSvg.substring(0, 200));
 			reject(new Error("Failed to load SVG for rasterization"));
 		};
 		img.src = url;
@@ -122,6 +140,12 @@ async function getFontStyle(): Promise<string> {
 		* { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
 	`;
 	return fontCache;
+}
+
+export async function exportXML(modeler: any): Promise<void> {
+	const { xml } = await modeler.saveXML({ format: true });
+	const blob = new Blob([xml], { type: "application/xml" });
+	downloadBlob(blob, "process-diagram.bpmn");
 }
 
 function downloadBlob(blob: Blob, filename: string): void {

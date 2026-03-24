@@ -1,7 +1,8 @@
 /**
- * Teleprompter Pipeline
+ * Teleprompter Pipeline — SIPOC Gap-Driven Methodology
  *
- * Generates contextual guided questions for the consultant.
+ * Generates contextual guided questions for the consultant using
+ * SIPOC framework analysis and gap-driven prioritization.
  * Runs PARALLEL to process extraction — independent pipeline.
  *
  * Latency tolerance: 15-20s (relaxed vs extraction's 8s).
@@ -10,23 +11,42 @@
 
 import { generateText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
+import { z } from "zod";
 import {
   buildTeleprompterSystemPrompt,
   TELEPROMPTER_USER,
 } from "../prompts/teleprompter";
 import type { SessionContext } from "../context/session-context";
+import { parseLlmJson } from "../utils/parse-llm-json";
+
+export interface SipocCoverage {
+  suppliers: number;  // 0-100
+  inputs: number;     // 0-100
+  process: number;    // 0-100
+  outputs: number;    // 0-100
+  customers: number;  // 0-100
+}
+
+export type TeleprompterGapType =
+  | "missing_role"
+  | "missing_exception"
+  | "missing_decision"
+  | "missing_trigger"
+  | "missing_sla"
+  | "missing_system"
+  | "missing_output"
+  | "missing_input"
+  | "missing_supplier"
+  | "missing_customer"
+  | "general_exploration";
 
 export interface TeleprompterResult {
   nextQuestion: string;
   reasoning: string;
-  gapType:
-    | "missing_path"
-    | "missing_role"
-    | "missing_exception"
-    | "missing_decision"
-    | "missing_trigger"
-    | "missing_output"
-    | "general_exploration";
+  gapType: TeleprompterGapType;
+  completenessScore: number; // 0-100
+  sipocCoverage: SipocCoverage;
+  /** @deprecated Use completenessScore instead. Kept for backward compatibility. */
   confidence: number;
 }
 
@@ -43,6 +63,14 @@ interface TranscriptEntry {
   text: string;
   timestamp: number;
 }
+
+const DEFAULT_SIPOC_COVERAGE: SipocCoverage = {
+  suppliers: 0,
+  inputs: 0,
+  process: 0,
+  outputs: 0,
+  customers: 0,
+};
 
 function formatTranscriptWindow(
   entries: TranscriptEntry[],
@@ -61,6 +89,20 @@ function formatTranscriptWindow(
       return `[${mins}:${secs.toString().padStart(2, "0")}] ${e.speaker}: ${e.text}`;
     })
     .join("\n");
+}
+
+/**
+ * Compute completeness score from SIPOC coverage using weighted average.
+ * S(15%) + I(20%) + P(30%) + O(20%) + C(15%)
+ */
+function computeCompletenessScore(sipoc: SipocCoverage): number {
+  return Math.round(
+    sipoc.suppliers * 0.15 +
+    sipoc.inputs * 0.20 +
+    sipoc.process * 0.30 +
+    sipoc.outputs * 0.20 +
+    sipoc.customers * 0.15,
+  );
 }
 
 /**
@@ -90,8 +132,10 @@ export async function generateNextQuestion(
       return {
         nextQuestion: `Let's continue mapping the "${context.targetProcess.name}" process. Last session we covered some steps — are there any corrections or additions before we continue?`,
         reasoning:
-          "Continuation session — start by verifying previous mapping.",
+          "Continuation session — start by validating previous SIPOC mapping before extending.",
         gapType: "general_exploration",
+        completenessScore: 0,
+        sipocCoverage: { ...DEFAULT_SIPOC_COVERAGE },
         confidence: 1.0,
       };
     }
@@ -99,10 +143,12 @@ export async function generateNextQuestion(
     return {
       nextQuestion:
         sessionType === "DISCOVERY"
-          ? "Can you walk me through your company's main business areas and core operations?"
-          : `Let's start mapping the "${processName}" process. Where does it begin — what triggers it?`,
-      reasoning: "No conversation yet — start with the opening question.",
-      gapType: "general_exploration",
+          ? "Can you walk me through your company's main business areas and who the key customers are for your core operations?"
+          : `Let's start mapping the "${processName}" process. Who are the customers that receive the output of this process, and what triggers it?`,
+      reasoning: "No conversation yet — opening with Customers and Inputs dimensions of SIPOC to frame the process boundaries.",
+      gapType: sessionType === "DISCOVERY" ? "missing_customer" : "missing_trigger",
+      completenessScore: 0,
+      sipocCoverage: { ...DEFAULT_SIPOC_COVERAGE },
       confidence: 1.0,
     };
   }
@@ -117,36 +163,70 @@ export async function generateNextQuestion(
       processName,
       context,
     ),
-    maxOutputTokens: 512,
-    temperature: 0.3, // Slightly more creative than extraction
+    maxOutputTokens: 1024,
+    temperature: 0.3,
   });
 
-  try {
-    // Strip markdown code fences if present
-    const cleaned = text
-      .replace(/^```json\s*/i, "")
-      .replace(/```\s*$/i, "")
-      .trim();
-    const result = JSON.parse(cleaned) as TeleprompterResult;
+  const SipocCoverageSchema = z.object({
+    suppliers: z.number().min(0).max(100).catch(0),
+    inputs: z.number().min(0).max(100).catch(0),
+    process: z.number().min(0).max(100).catch(0),
+    outputs: z.number().min(0).max(100).catch(0),
+    customers: z.number().min(0).max(100).catch(0),
+  });
 
-    if (!result.nextQuestion) {
-      throw new Error("Missing nextQuestion");
-    }
+  const TeleprompterSchema = z.object({
+    nextQuestion: z.string().min(1),
+    reasoning: z.string().catch(""),
+    gapType: z.enum([
+      "missing_role",
+      "missing_exception",
+      "missing_decision",
+      "missing_trigger",
+      "missing_sla",
+      "missing_system",
+      "missing_output",
+      "missing_input",
+      "missing_supplier",
+      "missing_customer",
+      "general_exploration",
+    ]).catch("general_exploration"),
+    completenessScore: z.number().min(0).max(100).catch(0),
+    sipocCoverage: SipocCoverageSchema.catch({
+      suppliers: 0,
+      inputs: 0,
+      process: 0,
+      outputs: 0,
+      customers: 0,
+    }),
+  });
 
-    return result;
-  } catch {
-    console.error(
-      "[Teleprompter] Invalid JSON from LLM:",
-      text.substring(0, 200),
-    );
-
-    // Fallback: generic follow-up
+  const parsed = parseLlmJson(text, TeleprompterSchema, "Teleprompter");
+  if (!parsed) {
     return {
       nextQuestion:
         "Can you tell me more about what happens next in this process?",
       reasoning: "LLM response was invalid — using generic follow-up.",
       gapType: "general_exploration",
+      completenessScore: 0,
+      sipocCoverage: { ...DEFAULT_SIPOC_COVERAGE },
       confidence: 0.3,
     };
   }
+
+  // Recompute completeness from SIPOC to ensure consistency
+  const computedScore = computeCompletenessScore(parsed.sipocCoverage);
+  const completenessScore = parsed.completenessScore > 0
+    ? parsed.completenessScore
+    : computedScore;
+
+  return {
+    nextQuestion: parsed.nextQuestion,
+    reasoning: parsed.reasoning,
+    gapType: parsed.gapType,
+    completenessScore,
+    sipocCoverage: parsed.sipocCoverage,
+    // Backward compat: map completeness to 0-1 confidence
+    confidence: completenessScore / 100,
+  };
 }

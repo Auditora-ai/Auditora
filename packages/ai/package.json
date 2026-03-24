@@ -6,6 +6,7 @@
 		"@repo/database": "workspace:*",
 		"ai": "catalog:",
 		"openai": "catalog:",
+		"ioredis": "^5.6.1",
 		"zod": "catalog:"
 	},
 	"devDependencies": {

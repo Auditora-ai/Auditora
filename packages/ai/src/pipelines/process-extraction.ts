@@ -18,6 +18,7 @@ import {
   PROCESS_EXTRACTION_USER,
 } from "../prompts/process-extraction";
 import type { SessionContext } from "../context/session-context";
+import { parseLlmJson } from "../utils/parse-llm-json";
 
 const VALID_NODE_TYPES = [
   "startEvent",
@@ -45,11 +46,18 @@ const NewNodeSchema = z.object({
   lane: z.string().optional(),
   connectFrom: z.string().nullable().optional(),
   connectTo: z.string().nullable().optional(),
+  confidence: z.number().min(0).max(1).catch(0.5),
 });
 
 const OutOfScopeSchema = z.object({
   topic: z.string().min(1),
   likelyProcess: z.string().min(1),
+});
+
+const SuggestedPatternSchema = z.object({
+  patternId: z.string(),
+  confidence: z.number().min(0).max(1),
+  message: z.string(),
 });
 
 const ExtractionResultSchema = z.object({
@@ -63,6 +71,7 @@ const ExtractionResultSchema = z.object({
     )
     .catch([]),
   outOfScope: z.array(OutOfScopeSchema).catch([]),
+  suggestedPattern: SuggestedPatternSchema.nullable().catch(null),
 });
 
 export interface BpmnNode {
@@ -76,6 +85,12 @@ export interface BpmnNode {
   positionY?: number;
 }
 
+export interface SuggestedPattern {
+  patternId: string;
+  confidence: number;
+  message: string;
+}
+
 export interface ExtractionResult {
   newNodes: Array<{
     id: string;
@@ -84,6 +99,7 @@ export interface ExtractionResult {
     lane?: string;
     connectFrom?: string | null;
     connectTo?: string | null;
+    confidence: number;
   }>;
   updatedNodes: Array<{
     id: string;
@@ -93,6 +109,7 @@ export interface ExtractionResult {
     topic: string;
     likelyProcess: string;
   }>;
+  suggestedPattern?: SuggestedPattern | null;
 }
 
 interface TranscriptEntry {
@@ -158,34 +175,20 @@ export async function extractProcessUpdates(
     model: anthropic("claude-sonnet-4-6"),
     system: buildExtractionSystemPrompt(context),
     prompt: PROCESS_EXTRACTION_USER(nodesForPrompt, transcriptText, context),
-    maxOutputTokens: 1024,
+    maxOutputTokens: 2048,
     temperature: 0.1, // Low temperature for structured output
   });
 
-  try {
-    // Strip markdown code fences if present
-    const cleaned = text
-      .replace(/^```json\s*/i, "")
-      .replace(/```\s*$/i, "")
-      .trim();
-    const raw = JSON.parse(cleaned);
-
-    // Validate with Zod — catches invalid nodeTypes, missing fields, etc.
-    const result = ExtractionResultSchema.parse(raw);
-
-    return {
-      newNodes: result.newNodes,
-      updatedNodes: result.updatedNodes,
-      outOfScope:
-        result.outOfScope.length > 0 ? result.outOfScope : undefined,
-    };
-  } catch (error) {
-    // LLM returned invalid JSON or failed validation
-    console.error(
-      "[ProcessExtraction] Invalid LLM output:",
-      text.substring(0, 200),
-      error instanceof Error ? error.message : "",
-    );
+  const result = parseLlmJson(text, ExtractionResultSchema, "ProcessExtraction");
+  if (!result) {
     return { newNodes: [], updatedNodes: [] };
   }
+
+  return {
+    newNodes: result.newNodes,
+    updatedNodes: result.updatedNodes,
+    outOfScope:
+      result.outOfScope.length > 0 ? result.outOfScope : undefined,
+    suggestedPattern: result.suggestedPattern ?? undefined,
+  };
 }

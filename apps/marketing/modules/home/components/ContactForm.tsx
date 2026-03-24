@@ -1,5 +1,6 @@
 "use client";
 
+import { config } from "@config";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, AlertTitle } from "@repo/ui/components/alert";
 import { Button } from "@repo/ui/components/button";
@@ -38,9 +39,20 @@ export function ContactForm() {
 
 	const onSubmit = form.handleSubmit(async (values) => {
 		try {
-			// TODO: Insert your contact form submission logic here to integrate with your CRM or email service
-			console.log("Submitting contact form for values:", values);
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+			const res = await fetch(
+				`${config.saasUrl}/api/public/tools/lead-capture`,
+				{
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({
+						email: values.email,
+						toolUsed: "contact-form",
+						outputData: { name: values.name, message: values.message },
+						source: "contact",
+					}),
+				},
+			);
+			if (!res.ok) throw new Error("Failed to submit");
 		} catch {
 			form.setError("root", {
 				message: t("contact.form.notifications.error"),

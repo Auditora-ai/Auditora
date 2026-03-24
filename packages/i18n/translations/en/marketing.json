@@ -69,7 +69,7 @@
 			"title": "Extract business processes from any conversation",
 			"subtitle": "Chat, upload audio, or join a live call — Prozea's AI extracts, organizes, and diagrams your client's processes in real-time. Walk out with BPMN deliverables, not meeting notes.",
 			"cta": "Start free trial",
-			"ctaSecondary": "See how it works",
+			"ctaSecondary": "Try Free Tools",
 			"counterLabel": "process steps captured"
 		},
 		"problem": {
@@ -284,6 +284,10 @@
 			"zoom": "Zoom",
 			"teams": "Microsoft Teams",
 			"meet": "Google Meet"
+		},
+		"tools": {
+			"title": "Free AI Tools for BPM Professionals",
+			"viewAll": "View all tools"
 		}
 	},
 	"newsletter": {
@@ -320,6 +324,7 @@
 			"pricing": "Pricing",
 			"privacyPolicy": "Privacy policy",
 			"termsAndConditions": "Terms and conditions",
+			"tools": "Free Tools",
 			"builtWith": "Prozea"
 		},
 		"menu": {
@@ -332,6 +337,7 @@
 			"howItWorks": "How it works",
 			"login": "Sign in",
 			"pricing": "Pricing",
+			"tools": "Free Tools",
 			"trial": "Start free trial"
 		},
 		"aria": {

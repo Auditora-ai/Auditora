@@ -16,10 +16,13 @@
 	},
 	"packageManager": "pnpm@10.28.2",
 	"devDependencies": {
+		"@ai-sdk/anthropic": "catalog:",
 		"@biomejs/biome": "catalog:",
 		"@repo/tsconfig": "workspace:*",
 		"@types/node": "catalog:",
+		"ai": "catalog:",
 		"dotenv-cli": "catalog:",
+		"tsx": "catalog:",
 		"turbo": "^2.8.17",
 		"typescript": "catalog:",
 		"vitest": "^4.1.0"

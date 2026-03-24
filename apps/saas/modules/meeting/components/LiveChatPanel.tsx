@@ -13,6 +13,7 @@ import {
 	ExtractionCard,
 	type ExtractedProcessData,
 } from "../../discovery/components/ExtractionCard";
+import type { DiagramNode } from "../types";
 
 interface Message {
 	id: string;
@@ -35,6 +36,7 @@ interface LiveChatPanelProps {
 	sessionEnded?: boolean;
 	onNewMessage?: () => void;
 	onProcessAccepted?: () => void;
+	nodes?: DiagramNode[];
 }
 
 function serializeTranscript(entries: TranscriptEntry[], limit = 50): string {
@@ -49,6 +51,7 @@ export function LiveChatPanel({
 	sessionEnded = false,
 	onNewMessage,
 	onProcessAccepted,
+	nodes = [],
 }: LiveChatPanelProps) {
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [input, setInput] = useState("");
@@ -114,6 +117,17 @@ export function LiveChatPanel({
 			try {
 				const transcriptContext = serializeTranscript(transcript);
 
+				// Include current diagram nodes so the AI understands the diagram context
+				const currentDiagramNodes = nodes
+					.filter((n) => n.state !== "rejected")
+					.map((n) => ({
+						id: n.id,
+						type: n.type,
+						label: n.label,
+						state: n.state,
+						lane: n.lane || null,
+					}));
+
 				const res = await fetch("/api/discovery/chat", {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
@@ -122,6 +136,7 @@ export function LiveChatPanel({
 						threadId,
 						sessionId,
 						transcriptContext,
+						currentDiagramNodes,
 					}),
 				});
 
@@ -154,7 +169,7 @@ export function LiveChatPanel({
 				setIsLoading(false);
 			}
 		},
-		[isLoading, threadId, sessionId, transcript, onNewMessage],
+		[isLoading, threadId, sessionId, transcript, onNewMessage, nodes],
 	);
 
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {

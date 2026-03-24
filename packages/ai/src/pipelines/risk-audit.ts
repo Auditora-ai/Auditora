@@ -23,6 +23,7 @@ import {
   RISK_AUDIT_USER,
 } from "../prompts/risk-audit";
 import type { KnowledgeSnapshot } from "./process-audit";
+import { parseLlmJson } from "../utils/parse-llm-json";
 
 // ============================================
 // Zod Schemas
@@ -219,7 +220,7 @@ export async function auditRisks(
       : undefined,
   });
 
-  const maxTokens = input.mode === "full" ? 6144 : 4096;
+  const maxTokens = input.mode === "full" ? 8192 : 4096;
 
   const { text } = await generateText({
     model: anthropic("claude-sonnet-4-6"),
@@ -229,27 +230,8 @@ export async function auditRisks(
     temperature: 0.1,
   });
 
-  try {
-    const cleaned = text
-      .replace(/^```json\s*/i, "")
-      .replace(/```\s*$/i, "")
-      .trim();
-    const raw = JSON.parse(cleaned);
-    const result = RiskAuditResultSchema.parse(raw);
-
-    return {
-      newRisks: result.newRisks,
-      updatedRisks: result.updatedRisks,
-      riskSummary: result.riskSummary,
-    };
-  } catch (error) {
-    console.error(
-      "[RiskAudit] Invalid LLM output:",
-      text.substring(0, 300),
-      error instanceof Error ? error.message : "",
-    );
-
-    // Return safe empty result
+  const result = parseLlmJson(text, RiskAuditResultSchema, "RiskAudit");
+  if (!result) {
     return {
       newRisks: [],
       updatedRisks: [],
@@ -261,6 +243,12 @@ export async function auditRisks(
       },
     };
   }
+
+  return {
+    newRisks: result.newRisks,
+    updatedRisks: result.updatedRisks,
+    riskSummary: result.riskSummary,
+  };
 }
 
 /**

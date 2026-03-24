@@ -11,7 +11,7 @@ export default async function LiveSessionPage({
 }: {
 	params: Promise<{ organizationSlug: string; sessionId: string }>;
 }) {
-	const { sessionId } = await params;
+	const { sessionId, organizationSlug } = await params;
 
 	const session = await db.meetingSession.findUnique({
 		where: { id: sessionId },
@@ -36,6 +36,8 @@ export default async function LiveSessionPage({
 			startedAt={session.startedAt?.toISOString()}
 			processId={session.processDefinitionId || undefined}
 			organizationId={session.organizationId}
+			organizationSlug={organizationSlug}
+			bpmnXml={session.processDefinition?.bpmnXml || null}
 		/>
 	);
 }

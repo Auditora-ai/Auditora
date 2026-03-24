@@ -23,6 +23,7 @@ import {
   PROCESS_AUDIT_INCREMENTAL_ADDENDUM,
   PROCESS_AUDIT_USER,
 } from "../prompts/process-audit";
+import { parseLlmJson } from "../utils/parse-llm-json";
 
 // ============================================
 // Zod Schemas
@@ -449,42 +450,12 @@ export async function auditProcess(input: AuditInput): Promise<AuditResult> {
     model: anthropic("claude-sonnet-4-6"),
     system: systemPrompt,
     prompt: userPrompt,
-    maxOutputTokens: isInitial ? 4096 : 2048,
+    maxOutputTokens: isInitial ? 8192 : 4096,
     temperature: 0.1,
   });
 
-  try {
-    const cleaned = text
-      .replace(/^```json\s*/i, "")
-      .replace(/```\s*$/i, "")
-      .trim();
-    const raw = JSON.parse(cleaned);
-    const result = AuditResultSchema.parse(raw);
-
-    return {
-      snapshotPatch: result.snapshotPatch,
-      updatedScores: result.updatedScores,
-      completenessScore: result.completenessScore,
-      newGaps: result.newGaps,
-      resolvedGapIds: result.resolvedGapIds,
-      crossProcessGaps:
-        result.crossProcessGaps.length > 0
-          ? result.crossProcessGaps
-          : [],
-      contradictions:
-        result.contradictions.length > 0 ? result.contradictions : [],
-      initialDesign:
-        isEmptyProcess || isSparseProcess ? result.initialDesign : undefined,
-      followUpSuggestion: result.followUpSuggestion,
-    };
-  } catch (error) {
-    console.error(
-      "[ProcessAudit] Invalid LLM output:",
-      text.substring(0, 300),
-      error instanceof Error ? error.message : "",
-    );
-
-    // Return safe empty result
+  const result = parseLlmJson(text, AuditResultSchema, "ProcessAudit");
+  if (!result) {
     return {
       snapshotPatch: {},
       updatedScores: input.confidenceScores,
@@ -495,6 +466,23 @@ export async function auditProcess(input: AuditInput): Promise<AuditResult> {
       contradictions: [],
     };
   }
+
+  return {
+    snapshotPatch: result.snapshotPatch,
+    updatedScores: result.updatedScores,
+    completenessScore: result.completenessScore,
+    newGaps: result.newGaps,
+    resolvedGapIds: result.resolvedGapIds,
+    crossProcessGaps:
+      result.crossProcessGaps.length > 0
+        ? result.crossProcessGaps
+        : [],
+    contradictions:
+      result.contradictions.length > 0 ? result.contradictions : [],
+    initialDesign:
+      isEmptyProcess || isSparseProcess ? result.initialDesign : undefined,
+    followUpSuggestion: result.followUpSuggestion,
+  };
 }
 
 /**

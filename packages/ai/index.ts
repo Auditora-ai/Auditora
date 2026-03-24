@@ -16,9 +16,9 @@ export * from "./lib";
 
 // Prozea pipelines
 export { extractProcessUpdates } from "./src/pipelines/process-extraction";
-export type { BpmnNode, ExtractionResult } from "./src/pipelines/process-extraction";
+export type { BpmnNode, ExtractionResult, SuggestedPattern } from "./src/pipelines/process-extraction";
 export { generateNextQuestion } from "./src/pipelines/teleprompter";
-export type { TeleprompterResult } from "./src/pipelines/teleprompter";
+export type { TeleprompterResult, TeleprompterGapType, SipocCoverage } from "./src/pipelines/teleprompter";
 export { extractDiscoveryUpdates } from "./src/pipelines/discovery-extraction";
 export type { DiscoveryResult, DiscoveryProcess, BusinessInsights } from "./src/pipelines/discovery-extraction";
 export { extractFromChat } from "./src/pipelines/chat-extraction";
@@ -29,7 +29,7 @@ export { buildSessionContext, clearSessionContextCache } from "./src/context/ses
 export type { SessionContext } from "./src/context/session-context";
 
 // Prozea providers
-export { createCallBotProvider } from "./src/providers/call-bot";
+export { createCallBotProvider, RecallAiProvider } from "./src/providers/call-bot";
 export type { CallBotProvider, BotStatus } from "./src/providers/call-bot";
 export { createSTTProvider } from "./src/providers/stt";
 export type { TranscriptionEvent } from "./src/providers/stt";
@@ -52,6 +52,62 @@ export type { AuditInput, AuditResult, KnowledgeSnapshot } from "./src/pipelines
 // Risk & Quality Layer
 export { auditRisks, calculateResidualRisk } from "./src/pipelines/risk-audit";
 export type { RiskAuditInput, RiskAuditResult } from "./src/pipelines/risk-audit";
+
+// Company Brain Enrichment
+export { enrichCompanyBrain } from "./src/pipelines/company-brain-enrichment";
+export type { EnrichmentInput, EnrichmentOutput } from "./src/pipelines/company-brain-enrichment";
+export { CompanyBrainEnrichmentSchema } from "./src/schemas/company-brain";
+export type {
+  CompanyBrainEnrichment,
+  OrgContextExtraction,
+  ValueChainActivityExtraction,
+  ProcessLinkExtraction,
+  GlobalRoleExtraction,
+  GlobalSystemExtraction,
+  ProcessCategorization,
+} from "./src/schemas/company-brain";
+
+// Consulting Deliverables Suite (Phase 2)
+export { generateMissionVision } from "./src/pipelines/mission-vision";
+export type { MissionVisionInput } from "./src/pipelines/mission-vision";
+export { MissionVisionResultSchema } from "./src/schemas/mission-vision";
+export type { MissionVisionResult } from "./src/schemas/mission-vision";
+
+export { generateValueChain } from "./src/pipelines/value-chain";
+export type { ValueChainInput } from "./src/pipelines/value-chain";
+export { ValueChainResultSchema } from "./src/schemas/value-chain";
+export type { ValueChainResult, ValueChainActivity } from "./src/schemas/value-chain";
+
+export { generateProcessLandscape } from "./src/pipelines/process-landscape";
+export type { ProcessLandscapeInput } from "./src/pipelines/process-landscape";
+export { ProcessLandscapeResultSchema } from "./src/schemas/process-landscape";
+export type { ProcessLandscapeResult, LandscapeProcess } from "./src/schemas/process-landscape";
+
+export { generateHorizontalView } from "./src/pipelines/horizontal-view";
+export type { HorizontalViewInput } from "./src/pipelines/horizontal-view";
+export { HorizontalViewResultSchema } from "./src/schemas/horizontal-view";
+export type { HorizontalViewResult, HorizontalStep, Handoff } from "./src/schemas/horizontal-view";
+
+export { generateProcedure } from "./src/pipelines/procedure-gen";
+export type { ProcedureGenInput } from "./src/pipelines/procedure-gen";
+export { ProcedureResultSchema } from "./src/schemas/procedure-gen";
+export type { ProcedureResult, ProcedureStep } from "./src/schemas/procedure-gen";
+
+// Process Pattern Templates
+export { PROCESS_PATTERNS, getPatternById, getPatternSummariesForPrompt } from "./src/templates/process-patterns";
+export type { ProcessPattern, ProcessPatternNode } from "./src/templates/process-patterns";
+
+// Free Tools pipelines (lead magnets)
+export { extractSipoc } from "./src/pipelines/sipoc-extraction";
+export type { SipocResult, SipocItem, SipocStep } from "./src/pipelines/sipoc-extraction";
+export { scoreComplexity } from "./src/pipelines/complexity-score";
+export type { ComplexityResult, ComplexityBreakdown } from "./src/pipelines/complexity-score";
+export { convertBpmnToText } from "./src/pipelines/bpmn-to-text";
+export type { BpmnToTextResult, BpmnDecision } from "./src/pipelines/bpmn-to-text";
+
+// Redis-backed activity state
+export { setActivity, getActivity, deleteActivity } from "./src/utils/redis";
+export type { ActivityState } from "./src/utils/redis";
 
 // Prozea prompts (for testing/eval)
 export { PROCESS_EXTRACTION_SYSTEM, buildExtractionSystemPrompt } from "./src/prompts/process-extraction";

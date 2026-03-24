@@ -22,13 +22,23 @@
    ═══════════════════════════════════════════ */
 
 .bpmn-editor-canvas {
-	background: #ffffff;
+	background: #ffffff !important;
 	position: relative;
 	flex: 1;
+	color: #1e293b;
 }
 
 .bpmn-editor-canvas .djs-container {
 	background: #ffffff !important;
+}
+
+/* Force light mode on canvas SVG elements regardless of app theme */
+.bpmn-editor-canvas .djs-container svg {
+	color: #1e293b;
+}
+
+.bpmn-editor-canvas .djs-container .djs-visual text {
+	fill: #1e293b !important;
 }
 
 /* ═══════════════════════════════════════════
@@ -68,6 +78,43 @@
 	stroke: #2563eb !important;
 	stroke-width: 3px !important;
 	fill: #dbeafe !important;
+}
+
+/* ═══════════════════════════════════════════
+   Confidence Markers — low confidence nodes get dashed border + badge
+   ═══════════════════════════════════════════ */
+
+.confidence-low .djs-visual rect,
+.confidence-low .djs-visual polygon,
+.confidence-low .djs-visual circle,
+.confidence-low .djs-visual ellipse {
+	stroke-dasharray: 4, 3 !important;
+	stroke-opacity: 0.7 !important;
+}
+
+.confidence-low .djs-outline {
+	position: relative;
+}
+
+/* '?' badge for low-confidence nodes via SVG overlay technique */
+.confidence-low::after {
+	content: "?";
+	position: absolute;
+	top: -6px;
+	right: -6px;
+	width: 16px;
+	height: 16px;
+	background: #f59e0b;
+	color: white;
+	font-size: 10px;
+	font-weight: 700;
+	font-family: 'Geist', -apple-system, sans-serif;
+	line-height: 16px;
+	text-align: center;
+	border-radius: 50%;
+	z-index: 5;
+	pointer-events: none;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 /* ═══════════════════════════════════════════
@@ -111,6 +158,12 @@
 	border-radius: 6px !important;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
 	z-index: 10 !important;
+	opacity: 0.6;
+	transition: opacity 0.2s;
+}
+
+.djs-palette:hover {
+	opacity: 1;
 }
 
 .djs-context-pad {
@@ -161,6 +214,10 @@
 	border-radius: 4px !important;
 }
 
+.bpmn-dark-chrome .djs-context-pad .entry::before {
+	color: #f1f5f9 !important;
+}
+
 .bpmn-dark-chrome .djs-context-pad .entry:hover {
 	background: #334155 !important;
 }
@@ -174,6 +231,18 @@
 
 .bpmn-dark-chrome .djs-popup .entry:hover {
 	background: #334155 !important;
+}
+
+.bpmn-dark-chrome .djs-popup .entry {
+	color: #f1f5f9 !important;
+}
+
+.bpmn-dark-chrome .djs-popup .entry::before {
+	color: #f1f5f9 !important;
+}
+
+.bpmn-dark-chrome .djs-popup .entry .djs-popup-label {
+	color: #f1f5f9 !important;
 }
 
 /* ═══════════════════════════════════════════
@@ -273,4 +342,72 @@
 	border: 2px solid #2563eb !important;
 	border-radius: 4px !important;
 	background: white !important;
+}
+
+/* ═══════════════════════════════════════════
+   Node Micro-interactions & Animations
+   Per DESIGN.md motion specs:
+   - Micro: 75ms (hover)
+   - Short: 150ms (tooltip)
+   - Medium: 300ms (node transitions, panel switch)
+   ═══════════════════════════════════════════ */
+
+/* ── Status bar: AI activity pulse ──
+   Subtle glow when bot is extracting or diagramming */
+@keyframes status-ai-pulse {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0.6; }
+}
+
+.status-ai-pulse {
+	animation: status-ai-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ── Node creation: fade-in + scale ── */
+@keyframes node-enter {
+	from {
+		opacity: 0;
+		transform: scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+.node-entering {
+	animation: node-enter 300ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* ── State transition: forming → confirmed ──
+   Smooth border from dashed to solid via stroke-dasharray interpolation */
+.state-forming .djs-visual rect,
+.state-forming .djs-visual polygon,
+.state-forming .djs-visual circle,
+.state-forming .djs-visual ellipse,
+.state-confirmed .djs-visual rect,
+.state-confirmed .djs-visual polygon,
+.state-confirmed .djs-visual circle,
+.state-confirmed .djs-visual ellipse {
+	transition:
+		stroke 300ms cubic-bezier(0.4, 0, 0.2, 1),
+		stroke-width 300ms cubic-bezier(0.4, 0, 0.2, 1),
+		fill 300ms cubic-bezier(0.4, 0, 0.2, 1),
+		opacity 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Hover highlight on BPMN nodes ──
+   Subtle blue glow — 75ms micro per DESIGN.md */
+.bjs-element .djs-visual rect,
+.bjs-element .djs-visual polygon,
+.bjs-element .djs-visual circle,
+.bjs-element .djs-visual ellipse {
+	transition: filter 75ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.bjs-element:hover .djs-visual rect,
+.bjs-element:hover .djs-visual polygon,
+.bjs-element:hover .djs-visual circle,
+.bjs-element:hover .djs-visual ellipse {
+	filter: drop-shadow(0 0 6px rgba(37, 99, 235, 0.2));
 }

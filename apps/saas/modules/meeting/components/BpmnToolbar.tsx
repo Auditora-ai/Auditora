@@ -14,8 +14,12 @@ interface BpmnToolbarProps {
 	onToggleGrid: () => void;
 	onExportSVG: () => void;
 	onExportPNG: () => void;
+	onExportXML?: () => void;
 	onToggleFullscreen: () => void;
 	onShowShortcuts: () => void;
+	// Save
+	onSave?: () => void;
+	saving?: boolean;
 	// New AI cockpit controls
 	onToggleIntelligence?: () => void;
 	intelligenceActive?: boolean;
@@ -47,8 +51,11 @@ export function BpmnToolbar({
 	onToggleGrid,
 	onExportSVG,
 	onExportPNG,
+	onExportXML,
 	onToggleFullscreen,
 	onShowShortcuts,
+	onSave,
+	saving,
 	onToggleIntelligence,
 	intelligenceActive,
 	onToggleLegend,
@@ -119,7 +126,38 @@ export function BpmnToolbar({
 				>
 					<span className="text-[10px] font-medium">PNG</span>
 				</ToolbarButton>
+				{onExportXML && (
+					<ToolbarButton
+						onClick={onExportXML}
+						disabled={!hasElements}
+						title="Export BPMN XML (Bizagi compatible)"
+						aria-label="Export BPMN XML"
+					>
+						<span className="text-[10px] font-medium">BPMN</span>
+					</ToolbarButton>
+				)}
 			</ToolbarSection>
+
+			{/* Save button */}
+			{onSave && (
+				<>
+					<ToolbarDivider />
+					<ToolbarSection>
+						<ToolbarButton
+							onClick={onSave}
+							disabled={saving}
+							title="Guardar (Ctrl+S)"
+							aria-label="Save diagram"
+						>
+							{saving ? (
+								<span className="text-[10px] font-medium animate-pulse">...</span>
+							) : (
+								<SaveIcon />
+							)}
+						</ToolbarButton>
+					</ToolbarSection>
+				</>
+			)}
 
 			{/* AI & Legend section */}
 			{(onToggleIntelligence || onToggleLegend) && (
@@ -202,12 +240,12 @@ function ToolbarButton({
 			disabled={disabled}
 			title={title}
 			aria-label={ariaLabel}
-			className={`flex h-7 min-w-7 items-center justify-center rounded px-1.5 text-sm transition-colors ${
+			className={`flex h-9 min-w-9 items-center justify-center rounded px-1.5 text-sm transition-colors focus:ring-2 focus:ring-[#2563EB]/50 focus:outline-none ${
 				active
 					? "bg-[#2563EB] text-white"
 					: disabled
-						? "cursor-not-allowed text-[#64748B]"
-						: "text-[#F1F5F9] hover:bg-[#334155]"
+						? "cursor-not-allowed text-[#475569]"
+						: "text-[#F1F5F9] hover:bg-[#334155] active:bg-[#475569] active:scale-[0.95]"
 			}`}
 		>
 			{children}
@@ -264,6 +302,16 @@ function GridIcon() {
 	return (
 		<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
 			<path d="M2 2h12v12H2zM2 6h12M2 10h12M6 2v12M10 2v12" />
+		</svg>
+	);
+}
+
+function SaveIcon() {
+	return (
+		<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+			<path d="M12.5 14H3.5C2.95 14 2.5 13.55 2.5 13V3C2.5 2.45 2.95 2 3.5 2H10.5L13.5 5V13C13.5 13.55 13.05 14 12.5 14Z" />
+			<path d="M11.5 14V9H4.5V14" />
+			<path d="M4.5 2V5.5H9.5" />
 		</svg>
 	);
 }

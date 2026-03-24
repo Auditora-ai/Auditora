@@ -16,6 +16,7 @@ import {
 	DOCUMENT_EXTRACTION_USER,
 } from "../prompts/document-extraction";
 import type { SessionContext } from "../context/session-context";
+import { parseLlmJson } from "../utils/parse-llm-json";
 
 const ProcessSchema = z.object({
 	name: z.string().min(1),
@@ -63,29 +64,18 @@ export async function extractFromDocument(
 		temperature: 0.1,
 	});
 
-	try {
-		const cleaned = text
-			.replace(/^```json\s*/i, "")
-			.replace(/```\s*$/i, "")
-			.trim();
-		const raw = JSON.parse(cleaned);
-		const result = DocumentExtractionResultSchema.parse(raw);
-
-		// Filter out any processes that match existing names (case-insensitive)
-		const existingLower = new Set(
-			existingProcessNames.map((n) => n.toLowerCase()),
-		);
-		const filtered = result.processes.filter(
-			(p) => !existingLower.has(p.name.toLowerCase()),
-		);
-
-		return { processes: filtered };
-	} catch (error) {
-		console.error(
-			"[DocumentExtraction] Invalid LLM output:",
-			text.substring(0, 200),
-			error instanceof Error ? error.message : "",
-		);
+	const result = parseLlmJson(text, DocumentExtractionResultSchema, "DocumentExtraction");
+	if (!result) {
 		return { processes: [] };
 	}
+
+	// Filter out any processes that match existing names (case-insensitive)
+	const existingLower = new Set(
+		existingProcessNames.map((n) => n.toLowerCase()),
+	);
+	const filtered = result.processes.filter(
+		(p) => !existingLower.has(p.name.toLowerCase()),
+	);
+
+	return { processes: filtered };
 }

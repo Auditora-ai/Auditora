@@ -18,6 +18,7 @@ import {
   DISCOVERY_EXTRACTION_USER,
 } from "../prompts/discovery-extraction";
 import type { SessionContext } from "../context/session-context";
+import { parseLlmJson } from "../utils/parse-llm-json";
 
 const DiscoveryProcessSchema = z.object({
   name: z.string().min(1),
@@ -110,24 +111,13 @@ export async function extractDiscoveryUpdates(
       existingProcesses,
       context,
     ),
-    maxOutputTokens: 1024,
+    maxOutputTokens: 2048,
     temperature: 0.1,
   });
 
-  try {
-    const cleaned = text
-      .replace(/^```json\s*/i, "")
-      .replace(/```\s*$/i, "")
-      .trim();
-    const raw = JSON.parse(cleaned);
-    const result = DiscoveryResultSchema.parse(raw);
-    return result;
-  } catch (error) {
-    console.error(
-      "[DiscoveryExtraction] Invalid LLM output:",
-      text.substring(0, 200),
-      error instanceof Error ? error.message : "",
-    );
+  const result = parseLlmJson(text, DiscoveryResultSchema, "DiscoveryExtraction");
+  if (!result) {
     return { processes: [], businessInsights: { keyRoles: [] } };
   }
+  return result;
 }

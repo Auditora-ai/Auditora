@@ -59,7 +59,7 @@ export function StatusBar({
 	onNewNodes,
 }: StatusBarProps) {
 	return (
-		<div className="flex items-center gap-4 border-t border-border bg-background px-4 py-1.5 text-[11px] text-muted-foreground">
+		<div className="flex items-center gap-4 border-t border-border bg-background px-4 py-2 text-[11px] text-muted-foreground">
 			{/* Connection status */}
 			<div className="flex items-center gap-1.5">
 				<span
@@ -67,13 +67,13 @@ export function StatusBar({
 						connectionStatus === "connected" ? "animate-pulse" : ""
 					}`}
 				/>
-				<span>{STATUS_LABELS[connectionStatus]}</span>
+				<span className="text-[#F1F5F9]">{STATUS_LABELS[connectionStatus]}</span>
 			</div>
 
 			{/* Recording indicator */}
 			{isRecording && (
 				<div className="flex items-center gap-1.5 text-destructive">
-					<span className="h-1.5 w-1.5 animate-pulse rounded-full bg-destructive" />
+					<span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#EF4444]" />
 					<span className="font-medium">REC</span>
 				</div>
 			)}
@@ -81,15 +81,15 @@ export function StatusBar({
 			<span className="text-border">|</span>
 
 			{/* Elapsed time */}
-			<span className="tabular-nums">
+			<span className="text-[#F1F5F9] tabular-nums" style={{ fontVariantNumeric: "tabular-nums" }}>
 				{formatElapsedTime(elapsedTime)}
 			</span>
 
 			<span className="text-border">|</span>
 
 			{/* Node stats */}
-			<span>
-				{nodeCount} nodes &middot; {confirmedCount} confirmed
+			<span aria-live="polite">
+				<span className="text-[#F1F5F9]">{nodeCount}</span> <span className="text-[#94A3B8]">nodes</span> &middot; <span className="text-[#F1F5F9]">{confirmedCount}</span> <span className="text-[#94A3B8]">confirmed</span>
 				{formingCount > 0 && (
 					<span className="text-amber-500">
 						{" "}
@@ -101,11 +101,13 @@ export function StatusBar({
 			<span className="text-border">|</span>
 
 			{/* Bot activity indicator */}
-			<BotActivityIndicator
-				activity={botActivity}
-				activityLog={activityLog}
-				onNewNodes={onNewNodes}
-			/>
+			<div role="status" aria-live="polite">
+				<BotActivityIndicator
+					activity={botActivity}
+					activityLog={activityLog}
+					onNewNodes={onNewNodes}
+				/>
+			</div>
 
 			{/* Layout presets — right aligned */}
 			<div className="ml-auto flex items-center gap-1">
@@ -121,10 +123,10 @@ export function StatusBar({
 						key={preset}
 						type="button"
 						onClick={() => onLayoutChange(preset)}
-						className={`rounded px-1.5 py-0.5 text-[10px] transition-colors ${
+						className={`rounded px-1.5 py-0.5 text-[10px] transition-all duration-150 ${
 							layout === preset
-								? "bg-accent text-foreground"
-								: "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+								? "bg-[#2563EB] text-white"
+								: "text-[#94A3B8] hover:bg-[#334155] hover:text-[#F1F5F9]"
 						}`}
 					>
 						{preset === "balanced"
@@ -140,7 +142,7 @@ export function StatusBar({
 			<button
 				type="button"
 				onClick={onEndSession}
-				className="ml-2 rounded bg-destructive px-2 py-0.5 text-[10px] font-medium text-destructive-foreground transition-colors hover:bg-destructive/90"
+				className="ml-2 rounded border border-red-500 bg-red-600 px-2 py-0.5 text-[10px] font-medium text-white transition-colors hover:bg-red-500 active:scale-[0.97]"
 			>
 				End Session
 			</button>

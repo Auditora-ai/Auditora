@@ -116,7 +116,13 @@ export function BotActivityIndicator({
 	return (
 		<div className="flex items-center gap-2">
 			{/* Activity indicator */}
-			<div className="flex items-center gap-1.5">
+			<div
+				className={`flex items-center gap-1.5${
+					activity.type === "extracting" || activity.type === "diagramming"
+						? " status-ai-pulse"
+						: ""
+				}`}
+			>
 				<span
 					className={`h-1.5 w-1.5 rounded-full ${ACTIVITY_DOT_COLORS[activity.type]} ${
 						activity.type !== "listening" ? "animate-pulse" : ""

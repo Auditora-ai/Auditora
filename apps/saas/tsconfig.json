@@ -21,7 +21,8 @@
 			"@dashboard/*": ["./modules/dashboard/*"],
 			"@process-library/*": ["./modules/process-library/*"],
 			"@discovery/*": ["./modules/discovery/*"],
-			"@risk/*": ["./modules/risk/*"]
+			"@risk/*": ["./modules/risk/*"],
+			"@deliverables/*": ["./modules/deliverables/*"]
 		}
 	},
 	"include": [

@@ -16,6 +16,7 @@ import {
   CHAT_EXTRACTION_SYSTEM,
   CHAT_EXTRACTION_USER,
 } from "../prompts/chat-extraction";
+import { parseLlmJson } from "../utils/parse-llm-json";
 
 const ExtractedProcessSchema = z.object({
   name: z.string().min(1),
@@ -94,6 +95,13 @@ export async function extractFromChat(
     liveTranscript?: string;
   },
   processContext?: ProcessChatContext,
+  currentDiagramNodes?: Array<{
+    id: string;
+    type: string;
+    label: string;
+    state: string;
+    lane?: string | null;
+  }>,
 ): Promise<ChatExtractionResult> {
   if (messages.length === 0) {
     return {
@@ -106,28 +114,18 @@ export async function extractFromChat(
   const { text } = await generateText({
     model: anthropic("claude-sonnet-4-6"),
     system: CHAT_EXTRACTION_SYSTEM,
-    prompt: CHAT_EXTRACTION_USER(messages, existingProcesses, projectContext, processContext),
+    prompt: CHAT_EXTRACTION_USER(messages, existingProcesses, projectContext, processContext, currentDiagramNodes),
     maxOutputTokens: 2048,
     temperature: 0.2,
   });
 
-  try {
-    const cleaned = text
-      .replace(/^```json\s*/i, "")
-      .replace(/```\s*$/i, "")
-      .trim();
-    const raw = JSON.parse(cleaned);
-    return ChatExtractionResultSchema.parse(raw);
-  } catch (error) {
-    console.error(
-      "[ChatExtraction] Invalid LLM output:",
-      text.substring(0, 200),
-      error instanceof Error ? error.message : "",
-    );
+  const result = parseLlmJson(text, ChatExtractionResultSchema, "ChatExtraction");
+  if (!result) {
     return {
       extractedProcesses: [],
       conversationalResponse:
         "Entendido. ¿Puedes darme más detalle sobre los procesos?",
     };
   }
+  return result;
 }

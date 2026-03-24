@@ -11,68 +11,73 @@ import { BpmnLegend } from "./BpmnLegend";
 import { ProcessCompleteness } from "./ProcessCompleteness";
 import { BpmnIntelligence } from "./BpmnIntelligence";
 import { KeyboardShortcutsModal } from "./KeyboardShortcutsModal";
-import { exportSVG, exportPNG } from "../lib/bpmn-export";
+import { exportSVG, exportPNG, exportXML } from "../lib/bpmn-export";
+import { bpmnType, dims } from "../lib/bpmn-builder";
+import { useDiagramContext } from "./MeetingView";
 
 // bpmn-js CSS
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-js.css";
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
 
-// Custom styles (dark toolbar, light canvas, state markers)
+// Custom styles (dark toolbar, light canvas)
 import "../styles/bpmn-editor.css";
 
 interface DiagramPanelProps {
-	nodes: DiagramNode[];
-	onConfirmNode: (nodeId: string) => void;
-	onRejectNode: (nodeId: string) => void;
+	/** Initial BPMN XML to load (from ProcessDefinition). Empty diagram if not provided. */
+	bpmnXml?: string | null;
+	/** Process ID for saving and intelligence features. */
+	processId?: string;
+	/** Session ID for auto-save context. */
+	sessionId?: string;
 	sessionType: "DISCOVERY" | "DEEP_DIVE";
 	sessionStatus?: "ACTIVE" | "ENDED";
 	isFullscreen?: boolean;
 	onToggleFullscreen?: () => void;
 	isFlashing?: boolean;
-	processId?: string;
+	/** Called when auto-save completes, passes the saved XML. */
+	onSave?: (xml: string) => void;
+	/** Called when the selected element changes, passes the element label. */
+	onSelectedElementChange?: (label: string | null) => void;
+	/** Live AI-extracted nodes to merge into the diagram incrementally. */
+	nodes?: DiagramNode[];
 }
 
 /**
- * DiagramPanel — Professional BPMN editor powered by bpmn-js Modeler
+ * DiagramPanel — Full BPMN editor for live sessions
  *
- * ┌─────────────────────────────────────┐
- * │        BpmnToolbar (dark)           │
- * ├──────────────────────────┬──────────┤
- * │                          │ Props    │
- * │   bpmn-js Modeler        │ Panel    │
- * │   (light canvas)         │ (dark)   │
- * │                          │          │
- * │              ┌──────┐    │          │
- * │              │Minimap│    │          │
- * │              └──────┘    │          │
- * └──────────────────────────┴──────────┘
+ * Same editing experience as /procesos: palette, drag-and-drop,
+ * context-pad, properties panel. AI suggestions are handled
+ * externally via AiSuggestionsPanel — this panel is purely for editing.
  *
- * Uses useBpmnModeler hook for all Modeler lifecycle management.
- * AI nodes merge incrementally via Modeling API (createShape, connect, updateProperties).
- * First render uses importXML bootstrap; subsequent updates preserve undo/redo.
+ * Auto-saves BPMN XML every 30 seconds when changes are detected.
  */
 export function DiagramPanel({
-	nodes,
-	onConfirmNode,
-	onRejectNode,
+	bpmnXml,
+	processId,
+	sessionId,
 	sessionType,
 	sessionStatus = "ACTIVE",
 	isFullscreen = false,
 	onToggleFullscreen,
 	isFlashing = false,
-	processId,
+	onSave,
+	onSelectedElementChange,
+	nodes,
 }: DiagramPanelProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const flashStyle = usePanelFlash(isFlashing, {
 		color: "rgba(37, 99, 235, 0.4)",
 	});
-	const propertiesPanelRef = useRef<HTMLDivElement>(null);
 	const [showShortcuts, setShowShortcuts] = useState(false);
 	const [propertiesOpen, setPropertiesOpen] = useState(false);
 	const [showLegend, setShowLegend] = useState(false);
 	const [showIntelligence, setShowIntelligence] = useState(false);
+	const [saving, setSaving] = useState(false);
+	const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+	const lastSavedXmlRef = useRef<string | null>(bpmnXml || null);
 
+	// Editor mode — no onConfirmNode/onRejectNode (no AI overlays)
 	const {
 		isReady,
 		renderError,
@@ -92,16 +97,32 @@ export function DiagramPanel({
 		navigateUp,
 	} = useBpmnModeler({
 		containerRef,
-		onConfirmNode,
-		onRejectNode,
+		initialXml: bpmnXml || undefined,
 		sessionStatus,
 	});
 
-	// Merge AI nodes when they change
+	// Merge AI-extracted nodes into the diagram when NEW nodes arrive
+	// Only call mergeAiNodes when the node count or IDs change, not on every poll
+	const prevNodeIdsRef = useRef<string>("");
 	useEffect(() => {
-		if (!isReady) return;
+		if (!nodes || nodes.length === 0 || !isReady) return;
+		// Create a stable key from node IDs + states to detect real changes
+		const nodeKey = nodes.map((n) => `${n.id}:${n.state}`).sort().join(",");
+		if (nodeKey === prevNodeIdsRef.current) return; // No change
+		prevNodeIdsRef.current = nodeKey;
 		mergeAiNodes(nodes);
 	}, [nodes, isReady, mergeAiNodes]);
+
+	// Track changes for auto-save
+	useEffect(() => {
+		const modeler = getModeler();
+		if (!modeler || !isReady) return;
+
+		const handler = () => setHasUnsavedChanges(true);
+		const eventBus = modeler.get("eventBus");
+		eventBus.on("commandStack.changed", handler);
+		return () => eventBus.off("commandStack.changed", handler);
+	}, [isReady, getModeler]);
 
 	// Auto-open properties panel on element selection in post-meeting mode
 	useEffect(() => {
@@ -110,7 +131,49 @@ export function DiagramPanel({
 		}
 	}, [selectedElement, sessionStatus]);
 
-	// Keyboard shortcuts: ? and F (only when not in text input)
+	// Notify parent when selected element changes (for document linking + transcript highlighting)
+	useEffect(() => {
+		const label = selectedElement?.businessObject?.name || null;
+		onSelectedElementChange?.(label);
+	}, [selectedElement, onSelectedElementChange]);
+
+	// Save to API
+	const handleSave = useCallback(async () => {
+		const modeler = getModeler();
+		if (!modeler || !processId) return;
+		setSaving(true);
+		try {
+			const { xml } = await modeler.saveXML({ format: true });
+			await fetch(`/api/processes/${processId}/diagram`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ bpmnXml: xml, sessionId }),
+			});
+			lastSavedXmlRef.current = xml;
+			setHasUnsavedChanges(false);
+			onSave?.(xml);
+		} catch (err) {
+			console.error("[DiagramPanel] Save error:", err);
+		} finally {
+			setSaving(false);
+		}
+	}, [processId, getModeler, onSave]);
+
+	// Auto-save every 30 seconds when there are unsaved changes
+	useEffect(() => {
+		if (!processId || sessionStatus === "ENDED") return;
+
+		// 10s interval during live sessions for faster AI sync
+		const interval = setInterval(() => {
+			if (hasUnsavedChanges && !saving) {
+				handleSave();
+			}
+		}, 10_000);
+
+		return () => clearInterval(interval);
+	}, [processId, hasUnsavedChanges, saving, handleSave, sessionStatus]);
+
+	// Keyboard shortcuts: Ctrl+S, ?, F, Escape
 	useEffect(() => {
 		const handler = (e: KeyboardEvent) => {
 			const target = e.target as HTMLElement;
@@ -118,6 +181,14 @@ export function DiagramPanel({
 				target.tagName === "INPUT" ||
 				target.tagName === "TEXTAREA" ||
 				target.isContentEditable;
+
+			// Ctrl+S — save
+			if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+				e.preventDefault();
+				handleSave();
+				return;
+			}
+
 			if (isTextInput) return;
 
 			if (e.key === "?" && !e.ctrlKey && !e.metaKey) {
@@ -131,7 +202,7 @@ export function DiagramPanel({
 		};
 		document.addEventListener("keydown", handler);
 		return () => document.removeEventListener("keydown", handler);
-	}, [onToggleFullscreen]);
+	}, [onToggleFullscreen, handleSave]);
 
 	const handleExportSVG = useCallback(async () => {
 		const modeler = getModeler();
@@ -153,7 +224,134 @@ export function DiagramPanel({
 		}
 	}, [getModeler]);
 
-	const visibleNodes = nodes.filter((n) => n.state !== "rejected");
+	const handleExportXML = useCallback(async () => {
+		const modeler = getModeler();
+		if (!modeler) return;
+		try {
+			await exportXML(modeler);
+		} catch (err) {
+			console.error("[DiagramPanel] BPMN XML export failed:", err);
+		}
+	}, [getModeler]);
+
+	/**
+	 * Add a node from an AI suggestion to the BPMN canvas.
+	 * Called from parent when user clicks "Add" in AiSuggestionsPanel.
+	 */
+	const addNodeFromSuggestion = useCallback(
+		(node: DiagramNode) => {
+			const modeler = getModeler();
+			if (!modeler || !isReady) return;
+
+			try {
+				const elementFactory = modeler.get("elementFactory");
+				const modeling = modeler.get("modeling");
+				const canvas = modeler.get("canvas");
+				const elementRegistry = modeler.get("elementRegistry");
+
+				const type = bpmnType(node.type);
+				const size = dims(node.type);
+
+				// Find parent (process or participant)
+				let parent = elementRegistry.get("Pool");
+				if (!parent) parent = elementRegistry.get("Process_1");
+				if (!parent) {
+					const roots = elementRegistry.filter(
+						(e: any) =>
+							e.type === "bpmn:Participant" || e.type === "bpmn:Process",
+					);
+					parent = roots[0] || canvas.getRootElement();
+				}
+
+				// Position: center of viewport with slight random offset to avoid stacking
+				const viewbox = canvas.viewbox();
+				const x = viewbox.x + viewbox.width / 2 + (Math.random() - 0.5) * 200;
+				const y = viewbox.y + viewbox.height / 2 + (Math.random() - 0.5) * 100;
+
+				const shape = elementFactory.createShape({
+					type,
+					...size,
+				});
+
+				modeling.createShape(shape, { x, y }, parent);
+
+				// Set label
+				if (node.label) {
+					modeling.updateProperties(shape, { name: node.label });
+				}
+
+				setHasUnsavedChanges(true);
+			} catch (err) {
+				console.error("[DiagramPanel] Failed to add suggestion:", err);
+			}
+		},
+		[getModeler, isReady],
+	);
+
+	// Register addNodeFromSuggestion and zoomToElement via React Context
+	const { registerAddNode, registerZoomToElement } = useDiagramContext();
+	useEffect(() => {
+		registerAddNode(addNodeFromSuggestion);
+	}, [addNodeFromSuggestion, registerAddNode]);
+
+	// Expose zoomToElement from useBpmnModeler
+	const zoomToElementFn = useCallback(
+		(labelOrLane: string) => {
+			const modeler = getModeler();
+			if (!modeler || !isReady) return;
+
+			const elementRegistry = modeler.get("elementRegistry");
+			const canvas = modeler.get("canvas");
+			const needle = labelOrLane.toLowerCase();
+
+			// Search all elements for a matching label or lane name
+			const allElements = elementRegistry.getAll();
+			let target: any = null;
+
+			for (const el of allElements) {
+				if (!el.businessObject) continue;
+				const name = (el.businessObject.name || "").toLowerCase();
+				if (name && name.includes(needle)) {
+					target = el;
+					break;
+				}
+			}
+
+			if (!target) {
+				for (const el of allElements) {
+					if (!el.businessObject) continue;
+					if (el.type === "bpmn:Lane" || el.type === "bpmn:Participant") {
+						const name = (el.businessObject.name || "").toLowerCase();
+						if (name && name.includes(needle)) {
+							target = el;
+							break;
+						}
+					}
+				}
+			}
+
+			if (!target) return;
+
+			const elementMid = {
+				x: target.x + (target.width || 0) / 2,
+				y: target.y + (target.height || 0) / 2,
+			};
+			const viewbox = canvas.viewbox();
+			const newViewbox = {
+				x: elementMid.x - viewbox.outer.width / 2,
+				y: elementMid.y - viewbox.outer.height / 2,
+				width: viewbox.outer.width,
+				height: viewbox.outer.height,
+			};
+			canvas.viewbox(newViewbox);
+			canvas.zoom(1.2);
+		},
+		[getModeler, isReady],
+	);
+
+	useEffect(() => {
+		registerZoomToElement(zoomToElementFn);
+	}, [zoomToElementFn, registerZoomToElement]);
 
 	return (
 		<div className="bpmn-dark-chrome flex h-full flex-col" style={flashStyle}>
@@ -163,7 +361,7 @@ export function DiagramPanel({
 				canRedo={canRedo}
 				gridEnabled={gridEnabled}
 				isFullscreen={isFullscreen}
-				hasElements={visibleNodes.length > 0}
+				hasElements={true}
 				onUndo={undo}
 				onRedo={redo}
 				onZoomIn={zoomIn}
@@ -172,46 +370,28 @@ export function DiagramPanel({
 				onToggleGrid={toggleGrid}
 				onExportSVG={handleExportSVG}
 				onExportPNG={handleExportPNG}
+				onExportXML={handleExportXML}
 				onToggleFullscreen={() => onToggleFullscreen?.()}
 				onShowShortcuts={() => setShowShortcuts(true)}
 				onToggleIntelligence={processId ? () => setShowIntelligence(!showIntelligence) : undefined}
 				intelligenceActive={showIntelligence}
 				onToggleLegend={() => setShowLegend(!showLegend)}
 				legendActive={showLegend}
+				onSave={processId ? handleSave : undefined}
+				saving={saving}
 			/>
 
-			{/* Panel header */}
-			<div className="flex items-center justify-between border-b border-border px-3 py-2">
-				<span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-					{sessionType === "DISCOVERY"
-						? "Process Architecture"
-						: "Live Process Diagram"}
-				</span>
-				{nodes.length > 0 && (
-					<div className="flex items-center gap-2">
-						<span className="rounded-full bg-success/10 px-2 py-0.5 text-[10px] font-medium text-success">
-							{nodes.filter((n) => n.state === "confirmed").length} confirmed
-						</span>
-						{nodes.filter((n) => n.state === "forming").length > 0 && (
-							<span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium text-amber-600">
-								{nodes.filter((n) => n.state === "forming").length} forming
-							</span>
-						)}
-						{/* Properties toggle */}
-						<button
-							type="button"
-							onClick={() => setPropertiesOpen(!propertiesOpen)}
-							className={`rounded px-1.5 py-0.5 text-[10px] transition-colors ${
-								propertiesOpen
-									? "bg-primary/10 text-primary"
-									: "text-muted-foreground hover:bg-accent/50"
-							}`}
-						>
-							Properties
-						</button>
-					</div>
-				)}
-			</div>
+			{/* Unsaved/saving indicators (inline in toolbar area) */}
+			{(hasUnsavedChanges || saving) && (
+				<div className="flex items-center gap-2 border-b border-border px-3 py-1">
+					{hasUnsavedChanges && (
+						<span className="text-[10px] text-amber-600">Sin guardar</span>
+					)}
+					{saving && (
+						<span className="text-[10px] text-muted-foreground">Guardando...</span>
+					)}
+				</div>
+			)}
 
 			{/* Subprocess breadcrumbs */}
 			<BpmnBreadcrumbs
@@ -220,7 +400,28 @@ export function DiagramPanel({
 			/>
 
 			{/* Canvas + Properties Panel + Overlays */}
-			<div className="relative flex-1">
+			<div
+				className="relative flex-1"
+				onDragOver={(e) => {
+					// Accept drops from suggestion cards
+					if (e.dataTransfer.types.includes("application/prozea-node")) {
+						e.preventDefault();
+						e.dataTransfer.dropEffect = "copy";
+					}
+				}}
+				onDrop={(e) => {
+					const data = e.dataTransfer.getData("application/prozea-node");
+					if (data) {
+						e.preventDefault();
+						try {
+							const node = JSON.parse(data);
+							addNodeFromSuggestion(node);
+						} catch {
+							// Invalid data
+						}
+					}
+				}}
+			>
 				<div ref={containerRef} className="bpmn-editor-canvas h-full w-full" />
 
 				{/* Render error banner */}
@@ -259,14 +460,15 @@ export function DiagramPanel({
 					onClose={() => setShowLegend(false)}
 				/>
 
-				{/* Empty state */}
+				{/* Loading state */}
 				{!isReady && (
 					<div className="absolute inset-0 flex items-center justify-center bg-white">
 						<div className="h-16 w-16 animate-pulse rounded-lg bg-gray-100" />
 					</div>
 				)}
 
-				{isReady && visibleNodes.length === 0 && (
+				{/* Empty state — shown when editor is ready but no XML was loaded */}
+				{isReady && !bpmnXml && (
 					<div className="pointer-events-none absolute inset-0 flex items-center justify-center">
 						<div className="text-center opacity-40">
 							<div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/5">
@@ -286,11 +488,11 @@ export function DiagramPanel({
 							</div>
 							<p className="text-lg text-muted-foreground">
 								{sessionType === "DISCOVERY"
-									? "Describe your business to begin mapping"
-									: "Describe the process to begin diagramming"}
+									? "Usa la paleta para comenzar a diagramar"
+									: "Arrastra elementos de la paleta al canvas"}
 							</p>
 							<p className="mt-2 text-sm text-muted-foreground/60">
-								BPMN diagram will build as process steps are discussed
+								Las sugerencias de la IA apareceran en el panel lateral
 							</p>
 						</div>
 					</div>

@@ -8,12 +8,30 @@ export function Footer() {
 
 	return (
 		<footer className="border-t py-8 text-foreground/60 text-sm">
-			<div className="container grid grid-cols-1 gap-6 lg:grid-cols-3">
+			<div className="container grid grid-cols-1 gap-6 lg:grid-cols-4">
 				<div>
 					<Logo className="opacity-70 grayscale" />
 					<p className="mt-3 text-sm opacity-70">
 						© {new Date().getFullYear()} {config.appName}. All rights reserved.
 					</p>
+				</div>
+
+				<div className="flex flex-col gap-2">
+					<span className="font-medium text-foreground/80">
+						{t("common.footer.tools") || "Free Tools"}
+					</span>
+					<LocaleLink href="/tools/bpmn-generator" className="block">
+						BPMN Generator
+					</LocaleLink>
+					<LocaleLink href="/tools/sipoc-generator" className="block">
+						SIPOC Generator
+					</LocaleLink>
+					<LocaleLink href="/tools/raci-generator" className="block">
+						RACI Generator
+					</LocaleLink>
+					<LocaleLink href="/tools/process-audit" className="block">
+						Process Health Check
+					</LocaleLink>
 				</div>
 
 				<div className="flex flex-col gap-2">

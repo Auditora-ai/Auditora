@@ -120,7 +120,7 @@ export function HeroSection() {
 						</a>
 					</Button>
 					<Button variant="ghost" size="lg" asChild>
-						<a href="#demo">
+						<a href="/tools">
 							{t("home.hero.ctaSecondary")}
 						</a>
 					</Button>

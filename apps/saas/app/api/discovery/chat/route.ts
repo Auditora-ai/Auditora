@@ -159,7 +159,7 @@ export async function POST(request: NextRequest) {
 		}
 
 		const body = await request.json();
-		const { message, threadId, sessionId, transcriptContext, processId: explicitProcessId } = body;
+		const { message, threadId, sessionId, transcriptContext, processId: explicitProcessId, currentDiagramNodes } = body;
 
 		if (!message) {
 			return NextResponse.json(
@@ -274,7 +274,48 @@ export async function POST(request: NextRequest) {
 				liveTranscript: transcriptContext ?? undefined,
 			},
 			processContext,
+			currentDiagramNodes ?? undefined,
 		);
+
+		// If in a live session context, create DiagramNodes for extracted process steps
+		let newDiagramNodes: Array<{ id: string; nodeType: string; label: string; state: string }> = [];
+		if (sessionId && result.extractedProcesses.length > 0) {
+			const session = await db.meetingSession.findUnique({
+				where: { id: sessionId },
+				select: { id: true, status: true },
+			});
+			if (session) {
+				const existingNodes = await db.diagramNode.findMany({
+					where: { sessionId },
+					select: { label: true },
+				});
+				const existingLabels = new Set(existingNodes.map((n) => n.label.toLowerCase()));
+
+				for (const proc of result.extractedProcesses) {
+					// Skip if a node with this label already exists
+					if (existingLabels.has(proc.name.toLowerCase())) continue;
+
+					const node = await db.diagramNode.create({
+						data: {
+							sessionId,
+							nodeType: "TASK",
+							label: proc.name,
+							state: "FORMING",
+							lane: proc.owner ?? null,
+							positionX: 200 + existingNodes.length * 200,
+							positionY: 200,
+							connections: [],
+						},
+					});
+					newDiagramNodes.push({
+						id: node.id,
+						nodeType: node.nodeType,
+						label: node.label,
+						state: node.state,
+					});
+				}
+			}
+		}
 
 		// Save assistant response
 		const assistantMessage = await db.discoveryMessage.create({
@@ -294,6 +335,7 @@ export async function POST(request: NextRequest) {
 			message: assistantMessage,
 			extractedProcesses: result.extractedProcesses,
 			followUpQuestion: result.followUpQuestion,
+			newDiagramNodes,
 		});
 	} catch (error) {
 		console.error("[Discovery Chat POST]", error);

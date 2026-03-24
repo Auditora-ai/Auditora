@@ -40,3 +40,34 @@
 		stroke-width: 1.75;
 	}
 }
+
+/* Live session fullscreen mode — hides app shell (sidebar, navbar, container padding) */
+body.live-session-active {
+	overflow: hidden !important;
+}
+
+body.live-session-active nav,
+body.live-session-active [data-sidebar],
+body.live-session-active .command-palette-trigger {
+	display: none !important;
+}
+
+body.live-session-active main {
+	margin-left: 0 !important;
+	padding: 0 !important;
+	border: none !important;
+}
+
+body.live-session-active main > .container {
+	max-width: 100% !important;
+	padding: 0 !important;
+	height: 100vh !important;
+	overflow: hidden !important;
+}
+
+body.live-session-active > div > div {
+	margin-left: 0 !important;
+	min-height: 100vh !important;
+	max-height: 100vh !important;
+	overflow: hidden !important;
+}

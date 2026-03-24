@@ -10,6 +10,7 @@
  */
 
 import type { SessionContext } from "../context/session-context";
+import { getPatternSummariesForPrompt } from "../templates/process-patterns";
 
 /**
  * Build a business context block for inclusion in the system prompt.
@@ -123,7 +124,8 @@ Output ONLY valid JSON (no markdown, no explanation):
       "label": "string (concise, 3-6 words)",
       "lane": "string (role/department)",
       "connectFrom": "existing_node_id or null",
-      "connectTo": "existing_node_id or null"
+      "connectTo": "existing_node_id or null",
+      "confidence": 0.0-1.0
     }
   ],
   "updatedNodes": [
@@ -137,8 +139,16 @@ Output ONLY valid JSON (no markdown, no explanation):
       "topic": "string (what was mentioned)",
       "likelyProcess": "string (which process it likely belongs to)"
     }
-  ]
+  ],
+  "suggestedPattern": {
+    "patternId": "string (one of the known pattern IDs below, or null)",
+    "confidence": 0.0-1.0,
+    "message": "string (e.g. 'This looks like an approval flow')"
+  } // or null if no pattern matches
 }
+
+KNOWN PROCESS PATTERNS (suggest one if the conversation clearly matches):
+${getPatternSummariesForPrompt()}
 
 Rules:
 - ONLY output nodes for process steps that are NOT already in the current diagram
@@ -150,7 +160,9 @@ Rules:
 - connectTo: which existing node this new node should connect TO (for merging paths)
 - If the conversation is off-topic (small talk, introductions), return empty arrays
 - Do NOT hallucinate steps that weren't discussed
-- If a topic is mentioned that belongs to a different process (sibling), add it to outOfScope instead of newNodes`;
+- If a topic is mentioned that belongs to a different process (sibling), add it to outOfScope instead of newNodes
+- confidence: rate how confident you are that this step is a real part of the process (0.0-1.0). High (>0.7): explicitly described by the speaker. Medium (0.4-0.7): implied or partially described. Low (<0.4): inferred or ambiguous.
+- suggestedPattern: if the conversation describes a process that closely matches one of the KNOWN PROCESS PATTERNS, include a suggestedPattern object. Only suggest when confidence >= 0.6. Set to null if no pattern matches or if the diagram already has 4+ nodes (pattern suggestion is most useful early).`;
 
 /**
  * Build the context-enhanced system prompt.

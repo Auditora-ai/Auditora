@@ -65,6 +65,7 @@ export class RecallAiProvider implements CallBotProvider {
             provider: {
               recallai_streaming: {
                 language_code: "es",
+                partial_results: true,
               },
             },
           },
@@ -72,7 +73,15 @@ export class RecallAiProvider implements CallBotProvider {
             {
               type: "webhook",
               url: `${process.env.NEXT_PUBLIC_TUNNEL_URL || process.env.NEXT_PUBLIC_SAAS_URL}/api/webhook/recall`,
-              events: ["transcript.data"],
+              events: [
+                "transcript.data",
+                "transcript.partial_data",
+                "participant_events.join",
+                "participant_events.leave",
+                "participant_events.speech_on",
+                "participant_events.speech_off",
+                "participant_events.chat_message",
+              ],
             },
           ],
         },
@@ -134,6 +143,97 @@ export class RecallAiProvider implements CallBotProvider {
       meetingUrl: data.meeting_url,
       participants: data.meeting_participants?.length,
     };
+  }
+
+  /**
+   * Get the video recording URL for a completed bot session.
+   * Returns null if the recording is not yet available (bot still processing).
+   */
+  async getVideoUrl(botId: string): Promise<string | null> {
+    try {
+      const response = await fetch(`${this.baseUrl}/bot/${botId}/`, {
+        headers: {
+          Authorization: `Token ${this.apiKey}`,
+        },
+      });
+
+      if (!response.ok) {
+        console.warn(`[RecallAi] getVideoUrl failed (${response.status}) for bot ${botId}`);
+        return null;
+      }
+
+      const data = await response.json();
+      // Recall.ai stores recordings in recordings[].media_shortcuts.video_mixed.data.download_url
+      // The download_url is a pre-signed S3 URL that expires in 5 hours
+      const videoUrl = data.recordings?.[0]?.media_shortcuts?.video_mixed?.data?.download_url
+        || data.video_url
+        || null;
+      return videoUrl;
+    } catch (err) {
+      console.warn(`[RecallAi] getVideoUrl error for bot ${botId}:`, err);
+      return null;
+    }
+  }
+
+  /**
+   * Get the audio recording URL for a completed bot session.
+   * Returns null if the recording is not yet available (bot still processing).
+   * Note: Recall.ai S3 URLs expire after 5 hours — fetch fresh on each access.
+   */
+  async getAudioUrl(botId: string): Promise<string | null> {
+    try {
+      const response = await fetch(`${this.baseUrl}/bot/${botId}/`, {
+        headers: {
+          Authorization: `Token ${this.apiKey}`,
+        },
+      });
+
+      if (!response.ok) {
+        console.warn(`[RecallAi] getAudioUrl failed (${response.status}) for bot ${botId}`);
+        return null;
+      }
+
+      const data = await response.json();
+      // Try recordings structure first, fallback to direct field
+      const audioUrl = data.recordings?.[0]?.media_shortcuts?.audio_mixed?.data?.download_url
+        || data.audio_url
+        || null;
+      return audioUrl;
+    } catch (err) {
+      console.warn(`[RecallAi] getAudioUrl error for bot ${botId}:`, err);
+      return null;
+    }
+  }
+
+  /**
+   * Get the list of meeting participants from a bot session.
+   * Returns empty array if not available yet.
+   */
+  async getParticipants(botId: string): Promise<Array<{ name: string; email?: string }>> {
+    try {
+      const response = await fetch(`${this.baseUrl}/bot/${botId}/`, {
+        headers: {
+          Authorization: `Token ${this.apiKey}`,
+        },
+      });
+
+      if (!response.ok) {
+        console.warn(`[RecallAi] getParticipants failed (${response.status}) for bot ${botId}`);
+        return [];
+      }
+
+      const data = await response.json();
+      const participants = data.meeting_participants;
+      if (!Array.isArray(participants)) return [];
+
+      return participants.map((p: any) => ({
+        name: p.name || "Unknown",
+        ...(p.email ? { email: p.email } : {}),
+      }));
+    } catch (err) {
+      console.warn(`[RecallAi] getParticipants error for bot ${botId}:`, err);
+      return [];
+    }
   }
 }
 

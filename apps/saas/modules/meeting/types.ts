@@ -5,6 +5,7 @@ export interface DiagramNode {
 	state: "forming" | "confirmed" | "rejected";
 	lane?: string;
 	connections: string[];
+	confidence?: number | null;
 }
 
 // Bot activity feedback types

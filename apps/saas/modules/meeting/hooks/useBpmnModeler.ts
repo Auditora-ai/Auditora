@@ -11,7 +11,7 @@ import { buildBpmnXml, bpmnType, dims, bpmnTag } from "../lib/bpmn-builder";
  * - Modeler initialization and destruction (SSR-safe via dynamic import)
  * - AI node rendering via incremental Modeling API (createShape, connect, etc.)
  * - First render uses importXML bootstrap; subsequent updates use Modeling API
- * - State-based overlays (confirm/reject for forming nodes)
+ * - State-based CSS markers for node states
  * - CSS markers for state-based coloring
  * - Full editing tools (palette, context-pad, undo/redo) preserved across AI updates
  */
@@ -43,6 +43,8 @@ interface ModelerAPI {
 	gridEnabled: boolean;
 	getModeler: () => any;
 	selectedElement: any;
+	// Smart zoom
+	zoomToElement: (labelOrLane: string) => void;
 	// Subprocess deep-linking
 	navigationStack: { id: string; label: string }[];
 	drillDown: (elementId: string) => void;
@@ -184,10 +186,8 @@ export function useBpmnModeler({
 						}
 					}
 
-					// Apply state-based styling (confirm/reject overlays)
-					if (onConfirmNode && onRejectNode) {
-						applyAllStyling(modeler, nodes, onConfirmNode, onRejectNode);
-					}
+					// Apply state-based styling
+					applyAllStyling(modeler, nodes);
 
 					bootstrappedRef.current = true;
 					setRenderError(null);
@@ -205,7 +205,7 @@ export function useBpmnModeler({
 				importingRef.current = false;
 			}
 		},
-		[isReady, onConfirmNode, onRejectNode],
+		[isReady],
 	);
 
 	/**
@@ -336,6 +336,15 @@ export function useBpmnModeler({
 
 				modeling.createShape(shape, { x: newX, y }, parent);
 
+				// Apply confidence marker for low-confidence nodes
+				if (node.confidence != null && node.confidence < 0.7) {
+					try {
+						canvas.addMarker(node.id, "confidence-low");
+					} catch {
+						// ok
+					}
+				}
+
 				known.set(node.id, { ...node });
 			} catch (err) {
 				console.warn(
@@ -389,19 +398,11 @@ export function useBpmnModeler({
 					applyTypeColors(gfx, node, element);
 				}
 
-				// Update overlay (remove old, add new if forming)
+				// Clear any stale overlays
 				try {
 					overlays.remove({ element: node.id });
 				} catch {
 					// ok
-				}
-				if (node.state === "forming" && onConfirmNode && onRejectNode) {
-					addFormingOverlay(
-						overlays,
-						node,
-						onConfirmNode,
-						onRejectNode,
-					);
 				}
 			}
 
@@ -526,6 +527,65 @@ export function useBpmnModeler({
 		if (canvas) canvas.zoom("fit-viewport", "auto");
 	}, []);
 
+	/**
+	 * Smart zoom: find an element by label or lane name and center the canvas on it.
+	 */
+	const zoomToElement = useCallback((labelOrLane: string) => {
+		const modeler = modelerRef.current;
+		if (!modeler) return;
+
+		const elementRegistry = modeler.get("elementRegistry");
+		const canvas = modeler.get("canvas");
+		const needle = labelOrLane.toLowerCase();
+
+		// Search all elements for a matching label or lane name
+		const allElements = elementRegistry.getAll();
+		let target: any = null;
+
+		for (const el of allElements) {
+			if (!el.businessObject) continue;
+			const name = (el.businessObject.name || "").toLowerCase();
+			if (name && name.includes(needle)) {
+				target = el;
+				break;
+			}
+		}
+
+		// Also check lane/participant names
+		if (!target) {
+			for (const el of allElements) {
+				if (!el.businessObject) continue;
+				if (
+					el.type === "bpmn:Lane" ||
+					el.type === "bpmn:Participant"
+				) {
+					const name = (el.businessObject.name || "").toLowerCase();
+					if (name && name.includes(needle)) {
+						target = el;
+						break;
+					}
+				}
+			}
+		}
+
+		if (!target) return;
+
+		// Center canvas on the element
+		const elementMid = {
+			x: target.x + (target.width || 0) / 2,
+			y: target.y + (target.height || 0) / 2,
+		};
+		const viewbox = canvas.viewbox();
+		const newViewbox = {
+			x: elementMid.x - viewbox.outer.width / 2,
+			y: elementMid.y - viewbox.outer.height / 2,
+			width: viewbox.outer.width,
+			height: viewbox.outer.height,
+		};
+		canvas.viewbox(newViewbox);
+		canvas.zoom(1.2); // slight zoom in for focus
+	}, []);
+
 	const undo = useCallback(() => {
 		modelerRef.current?.get("commandStack")?.undo();
 	}, []);
@@ -625,6 +685,7 @@ export function useBpmnModeler({
 		zoomIn,
 		zoomOut,
 		zoomFit,
+		zoomToElement,
 		undo,
 		redo,
 		canUndo,
@@ -700,22 +761,15 @@ function applyTypeColors(gfx: any, node: DiagramNode, element: any) {
 
 /**
  * Apply styling to all nodes after bootstrap importXML.
+ * Note: Overlay-based confirm/reject buttons have been removed.
+ * AI suggestions are now handled by AiSuggestionsPanel in the sidebar.
  */
 function applyAllStyling(
 	modeler: any,
 	allNodes: DiagramNode[],
-	onConfirmNode: (nodeId: string) => void,
-	onRejectNode: (nodeId: string) => void,
 ) {
 	const canvas = modeler.get("canvas");
 	const elementRegistry = modeler.get("elementRegistry");
-	const overlays = modeler.get("overlays");
-
-	try {
-		overlays.clear();
-	} catch {
-		// ok
-	}
 
 	for (const node of allNodes) {
 		const element = elementRegistry.get(node.id);
@@ -728,47 +782,20 @@ function applyAllStyling(
 			// Element may not support markers
 		}
 
+		// Apply confidence marker for low-confidence nodes
+		if (node.confidence != null && node.confidence < 0.7) {
+			try {
+				canvas.addMarker(node.id, "confidence-low");
+			} catch {
+				// ok
+			}
+		}
+
 		// Apply type-based coloring to the SVG element
 		const gfx = elementRegistry.getGraphics(node.id);
 		if (gfx) {
 			applyTypeColors(gfx, node, element);
 		}
-
-		// Add confirm/reject overlay for forming nodes
-		if (node.state === "forming") {
-			addFormingOverlay(overlays, node, onConfirmNode, onRejectNode);
-		}
-	}
-}
-
-function addFormingOverlay(
-	overlays: any,
-	node: DiagramNode,
-	onConfirmNode: (nodeId: string) => void,
-	onRejectNode: (nodeId: string) => void,
-) {
-	const html = document.createElement("div");
-	html.className = "bpmn-node-actions";
-	html.innerHTML = `
-		<button data-action="confirm" data-node-id="${node.id}" class="bpmn-action-btn bpmn-action-confirm" title="Confirm step">✓</button>
-		<button data-action="reject" data-node-id="${node.id}" class="bpmn-action-btn bpmn-action-reject" title="Reject step">✗</button>
-	`;
-
-	html.addEventListener("click", (e) => {
-		const target = e.target as HTMLElement;
-		const action = target.getAttribute("data-action");
-		const nodeId = target.getAttribute("data-node-id");
-		if (action === "confirm" && nodeId) onConfirmNode(nodeId);
-		if (action === "reject" && nodeId) onRejectNode(nodeId);
-	});
-
-	try {
-		overlays.add(node.id, "node-actions", {
-			position: { bottom: -8, left: 0 },
-			html,
-		});
-	} catch {
-		// Element may not support overlays
 	}
 }
 

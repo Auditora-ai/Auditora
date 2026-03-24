@@ -155,6 +155,8 @@ model Organization {
   architecture       ProcessArchitecture?
   documents          Document[]
   discoveryThreads   DiscoveryThread[]
+  companyBrain       CompanyBrain?
+  orgDeliverables    OrgDeliverable[]
 
   @@unique([slug])
   @@map("organization")
@@ -392,6 +394,11 @@ model MeetingSession {
   correctionLogs      CorrectionLog[]
   teleprompterLogs    TeleprompterLog[]
   sessionSummary      SessionSummary?
+  sessionDeliverables SessionDeliverable[]
+
+  // Recall.ai media
+  videoUrl            String?
+  audioUrl            String?
 
   // Share
   shareToken          String?           @unique @default(cuid())
@@ -413,6 +420,7 @@ model DiagramNode {
   label     String
   state     NodeState      @default(FORMING)
   lane      String?
+  confidence Float?
   positionX Float          @default(0)
   positionY Float          @default(0)
 
@@ -454,13 +462,15 @@ model NodeComment {
 }
 
 model TranscriptEntry {
-  id        String         @id @default(cuid())
-  sessionId String
-  session   MeetingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  speaker   String
-  text      String         @db.Text
-  timestamp Float
-  confidence Float?
+  id            String         @id @default(cuid())
+  sessionId     String
+  session       MeetingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  speaker       String
+  text          String         @db.Text
+  correctedText String?        @db.Text
+  timestamp     Float
+  confidence    Float?
+  source        String         @default("deepgram") // "deepgram" | "manual"
 
   createdAt DateTime       @default(now())
 
@@ -486,13 +496,16 @@ model CorrectionLog {
 }
 
 model TeleprompterLog {
-  id        String         @id @default(cuid())
-  sessionId String
-  session   MeetingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-  question  String         @db.Text
-  used      Boolean        @default(false)
-  skipped   Boolean        @default(false)
-  shownAt   DateTime       @default(now())
+  id                String         @id @default(cuid())
+  sessionId         String
+  session           MeetingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  question          String         @db.Text
+  used              Boolean        @default(false)
+  skipped           Boolean        @default(false)
+  shownAt           DateTime       @default(now())
+  completenessScore Int?
+  gapType           String?
+  sipocCoverage     Json?
 
   @@index([sessionId])
   @@map("teleprompter_log")
@@ -509,6 +522,42 @@ model SessionSummary {
   createdAt   DateTime       @default(now())
 
   @@map("session_summary")
+}
+
+model SessionDeliverable {
+  id          String         @id @default(cuid())
+  sessionId   String
+  session     MeetingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  type        String         // "summary" | "process_audit" | "raci" | "risk_audit"
+  status      String         @default("pending") // "pending" | "running" | "completed" | "failed" | "skipped"
+  data        Json?
+  error       String?
+  startedAt   DateTime?
+  completedAt DateTime?
+
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@unique([sessionId, type])
+  @@index([sessionId])
+  @@index([status])
+  @@map("session_deliverable")
+}
+
+model MeetingParticipant {
+  id          String         @id @default(cuid())
+  sessionId   String
+  name        String
+  email       String?
+  role        String?
+  talkTimeMs  Int            @default(0)
+  joinedAt    DateTime?
+  leftAt      DateTime?
+
+  createdAt   DateTime       @default(now())
+
+  @@index([sessionId])
+  @@map("meeting_participant")
 }
 
 // ============================================
@@ -851,6 +900,219 @@ model DocumentVersion {
   @@unique([documentId, version])
   @@index([documentId])
   @@map("document_version")
+}
+
+// ============================================
+// MARKETING TOOLS (lead magnets)
+// ============================================
+
+model ToolLead {
+  id         String    @id @default(cuid())
+  email      String
+  toolUsed   String // "bpmn-generator" | "sipoc-generator" | "raci-generator" | "process-audit" | "meeting-to-process" | "process-complexity" | "bpmn-to-text" | "roi-calculator"
+  outputData Json? // stored result for email link
+  ipAddress  String?
+  source     String    @default("tool") // "tool" | "contact"
+  nurture1At DateTime? // when nurture email 2 was sent
+  nurture2At DateTime? // when nurture email 3 was sent
+  createdAt  DateTime  @default(now())
+
+  @@index([email])
+  @@index([toolUsed])
+  @@index([createdAt])
+  @@map("tool_lead")
+}
+
+// ============================================
+// COMPANY BRAIN — Organizational Knowledge Model
+// ============================================
+
+model CompanyBrain {
+  id             String       @id @default(cuid())
+  organizationId String       @unique
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  orgContext          OrgContext?
+  valueChainActivities ValueChainActivity[]
+  processLinks        ProcessLink[]
+  globalRoles         GlobalRole[]
+  globalSystems       GlobalSystem[]
+  enrichmentHistory   EnrichmentHistory[]
+
+  lastEnrichedAt DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@map("company_brain")
+}
+
+model OrgContext {
+  id             String       @id @default(cuid())
+  companyBrainId String       @unique
+  companyBrain   CompanyBrain @relation(fields: [companyBrainId], references: [id], onDelete: Cascade)
+
+  // Each field stores: text content
+  mission        String?      @db.Text
+  missionConfidence Float?
+  missionSources Json?        // [{ sessionId, timestamp, quote }]
+
+  vision         String?      @db.Text
+  visionConfidence Float?
+  visionSources  Json?
+
+  values         Json?        // [{ name: string, description: string }]
+  valuesConfidence Float?
+  valuesSources  Json?
+
+  industrySector    String?
+  industrySubsector String?
+  companySize       String?   // "small" | "medium" | "large" | "enterprise"
+  geography         String?
+
+  orgStructure   Json?        // { departments: [{ name, head, parentDept }] }
+  businessModel  String?      @db.Text
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@map("org_context")
+}
+
+enum ValueChainType {
+  PRIMARY
+  SUPPORT
+}
+
+model ValueChainActivity {
+  id             String         @id @default(cuid())
+  companyBrainId String
+  companyBrain   CompanyBrain   @relation(fields: [companyBrainId], references: [id], onDelete: Cascade)
+
+  name           String
+  type           ValueChainType
+  description    String?        @db.Text
+  orderIndex     Int            @default(0)
+  linkedProcessIds String[]     // ProcessDefinition IDs mapped to this activity
+
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@index([companyBrainId])
+  @@map("value_chain_activity")
+}
+
+enum ProcessLinkType {
+  FEEDS           // Output of A is input to B
+  TRIGGERS        // Completion of A starts B
+  DEPENDS         // A requires B to be done first
+  HANDOFF         // A passes work to B (cross-department)
+}
+
+model ProcessLink {
+  id             String          @id @default(cuid())
+  companyBrainId String
+  companyBrain   CompanyBrain    @relation(fields: [companyBrainId], references: [id], onDelete: Cascade)
+
+  fromProcessId  String          // ProcessDefinition ID
+  toProcessId    String          // ProcessDefinition ID
+  linkType       ProcessLinkType
+  description    String?
+
+  confidence     Float           @default(0.5)
+  source         String          @default("ai") // "ai" | "manual"
+
+  createdAt      DateTime        @default(now())
+
+  @@unique([companyBrainId, fromProcessId, toProcessId, linkType])
+  @@index([companyBrainId])
+  @@map("process_link")
+}
+
+model GlobalRole {
+  id             String       @id @default(cuid())
+  companyBrainId String
+  companyBrain   CompanyBrain @relation(fields: [companyBrainId], references: [id], onDelete: Cascade)
+
+  name           String
+  department     String?
+  title          String?
+  appearsInProcessIds String[] // ProcessDefinition IDs where this role appears
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@unique([companyBrainId, name])
+  @@index([companyBrainId])
+  @@map("global_role")
+}
+
+model GlobalSystem {
+  id             String       @id @default(cuid())
+  companyBrainId String
+  companyBrain   CompanyBrain @relation(fields: [companyBrainId], references: [id], onDelete: Cascade)
+
+  name           String
+  vendor         String?
+  description    String?
+  usedInProcessIds String[]   // ProcessDefinition IDs where this system is used
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@unique([companyBrainId, name])
+  @@index([companyBrainId])
+  @@map("global_system")
+}
+
+enum EnrichmentSourceType {
+  SESSION
+  DOCUMENT
+  MANUAL
+}
+
+model EnrichmentHistory {
+  id             String              @id @default(cuid())
+  companyBrainId String
+  companyBrain   CompanyBrain        @relation(fields: [companyBrainId], references: [id], onDelete: Cascade)
+
+  sourceType     EnrichmentSourceType
+  sourceId       String              // MeetingSession ID or Document ID
+  field          String              // e.g., "orgContext.mission", "valueChainActivity.Logistics"
+  oldValue       String?             @db.Text
+  newValue       String?             @db.Text
+  confidence     Float?
+  action         String              @default("update") // "create" | "update" | "delete"
+
+  createdAt      DateTime            @default(now())
+
+  @@index([companyBrainId])
+  @@index([sourceId])
+  @@map("enrichment_history")
+}
+
+// Org-level deliverables (not session-scoped)
+model OrgDeliverable {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  type           String       // "mission_vision" | "value_chain" | "landscape" | "horizontal_view" | "procedure" | "gap_analysis" | "benchmark" | "progress" | "executive_report"
+  status         String       @default("pending") // "pending" | "running" | "completed" | "failed" | "draft"
+  data           Json?        // Output of the pipeline (schema varies by type)
+  error          String?
+  confidence     Float?       // Overall confidence score
+
+  // For procedure type: which process/activity this is for
+  processDefinitionId String?
+
+  startedAt      DateTime?
+  completedAt    DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([organizationId])
+  @@index([organizationId, type])
+  @@map("org_deliverable")
 }
 
 // ============================================

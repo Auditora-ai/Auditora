@@ -11,6 +11,7 @@
 import { generateText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { z } from "zod";
+import { parseLlmJson } from "../utils/parse-llm-json";
 
 const RaciAssignmentSchema = z.object({
 	activityName: z.string().min(1),
@@ -76,19 +77,9 @@ Generate the RACI matrix assignments.`,
 		temperature: 0.1,
 	});
 
-	try {
-		const cleaned = text
-			.replace(/^```json\s*/i, "")
-			.replace(/```\s*$/i, "")
-			.trim();
-		const raw = JSON.parse(cleaned);
-		return RaciResultSchema.parse(raw);
-	} catch (error) {
-		console.error(
-			"[RaciGenerator] Invalid LLM output:",
-			text.substring(0, 200),
-			error instanceof Error ? error.message : "",
-		);
+	const result = parseLlmJson(text, RaciResultSchema, "RaciGenerator");
+	if (!result) {
 		return { assignments: [] };
 	}
+	return result;
 }

@@ -3,6 +3,7 @@ import { FaqSection } from "@home/components/FaqSection";
 import { HeroSection } from "@home/components/HeroSection";
 import { PillarsSection } from "@home/components/PillarsSection";
 import { PricingSection } from "@home/components/PricingSection";
+import { ToolsShowcaseSection } from "@home/components/ToolsShowcaseSection";
 import { TryItSection } from "@home/components/TryItSection";
 import { setRequestLocale } from "next-intl/server";
 
@@ -18,6 +19,7 @@ export default async function Home({
 		<>
 			<HeroSection />
 			<TryItSection />
+			<ToolsShowcaseSection />
 			<PillarsSection />
 			<PricingSection />
 			<FaqSection />

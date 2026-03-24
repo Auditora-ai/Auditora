@@ -79,6 +79,10 @@ export function NavBar() {
 		href: string;
 	}[] = [
 		{
+			label: t("common.menu.tools") || "Free Tools",
+			href: "/tools",
+		},
+		{
 			label: t("common.menu.howItWorks"),
 			href: "/#how-it-works",
 		},

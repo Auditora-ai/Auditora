@@ -36,7 +36,7 @@ Tu respuesta debe ser un JSON con SOLO los cambios (DELTA):
   "completenessScore": 47,  // 0-100 overall
   "newGaps": [
     {
-      "category": "MISSING_EXCEPTION",
+      "category": "MISSING_EXCEPTION",  // MUST be one of: MISSING_PATH, MISSING_ROLE, MISSING_EXCEPTION, MISSING_DECISION, MISSING_TRIGGER, MISSING_OUTPUT, CONTRADICTION, UNCLEAR_HANDOFF, MISSING_SLA, MISSING_SYSTEM, GENERAL_GAP
       "question": "¿Qué pasa cuando el pedido es rechazado por calidad?",
       "context": "Los pasos 4-5 mencionan revisión de calidad pero no hay camino de rechazo definido",
       "priority": 85,

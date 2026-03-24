@@ -69,7 +69,7 @@
 			"title": "Extrae procesos de negocio de cualquier conversación",
 			"subtitle": "Chatea, sube audio, o únete a una llamada en vivo — la IA de Prozea extrae, organiza y diagrama los procesos de tu cliente en tiempo real. Sal con entregables BPMN, no con notas de reunión.",
 			"cta": "Prueba gratis",
-			"ctaSecondary": "Ver cómo funciona",
+			"ctaSecondary": "Herramientas Gratis",
 			"counterLabel": "pasos de proceso capturados"
 		},
 		"problem": {
@@ -284,6 +284,10 @@
 			"zoom": "Zoom",
 			"teams": "Microsoft Teams",
 			"meet": "Google Meet"
+		},
+		"tools": {
+			"title": "Herramientas IA Gratis para Profesionales BPM",
+			"viewAll": "Ver todas las herramientas"
 		}
 	},
 	"newsletter": {
@@ -320,6 +324,7 @@
 			"pricing": "Precios",
 			"privacyPolicy": "Política de privacidad",
 			"termsAndConditions": "Términos y condiciones",
+			"tools": "Herramientas Gratis",
 			"builtWith": "Prozea"
 		},
 		"menu": {
@@ -332,6 +337,7 @@
 			"howItWorks": "Cómo funciona",
 			"login": "Iniciar sesión",
 			"pricing": "Precios",
+			"tools": "Herramientas Gratis",
 			"trial": "Prueba gratis"
 		},
 		"aria": {

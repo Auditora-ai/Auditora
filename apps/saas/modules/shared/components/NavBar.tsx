@@ -14,6 +14,7 @@ import {
 import { UserMenu } from "@shared/components/UserMenu";
 import {
 	ChevronRightIcon,
+	FileTextIcon,
 	HomeIcon,
 	PanelLeftCloseIcon,
 	PanelLeftOpenIcon,
@@ -33,7 +34,7 @@ export function NavBar() {
 	const t = useTranslations();
 	const pathname = usePathname();
 	const { user } = useSession();
-	const { activeOrganization, isOrganizationAdmin } = useActiveOrganization();
+	const { activeOrganization, isOrganizationAdmin, loaded } = useActiveOrganization();
 	const { isCollapsed, toggleCollapsed } = useSidebar();
 	const isMobile = useIsMobile();
 
@@ -59,18 +60,19 @@ export function NavBar() {
 						icon: WorkflowIcon,
 						isActive: pathname.startsWith(`${basePath}/procesos`),
 					},
-				]
-			: []),
-		...(authConfig.organizations.enable &&
-		activeOrganization &&
-		isOrganizationAdmin
-			? [
 					{
-						label: t("app.menu.organizationSettings"),
-						href: `${basePath}/settings`,
-						icon: SettingsIcon,
-						isActive: pathname.startsWith(`${basePath}/settings/`),
+						label: "Entregables",
+						href: `${basePath}/deliverables`,
+						icon: FileTextIcon,
+						isActive: pathname.startsWith(`${basePath}/deliverables`),
 					},
+					{
+					label: t("app.menu.organizationSettings"),
+					href: `${basePath}/settings`,
+					icon: SettingsIcon,
+					isActive: pathname.startsWith(`${basePath}/settings/`),
+					hidden: !isOrganizationAdmin,
+				},
 				]
 			: []),
 		{
@@ -79,16 +81,13 @@ export function NavBar() {
 			icon: UserCog2Icon,
 			isActive: pathname.startsWith("/settings/"),
 		},
-		...(user?.role === "admin"
-			? [
-					{
-						label: t("app.menu.admin"),
-						href: "/admin",
-						icon: UserCogIcon,
-						isActive: pathname.startsWith("/admin/"),
-					},
-				]
-			: []),
+		{
+			label: t("app.menu.admin"),
+			href: "/admin",
+			icon: UserCogIcon,
+			isActive: pathname.startsWith("/admin/"),
+			hidden: user?.role !== "admin",
+		},
 	];
 
 	return (
@@ -176,6 +175,7 @@ export function NavBar() {
 						)}
 					>
 						{menuItems.map((menuItem) => {
+							if (menuItem.hidden) return null;
 							const menuItemContent = (
 								<Link
 									href={menuItem.href}

@@ -7,7 +7,7 @@ import {
 	mergeSnapshotPatch,
 	KnowledgeSnapshotSchema,
 } from "@repo/ai";
-import { sessionActivity } from "../../../webhook/recall/route";
+import { deleteSessionActivity } from "../../../webhook/recall/route";
 
 export async function POST(
 	request: NextRequest,
@@ -49,8 +49,8 @@ export async function POST(
 			data: { status: "ENDED", endedAt: new Date() },
 		});
 
-		// Clean up in-memory activity state
-		sessionActivity.delete(sessionId);
+		// Clean up activity state (Redis-backed)
+		await deleteSessionActivity(sessionId);
 
 		// Auto-version process and architecture (non-blocking)
 		autoVersionOnSessionEnd(sessionId, session).catch((err) =>
@@ -323,11 +323,17 @@ async function triggerIntelligenceAudit(
 	});
 
 	// Create new items
+	const VALID_CATEGORIES = new Set([
+		"MISSING_PATH", "MISSING_ROLE", "MISSING_EXCEPTION", "MISSING_DECISION",
+		"MISSING_TRIGGER", "MISSING_OUTPUT", "CONTRADICTION", "UNCLEAR_HANDOFF",
+		"MISSING_SLA", "MISSING_SYSTEM", "GENERAL_GAP",
+	]);
+
 	if (result.newGaps.length > 0) {
 		await db.intelligenceItem.createMany({
 			data: result.newGaps.map((gap) => ({
 				intelligenceId: intelligence!.id,
-				category: gap.category as any,
+				category: (VALID_CATEGORIES.has(gap.category) ? gap.category : "GENERAL_GAP") as any,
 				question: gap.question,
 				context: gap.context || null,
 				priority: gap.priority,
