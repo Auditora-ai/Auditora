@@ -247,8 +247,11 @@ function TranscriptLine({ entry, sessionId }: { entry: TranscriptEntry; sessionI
 	const color = getSpeakerColor(entry.speaker);
 	const time = formatTimestamp(entry.timestamp);
 	const isManual = entry.source === "manual";
-	const isEdited = !!entry.correctedText;
-	const displayText = entry.correctedText || entry.text;
+	const corrected = entry.correctedText;
+	const isAiResult = isManual && corrected && (corrected.startsWith("[✓") || corrected.startsWith("[—") || corrected.startsWith("[ERROR"));
+	const isEdited = !!corrected && !isAiResult;
+	const displayText = isAiResult ? entry.text : (corrected || entry.text);
+	const aiStatus = isAiResult ? corrected : null;
 
 	const [editing, setEditing] = useState(false);
 	const [editText, setEditText] = useState(displayText);
@@ -287,6 +290,29 @@ function TranscriptLine({ entry, sessionId }: { entry: TranscriptEntry; sessionI
 			toast.success("Entrada eliminada");
 		} catch {
 			toast.error("Error al eliminar");
+		} finally {
+			setSaving(false);
+		}
+	};
+
+	const handleRetry = async () => {
+		setSaving(true);
+		try {
+			// Clear the AI result and re-send the text
+			await fetch(`/api/sessions/${sessionId}/transcript`, {
+				method: "PATCH",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ entryId: entry.id, correctedText: "" }),
+			});
+			// Re-trigger extraction by posting the same text again
+			await fetch(`/api/sessions/${sessionId}/transcript`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ text: entry.text }),
+			});
+			toast.success("Re-procesando...");
+		} catch {
+			toast.error("Error al reintentar");
 		} finally {
 			setSaving(false);
 		}
@@ -361,9 +387,34 @@ function TranscriptLine({ entry, sessionId }: { entry: TranscriptEntry; sessionI
 					</button>
 				</div>
 			) : (
-				<p className="mt-0.5 text-xs leading-relaxed text-[#E2E8F0]">
-					{displayText}
-				</p>
+				<>
+					<p className="mt-0.5 text-xs leading-relaxed text-[#E2E8F0]">
+						{displayText}
+					</p>
+					{aiStatus && (
+						<div className="mt-1 flex items-center gap-1.5">
+							<span className={`text-[10px] ${
+								aiStatus.startsWith("[✓") ? "text-green-400" :
+								aiStatus.startsWith("[ERROR") ? "text-red-400" :
+								"text-[#64748B]"
+							}`}>
+								{aiStatus}
+							</span>
+							<button
+								type="button"
+								onClick={handleRetry}
+								disabled={saving}
+								className="text-[9px] text-[#64748B] hover:text-[#2563EB]"
+								title="Re-procesar con IA"
+							>
+								↻ reintentar
+							</button>
+						</div>
+					)}
+					{isManual && !aiStatus && !isEdited && (
+						<span className="mt-0.5 block text-[10px] text-[#64748B] animate-pulse">procesando...</span>
+					)}
+				</>
 			)}
 		</div>
 	);

@@ -110,8 +110,13 @@ export async function POST(
 
 	// Trigger extraction directly (bypass 15s throttle — user explicitly requested)
 	// Run for ANY session status (ACTIVE, ENDED, CONNECTING) so manual input always works
-	runManualExtraction(sessionId).catch((err) => {
+	runManualExtraction(sessionId, entry.id).catch((err) => {
 		console.error(`[Transcript] Manual extraction failed for ${sessionId.substring(0, 8)}:`, err);
+		// Mark the entry as failed
+		db.transcriptEntry.update({
+			where: { id: entry.id },
+			data: { correctedText: "[ERROR] No se pudo procesar" },
+		}).catch(() => {});
 	});
 
 	return NextResponse.json({ ok: true, entry }, { status: 202 });
@@ -121,7 +126,7 @@ export async function POST(
  * Run process extraction triggered by a manual note.
  * Bypasses the 15s throttle since the user explicitly submitted text.
  */
-async function runManualExtraction(sessionId: string) {
+async function runManualExtraction(sessionId: string, entryId?: string) {
 	// Update activity state: extracting
 	await setActivity(sessionId, "extracting", "Procesando indicacion manual").catch(() => {});
 
@@ -208,15 +213,35 @@ async function runManualExtraction(sessionId: string) {
 		}
 	}
 
-	if (result.newNodes?.length || result.updatedNodes?.length) {
-		const total = (result.newNodes?.length || 0) + (result.updatedNodes?.length || 0);
+	const newCount = result.newNodes?.length || 0;
+	const updCount = result.updatedNodes?.length || 0;
+	const total = newCount + updCount;
+
+	if (total > 0) {
 		await setActivity(sessionId, "diagramming", `${total} cambios aplicados`).catch(() => {});
-		// Return to listening after 3 seconds
-		setTimeout(() => {
-			setActivity(sessionId, "listening").catch(() => {});
-		}, 3000);
+		setTimeout(() => { setActivity(sessionId, "listening").catch(() => {}); }, 3000);
+
+		// Write back result to the transcript entry so UI shows confirmation
+		if (entryId) {
+			const parts: string[] = [];
+			if (newCount > 0) parts.push(`${newCount} nodo${newCount > 1 ? "s" : ""} creado${newCount > 1 ? "s" : ""}`);
+			if (updCount > 0) parts.push(`${updCount} actualizado${updCount > 1 ? "s" : ""}`);
+			const labels = result.newNodes?.map((n) => n.label).join(", ") || "";
+			const summary = `[✓ ${parts.join(", ")}] ${labels}`;
+			await db.transcriptEntry.update({
+				where: { id: entryId },
+				data: { correctedText: summary },
+			}).catch(() => {});
+		}
 	} else {
 		console.log(`[Transcript] No changes from extraction for ${sessionId.substring(0, 8)}`);
 		await setActivity(sessionId, "listening").catch(() => {});
+
+		if (entryId) {
+			await db.transcriptEntry.update({
+				where: { id: entryId },
+				data: { correctedText: "[—] Sin cambios en el diagrama" },
+			}).catch(() => {});
+		}
 	}
 }
