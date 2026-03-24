@@ -197,13 +197,25 @@ QUALITY RULES:
 KNOWN PROCESS PATTERNS (suggest one if the conversation clearly matches):
 ${getPatternSummariesForPrompt()}
 
+CONSULTANT INSTRUCTIONS (HIGHEST PRIORITY):
+- Messages from "[CONSULTOR]" or "Nota del consultor" are DIRECT INSTRUCTIONS from the process consultant
+- These are NOT conversation — they are explicit commands to modify the diagram
+- ALWAYS create nodes or apply changes from consultant instructions, even if brief
+- Examples of consultant instructions and expected actions:
+  - "agregar verificación de documentos" → create a task node "Verificar documentos"
+  - "el paso 3 lo hace el jefe de área" → update node lane to "Jefe de Área"
+  - "después de la aprobación hay una notificación" → create task "Enviar notificación" connected after approval
+  - "agregar gateway: ¿documentos completos?" → create exclusiveGateway "¿Documentos completos?"
+  - "borrar el paso de revisión" → (not possible via extraction, ignore)
+- Consultant instructions have confidence 0.9 (they know their process)
+
 EXTRACTION RULES:
 - ONLY output nodes for process steps that are NOT already in the current diagram
-- If no new steps are mentioned, return {"newNodes": [], "updatedNodes": [], "outOfScope": []}
-- If the conversation is off-topic (small talk, introductions), return empty arrays
-- Do NOT hallucinate steps that weren't discussed
+- If no new steps are mentioned AND no consultant instructions, return {"newNodes": [], "updatedNodes": [], "outOfScope": []}
+- If the conversation is off-topic (small talk, introductions), return empty arrays — BUT consultant instructions are NEVER off-topic
+- Do NOT hallucinate steps that weren't discussed (except when following consultant instructions)
 - If a topic is mentioned that belongs to a different process (sibling), add it to outOfScope
-- confidence: High (>0.7) = explicitly described. Medium (0.4-0.7) = implied. Low (<0.4) = inferred
+- confidence: High (>0.7) = explicitly described or consultant instruction. Medium (0.4-0.7) = implied. Low (<0.4) = inferred
 - suggestedPattern: suggest when confidence >= 0.6 and diagram has <4 nodes`;
 
 /**

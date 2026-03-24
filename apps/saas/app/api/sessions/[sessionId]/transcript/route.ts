@@ -158,7 +158,7 @@ async function runManualExtraction(sessionId: string) {
 			connections: n.connections,
 		})),
 		transcript.reverse().map((t) => ({
-			speaker: t.speaker,
+			speaker: t.source === "manual" ? "[CONSULTOR]" : t.speaker,
 			text: (t as any).correctedText ?? t.text,
 			timestamp: t.timestamp,
 		})),
