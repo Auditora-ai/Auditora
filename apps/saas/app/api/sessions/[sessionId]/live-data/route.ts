@@ -61,9 +61,9 @@ export async function GET(
 			},
 		});
 
-		// Fetch diagram nodes
+		// Fetch diagram nodes (exclude rejected)
 		const nodes = await db.diagramNode.findMany({
-			where: { sessionId },
+			where: { sessionId, state: { not: "REJECTED" } },
 			select: {
 				id: true,
 				nodeType: true,
