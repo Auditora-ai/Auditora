@@ -24,6 +24,19 @@ export async function POST(
 			include: { processDefinition: true },
 		});
 
+		// Pre-clean: reject nodes without lane (junk from pattern library)
+		await db.diagramNode.updateMany({
+			where: { sessionId, lane: null, state: { not: "REJECTED" },
+				nodeType: { notIn: ["START_EVENT", "END_EVENT"] } },
+			data: { state: "REJECTED", rejectedAt: new Date() },
+		});
+		// Also reject nodes with lane = empty string
+		await db.diagramNode.updateMany({
+			where: { sessionId, lane: "", state: { not: "REJECTED" },
+				nodeType: { notIn: ["START_EVENT", "END_EVENT"] } },
+			data: { state: "REJECTED", rejectedAt: new Date() },
+		});
+
 		const allNodes = await db.diagramNode.findMany({
 			where: { sessionId, state: { not: "REJECTED" } },
 			orderBy: { createdAt: "asc" },
@@ -32,6 +45,8 @@ export async function POST(
 		if (allNodes.length < 2) {
 			return NextResponse.json({ ok: true, message: "Not enough nodes" });
 		}
+
+		console.log(`[Reorganize] ${allNodes.length} nodes after pre-clean`);
 
 		// Get transcript for context
 		const transcript = await db.transcriptEntry.findMany({
