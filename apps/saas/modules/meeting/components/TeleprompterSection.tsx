@@ -3,6 +3,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { SparklesIcon, ClipboardCopyIcon, PlusCircleIcon, Loader2Icon } from "lucide-react";
 import { toast } from "sonner";
+import type { DiagramNode } from "../types";
 import { useLiveSessionContext } from "../context/LiveSessionContext";
 
 interface TeleprompterSectionProps {
@@ -21,16 +22,119 @@ const SIPOC_DIMENSIONS = [
 	{ key: "customers", label: "C", fullLabel: "Clientes", color: "#DC2626" },
 ];
 
-const DEFAULT_SIPOC_QUESTIONS = [
-	{ dimension: "S", question: "¿Quienes son los proveedores o areas que inician este proceso?", color: "#3B82F6" },
-	{ dimension: "I", question: "¿Que informacion, documentos o materiales se necesitan para comenzar?", color: "#7C3AED" },
-	{ dimension: "P", question: "¿Cuales son los pasos principales del proceso de inicio a fin?", color: "#16A34A" },
-	{ dimension: "O", question: "¿Que entregables o resultados produce este proceso?", color: "#EAB308" },
-	{ dimension: "C", question: "¿Quienes son los clientes o areas que reciben el resultado?", color: "#DC2626" },
-	{ dimension: "P", question: "¿Que decisiones se toman durante el proceso y quien las toma?", color: "#16A34A" },
-	{ dimension: "P", question: "¿Que excepciones o caminos alternativos existen?", color: "#16A34A" },
-	{ dimension: "I", question: "¿Que sistemas o herramientas se utilizan?", color: "#7C3AED" },
+interface SipocQuestion {
+	dimension: string;
+	question: string;
+	color: string;
+	/** Check if this question is resolved by analyzing current diagram nodes */
+	isResolved: (nodes: DiagramNode[]) => boolean;
+}
+
+const DEFAULT_SIPOC_QUESTIONS: SipocQuestion[] = [
+	{
+		dimension: "S",
+		question: "¿Quienes son los proveedores o areas que inician este proceso?",
+		color: "#3B82F6",
+		// Resolved when there are 2+ distinct lanes (roles/areas identified)
+		isResolved: (nodes) => {
+			const lanes = new Set(nodes.filter((n) => n.lane && n.state !== "rejected").map((n) => n.lane));
+			return lanes.size >= 2;
+		},
+	},
+	{
+		dimension: "I",
+		question: "¿Que informacion, documentos o materiales se necesitan para comenzar?",
+		color: "#7C3AED",
+		// Resolved when there's a start event with a descriptive label (not just "Inicio")
+		isResolved: (nodes) => {
+			return nodes.some((n) =>
+				isStartType(n.type) && n.label.length > 6 && n.label.toLowerCase() !== "inicio"
+			);
+		},
+	},
+	{
+		dimension: "P",
+		question: "¿Cuales son los pasos principales del proceso de inicio a fin?",
+		color: "#16A34A",
+		// Resolved when there are 3+ task nodes
+		isResolved: (nodes) => {
+			return nodes.filter((n) => isTaskType(n.type) && n.state !== "rejected").length >= 3;
+		},
+	},
+	{
+		dimension: "O",
+		question: "¿Que entregables o resultados produce este proceso?",
+		color: "#EAB308",
+		// Resolved when there's an end event with descriptive label
+		isResolved: (nodes) => {
+			return nodes.some((n) =>
+				isEndType(n.type) && n.label.length > 3 && n.label.toLowerCase() !== "fin"
+			);
+		},
+	},
+	{
+		dimension: "C",
+		question: "¿Quienes son los clientes o areas que reciben el resultado?",
+		color: "#DC2626",
+		// Resolved when the last lane (end event lane) is identified and there are 2+ lanes
+		isResolved: (nodes) => {
+			const lanes = new Set(nodes.filter((n) => n.lane && n.state !== "rejected").map((n) => n.lane));
+			const hasEndInLane = nodes.some((n) => isEndType(n.type) && n.lane);
+			return lanes.size >= 2 && hasEndInLane;
+		},
+	},
+	{
+		dimension: "P",
+		question: "¿Que decisiones se toman durante el proceso y quien las toma?",
+		color: "#16A34A",
+		// Resolved when there's at least 1 gateway
+		isResolved: (nodes) => {
+			return nodes.some((n) => isGatewayType(n.type) && n.state !== "rejected");
+		},
+	},
+	{
+		dimension: "P",
+		question: "¿Que excepciones o caminos alternativos existen?",
+		color: "#16A34A",
+		// Resolved when there are 2+ gateways (multiple decision points = exception paths)
+		isResolved: (nodes) => {
+			return nodes.filter((n) => isGatewayType(n.type) && n.state !== "rejected").length >= 2;
+		},
+	},
+	{
+		dimension: "I",
+		question: "¿Que sistemas o herramientas se utilizan?",
+		color: "#7C3AED",
+		// Resolved when there's a serviceTask or a lane that looks like a system
+		isResolved: (nodes) => {
+			const hasServiceTask = nodes.some((n) =>
+				(n.type.toLowerCase().includes("service") || n.type.toLowerCase() === "servicetask") &&
+				n.state !== "rejected"
+			);
+			const hasSystemLane = nodes.some((n) =>
+				n.lane && /sistema|sap|erp|crm|app|plataforma|software/i.test(n.lane)
+			);
+			return hasServiceTask || hasSystemLane;
+		},
+	},
 ];
+
+function isTaskType(type: string): boolean {
+	const t = type.toLowerCase();
+	return t === "task" || t === "usertask" || t === "user_task" ||
+		t === "servicetask" || t === "service_task";
+}
+function isGatewayType(type: string): boolean {
+	return type.toLowerCase().includes("gateway");
+}
+function isStartType(type: string): boolean {
+	const t = type.toLowerCase();
+	return t === "startevent" || t === "start_event";
+}
+function isEndType(type: string): boolean {
+	const t = type.toLowerCase();
+	return t === "endevent" || t === "end_event";
+}
 
 export function TeleprompterSection({
 	currentQuestion,
@@ -39,12 +143,28 @@ export function TeleprompterSection({
 	sipocCoverage,
 	gapType,
 }: TeleprompterSectionProps) {
-	const { sessionId } = useLiveSessionContext();
+	const { sessionId, nodes } = useLiveSessionContext();
 	const [addingToDiagram, setAddingToDiagram] = useState(false);
 	const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
 	const [expandedQ, setExpandedQ] = useState<number | null>(null);
 	const [answerText, setAnswerText] = useState("");
-	const [answeredQuestions, setAnsweredQuestions] = useState<Set<number>>(new Set());
+	const [manuallyAnswered, setManuallyAnswered] = useState<Set<number>>(new Set());
+
+	// Auto-detect which questions are resolved by analyzing the diagram
+	const resolvedByDiagram = useMemo(() => {
+		const resolved = new Set<number>();
+		DEFAULT_SIPOC_QUESTIONS.forEach((q, i) => {
+			if (q.isResolved(nodes)) {
+				resolved.add(i);
+			}
+		});
+		return resolved;
+	}, [nodes]);
+
+	// Combine: resolved by diagram OR manually answered
+	const answeredQuestions = useMemo(() => {
+		return new Set([...resolvedByDiagram, ...manuallyAnswered]);
+	}, [resolvedByDiagram, manuallyAnswered]);
 
 	const handleCopy = useCallback((text: string, idx?: number) => {
 		navigator.clipboard.writeText(text);
@@ -93,7 +213,7 @@ export function TeleprompterSection({
 			setAnswerText("");
 			setExpandedQ(null);
 			// Mark question as answered
-			setAnsweredQuestions((prev) => new Set([...prev, questionIdx]));
+			setManuallyAnswered((prev) => new Set([...prev, questionIdx]));
 		} catch {
 			toast.error("Error al enviar respuesta");
 		}
