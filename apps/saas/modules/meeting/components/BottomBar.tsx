@@ -35,71 +35,112 @@ export function BottomBar() {
 		if (!sessionId) return;
 		setFixingIdx(idx);
 		try {
-			// Apply fix directly via node edit API
-			const editData: Record<string, string> = { action: "edit" };
+			const node = nodes.find((n) => n.id === warning.nodeId);
 
 			switch (warning.type) {
 				case "naming":
-					// Fix task naming: use suggestion
+				case "gateway_label": {
+					// Direct label fix
 					if (warning.suggestion) {
-						editData.label = warning.suggestion;
-					}
-					break;
-				case "gateway_label":
-					// Fix gateway label: make it a question
-					if (warning.suggestion) {
-						editData.label = warning.suggestion;
-					}
-					break;
-				case "task_as_decision": {
-					const node = nodes.find((n) => n.id === warning.nodeId);
-					if (node && node.connections.length > 1) {
-						// Multiple outputs from non-gateway — send to AI to restructure
-						const fixText = `[Corrección BPMN] La tarea "${node.label}" tiene ${node.connections.length} salidas pero no es un gateway. Reestructura: si es una decisión, conviértela a exclusiveGateway. Si no, mantén solo la conexión principal.`;
-						await fetch(`/api/sessions/${sessionId}/transcript`, {
-							method: "POST",
+						await fetch(`/api/sessions/${sessionId}/nodes/${warning.nodeId}`, {
+							method: "PATCH",
 							headers: { "Content-Type": "application/json" },
-							body: JSON.stringify({ text: fixText }),
+							body: JSON.stringify({ action: "edit", label: warning.suggestion }),
 						});
-						toast.success("IA reestructurando conexiones...");
-						if (auditResults) {
-							const updated = auditResults.warnings.filter((_, i) => i !== idx);
-							setAuditResults({ ...auditResults, warnings: updated });
-						}
-						setFixingIdx(null);
-						return;
+						toast.success(`Renombrado a "${warning.suggestion}"`);
 					}
-					// Single decision task → convert to gateway
-					editData.type = "exclusiveGateway";
-					if (node) editData.label = `¿${node.label}?`;
 					break;
 				}
-				default:
-					// For structural issues, send to AI extraction pipeline
-					const fixText = `[Corrección BPMN] ${warning.message}. ${warning.suggestion || ""}`;
-					await fetch(`/api/sessions/${sessionId}/transcript`, {
+
+				case "task_as_decision": {
+					if (node && node.connections.length > 1 && !node.type.toLowerCase().includes("gateway")) {
+						// Task with multiple outputs → convert to gateway
+						await fetch(`/api/sessions/${sessionId}/nodes/${warning.nodeId}`, {
+							method: "PATCH",
+							headers: { "Content-Type": "application/json" },
+							body: JSON.stringify({ action: "edit", type: "exclusiveGateway", label: `¿${node.label}?` }),
+						});
+						toast.success(`Convertido a gateway: "¿${node.label}?"`);
+					} else if (node) {
+						await fetch(`/api/sessions/${sessionId}/nodes/${warning.nodeId}`, {
+							method: "PATCH",
+							headers: { "Content-Type": "application/json" },
+							body: JSON.stringify({ action: "edit", type: "exclusiveGateway", label: `¿${node.label}?` }),
+						});
+						toast.success("Convertido a gateway");
+					}
+					break;
+				}
+
+				case "gateway_no_conditions": {
+					// Gateway missing flow labels → rebuild diagram to fix
+					toast.info("Reorganizando diagrama para corregir flujos...");
+					if (modelerApi?.isReady) {
+						await modelerApi.rebuildFromNodes(nodes);
+						toast.success("Diagrama reorganizado");
+					}
+					break;
+				}
+
+				case "gateway_no_merge": {
+					// Missing merge gateway → create one via bulk API
+					await fetch(`/api/sessions/${sessionId}/nodes/bulk`, {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
-						body: JSON.stringify({ text: fixText }),
+						body: JSON.stringify({
+							nodes: [{
+								type: "exclusiveGateway",
+								label: `Reunion: ${node?.label || "merge"}`,
+								lane: node?.lane || null,
+							}],
+						}),
 					});
-					toast.success("IA procesando corrección...");
-					if (auditResults) {
-						const updated = auditResults.warnings.filter((_, i) => i !== idx);
-						setAuditResults({ ...auditResults, warnings: updated, bestPracticesScore: Math.min(100, auditResults.bestPracticesScore + 5) });
+					toast.success("Gateway de reunion creado");
+					break;
+				}
+
+				case "orphan":
+				case "dead_end":
+				case "missing_start":
+				case "missing_end":
+				case "cycle":
+				case "missing_connection": {
+					// Structural issues → rebuild fixes them automatically
+					toast.info("Reorganizando diagrama...");
+					if (modelerApi?.isReady) {
+						await modelerApi.rebuildFromNodes(nodes);
+						toast.success("Diagrama reorganizado");
 					}
-					setFixingIdx(null);
-					return;
+					break;
+				}
+
+				case "lane_inconsistency": {
+					// Fix lane name to match the primary variant
+					if (warning.suggestion && node) {
+						// Find the primary lane name (the one used most)
+						const targetLane = warning.message.match(/similar a "([^"]+)"/)?.[1];
+						if (targetLane) {
+							await fetch(`/api/sessions/${sessionId}/nodes/${warning.nodeId}`, {
+								method: "PATCH",
+								headers: { "Content-Type": "application/json" },
+								body: JSON.stringify({ action: "edit", lane: targetLane }),
+							});
+							toast.success(`Lane unificado a "${targetLane}"`);
+						}
+					}
+					break;
+				}
+
+				default: {
+					// Rebuild as fallback
+					toast.info("Reorganizando diagrama...");
+					if (modelerApi?.isReady) {
+						await modelerApi.rebuildFromNodes(nodes);
+						toast.success("Diagrama reorganizado");
+					}
+					break;
+				}
 			}
-
-			// Direct node edit
-			const res = await fetch(`/api/sessions/${sessionId}/nodes/${warning.nodeId}`, {
-				method: "PATCH",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(editData),
-			});
-
-			if (!res.ok) throw new Error(`HTTP ${res.status}`);
-			toast.success("Nodo corregido");
 
 			// Remove fixed warning
 			if (auditResults) {
@@ -111,7 +152,7 @@ export function BottomBar() {
 		} finally {
 			setFixingIdx(null);
 		}
-	}, [sessionId, auditResults, nodes]);
+	}, [sessionId, auditResults, nodes, modelerApi]);
 
 	const confirmedCount = nodes.filter((n) => n.state === "confirmed").length;
 	const totalCount = nodes.length;
