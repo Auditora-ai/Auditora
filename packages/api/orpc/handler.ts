@@ -36,7 +36,7 @@ export const openApiHandler = new OpenAPIHandler(router, {
 				return {
 					...(authSchema as any),
 					info: {
-						title: "supastarter API",
+						title: "aiprocess.me API",
 						version: "1.0.0",
 					},
 					servers: [

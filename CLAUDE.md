@@ -4,9 +4,9 @@
 aiprocess.me is an AI-powered process elicitation platform. It joins video calls, provides consultants with a teleprompter of guided questions, and auto-diagrams business processes live during the meeting using BPMN notation.
 
 ## Tech Stack
-- **Framework**: Next.js (via supastarter-nextjs template)
+- **Framework**: Next.js
 - **Database**: Supabase (Postgres + Realtime + Storage — NOT using Supabase Auth)
-- **Auth**: better-auth (via supastarter — NOT Supabase Auth)
+- **Auth**: better-auth (NOT Supabase Auth)
 - **ORM**: Prisma (server-side), Supabase client (browser-side for Realtime/Storage only)
 - **Deploy**: Railway (3 services: web, AI worker, Redis)
 - **Call Bot**: Recall.ai

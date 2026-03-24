@@ -1,8 +1,3 @@
-# supastarter for Next.js
+# aiprocess.me
 
-supastarter is the ultimate starter kit for production-ready, scalable SaaS applications.
-
-## Helpful links
-
-- [📘 Documentation](https://supastarter.dev/docs/nextjs)
-- [🚀 Demo](https://demo.supastarter.dev)
+AI-powered process elicitation platform. Joins video calls, guides consultants with a teleprompter, and auto-diagrams business processes live during the meeting using BPMN notation.

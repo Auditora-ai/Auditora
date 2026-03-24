@@ -44,7 +44,21 @@ export function CentralCanvas({ containerRef }: CentralCanvasProps) {
 			if (res.ok && data.nodes && data.nodes.length > 0) {
 				await modelerApi.rebuildFromNodes(data.nodes);
 
-				// Show narrative as detailed toast
+				// Save rendered XML to session so end-session persists this layout
+				try {
+					const modeler = modelerApi.getModeler();
+					if (modeler && sessionId) {
+						const { xml } = await modeler.saveXML({ format: true });
+						if (xml) {
+							fetch(`/api/sessions/${sessionId}/diagram`, {
+								method: "POST",
+								headers: { "Content-Type": "application/json" },
+								body: JSON.stringify({ bpmnXml: xml }),
+							}).catch(() => {});
+						}
+					}
+				} catch { /* non-critical */ }
+
 				// Show completeness + narrative
 				const score = data.completeness?.score;
 				if (score !== undefined) {

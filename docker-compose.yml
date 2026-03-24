@@ -4,12 +4,12 @@
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: supastarter-postgres
+    container_name: aiprocess-postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: supastarter
+      POSTGRES_DB: aiprocess
     ports:
       - "5432:5432"
     volumes:
@@ -22,7 +22,7 @@ services:
 
   minio:
     image: minio/minio:latest
-    container_name: supastarter-minio
+    container_name: aiprocess-minio
     restart: unless-stopped
     command: server /data --console-address ":9001"
     environment:
@@ -42,7 +42,7 @@ services:
   # Creates the default bucket on startup
   minio-setup:
     image: minio/mc:latest
-    container_name: supastarter-minio-setup
+    container_name: aiprocess-minio-setup
     depends_on:
       minio:
         condition: service_healthy

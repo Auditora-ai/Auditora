@@ -1116,7 +1116,7 @@ model OrgDeliverable {
 }
 
 // ============================================
-// SUPASTARTER MODELS (existing)
+// BASE MODELS
 // ============================================
 
 enum PurchaseType {

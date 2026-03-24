@@ -22,9 +22,9 @@ Clean architecture, comprehensive tests, structured logging, usage metrics. Ever
 
 ## Technology Stack
 
-- **Framework**: Next.js (supastarter-nextjs monorepo)
+- **Framework**: Next.js monorepo
 - **Database**: Supabase Postgres via Prisma (server-side)
-- **Auth**: better-auth (via supastarter)
+- **Auth**: better-auth
 - **Real-time**: Supabase Realtime Broadcast (AI Worker → Browser)
 - **Call Bot**: Recall.ai (CallBotProvider interface)
 - **STT**: Deepgram (STTProvider interface)

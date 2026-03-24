@@ -1,7 +1,7 @@
 import { anthropic } from "@ai-sdk/anthropic";
 import { openai } from "@ai-sdk/openai";
 
-// Supastarter original exports (DO NOT REMOVE — used by packages/api)
+// Base exports (DO NOT REMOVE — used by packages/api)
 export const textModel = openai("gpt-4o-mini");
 export const imageModel = openai("dall-e-3");
 export const audioModel = openai("whisper-1");

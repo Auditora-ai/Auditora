@@ -99,33 +99,40 @@ async function autoVersionOnSessionEnd(
 				where: { sessionId, state: "CONFIRMED" },
 			});
 
-			let finalBpmnXml = processDef.bpmnXml; // fallback to existing
-
-			if (confirmedNodes.length > 0) {
-				const diagramNodes: DiagramNode[] = confirmedNodes.map((n) => ({
-					id: n.id,
-					type: n.nodeType.toLowerCase(),
-					label: n.label,
-					state: "confirmed" as const,
-					lane: n.lane || undefined,
-					connections: n.connections || [],
-					confidence: n.confidence,
-				}));
-
-				try {
-					finalBpmnXml = await buildBpmnXml(diagramNodes);
-				} catch (err) {
-					console.error("[EndSession] Failed to build BPMN XML from nodes:", err);
-				}
-			}
-
-			// Also check if session has saved XML (from manual editing)
+			// Priority: 1) Session's rendered XML (from Reorganizar), 2) Generated from nodes, 3) Existing process XML
 			const sessionData = await db.meetingSession.findUnique({
 				where: { id: sessionId },
 				select: { bpmnXml: true },
 			});
+
+			let finalBpmnXml: string | null = null;
+
+			// Best: use the session's saved XML (rendered by bpmn-js with proper layout)
 			if (sessionData?.bpmnXml) {
 				finalBpmnXml = sessionData.bpmnXml;
+				console.log(`[EndSession] Using session's saved BPMN XML (from modeler)`);
+			}
+			// Fallback: generate from confirmed nodes
+			else if (confirmedNodes.length > 0) {
+				try {
+					const diagramNodes: DiagramNode[] = confirmedNodes.map((n) => ({
+						id: n.id,
+						type: n.nodeType.toLowerCase(),
+						label: n.label,
+						state: "confirmed" as const,
+						lane: n.lane || undefined,
+						connections: n.connections || [],
+						confidence: n.confidence,
+					}));
+					finalBpmnXml = await buildBpmnXml(diagramNodes);
+					console.log(`[EndSession] Generated BPMN XML from ${confirmedNodes.length} nodes`);
+				} catch (err) {
+					console.error("[EndSession] Failed to build BPMN XML:", err);
+				}
+			}
+			// Last resort: keep existing process XML
+			if (!finalBpmnXml) {
+				finalBpmnXml = processDef.bpmnXml;
 			}
 
 			// Save BPMN XML to ProcessDefinition (this is the critical missing step)
