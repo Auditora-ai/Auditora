@@ -22,14 +22,14 @@ export type SourceRef = z.infer<typeof SourceRefSchema>;
 const OrgContextExtractionSchema = z.object({
   mission: z
     .object({
-      text: z.string(),
-      confidence: z.number().min(0).max(1),
+      text: z.string().nullable().optional(),
+      confidence: z.number().min(0).max(1).optional(),
     })
     .optional(),
   vision: z
     .object({
-      text: z.string(),
-      confidence: z.number().min(0).max(1),
+      text: z.string().nullable().optional(),
+      confidence: z.number().min(0).max(1).optional(),
     })
     .optional(),
   values: z
@@ -50,13 +50,13 @@ const OrgContextExtractionSchema = z.object({
   companySize: z
     .enum(["small", "medium", "large", "enterprise"])
     .optional(),
-  geography: z.string().optional(),
+  geography: z.string().nullable().optional(),
   departments: z
     .array(
       z.object({
         name: z.string(),
-        head: z.string().optional(),
-        parentDept: z.string().optional(),
+        head: z.string().nullable().optional(),
+        parentDept: z.string().nullable().optional(),
       }),
     )
     .optional(),

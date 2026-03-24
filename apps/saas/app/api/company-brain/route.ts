@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
           if (
             ctx.mission &&
             (!existingCtx.missionConfidence ||
-              ctx.mission.confidence > existingCtx.missionConfidence)
+              (ctx.mission.confidence || 0) > existingCtx.missionConfidence)
           ) {
             // Log old value
             await tx.enrichmentHistory.create({
@@ -173,7 +173,7 @@ export async function POST(request: NextRequest) {
           if (
             ctx.vision &&
             (!existingCtx.visionConfidence ||
-              ctx.vision.confidence > existingCtx.visionConfidence)
+              (ctx.vision.confidence || 0) > existingCtx.visionConfidence)
           ) {
             await tx.enrichmentHistory.create({
               data: {

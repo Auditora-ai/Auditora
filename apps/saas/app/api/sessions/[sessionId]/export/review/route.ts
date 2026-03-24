@@ -65,7 +65,8 @@ function formatDuration(start: Date | null, end: Date | null): string {
 	return `${Math.floor(mins / 60)}h ${mins % 60}m`;
 }
 
-function esc(s: string): string {
+function esc(s: string | null | undefined): string {
+	if (!s) return "";
 	return s
 		.replace(/&/g, "&amp;")
 		.replace(/</g, "&lt;")
