@@ -423,6 +423,7 @@
 
 /* Subtle grid background for live canvas */
 .live-session {
+	background-color: #ffffff !important;
 	background-image:
 		linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
 		linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px) !important;
