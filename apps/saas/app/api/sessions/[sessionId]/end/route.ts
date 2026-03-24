@@ -7,7 +7,9 @@ import {
 	mergeSnapshotPatch,
 	KnowledgeSnapshotSchema,
 } from "@repo/ai";
-import { deleteSessionActivity } from "../../../webhook/recall/route";
+import { deleteSessionActivity, runPostSessionPipelines } from "../../../webhook/recall/route";
+import { buildBpmnXml } from "@meeting/lib/bpmn-builder";
+import type { DiagramNode } from "@meeting/types";
 
 export async function POST(
 	request: NextRequest,
@@ -70,6 +72,11 @@ export async function POST(
 			);
 		}
 
+		// Generate session deliverables (summary, process audit, RACI, risk audit) — non-blocking
+		runPostSessionPipelines(sessionId, session.diagramNodes).catch((err) =>
+			console.error("[EndSession] Post-session pipelines failed:", err),
+		);
+
 		return NextResponse.json({ ok: true, sessionId });
 	} catch (error) {
 		console.error("[EndSession] Error:", error);
@@ -87,6 +94,49 @@ async function autoVersionOnSessionEnd(
 			where: { id: session.processDefinitionId },
 		});
 		if (processDef) {
+			// Generate BPMN XML from the session's confirmed nodes
+			const confirmedNodes = await db.diagramNode.findMany({
+				where: { sessionId, state: "CONFIRMED" },
+			});
+
+			let finalBpmnXml = processDef.bpmnXml; // fallback to existing
+
+			if (confirmedNodes.length > 0) {
+				const diagramNodes: DiagramNode[] = confirmedNodes.map((n) => ({
+					id: n.id,
+					type: n.nodeType.toLowerCase(),
+					label: n.label,
+					state: "confirmed" as const,
+					lane: n.lane || undefined,
+					connections: n.connections || [],
+					confidence: n.confidence,
+				}));
+
+				try {
+					finalBpmnXml = buildBpmnXml(diagramNodes);
+				} catch (err) {
+					console.error("[EndSession] Failed to build BPMN XML from nodes:", err);
+				}
+			}
+
+			// Also check if session has saved XML (from manual editing)
+			const sessionData = await db.meetingSession.findUnique({
+				where: { id: sessionId },
+				select: { bpmnXml: true },
+			});
+			if (sessionData?.bpmnXml) {
+				finalBpmnXml = sessionData.bpmnXml;
+			}
+
+			// Save BPMN XML to ProcessDefinition (this is the critical missing step)
+			await db.processDefinition.update({
+				where: { id: processDef.id },
+				data: {
+					bpmnXml: finalBpmnXml,
+					processStatus: "MAPPED",
+				},
+			});
+
 			// Get next version number
 			const lastVersion = await db.processVersion.findFirst({
 				where: { processDefinitionId: processDef.id },
@@ -100,7 +150,7 @@ async function autoVersionOnSessionEnd(
 					version: nextVersion,
 					name: processDef.name,
 					description: processDef.description,
-					bpmnXml: processDef.bpmnXml,
+					bpmnXml: finalBpmnXml,
 					goals: processDef.goals,
 					triggers: processDef.triggers,
 					outputs: processDef.outputs,
@@ -109,13 +159,7 @@ async function autoVersionOnSessionEnd(
 				},
 			});
 
-			// Update process status
-			await db.processDefinition.update({
-				where: { id: processDef.id },
-				data: { processStatus: "MAPPED" },
-			});
-
-			console.log(`[EndSession] Created ProcessVersion v${nextVersion} for "${processDef.name}"`);
+			console.log(`[EndSession] Saved BPMN XML (${confirmedNodes.length} nodes) to process "${processDef.name}" v${nextVersion}`);
 		}
 	}
 
