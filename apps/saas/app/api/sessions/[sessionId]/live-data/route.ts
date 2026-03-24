@@ -55,7 +55,9 @@ export async function GET(
 				id: true,
 				speaker: true,
 				text: true,
+				correctedText: true,
 				timestamp: true,
+				source: true,
 			},
 		});
 
@@ -114,7 +116,9 @@ export async function GET(
 				id: t.id,
 				speaker: t.speaker,
 				text: t.text,
+				correctedText: t.correctedText,
 				timestamp: t.timestamp,
+				source: t.source,
 			})),
 			nodes: nodes.map((n) => ({
 				id: n.id,

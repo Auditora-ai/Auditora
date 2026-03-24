@@ -1,7 +1,18 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { MessageSquareIcon, SendIcon, MicIcon, MicOffIcon, Loader2Icon } from "lucide-react";
+import {
+	MessageSquareIcon,
+	SendIcon,
+	MicIcon,
+	MicOffIcon,
+	Loader2Icon,
+	PencilIcon,
+	TrashIcon,
+	CheckIcon,
+	XIcon,
+	EyeOffIcon,
+} from "lucide-react";
 import { toast } from "sonner";
 import type { TranscriptEntry } from "../types";
 import { getSpeakerColor } from "../lib/speaker-colors";
@@ -165,7 +176,11 @@ export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 				) : (
 					<div className="space-y-0.5 p-2">
 						{transcript.map((entry) => (
-							<TranscriptLine key={entry.id} entry={entry} />
+							<TranscriptLine
+								key={entry.id}
+								entry={entry}
+								sessionId={sessionId}
+							/>
 						))}
 						{processingText && (
 							<div className="flex items-start gap-2 rounded-lg border-l-2 border-[#7C3AED]/50 bg-[#7C3AED]/5 px-2 py-1.5 animate-pulse">
@@ -227,15 +242,80 @@ export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 	);
 }
 
-function TranscriptLine({ entry }: { entry: TranscriptEntry }) {
+function TranscriptLine({ entry, sessionId }: { entry: TranscriptEntry; sessionId: string }) {
 	const color = getSpeakerColor(entry.speaker);
 	const time = formatTimestamp(entry.timestamp);
 	const isManual = entry.source === "manual";
+	const isEdited = !!entry.correctedText;
+	const displayText = entry.correctedText || entry.text;
+
+	const [editing, setEditing] = useState(false);
+	const [editText, setEditText] = useState(displayText);
+	const [saving, setSaving] = useState(false);
+	const [hidden, setHidden] = useState(false);
+
+	const handleEdit = async () => {
+		if (!editText.trim()) return;
+		setSaving(true);
+		try {
+			const res = await fetch(`/api/sessions/${sessionId}/transcript`, {
+				method: "PATCH",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ entryId: entry.id, correctedText: editText.trim() }),
+			});
+			if (!res.ok) throw new Error();
+			setEditing(false);
+			toast.success("Texto corregido");
+		} catch {
+			toast.error("Error al editar");
+		} finally {
+			setSaving(false);
+		}
+	};
+
+	const handleDelete = async () => {
+		setSaving(true);
+		try {
+			const res = await fetch(`/api/sessions/${sessionId}/transcript`, {
+				method: "DELETE",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ entryId: entry.id }),
+			});
+			if (!res.ok) throw new Error();
+			setHidden(true);
+			toast.success("Entrada eliminada");
+		} catch {
+			toast.error("Error al eliminar");
+		} finally {
+			setSaving(false);
+		}
+	};
+
+	const handleIgnore = async () => {
+		// Mark as ignored by setting correctedText to "[IGNORADO]"
+		setSaving(true);
+		try {
+			const res = await fetch(`/api/sessions/${sessionId}/transcript`, {
+				method: "PATCH",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ entryId: entry.id, correctedText: "[IGNORADO]" }),
+			});
+			if (!res.ok) throw new Error();
+			setHidden(true);
+			toast.success("La IA ignorara esta entrada");
+		} catch {
+			toast.error("Error");
+		} finally {
+			setSaving(false);
+		}
+	};
+
+	if (hidden) return null;
 
 	return (
-		<div className={`group rounded-lg px-2 py-1.5 transition-colors duration-75 hover:bg-[#1E293B] ${
+		<div className={`group relative rounded-lg px-2 py-1.5 transition-colors duration-75 hover:bg-[#1E293B] ${
 			isManual ? "border-l-2 border-[#2563EB]/50 bg-[#2563EB]/5" : ""
-		}`}>
+		} ${isEdited ? "border-l-2 border-amber-500/50" : ""}`}>
 			<div className="flex items-baseline gap-2">
 				<span
 					className="text-[10px] font-medium"
@@ -244,13 +324,74 @@ function TranscriptLine({ entry }: { entry: TranscriptEntry }) {
 					{isManual ? "Tu" : entry.speaker}
 				</span>
 				<span className="text-[10px] tabular-nums text-[#64748B]">{time}</span>
-				{isManual && (
-					<span className="text-[9px] text-[#2563EB]/60">chat</span>
-				)}
+				{isManual && <span className="text-[9px] text-[#2563EB]/60">chat</span>}
+				{isEdited && <span className="text-[9px] text-amber-500/60">editado</span>}
+
+				{/* Action buttons — visible on hover */}
+				<div className="ml-auto flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
+					<button
+						type="button"
+						onClick={() => { setEditing(true); setEditText(displayText); }}
+						className="rounded p-0.5 text-[#64748B] hover:bg-[#334155] hover:text-white"
+						title="Editar texto"
+					>
+						<PencilIcon className="h-2.5 w-2.5" />
+					</button>
+					<button
+						type="button"
+						onClick={handleIgnore}
+						disabled={saving}
+						className="rounded p-0.5 text-[#64748B] hover:bg-amber-500/10 hover:text-amber-400"
+						title="Ignorar (IA no tomara en cuenta)"
+					>
+						<EyeOffIcon className="h-2.5 w-2.5" />
+					</button>
+					<button
+						type="button"
+						onClick={handleDelete}
+						disabled={saving}
+						className="rounded p-0.5 text-[#64748B] hover:bg-red-500/10 hover:text-red-400"
+						title="Eliminar"
+					>
+						<TrashIcon className="h-2.5 w-2.5" />
+					</button>
+				</div>
 			</div>
-			<p className="mt-0.5 text-xs leading-relaxed text-[#E2E8F0]">
-				{entry.text}
-			</p>
+
+			{editing ? (
+				<div className="mt-1 flex gap-1">
+					<input
+						type="text"
+						value={editText}
+						onChange={(e) => setEditText(e.target.value)}
+						onKeyDown={(e) => {
+							if (e.key === "Enter") handleEdit();
+							if (e.key === "Escape") setEditing(false);
+						}}
+						autoFocus
+						className="flex-1 rounded bg-[#1E293B] px-2 py-1 text-[11px] text-[#F1F5F9] outline-none ring-1 ring-[#334155] focus:ring-[#2563EB]"
+					/>
+					<button
+						type="button"
+						onClick={handleEdit}
+						disabled={saving}
+						className="rounded bg-[#2563EB] p-1 text-white disabled:opacity-50"
+					>
+						{saving ? <Loader2Icon className="h-3 w-3 animate-spin" /> : <CheckIcon className="h-3 w-3" />}
+					</button>
+					<button
+						type="button"
+						onClick={() => setEditing(false)}
+						className="rounded bg-[#334155] p-1 text-[#94A3B8]"
+					>
+						<XIcon className="h-3 w-3" />
+					</button>
+				</div>
+			) : (
+				<p className="mt-0.5 text-xs leading-relaxed text-[#E2E8F0]">
+					{displayText}
+				</p>
+			)}
 		</div>
 	);
 }

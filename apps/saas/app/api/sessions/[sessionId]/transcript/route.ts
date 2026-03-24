@@ -42,6 +42,30 @@ export async function PATCH(
 	return NextResponse.json({ ok: true, entry: updated });
 }
 
+export async function DELETE(
+	request: NextRequest,
+	{ params }: { params: Promise<{ sessionId: string }> },
+) {
+	const { sessionId } = await params;
+	const body = await request.json();
+	const { entryId } = body;
+
+	if (!entryId) {
+		return NextResponse.json({ error: "entryId is required" }, { status: 400 });
+	}
+
+	const entry = await db.transcriptEntry.findFirst({
+		where: { id: entryId, sessionId },
+	});
+	if (!entry) {
+		return NextResponse.json({ error: "Entry not found" }, { status: 404 });
+	}
+
+	await db.transcriptEntry.delete({ where: { id: entryId } });
+
+	return NextResponse.json({ ok: true, deleted: entryId });
+}
+
 export async function POST(
 	request: NextRequest,
 	{ params }: { params: Promise<{ sessionId: string }> },
