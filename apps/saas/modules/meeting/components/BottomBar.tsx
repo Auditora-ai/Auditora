@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { toast } from "sonner";
 import { useLiveSessionContext } from "../context/LiveSessionContext";
-import { validateDiagram } from "../lib/bpmn-validator";
+import { validateDiagram, type DiagramWarning } from "../lib/bpmn-validator";
 import {
 	MousePointerIcon,
 	ArrowRightLeftIcon,
@@ -14,6 +14,8 @@ import {
 	AlertTriangleIcon,
 	InfoIcon,
 	CheckCircleIcon,
+	WrenchIcon,
+	Loader2Icon,
 } from "lucide-react";
 
 const TOOLS = [
@@ -23,10 +25,42 @@ const TOOLS = [
 ];
 
 export function BottomBar() {
-	const { selectedTool, setSelectedTool, nodes, modelerApi } =
+	const { selectedTool, setSelectedTool, nodes, modelerApi, sessionId } =
 		useLiveSessionContext();
 	const [auditResults, setAuditResults] = useState<ReturnType<typeof validateDiagram> | null>(null);
 	const [showAudit, setShowAudit] = useState(false);
+	const [fixingIdx, setFixingIdx] = useState<number | null>(null);
+
+	const handleFixWithAi = useCallback(async (warning: DiagramWarning, idx: number) => {
+		if (!sessionId) return;
+		setFixingIdx(idx);
+		try {
+			// Send the warning + suggestion as a manual transcript note
+			// The AI extraction pipeline will interpret and apply the fix
+			const fixText = `[Corrección BPMN] ${warning.message}. ${warning.suggestion || ""} Nodo afectado: ${warning.nodeId}`;
+			const res = await fetch(`/api/sessions/${sessionId}/transcript`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ text: fixText }),
+			});
+			if (!res.ok) throw new Error(`HTTP ${res.status}`);
+			toast.success("IA aplicando corrección...");
+
+			// Remove the fixed warning from results
+			if (auditResults) {
+				const updatedWarnings = auditResults.warnings.filter((_, i) => i !== idx);
+				setAuditResults({
+					...auditResults,
+					warnings: updatedWarnings,
+					bestPracticesScore: Math.min(100, auditResults.bestPracticesScore + 5),
+				});
+			}
+		} catch {
+			toast.error("Error al aplicar corrección");
+		} finally {
+			setFixingIdx(null);
+		}
+	}, [sessionId, auditResults]);
 
 	const confirmedCount = nodes.filter((n) => n.state === "confirmed").length;
 	const totalCount = nodes.length;
@@ -183,9 +217,19 @@ export function BottomBar() {
 											</p>
 										)}
 									</div>
-									<span className="flex-shrink-0 rounded bg-[#1E293B] px-1.5 py-0.5 text-[9px] text-[#64748B]">
-										{w.type.replace(/_/g, " ")}
-									</span>
+									<button
+										type="button"
+										onClick={() => handleFixWithAi(w, i)}
+										disabled={fixingIdx === i}
+										className="flex flex-shrink-0 items-center gap-1 rounded-md bg-[#7C3AED]/10 px-2 py-1 text-[9px] font-medium text-[#7C3AED] transition-colors hover:bg-[#7C3AED]/20 disabled:opacity-50"
+									>
+										{fixingIdx === i ? (
+											<Loader2Icon className="h-3 w-3 animate-spin" />
+										) : (
+											<WrenchIcon className="h-3 w-3" />
+										)}
+										Corregir
+									</button>
 								</div>
 							))}
 						</div>
