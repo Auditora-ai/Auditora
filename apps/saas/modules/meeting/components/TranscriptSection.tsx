@@ -52,8 +52,11 @@ export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 		}
 	}, [message, sessionId, sending]);
 
+	const wantsListeningRef = useRef(false);
+
 	const toggleVoice = useCallback(() => {
 		if (listening) {
+			wantsListeningRef.current = false;
 			recognitionRef.current?.stop();
 			setListening(false);
 			return;
@@ -70,16 +73,14 @@ export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 		recognition.continuous = true;
 		recognition.interimResults = true;
 		recognitionRef.current = recognition;
+		wantsListeningRef.current = true;
 
 		recognition.onresult = (event: any) => {
 			let finalTranscript = "";
-			let interimTranscript = "";
 			for (let i = event.resultIndex; i < event.results.length; i++) {
 				const result = event.results[i];
 				if (result.isFinal) {
 					finalTranscript += result[0].transcript;
-				} else {
-					interimTranscript += result[0].transcript;
 				}
 			}
 			if (finalTranscript) {
@@ -87,16 +88,38 @@ export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 			}
 		};
 
-		recognition.onerror = () => {
-			setListening(false);
+		recognition.onerror = (event: any) => {
+			console.error("[Voice] Recognition error:", event.error);
+			if (event.error === "not-allowed" || event.error === "service-not-allowed") {
+				toast.error("Permiso de microfono denegado");
+				wantsListeningRef.current = false;
+				setListening(false);
+			}
+			// For other errors (network, no-speech), onend will auto-restart
 		};
 
 		recognition.onend = () => {
+			// Auto-restart if user still wants to listen (browser stops after silence)
+			if (wantsListeningRef.current) {
+				try {
+					recognition.start();
+				} catch {
+					// Already started or destroyed
+					setListening(false);
+					wantsListeningRef.current = false;
+				}
+				return;
+			}
 			setListening(false);
 		};
 
-		recognition.start();
-		setListening(true);
+		try {
+			recognition.start();
+			setListening(true);
+		} catch {
+			toast.error("No se pudo iniciar el dictado");
+			wantsListeningRef.current = false;
+		}
 	}, [listening]);
 
 	return (
