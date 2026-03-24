@@ -95,12 +95,24 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 	const validIds = new Set(visible.map((n) => n.id));
 	const lanes = [...new Set(visible.map((n) => n.lane || "General"))];
 
+	// Sanitize node IDs for XML (must be valid NCName: no special chars)
+	const idMap = new Map<string, string>();
+	let idCounter = 0;
+	function safeId(originalId: string): string {
+		if (idMap.has(originalId)) return idMap.get(originalId)!;
+		// Keep simple IDs, replace complex ones
+		const safe = /^[a-zA-Z_][\w.-]*$/.test(originalId)
+			? originalId
+			: `node_${idCounter++}`;
+		idMap.set(originalId, safe);
+		return safe;
+	}
+
 	// Build ordered node list with auto start/end
 	const ordered: DiagramNode[] = [];
 
-	// Add start event
 	ordered.push({
-		id: "_start",
+		id: safeId("_start"),
 		type: "start_event",
 		label: "Inicio",
 		state: "confirmed",
@@ -114,13 +126,16 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 		if (tag === "startEvent" || tag === "endEvent") continue;
 		ordered.push({
 			...n,
-			connections: n.connections.filter((c) => validIds.has(c)),
+			id: safeId(n.id),
+			connections: n.connections
+				.filter((c) => validIds.has(c))
+				.map((c) => safeId(c)),
 		});
 	}
 
 	// Add end event
 	ordered.push({
-		id: "_end",
+		id: safeId("_end"),
 		type: "end_event",
 		label: "Fin",
 		state: "confirmed",
@@ -254,8 +269,23 @@ export async function layoutBpmnXml(xml: string): Promise<string> {
 		const layoutedXml = await layoutProcess(xml);
 		return layoutedXml;
 	} catch (err) {
-		console.warn("[bpmn-builder] Auto-layout failed, returning raw XML:", err);
-		return xml;
+		console.warn("[bpmn-builder] Auto-layout failed:", err);
+		// Log the XML that failed so we can debug
+		console.warn("[bpmn-builder] Failed XML (first 500 chars):", xml.substring(0, 500));
+
+		// Fallback: try without lanes (strip laneSet)
+		try {
+			const { layoutProcess: lp } = await import("bpmn-auto-layout");
+			const xmlNoLanes = xml
+				.replace(/<bpmn:laneSet>[\s\S]*?<\/bpmn:laneSet>\n?/g, "");
+			const result = await lp(xmlNoLanes);
+			console.log("[bpmn-builder] Fallback without lanes succeeded");
+			return result;
+		} catch {
+			// Final fallback: return raw XML (bpmn-js will show it without layout)
+			console.warn("[bpmn-builder] Fallback also failed, returning raw XML");
+			return xml;
+		}
 	}
 }
 
