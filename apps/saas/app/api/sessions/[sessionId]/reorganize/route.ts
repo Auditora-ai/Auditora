@@ -20,23 +20,36 @@ export async function POST(
 	try {
 		const { sessionId } = await params;
 
-		// Delete orphan nodes: no connections, no one connects to them, no lane
+		// Delete junk nodes: no lane assigned (from pattern library or bad extraction)
 		const allNodes = await db.diagramNode.findMany({
 			where: { sessionId, state: { not: "REJECTED" } },
 			orderBy: { createdAt: "asc" },
 		});
-		const allTargets = new Set(allNodes.flatMap((n) => n.connections));
 		const orphanIds = allNodes
 			.filter((n) => {
 				const t = n.nodeType.toLowerCase();
 				if (t.includes("start") || t.includes("end")) return false;
-				return n.connections.length === 0 && !allTargets.has(n.id);
+				// No lane = not part of a real process flow
+				return !n.lane;
 			})
 			.map((n) => n.id);
 
 		if (orphanIds.length > 0) {
 			await db.diagramNode.deleteMany({ where: { id: { in: orphanIds } } });
-			console.log(`[Reorganize] Deleted ${orphanIds.length} orphan nodes`);
+			console.log(`[Reorganize] Deleted ${orphanIds.length} junk nodes (no lane)`);
+
+			// Clean connections referencing deleted nodes
+			const orphanSet = new Set(orphanIds);
+			const remaining = allNodes.filter((n) => !orphanSet.has(n.id));
+			for (const n of remaining) {
+				const cleanConns = n.connections.filter((c) => !orphanSet.has(c));
+				if (cleanConns.length !== n.connections.length) {
+					await db.diagramNode.update({
+						where: { id: n.id },
+						data: { connections: cleanConns },
+					});
+				}
+			}
 		}
 
 		// Get remaining nodes
