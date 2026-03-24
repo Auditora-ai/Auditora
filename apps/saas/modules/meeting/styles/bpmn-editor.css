@@ -421,25 +421,7 @@
 	display: none !important;
 }
 
-/* Subtle grid background for live canvas */
-.live-session {
-	background-color: #ffffff !important;
-	background-image:
-		linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-		linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px) !important;
-	background-size: 20px 20px !important;
-}
-
-/* Force white on all bpmn-js internal containers in live session */
-.live-session .djs-container,
-.live-session .djs-container svg,
-.live-session .djs-overlay-container,
-.live-session .djs-visual {
-	background-color: #ffffff !important;
-}
-.live-session .djs-container svg {
-	background: #ffffff !important;
-}
+/* Live session wrapper — no background overrides on bpmn-js internals */
 
 /* Drop target feedback */
 .live-session.drag-over {
