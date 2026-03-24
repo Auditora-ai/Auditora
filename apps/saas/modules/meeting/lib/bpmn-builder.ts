@@ -281,11 +281,13 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 		const roots = middleNodes.filter((n) => !incoming.has(n.id));
 		if (roots.length === 0 && middleNodes.length > 0) {
 			ordered[0].connections = [middleNodes[0].id];
+		} else if (roots.length === 0) {
+			// No middle nodes — just start → end
+			ordered[0].connections = ["_end"];
 		} else if (roots.length === 1) {
 			ordered[0].connections = [roots[0].id];
 		} else {
 			// Multiple roots — start MUST have only 1 output (BPMN rule)
-			// Connect start → first root, then chain unconnected roots sequentially
 			ordered[0].connections = [roots[0].id];
 			for (let i = 1; i < roots.length; i++) {
 				// Find the last node in the chain before this root and connect it

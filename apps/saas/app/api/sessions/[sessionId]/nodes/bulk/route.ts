@@ -1,6 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
 
+/** Convert camelCase AI node type to UPPER_SNAKE_CASE Prisma enum */
+function toNodeType(type?: string): string {
+	if (!type) return "TASK";
+	const map: Record<string, string> = {
+		startevent: "START_EVENT",
+		endevent: "END_EVENT",
+		task: "TASK",
+		usertask: "USER_TASK",
+		servicetask: "SERVICE_TASK",
+		manualtask: "MANUAL_TASK",
+		businessruletask: "BUSINESS_RULE_TASK",
+		subprocess: "SUBPROCESS",
+		exclusivegateway: "EXCLUSIVE_GATEWAY",
+		parallelgateway: "PARALLEL_GATEWAY",
+		timerevent: "TIMER_EVENT",
+		messageevent: "MESSAGE_EVENT",
+		intermediateevent: "TIMER_EVENT",
+	};
+	return map[type.toLowerCase().replace(/_/g, "")] || "TASK";
+}
+
 export async function POST(
 	request: NextRequest,
 	{ params }: { params: Promise<{ sessionId: string }> },
@@ -17,7 +38,6 @@ export async function POST(
 			);
 		}
 
-		// Verify session exists
 		const session = await db.meetingSession.findUnique({
 			where: { id: sessionId },
 			select: { id: true },
@@ -30,11 +50,10 @@ export async function POST(
 			);
 		}
 
-		// Create nodes in bulk
 		const created = await db.diagramNode.createMany({
 			data: nodes.map((n: any) => ({
 				sessionId,
-				nodeType: (n.type || "TASK").toUpperCase(),
+				nodeType: toNodeType(n.type) as any,
 				label: n.label || "Sin nombre",
 				state: "FORMING",
 				lane: n.lane || null,
