@@ -425,6 +425,16 @@ export function useBpmnModeler({
 
 				modeling.createShape(shape, { x: newX, y }, parent);
 
+				// Apply state marker
+				if (node.state === "forming") {
+					try {
+						canvas.addMarker(node.id, "state-forming");
+					} catch { /* ok */ }
+
+					// Add confirm/reject overlay buttons
+					addFormingOverlay(overlays, node.id, onConfirmNode, onRejectNode);
+				}
+
 				// Apply confidence marker for low-confidence nodes
 				if (node.confidence != null && node.confidence < 0.7) {
 					try {
@@ -887,6 +897,64 @@ function applyAllStyling(
 		if (gfx) {
 			applyTypeColors(gfx, node, element);
 		}
+	}
+}
+
+/**
+ * Add confirm/reject overlay buttons to a forming node.
+ */
+function addFormingOverlay(
+	overlays: any,
+	nodeId: string,
+	onConfirm?: (id: string) => void,
+	onReject?: (id: string) => void,
+): void {
+	if (!onConfirm && !onReject) return;
+
+	const container = document.createElement("div");
+	container.style.cssText = "display:flex; gap:4px; pointer-events:auto;";
+
+	if (onConfirm) {
+		const confirmBtn = document.createElement("button");
+		confirmBtn.innerHTML = "✓";
+		confirmBtn.title = "Confirmar nodo";
+		confirmBtn.style.cssText =
+			"width:22px; height:22px; border-radius:6px; border:none; cursor:pointer; font-size:12px; font-weight:bold; " +
+			"background:#16A34A; color:white; display:flex; align-items:center; justify-content:center; " +
+			"box-shadow:0 1px 3px rgba(0,0,0,0.3); transition:transform 75ms;";
+		confirmBtn.onmouseenter = () => { confirmBtn.style.transform = "scale(1.15)"; };
+		confirmBtn.onmouseleave = () => { confirmBtn.style.transform = "scale(1)"; };
+		confirmBtn.onclick = (e) => {
+			e.stopPropagation();
+			onConfirm(nodeId);
+		};
+		container.appendChild(confirmBtn);
+	}
+
+	if (onReject) {
+		const rejectBtn = document.createElement("button");
+		rejectBtn.innerHTML = "✗";
+		rejectBtn.title = "Rechazar nodo";
+		rejectBtn.style.cssText =
+			"width:22px; height:22px; border-radius:6px; border:none; cursor:pointer; font-size:12px; font-weight:bold; " +
+			"background:#DC2626; color:white; display:flex; align-items:center; justify-content:center; " +
+			"box-shadow:0 1px 3px rgba(0,0,0,0.3); transition:transform 75ms;";
+		rejectBtn.onmouseenter = () => { rejectBtn.style.transform = "scale(1.15)"; };
+		rejectBtn.onmouseleave = () => { rejectBtn.style.transform = "scale(1)"; };
+		rejectBtn.onclick = (e) => {
+			e.stopPropagation();
+			onReject(nodeId);
+		};
+		container.appendChild(rejectBtn);
+	}
+
+	try {
+		overlays.add(nodeId, "forming-actions", {
+			position: { bottom: -8, right: -8 },
+			html: container,
+		});
+	} catch {
+		// Element may not exist yet
 	}
 }
 
