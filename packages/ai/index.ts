@@ -6,7 +6,7 @@ export const textModel = openai("gpt-4o-mini");
 export const imageModel = openai("dall-e-3");
 export const audioModel = openai("whisper-1");
 
-// Prozea AI models
+// aiprocess.me AI models
 export const processExtractionModel = anthropic("claude-sonnet-4-6");
 export const teleprompterModel = anthropic("claude-sonnet-4-6");
 
@@ -14,7 +14,7 @@ export const teleprompterModel = anthropic("claude-sonnet-4-6");
 export * from "ai";
 export * from "./lib";
 
-// Prozea pipelines
+// aiprocess.me pipelines
 export { extractProcessUpdates } from "./src/pipelines/process-extraction";
 export type { BpmnNode, ExtractionResult, SuggestedPattern } from "./src/pipelines/process-extraction";
 export { generateNextQuestion } from "./src/pipelines/teleprompter";
@@ -24,11 +24,11 @@ export type { DiscoveryResult, DiscoveryProcess, BusinessInsights } from "./src/
 export { extractFromChat } from "./src/pipelines/chat-extraction";
 export type { ChatExtractionResult, ExtractedProcess, ProcessChatContext } from "./src/pipelines/chat-extraction";
 
-// Prozea context
+// aiprocess.me context
 export { buildSessionContext, clearSessionContextCache } from "./src/context/session-context";
 export type { SessionContext } from "./src/context/session-context";
 
-// Prozea providers
+// aiprocess.me providers
 export { createCallBotProvider, RecallAiProvider } from "./src/providers/call-bot";
 export type { CallBotProvider, BotStatus } from "./src/providers/call-bot";
 export { createSTTProvider } from "./src/providers/stt";
@@ -37,7 +37,7 @@ export type { TranscriptionEvent } from "./src/providers/stt";
 export { generateSessionSummary } from "./src/pipelines/session-summary";
 export type { SummaryResult } from "./src/pipelines/session-summary";
 
-// Prozea new pipelines (Caballo de Troya)
+// aiprocess.me new pipelines (Caballo de Troya)
 export { extractFromDocument } from "./src/pipelines/document-extraction";
 export type { DocumentExtractionResult } from "./src/pipelines/document-extraction";
 export { generateRaci } from "./src/pipelines/raci-generator";
@@ -105,11 +105,15 @@ export type { ComplexityResult, ComplexityBreakdown } from "./src/pipelines/comp
 export { convertBpmnToText } from "./src/pipelines/bpmn-to-text";
 export type { BpmnToTextResult, BpmnDecision } from "./src/pipelines/bpmn-to-text";
 
+// Diagram Repair
+export { repairDiagram } from "./src/pipelines/diagram-repair";
+export type { RepairInput, RepairResult, RepairChange } from "./src/pipelines/diagram-repair";
+
 // Redis-backed activity state
 export { setActivity, getActivity, deleteActivity } from "./src/utils/redis";
 export type { ActivityState } from "./src/utils/redis";
 
-// Prozea prompts (for testing/eval)
+// aiprocess.me prompts (for testing/eval)
 export { PROCESS_EXTRACTION_SYSTEM, buildExtractionSystemPrompt } from "./src/prompts/process-extraction";
 export { TELEPROMPTER_SYSTEM, buildTeleprompterSystemPrompt } from "./src/prompts/teleprompter";
 export { DISCOVERY_EXTRACTION_SYSTEM } from "./src/prompts/discovery-extraction";

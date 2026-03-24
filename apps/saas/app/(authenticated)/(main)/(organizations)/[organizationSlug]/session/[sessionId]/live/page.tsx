@@ -3,7 +3,7 @@ import { MeetingView } from "@meeting/components/MeetingView";
 import { notFound } from "next/navigation";
 
 export const metadata = {
-	title: "Live Session — Prozea",
+	title: "Live Session — aiprocess.me",
 };
 
 export default async function LiveSessionPage({

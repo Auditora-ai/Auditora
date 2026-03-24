@@ -107,7 +107,7 @@ function buildContextBlock(context?: SessionContext): string {
   return parts.length > 0 ? `\n\n${parts.join("\n\n")}` : "";
 }
 
-export const PROCESS_EXTRACTION_SYSTEM = `You are a BPMN process extraction engine for Prozea, a live process elicitation tool.
+export const PROCESS_EXTRACTION_SYSTEM = `You are a BPMN process extraction engine for aiprocess.me, a live process elicitation tool.
 
 You receive:
 1. The CURRENT BPMN diagram state (JSON list of existing nodes)

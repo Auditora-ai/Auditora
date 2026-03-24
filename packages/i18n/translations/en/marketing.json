@@ -5,11 +5,11 @@
 		"back": "Back to blog"
 	},
 	"changelog": {
-		"description": "Stay up to date with the latest changes in Prozea.",
+		"description": "Stay up to date with the latest changes in aiprocess.me.",
 		"title": "Changelog"
 	},
 	"contact": {
-		"description": "Have questions about Prozea? We'd love to hear from you.",
+		"description": "Have questions about aiprocess.me? We'd love to hear from you.",
 		"form": {
 			"email": "Email",
 			"message": "Message",
@@ -26,12 +26,12 @@
 		"title": "Documentation"
 	},
 	"faq": {
-		"description": "Everything you need to know about Prozea.",
+		"description": "Everything you need to know about aiprocess.me.",
 		"title": "Frequently asked questions",
 		"items": {
 			"extraction": {
-				"question": "How does Prozea extract processes?",
-				"answer": "Prozea extracts business processes from any conversation — chat, audio recordings, or live video calls. Its AI analyzes the conversation, identifies process steps, roles, decisions, and exceptions, and presents them as structured extraction cards you can accept, edit, or reject."
+				"question": "How does aiprocess.me extract processes?",
+				"answer": "aiprocess.me extracts business processes from any conversation — chat, audio recordings, or live video calls. Its AI analyzes the conversation, identifies process steps, roles, decisions, and exceptions, and presents them as structured extraction cards you can accept, edit, or reject."
 			},
 			"dataSecurity": {
 				"question": "Is my client conversation data secure?",
@@ -39,7 +39,7 @@
 			},
 			"bpmnStandard": {
 				"question": "What BPMN standard do you support?",
-				"answer": "Prozea generates BPMN 2.0 compliant diagrams. You can export and open them in any standards-compliant tool like Camunda, Signavio, or Visio."
+				"answer": "aiprocess.me generates BPMN 2.0 compliant diagrams. You can export and open them in any standards-compliant tool like Camunda, Signavio, or Visio."
 			},
 			"liveEditing": {
 				"question": "Can I edit the diagram during the meeting?",
@@ -47,19 +47,19 @@
 			},
 			"intelligence": {
 				"question": "What is Process Intelligence?",
-				"answer": "Process Intelligence is Prozea's AI audit system. It analyzes each process for completeness — identifying missing paths, roles, exceptions, decision points, and handoffs. It scores completeness and prioritizes what to ask in your next session."
+				"answer": "Process Intelligence is aiprocess.me's AI audit system. It analyzes each process for completeness — identifying missing paths, roles, exceptions, decision points, and handoffs. It scores completeness and prioritizes what to ask in your next session."
 			},
 			"discoveryChat": {
 				"question": "How does the discovery chat work?",
-				"answer": "Open the discovery panel, describe a process by typing or upload an audio recording. Prozea's AI analyzes the conversation and extracts process steps as cards. Accept, edit, or reject each one. The chat persists — you can close and come back where you left off."
+				"answer": "Open the discovery panel, describe a process by typing or upload an audio recording. aiprocess.me's AI analyzes the conversation and extracts process steps as cards. Accept, edit, or reject each one. The chat persists — you can close and come back where you left off."
 			},
 			"sharing": {
 				"question": "Can I share diagrams with clients?",
 				"answer": "Yes. Generate a public share link for any process diagram. You can also send pre-call preparation links where stakeholders answer targeted questions before the meeting — so you arrive with context already captured."
 			},
 			"integrations": {
-				"question": "What tools does Prozea integrate with?",
-				"answer": "Prozea joins Zoom, Microsoft Teams, and Google Meet video calls. You can also use AI chat, upload audio recordings, or import documents — every channel feeds the same extraction engine."
+				"question": "What tools does aiprocess.me integrate with?",
+				"answer": "aiprocess.me joins Zoom, Microsoft Teams, and Google Meet video calls. You can also use AI chat, upload audio recordings, or import documents — every channel feeds the same extraction engine."
 			}
 		}
 	},
@@ -67,7 +67,7 @@
 		"hero": {
 			"badge": "AI-Powered BPM Elicitation Platform",
 			"title": "Extract business processes from any conversation",
-			"subtitle": "Chat, upload audio, or join a live call — Prozea's AI extracts, organizes, and diagrams your client's processes in real-time. Walk out with BPMN deliverables, not meeting notes.",
+			"subtitle": "Chat, upload audio, or join a live call — aiprocess.me's AI extracts, organizes, and diagrams your client's processes in real-time. Walk out with BPMN deliverables, not meeting notes.",
 			"cta": "Start free trial",
 			"ctaSecondary": "Try Free Tools",
 			"counterLabel": "process steps captured"
@@ -98,7 +98,7 @@
 			"stepLabel": "Phase {number}",
 			"step1": {
 				"title": "Discover",
-				"description": "Chat with the AI, upload an audio recording, or let Prozea join your video call. Every conversation channel feeds the same extraction engine."
+				"description": "Chat with the AI, upload an audio recording, or let aiprocess.me join your video call. Every conversation channel feeds the same extraction engine."
 			},
 			"step2": {
 				"title": "Organize",
@@ -116,7 +116,7 @@
 		"pillars": {
 			"badge": "The platform",
 			"title": "Four pillars of modern process elicitation",
-			"description": "Prozea replaces scattered tools with one platform that covers the entire BPM consulting workflow.",
+			"description": "aiprocess.me replaces scattered tools with one platform that covers the entire BPM consulting workflow.",
 			"pillar1": {
 				"title": "Conversational Discovery",
 				"subtitle": "Extract processes from any conversation.",
@@ -137,7 +137,7 @@
 			"pillar2": {
 				"title": "Live Sessions",
 				"subtitle": "AI-guided meetings with real-time diagramming.",
-				"description": "Prozea joins Zoom, Teams, or Meet. A private teleprompter guides your questions. The BPMN diagram builds itself while you talk.",
+				"description": "aiprocess.me joins Zoom, Teams, or Meet. A private teleprompter guides your questions. The BPMN diagram builds itself while you talk.",
 				"benefit1": {
 					"title": "Real-Time Transcription",
 					"description": "Every word captured with speaker diarization. Know exactly who said what."
@@ -187,7 +187,7 @@
 			}
 		},
 		"demo": {
-			"windowTitle": "Prozea — Consultant Workflow",
+			"windowTitle": "aiprocess.me — Consultant Workflow",
 			"scene1": {
 				"title": "Discover through conversation",
 				"chatMessage1": "We receive purchase orders via email and the assistant logs them in the system.",
@@ -297,12 +297,12 @@
 				"message": "Could not subscribe. Please try again later."
 			},
 			"success": {
-				"message": "You're on the list. We'll notify you when Prozea launches.",
+				"message": "You're on the list. We'll notify you when aiprocess.me launches.",
 				"title": "Subscribed"
 			}
 		},
 		"submit": "Subscribe",
-		"subtitle": "Be among the first to get access to Prozea.",
+		"subtitle": "Be among the first to get access to aiprocess.me.",
 		"title": "Get early access"
 	},
 	"cta": {
@@ -325,7 +325,7 @@
 			"privacyPolicy": "Privacy policy",
 			"termsAndConditions": "Terms and conditions",
 			"tools": "Free Tools",
-			"builtWith": "Prozea"
+			"builtWith": "aiprocess.me"
 		},
 		"menu": {
 			"blog": "Blog",

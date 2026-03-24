@@ -25,13 +25,19 @@ interface UseBpmnModelerOptions {
 	/** Callback when user rejects a forming node. Required for live AI mode. */
 	onRejectNode?: (nodeId: string) => void;
 	sessionStatus?: "ACTIVE" | "ENDED";
+	/** Fallback nodes to rebuild XML from if importXML fails (auto-recovery). */
+	fallbackNodes?: DiagramNode[];
 }
 
 interface ModelerAPI {
 	modeler: any;
 	isReady: boolean;
 	renderError: string | null;
+	/** True when the modeler recovered from corrupted XML by rebuilding from nodes. */
+	recovered: boolean;
 	mergeAiNodes: (nodes: DiagramNode[]) => void;
+	/** Force-rebuild the diagram from the given nodes (or fallbackNodes). */
+	rebuildFromNodes: (nodes?: DiagramNode[]) => Promise<void>;
 	zoomIn: () => void;
 	zoomOut: () => void;
 	zoomFit: () => void;
@@ -60,10 +66,12 @@ export function useBpmnModeler({
 	onConfirmNode,
 	onRejectNode,
 	sessionStatus = "ACTIVE",
+	fallbackNodes,
 }: UseBpmnModelerOptions): ModelerAPI {
 	const modelerRef = useRef<any>(null);
 	const [isReady, setIsReady] = useState(false);
 	const [renderError, setRenderError] = useState<string | null>(null);
+	const [recovered, setRecovered] = useState(false);
 	const [canUndo, setCanUndo] = useState(false);
 	const [canRedo, setCanRedo] = useState(false);
 	const [gridEnabled, setGridEnabled] = useState(false);
@@ -75,6 +83,8 @@ export function useBpmnModeler({
 	const knownConnectionsRef = useRef<Set<string>>(new Set());
 	const layoutXRef = useRef<Map<string, number>>(new Map()); // lane -> next X
 	const importingRef = useRef(false);
+	const fallbackNodesRef = useRef<DiagramNode[] | undefined>(fallbackNodes);
+	fallbackNodesRef.current = fallbackNodes;
 
 	// Initialize Modeler
 	useEffect(() => {
@@ -110,11 +120,37 @@ export function useBpmnModeler({
 				await modeler.importXML(initialXml || emptyBpmnXml());
 				const canvas = modeler.get("canvas");
 				canvas.zoom("fit-viewport", "auto");
-				// Apply Bizagi colors to existing elements + auto-color new ones
 				applyBizagiColors(modeler);
 			} catch (err) {
-				console.error("[useBpmnModeler] Failed to initialize:", err);
-				return;
+				console.error("[useBpmnModeler] Failed to import initial XML:", err);
+
+				// Auto-recovery: rebuild from fallback nodes if available
+				const nodes = fallbackNodesRef.current;
+				if (nodes && nodes.length > 0) {
+					console.warn("[useBpmnModeler] Attempting auto-recovery from DiagramNodes...");
+					try {
+						const recoveredXml = buildBpmnXml(nodes);
+						await modeler.importXML(recoveredXml);
+						const canvas = modeler.get("canvas");
+						canvas.zoom("fit-viewport", "auto");
+						applyBizagiColors(modeler);
+						setRecovered(true);
+						setRenderError("El diagrama se regeneró automáticamente desde los datos guardados.");
+					} catch (recoveryErr) {
+						console.error("[useBpmnModeler] Recovery also failed, loading empty diagram:", recoveryErr);
+						await modeler.importXML(emptyBpmnXml());
+						setRenderError("El diagrama está corrupto y no se pudo recuperar. Use 'Arreglar con IA' para repararlo.");
+					}
+				} else {
+					// No nodes available — load empty diagram so modeler is usable
+					try {
+						await modeler.importXML(emptyBpmnXml());
+						setRenderError("El diagrama no se pudo cargar. Use 'Arreglar con IA' para repararlo.");
+					} catch {
+						console.error("[useBpmnModeler] Even empty diagram failed");
+						return;
+					}
+				}
 			}
 
 			// Listen for command stack changes (undo/redo state)
@@ -171,7 +207,13 @@ export function useBpmnModeler({
 					}
 
 					const xml = buildBpmnXml(visibleNodes);
-					await modeler.importXML(xml);
+					try {
+						await modeler.importXML(xml);
+					} catch (bootstrapErr) {
+						console.error("[useBpmnModeler] Bootstrap importXML failed, loading empty:", bootstrapErr);
+						await modeler.importXML(emptyBpmnXml());
+						setRenderError("El diagrama generado tiene errores. Use 'Arreglar con IA' para repararlo.");
+					}
 
 					const canvas = modeler.get("canvas");
 					canvas.zoom("fit-viewport", "auto");
@@ -190,11 +232,9 @@ export function useBpmnModeler({
 					applyAllStyling(modeler, nodes);
 
 					bootstrappedRef.current = true;
-					setRenderError(null);
 				} else {
 					// --- Incremental update via Modeling API ---
 					incrementalUpdate(modeler, visibleNodes, nodes);
-					setRenderError(null);
 				}
 			} catch (err) {
 				console.error("[useBpmnModeler] Failed to render BPMN:", err);
@@ -206,6 +246,49 @@ export function useBpmnModeler({
 			}
 		},
 		[isReady],
+	);
+
+	/**
+	 * Force-rebuild the diagram from nodes, resetting all state.
+	 * Used for manual recovery ("Regenerar diagrama") and AI repair.
+	 */
+	const rebuildFromNodes = useCallback(
+		async (nodes?: DiagramNode[]) => {
+			const modeler = modelerRef.current;
+			if (!modeler) return;
+
+			const rebuildNodes = nodes || fallbackNodesRef.current;
+			if (!rebuildNodes || rebuildNodes.length === 0) {
+				setRenderError("No hay datos de nodos para regenerar el diagrama.");
+				return;
+			}
+
+			try {
+				const xml = buildBpmnXml(rebuildNodes);
+				await modeler.importXML(xml);
+				const canvas = modeler.get("canvas");
+				canvas.zoom("fit-viewport", "auto");
+				applyBizagiColors(modeler);
+
+				// Reset incremental state
+				bootstrappedRef.current = true;
+				knownNodesRef.current.clear();
+				knownConnectionsRef.current.clear();
+				for (const node of rebuildNodes.filter((n) => n.state !== "rejected")) {
+					knownNodesRef.current.set(node.id, { ...node });
+					for (const target of node.connections) {
+						knownConnectionsRef.current.add(`${node.id}->${target}`);
+					}
+				}
+
+				setRenderError(null);
+				setRecovered(true);
+			} catch (err) {
+				console.error("[useBpmnModeler] Rebuild from nodes failed:", err);
+				setRenderError("No se pudo regenerar el diagrama. Intente 'Arreglar con IA'.");
+			}
+		},
+		[],
 	);
 
 	/**
@@ -681,7 +764,9 @@ export function useBpmnModeler({
 		modeler: modelerRef.current,
 		isReady,
 		renderError,
+		recovered,
 		mergeAiNodes,
+		rebuildFromNodes,
 		zoomIn,
 		zoomOut,
 		zoomFit,

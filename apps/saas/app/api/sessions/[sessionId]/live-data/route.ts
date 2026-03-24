@@ -11,6 +11,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
 import { getSessionActivity } from "../../../webhook/recall/route";
 import { recordEvent } from "@meeting/lib/session-timeline";
+import { validateDiagram } from "@meeting/lib/bpmn-validator";
 
 // One-time guards to avoid spamming diagnostic events
 const firstTranscriptPollRecorded = new Set<string>();
@@ -91,6 +92,18 @@ export async function GET(
 		const sipocCoverage = recentQuestions[0]?.sipocCoverage ?? null;
 		const questionQueue = recentQuestions.slice(1).map((q) => q.question);
 
+		// Validate diagram for structural problems
+		const mappedNodes = nodes.map((n) => ({
+			id: n.id,
+			type: n.nodeType.toLowerCase(),
+			label: n.label,
+			state: n.state.toLowerCase() as "forming" | "confirmed" | "rejected",
+			lane: n.lane || undefined,
+			connections: n.connections || [],
+			confidence: n.confidence,
+		}));
+		const validation = validateDiagram(mappedNodes);
+
 		// Bot activity state from Redis (with in-memory fallback)
 		const activity = await getSessionActivity(sessionId);
 		const STALE_THRESHOLD = 60_000; // 60s
@@ -124,6 +137,12 @@ export async function GET(
 				stale: activity
 					? Date.now() - activity.updatedAt > STALE_THRESHOLD
 					: true,
+			},
+			diagramHealth: {
+				valid: validation.valid,
+				needsRepair: validation.needsRepair,
+				warningCount: validation.warnings.length,
+				warnings: validation.warnings.slice(0, 5), // Limit to top 5
 			},
 		});
 	} catch (error) {

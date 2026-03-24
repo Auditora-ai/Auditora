@@ -27,3 +27,12 @@ export interface ActivityLogEntry {
 	detail: string;
 	timestamp: number;
 }
+
+export interface TranscriptEntry {
+	id: string;
+	speaker: string;
+	text: string;
+	correctedText?: string | null;
+	timestamp: number;
+	source?: string;
+}

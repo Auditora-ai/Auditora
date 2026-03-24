@@ -255,7 +255,7 @@ export default function PublicRiskSharePage() {
 
         {/* Footer */}
         <div className="text-center text-xs text-slate-400 pt-8 border-t border-slate-100">
-          Generado por Prozea
+          Generado por aiprocess.me
         </div>
       </div>
     </div>

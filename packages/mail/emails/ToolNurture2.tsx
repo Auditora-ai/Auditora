@@ -15,14 +15,14 @@ export function ToolNurture2({
 			</Text>
 
 			<Text>
-				Last week you used our {toolName}. Here's what a typical Prozea
+				Last week you used our {toolName}. Here's what a typical aiprocess.me
 				session looks like in practice:
 			</Text>
 
 			<Text style={{ backgroundColor: "#F8FAFC", padding: "16px", borderRadius: "8px", border: "1px solid #E2E8F0" }}>
-				<strong>Before Prozea:</strong>{"\n"}
+				<strong>Before aiprocess.me:</strong>{"\n"}
 				1 hour meeting + 4-6 hours documenting (BPMN, RACI, process sheet, executive summary){"\n\n"}
-				<strong>With Prozea:</strong>{"\n"}
+				<strong>With aiprocess.me:</strong>{"\n"}
 				1 hour meeting + 15 minutes reviewing AI-generated deliverables
 			</Text>
 
@@ -31,13 +31,13 @@ export function ToolNurture2({
 				get back for analysis and client work instead of documentation.
 			</Text>
 
-			<PrimaryButton href="https://prozea.com">
+			<PrimaryButton href="https://aiprocess.me">
 				Start your free trial &rarr;
 			</PrimaryButton>
 
 			<Text style={{ color: "#94A3B8", fontSize: "12px", marginTop: "32px" }}>
-				Prozea — AI-powered process elicitation for BPM consultants.{" "}
-				<Link href="https://prozea.com" style={{ color: "#64748B" }}>
+				aiprocess.me — AI-powered process elicitation for BPM consultants.{" "}
+				<Link href="https://aiprocess.me" style={{ color: "#64748B" }}>
 					Unsubscribe
 				</Link>
 			</Text>

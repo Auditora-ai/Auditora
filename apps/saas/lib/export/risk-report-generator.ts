@@ -281,7 +281,7 @@ export function generateRiskReportHtml(data: RiskReportData): string {
   }
 
   <div style="margin-top:48px;padding-top:16px;border-top:1px solid #E2E8F0;font-size:11px;color:#94A3B8;text-align:center">
-    Generado por Prozea — ${escHtml(data.date)}
+    Generado por aiprocess.me — ${escHtml(data.date)}
   </div>
 </body>
 </html>`;

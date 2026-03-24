@@ -17,7 +17,7 @@ export interface ActivityState {
 	updatedAt: number;
 }
 
-const ACTIVITY_PREFIX = "prozea:activity:";
+const ACTIVITY_PREFIX = "aiprocess:activity:";
 const ACTIVITY_TTL = 300; // 5 minutes
 
 // Singleton Redis client — lazy initialized

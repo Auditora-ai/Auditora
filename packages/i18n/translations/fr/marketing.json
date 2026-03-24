@@ -5,11 +5,11 @@
 		"back": "Retour au blog"
 	},
 	"changelog": {
-		"description": "Restez informé des dernières modifications de Prozea.",
+		"description": "Restez informé des dernières modifications de aiprocess.me.",
 		"title": "Changelog"
 	},
 	"contact": {
-		"description": "Des questions sur Prozea ? Nous serions ravis d'échanger avec vous.",
+		"description": "Des questions sur aiprocess.me ? Nous serions ravis d'échanger avec vous.",
 		"form": {
 			"email": "E-mail",
 			"message": "Message",
@@ -26,12 +26,12 @@
 		"title": "Documentation"
 	},
 	"faq": {
-		"description": "Tout ce que vous devez savoir sur Prozea.",
+		"description": "Tout ce que vous devez savoir sur aiprocess.me.",
 		"title": "Questions fréquentes",
 		"items": {
 			"joinCall": {
-				"question": "Comment Prozea rejoint-il mon appel ?",
-				"answer": "Prozea utilise Recall.ai pour rejoindre en tant que participant bot dans Zoom, Google Meet ou Microsoft Teams. Partagez simplement un lien de réunion ou invitez Prozea directement — il rejoint silencieusement et commence la transcription en temps réel."
+				"question": "Comment aiprocess.me rejoint-il mon appel ?",
+				"answer": "aiprocess.me utilise Recall.ai pour rejoindre en tant que participant bot dans Zoom, Google Meet ou Microsoft Teams. Partagez simplement un lien de réunion ou invitez aiprocess.me directement — il rejoint silencieusement et commence la transcription en temps réel."
 			},
 			"dataSecurity": {
 				"question": "Les données de conversation de mes clients sont-elles sécurisées ?",
@@ -39,7 +39,7 @@
 			},
 			"bpmnStandard": {
 				"question": "Quel standard BPMN supportez-vous ?",
-				"answer": "Prozea génère des diagrammes conformes à BPMN 2.0. Vous pouvez les exporter et les ouvrir dans n'importe quel outil conforme comme Camunda, Signavio ou Visio."
+				"answer": "aiprocess.me génère des diagrammes conformes à BPMN 2.0. Vous pouvez les exporter et les ouvrir dans n'importe quel outil conforme comme Camunda, Signavio ou Visio."
 			},
 			"liveEditing": {
 				"question": "Puis-je modifier le diagramme pendant la réunion ?",
@@ -55,7 +55,7 @@
 		"hero": {
 			"badge": "Élicitation de processus par IA",
 			"title": "Transformez chaque réunion client en une carte de processus finalisée",
-			"subtitle": "Prozea rejoint votre visioconférence, guide vos questions avec un téléprompteur IA, et crée automatiquement des diagrammes de processus métier en temps réel. Sortez de chaque réunion avec un livrable BPMN prêt pour le client.",
+			"subtitle": "aiprocess.me rejoint votre visioconférence, guide vos questions avec un téléprompteur IA, et crée automatiquement des diagrammes de processus métier en temps réel. Sortez de chaque réunion avec un livrable BPMN prêt pour le client.",
 			"cta": "Essai gratuit",
 			"ctaSecondary": "Voir comment ça marche"
 		},
@@ -82,8 +82,8 @@
 			"title": "Trois étapes. Zéro documentation post-réunion.",
 			"stepLabel": "Étape {number}",
 			"step1": {
-				"title": "Prozea rejoint votre appel",
-				"description": "Invitez Prozea à n'importe quelle session Zoom, Teams ou Meet. Il rejoint en tant que participant silencieux et commence la transcription en temps réel avec identification des intervenants."
+				"title": "aiprocess.me rejoint votre appel",
+				"description": "Invitez aiprocess.me à n'importe quelle session Zoom, Teams ou Meet. Il rejoint en tant que participant silencieux et commence la transcription en temps réel avec identification des intervenants."
 			},
 			"step2": {
 				"title": "L'IA guide vos questions",
@@ -97,11 +97,11 @@
 		"features": {
 			"badge": "Fonctionnalités clés",
 			"title": "Tout ce dont vous avez besoin pour éliciter les processus, pas les documenter",
-			"description": "Prozea gère la documentation pour que vous puissiez vous concentrer sur ce que vous faites le mieux — comprendre le métier de votre client.",
+			"description": "aiprocess.me gère la documentation pour que vous puissiez vous concentrer sur ce que vous faites le mieux — comprendre le métier de votre client.",
 			"feature1": {
 				"title": "Transcription en temps réel",
 				"subtitle": "Chaque mot capturé, chaque intervenant identifié.",
-				"description": "Propulsé par Deepgram, Prozea capture chaque mot avec diarisation des intervenants. Il sait exactement qui a dit quoi, pour que votre carte de processus reflète les bons rôles et responsabilités.",
+				"description": "Propulsé par Deepgram, aiprocess.me capture chaque mot avec diarisation des intervenants. Il sait exactement qui a dit quoi, pour que votre carte de processus reflète les bons rôles et responsabilités.",
 				"benefit1": {
 					"title": "Diarisation des intervenants",
 					"description": "Identifie automatiquement qui parle, en associant les voix aux rôles dans votre diagramme de processus."
@@ -151,7 +151,7 @@
 			}
 		},
 		"demo": {
-			"windowTitle": "Prozea — Session en direct",
+			"windowTitle": "aiprocess.me — Session en direct",
 			"rec": "REC",
 			"teleprompterLabel": "Téléprompteur",
 			"askNow": "Demander maintenant",
@@ -198,13 +198,13 @@
 				"export": "Prêt à exporter"
 			},
 			"scene1": {
-				"title": "Prozea rejoint votre appel",
-				"joining": "Prozea rejoint la réunion…",
+				"title": "aiprocess.me rejoint votre appel",
+				"joining": "aiprocess.me rejoint la réunion…",
 				"participant1": "Ana López",
 				"participant2": "Marco Díaz",
 				"participant3": "Sarah Chen",
 				"you": "Vous (Consultant)",
-				"prozea": "Prozea AI"
+				"prozea": "aiprocess.me AI"
 			},
 			"scene2": {
 				"title": "Chaque mot, capturé",
@@ -238,12 +238,12 @@
 				"message": "Impossible de s'inscrire. Veuillez réessayer plus tard."
 			},
 			"success": {
-				"message": "Vous êtes sur la liste. Nous vous notifierons au lancement de Prozea.",
+				"message": "Vous êtes sur la liste. Nous vous notifierons au lancement de aiprocess.me.",
 				"title": "Inscrit"
 			}
 		},
 		"submit": "S'inscrire",
-		"subtitle": "Soyez parmi les premiers à accéder à Prozea.",
+		"subtitle": "Soyez parmi les premiers à accéder à aiprocess.me.",
 		"title": "Accès anticipé"
 	},
 	"cta": {
@@ -265,7 +265,7 @@
 			"pricing": "Tarifs",
 			"privacyPolicy": "Politique de confidentialité",
 			"termsAndConditions": "Conditions générales",
-			"builtWith": "Prozea"
+			"builtWith": "aiprocess.me"
 		},
 		"menu": {
 			"blog": "Blog",

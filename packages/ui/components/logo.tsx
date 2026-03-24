@@ -15,7 +15,7 @@ export function Logo({
 			)}
 		>
 			<svg className="size-8 text-primary" viewBox="0 0 32 32" fill="none">
-				<title>Prozea</title>
+				<title>aiprocess.me</title>
 				<circle cx="8" cy="16" r="3" fill="currentColor" />
 				<circle cx="24" cy="8" r="3" fill="currentColor" />
 				<circle cx="24" cy="24" r="3" fill="currentColor" />
@@ -25,7 +25,7 @@ export function Logo({
 			</svg>
 			{withLabel && (
 				<span className="ml-2 hidden text-lg md:block" style={{ fontFamily: "var(--font-display), serif" }}>
-					Prozea
+					aiprocess.me
 				</span>
 			)}
 		</span>

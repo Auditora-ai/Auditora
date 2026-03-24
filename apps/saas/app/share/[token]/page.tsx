@@ -4,7 +4,7 @@ import { SessionDiagram } from "@meeting/components/SessionDiagram";
 import { SparklesIcon, ListChecksIcon } from "lucide-react";
 
 export async function generateMetadata() {
-	return { title: "Shared Process Diagram — Prozea" };
+	return { title: "Shared Process Diagram — aiprocess.me" };
 }
 
 export default async function SharedDiagramPage({
@@ -121,10 +121,10 @@ export default async function SharedDiagramPage({
 			<div className="border-t border-border bg-card px-6 py-4">
 				<div className="mx-auto flex max-w-6xl items-center justify-between">
 					<span className="text-xs text-muted-foreground">
-						Powered by Prozea
+						Powered by aiprocess.me
 					</span>
 					<a
-						href="https://prozea.com"
+						href="https://aiprocess.me"
 						target="_blank"
 						rel="noreferrer"
 						className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"

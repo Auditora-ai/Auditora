@@ -200,9 +200,9 @@ export const TOOLS: ToolConfig[] = [
     name: "Process Documentation ROI Calculator",
     nameEs: "Calculadora de Ahorro en Documentacion",
     description:
-      "Calculate how much time and money Prozea saves on process documentation. No AI required — instant results.",
+      "Calculate how much time and money aiprocess.me saves on process documentation. No AI required — instant results.",
     descriptionEs:
-      "Calcula cuanto tiempo y dinero Prozea ahorra en documentacion de procesos. Sin IA — resultados instantaneos.",
+      "Calcula cuanto tiempo y dinero aiprocess.me ahorra en documentacion de procesos. Sin IA — resultados instantaneos.",
     inputLabel: "",
     inputLabelEs: "",
     inputPlaceholder: "",

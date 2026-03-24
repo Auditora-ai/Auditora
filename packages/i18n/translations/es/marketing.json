@@ -5,11 +5,11 @@
 		"back": "Volver al blog"
 	},
 	"changelog": {
-		"description": "Mantente al día con los últimos cambios en Prozea.",
+		"description": "Mantente al día con los últimos cambios en aiprocess.me.",
 		"title": "Changelog"
 	},
 	"contact": {
-		"description": "¿Tienes preguntas sobre Prozea? Nos encantaría saber de ti.",
+		"description": "¿Tienes preguntas sobre aiprocess.me? Nos encantaría saber de ti.",
 		"form": {
 			"email": "Correo electrónico",
 			"message": "Mensaje",
@@ -26,12 +26,12 @@
 		"title": "Documentación"
 	},
 	"faq": {
-		"description": "Todo lo que necesitas saber sobre Prozea.",
+		"description": "Todo lo que necesitas saber sobre aiprocess.me.",
 		"title": "Preguntas frecuentes",
 		"items": {
 			"extraction": {
-				"question": "¿Cómo extrae Prozea los procesos?",
-				"answer": "Prozea extrae procesos de negocio de cualquier conversación — chat, grabaciones de audio o videollamadas en vivo. Su IA analiza la conversación, identifica pasos del proceso, roles, decisiones y excepciones, y los presenta como tarjetas de extracción que puedes aceptar, editar o rechazar."
+				"question": "¿Cómo extrae aiprocess.me los procesos?",
+				"answer": "aiprocess.me extrae procesos de negocio de cualquier conversación — chat, grabaciones de audio o videollamadas en vivo. Su IA analiza la conversación, identifica pasos del proceso, roles, decisiones y excepciones, y los presenta como tarjetas de extracción que puedes aceptar, editar o rechazar."
 			},
 			"dataSecurity": {
 				"question": "¿Los datos de conversación de mi cliente están seguros?",
@@ -39,7 +39,7 @@
 			},
 			"bpmnStandard": {
 				"question": "¿Qué estándar BPMN soportan?",
-				"answer": "Prozea genera diagramas compatibles con BPMN 2.0. Puedes exportarlos y abrirlos en cualquier herramienta compatible como Camunda, Signavio o Visio."
+				"answer": "aiprocess.me genera diagramas compatibles con BPMN 2.0. Puedes exportarlos y abrirlos en cualquier herramienta compatible como Camunda, Signavio o Visio."
 			},
 			"liveEditing": {
 				"question": "¿Puedo editar el diagrama durante la reunión?",
@@ -47,19 +47,19 @@
 			},
 			"intelligence": {
 				"question": "¿Qué es la Inteligencia de Procesos?",
-				"answer": "La Inteligencia de Procesos es el sistema de auditoría de IA de Prozea. Analiza cada proceso en busca de completitud — identifica rutas faltantes, roles, excepciones, puntos de decisión y traspasos. Califica la completitud y prioriza qué preguntar en tu próxima sesión."
+				"answer": "La Inteligencia de Procesos es el sistema de auditoría de IA de aiprocess.me. Analiza cada proceso en busca de completitud — identifica rutas faltantes, roles, excepciones, puntos de decisión y traspasos. Califica la completitud y prioriza qué preguntar en tu próxima sesión."
 			},
 			"discoveryChat": {
 				"question": "¿Cómo funciona el chat de discovery?",
-				"answer": "Abre el panel de discovery, describe un proceso escribiendo o sube una grabación de audio. La IA de Prozea analiza la conversación y extrae pasos del proceso como tarjetas. Acepta, edita o rechaza cada una. El chat persiste — puedes cerrar y volver donde lo dejaste."
+				"answer": "Abre el panel de discovery, describe un proceso escribiendo o sube una grabación de audio. La IA de aiprocess.me analiza la conversación y extrae pasos del proceso como tarjetas. Acepta, edita o rechaza cada una. El chat persiste — puedes cerrar y volver donde lo dejaste."
 			},
 			"sharing": {
 				"question": "¿Puedo compartir diagramas con mis clientes?",
 				"answer": "Sí. Genera un enlace público para cualquier diagrama de procesos. También puedes enviar enlaces de preparación pre-reunión donde los stakeholders responden preguntas dirigidas antes de la reunión — así llegas con contexto ya capturado."
 			},
 			"integrations": {
-				"question": "¿Con qué herramientas se integra Prozea?",
-				"answer": "Prozea se une a videollamadas de Zoom, Microsoft Teams y Google Meet. También puedes usar el chat con IA, subir grabaciones de audio o importar documentos — cada canal alimenta el mismo motor de extracción."
+				"question": "¿Con qué herramientas se integra aiprocess.me?",
+				"answer": "aiprocess.me se une a videollamadas de Zoom, Microsoft Teams y Google Meet. También puedes usar el chat con IA, subir grabaciones de audio o importar documentos — cada canal alimenta el mismo motor de extracción."
 			}
 		}
 	},
@@ -67,7 +67,7 @@
 		"hero": {
 			"badge": "Plataforma de Elicitación BPM con IA",
 			"title": "Extrae procesos de negocio de cualquier conversación",
-			"subtitle": "Chatea, sube audio, o únete a una llamada en vivo — la IA de Prozea extrae, organiza y diagrama los procesos de tu cliente en tiempo real. Sal con entregables BPMN, no con notas de reunión.",
+			"subtitle": "Chatea, sube audio, o únete a una llamada en vivo — la IA de aiprocess.me extrae, organiza y diagrama los procesos de tu cliente en tiempo real. Sal con entregables BPMN, no con notas de reunión.",
 			"cta": "Prueba gratis",
 			"ctaSecondary": "Herramientas Gratis",
 			"counterLabel": "pasos de proceso capturados"
@@ -98,7 +98,7 @@
 			"stepLabel": "Fase {number}",
 			"step1": {
 				"title": "Descubre",
-				"description": "Chatea con la IA, sube una grabación de audio, o deja que Prozea se una a tu videollamada. Cada canal de conversación alimenta el mismo motor de extracción."
+				"description": "Chatea con la IA, sube una grabación de audio, o deja que aiprocess.me se una a tu videollamada. Cada canal de conversación alimenta el mismo motor de extracción."
 			},
 			"step2": {
 				"title": "Organiza",
@@ -116,7 +116,7 @@
 		"pillars": {
 			"badge": "La plataforma",
 			"title": "Cuatro pilares de la elicitación moderna de procesos",
-			"description": "Prozea reemplaza herramientas dispersas con una plataforma que cubre todo el flujo de trabajo de consultoría BPM.",
+			"description": "aiprocess.me reemplaza herramientas dispersas con una plataforma que cubre todo el flujo de trabajo de consultoría BPM.",
 			"pillar1": {
 				"title": "Discovery Conversacional",
 				"subtitle": "Extrae procesos de cualquier conversación.",
@@ -137,7 +137,7 @@
 			"pillar2": {
 				"title": "Sesiones en Vivo",
 				"subtitle": "Reuniones guiadas por IA con diagramación en tiempo real.",
-				"description": "Prozea se une a Zoom, Teams o Meet. Un teleprompter privado guía tus preguntas. El diagrama BPMN se construye solo mientras hablas.",
+				"description": "aiprocess.me se une a Zoom, Teams o Meet. Un teleprompter privado guía tus preguntas. El diagrama BPMN se construye solo mientras hablas.",
 				"benefit1": {
 					"title": "Transcripción en Tiempo Real",
 					"description": "Cada palabra capturada con diarización de hablantes. Sabe exactamente quién dijo qué."
@@ -187,7 +187,7 @@
 			}
 		},
 		"demo": {
-			"windowTitle": "Prozea — Flujo del Consultor",
+			"windowTitle": "aiprocess.me — Flujo del Consultor",
 			"scene1": {
 				"title": "Descubre a través de la conversación",
 				"chatMessage1": "Recibimos órdenes de compra por correo y la asistente las registra en el sistema.",
@@ -297,12 +297,12 @@
 				"message": "No se pudo suscribir. Inténtalo de nuevo más tarde."
 			},
 			"success": {
-				"message": "Estás en la lista. Te notificaremos cuando Prozea se lance.",
+				"message": "Estás en la lista. Te notificaremos cuando aiprocess.me se lance.",
 				"title": "Suscrito"
 			}
 		},
 		"submit": "Suscribirse",
-		"subtitle": "Sé de los primeros en acceder a Prozea.",
+		"subtitle": "Sé de los primeros en acceder a aiprocess.me.",
 		"title": "Acceso anticipado"
 	},
 	"cta": {
@@ -325,7 +325,7 @@
 			"privacyPolicy": "Política de privacidad",
 			"termsAndConditions": "Términos y condiciones",
 			"tools": "Herramientas Gratis",
-			"builtWith": "Prozea"
+			"builtWith": "aiprocess.me"
 		},
 		"menu": {
 			"blog": "Blog",

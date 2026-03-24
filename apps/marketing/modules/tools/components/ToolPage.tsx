@@ -237,12 +237,12 @@ export function ToolPage({ tool, locale, children }: ToolPageProps) {
           </h2>
           <p className="mb-8 text-[#94A3B8]">
             {isEs
-              ? "Prozea se une a tu videollamada, guia tus preguntas con un teleprompter, y genera el diagrama BPMN en tiempo real."
-              : "Prozea joins your video call, guides your questions with a teleprompter, and generates the BPMN diagram in real-time."}
+              ? "aiprocess.me se une a tu videollamada, guia tus preguntas con un teleprompter, y genera el diagrama BPMN en tiempo real."
+              : "aiprocess.me joins your video call, guides your questions with a teleprompter, and generates the BPMN diagram in real-time."}
           </p>
           <a href={config.saasUrl}>
             <Button size="lg" className="gap-2">
-              {isEs ? "Probar Prozea Gratis" : "Try Prozea Free"}
+              {isEs ? "Probar aiprocess.me Gratis" : "Try aiprocess.me Free"}
               <ArrowRightIcon className="h-4 w-4" />
             </Button>
           </a>

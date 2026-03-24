@@ -195,6 +195,58 @@ async function syncDiagramNodesFromXml(
 	}
 }
 
+/**
+ * GET /api/processes/[processId]/diagram
+ * Returns DiagramNodes for rebuilding the diagram from structured data.
+ */
+export async function GET(
+	request: NextRequest,
+	{ params }: { params: Promise<{ processId: string }> },
+) {
+	try {
+		const session = await auth.api.getSession({
+			headers: await headers(),
+			query: { disableCookieCache: true },
+		});
+		if (!session?.user) {
+			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+		}
+
+		const { processId } = await params;
+
+		// Find the most recent session for this process that has diagram nodes
+		const meetingSession = await db.meetingSession.findFirst({
+			where: { processDefinitionId: processId },
+			orderBy: { createdAt: "desc" },
+			select: { id: true },
+		});
+
+		if (!meetingSession) {
+			return NextResponse.json({ nodes: [] });
+		}
+
+		const dbNodes = await db.diagramNode.findMany({
+			where: { sessionId: meetingSession.id },
+			orderBy: { confirmedAt: "asc" },
+		});
+
+		const nodes = dbNodes.map((n) => ({
+			id: n.id,
+			type: n.nodeType.toLowerCase(),
+			label: n.label,
+			state: n.state.toLowerCase() as "forming" | "confirmed" | "rejected",
+			lane: n.lane || undefined,
+			connections: n.connections || [],
+			confidence: n.confidence,
+		}));
+
+		return NextResponse.json({ nodes });
+	} catch (error) {
+		console.error("[DiagramGET] Error:", error);
+		return NextResponse.json({ error: "Internal error" }, { status: 500 });
+	}
+}
+
 export async function POST(
 	request: NextRequest,
 	{ params }: { params: Promise<{ processId: string }> },

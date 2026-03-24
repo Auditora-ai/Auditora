@@ -196,7 +196,7 @@ model Invitation {
 }
 
 // ============================================
-// PROZEA MODELS
+// AIPROCESS MODELS
 // ============================================
 
 enum SessionType {

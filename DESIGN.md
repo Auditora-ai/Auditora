@@ -1,4 +1,4 @@
-# Design System — Prozea
+# Design System — aiprocess.me
 
 ## Product Context
 - **What this is:** AI-powered process elicitation platform that joins video calls, guides consultants with a teleprompter, and auto-diagrams business processes live during the meeting
@@ -13,12 +13,13 @@
 - **Key design insight:** Dual-temperature UI — dark chrome for the consultant's private view (teleprompter, transcript, controls), light canvas for the shared BPMN diagram. The diagram area must be pristine enough to screenshot and send to a Fortune 500 client.
 
 ## Typography
-- **Display/Hero:** Instrument Serif — distinctive, refined identity. Serif says "consulting, precision, authority" without feeling corporate. Use for page titles, session names, hero text.
-- **Body:** Geist — Vercel's font, excellent at small sizes, clean and contemporary. All body copy, UI labels, navigation, form labels.
-- **UI/Labels:** Geist (same as body) — at 12-14px with medium weight for UI controls
-- **Data/Tables:** Geist with `font-variant-numeric: tabular-nums` — aligned numbers in analytics, timestamps, node counts
+- **Display/Hero:** Inter — clean, modern, premium feel. Use for page titles, session names, hero text.
+- **Body:** Inter — excellent at all sizes, optimized for UI. All body copy, UI labels, navigation, form labels.
+- **UI/Labels:** Inter (same as body) — at 12-14px with medium weight for UI controls
+- **Data/Tables:** Inter with `font-variant-numeric: tabular-nums` — aligned numbers in analytics, timestamps, node counts
 - **Code:** Geist Mono — for BPMN XML preview, technical identifiers
-- **Loading:** Google Fonts for Instrument Serif, self-hosted or CDN for Geist (via Vercel)
+- **Loading:** Google Fonts for Inter, self-hosted for Geist Mono
+- **Font stack:** `font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`
 - **Scale:**
   - `3xl`: 48px / 3rem — page hero (session name on dashboard)
   - `2xl`: 36px / 2.25rem — section headings
@@ -106,9 +107,10 @@ State-based coloring takes priority over type-based colors via CSS markers.
   - Transcript Focus: 20% / 40% / 40%
   - Presets toggled via status bar buttons
 - **Border radius:**
-  - `sm`: 4px — inputs, buttons, small cards
-  - `md`: 6px — standard cards, dropdowns
-  - `lg`: 8px — modals, large containers
+  - `sm`: 6px — inputs, buttons, small cards
+  - `md`: 8px — standard cards, dropdowns
+  - `lg`: 12px — modals, large containers, panels
+  - `xl`: 16px — hero cards, major containers
   - `full`: 9999px — badges, pills, avatar circles
 
 ## Motion

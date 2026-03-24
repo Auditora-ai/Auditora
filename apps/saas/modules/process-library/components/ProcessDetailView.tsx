@@ -54,9 +54,7 @@ import { ConsolidationView } from "./ConsolidationView";
 import { IntelligenceTab } from "@projects/components/IntelligenceTab";
 import { RiskTab } from "@risk/components/RiskTab";
 import { ProcessSchedule } from "@projects/components/ProcessSchedule";
-import { NodeComments } from "@meeting/components/NodeComments";
 import { useBpmnModeler } from "@meeting/hooks/useBpmnModeler";
-import { ProcessCompleteness } from "@meeting/components/ProcessCompleteness";
 // BpmnIntelligence and BpmnVersionDiff available but not rendered inside canvas
 // to avoid breaking modeler interaction. Activated via toolbar toggles.
 import { DocumentList } from "@documents/components/DocumentList";
@@ -592,6 +590,7 @@ function DiagramTab({
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [showEditor, setShowEditor] = useState(!!bpmnXml);
 	const [saving, setSaving] = useState(false);
+	const [repairing, setRepairing] = useState(false);
 	const [fullscreen, setFullscreen] = useState(false);
 	const [commentMode, setCommentMode] = useState(false);
 	const [showIntelligence, setShowIntelligence] = useState(false);
@@ -604,6 +603,8 @@ function DiagramTab({
 	// ─── Single shared hook — same as live sessions ─────────────────
 	const {
 		isReady,
+		renderError,
+		rebuildFromNodes,
 		zoomIn,
 		zoomOut,
 		zoomFit,
@@ -620,9 +621,54 @@ function DiagramTab({
 	} = useBpmnModeler({
 		containerRef: showEditor ? containerRef : { current: null },
 		initialXml: bpmnXml || undefined,
-		// No onConfirmNode/onRejectNode → editor mode (no AI overlays)
 		sessionStatus: "ENDED",
 	});
+
+	// Rebuild diagram from nodes stored in the database
+	const handleRebuildFromNodes = useCallback(async () => {
+		setRepairing(true);
+		try {
+			const res = await fetch(`/api/processes/${processId}/diagram`);
+			if (!res.ok) throw new Error("Failed to fetch diagram data");
+			const data = await res.json();
+			if (data.nodes && data.nodes.length > 0) {
+				await rebuildFromNodes(data.nodes);
+			}
+		} catch (err) {
+			console.error("[DiagramTab] Rebuild failed:", err);
+		} finally {
+			setRepairing(false);
+		}
+	}, [processId, rebuildFromNodes]);
+
+	// AI-powered repair
+	const handleRepairWithAi = useCallback(async () => {
+		setRepairing(true);
+		try {
+			const res = await fetch(`/api/processes/${processId}/repair`, {
+				method: "POST",
+			});
+			if (!res.ok) throw new Error("Repair failed");
+			const data = await res.json();
+			if (data.nodes && data.nodes.length > 0) {
+				await rebuildFromNodes(data.nodes);
+				// Save the repaired diagram
+				const modeler = getModeler();
+				if (modeler) {
+					const { xml } = await modeler.saveXML({ format: true });
+					await fetch(`/api/processes/${processId}/diagram`, {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ bpmnXml: xml }),
+					});
+				}
+			}
+		} catch (err) {
+			console.error("[DiagramTab] AI repair failed:", err);
+		} finally {
+			setRepairing(false);
+		}
+	}, [processId, rebuildFromNodes, getModeler]);
 
 	// Element click for comments
 	useEffect(() => {
@@ -775,26 +821,39 @@ function DiagramTab({
 				}}
 			/>
 
+			{(renderError || repairing) && (
+				<div className="absolute left-1/2 top-2 z-10 -translate-x-1/2 rounded-md border border-amber-300 bg-amber-50 px-4 py-2 text-xs text-amber-800 shadow-sm" style={{ marginTop: fullscreen ? "-calc(100vh - 49px)" : "-600px", position: "relative" }}>
+					<div className="flex items-center gap-3">
+						<span>{repairing ? "Reparando diagrama..." : renderError}</span>
+						{!repairing && (
+							<div className="flex gap-2">
+								<button
+									type="button"
+									onClick={handleRebuildFromNodes}
+									className="rounded bg-amber-200 px-2 py-0.5 text-[10px] font-medium text-amber-900 hover:bg-amber-300 transition-colors"
+								>
+									Regenerar
+								</button>
+								<button
+									type="button"
+									onClick={handleRepairWithAi}
+									className="rounded bg-blue-500 px-2 py-0.5 text-[10px] font-medium text-white hover:bg-blue-600 transition-colors"
+								>
+									Arreglar con IA
+								</button>
+							</div>
+						)}
+					</div>
+				</div>
+			)}
+
 			{!isReady && (
 				<div className="flex items-center justify-center" style={{ height: canvasHeight, marginTop: `-${canvasHeight}` }}>
 					<div className="h-16 w-16 animate-pulse rounded-lg bg-gray-100" />
 				</div>
 			)}
 
-			{commentMode && selectedNode && (
-				<div className="relative" style={{ marginTop: fullscreen ? "calc(-100vh + 49px)" : "-600px", height: fullscreen ? "calc(100vh - 49px)" : "600px", pointerEvents: "none" }}>
-					<div style={{ pointerEvents: "auto" }}>
-						<NodeComments
-							processId={processId}
-							nodeId={selectedNode.nodeId}
-							nodeLabel={selectedNode.label}
-							isOpen={true}
-							onClose={() => setSelectedNode(null)}
-							position={selectedNode.position}
-						/>
-					</div>
-				</div>
-			)}
+			{/* TODO: NodeComments — rebuild from scratch */}
 		</>
 	);
 
@@ -814,11 +873,7 @@ function DiagramTab({
 			{toolbar}
 			{canvas}
 
-			{showIntelligence && (
-				<div className="mt-2">
-					<ProcessCompleteness processId={processId} />
-				</div>
-			)}
+			{/* TODO: ProcessCompleteness — rebuild from scratch */}
 		</div>
 	);
 }

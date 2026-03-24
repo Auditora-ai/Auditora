@@ -70,7 +70,7 @@ export function PricingSection() {
 				isEnterprise,
 				prices,
 				to: isEnterprise
-					? "mailto:sales@prozea.com?subject=Prozea Enterprise"
+					? "mailto:sales@aiprocess.me?subject=aiprocess.me Enterprise"
 					: (signupUrl ?? "#"),
 			});
 		}

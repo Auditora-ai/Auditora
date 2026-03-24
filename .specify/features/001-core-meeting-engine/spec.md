@@ -3,13 +3,13 @@
 **Feature Branch**: `001-core-meeting-engine`
 **Created**: 2026-03-22
 **Status**: Draft
-**Input**: Phase 1 of Prozea — live process elicitation with auto-diagramming
+**Input**: Phase 1 of aiprocess.me — live process elicitation with auto-diagramming
 
 ## User Scenarios & Testing
 
 ### User Story 1 - Live Process Diagramming (Priority: P1)
 
-As a BPM consultant, I start a Prozea session with a meeting link. A bot joins my video call, listens to the conversation, and auto-generates a BPMN process diagram in real-time. I see nodes appear as process steps are discussed, and I can confirm or reject them.
+As a BPM consultant, I start a aiprocess.me session with a meeting link. A bot joins my video call, listens to the conversation, and auto-generates a BPMN process diagram in real-time. I see nodes appear as process steps are discussed, and I can confirm or reject them.
 
 **Why this priority**: This is the core value proposition. Without live diagramming, there is no product.
 
@@ -28,7 +28,7 @@ As a BPM consultant, I start a Prozea session with a meeting link. A bot joins m
 
 As a BPM consultant during a live call, I see a teleprompter panel showing me the next question to ask. The questions adapt based on what has already been discussed and what gaps remain in the process diagram.
 
-**Why this priority**: The teleprompter is what makes Prozea different from "recording + AI summary." It guides the conversation to produce a complete diagram.
+**Why this priority**: The teleprompter is what makes aiprocess.me different from "recording + AI summary." It guides the conversation to produce a complete diagram.
 
 **Independent Test**: Can be tested by feeding a partial transcript and verifying the teleprompter suggests relevant follow-up questions about uncovered process areas.
 
@@ -73,7 +73,7 @@ As a consultant, after a session I can export the process diagram as BPMN 2.0 XM
 
 As a consultant doing an initial engagement, I run a Discovery Session where the AI maps the overall business model and creates a process architecture — a high-level map of all processes the company has. Future Deep-Dive sessions then target individual processes from this architecture.
 
-**Why this priority**: The multi-session workflow mirrors how real BPM consulting works and differentiates Prozea from single-meeting tools.
+**Why this priority**: The multi-session workflow mirrors how real BPM consulting works and differentiates aiprocess.me from single-meeting tools.
 
 **Independent Test**: Can be tested by running a Discovery Session, verifying a process architecture is created, then starting a Deep-Dive session that inherits context from the architecture.
 

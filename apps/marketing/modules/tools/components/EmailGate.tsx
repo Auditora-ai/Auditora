@@ -71,7 +71,7 @@ export function EmailGate({ toolSlug, result, locale, onClose }: EmailGateProps)
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `prozea-${toolSlug}-result.json`;
+    a.download = `aiprocess-${toolSlug}-result.json`;
     a.click();
     URL.revokeObjectURL(url);
   }, [result, toolSlug]);

@@ -1,7 +1,7 @@
 import type { SaasConfig } from "./types";
 
 export const config = {
-	appName: "Prozea",
+	appName: "aiprocess.me",
 	docsUrl: process.env.NEXT_PUBLIC_DOCS_URL as string | undefined,
 	marketingUrl: process.env.NEXT_PUBLIC_MARKETING_URL as string | undefined,
 	enabledThemes: ["light", "dark"],

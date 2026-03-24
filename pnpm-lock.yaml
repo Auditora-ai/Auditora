@@ -689,6 +689,9 @@ importers:
       es-toolkit:
         specifier: 'catalog:'
         version: 1.45.1
+      gsap:
+        specifier: ^3.14.2
+        version: 3.14.2
       hono:
         specifier: 'catalog:'
         version: 4.12.8

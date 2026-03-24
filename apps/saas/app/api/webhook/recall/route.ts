@@ -701,7 +701,7 @@ async function runPostSessionPipelines(sessionId: string, _diagramNodes: any[]) 
 						<a href="${reviewUrl}" style="display: inline-block; background: #2563EB; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 500; margin-top: 16px;">
 							Revisar entregables
 						</a>
-						<p style="color: #94A3B8; font-size: 12px; margin-top: 24px;">— Prozea</p>
+						<p style="color: #94A3B8; font-size: 12px; margin-top: 24px;">— aiprocess.me</p>
 					</div>
 				`,
 			});

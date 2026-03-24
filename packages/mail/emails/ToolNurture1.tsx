@@ -25,7 +25,7 @@ export function ToolNurture1({
 			</Text>
 
 			<Text>
-				With Prozea, an AI bot joins your Zoom/Teams/Meet call and:
+				With aiprocess.me, an AI bot joins your Zoom/Teams/Meet call and:
 			</Text>
 
 			<Text>
@@ -41,13 +41,13 @@ export function ToolNurture1({
 				sheet + executive summary. No post-session work.
 			</Text>
 
-			<PrimaryButton href="https://prozea.com">
-				Try Prozea free &rarr;
+			<PrimaryButton href="https://aiprocess.me">
+				Try aiprocess.me free &rarr;
 			</PrimaryButton>
 
 			<Text style={{ color: "#64748B", fontSize: "14px", marginTop: "24px" }}>
-				You're receiving this because you used a free tool on Prozea.{" "}
-				<Link href="https://prozea.com" style={{ color: "#2563EB" }}>
+				You're receiving this because you used a free tool on aiprocess.me.{" "}
+				<Link href="https://aiprocess.me" style={{ color: "#2563EB" }}>
 					Unsubscribe
 				</Link>
 			</Text>

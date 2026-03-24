@@ -1,7 +1,7 @@
-# Prozea — Development Guide
+# aiprocess.me — Development Guide
 
 ## What is this?
-Prozea is an AI-powered process elicitation platform. It joins video calls, provides consultants with a teleprompter of guided questions, and auto-diagrams business processes live during the meeting using BPMN notation.
+aiprocess.me is an AI-powered process elicitation platform. It joins video calls, provides consultants with a teleprompter of guided questions, and auto-diagrams business processes live during the meeting using BPMN notation.
 
 ## Tech Stack
 - **Framework**: Next.js (via supastarter-nextjs template)

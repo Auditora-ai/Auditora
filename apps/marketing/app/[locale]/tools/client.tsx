@@ -94,12 +94,12 @@ export function ToolsHubClient({ tools, locale }: ToolsHubClientProps) {
           </h2>
           <p className="mb-8 text-[#94A3B8]">
             {isEs
-              ? "Prozea se une a tu videollamada y genera todo automaticamente."
-              : "Prozea joins your video call and generates everything automatically."}
+              ? "aiprocess.me se une a tu videollamada y genera todo automaticamente."
+              : "aiprocess.me joins your video call and generates everything automatically."}
           </p>
           <Button size="lg" className="gap-2" asChild>
             <a href="/signup">
-              {isEs ? "Probar Prozea Gratis" : "Try Prozea Free"}
+              {isEs ? "Probar aiprocess.me Gratis" : "Try aiprocess.me Free"}
               <ArrowRightIcon className="h-4 w-4" />
             </a>
           </Button>

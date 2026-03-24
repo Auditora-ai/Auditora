@@ -2,7 +2,7 @@
 /**
  * Session Simulation — AI Pipeline Latency Auditor
  *
- * Replays a real meeting transcript through the Prozea AI pipelines
+ * Replays a real meeting transcript through the aiprocess.me AI pipelines
  * (process extraction + teleprompter) using the REAL Claude API,
  * measuring latency at every stage.
  *

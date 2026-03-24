@@ -59,7 +59,7 @@ export class RecallAiProvider implements CallBotProvider {
       },
       body: JSON.stringify({
         meeting_url: meetingUrl,
-        bot_name: "Prozea",
+        bot_name: "aiprocess.me",
         recording_config: {
           transcript: {
             provider: {

@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { DeliverablesGrid } from "@deliverables/components/DeliverablesGrid";
 
 export const metadata = {
-  title: "Entregables — Prozea",
+  title: "Entregables — aiprocess.me",
 };
 
 export default async function DeliverablesPage({

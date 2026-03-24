@@ -1,4 +1,4 @@
-# Prozea Constitution
+# aiprocess.me Constitution
 
 ## Core Principles
 

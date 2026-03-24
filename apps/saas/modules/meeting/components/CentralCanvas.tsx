@@ -1,0 +1,197 @@
+"use client";
+
+import { useCallback, type RefObject } from "react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { useLiveSessionContext } from "../context/LiveSessionContext";
+import {
+	Undo2Icon,
+	Redo2Icon,
+	MaximizeIcon,
+	GridIcon,
+	AlertTriangleIcon,
+	WrenchIcon,
+	Loader2Icon,
+} from "lucide-react";
+
+import "bpmn-js/dist/assets/diagram-js.css";
+import "bpmn-js/dist/assets/bpmn-js.css";
+import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
+import "../styles/bpmn-editor.css";
+
+interface CentralCanvasProps {
+	containerRef: RefObject<HTMLDivElement | null>;
+}
+
+export function CentralCanvas({ containerRef }: CentralCanvasProps) {
+	const { modelerApi, diagramHealth, nodes, processId } = useLiveSessionContext();
+	const [repairing, setRepairing] = useState(false);
+
+	const handleRepair = async () => {
+		if (!processId) return;
+		setRepairing(true);
+		try {
+			const res = await fetch(`/api/processes/${processId}/repair`, { method: "POST" });
+			if (!res.ok) throw new Error(`HTTP ${res.status}`);
+			toast.success("Diagrama reparado");
+		} catch (err) {
+			console.error("[CentralCanvas] Repair failed:", err);
+			toast.error("Error al reparar diagrama");
+		} finally {
+			setRepairing(false);
+		}
+	};
+
+	const handleDragOver = useCallback((e: React.DragEvent) => {
+		const type = e.dataTransfer.types.includes("application/bpmn-element");
+		if (type) {
+			e.preventDefault();
+			e.dataTransfer.dropEffect = "copy";
+		}
+	}, []);
+
+	const handleDrop = useCallback(
+		(e: React.DragEvent) => {
+			e.preventDefault();
+			const elementType = e.dataTransfer.getData("application/bpmn-element");
+			if (!elementType || !modelerApi?.isReady) return;
+
+			const modeler = modelerApi.getModeler();
+			if (!modeler) return;
+
+			const canvas = modeler.get("canvas");
+			const modeling = modeler.get("modeling");
+			const elementFactory = modeler.get("elementFactory");
+
+			const rect = containerRef.current?.getBoundingClientRect();
+			if (!rect) return;
+
+			const viewbox = canvas.viewbox();
+			const x = (e.clientX - rect.left) / viewbox.scale + viewbox.x;
+			const y = (e.clientY - rect.top) / viewbox.scale + viewbox.y;
+
+			const shape = elementFactory.createShape({ type: elementType });
+			modeling.createShape(shape, { x, y }, canvas.getRootElement());
+		},
+		[modelerApi, containerRef],
+	);
+
+	return (
+		<div
+			className="relative overflow-hidden bg-white"
+			style={{ gridArea: "canvas" }}
+			onDragOver={handleDragOver}
+			onDrop={handleDrop}
+		>
+			{/* bpmn-js mounts here */}
+			<div
+				ref={containerRef}
+				className="live-session bpmn-editor-canvas absolute inset-0"
+			/>
+
+			{/* Empty state */}
+			{modelerApi?.isReady && nodes.length === 0 && (
+				<div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+					<p className="text-sm text-[#94A3B8]">
+						El diagrama aparecera aqui conforme avance la sesion
+					</p>
+				</div>
+			)}
+
+			{/* Loading state */}
+			{!modelerApi?.isReady && (
+				<div className="absolute inset-0 flex items-center justify-center bg-white">
+					<div className="h-16 w-16 animate-pulse rounded-xl bg-gray-100" />
+				</div>
+			)}
+
+			{/* Render error */}
+			{modelerApi?.renderError && (
+				<div className="absolute inset-0 flex items-center justify-center bg-white">
+					<p className="text-sm text-red-600">{modelerApi.renderError}</p>
+				</div>
+			)}
+
+			{/* Diagram health banner */}
+			{diagramHealth.needsRepair && (
+				<div className="absolute left-1/2 top-3 z-10 flex -translate-x-1/2 items-center gap-2 rounded-xl bg-amber-50 px-4 py-2 text-xs text-amber-800 shadow-sm">
+					<AlertTriangleIcon className="h-3.5 w-3.5" />
+					{diagramHealth.warningCount} problemas detectados
+					{processId && (
+						<button
+							type="button"
+							onClick={handleRepair}
+							disabled={repairing}
+							className="ml-2 flex items-center gap-1 rounded-lg bg-amber-600 px-2 py-1 text-[10px] font-medium text-white transition-colors hover:bg-amber-700 disabled:opacity-50"
+						>
+							{repairing ? (
+								<Loader2Icon className="h-3 w-3 animate-spin" />
+							) : (
+								<WrenchIcon className="h-3 w-3" />
+							)}
+							Reparar con IA
+						</button>
+					)}
+				</div>
+			)}
+
+			{/* Floating tools */}
+			{modelerApi?.isReady && (
+				<div className="absolute bottom-4 left-4 z-10 flex items-center gap-1 rounded-xl bg-[#0F172A]/90 p-1.5 shadow-lg backdrop-blur-sm">
+					<ToolButton
+						icon={<Undo2Icon className="h-4 w-4" />}
+						onClick={() => modelerApi.undo()}
+						disabled={!modelerApi.canUndo}
+						title="Deshacer"
+					/>
+					<ToolButton
+						icon={<Redo2Icon className="h-4 w-4" />}
+						onClick={() => modelerApi.redo()}
+						disabled={!modelerApi.canRedo}
+						title="Rehacer"
+					/>
+					<div className="mx-1 h-5 w-px bg-[#334155]" />
+					<ToolButton
+						icon={<MaximizeIcon className="h-4 w-4" />}
+						onClick={() => modelerApi.zoomFit()}
+						title="Ajustar al viewport"
+					/>
+					<ToolButton
+						icon={<GridIcon className="h-4 w-4" />}
+						onClick={() => modelerApi.toggleGrid()}
+						active={modelerApi.gridEnabled}
+						title="Toggle grid"
+					/>
+				</div>
+			)}
+		</div>
+	);
+}
+
+function ToolButton({
+	icon,
+	onClick,
+	disabled,
+	active,
+	title,
+}: {
+	icon: React.ReactNode;
+	onClick: () => void;
+	disabled?: boolean;
+	active?: boolean;
+	title: string;
+}) {
+	return (
+		<button
+			type="button"
+			onClick={onClick}
+			disabled={disabled}
+			title={title}
+			className={`rounded-lg p-2 text-[#94A3B8] transition-colors duration-75 hover:bg-[#334155] hover:text-white disabled:cursor-not-allowed disabled:opacity-30 ${
+				active ? "bg-[#334155] text-white" : ""
+			}`}
+		>
+			{icon}
+		</button>
+	);
+}

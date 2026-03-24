@@ -195,7 +195,7 @@
 		"title": "Elige tu plan",
 		"description": "Para continuar, por favor selecciona un plan.",
 		"trialExpiredTitle": "Tu prueba ha terminado",
-		"trialExpiredDescription": "Tu prueba gratis de 14 días ha expirado. Elige un plan para seguir usando Prozea."
+		"trialExpiredDescription": "Tu prueba gratis de 14 días ha expirado. Elige un plan para seguir usando aiprocess.me."
 	},
 	"documentation": {
 		"title": "Documentación"
@@ -208,7 +208,7 @@
 	},
 	"onboarding": {
 		"welcome": {
-			"title": "Bienvenido a Prozea",
+			"title": "Bienvenido a aiprocess.me",
 			"subtitle": "Tu plataforma de elicitación de procesos con IA",
 			"step1": "Crea un cliente",
 			"step1Desc": "La empresa cuyos procesos vas a mapear",
@@ -606,7 +606,7 @@
 			"title": "Arquitectura de Procesos",
 			"aiStat": "IA extrajo {nodes} actividades de {sessions} conversaciones",
 			"demoTitle": "Esto es lo que la IA genera",
-			"demoSubtitle": "Inicia una conversación y Prozea extraerá automáticamente los diagramas de procesos"
+			"demoSubtitle": "Inicia una conversación y aiprocess.me extraerá automáticamente los diagramas de procesos"
 		},
 		"cta": {
 			"firstDiscovery": "Descubre tu primer proceso",
@@ -629,7 +629,7 @@
 			"empty": "Sin procesos mapeados aún"
 		},
 		"insight": {
-			"title": "Prozea IA",
+			"title": "aiprocess.me IA",
 			"empty": "Inicia una conversación con la IA para descubrir tus procesos de negocio.",
 			"noSupport": "Has mapeado {count} procesos pero ninguno de soporte. Sugerencia: descubre IT, Facilities o RRHH.",
 			"fewCore": "Tienes {count} procesos core. Industrias similares suelen tener 5-7. ¿Qué otros procesos son esenciales?",
