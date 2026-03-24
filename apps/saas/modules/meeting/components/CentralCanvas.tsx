@@ -78,15 +78,17 @@ export function CentralCanvas({ containerRef }: CentralCanvasProps) {
 
 	return (
 		<div
-			className="live-session relative overflow-hidden bg-white"
-			style={{ gridArea: "canvas" }}
+			className="live-session relative overflow-hidden"
+			style={{ gridArea: "canvas", colorScheme: "light", background: "#ffffff" }}
 			onDragOver={handleDragOver}
 			onDrop={handleDrop}
+			data-theme="light"
 		>
 			{/* bpmn-js mounts here — same pattern as DiagramEditor (no extra classes) */}
 			<div
 				ref={containerRef}
 				className="bpmn-editor-canvas absolute inset-0"
+				style={{ background: "#ffffff" }}
 			/>
 
 			{/* Empty state */}

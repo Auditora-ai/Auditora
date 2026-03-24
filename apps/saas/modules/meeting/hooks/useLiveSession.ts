@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { DiagramNode, BotActivity, TranscriptEntry } from "../types";
 import type { DiagramHealth } from "../context/LiveSessionContext";
 
@@ -53,78 +53,85 @@ export function useLiveSession(
 	const failCountRef = useRef(0);
 	const stoppedRef = useRef(false);
 
-	const poll = useCallback(async () => {
-		if (stoppedRef.current) return;
+	// Use refs for modelerApi and aiEnabled to avoid recreating the poll callback
+	const modelerApiRef = useRef(modelerApi);
+	const aiEnabledRef = useRef(aiEnabled);
+	modelerApiRef.current = modelerApi;
+	aiEnabledRef.current = aiEnabled;
 
-		try {
-			const res = await fetch(`/api/sessions/${sessionId}/live-data`);
-
-			if (res.status === 404) {
-				stoppedRef.current = true;
-				return;
-			}
-
-			if (!res.ok) {
-				failCountRef.current++;
-				return;
-			}
-
-			failCountRef.current = 0;
-			const json = await res.json();
-
-			const newNodes: DiagramNode[] = (json.nodes || []).map((n: any) => ({
-				id: n.id,
-				type: n.type,
-				label: n.label,
-				state: n.state,
-				lane: n.lane || undefined,
-				connections: n.connections || [],
-				confidence: n.confidence ?? null,
-			}));
-
-			// Diff nodes to avoid unnecessary mergeAiNodes calls
-			const nodesKey = JSON.stringify(newNodes.map((n) => `${n.id}:${n.state}:${n.label}`));
-			const nodesChanged = nodesKey !== prevNodesRef.current;
-
-			if (nodesChanged && modelerApi?.isReady && aiEnabled) {
-				modelerApi.mergeAiNodes(newNodes);
-				prevNodesRef.current = nodesKey;
-			}
-
-			setData({
-				sessionStatus: json.status || "ACTIVE",
-				transcript: json.transcript || [],
-				nodes: newNodes,
-				teleprompterQuestion: json.teleprompterQuestion || null,
-				questionQueue: json.questionQueue || [],
-				completenessScore: json.completenessScore ?? null,
-				sipocCoverage: json.sipocCoverage ?? null,
-				gapType: json.gapType ?? null,
-				botActivity: json.botActivity || DEFAULT_BOT_ACTIVITY,
-				diagramHealth: json.diagramHealth || DEFAULT_HEALTH,
-			});
-
-			if (json.status === "ENDED") {
-				stoppedRef.current = true;
-			}
-		} catch {
-			failCountRef.current++;
-		}
-	}, [sessionId, modelerApi, aiEnabled]);
-
+	// Single stable effect — only depends on sessionId (never recreated)
 	useEffect(() => {
 		stoppedRef.current = false;
 		failCountRef.current = 0;
+		prevNodesRef.current = "";
+
+		async function poll() {
+			if (stoppedRef.current) return;
+
+			try {
+				const res = await fetch(`/api/sessions/${sessionId}/live-data`);
+
+				if (res.status === 404) {
+					stoppedRef.current = true;
+					return;
+				}
+
+				if (!res.ok) {
+					failCountRef.current++;
+					return;
+				}
+
+				failCountRef.current = 0;
+				const json = await res.json();
+
+				const newNodes: DiagramNode[] = (json.nodes || []).map((n: any) => ({
+					id: n.id,
+					type: n.type,
+					label: n.label,
+					state: n.state,
+					lane: n.lane || undefined,
+					connections: n.connections || [],
+					confidence: n.confidence ?? null,
+				}));
+
+				// Diff nodes to avoid unnecessary mergeAiNodes calls
+				const nodesKey = JSON.stringify(newNodes.map((n) => `${n.id}:${n.state}:${n.label}`));
+				const nodesChanged = nodesKey !== prevNodesRef.current;
+
+				const api = modelerApiRef.current;
+				if (nodesChanged && api?.isReady && aiEnabledRef.current) {
+					api.mergeAiNodes(newNodes);
+					prevNodesRef.current = nodesKey;
+				}
+
+				setData({
+					sessionStatus: json.status || "ACTIVE",
+					transcript: json.transcript || [],
+					nodes: newNodes,
+					teleprompterQuestion: json.teleprompterQuestion || null,
+					questionQueue: json.questionQueue || [],
+					completenessScore: json.completenessScore ?? null,
+					sipocCoverage: json.sipocCoverage ?? null,
+					gapType: json.gapType ?? null,
+					botActivity: json.botActivity || DEFAULT_BOT_ACTIVITY,
+					diagramHealth: json.diagramHealth || DEFAULT_HEALTH,
+				});
+
+				if (json.status === "ENDED") {
+					stoppedRef.current = true;
+				}
+			} catch {
+				failCountRef.current++;
+			}
+		}
 
 		// Initial poll
 		poll();
 
-		// Poll interval with backoff on failures
+		// Poll every 3 seconds with backoff on failures
 		const id = setInterval(() => {
 			if (stoppedRef.current) return;
-			const backoff = Math.min(failCountRef.current, 3);
-			if (backoff > 0) {
-				// Skip this interval if in backoff (simple approach)
+			if (failCountRef.current > 0) {
 				failCountRef.current--;
 				return;
 			}
@@ -135,7 +142,7 @@ export function useLiveSession(
 			clearInterval(id);
 			stoppedRef.current = true;
 		};
-	}, [poll]);
+	}, [sessionId]);
 
 	return data;
 }
