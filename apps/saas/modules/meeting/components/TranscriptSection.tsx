@@ -183,12 +183,13 @@ export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 							/>
 						))}
 						{processingText && (
-							<div className="flex items-start gap-2 rounded-lg border-l-2 border-[#7C3AED]/50 bg-[#7C3AED]/5 px-2 py-1.5 animate-pulse">
-								<Loader2Icon className="mt-0.5 h-3 w-3 flex-shrink-0 animate-spin text-[#7C3AED]" />
-								<div>
-									<span className="text-[10px] font-medium text-[#7C3AED]">IA analizando</span>
-									<p className="mt-0.5 text-[11px] text-[#94A3B8]">{processingText}</p>
+							<div className="rounded-lg px-2 py-1.5 animate-pulse">
+								<div className="flex items-baseline gap-2">
+									<span className="text-[10px] font-medium text-[#7C3AED]">IA</span>
+									<Loader2Icon className="h-2.5 w-2.5 animate-spin text-[#64748B]" />
+									<span className="text-[10px] text-[#64748B]">analizando</span>
 								</div>
+								<p className="mt-0.5 text-xs leading-relaxed text-[#94A3B8]">{processingText}</p>
 							</div>
 						)}
 					</div>
