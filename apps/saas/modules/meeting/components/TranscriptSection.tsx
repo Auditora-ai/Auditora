@@ -313,9 +313,7 @@ function TranscriptLine({ entry, sessionId }: { entry: TranscriptEntry; sessionI
 	if (hidden) return null;
 
 	return (
-		<div className={`group rounded-lg px-2 py-1.5 transition-colors duration-75 hover:bg-[#1E293B] ${
-			isManual ? "border-l-2 border-[#2563EB]/50 bg-[#2563EB]/5" : ""
-		}`}>
+		<div className="group rounded-lg px-2 py-1.5 transition-colors duration-75 hover:bg-[#1E293B]">
 			<div className="flex items-baseline gap-2">
 				<span
 					className="text-[10px] font-medium"
