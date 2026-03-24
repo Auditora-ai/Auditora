@@ -411,10 +411,23 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 			const condLabel = (n as any).connectionLabels?.[ci];
 			const nameAttr = condLabel ? ` name="${esc(condLabel)}"` : "";
 			flowsXml += `    <bpmn:sequenceFlow id="${fid}"${nameAttr} sourceRef="${n.id}" targetRef="${targetId}" />\n`;
-			edgesXml += `    <bpmndi:BPMNEdge id="${fid}_di" bpmnElement="${fid}">
-      <di:waypoint x="${x + d.w}" y="${y + d.h / 2}" />
-      <di:waypoint x="${tx}" y="${ty + td.h / 2}" />
-    </bpmndi:BPMNEdge>\n`;
+
+			// Orthogonal routing (Manhattan — right angles only)
+			const sx = x + d.w;          // source: right edge
+			const sy = y + d.h / 2;      // source: vertical center
+			const ex = tx;               // target: left edge
+			const ey = ty + td.h / 2;    // target: vertical center
+
+			let waypoints: string;
+			if (Math.abs(sy - ey) < 5) {
+				// Same Y — straight horizontal line
+				waypoints = `      <di:waypoint x="${sx}" y="${sy}" />\n      <di:waypoint x="${ex}" y="${ey}" />`;
+			} else {
+				// Different Y — orthogonal L-shape or Z-shape routing
+				const midX = Math.round((sx + ex) / 2);
+				waypoints = `      <di:waypoint x="${sx}" y="${sy}" />\n      <di:waypoint x="${midX}" y="${sy}" />\n      <di:waypoint x="${midX}" y="${ey}" />\n      <di:waypoint x="${ex}" y="${ey}" />`;
+			}
+			edgesXml += `    <bpmndi:BPMNEdge id="${fid}_di" bpmnElement="${fid}">\n${waypoints}\n    </bpmndi:BPMNEdge>\n`;
 		}
 	}
 

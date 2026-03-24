@@ -273,8 +273,28 @@ export function useBpmnModeler({
 				const xml = buildBpmnXml(rebuildNodes);
 				await modeler.importXML(xml);
 				const canvas = modeler.get("canvas");
+				const elementRegistry = modeler.get("elementRegistry");
+				const modeling = modeler.get("modeling");
+
+				// Re-layout all connections using bpmn-js orthogonal router
+				try {
+					const connections = elementRegistry.filter(
+						(el: any) => el.type === "bpmn:SequenceFlow",
+					);
+					for (const conn of connections) {
+						try {
+							modeling.layoutConnection(conn);
+						} catch {
+							// Some connections may not support layout
+						}
+					}
+				} catch {
+					// Layout service may not be available
+				}
+
 				canvas.zoom("fit-viewport", "auto");
 				applyBizagiColors(modeler);
+				forceCanvasWhite(containerRef.current);
 
 				// Reset incremental state
 				bootstrappedRef.current = true;
