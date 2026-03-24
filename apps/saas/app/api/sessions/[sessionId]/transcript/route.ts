@@ -176,20 +176,68 @@ async function runManualExtraction(sessionId: string, entryId?: string) {
 		outOfScope: result.outOfScope?.length ?? 0,
 	});
 
-	// Create new diagram nodes
+	// Create new diagram nodes — two-pass to fix AI ID → DB ID mapping
 	if (result.newNodes && result.newNodes.length > 0) {
+		const aiIdToDbId = new Map<string, string>();
+
+		// Pass 1: Create all nodes (connections empty for now)
 		for (const node of result.newNodes) {
-			await db.diagramNode.create({
+			const created = await db.diagramNode.create({
 				data: {
 					sessionId,
 					nodeType: toNodeType(node.type),
 					label: node.label,
 					state: "FORMING",
 					lane: node.lane || null,
-					connections: [node.connectTo].filter(Boolean) as string[],
+					connections: [],
 				},
 			});
-			console.log(`[Transcript] +Node: [${node.type}] "${node.label}" (lane: ${node.lane || "none"})`);
+			aiIdToDbId.set(node.id, created.id);
+			console.log(`[Transcript] +Node: [${node.type}] "${node.label}" (AI:${node.id} → DB:${created.id})`);
+		}
+
+		// Pass 2: Fix connections (map AI IDs to DB IDs, or find existing nodes by ID)
+		for (const node of result.newNodes) {
+			const dbId = aiIdToDbId.get(node.id);
+			if (!dbId) continue;
+
+			const connections: string[] = [];
+
+			if (node.connectTo) {
+				// Try: is it another new node? Map AI ID → DB ID
+				const mappedId = aiIdToDbId.get(node.connectTo);
+				if (mappedId) {
+					connections.push(mappedId);
+				} else {
+					// Try: is it an existing node in the session?
+					const existing = await db.diagramNode.findFirst({
+						where: { id: node.connectTo, sessionId },
+						select: { id: true },
+					});
+					if (existing) {
+						connections.push(existing.id);
+					}
+					// Otherwise: skip broken connection
+				}
+			}
+
+			if (node.connectFrom) {
+				// connectFrom: another node should connect TO this node
+				const fromDbId = aiIdToDbId.get(node.connectFrom);
+				const fromId = fromDbId || node.connectFrom;
+				// Add this node's dbId to the source node's connections
+				await db.diagramNode.updateMany({
+					where: { id: fromId, sessionId },
+					data: { connections: { push: dbId } },
+				}).catch(() => {});
+			}
+
+			if (connections.length > 0) {
+				await db.diagramNode.update({
+					where: { id: dbId },
+					data: { connections },
+				});
+			}
 		}
 	}
 

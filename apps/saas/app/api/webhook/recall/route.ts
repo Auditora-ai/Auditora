@@ -354,29 +354,20 @@ async function runExtraction(sessionId: string) {
 			context,
 		);
 
-		// Store new nodes
+		// Store new nodes — two-pass to fix AI ID → DB ID connections
+		const typeMap: Record<string, string> = {
+			startevent: "START_EVENT", endevent: "END_EVENT", task: "TASK",
+			usertask: "USER_TASK", servicetask: "SERVICE_TASK", manualtask: "MANUAL_TASK",
+			businessruletask: "BUSINESS_RULE_TASK", subprocess: "SUBPROCESS",
+			exclusivegateway: "EXCLUSIVE_GATEWAY", parallelgateway: "PARALLEL_GATEWAY",
+			timerevent: "TIMER_EVENT", messageevent: "MESSAGE_EVENT", intermediateevent: "TIMER_EVENT",
+		};
+
+		const aiIdToDbId = new Map<string, string>();
+
+		// Pass 1: Create all nodes without connections
 		for (const newNode of result.newNodes) {
-			const posX = 200 + currentNodes.length * 200;
-			const posY = 200;
-
-			// Map LLM node type (camelCase) to Prisma enum (UPPER_SNAKE_CASE)
-			const typeMap: Record<string, string> = {
-				startevent: "START_EVENT",
-				endevent: "END_EVENT",
-				task: "TASK",
-				usertask: "USER_TASK",
-				servicetask: "SERVICE_TASK",
-				manualtask: "MANUAL_TASK",
-				businessruletask: "BUSINESS_RULE_TASK",
-				subprocess: "SUBPROCESS",
-				exclusivegateway: "EXCLUSIVE_GATEWAY",
-				parallelgateway: "PARALLEL_GATEWAY",
-				timerevent: "TIMER_EVENT",
-				messageevent: "MESSAGE_EVENT",
-				intermediateevent: "TIMER_EVENT",
-			};
-
-			await db.diagramNode.create({
+			const created = await db.diagramNode.create({
 				data: {
 					sessionId,
 					nodeType: (typeMap[newNode.type.toLowerCase()] || "TASK") as any,
@@ -384,13 +375,42 @@ async function runExtraction(sessionId: string) {
 					state: "FORMING",
 					lane: newNode.lane || null,
 					confidence: newNode.confidence,
-					positionX: posX,
-					positionY: posY,
-					connections: newNode.connectTo ? [newNode.connectTo] : [],
+					connections: [],
 				},
 			});
+			aiIdToDbId.set(newNode.id, created.id);
+			console.log(`[Extraction] New node: "${newNode.label}" (${newNode.id} → ${created.id})`);
+		}
 
-			console.log(`[Extraction] New node: "${newNode.label}"`);
+		// Pass 2: Wire connections (AI ID → DB ID)
+		for (const newNode of result.newNodes) {
+			const dbId = aiIdToDbId.get(newNode.id);
+			if (!dbId) continue;
+
+			const connections: string[] = [];
+			if (newNode.connectTo) {
+				const mapped = aiIdToDbId.get(newNode.connectTo);
+				if (mapped) {
+					connections.push(mapped);
+				} else {
+					// Try existing node
+					const existing = currentNodes.find(n => n.id === newNode.connectTo);
+					if (existing) connections.push(existing.id);
+				}
+			}
+			if (newNode.connectFrom) {
+				const fromDbId = aiIdToDbId.get(newNode.connectFrom) || newNode.connectFrom;
+				await db.diagramNode.updateMany({
+					where: { id: fromDbId, sessionId },
+					data: { connections: { push: dbId } },
+				}).catch(() => {});
+			}
+			if (connections.length > 0) {
+				await db.diagramNode.update({
+					where: { id: dbId },
+					data: { connections },
+				}).catch(() => {});
+			}
 		}
 
 		// Log out-of-scope topics

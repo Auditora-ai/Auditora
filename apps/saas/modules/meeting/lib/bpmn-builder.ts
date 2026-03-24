@@ -222,35 +222,52 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 		connections: [],
 	});
 
-	// --- Wire start/end based on actual graph topology ---
-
-	// Build incoming-connections map
-	const incoming = new Map<string, string[]>();
-	for (const n of ordered) {
-		if (n.id === "_start" || n.id === "_end") continue;
-		for (const target of n.connections) {
-			if (!incoming.has(target)) incoming.set(target, []);
-			incoming.get(target)!.push(n.id);
-		}
-	}
-
-	// Root nodes: no other node connects TO them (excluding _start, _end)
+	// --- Check if connections are mostly broken (AI ID mismatch) ---
 	const middleNodes = ordered.filter(
 		(n) => n.id !== "_start" && n.id !== "_end",
 	);
-	const roots = middleNodes.filter((n) => !incoming.has(n.id));
+	const totalConnections = middleNodes.reduce((sum, n) => sum + n.connections.length, 0);
 
-	// If there are no roots (everything has an incoming), connect start to the first middle node
-	if (roots.length === 0 && middleNodes.length > 0) {
+	// If less than 30% of middle nodes have valid connections,
+	// connections are broken — fall back to sequential order
+	if (middleNodes.length >= 2 && totalConnections < middleNodes.length * 0.3) {
+		console.log(`[bpmn-builder] Broken connections detected (${totalConnections}/${middleNodes.length}). Using sequential order.`);
+		// Wire nodes sequentially: first → second → third → ...
+		for (let i = 0; i < middleNodes.length - 1; i++) {
+			middleNodes[i].connections = [middleNodes[i + 1].id];
+		}
+		// Last middle node → end
+		middleNodes[middleNodes.length - 1].connections = ["_end"];
+		// Start → first middle node
 		ordered[0].connections = [middleNodes[0].id];
 	} else {
-		ordered[0].connections = roots.map((r) => r.id);
-	}
+		// --- Wire start/end based on actual graph topology ---
 
-	// Terminal nodes: they have no outgoing connections
-	const terminals = middleNodes.filter((n) => n.connections.length === 0);
-	for (const t of terminals) {
-		t.connections = ["_end"];
+		// Build incoming-connections map
+		const incoming = new Map<string, string[]>();
+		for (const n of ordered) {
+			if (n.id === "_start" || n.id === "_end") continue;
+			for (const target of n.connections) {
+				if (!incoming.has(target)) incoming.set(target, []);
+				incoming.get(target)!.push(n.id);
+			}
+		}
+
+		// Root nodes: no other node connects TO them
+		const roots = middleNodes.filter((n) => !incoming.has(n.id));
+
+		// If there are no roots, connect start to the first middle node
+		if (roots.length === 0 && middleNodes.length > 0) {
+			ordered[0].connections = [middleNodes[0].id];
+		} else {
+			ordered[0].connections = roots.map((r) => r.id);
+		}
+
+		// Terminal nodes: they have no outgoing connections
+		const terminals = middleNodes.filter((n) => n.connections.length === 0);
+		for (const t of terminals) {
+			t.connections = ["_end"];
+		}
 	}
 
 	// --- Compute layout ---
