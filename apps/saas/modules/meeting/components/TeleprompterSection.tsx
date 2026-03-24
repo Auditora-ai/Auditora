@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
-import { SparklesIcon, ClipboardCopyIcon, PlusCircleIcon, Loader2Icon } from "lucide-react";
+import { SparklesIcon } from "lucide-react";
 import { toast } from "sonner";
 import type { DiagramNode } from "../types";
 import { useLiveSessionContext } from "../context/LiveSessionContext";
@@ -147,8 +147,6 @@ export function TeleprompterSection({
 	compact,
 }: TeleprompterSectionProps) {
 	const { sessionId, nodes } = useLiveSessionContext();
-	const [addingToDiagram, setAddingToDiagram] = useState(false);
-	const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
 	const [expandedQ, setExpandedQ] = useState<number | null>(null);
 	const [answerText, setAnswerText] = useState("");
 	const [manuallyAnswered, setManuallyAnswered] = useState<Set<number>>(new Set());
@@ -169,34 +167,27 @@ export function TeleprompterSection({
 		return new Set([...resolvedByDiagram, ...manuallyAnswered]);
 	}, [resolvedByDiagram, manuallyAnswered]);
 
-	const handleCopy = useCallback((text: string, idx?: number) => {
-		navigator.clipboard.writeText(text);
-		toast.success("Pregunta copiada al portapapeles");
-		if (idx !== undefined) {
-			setCopiedIdx(idx);
-			setTimeout(() => setCopiedIdx(null), 2000);
-		}
-	}, []);
+	const [answeredAiQuestions, setAnsweredAiQuestions] = useState<Set<string>>(new Set());
 
-	const handleAddToDiagram = useCallback(async (text: string) => {
-		if (!sessionId) return;
-		setAddingToDiagram(true);
+	const handleAnswerAiQuestion = useCallback(async (question?: string) => {
+		if (!sessionId || !answerText.trim()) return;
+		const q = question || currentQuestion || "";
+		const fullText = `[Pregunta: ${q}] Respuesta: ${answerText.trim()}`;
 		try {
-			// Route through transcript API so AI extraction interprets it
 			const res = await fetch(`/api/sessions/${sessionId}/transcript`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ text: `Agregar al proceso: ${text}` }),
+				body: JSON.stringify({ text: fullText }),
 			});
 			if (!res.ok) throw new Error(`HTTP ${res.status}`);
-			toast.success("IA procesando sugerencia...");
-		} catch (err) {
-			console.error("[TeleprompterSection] Add to diagram failed:", err);
-			toast.error("Error al procesar sugerencia");
-		} finally {
-			setAddingToDiagram(false);
+			toast.success("IA procesando respuesta...");
+			setAnswerText("");
+			setExpandedQ(null);
+			setAnsweredAiQuestions((prev) => new Set([...prev, q]));
+		} catch {
+			toast.error("Error al enviar respuesta");
 		}
-	}, [sessionId]);
+	}, [sessionId, answerText, currentQuestion]);
 
 	const handleAnswer = useCallback(async (questionIdx: number) => {
 		if (!sessionId || !answerText.trim()) return;
@@ -305,46 +296,59 @@ export function TeleprompterSection({
 			{/* Questions */}
 			<div className="flex-1 overflow-y-auto p-3">
 				{hasAiSuggestions ? (
-					/* AI-generated questions from teleprompter pipeline */
-					<div className="space-y-3">
-						<div className="rounded-xl bg-white/10 p-3 backdrop-blur-sm">
-							<p className="text-sm font-medium leading-relaxed text-[#F1F5F9]">
-								{currentQuestion}
+					/* AI-generated questions — same interactive pattern as SIPOC */
+					<div className="space-y-1.5">
+						<p className="mb-2 text-[10px] font-medium uppercase tracking-wider text-[#64748B]">
+							Preguntas del proceso
+						</p>
+						{/* All questions (current + past), filter answered */}
+						{[currentQuestion, ...questionQueue]
+							.filter((q): q is string => !!q && !answeredAiQuestions.has(q))
+							.map((q, i) => {
+								const dimColor = gapType
+									? SIPOC_DIMENSIONS.find((d) => d.label === gapType)?.color || "#2563EB"
+									: "#2563EB";
+								const dimLabel = gapType || "P";
+								return (
+									<div key={`ai-${i}`}>
+										<button
+											type="button"
+											onClick={() => {
+												if (expandedQ === 200 + i) { setExpandedQ(null); }
+												else { setExpandedQ(200 + i); setAnswerText(""); }
+											}}
+											className="group flex w-full items-start gap-2 rounded-lg p-2 text-left transition-colors hover:bg-[#1E293B]"
+										>
+											<span
+												className="mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center rounded text-[9px] font-bold text-white"
+												style={{ backgroundColor: dimColor }}
+											>
+												{dimLabel}
+											</span>
+											<span className="text-[11px] leading-relaxed text-[#E2E8F0]">{q}</span>
+										</button>
+										{expandedQ === 200 + i && (
+											<div className="ml-6 mt-1 flex gap-1.5 pb-1">
+												<input
+													type="text"
+													value={answerText}
+													onChange={(e) => setAnswerText(e.target.value)}
+													onKeyDown={(e) => e.key === "Enter" && handleAnswerAiQuestion(q)}
+													placeholder="Escribe la respuesta..."
+													autoFocus
+													className="flex-1 rounded-lg bg-[#1E293B] px-2.5 py-1.5 text-[11px] text-[#F1F5F9] placeholder-[#64748B] outline-none ring-1 ring-[#334155] focus:ring-[#2563EB]"
+												/>
+												<button type="button" onClick={() => handleAnswerAiQuestion(q)} disabled={!answerText.trim()} className="rounded-lg bg-[#2563EB] px-2 py-1.5 text-[10px] font-medium text-white disabled:opacity-40">+</button>
+											</div>
+										)}
+									</div>
+								);
+							})}
+						{answeredAiQuestions.size > 0 && (
+							<p className="mt-2 text-center text-[10px] text-[#64748B]">
+								{answeredAiQuestions.size} pregunta{answeredAiQuestions.size > 1 ? "s" : ""} respondida{answeredAiQuestions.size > 1 ? "s" : ""}
 							</p>
-							<div className="mt-2.5 flex gap-2">
-								<button
-									type="button"
-									onClick={() => handleCopy(currentQuestion!)}
-									className="flex items-center gap-1 rounded-lg bg-[#2563EB] px-2.5 py-1.5 text-[10px] font-medium text-white transition-colors hover:bg-[#1D4ED8]"
-								>
-									<ClipboardCopyIcon className="h-3 w-3" />
-									Copiar pregunta
-								</button>
-								<button
-									type="button"
-									onClick={() => handleAddToDiagram(currentQuestion!)}
-									disabled={addingToDiagram}
-									className="flex items-center gap-1 rounded-lg bg-[#1E293B] px-2.5 py-1.5 text-[10px] font-medium text-[#94A3B8] transition-colors hover:bg-[#334155] hover:text-white disabled:opacity-50"
-								>
-									{addingToDiagram ? (
-										<Loader2Icon className="h-3 w-3 animate-spin" />
-									) : (
-										<PlusCircleIcon className="h-3 w-3" />
-									)}
-									Agregar al diagrama
-								</button>
-							</div>
-						</div>
-
-						{questionQueue.slice(0, 3).map((q, i) => (
-							<div
-								key={`q-${i}`}
-								className="rounded-lg bg-white/5 p-2.5"
-								style={{ opacity: 0.6 - i * 0.15 }}
-							>
-								<p className="text-xs leading-relaxed text-[#94A3B8]">{q}</p>
-							</div>
-						))}
+						)}
 					</div>
 				) : (
 					/* Default SIPOC-based questions before AI kicks in */

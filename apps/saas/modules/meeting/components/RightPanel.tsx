@@ -22,6 +22,7 @@ export function RightPanel({ organizationId, processId }: RightPanelProps) {
 		gapType,
 	} = useLiveSessionContext();
 
+	const [transcriptOpen, setTranscriptOpen] = useState(true);
 	const [sipocOpen, setSipocOpen] = useState(true);
 	const [docsOpen, setDocsOpen] = useState(false);
 
@@ -30,18 +31,28 @@ export function RightPanel({ organizationId, processId }: RightPanelProps) {
 			className="flex flex-col overflow-hidden border-l border-[#334155] bg-[#0F172A]"
 			style={{ gridArea: "right", width: 280 }}
 		>
-			{/* Transcript: takes all remaining space, always scrollable */}
-			<div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-				<TranscriptSection transcript={transcript} />
+			{/* Transcript — collapsible, compact by default */}
+			<div className={`flex flex-col border-b border-[#334155] ${transcriptOpen ? "max-h-[40%]" : ""}`}>
+				<AccordionHeader
+					title="Transcripcion"
+					open={transcriptOpen}
+					onToggle={() => setTranscriptOpen(!transcriptOpen)}
+					badge={transcript.length > 0 ? `${transcript.length}` : undefined}
+				/>
+				{transcriptOpen && (
+					<div className="min-h-0 flex-1 overflow-hidden">
+						<TranscriptSection transcript={transcript} />
+					</div>
+				)}
 			</div>
 
-			{/* Sugerencias IA — accordion */}
-			<div className={`flex flex-col border-t border-[#334155] ${sipocOpen ? "max-h-[45%]" : ""}`}>
+			{/* Sugerencias IA — main section, always expanded */}
+			<div className="flex min-h-0 flex-1 flex-col border-t border-[#334155]">
 				<AccordionHeader
 					title="Sugerencias IA"
 					open={sipocOpen}
 					onToggle={() => setSipocOpen(!sipocOpen)}
-					badge={gapType || (sipocOpen ? undefined : "SIPOC")}
+					badge={gapType || "SIPOC"}
 				/>
 				{sipocOpen && (
 					<div className="min-h-0 flex-1 overflow-hidden">
