@@ -100,19 +100,21 @@ export function BottomBar() {
 				}
 
 				case "orphan":
-				case "dead_end":
-				case "missing_start":
-				case "missing_end":
-				case "cycle":
-				case "missing_connection": {
-					// Structural issues → rebuild fixes them automatically
-					toast.info("Reorganizando diagrama...");
-					if (modelerApi?.isReady) {
-						await modelerApi.rebuildFromNodes(nodes);
-						toast.success("Diagrama reorganizado");
-					}
-					break;
+			case "dead_end":
+			case "missing_start":
+			case "missing_end":
+			case "cycle":
+			case "missing_connection": {
+				// Structural issues → rebuild fixes them
+				// The builder auto-connects: orphans to chain, dead-ends to _end,
+				// missing start/end added, cycles broken
+				toast.info("Reorganizando — el builder conectara nodos sueltos...");
+				if (modelerApi?.isReady) {
+					await modelerApi.rebuildFromNodes(nodes);
+					toast.success("Diagrama reorganizado — nodos reconectados");
 				}
+				break;
+			}
 
 				case "lane_inconsistency": {
 					// Fix lane name to match the primary variant

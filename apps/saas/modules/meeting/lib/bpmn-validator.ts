@@ -91,33 +91,36 @@ function validateStructure(nodes: DiagramNode[]): DiagramWarning[] {
 			hasIncoming.add(targetId);
 		}
 	}
-	for (const node of nodes) {
-		if (node.connections.length === 0 && !hasIncoming.has(node.id) && nodes.length > 1) {
-			warnings.push({
-				type: "orphan",
-				nodeId: node.id,
-				message: `"${node.label}" esta desconectado del flujo`,
-				severity: "warning",
-			});
-		}
-	}
-
-	// 3. Dead ends
+	// 3. Dead ends + orphans — ERRORS (all paths must reach an end event)
 	for (const node of nodes) {
 		if (
 			node.connections.length === 0 &&
 			hasIncoming.has(node.id) &&
 			!isEndEvent(node.type)
 		) {
-			const hasFlowingNodes = nodes.some((n) => n.connections.length > 0);
-			if (hasFlowingNodes) {
-				warnings.push({
-					type: "dead_end",
-					nodeId: node.id,
-					message: `"${node.label}" no tiene salida (dead end)`,
-					severity: "info",
-				});
-			}
+			warnings.push({
+				type: "dead_end",
+				nodeId: node.id,
+				message: `"${node.label}" no tiene salida — todo debe conectar a un evento de fin`,
+				severity: "error",
+				suggestion: "Conectar a la siguiente tarea o al evento de fin",
+			});
+		}
+		// Also check: tasks without output AND without incoming (floating)
+		if (
+			node.connections.length === 0 &&
+			!hasIncoming.has(node.id) &&
+			!isEndEvent(node.type) &&
+			!isStartEvent(node.type) &&
+			nodes.length > 1
+		) {
+			warnings.push({
+				type: "orphan",
+				nodeId: node.id,
+				message: `"${node.label}" esta completamente desconectado del proceso`,
+				severity: "error",
+				suggestion: "Conectar al flujo principal o eliminar",
+			});
 		}
 	}
 

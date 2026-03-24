@@ -442,20 +442,59 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 			const nameAttr = condLabel ? ` name="${esc(condLabel)}"` : "";
 			flowsXml += `    <bpmn:sequenceFlow id="${fid}"${nameAttr} sourceRef="${n.id}" targetRef="${targetId}" />\n`;
 
-			// Orthogonal routing (Manhattan — right angles only)
-			const sx = x + d.w;          // source: right edge
-			const sy = y + d.h / 2;      // source: vertical center
-			const ex = tx;               // target: left edge
-			const ey = ty + td.h / 2;    // target: vertical center
+			// Orthogonal routing with fan-out for multi-output nodes (gateways)
+			const totalOutputs = n.connections.length;
+			const isMultiOutput = totalOutputs > 1;
+
+			// Source point: distribute exits along right edge for gateways
+			// For diamond gateways: top=first branch, bottom=second branch, right=third
+			let sx: number;
+			let sy: number;
+			if (isMultiOutput && isGatewayNode(n.type)) {
+				// Fan exits: first goes right, second goes bottom, third goes top
+				if (ci === 0) {
+					sx = x + d.w;          // right edge
+					sy = y + d.h / 2;      // center
+				} else if (ci === 1) {
+					sx = x + d.w / 2;      // bottom edge center
+					sy = y + d.h;          // bottom
+				} else {
+					sx = x + d.w / 2;      // top edge center
+					sy = y;                // top
+				}
+			} else {
+				sx = x + d.w;              // right edge
+				sy = y + d.h / 2;          // center
+			}
+
+			const ex = tx;                 // target: left edge
+			const ey = ty + td.h / 2;     // target: vertical center
 
 			let waypoints: string;
-			if (Math.abs(sy - ey) < 5) {
+			if (isMultiOutput && isGatewayNode(n.type) && ci > 0) {
+				// Branch exits: go down/up first, then across
+				const branchOffsetY = ci === 1 ? 40 : -40;
+				const exitY = sy + branchOffsetY;
+				const midX = Math.round((sx + ex) / 2);
+				waypoints = [
+					`      <di:waypoint x="${sx}" y="${sy}" />`,
+					`      <di:waypoint x="${sx}" y="${exitY}" />`,
+					`      <di:waypoint x="${midX}" y="${exitY}" />`,
+					`      <di:waypoint x="${midX}" y="${ey}" />`,
+					`      <di:waypoint x="${ex}" y="${ey}" />`,
+				].join("\n");
+			} else if (Math.abs(sy - ey) < 5) {
 				// Same Y — straight horizontal line
 				waypoints = `      <di:waypoint x="${sx}" y="${sy}" />\n      <di:waypoint x="${ex}" y="${ey}" />`;
 			} else {
-				// Different Y — orthogonal L-shape or Z-shape routing
+				// Different Y — orthogonal L-shape
 				const midX = Math.round((sx + ex) / 2);
-				waypoints = `      <di:waypoint x="${sx}" y="${sy}" />\n      <di:waypoint x="${midX}" y="${sy}" />\n      <di:waypoint x="${midX}" y="${ey}" />\n      <di:waypoint x="${ex}" y="${ey}" />`;
+				waypoints = [
+					`      <di:waypoint x="${sx}" y="${sy}" />`,
+					`      <di:waypoint x="${midX}" y="${sy}" />`,
+					`      <di:waypoint x="${midX}" y="${ey}" />`,
+					`      <di:waypoint x="${ex}" y="${ey}" />`,
+				].join("\n");
 			}
 			edgesXml += `    <bpmndi:BPMNEdge id="${fid}_di" bpmnElement="${fid}">\n${waypoints}\n    </bpmndi:BPMNEdge>\n`;
 		}
