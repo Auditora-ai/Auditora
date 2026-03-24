@@ -35,32 +35,69 @@ export function BottomBar() {
 		if (!sessionId) return;
 		setFixingIdx(idx);
 		try {
-			// Send the warning + suggestion as a manual transcript note
-			// The AI extraction pipeline will interpret and apply the fix
-			const fixText = `[Corrección BPMN] ${warning.message}. ${warning.suggestion || ""} Nodo afectado: ${warning.nodeId}`;
-			const res = await fetch(`/api/sessions/${sessionId}/transcript`, {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ text: fixText }),
-			});
-			if (!res.ok) throw new Error(`HTTP ${res.status}`);
-			toast.success("IA aplicando corrección...");
+			// Apply fix directly via node edit API
+			const editData: Record<string, string> = { action: "edit" };
 
-			// Remove the fixed warning from results
+			switch (warning.type) {
+				case "naming":
+					// Fix task naming: use suggestion
+					if (warning.suggestion) {
+						editData.label = warning.suggestion;
+					}
+					break;
+				case "gateway_label":
+					// Fix gateway label: make it a question
+					if (warning.suggestion) {
+						editData.label = warning.suggestion;
+					}
+					break;
+				case "task_as_decision":
+					// Change task type to gateway
+					editData.type = "exclusiveGateway";
+					// Also fix label to question format
+					const node = nodes.find((n) => n.id === warning.nodeId);
+					if (node) {
+						editData.label = `¿${node.label}?`;
+					}
+					break;
+				default:
+					// For structural issues, send to AI extraction pipeline
+					const fixText = `[Corrección BPMN] ${warning.message}. ${warning.suggestion || ""}`;
+					await fetch(`/api/sessions/${sessionId}/transcript`, {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ text: fixText }),
+					});
+					toast.success("IA procesando corrección...");
+					if (auditResults) {
+						const updated = auditResults.warnings.filter((_, i) => i !== idx);
+						setAuditResults({ ...auditResults, warnings: updated, bestPracticesScore: Math.min(100, auditResults.bestPracticesScore + 5) });
+					}
+					setFixingIdx(null);
+					return;
+			}
+
+			// Direct node edit
+			const res = await fetch(`/api/sessions/${sessionId}/nodes/${warning.nodeId}`, {
+				method: "PATCH",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(editData),
+			});
+
+			if (!res.ok) throw new Error(`HTTP ${res.status}`);
+			toast.success("Nodo corregido");
+
+			// Remove fixed warning
 			if (auditResults) {
-				const updatedWarnings = auditResults.warnings.filter((_, i) => i !== idx);
-				setAuditResults({
-					...auditResults,
-					warnings: updatedWarnings,
-					bestPracticesScore: Math.min(100, auditResults.bestPracticesScore + 5),
-				});
+				const updated = auditResults.warnings.filter((_, i) => i !== idx);
+				setAuditResults({ ...auditResults, warnings: updated, bestPracticesScore: Math.min(100, auditResults.bestPracticesScore + 5) });
 			}
 		} catch {
 			toast.error("Error al aplicar corrección");
 		} finally {
 			setFixingIdx(null);
 		}
-	}, [sessionId, auditResults]);
+	}, [sessionId, auditResults, nodes]);
 
 	const confirmedCount = nodes.filter((n) => n.state === "confirmed").length;
 	const totalCount = nodes.length;
