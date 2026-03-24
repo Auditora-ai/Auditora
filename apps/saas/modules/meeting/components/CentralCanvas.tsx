@@ -90,15 +90,6 @@ export function CentralCanvas({ containerRef }: CentralCanvasProps) {
 				style={{ width: "100%", height: "100%" }}
 			/>
 
-			{/* Empty state */}
-			{modelerApi?.isReady && nodes.length === 0 && (
-				<div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-					<p className="text-sm text-[#94A3B8]">
-						El diagrama aparecera aqui conforme avance la sesion
-					</p>
-				</div>
-			)}
-
 			{/* Loading state */}
 			{!modelerApi?.isReady && (
 				<div className="absolute inset-0 flex items-center justify-center bg-white">
