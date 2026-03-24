@@ -263,29 +263,36 @@ ${laneSetXml}${processXml}${flowsXml}  </bpmn:process>
  * Uses bpmn-auto-layout (from bpmn.io) to add DI with proper
  * orthogonal routing, lane spacing, and element distribution.
  */
+/**
+ * Apply professional auto-layout to BPMN XML via server-side API.
+ * bpmn-auto-layout requires bpmn-moddle which only works in Node.js.
+ */
 export async function layoutBpmnXml(xml: string): Promise<string> {
 	try {
-		const { layoutProcess } = await import("bpmn-auto-layout");
-		const layoutedXml = await layoutProcess(xml);
-		return layoutedXml;
-	} catch (err) {
-		console.warn("[bpmn-builder] Auto-layout failed:", err);
-		// Log the XML that failed so we can debug
-		console.warn("[bpmn-builder] Failed XML (first 500 chars):", xml.substring(0, 500));
-
-		// Fallback: try without lanes (strip laneSet)
-		try {
-			const { layoutProcess: lp } = await import("bpmn-auto-layout");
-			const xmlNoLanes = xml
-				.replace(/<bpmn:laneSet>[\s\S]*?<\/bpmn:laneSet>\n?/g, "");
-			const result = await lp(xmlNoLanes);
-			console.log("[bpmn-builder] Fallback without lanes succeeded");
-			return result;
-		} catch {
-			// Final fallback: return raw XML (bpmn-js will show it without layout)
-			console.warn("[bpmn-builder] Fallback also failed, returning raw XML");
-			return xml;
+		// Server-side: import directly
+		if (typeof window === "undefined") {
+			const { layoutProcess } = await import("bpmn-auto-layout");
+			return await layoutProcess(xml);
 		}
+
+		// Client-side: call the server API
+		const res = await fetch("/api/bpmn/layout", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ xml }),
+		});
+
+		if (!res.ok) {
+			const data = await res.json().catch(() => ({}));
+			console.warn("[bpmn-builder] Layout API returned", res.status);
+			return data.xml || xml; // API returns raw xml on 422
+		}
+
+		const data = await res.json();
+		return data.xml;
+	} catch (err) {
+		console.warn("[bpmn-builder] Auto-layout failed, using raw XML:", err);
+		return xml;
 	}
 }
 
