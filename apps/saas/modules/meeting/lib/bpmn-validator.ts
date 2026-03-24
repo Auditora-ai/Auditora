@@ -168,6 +168,86 @@ function validateBestPractices(nodes: DiagramNode[]): DiagramWarning[] {
 	const warnings: DiagramWarning[] = [];
 	if (nodes.length < 2) return warnings;
 
+	// --- Connection rules (BPMN structural rules) ---
+	for (const node of nodes) {
+		// Rule: Tasks/Events can have MAX 1 outgoing connection
+		if (node.connections.length > 1 && !isGatewayType(node.type) && !isStartEvent(node.type)) {
+			warnings.push({
+				type: "task_as_decision",
+				nodeId: node.id,
+				message: `"${node.label}" tiene ${node.connections.length} salidas — solo gateways pueden tener multiples salidas`,
+				severity: "error",
+				suggestion: `Convertir a gateway o mantener solo 1 conexion de salida`,
+			});
+		}
+
+		// Rule: Start event should have exactly 1 outgoing
+		if (isStartEvent(node.type) && node.connections.length > 1) {
+			warnings.push({
+				type: "task_as_decision",
+				nodeId: node.id,
+				message: `Evento de inicio tiene ${node.connections.length} salidas — debe tener solo 1`,
+				severity: "error",
+				suggestion: `Conectar inicio a una sola tarea o gateway`,
+			});
+		}
+
+		// Rule: Gateways must have 2+ outgoing connections
+		if (isGatewayType(node.type) && node.connections.length < 2 && node.connections.length > 0) {
+			warnings.push({
+				type: "gateway_no_conditions",
+				nodeId: node.id,
+				message: `Gateway "${node.label}" tiene solo ${node.connections.length} salida — necesita minimo 2`,
+				severity: "warning",
+				suggestion: `Agregar la rama alternativa (Si/No)`,
+			});
+		}
+
+		// Rule: No node should connect to itself
+		if (node.connections.includes(node.id)) {
+			warnings.push({
+				type: "cycle",
+				nodeId: node.id,
+				message: `"${node.label}" se conecta a si mismo`,
+				severity: "error",
+				suggestion: `Eliminar auto-conexion`,
+			});
+		}
+	}
+
+	// Rule: Process must have a connected path from start to end
+	const startNodes = nodes.filter(n => isStartEvent(n.type));
+	const endNodes = nodes.filter(n => isEndEvent(n.type));
+	if (endNodes.length > 0 && startNodes.length > 0) {
+		// Check if end is reachable from start
+		const reachable = new Set<string>();
+		const queue = startNodes.map(n => n.id);
+		const nodeMap = new Map(nodes.map(n => [n.id, n]));
+		while (queue.length > 0) {
+			const id = queue.shift()!;
+			if (reachable.has(id)) continue;
+			reachable.add(id);
+			const n = nodeMap.get(id);
+			if (n) {
+				for (const target of n.connections) {
+					if (!reachable.has(target)) queue.push(target);
+				}
+			}
+		}
+		const unreachableFromStart = nodes.filter(n =>
+			!isStartEvent(n.type) && !reachable.has(n.id) && n.state !== "rejected"
+		);
+		for (const n of unreachableFromStart) {
+			warnings.push({
+				type: "orphan",
+				nodeId: n.id,
+				message: `"${n.label}" no es alcanzable desde el inicio del proceso`,
+				severity: "warning",
+				suggestion: `Conectar a la secuencia principal del proceso`,
+			});
+		}
+	}
+
 	// --- Naming rules ---
 	for (const node of nodes) {
 		const label = node.label.trim();

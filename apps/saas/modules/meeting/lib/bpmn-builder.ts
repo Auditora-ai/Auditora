@@ -253,28 +253,22 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 		connections: [],
 	});
 
-	// --- Check if connections are mostly broken (AI ID mismatch) ---
+	// --- Build connection graph ---
 	const middleNodes = ordered.filter(
 		(n) => n.id !== "_start" && n.id !== "_end",
 	);
 	const totalConnections = middleNodes.reduce((sum, n) => sum + n.connections.length, 0);
 
-	// If less than 30% of middle nodes have valid connections,
-	// connections are broken — fall back to sequential order
+	// If connections are mostly broken (AI ID mismatch), fall back to sequential
 	if (middleNodes.length >= 2 && totalConnections < middleNodes.length * 0.3) {
-		console.log(`[bpmn-builder] Broken connections detected (${totalConnections}/${middleNodes.length}). Using sequential order.`);
-		// Wire nodes sequentially: first → second → third → ...
+		console.log(`[bpmn-builder] Broken connections (${totalConnections}/${middleNodes.length}). Using sequential order.`);
 		for (let i = 0; i < middleNodes.length - 1; i++) {
 			middleNodes[i].connections = [middleNodes[i + 1].id];
 		}
-		// Last middle node → end
 		middleNodes[middleNodes.length - 1].connections = ["_end"];
-		// Start → first middle node
 		ordered[0].connections = [middleNodes[0].id];
 	} else {
-		// --- Wire start/end based on actual graph topology ---
-
-		// Build incoming-connections map
+		// Wire start/end based on graph topology
 		const incoming = new Map<string, string[]>();
 		for (const n of ordered) {
 			if (n.id === "_start" || n.id === "_end") continue;
@@ -284,20 +278,56 @@ export function buildBpmnXml(inputNodes: DiagramNode[]): string {
 			}
 		}
 
-		// Root nodes: no other node connects TO them
 		const roots = middleNodes.filter((n) => !incoming.has(n.id));
-
-		// If there are no roots, connect start to the first middle node
 		if (roots.length === 0 && middleNodes.length > 0) {
 			ordered[0].connections = [middleNodes[0].id];
+		} else if (roots.length === 1) {
+			ordered[0].connections = [roots[0].id];
 		} else {
-			ordered[0].connections = roots.map((r) => r.id);
+			// Multiple roots — start MUST have only 1 output (BPMN rule)
+			// Connect start → first root, then chain unconnected roots sequentially
+			ordered[0].connections = [roots[0].id];
+			for (let i = 1; i < roots.length; i++) {
+				// Find the last node in the chain before this root and connect it
+				const prevTerminal = findLastInChain(roots[i - 1], ordered);
+				if (prevTerminal && !isGatewayNode(prevTerminal.type)) {
+					// Insert before _end connection
+					prevTerminal.connections = prevTerminal.connections.filter(c => c !== "_end");
+					prevTerminal.connections.push(roots[i].id);
+				}
+			}
 		}
 
-		// Terminal nodes: they have no outgoing connections
+		// Terminal nodes → end
 		const terminals = middleNodes.filter((n) => n.connections.length === 0);
 		for (const t of terminals) {
 			t.connections = ["_end"];
+		}
+	}
+
+	// --- BPMN Rule Enforcement ---
+	// Rule: tasks/events can have max 1 outgoing connection
+	// Multiple outgoing is ONLY allowed from gateways
+	for (const n of ordered) {
+		if (n.connections.length > 1 && !isGatewayNode(n.type)) {
+			// Non-gateway with multiple outputs — keep only the first connection
+			console.log(`[bpmn-builder] BPMN fix: "${n.label}" (${n.type}) had ${n.connections.length} outputs, keeping first only`);
+			n.connections = [n.connections[0]];
+		}
+	}
+
+	// Rule: every gateway must have 2+ outputs (otherwise it's pointless)
+	for (const n of ordered) {
+		if (isGatewayNode(n.type) && n.connections.length < 2) {
+			// Gateway with <2 outputs — find the next unconnected node and add it
+			const nextUnconnected = middleNodes.find((m) =>
+				m.id !== n.id &&
+				!n.connections.includes(m.id) &&
+				!ordered.some((o) => o.connections.includes(m.id) && o.id !== "_start"),
+			);
+			if (nextUnconnected) {
+				n.connections.push(nextUnconnected.id);
+			}
 		}
 	}
 
@@ -453,6 +483,25 @@ ${laneSetXml}${processXml}${flowsXml}  </bpmn:process>
 ${shapesXml}${edgesXml}    </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>`;
+}
+
+function isGatewayNode(type: string): boolean {
+	const t = type.toLowerCase();
+	return t.includes("gateway");
+}
+
+function findLastInChain(startNode: DiagramNode, allNodes: DiagramNode[]): DiagramNode | null {
+	let current = startNode;
+	const visited = new Set<string>();
+	while (current.connections.length === 1 && !visited.has(current.id)) {
+		visited.add(current.id);
+		const nextId = current.connections[0];
+		if (nextId === "_end") return current;
+		const next = allNodes.find((n) => n.id === nextId);
+		if (!next) return current;
+		current = next;
+	}
+	return current;
 }
 
 function emptyXml(): string {

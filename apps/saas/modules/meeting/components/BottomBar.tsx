@@ -51,15 +51,29 @@ export function BottomBar() {
 						editData.label = warning.suggestion;
 					}
 					break;
-				case "task_as_decision":
-					// Change task type to gateway
-					editData.type = "exclusiveGateway";
-					// Also fix label to question format
+				case "task_as_decision": {
 					const node = nodes.find((n) => n.id === warning.nodeId);
-					if (node) {
-						editData.label = `¿${node.label}?`;
+					if (node && node.connections.length > 1) {
+						// Multiple outputs from non-gateway — send to AI to restructure
+						const fixText = `[Corrección BPMN] La tarea "${node.label}" tiene ${node.connections.length} salidas pero no es un gateway. Reestructura: si es una decisión, conviértela a exclusiveGateway. Si no, mantén solo la conexión principal.`;
+						await fetch(`/api/sessions/${sessionId}/transcript`, {
+							method: "POST",
+							headers: { "Content-Type": "application/json" },
+							body: JSON.stringify({ text: fixText }),
+						});
+						toast.success("IA reestructurando conexiones...");
+						if (auditResults) {
+							const updated = auditResults.warnings.filter((_, i) => i !== idx);
+							setAuditResults({ ...auditResults, warnings: updated });
+						}
+						setFixingIdx(null);
+						return;
 					}
+					// Single decision task → convert to gateway
+					editData.type = "exclusiveGateway";
+					if (node) editData.label = `¿${node.label}?`;
 					break;
+				}
 				default:
 					// For structural issues, send to AI extraction pipeline
 					const fixText = `[Corrección BPMN] ${warning.message}. ${warning.suggestion || ""}`;
