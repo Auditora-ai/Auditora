@@ -47,8 +47,10 @@ import {
 	CheckCircleIcon,
 	AlertTriangleIcon,
 	ShieldAlertIcon,
+	TrashIcon,
 } from "lucide-react";
 import { toastSuccess, toastError } from "@repo/ui/components/toast";
+import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { RaciTab } from "./RaciTab";
 import { ConsolidationView } from "./ConsolidationView";
 import { IntelligenceTab } from "@projects/components/IntelligenceTab";
@@ -238,6 +240,7 @@ export function ProcessDetailView({
 	const [activeTab, setActiveTab] = useState<string>("diagram");
 	const [exporting, setExporting] = useState(false);
 	const router = useRouter();
+	const { confirm } = useConfirmationAlert();
 
 	const tabs = [
 		{ key: "diagram", label: "Diagrama", icon: GitBranch },
@@ -271,6 +274,20 @@ export function ProcessDetailView({
 	const handleShare = async () => {
 		const url = `${window.location.origin}/share/${process.id}`;
 		await navigator.clipboard.writeText(url);
+	};
+
+	const handleDeleteProcess = () => {
+		confirm({
+			title: "Eliminar proceso",
+			message: `Se eliminará "${process.name}" y todos sus sub-procesos, sesiones, RACI, riesgos y versiones asociados. Esta acción no se puede deshacer.`,
+			confirmLabel: "Eliminar",
+			destructive: true,
+			onConfirm: async () => {
+				const { orpcClient } = await import("@shared/lib/orpc-client");
+				await orpcClient.processes.delete({ processId: process.id });
+				router.push(processesPath);
+			},
+		});
 	};
 
 	return (
@@ -338,6 +355,14 @@ export function ProcessDetailView({
 					</Button>
 					<Button variant="ghost" size="sm" onClick={handleShare}>
 						<ShareIcon className="h-3.5 w-3.5" />
+					</Button>
+					<Button
+						variant="ghost"
+						size="sm"
+						className="text-destructive hover:text-destructive"
+						onClick={handleDeleteProcess}
+					>
+						<TrashIcon className="h-3.5 w-3.5" />
 					</Button>
 					<div className="ml-2 text-xs text-muted-foreground">
 						{process.sessionsCount} sesiones · {process.versionsCount}v
@@ -1330,6 +1355,24 @@ function DocumentsTab({ organizationSlug }: { organizationSlug: string }) {
 				documents={documents}
 				showExtract={true}
 				onExtracted={fetchDocs}
+				onDelete={async (id) => {
+					try {
+						const { orpcClient } = await import("@shared/lib/orpc-client");
+						await orpcClient.documents.delete({ documentId: id });
+						await fetchDocs();
+					} catch (err) {
+						console.error("Delete error:", err);
+					}
+				}}
+				onEdit={async (id, data) => {
+					try {
+						const { orpcClient } = await import("@shared/lib/orpc-client");
+						await orpcClient.documents.update({ documentId: id, ...data });
+						await fetchDocs();
+					} catch (err) {
+						console.error("Update error:", err);
+					}
+				}}
 			/>
 		</div>
 	);

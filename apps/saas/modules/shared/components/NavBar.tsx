@@ -113,7 +113,7 @@ export function NavBar() {
 					>
 						<div className="flex items-center gap-2 md:w-full">
 							<Link href="/" className="block">
-								<Logo withLabel={false} />
+								<Logo withLabel={!isCollapsedEffective} />
 							</Link>
 						</div>
 

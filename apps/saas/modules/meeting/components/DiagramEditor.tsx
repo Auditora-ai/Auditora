@@ -46,7 +46,7 @@ export function DiagramEditor({
 				modeler = new BpmnModeler({ container: containerRef.current });
 				modelerRef.current = modeler;
 
-				const xml = bpmnXml || (nodes.length > 0 ? buildBpmnXml(nodes) : emptyBpmnXml());
+				const xml = bpmnXml || (nodes.length > 0 ? await buildBpmnXml(nodes) : emptyBpmnXml());
 				try {
 					await modeler.importXML(xml);
 					if (destroyed) { modeler.destroy(); return; }

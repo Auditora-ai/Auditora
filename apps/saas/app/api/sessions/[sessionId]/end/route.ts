@@ -113,7 +113,7 @@ async function autoVersionOnSessionEnd(
 				}));
 
 				try {
-					finalBpmnXml = await layoutBpmnXml(buildBpmnXml(diagramNodes));
+					finalBpmnXml = await buildBpmnXml(diagramNodes);
 				} catch (err) {
 					console.error("[EndSession] Failed to build BPMN XML from nodes:", err);
 				}

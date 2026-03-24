@@ -33,7 +33,7 @@ export async function GET(
 		connections: n.connections,
 	}));
 
-	const xml = buildBpmnXml(nodes);
+	const xml = await buildBpmnXml(nodes);
 	const orgName = session.organization.name;
 	const processName = session.processDefinition?.name || session.type;
 	const filename = `${orgName}-${processName}`.replace(/[^a-zA-Z0-9-_]/g, "_");

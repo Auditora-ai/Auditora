@@ -5,6 +5,7 @@ import { FileTextIcon, PlusIcon, SparklesIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useCallback } from "react";
+import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { ProcessCard, type ProcessCardData } from "./ProcessCard";
 import { ProcessFilters, type FilterState } from "./ProcessFilters";
 import { DiscoveryPanel } from "@discovery/components/DiscoveryPanel";
@@ -32,6 +33,7 @@ export function ProcessLibrary({
 }) {
 	const t = useTranslations("processLibrary");
 	const router = useRouter();
+	const { confirm } = useConfirmationAlert();
 	const [filters, setFilters] = useState<FilterState>({
 		search: "",
 		status: "all",
@@ -77,6 +79,26 @@ export function ProcessLibrary({
 	const handleProcessAccepted = useCallback(() => {
 		router.refresh();
 	}, [router]);
+
+	const handleDeleteProcess = useCallback(
+		(processId: string) => {
+			const process = processes.find((p) => p.id === processId);
+			confirm({
+				title: "Eliminar proceso",
+				message: `Se eliminará "${process?.name ?? "este proceso"}" y todos sus sub-procesos, sesiones, RACI, riesgos y versiones asociados. Esta acción no se puede deshacer.`,
+				confirmLabel: "Eliminar",
+				destructive: true,
+				onConfirm: async () => {
+					const { orpcClient } = await import(
+						"@shared/lib/orpc-client"
+					);
+					await orpcClient.processes.delete({ processId });
+					router.refresh();
+				},
+			});
+		},
+		[processes, confirm, router],
+	);
 
 	return (
 		<div className="space-y-4">
@@ -181,6 +203,7 @@ export function ProcessLibrary({
 							key={process.id}
 							process={process}
 							basePath={basePath}
+							onDelete={handleDeleteProcess}
 						/>
 					))}
 

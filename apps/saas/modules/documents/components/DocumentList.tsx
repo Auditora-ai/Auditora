@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@repo/ui";
+import { Input } from "@repo/ui/components/input";
 import { Card } from "@repo/ui/components/card";
 import {
 	Table,
@@ -16,6 +18,9 @@ import {
 	FileSpreadsheetIcon,
 	DownloadIcon,
 	TrashIcon,
+	PencilIcon,
+	CheckIcon,
+	XIcon,
 } from "lucide-react";
 import { ExtractProcessesButton } from "./ExtractProcessesButton";
 
@@ -50,15 +55,35 @@ export function DocumentList({
 	documents,
 	onDownload,
 	onDelete,
+	onEdit,
 	showExtract = false,
 	onExtracted,
 }: {
 	documents: Document[];
 	onDownload?: (id: string) => void;
 	onDelete?: (id: string) => void;
+	onEdit?: (id: string, data: { name: string }) => void;
 	showExtract?: boolean;
 	onExtracted?: () => void;
 }) {
+	const [editingId, setEditingId] = useState<string | null>(null);
+	const [editName, setEditName] = useState("");
+
+	const startEdit = (doc: Document) => {
+		setEditingId(doc.id);
+		setEditName(doc.name);
+	};
+
+	const saveEdit = () => {
+		if (editingId && editName.trim()) {
+			onEdit?.(editingId, { name: editName.trim() });
+		}
+		setEditingId(null);
+	};
+
+	const cancelEdit = () => {
+		setEditingId(null);
+	};
 	if (documents.length === 0) {
 		return (
 			<Card>
@@ -94,9 +119,30 @@ export function DocumentList({
 								<TableCell>
 									<div className="flex items-center gap-2">
 										<Icon className="h-4 w-4 text-muted-foreground" />
-										<span className="font-medium text-foreground">
-											{doc.name}
-										</span>
+										{editingId === doc.id ? (
+											<div className="flex items-center gap-1">
+												<Input
+													value={editName}
+													onChange={(e) => setEditName(e.target.value)}
+													className="h-7 w-48 text-sm"
+													autoFocus
+													onKeyDown={(e) => {
+														if (e.key === "Enter") saveEdit();
+														if (e.key === "Escape") cancelEdit();
+													}}
+												/>
+												<Button variant="ghost" size="icon" className="h-7 w-7" onClick={saveEdit}>
+													<CheckIcon className="h-3.5 w-3.5" />
+												</Button>
+												<Button variant="ghost" size="icon" className="h-7 w-7" onClick={cancelEdit}>
+													<XIcon className="h-3.5 w-3.5" />
+												</Button>
+											</div>
+										) : (
+											<span className="font-medium text-foreground">
+												{doc.name}
+											</span>
+										)}
 									</div>
 								</TableCell>
 								<TableCell className="text-muted-foreground">
@@ -118,6 +164,15 @@ export function DocumentList({
 												hasExtractedText={!!doc.extractedText}
 												onExtracted={() => onExtracted?.()}
 											/>
+										)}
+										{onEdit && editingId !== doc.id && (
+											<Button
+												variant="ghost"
+												size="icon"
+												onClick={() => startEdit(doc)}
+											>
+												<PencilIcon className="h-4 w-4" />
+											</Button>
 										)}
 										{onDownload && (
 											<Button

@@ -1,7 +1,7 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 @import "@repo/tailwind-config/theme.css";
 @import "@repo/tailwind-config/tailwind-animate.css";
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
 @source "../../../packages/ui/components";
 @source "../node_modules/streamdown/dist/*.js";

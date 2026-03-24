@@ -24,8 +24,9 @@ export function Logo({
 				<rect x="15" y="14" width="4" height="4" rx="1" fill="currentColor" opacity="0.4" transform="rotate(45 17 16)" />
 			</svg>
 			{withLabel && (
-				<span className="ml-2 hidden text-lg md:block" style={{ fontFamily: "var(--font-display), serif" }}>
-					aiprocess.me
+				<span className="ml-2 hidden text-xl md:block tracking-tight">
+					<span className="font-bold">AI</span>
+					<span className="font-light text-muted-foreground">process.me</span>
 				</span>
 			)}
 		</span>

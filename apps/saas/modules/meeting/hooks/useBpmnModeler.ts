@@ -135,7 +135,7 @@ export function useBpmnModeler({
 				if (nodes && nodes.length > 0) {
 					console.warn("[useBpmnModeler] Attempting auto-recovery from DiagramNodes...");
 					try {
-						const recoveredXml = buildBpmnXml(nodes);
+						const recoveredXml = await buildBpmnXml(nodes);
 						await modeler.importXML(recoveredXml);
 						const canvas = modeler.get("canvas");
 						canvas.zoom("fit-viewport", "auto");
@@ -212,7 +212,7 @@ export function useBpmnModeler({
 						return;
 					}
 
-					const rawXml = buildBpmnXml(visibleNodes);
+					const rawXml = await buildBpmnXml(visibleNodes);
 					const xml = await layoutBpmnXml(rawXml);
 					try {
 						await modeler.importXML(xml);
@@ -271,7 +271,7 @@ export function useBpmnModeler({
 			}
 
 			try {
-				const rawXml = buildBpmnXml(rebuildNodes);
+				const rawXml = await buildBpmnXml(rebuildNodes);
 				const xml = await layoutBpmnXml(rawXml);
 				await modeler.importXML(xml);
 				const canvas = modeler.get("canvas");
@@ -972,7 +972,7 @@ async function defaultBpmnXml(processName?: string): Promise<string> {
 		lane: name,
 		connections: [],
 	};
-	const rawXml = buildBpmnXml([startNode]);
+	const rawXml = await buildBpmnXml([startNode]);
 	return layoutBpmnXml(rawXml);
 }
 

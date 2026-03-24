@@ -116,3 +116,103 @@ export async function POST(
 
 	return NextResponse.json({ entries });
 }
+
+const VALID_ASSIGNMENTS = ["RESPONSIBLE", "ACCOUNTABLE", "CONSULTED", "INFORMED"] as const;
+
+export async function PUT(
+	request: NextRequest,
+	{ params }: { params: Promise<{ processId: string }> },
+) {
+	const session = await getSession();
+	if (!session?.user)
+		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+	const { processId } = await params;
+	const body = await request.json();
+	const { entryId, activityName, role, assignment } = body;
+
+	if (!assignment || !VALID_ASSIGNMENTS.includes(assignment)) {
+		return NextResponse.json(
+			{ error: `Invalid assignment. Must be one of: ${VALID_ASSIGNMENTS.join(", ")}` },
+			{ status: 400 },
+		);
+	}
+
+	// Update existing entry by ID
+	if (entryId) {
+		const entry = await db.raciEntry.findUnique({ where: { id: entryId } });
+		if (!entry || entry.processId !== processId) {
+			return NextResponse.json({ error: "Entry not found" }, { status: 404 });
+		}
+
+		const updated = await db.raciEntry.update({
+			where: { id: entryId },
+			data: { assignment, source: "manual-edit" },
+		});
+
+		return NextResponse.json({ entry: updated });
+	}
+
+	// Upsert by activityName + role
+	if (activityName && role) {
+		const existing = await db.raciEntry.findFirst({
+			where: { processId, activityName, role },
+		});
+
+		if (existing) {
+			const updated = await db.raciEntry.update({
+				where: { id: existing.id },
+				data: { assignment, source: "manual-edit" },
+			});
+			return NextResponse.json({ entry: updated });
+		}
+
+		const created = await db.raciEntry.create({
+			data: {
+				processId,
+				activityName: activityName.trim(),
+				role: role.trim(),
+				assignment,
+				source: "manual-edit",
+			},
+		});
+		return NextResponse.json({ entry: created });
+	}
+
+	return NextResponse.json(
+		{ error: "Provide entryId or activityName + role" },
+		{ status: 400 },
+	);
+}
+
+export async function DELETE(
+	request: NextRequest,
+	{ params }: { params: Promise<{ processId: string }> },
+) {
+	const session = await getSession();
+	if (!session?.user)
+		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+	const { processId } = await params;
+	const body = await request.json();
+	const { entryId, activityName } = body;
+
+	if (entryId) {
+		const entry = await db.raciEntry.findUnique({ where: { id: entryId } });
+		if (!entry || entry.processId !== processId) {
+			return NextResponse.json({ error: "Entry not found" }, { status: 404 });
+		}
+		await db.raciEntry.delete({ where: { id: entryId } });
+		return NextResponse.json({ success: true });
+	}
+
+	if (activityName) {
+		await db.raciEntry.deleteMany({ where: { processId, activityName } });
+		return NextResponse.json({ success: true });
+	}
+
+	return NextResponse.json(
+		{ error: "Provide entryId or activityName" },
+		{ status: 400 },
+	);
+}

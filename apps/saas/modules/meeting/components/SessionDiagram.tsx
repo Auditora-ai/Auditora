@@ -45,7 +45,7 @@ export function SessionDiagram({
 		async function render() {
 			if (!containerRef.current) return;
 
-			const xml = bpmnXml || (nodes.length > 0 ? buildBpmnXml(nodes) : null);
+			const xml = bpmnXml || (nodes.length > 0 ? await buildBpmnXml(nodes) : null);
 			if (!xml) return;
 
 			const BpmnViewer = (

@@ -12,6 +12,7 @@ import {
 	ShareIcon,
 	GitBranchIcon,
 	LayersIcon,
+	TrashIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -39,10 +40,12 @@ export function ProcessCard({
 	process,
 	basePath,
 	onExport,
+	onDelete,
 }: {
 	process: ProcessCardData;
 	basePath: string;
 	onExport?: (processId: string) => void;
+	onDelete?: (processId: string) => void;
 }) {
 	const t = useTranslations("processLibrary");
 
@@ -98,6 +101,20 @@ export function ProcessCard({
 						>
 							<DownloadIcon className="mr-1 size-3" />
 							{t("export")}
+						</Button>
+					)}
+					{onDelete && (
+						<Button
+							variant="ghost"
+							size="sm"
+							className="h-7 text-xs text-destructive hover:text-destructive"
+							onClick={(e) => {
+								e.preventDefault();
+								onDelete(process.id);
+							}}
+						>
+							<TrashIcon className="mr-1 size-3" />
+							Eliminar
 						</Button>
 					)}
 				</div>
