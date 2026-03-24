@@ -20,7 +20,26 @@ export async function POST(
 	try {
 		const { sessionId } = await params;
 
-		// Get all non-rejected nodes
+		// Delete orphan nodes: no connections, no one connects to them, no lane
+		const allNodes = await db.diagramNode.findMany({
+			where: { sessionId, state: { not: "REJECTED" } },
+			orderBy: { createdAt: "asc" },
+		});
+		const allTargets = new Set(allNodes.flatMap((n) => n.connections));
+		const orphanIds = allNodes
+			.filter((n) => {
+				const t = n.nodeType.toLowerCase();
+				if (t.includes("start") || t.includes("end")) return false;
+				return n.connections.length === 0 && !allTargets.has(n.id);
+			})
+			.map((n) => n.id);
+
+		if (orphanIds.length > 0) {
+			await db.diagramNode.deleteMany({ where: { id: { in: orphanIds } } });
+			console.log(`[Reorganize] Deleted ${orphanIds.length} orphan nodes`);
+		}
+
+		// Get remaining nodes
 		const nodes = await db.diagramNode.findMany({
 			where: { sessionId, state: { not: "REJECTED" } },
 			orderBy: { createdAt: "asc" },
