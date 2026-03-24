@@ -29,39 +29,31 @@ export function CentralCanvas({ containerRef }: CentralCanvasProps) {
 	const [repairing, setRepairing] = useState(false);
 
 	const handleRebuildLayout = async () => {
-		if (!modelerApi?.isReady || nodes.length === 0) return;
+		if (!modelerApi?.isReady || !sessionId || nodes.length === 0) return;
 		setRepairing(true);
 		try {
-			// Rebuild the diagram XML from current nodes with proper topological layout
-			await modelerApi.rebuildFromNodes(nodes);
-			toast.success("Diagrama reorganizado");
+			toast.info("IA analizando flujo del proceso...");
+
+			// Step 1: AI determines correct connections
+			const res = await fetch(`/api/sessions/${sessionId}/reorganize`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+			});
+
+			if (!res.ok) throw new Error(`HTTP ${res.status}`);
+			const data = await res.json();
+
+			if (data.nodes && data.nodes.length > 0) {
+				// Step 2: Rebuild diagram with AI-fixed connections + ELK layout
+				await modelerApi.rebuildFromNodes(data.nodes);
+				toast.success(`Diagrama reorganizado — ${data.reasoning || ""}`);
+			} else {
+				await modelerApi.rebuildFromNodes(nodes);
+				toast.success("Diagrama reorganizado");
+			}
 		} catch (err) {
 			console.error("[CentralCanvas] Rebuild failed:", err);
 			toast.error("Error al reorganizar");
-		} finally {
-			setRepairing(false);
-		}
-	};
-
-	const handleRepairWithAi = async () => {
-		if (!sessionId) return;
-		setRepairing(true);
-		try {
-			// Send instruction to AI to fix connections and structure
-			const res = await fetch(`/api/sessions/${sessionId}/transcript`, {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					text: `[CORRECCIÓN BPMN] Revisa el diagrama completo. Los nodos actuales son: ${nodes.map(n => `"${n.label}" (${n.type}, lane: ${n.lane || "sin lane"})`).join(", ")}. Organiza las conexiones correctamente siguiendo el flujo lógico del proceso. Cada nodo debe conectar al siguiente paso lógico, NO todos al inicio y al final.`,
-				}),
-			});
-			if (!res.ok) throw new Error(`HTTP ${res.status}`);
-			toast.success("IA analizando estructura del diagrama...");
-			// After AI processes, rebuild layout
-			setTimeout(() => handleRebuildLayout(), 8000);
-		} catch (err) {
-			console.error("[CentralCanvas] AI repair failed:", err);
-			toast.error("Error al reparar");
 		} finally {
 			setRepairing(false);
 		}
@@ -160,18 +152,10 @@ export function CentralCanvas({ containerRef }: CentralCanvasProps) {
 						type="button"
 						onClick={handleRebuildLayout}
 						disabled={repairing}
-						className="flex items-center gap-1 rounded-lg bg-amber-600 px-2 py-1 text-[10px] font-medium text-white transition-colors hover:bg-amber-700 disabled:opacity-50"
-					>
-						{repairing ? <Loader2Icon className="h-3 w-3 animate-spin" /> : <WrenchIcon className="h-3 w-3" />}
-						Reorganizar
-					</button>
-					<button
-						type="button"
-						onClick={handleRepairWithAi}
-						disabled={repairing}
 						className="flex items-center gap-1 rounded-lg bg-[#2563EB] px-2 py-1 text-[10px] font-medium text-white transition-colors hover:bg-[#1D4ED8] disabled:opacity-50"
 					>
-						Reparar con IA
+						{repairing ? <Loader2Icon className="h-3 w-3 animate-spin" /> : <WrenchIcon className="h-3 w-3" />}
+						Reorganizar con IA
 					</button>
 				</div>
 			)}
