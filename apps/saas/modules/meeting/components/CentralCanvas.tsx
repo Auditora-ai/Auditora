@@ -12,6 +12,7 @@ import {
 	AlertTriangleIcon,
 	WrenchIcon,
 	Loader2Icon,
+	LayoutDashboardIcon,
 } from "lucide-react";
 
 import "bpmn-js/dist/assets/diagram-js.css";
@@ -24,19 +25,43 @@ interface CentralCanvasProps {
 }
 
 export function CentralCanvas({ containerRef }: CentralCanvasProps) {
-	const { modelerApi, diagramHealth, nodes, processId } = useLiveSessionContext();
+	const { modelerApi, diagramHealth, nodes, processId, sessionId } = useLiveSessionContext();
 	const [repairing, setRepairing] = useState(false);
 
-	const handleRepair = async () => {
-		if (!processId) return;
+	const handleRebuildLayout = async () => {
+		if (!modelerApi?.isReady || nodes.length === 0) return;
 		setRepairing(true);
 		try {
-			const res = await fetch(`/api/processes/${processId}/repair`, { method: "POST" });
-			if (!res.ok) throw new Error(`HTTP ${res.status}`);
-			toast.success("Diagrama reparado");
+			// Rebuild the diagram XML from current nodes with proper topological layout
+			await modelerApi.rebuildFromNodes(nodes);
+			toast.success("Diagrama reorganizado");
 		} catch (err) {
-			console.error("[CentralCanvas] Repair failed:", err);
-			toast.error("Error al reparar diagrama");
+			console.error("[CentralCanvas] Rebuild failed:", err);
+			toast.error("Error al reorganizar");
+		} finally {
+			setRepairing(false);
+		}
+	};
+
+	const handleRepairWithAi = async () => {
+		if (!sessionId) return;
+		setRepairing(true);
+		try {
+			// Send instruction to AI to fix connections and structure
+			const res = await fetch(`/api/sessions/${sessionId}/transcript`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					text: `[CORRECCIÓN BPMN] Revisa el diagrama completo. Los nodos actuales son: ${nodes.map(n => `"${n.label}" (${n.type}, lane: ${n.lane || "sin lane"})`).join(", ")}. Organiza las conexiones correctamente siguiendo el flujo lógico del proceso. Cada nodo debe conectar al siguiente paso lógico, NO todos al inicio y al final.`,
+				}),
+			});
+			if (!res.ok) throw new Error(`HTTP ${res.status}`);
+			toast.success("IA analizando estructura del diagrama...");
+			// After AI processes, rebuild layout
+			setTimeout(() => handleRebuildLayout(), 8000);
+		} catch (err) {
+			console.error("[CentralCanvas] AI repair failed:", err);
+			toast.error("Error al reparar");
 		} finally {
 			setRepairing(false);
 		}
@@ -62,6 +87,7 @@ export function CentralCanvas({ containerRef }: CentralCanvasProps) {
 			const canvas = modeler.get("canvas");
 			const modeling = modeler.get("modeling");
 			const elementFactory = modeler.get("elementFactory");
+			const elementRegistry = modeler.get("elementRegistry");
 
 			const rect = containerRef.current?.getBoundingClientRect();
 			if (!rect) return;
@@ -70,8 +96,29 @@ export function CentralCanvas({ containerRef }: CentralCanvasProps) {
 			const x = (e.clientX - rect.left) / viewbox.scale + viewbox.x;
 			const y = (e.clientY - rect.top) / viewbox.scale + viewbox.y;
 
+			// In collaboration diagrams, shapes must be dropped onto a participant, not the root
+			const rootElement = canvas.getRootElement();
+			let parent = rootElement;
+			if (rootElement?.businessObject?.$type === "bpmn:Collaboration") {
+				const participants = elementRegistry.filter(
+					(el: any) => el.type === "bpmn:Participant",
+				);
+				if (participants.length > 0) {
+					// Pick the participant whose bounds contain the drop point, or the first one
+					parent =
+						participants.find(
+							(p: any) =>
+								x >= p.x &&
+								x <= p.x + p.width &&
+								y >= p.y &&
+								y <= p.y + p.height,
+						) ?? participants[0];
+				}
+			}
+			if (!parent?.children) return;
+
 			const shape = elementFactory.createShape({ type: elementType });
-			modeling.createShape(shape, { x, y }, canvas.getRootElement());
+			modeling.createShape(shape, { x, y }, parent);
 		},
 		[modelerApi, containerRef],
 	);
@@ -108,22 +155,24 @@ export function CentralCanvas({ containerRef }: CentralCanvasProps) {
 			{diagramHealth.needsRepair && (
 				<div className="absolute left-1/2 top-3 z-10 flex -translate-x-1/2 items-center gap-2 rounded-xl bg-amber-50 px-4 py-2 text-xs text-amber-800 shadow-sm">
 					<AlertTriangleIcon className="h-3.5 w-3.5" />
-					{diagramHealth.warningCount} problemas detectados
-					{processId && (
-						<button
-							type="button"
-							onClick={handleRepair}
-							disabled={repairing}
-							className="ml-2 flex items-center gap-1 rounded-lg bg-amber-600 px-2 py-1 text-[10px] font-medium text-white transition-colors hover:bg-amber-700 disabled:opacity-50"
-						>
-							{repairing ? (
-								<Loader2Icon className="h-3 w-3 animate-spin" />
-							) : (
-								<WrenchIcon className="h-3 w-3" />
-							)}
-							Reparar con IA
-						</button>
-					)}
+					{diagramHealth.warningCount} problemas
+					<button
+						type="button"
+						onClick={handleRebuildLayout}
+						disabled={repairing}
+						className="flex items-center gap-1 rounded-lg bg-amber-600 px-2 py-1 text-[10px] font-medium text-white transition-colors hover:bg-amber-700 disabled:opacity-50"
+					>
+						{repairing ? <Loader2Icon className="h-3 w-3 animate-spin" /> : <WrenchIcon className="h-3 w-3" />}
+						Reorganizar
+					</button>
+					<button
+						type="button"
+						onClick={handleRepairWithAi}
+						disabled={repairing}
+						className="flex items-center gap-1 rounded-lg bg-[#2563EB] px-2 py-1 text-[10px] font-medium text-white transition-colors hover:bg-[#1D4ED8] disabled:opacity-50"
+					>
+						Reparar con IA
+					</button>
 				</div>
 			)}
 
@@ -154,6 +203,17 @@ export function CentralCanvas({ containerRef }: CentralCanvasProps) {
 						active={modelerApi.gridEnabled}
 						title="Toggle grid"
 					/>
+					{nodes.length > 0 && (
+						<>
+							<div className="mx-1 h-5 w-px bg-[#334155]" />
+							<ToolButton
+								icon={<LayoutDashboardIcon className="h-4 w-4" />}
+								onClick={handleRebuildLayout}
+								disabled={repairing}
+								title="Reorganizar diagrama"
+							/>
+						</>
+					)}
 				</div>
 			)}
 		</div>
