@@ -8,7 +8,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
-import { extractProcessUpdates, buildSessionContext } from "@repo/ai";
+import { extractProcessUpdates, buildSessionContext, setActivity } from "@repo/ai";
 
 export async function PATCH(
 	request: NextRequest,
@@ -98,6 +98,9 @@ export async function POST(
  * Bypasses the 15s throttle since the user explicitly submitted text.
  */
 async function runManualExtraction(sessionId: string) {
+	// Update activity state: extracting
+	await setActivity(sessionId, "extracting", "Procesando indicacion manual").catch(() => {});
+
 	const session = await db.meetingSession.findUnique({
 		where: { id: sessionId },
 		include: { processDefinition: true },
@@ -181,7 +184,15 @@ async function runManualExtraction(sessionId: string) {
 		}
 	}
 
-	if (!result.newNodes?.length && !result.updatedNodes?.length) {
+	if (result.newNodes?.length || result.updatedNodes?.length) {
+		const total = (result.newNodes?.length || 0) + (result.updatedNodes?.length || 0);
+		await setActivity(sessionId, "diagramming", `${total} cambios aplicados`).catch(() => {});
+		// Return to listening after 3 seconds
+		setTimeout(() => {
+			setActivity(sessionId, "listening").catch(() => {});
+		}, 3000);
+	} else {
 		console.log(`[Transcript] No changes from extraction for ${sessionId.substring(0, 8)}`);
+		await setActivity(sessionId, "listening").catch(() => {});
 	}
 }

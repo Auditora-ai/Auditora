@@ -47,7 +47,7 @@ export function TopBar({ processName, clientName }: TopBarProps) {
 
 			{/* Center: Live indicator + Completeness */}
 			<div className="flex items-center gap-4">
-				<LiveIndicator stale={botActivity.stale} />
+				<LiveIndicator stale={botActivity.stale} activity={botActivity} />
 				<CompletenessRing score={completenessScore} />
 			</div>
 
@@ -89,21 +89,35 @@ export function TopBar({ processName, clientName }: TopBarProps) {
 	);
 }
 
-function LiveIndicator({ stale }: { stale: boolean }) {
+function LiveIndicator({ stale, activity }: { stale: boolean; activity: { type: string; detail: string | null } }) {
+	const labels: Record<string, { text: string; color: string }> = {
+		listening: { text: "Escuchando", color: "bg-green-500" },
+		extracting: { text: "Analizando...", color: "bg-blue-500" },
+		diagramming: { text: "Diagramando...", color: "bg-purple-500" },
+		suggesting: { text: "Sugiriendo...", color: "bg-amber-500" },
+	};
+	const state = labels[activity.type] || labels.listening;
+
+	if (stale) {
+		return (
+			<div className="flex items-center gap-2">
+				<span className="inline-flex h-2 w-2 rounded-full bg-amber-400" />
+				<span className="text-xs text-[#94A3B8]">Reconectando...</span>
+			</div>
+		);
+	}
+
 	return (
 		<div className="flex items-center gap-2">
 			<div className="relative flex h-2 w-2">
-				{!stale && (
-					<span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
+				{(activity.type === "extracting" || activity.type === "diagramming") && (
+					<span className={`absolute inline-flex h-full w-full animate-ping rounded-full ${state.color} opacity-75`} />
 				)}
-				<span
-					className={`relative inline-flex h-2 w-2 rounded-full ${
-						stale ? "bg-amber-400" : "bg-green-500"
-					}`}
-				/>
+				<span className={`relative inline-flex h-2 w-2 rounded-full ${state.color}`} />
 			</div>
 			<span className="text-xs text-[#94A3B8]">
-				{stale ? "Reconectando..." : "En vivo \u00B7 Recall conectado"}
+				{state.text}
+				{activity.detail && <span className="ml-1 text-[#64748B]">· {activity.detail}</span>}
 			</span>
 		</div>
 	);

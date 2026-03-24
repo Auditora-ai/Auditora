@@ -18,6 +18,7 @@ export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 	const [message, setMessage] = useState("");
 	const [sending, setSending] = useState(false);
 	const [listening, setListening] = useState(false);
+	const [processingText, setProcessingText] = useState<string | null>(null);
 	const recognitionRef = useRef<any>(null);
 
 	// Auto-scroll on new entries
@@ -35,18 +36,22 @@ export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 
 	const handleSend = useCallback(async () => {
 		if (!message.trim() || !sessionId || sending) return;
+		const text = message.trim();
 		setSending(true);
+		setProcessingText(text);
 		try {
 			const res = await fetch(`/api/sessions/${sessionId}/transcript`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ text: message.trim() }),
+				body: JSON.stringify({ text }),
 			});
 			if (!res.ok) throw new Error(`HTTP ${res.status}`);
 			setMessage("");
-			toast.success("IA procesando indicacion...");
+			// Keep processingText visible for a few seconds to show AI is working
+			setTimeout(() => setProcessingText(null), 8000);
 		} catch {
 			toast.error("Error al enviar mensaje");
+			setProcessingText(null);
 		} finally {
 			setSending(false);
 		}
@@ -150,6 +155,15 @@ export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 						{transcript.map((entry) => (
 							<TranscriptLine key={entry.id} entry={entry} />
 						))}
+						{processingText && (
+							<div className="flex items-start gap-2 rounded-lg border-l-2 border-[#7C3AED]/50 bg-[#7C3AED]/5 px-2 py-1.5 animate-pulse">
+								<Loader2Icon className="mt-0.5 h-3 w-3 flex-shrink-0 animate-spin text-[#7C3AED]" />
+								<div>
+									<span className="text-[10px] font-medium text-[#7C3AED]">IA analizando</span>
+									<p className="mt-0.5 text-[11px] text-[#94A3B8]">{processingText}</p>
+								</div>
+							</div>
+						)}
 					</div>
 				)}
 			</div>
