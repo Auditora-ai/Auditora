@@ -19,6 +19,7 @@ export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 	const [sending, setSending] = useState(false);
 	const [listening, setListening] = useState(false);
 	const [processingText, setProcessingText] = useState<string | null>(null);
+	const [interimText, setInterimText] = useState("");
 	const recognitionRef = useRef<any>(null);
 
 	// Auto-scroll on new entries
@@ -64,6 +65,7 @@ export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 			wantsListeningRef.current = false;
 			recognitionRef.current?.stop();
 			setListening(false);
+			setInterimText("");
 			return;
 		}
 
@@ -82,15 +84,25 @@ export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 
 		recognition.onresult = (event: any) => {
 			let finalTranscript = "";
+			let interim = "";
 			for (let i = event.resultIndex; i < event.results.length; i++) {
 				const result = event.results[i];
 				if (result.isFinal) {
 					finalTranscript += result[0].transcript;
+				} else {
+					interim += result[0].transcript;
 				}
 			}
 			if (finalTranscript) {
 				setMessage((prev) => (prev + " " + finalTranscript).trim());
+				setInterimText("");
+			} else if (interim) {
+				setInterimText(interim);
 			}
+		};
+
+		recognition.onaudiostart = () => {
+			toast.success("Microfono activo — habla ahora", { duration: 2000 });
 		};
 
 		recognition.onerror = (event: any) => {
@@ -188,8 +200,14 @@ export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 						value={message}
 						onChange={(e) => setMessage(e.target.value)}
 						onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
-						placeholder={listening ? "Escuchando..." : "Escribe una indicacion para la IA..."}
-						className="flex-1 rounded-lg bg-[#1E293B] px-3 py-2 text-[11px] text-[#F1F5F9] placeholder-[#64748B] outline-none ring-1 ring-[#334155] focus:ring-[#2563EB]"
+						placeholder={
+							listening
+								? interimText || "Escuchando... habla ahora"
+								: "Escribe una indicacion para la IA..."
+						}
+						className={`flex-1 rounded-lg bg-[#1E293B] px-3 py-2 text-[11px] text-[#F1F5F9] outline-none ring-1 focus:ring-[#2563EB] ${
+							listening ? "ring-red-500/50 placeholder-[#94A3B8]" : "ring-[#334155] placeholder-[#64748B]"
+						}`}
 					/>
 					<button
 						type="button"
