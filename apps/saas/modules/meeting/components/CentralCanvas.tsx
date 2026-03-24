@@ -34,26 +34,32 @@ export function CentralCanvas({ containerRef }: CentralCanvasProps) {
 		try {
 			toast.info("IA analizando flujo del proceso...");
 
-			// Step 1: AI determines correct connections
 			const res = await fetch(`/api/sessions/${sessionId}/reorganize`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 			});
 
-			if (!res.ok) throw new Error(`HTTP ${res.status}`);
-			const data = await res.json();
+			const data = await res.json().catch(() => ({}));
 
-			if (data.nodes && data.nodes.length > 0) {
-				// Step 2: Rebuild diagram with AI-fixed connections + ELK layout
+			if (res.ok && data.nodes && data.nodes.length > 0) {
 				await modelerApi.rebuildFromNodes(data.nodes);
-				toast.success(`Diagrama reorganizado — ${data.reasoning || ""}`);
+				const removed = data.removed || 0;
+				const msg = removed > 0
+					? `${removed} nodos eliminados. ${data.reasoning?.substring(0, 80) || ""}`
+					: data.reasoning?.substring(0, 100) || "Diagrama reorganizado";
+				toast.success(msg);
+			} else if (data.error) {
+				console.warn("[CentralCanvas] Reorganize error:", data.error);
+				toast.info("Reorganizando con datos actuales...");
+				await modelerApi.rebuildFromNodes(nodes);
+				toast.success("Diagrama reorganizado");
 			} else {
 				await modelerApi.rebuildFromNodes(nodes);
 				toast.success("Diagrama reorganizado");
 			}
 		} catch (err) {
 			console.error("[CentralCanvas] Rebuild failed:", err);
-			toast.error("Error al reorganizar");
+			toast.error("Error al reorganizar. Intenta de nuevo.");
 		} finally {
 			setRepairing(false);
 		}
