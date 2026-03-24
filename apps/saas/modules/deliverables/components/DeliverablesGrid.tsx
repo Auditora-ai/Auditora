@@ -247,7 +247,7 @@ export function DeliverablesGrid({
               </p>
             )}
 
-            {card.status === "completed" && card.data && (
+            {card.status === "completed" && card.data != null && (
               <p className="text-xs text-green-600">
                 Generado exitosamente
               </p>
