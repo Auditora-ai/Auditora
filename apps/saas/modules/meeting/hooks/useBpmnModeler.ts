@@ -3,6 +3,8 @@
 import { useEffect, useRef, useCallback, useState } from "react";
 import type { DiagramNode } from "../types";
 import { buildBpmnXml, layoutBpmnXml, bpmnType, dims, bpmnTag } from "../lib/bpmn-builder";
+import { ELK_BPMN_CONFIG } from "../lib/layout-constants";
+import { preprocessForElk, assignLaneYPositions } from "../lib/bpmn-layout-preprocessor";
 
 /**
  * useBpmnModeler — Custom hook for bpmn-js Modeler lifecycle
@@ -223,7 +225,7 @@ export function useBpmnModeler({
 					}
 
 					const canvas = modeler.get("canvas");
-					canvas.zoom("fit-viewport", "auto");
+					try { canvas.zoom("fit-viewport", "auto"); } catch { /* empty canvas */ }
 
 					// Populate known state from bootstrap
 					knownNodesRef.current.clear();
@@ -264,72 +266,95 @@ export function useBpmnModeler({
 			const modeler = modelerRef.current;
 			if (!modeler) return;
 
-			const rebuildNodes = (nodes || fallbackNodesRef.current || [])
-				.filter((n) => n.state !== "rejected");
+			let rebuildNodes = (nodes || fallbackNodesRef.current || [])
+				.filter((n) => n.state !== "rejected")
+				.filter((n) => {
+					// Filter phantom nodes: no label, no connections, not start/end
+					const tag = bpmnTag(n.type);
+					const isEvent = tag === "startEvent" || tag === "endEvent";
+					const hasLabel = n.label && n.label.trim() !== "";
+					return isEvent || hasLabel || n.connections.length > 0;
+				});
+
+			// Fallback: extract nodes from current canvas if no data nodes available
+			if (rebuildNodes.length === 0 && modeler) {
+				try {
+					const elementRegistry = modeler.get("elementRegistry");
+					const extracted: DiagramNode[] = [];
+					const elements = elementRegistry.filter((e: any) =>
+						e.type?.startsWith("bpmn:") &&
+						e.type !== "bpmn:Participant" &&
+						e.type !== "bpmn:Lane" &&
+						e.type !== "bpmn:Collaboration" &&
+						e.type !== "bpmn:Process" &&
+						!e.type.includes("Plane"),
+					);
+					for (const el of elements) {
+						const outgoing = (el.outgoing || []).map((c: any) => c.target?.id).filter(Boolean);
+						// Find which lane this element is in
+						let lane = "General";
+						if (el.parent?.type === "bpmn:Lane") {
+							lane = el.parent.businessObject?.name || "General";
+						} else if (el.parent?.type === "bpmn:Participant") {
+							lane = el.parent.businessObject?.name || "General";
+						}
+						extracted.push({
+							id: el.id,
+							type: el.type.replace("bpmn:", "").replace(/([A-Z])/g, "_$1").toLowerCase().replace(/^_/, ""),
+							label: el.businessObject?.name || "",
+							state: "confirmed",
+							lane,
+							connections: outgoing,
+						});
+					}
+					if (extracted.length > 0) {
+						rebuildNodes = extracted;
+					}
+				} catch (err) {
+					console.warn("[rebuildFromNodes] Canvas extraction failed:", err);
+				}
+			}
+
 			if (rebuildNodes.length === 0) {
 				setRenderError("No hay datos de nodos para regenerar el diagrama.");
 				return;
 			}
 
 			try {
-				// Step 1: Calculate positions with ELK (all nodes including start/end)
+				// Step 1: Preprocess graph + calculate positions with ELK
 				const ELK = (await import("elkjs/lib/elk.bundled.js")).default;
 				const elkInstance = new ELK();
 
 				const allNodes = rebuildNodes;
-				const lanes = [...new Set(allNodes.map((n) => n.lane || "General"))];
-				const validIds = new Set(allNodes.map((n) => n.id));
-
-				// Build ELK graph with lanes as groups
-				const elkChildren = lanes.map((lane, li) => ({
-					id: `elk_lane_${li}`,
-					layoutOptions: { "elk.padding": "[top=50,left=20,bottom=20,right=20]" },
-					children: allNodes
-						.filter((n) => (n.lane || "General") === lane)
-						.map((n) => ({ id: n.id, width: dims(n.type).w, height: dims(n.type).h })),
-				}));
-
-				const elkEdges: any[] = [];
-				let eIdx = 0;
-				for (const n of allNodes) {
-					for (const target of n.connections) {
-						if (validIds.has(target)) {
-							elkEdges.push({ id: `e${eIdx++}`, sources: [n.id], targets: [target] });
-						}
-					}
-				}
+				const pp = preprocessForElk(allNodes);
+				const lanes = pp.lanes;
 
 				const elkResult = await elkInstance.layout({
 					id: "root",
-					layoutOptions: {
-						"elk.algorithm": "layered",
-						"elk.direction": "RIGHT",
-						"elk.spacing.nodeNode": "50",
-						"elk.layered.spacing.nodeNodeBetweenLayers": "80",
-						"elk.edgeRouting": "ORTHOGONAL",
-					},
-					children: elkChildren,
-					edges: elkEdges,
+					layoutOptions: { ...ELK_BPMN_CONFIG },
+					children: pp.elkNodes.map(({ _lane, ...n }) => n),
+					edges: pp.elkEdges,
 				});
 
-				// Extract coordinates + lane dimensions
+				// Extract coordinates: X from ELK, Y from lane assignment
+				const { positions: lanePositions, laneLayouts } = assignLaneYPositions(
+					elkResult, pp, LANE_H, 50,
+				);
 				const positions = new Map<string, { x: number; y: number }>();
-				const laneDims: { x: number; y: number; w: number; h: number }[] = [];
 				const poolOffset = 40; // pool header width
 
-				for (const lane of elkResult.children || []) {
-					const lx = (lane.x || 0) + poolOffset;
-					const ly = (lane.y || 0);
-					laneDims.push({ x: lx, y: ly, w: lane.width || 400, h: lane.height || 200 });
-					for (const child of lane.children || []) {
-						positions.set(child.id, { x: lx + (child.x || 0), y: ly + (child.y || 0) });
-					}
+				for (const [id, pos] of lanePositions) {
+					positions.set(id, { x: pos.x + poolOffset, y: pos.y });
 				}
 
 				// Pool size
 				let poolW = 0, poolH = 0;
-				for (const ld of laneDims) { poolW = Math.max(poolW, ld.x + ld.w); poolH = Math.max(poolH, ld.y + ld.h); }
-				poolW += 40; poolH += 20;
+				for (const ll of laneLayouts) { poolH = Math.max(poolH, ll.y + ll.height); }
+				for (const child of elkResult.children || []) {
+					poolW = Math.max(poolW, (child.x || 0) + (child.width || 160));
+				}
+				poolW += poolOffset + 80;
+				poolH += 20;
 
 				// Step 2: Import empty diagram
 				const emptyXml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -355,26 +380,22 @@ export function useBpmnModeler({
 				}
 
 				// Step 4: Create Lanes inside the participant
-				const createdLanes: any[] = [];
-				for (let li = 0; li < lanes.length; li++) {
-					const ld = laneDims[li] || { x: 0, y: li * 200, w: poolW, h: 200 };
+				// The participant already has 1 default lane. Reuse it as lanes[0].
+				// Only call addLane() for lanes[1..N-1] to avoid N+1 duplicate lanes.
+				const existingLanes = elementRegistry.filter((e: any) => e.type === "bpmn:Lane");
+				if (existingLanes.length > 0 && lanes.length > 0) {
+					// Rename the default lane to lanes[0]
+					modeling.updateProperties(existingLanes[0], { name: lanes[0] });
+				}
+				// Add additional lanes for lanes[1..N-1]
+				for (let li = 1; li < lanes.length; li++) {
 					try {
 						const laneShape = modeling.addLane(participant, "bottom");
 						if (laneShape) {
-							// Rename the lane
 							modeling.updateProperties(laneShape, { name: lanes[li] });
-							createdLanes.push(laneShape);
 						}
 					} catch {
 						// Lane creation may not work as expected
-					}
-				}
-				// Remove the default lane if we created new ones
-				if (createdLanes.length > 0) {
-					// Name the first auto-created lane
-					const existingLanes = elementRegistry.filter((e: any) => e.type === "bpmn:Lane");
-					if (existingLanes.length > 0 && lanes.length > 0) {
-						modeling.updateProperties(existingLanes[0], { name: lanes[0] });
 					}
 				}
 
@@ -386,23 +407,22 @@ export function useBpmnModeler({
 					if (name) laneMap.set(name, laneEl);
 				}
 
-				// Step 5: Create all shapes inside the CORRECT lane
+				// Step 5: Create all shapes in participant, then move to correct lanes
+				// Strategy: create with correct absolute positions in participant first
+				// (this preserves connection routing), then reassign to lanes after.
 				const createdElements = new Map<string, any>();
+
 				for (const n of allNodes) {
 					const type = bpmnType(n.type);
 					const pos = positions.get(n.id) || { x: 200, y: 200 };
 					const d = dims(n.type);
-
-					// Find the lane this node belongs to
-					const nodeLane = n.lane || "General";
-					const targetLane = laneMap.get(nodeLane) || participant;
 
 					try {
 						const shape = elementFactory.createShape({ type });
 						const created = modeling.createShape(
 							shape,
 							{ x: pos.x + d.w / 2, y: pos.y + d.h / 2 },
-							targetLane,
+							participant,
 						);
 						if (created) {
 							modeling.updateProperties(created, { name: n.label || undefined });
@@ -413,23 +433,87 @@ export function useBpmnModeler({
 					}
 				}
 
-				// Step 6: Create connections
+				// Step 6: Create connections with labels (for gateway conditions)
 				for (const n of allNodes) {
 					const sourceEl = createdElements.get(n.id);
 					if (!sourceEl) continue;
-					for (const targetId of n.connections) {
+					for (let ci = 0; ci < n.connections.length; ci++) {
+						const targetId = n.connections[ci];
 						const targetEl = createdElements.get(targetId);
 						if (!targetEl) continue;
 						try {
-							modeling.connect(sourceEl, targetEl);
+							const connection = modeling.connect(sourceEl, targetEl);
+							// Add label for gateway outgoing flows
+							const condLabel = n.connectionLabels?.[ci];
+							if (condLabel && connection) {
+								modeling.updateProperties(connection, { name: condLabel });
+							}
 						} catch {
 							// ok
 						}
 					}
 				}
 
+				// Step 7: Resize lanes to encompass their shapes
+				// Instead of moving shapes into lanes (which repositions them),
+				// we resize each lane to cover the Y-band where its shapes are.
+				for (const ll of laneLayouts) {
+					const laneEl = laneMap.get(ll.name);
+					if (!laneEl) continue;
+
+					// Find min/max Y of shapes in this lane
+					let minY = Infinity, maxY = -Infinity;
+					for (const n of allNodes) {
+						if ((n.lane || "General") !== ll.name) continue;
+						const el = createdElements.get(n.id);
+						if (!el) continue;
+						minY = Math.min(minY, el.y);
+						maxY = Math.max(maxY, el.y + el.height);
+					}
+					if (minY === Infinity) continue; // No shapes in this lane
+
+					const padding = 30;
+					const newY = minY - padding;
+					const newH = (maxY - minY) + padding * 2;
+
+					try {
+						modeling.resizeLane(laneEl, {
+							x: laneEl.x,
+							y: newY,
+							width: laneEl.width,
+							height: Math.max(newH, 120),
+						});
+					} catch {
+						// resizeLane may not be available, try moveShape + resize
+						try {
+							modeling.resizeShape(laneEl, {
+								x: laneEl.x,
+								y: newY,
+								width: laneEl.width,
+								height: Math.max(newH, 120),
+							});
+						} catch { /* ok */ }
+					}
+				}
+
+				// Step 8: Re-layout all connections for proper orthogonal routing
+				// bpmn-js uses Manhattan routing but it needs to be triggered after
+				// all shapes are in their final positions
+				try {
+					const layouter = modeler.get("connectionDocking");
+					const allConnections = elementRegistry.filter((e: any) => e.type === "bpmn:SequenceFlow");
+					for (const conn of allConnections) {
+						try {
+							modeling.layoutConnection(conn);
+						} catch { /* ok */ }
+					}
+				} catch { /* connectionDocking not available */ }
+
 				canvas.zoom("fit-viewport", "auto");
-				applyBizagiColors(modeler);
+				// Apply colors after a tick to ensure all shapes are fully rendered
+				setTimeout(() => {
+					try { applyBizagiColors(modeler); } catch { /* ok */ }
+				}, 100);
 				forceCanvasWhite(containerRef.current);
 
 				// Reset incremental state

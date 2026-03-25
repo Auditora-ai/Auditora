@@ -13,52 +13,16 @@
 import type { DiagramNode } from "../types";
 import { escapeHtml as esc } from "./html-utils";
 import ELK from "elkjs/lib/elk.bundled.js";
+import { ELK_BPMN_CONFIG, LANE_H, bpmnTag, dims, bpmnType } from "./layout-constants";
+import { preprocessForElk, assignLaneYPositions } from "./bpmn-layout-preprocessor";
 
 // Re-export layout constants for useBpmnModeler incremental placement
 export { TASK_W, TASK_H, GW_SIZE, EVENT_SIZE, LANE_H, X_GAP, Y_PAD, POOL_X, CONTENT_X } from "./layout-constants";
 
 const elk = new ELK();
 
-export function bpmnTag(type: string): string {
-	const map: Record<string, string> = {
-		task: "task", user_task: "userTask", usertask: "userTask",
-		service_task: "serviceTask", servicetask: "serviceTask",
-		manual_task: "manualTask", manualtask: "manualTask",
-		business_rule_task: "businessRuleTask", businessruletask: "businessRuleTask",
-		subprocess: "subProcess", sub_process: "subProcess",
-		start_event: "startEvent", startevent: "startEvent",
-		end_event: "endEvent", endevent: "endEvent",
-		exclusive_gateway: "exclusiveGateway", exclusivegateway: "exclusiveGateway",
-		parallel_gateway: "parallelGateway", parallelgateway: "parallelGateway",
-		intermediate_event: "intermediateCatchEvent", intermediateevent: "intermediateCatchEvent",
-		timer_event: "intermediateCatchEvent", timerevent: "intermediateCatchEvent",
-		message_event: "intermediateCatchEvent", messageevent: "intermediateCatchEvent",
-		text_annotation: "textAnnotation", textannotation: "textAnnotation",
-		data_object: "dataObjectReference", dataobject: "dataObjectReference",
-	};
-	return map[type.toLowerCase()] || "task";
-}
-
-export function dims(type: string) {
-	const tag = bpmnTag(type);
-	if (tag.includes("Gateway")) return { w: 50, h: 50 };
-	if (tag.includes("Event") || tag === "intermediateCatchEvent") return { w: 36, h: 36 };
-	if (tag === "subProcess") return { w: 120, h: 100 };
-	return { w: 160, h: 80 };
-}
-
-export function bpmnType(type: string): string {
-	const tag = bpmnTag(type);
-	const map: Record<string, string> = {
-		task: "bpmn:Task", userTask: "bpmn:UserTask", serviceTask: "bpmn:ServiceTask",
-		manualTask: "bpmn:ManualTask", businessRuleTask: "bpmn:BusinessRuleTask",
-		subProcess: "bpmn:SubProcess", startEvent: "bpmn:StartEvent", endEvent: "bpmn:EndEvent",
-		exclusiveGateway: "bpmn:ExclusiveGateway", parallelGateway: "bpmn:ParallelGateway",
-		intermediateCatchEvent: "bpmn:IntermediateCatchEvent",
-		textAnnotation: "bpmn:TextAnnotation", dataObjectReference: "bpmn:DataObjectReference",
-	};
-	return map[tag] || "bpmn:Task";
-}
+// bpmnTag, dims, bpmnType are re-exported from layout-constants to avoid circular imports
+export { bpmnTag, dims, bpmnType } from "./layout-constants";
 
 /**
  * Build BPMN 2.0 XML with ELK-powered professional layout.
@@ -152,80 +116,47 @@ export async function buildBpmnXml(inputNodes: DiagramNode[]): Promise<string> {
 		if (n.connections.length > 1 && !n.type.toLowerCase().includes("gateway")) n.connections = [n.connections[0]];
 	}
 
-	// Break cycles
-	const visited = new Set<string>(); const inStack = new Set<string>();
-	function breakCycles(nodeId: string) {
-		if (inStack.has(nodeId) || visited.has(nodeId)) return;
-		visited.add(nodeId); inStack.add(nodeId);
-		const node = ordered.find((n) => n.id === nodeId);
-		if (node) {
-			node.connections = node.connections.filter((t) => !inStack.has(t));
-			for (const t of node.connections) breakCycles(t);
-		}
-		inStack.delete(nodeId);
-	}
-	breakCycles(ordered[0].id);
+	// --- Preprocessor: detect back-edges, build flat ELK graph with port constraints ---
+	// Back-edges are NOT removed — they're omitted from ELK and rendered separately.
+	const pp = preprocessForElk(ordered);
 
-	// --- ELK Layout ---
 	const nodeById = new Map(ordered.map((n) => [n.id, n]));
-
-	// Build ELK graph: lanes as group nodes
-	const elkChildren: any[] = [];
-	for (let li = 0; li < lanes.length; li++) {
-		const laneNodes = ordered.filter((n) => (n.lane || "General") === lanes[li]);
-		elkChildren.push({
-			id: `Lane_${li}`,
-			layoutOptions: {
-				"elk.padding": "[top=40,left=20,bottom=20,right=20]",
-			},
-			children: laneNodes.map((n) => {
-				const d = dims(n.type);
-				return { id: n.id, width: d.w, height: d.h };
-			}),
-		});
-	}
-
-	// Build ELK edges
-	const elkEdges: any[] = [];
-	let flowId = 0;
-	for (const n of ordered) {
-		for (const targetId of n.connections) {
-			flowId++;
-			elkEdges.push({ id: `flow_${flowId}`, sources: [n.id], targets: [targetId] });
-		}
-	}
 
 	let elkResult: any;
 	try {
 		elkResult = await elk.layout({
 			id: "root",
-			layoutOptions: {
-				"elk.algorithm": "layered",
-				"elk.direction": "RIGHT",
-				"elk.spacing.nodeNode": "40",
-				"elk.layered.spacing.nodeNodeBetweenLayers": "60",
-				"elk.edgeRouting": "ORTHOGONAL",
-				"elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",
-			},
-			children: elkChildren,
-			edges: elkEdges,
+			layoutOptions: { ...ELK_BPMN_CONFIG },
+			children: pp.elkNodes.map(({ _lane, ...n }) => n),
+			edges: pp.elkEdges,
 		});
 	} catch (err) {
 		console.warn("[bpmn-builder] ELK layout failed, using fallback:", err);
 		return emptyXml();
 	}
 
-	// --- Extract coordinates from ELK result ---
+	// --- Extract coordinates: X from ELK, Y from lane assignment ---
+	const { positions: lanePositions, laneLayouts } = assignLaneYPositions(
+		elkResult, pp, LANE_H, 50,
+	);
 	const nodeCoords = new Map<string, { x: number; y: number }>();
 	const laneCoords = new Map<string, { x: number; y: number; w: number; h: number }>();
 
-	for (const lane of elkResult.children || []) {
-		const lx = lane.x || 0;
-		const ly = lane.y || 0;
-		laneCoords.set(lane.id, { x: lx, y: ly, w: lane.width || 400, h: lane.height || 200 });
-		for (const child of lane.children || []) {
-			nodeCoords.set(child.id, { x: lx + (child.x || 0), y: ly + (child.y || 0) });
-		}
+	// Find max X to determine pool width
+	let maxX = 0;
+	for (const child of elkResult.children || []) {
+		const x = (child.x || 0) + (child.width || 160);
+		if (x > maxX) maxX = x;
+	}
+
+	for (const [id, pos] of lanePositions) {
+		nodeCoords.set(id, { x: pos.x, y: pos.y });
+	}
+
+	// Build lane coordinate map for XML generation
+	for (let li = 0; li < laneLayouts.length; li++) {
+		const ll = laneLayouts[li];
+		laneCoords.set(`Lane_${li}`, { x: 0, y: ll.y, w: maxX + 80, h: ll.height });
 	}
 
 	// Pool dimensions
@@ -242,9 +173,28 @@ export async function buildBpmnXml(inputNodes: DiagramNode[]): Promise<string> {
 	poolH += 40;
 
 	// Offset all coordinates by pool header
-	for (const [id, coord] of nodeCoords) {
+	for (const [, coord] of nodeCoords) {
 		coord.x += poolHeaderW + 20;
 		coord.y += poolY;
+	}
+
+	// Remap lanes from preprocessor names to ordered indices
+	const ppLaneToIndex = new Map<string, number>();
+	for (let li = 0; li < lanes.length; li++) {
+		ppLaneToIndex.set(lanes[li], li);
+	}
+
+	// --- Build edge lookup from ELK result for waypoints ---
+	// Map from "sourceId->targetId" to ELK edge sections
+	const elkEdgeSections = new Map<string, any>();
+	for (const edge of elkResult.edges || []) {
+		const section = edge.sections?.[0];
+		if (section) {
+			// Extract node IDs from port IDs (e.g., "task1_out" → "task1")
+			const sourceNodeId = edge.sources?.[0]?.replace(/_out$|_back$/, "") || "";
+			const targetNodeId = edge.targets?.[0]?.replace(/_in$/, "") || "";
+			elkEdgeSections.set(`${sourceNodeId}->${targetNodeId}`, section);
+		}
 	}
 
 	// --- Generate XML ---
@@ -252,7 +202,7 @@ export async function buildBpmnXml(inputNodes: DiagramNode[]): Promise<string> {
 	let flowsXml = "";
 	let shapesXml = "";
 	let edgesXml = "";
-	flowId = 0;
+	let flowId = 0;
 
 	// Lane set
 	let laneSetXml = "    <bpmn:laneSet>\n";
@@ -299,24 +249,39 @@ export async function buildBpmnXml(inputNodes: DiagramNode[]): Promise<string> {
 			const condAttr = condLabel ? ` name="${esc(condLabel)}"` : "";
 			flowsXml += `    <bpmn:sequenceFlow id="${fid}"${condAttr} sourceRef="${n.id}" targetRef="${targetId}" />\n`;
 
-			// Find ELK edge for waypoints
-			const elkEdge = elkResult.edges?.find((e: any) => e.id === fid);
-			const section = elkEdge?.sections?.[0];
-			let waypoints: string;
+			// Straight line waypoints from node positions (ELK flat layout + lane Y)
+			const tc = nodeCoords.get(targetId) || { x: coord.x + 200, y: coord.y };
+			const td = dims(nodeById.get(targetId)?.type || "task");
 
-			if (section) {
-				const pts: { x: number; y: number }[] = [];
-				pts.push({ x: (section.startPoint?.x || 0) + poolHeaderW + 20, y: (section.startPoint?.y || 0) + poolY });
-				for (const bp of section.bendPoints || []) {
-					pts.push({ x: bp.x + poolHeaderW + 20, y: bp.y + poolY });
-				}
-				pts.push({ x: (section.endPoint?.x || 0) + poolHeaderW + 20, y: (section.endPoint?.y || 0) + poolY });
-				waypoints = pts.map((p) => `      <di:waypoint x="${Math.round(p.x)}" y="${Math.round(p.y)}" />`).join("\n");
+			const isBackEdge = pp.backEdges.has(`${n.id}->${targetId}`);
+
+			let waypoints: string;
+			if (isBackEdge) {
+				// Back-edge: exit from bottom of source, route down and back to target
+				const srcBottom = { x: coord.x + d.w / 2, y: coord.y + d.h };
+				const tgtBottom = { x: tc.x + td.w / 2, y: tc.y + td.h };
+				const routeY = Math.max(srcBottom.y, tgtBottom.y) + 40;
+				waypoints = [
+					`      <di:waypoint x="${Math.round(srcBottom.x)}" y="${Math.round(srcBottom.y)}" />`,
+					`      <di:waypoint x="${Math.round(srcBottom.x)}" y="${Math.round(routeY)}" />`,
+					`      <di:waypoint x="${Math.round(tgtBottom.x)}" y="${Math.round(routeY)}" />`,
+					`      <di:waypoint x="${Math.round(tgtBottom.x)}" y="${Math.round(tgtBottom.y)}" />`,
+				].join("\n");
 			} else {
-				// Fallback: straight line
-				const tc = nodeCoords.get(targetId) || { x: coord.x + 200, y: coord.y };
-				const td = dims(nodeById.get(targetId)?.type || "task");
-				waypoints = `      <di:waypoint x="${Math.round(coord.x + d.w)}" y="${Math.round(coord.y + d.h / 2)}" />\n      <di:waypoint x="${Math.round(tc.x)}" y="${Math.round(tc.y + td.h / 2)}" />`;
+				// Forward edge: use ELK waypoints if available, otherwise straight line
+				const section = elkEdgeSections.get(`${n.id}->${targetId}`);
+				if (section) {
+					const pts: { x: number; y: number }[] = [];
+					pts.push({ x: (section.startPoint?.x || 0) + poolHeaderW + 20, y: (section.startPoint?.y || 0) + poolY });
+					for (const bp of section.bendPoints || []) {
+						pts.push({ x: bp.x + poolHeaderW + 20, y: bp.y + poolY });
+					}
+					pts.push({ x: (section.endPoint?.x || 0) + poolHeaderW + 20, y: (section.endPoint?.y || 0) + poolY });
+					waypoints = pts.map((p) => `      <di:waypoint x="${Math.round(p.x)}" y="${Math.round(p.y)}" />`).join("\n");
+				} else {
+					// Fallback: straight line between node edges
+					waypoints = `      <di:waypoint x="${Math.round(coord.x + d.w)}" y="${Math.round(coord.y + d.h / 2)}" />\n      <di:waypoint x="${Math.round(tc.x)}" y="${Math.round(tc.y + td.h / 2)}" />`;
+				}
 			}
 			edgesXml += `    <bpmndi:BPMNEdge id="${fid}_di" bpmnElement="${fid}">\n${waypoints}\n    </bpmndi:BPMNEdge>\n`;
 		}

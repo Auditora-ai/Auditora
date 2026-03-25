@@ -11,6 +11,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
 import { generateText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
+import { requireSessionAuth, isAuthError } from "@/lib/auth-helpers";
 
 export async function POST(
 	request: NextRequest,
@@ -19,22 +20,18 @@ export async function POST(
 	try {
 		const { sessionId } = await params;
 
-		const session = await db.meetingSession.findUnique({
-			where: { id: sessionId },
-			include: { processDefinition: true },
-		});
+		const authResult = await requireSessionAuth(sessionId);
+		if (isAuthError(authResult)) return authResult;
+		const { session } = authResult;
 
-		// Pre-clean: reject nodes without lane (junk from pattern library)
+		// Pre-clean: assign default lane to nodes without lane (instead of rejecting)
 		await db.diagramNode.updateMany({
-			where: { sessionId, lane: null, state: { not: "REJECTED" },
-				nodeType: { notIn: ["START_EVENT", "END_EVENT"] } },
-			data: { state: "REJECTED", rejectedAt: new Date() },
+			where: { sessionId, lane: null, state: { not: "REJECTED" } },
+			data: { lane: "General" },
 		});
-		// Also reject nodes with lane = empty string
 		await db.diagramNode.updateMany({
-			where: { sessionId, lane: "", state: { not: "REJECTED" },
-				nodeType: { notIn: ["START_EVENT", "END_EVENT"] } },
-			data: { state: "REJECTED", rejectedAt: new Date() },
+			where: { sessionId, lane: "", state: { not: "REJECTED" } },
+			data: { lane: "General" },
 		});
 
 		const allNodes = await db.diagramNode.findMany({
@@ -43,7 +40,20 @@ export async function POST(
 		});
 
 		if (allNodes.length < 2) {
-			return NextResponse.json({ ok: true, message: "Not enough nodes" });
+			// Not enough nodes for AI analysis — return what we have for simple rebuild
+			return NextResponse.json({
+				ok: true,
+				message: "Not enough nodes for AI analysis",
+				nodes: allNodes.map((n) => ({
+					id: n.id,
+					type: n.nodeType.toLowerCase(),
+					label: n.label,
+					state: n.state.toLowerCase(),
+					lane: n.lane || "General",
+					connections: n.connections || [],
+					confidence: n.confidence,
+				})),
+			});
 		}
 
 		console.log(`[Reorganize] ${allNodes.length} nodes after pre-clean`);
@@ -76,18 +86,18 @@ TU ROL: Actúa como un ingeniero modelador profesional. Tu trabajo es limpiar, c
 PROCESO: "${processName}"${processDesc ? ` — ${processDesc}` : ""}
 
 EVALUACIÓN DE CADA NODO — Para cada nodo, evalúa:
-1. ¿Fue mencionado en la conversación o es relevante al proceso "${processName}"?
+1. ¿Es relevante al proceso "${processName}"? (si tiene un label que tiene sentido para este proceso, CONSÉRVALO)
 2. ¿Tiene un nombre correcto (verbo + sustantivo para tareas, pregunta para gateways)?
 3. ¿Está en el lane correcto (quién hace esta actividad)?
-4. ¿Es un duplicado de otro nodo?
+4. ¿Es un duplicado exacto de otro nodo?
 
 REGLAS DE LIMPIEZA:
-- ELIMINA nodos que NO pertenecen al proceso (ej: "Solicitar información" genérico sin contexto)
-- ELIMINA nodos que NO fueron discutidos en la conversación
-- ELIMINA duplicados (misma actividad con diferente nombre)
+- CONSERVA todos los nodos que tengan un label relevante al proceso — aunque no hayan sido mencionados en la conversación
+- SOLO ELIMINA nodos que sean duplicados exactos o que tengan labels vacíos/genéricos sin sentido
 - CORRIGE labels: tareas = verbo + sustantivo, gateways = pregunta con ¿?
-- CORRIGE lanes: asigna el rol/área correcto basado en el contexto
+- CORRIGE lanes: asigna el rol/área correcto basado en el contexto del proceso
 - CORRIGE tipos: si una "tarea" es realmente una decisión, cámbiala a exclusiveGateway
+- Si un nodo no tiene label pero es un start_event o end_event, CONSÉRVALO con label "Inicio"/"Fin"
 
 REGLAS DE CONEXIÓN:
 - El proceso fluye de INICIO a FIN en una secuencia lógica
@@ -188,9 +198,15 @@ Revisa cada nodo, elimina lo que no pertenece, corrige lo que esté mal, y organ
 
 		const validIds = new Set(allNodes.map((n) => n.id));
 
-		// Step 1: Delete removed nodes
+		// Safety: if AI wants to remove >70% of nodes, something went wrong — abort removal
 		const removeIds = (result.remove || []).filter((id: string) => validIds.has(id));
-		if (removeIds.length > 0) {
+		const keepCount = (result.keep || []).filter((n: any) => validIds.has(n.id)).length;
+		const removalRatio = removeIds.length / allNodes.length;
+
+		if (removalRatio > 0.7 && allNodes.length > 3) {
+			console.warn(`[Reorganize] AI wants to remove ${removeIds.length}/${allNodes.length} nodes (${Math.round(removalRatio * 100)}%) — aborting removal to protect data`);
+			// Don't remove anything, just update what AI wants to keep
+		} else if (removeIds.length > 0) {
 			await db.diagramNode.updateMany({
 				where: { id: { in: removeIds } },
 				data: { state: "REJECTED", rejectedAt: new Date() },
@@ -201,9 +217,14 @@ Revisa cada nodo, elimina lo que no pertenece, corrige lo que esté mal, y organ
 		// Step 2: Update kept nodes (label, type, lane, connections)
 		let updated = 0;
 		const keepIds = new Set<string>();
+		// Store targetLabels from AI for the response (not persisted in DB)
+		const nodeTargetLabels = new Map<string, string[]>();
 		for (const node of result.keep || []) {
 			if (!node.id || !validIds.has(node.id)) continue;
 			keepIds.add(node.id);
+			if (node.targetLabels?.length > 0) {
+				nodeTargetLabels.set(node.id, node.targetLabels);
+			}
 
 			const updateData: any = {};
 			if (node.label) updateData.label = node.label;
@@ -302,6 +323,7 @@ Revisa cada nodo, elimina lo que no pertenece, corrige lo que esté mal, y organ
 				state: n.state.toLowerCase(),
 				lane: n.lane || undefined,
 				connections: n.connections || [],
+				connectionLabels: nodeTargetLabels.get(n.id) || [],
 				confidence: n.confidence,
 			})),
 		});
