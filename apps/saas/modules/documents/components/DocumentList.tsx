@@ -13,6 +13,13 @@ import {
 	TableRow,
 } from "@repo/ui/components/table";
 import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
+import {
 	FileTextIcon,
 	FileImageIcon,
 	FileSpreadsheetIcon,
@@ -21,6 +28,7 @@ import {
 	PencilIcon,
 	CheckIcon,
 	XIcon,
+	MoreHorizontalIcon,
 } from "lucide-react";
 import { ExtractProcessesButton } from "./ExtractProcessesButton";
 
@@ -84,20 +92,23 @@ export function DocumentList({
 	const cancelEdit = () => {
 		setEditingId(null);
 	};
+
 	if (documents.length === 0) {
 		return (
 			<Card>
 				<div className="flex flex-col items-center justify-center p-12 text-center">
-					<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-						<FileTextIcon className="h-6 w-6 text-primary" />
+					<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#EFF6FF]">
+						<FileTextIcon className="h-6 w-6 text-[#2563EB]" />
 					</div>
-					<p className="text-sm text-muted-foreground">
+					<p className="text-sm text-[#94A3B8]">
 						No documents uploaded yet.
 					</p>
 				</div>
 			</Card>
 		);
 	}
+
+	const hasMenuActions = onEdit || onDelete;
 
 	return (
 		<Card>
@@ -118,7 +129,7 @@ export function DocumentList({
 							<TableRow key={doc.id}>
 								<TableCell>
 									<div className="flex items-center gap-2">
-										<Icon className="h-4 w-4 text-muted-foreground" />
+										<Icon className="h-4 w-4 text-[#94A3B8]" />
 										{editingId === doc.id ? (
 											<div className="flex items-center gap-1">
 												<Input
@@ -145,19 +156,19 @@ export function DocumentList({
 										)}
 									</div>
 								</TableCell>
-								<TableCell className="text-muted-foreground">
+								<TableCell className="text-[#94A3B8]">
 									{doc.mimeType.split("/").pop()}
 								</TableCell>
-								<TableCell className="text-muted-foreground">
+								<TableCell className="text-[#94A3B8]">
 									{formatFileSize(doc.fileSize)}
 								</TableCell>
-								<TableCell className="text-muted-foreground">
+								<TableCell className="text-[#94A3B8]">
 									{new Date(
 										doc.createdAt,
 									).toLocaleDateString()}
 								</TableCell>
 								<TableCell className="text-right">
-									<div className="flex items-center justify-end gap-2">
+									<div className="flex items-center justify-end gap-1">
 										{showExtract && (
 											<ExtractProcessesButton
 												documentId={doc.id}
@@ -165,36 +176,44 @@ export function DocumentList({
 												onExtracted={() => onExtracted?.()}
 											/>
 										)}
-										{onEdit && editingId !== doc.id && (
-											<Button
-												variant="ghost"
-												size="icon"
-												onClick={() => startEdit(doc)}
-											>
-												<PencilIcon className="h-4 w-4" />
-											</Button>
-										)}
 										{onDownload && (
 											<Button
 												variant="ghost"
 												size="icon"
-												onClick={() =>
-													onDownload(doc.id)
-												}
+												className="h-8 w-8"
+												onClick={() => onDownload(doc.id)}
 											>
 												<DownloadIcon className="h-4 w-4" />
 											</Button>
 										)}
-										{onDelete && (
-											<Button
-												variant="ghost"
-												size="icon"
-												onClick={() =>
-													onDelete(doc.id)
-												}
-											>
-												<TrashIcon className="h-4 w-4" />
-											</Button>
+										{hasMenuActions && editingId !== doc.id && (
+											<DropdownMenu>
+												<DropdownMenuTrigger asChild>
+													<Button variant="ghost" size="icon" className="h-8 w-8">
+														<MoreHorizontalIcon className="h-4 w-4" />
+													</Button>
+												</DropdownMenuTrigger>
+												<DropdownMenuContent align="end">
+													{onEdit && (
+														<DropdownMenuItem onClick={() => startEdit(doc)}>
+															<PencilIcon className="mr-2 h-4 w-4" />
+															Renombrar
+														</DropdownMenuItem>
+													)}
+													{onDelete && (
+														<>
+															{onEdit && <DropdownMenuSeparator />}
+															<DropdownMenuItem
+																className="text-destructive focus:text-destructive"
+																onClick={() => onDelete(doc.id)}
+															>
+																<TrashIcon className="mr-2 h-4 w-4" />
+																Eliminar
+															</DropdownMenuItem>
+														</>
+													)}
+												</DropdownMenuContent>
+											</DropdownMenu>
 										)}
 									</div>
 								</TableCell>

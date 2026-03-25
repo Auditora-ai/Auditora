@@ -17,6 +17,13 @@ import {
 	SelectValue,
 } from "@repo/ui/components/select";
 import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
+import {
 	ArrowLeft,
 	FileText,
 	GitBranch,
@@ -48,6 +55,7 @@ import {
 	AlertTriangleIcon,
 	ShieldAlertIcon,
 	TrashIcon,
+	MoreHorizontalIcon,
 } from "lucide-react";
 import { toastSuccess, toastError } from "@repo/ui/components/toast";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
@@ -60,6 +68,14 @@ import { useBpmnModeler } from "@meeting/hooks/useBpmnModeler";
 // BpmnIntelligence and BpmnVersionDiff available but not rendered inside canvas
 // to avoid breaking modeler interaction. Activated via toolbar toggles.
 import { DocumentList } from "@documents/components/DocumentList";
+import { ContextChat } from "./ContextChat";
+import { VersionDiff } from "./VersionDiff";
+import {
+	ProcessPhaseDashboard,
+	calculatePhaseCompleteness,
+	calculateOverallHealth,
+} from "./ProcessPhaseDashboard";
+import { ProcessHealthRing } from "./ProcessHealthRing";
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-js.css";
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
@@ -76,6 +92,12 @@ type ProcessChild = {
 	description: string | null;
 };
 
+type SessionDeliverable = {
+	type: string;
+	status: string;
+	data: Record<string, unknown> | null;
+};
+
 type ProcessSession = {
 	id: string;
 	type: string;
@@ -83,6 +105,7 @@ type ProcessSession = {
 	createdAt: string;
 	endedAt: string | null;
 	_count: { diagramNodes: number };
+	deliverables?: SessionDeliverable[];
 };
 
 type ProcessVersionEntry = {
@@ -113,6 +136,8 @@ interface ProcessData {
 	sessionsCount: number;
 	versionsCount: number;
 	raciCount: number;
+	risksCount: number;
+	hasIntelligence: boolean;
 	conflictsCount: number;
 }
 
@@ -174,13 +199,13 @@ function CollapsibleSection({
 			<button
 				type="button"
 				onClick={() => setOpen(!open)}
-				className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-accent/30"
+				className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-[#F1F5F9]"
 			>
 				<div className="flex items-center gap-2.5">
 					<Icon className="h-4 w-4 text-muted-foreground" />
 					<span className="text-sm font-semibold">{title}</span>
 					{badge?.type === "count" && badge.count > 0 && (
-						<span className="rounded-full bg-primary/10 px-1.5 text-xs text-primary">
+						<span className="rounded-full bg-[#EFF6FF] px-1.5 text-xs text-[#2563EB]">
 							{badge.count}
 						</span>
 					)}
@@ -237,27 +262,34 @@ export function ProcessDetailView({
 	basePath,
 }: ProcessDetailViewProps) {
 	const [process, setProcess] = useState(initialProcess);
-	const [activeTab, setActiveTab] = useState<string>("diagram");
+	const [expandedPhase, setExpandedPhase] = useState<string | null>(null);
+	// Keep DiagramTab mounted once expanded to avoid costly bpmn-js remount
+	const [modeloMounted, setModeloMounted] = useState(false);
 	const [exporting, setExporting] = useState(false);
+	const [editingField, setEditingField] = useState<string | null>(null);
+	const [editName, setEditName] = useState(process.name);
+	const [editDescription, setEditDescription] = useState(process.description || "");
+	const [editOwner, setEditOwner] = useState(process.owner || "");
 	const router = useRouter();
 	const { confirm } = useConfirmationAlert();
 
-	const tabs = [
-		{ key: "diagram", label: "Diagrama", icon: GitBranch },
-		{ key: "info", label: "Informacion", icon: FileText },
-		{ key: "analysis", label: "Analisis IA", icon: SparklesIcon },
-		{ key: "sessions", label: "Sesiones", icon: ClockIcon },
-	];
-
 	const processesPath = `${basePath}/procesos`;
+
+	// Calculate health score for the header ring
+	const scores = calculatePhaseCompleteness({
+		...process,
+		risksCount: process.risksCount ?? 0,
+		hasIntelligence: process.hasIntelligence ?? false,
+	});
+	const healthScore = calculateOverallHealth(scores);
 
 	const handleExportReport = async () => {
 		setExporting(true);
 		try {
-			const res = await fetch("/api/processes/export-report", {
+			const res = await fetch(`/api/processes/${process.id}/export-book`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ svgMap: {} }),
+				body: JSON.stringify({}),
 			});
 			if (res.ok) {
 				const html = await res.text();
@@ -274,6 +306,7 @@ export function ProcessDetailView({
 	const handleShare = async () => {
 		const url = `${window.location.origin}/share/${process.id}`;
 		await navigator.clipboard.writeText(url);
+		toastSuccess("Link copiado");
 	};
 
 	const handleDeleteProcess = () => {
@@ -288,6 +321,38 @@ export function ProcessDetailView({
 				router.push(processesPath);
 			},
 		});
+	};
+
+	const saveInlineField = async (field: string, value: string) => {
+		// Validate: name cannot be empty
+		if (field === "name" && !value.trim()) {
+			setEditName(process.name);
+			toastError("El nombre es requerido");
+			setEditingField(null);
+			return;
+		}
+		try {
+			const res = await fetch(`/api/processes/${process.id}`, {
+				method: "PATCH",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ [field]: value || null }),
+			});
+			if (res.ok) {
+				setProcess((prev) => ({ ...prev, [field]: value || null }));
+			} else {
+				// Revert on failure
+				if (field === "name") setEditName(process.name);
+				if (field === "description") setEditDescription(process.description || "");
+				if (field === "owner") setEditOwner(process.owner || "");
+				toastError("Error al guardar");
+			}
+		} catch {
+			if (field === "name") setEditName(process.name);
+			if (field === "description") setEditDescription(process.description || "");
+			if (field === "owner") setEditOwner(process.owner || "");
+			toastError("Error al guardar");
+		}
+		setEditingField(null);
 	};
 
 	return (
@@ -312,7 +377,7 @@ export function ProcessDetailView({
 				<span className="text-foreground font-medium">{process.name}</span>
 			</nav>
 
-			{/* Header + Action Bar */}
+			{/* Header Identity Card */}
 			<div className="flex items-start justify-between">
 				<div className="flex items-start gap-4">
 					<Link href={processesPath}>
@@ -320,18 +385,102 @@ export function ProcessDetailView({
 							<ArrowLeft className="h-5 w-5" />
 						</Button>
 					</Link>
-					<div>
+					<div className="flex-1 space-y-1">
+						{/* Name — inline editable */}
 						<div className="flex items-center gap-3">
-							<h1 className="text-2xl font-bold">{process.name}</h1>
-							<Badge status={STATUS_MAP[process.processStatus] || "info"}>
-								{process.processStatus}
-							</Badge>
+							{editingField === "name" ? (
+								<input
+									autoFocus
+									className="text-2xl font-bold bg-transparent border-b-2 border-[#2563EB] outline-none px-0 py-0"
+									value={editName}
+									onChange={(e) => setEditName(e.target.value)}
+									onBlur={() => saveInlineField("name", editName)}
+									onKeyDown={(e) => {
+										if (e.key === "Enter") saveInlineField("name", editName);
+										if (e.key === "Escape") {
+											setEditName(process.name);
+											setEditingField(null);
+										}
+									}}
+								/>
+							) : (
+								<h1
+									className="text-2xl font-bold cursor-pointer hover:text-primary/80 transition-colors"
+									onClick={() => {
+										setEditName(process.name);
+										setEditingField("name");
+									}}
+									title="Click para editar"
+								>
+									{process.name}
+								</h1>
+							)}
 							{process.category && <Badge>{process.category}</Badge>}
+							<ProcessHealthRing score={healthScore} />
 						</div>
-						{process.description && (
-							<p className="mt-1 text-sm text-muted-foreground max-w-xl">
-								{process.description}
+
+						{/* Description — inline editable */}
+						{editingField === "description" ? (
+							<input
+								autoFocus
+								className="text-sm text-muted-foreground bg-transparent border-b border-[#2563EB] outline-none w-full max-w-xl px-0 py-0"
+								value={editDescription}
+								onChange={(e) => setEditDescription(e.target.value)}
+								onBlur={() => saveInlineField("description", editDescription)}
+								onKeyDown={(e) => {
+									if (e.key === "Enter") saveInlineField("description", editDescription);
+									if (e.key === "Escape") {
+										setEditDescription(process.description || "");
+										setEditingField(null);
+									}
+								}}
+								placeholder="Agregar descripción..."
+							/>
+						) : (
+							<p
+								className="text-sm text-muted-foreground max-w-xl cursor-pointer hover:text-foreground/70 transition-colors"
+								onClick={() => {
+									setEditDescription(process.description || "");
+									setEditingField("description");
+								}}
+								title="Click para editar"
+							>
+								{process.description || "Agregar descripción..."}
 							</p>
+						)}
+
+						{/* Owner — inline editable */}
+						{editingField === "owner" ? (
+							<div className="flex items-center gap-1.5 text-xs">
+								<User className="h-3 w-3 text-muted-foreground" />
+								<input
+									autoFocus
+									className="text-xs bg-transparent border-b border-[#2563EB] outline-none px-0 py-0"
+									value={editOwner}
+									onChange={(e) => setEditOwner(e.target.value)}
+									onBlur={() => saveInlineField("owner", editOwner)}
+									onKeyDown={(e) => {
+										if (e.key === "Enter") saveInlineField("owner", editOwner);
+										if (e.key === "Escape") {
+											setEditOwner(process.owner || "");
+											setEditingField(null);
+										}
+									}}
+									placeholder="Asignar responsable..."
+								/>
+							</div>
+						) : (
+							<div
+								className="flex items-center gap-1.5 text-xs text-muted-foreground cursor-pointer hover:text-foreground/70 transition-colors"
+								onClick={() => {
+									setEditOwner(process.owner || "");
+									setEditingField("owner");
+								}}
+								title="Click para editar"
+							>
+								<User className="h-3 w-3" />
+								<span>{process.owner || "Asignar responsable..."}</span>
+							</div>
 						)}
 					</div>
 				</div>
@@ -351,54 +500,62 @@ export function ProcessDetailView({
 						loading={exporting}
 					>
 						<FileText className="mr-1.5 h-3.5 w-3.5" />
-						Export Report
+						Exportar
 					</Button>
-					<Button variant="ghost" size="sm" onClick={handleShare}>
-						<ShareIcon className="h-3.5 w-3.5" />
-					</Button>
-					<Button
-						variant="ghost"
-						size="sm"
-						className="text-destructive hover:text-destructive"
-						onClick={handleDeleteProcess}
-					>
-						<TrashIcon className="h-3.5 w-3.5" />
-					</Button>
-					<div className="ml-2 text-xs text-muted-foreground">
-						{process.sessionsCount} sesiones · {process.versionsCount}v
-					</div>
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+								<MoreHorizontalIcon className="h-4 w-4" />
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent align="end">
+							<DropdownMenuItem onClick={handleShare}>
+								<ShareIcon className="mr-2 h-4 w-4" />
+								Compartir
+							</DropdownMenuItem>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem
+								className="text-destructive focus:text-destructive"
+								onClick={handleDeleteProcess}
+							>
+								<TrashIcon className="mr-2 h-4 w-4" />
+								Eliminar
+							</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
 				</div>
 			</div>
 
-			{/* 4 Smart Tabs */}
-			<div className="flex overflow-x-auto border-b">
-				{tabs.map((tab) => {
-					const Icon = tab.icon;
-					return (
-						<button
-							key={tab.key}
-							type="button"
-							onClick={() => setActiveTab(tab.key)}
-							className={`flex items-center gap-1.5 whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-medium transition-colors ${
-								activeTab === tab.key
-									? "border-primary text-primary"
-									: "border-transparent text-muted-foreground hover:text-foreground"
-							}`}
-						>
-							<Icon className="h-4 w-4" />
-							{tab.label}
-						</button>
-					);
-				})}
-			</div>
-
-			{/* Tab Content */}
-			{activeTab === "diagram" && (
-				<DiagramTab processId={process.id} bpmnXml={process.bpmnXml} versions={process.versions} />
+			{/* Onboarding banner for new processes */}
+			{healthScore === 0 && !expandedPhase && (
+				<div className="rounded-lg border border-[#BFDBFE] bg-[#EFF6FF] p-4">
+					<p className="text-sm font-medium">¿Primera vez con este proceso?</p>
+					<p className="mt-1 text-sm text-muted-foreground">
+						Empieza por <strong>Contexto</strong>: sube documentos y define los
+						objetivos del proceso. Luego inicia tu primera sesión de{" "}
+						<strong>Captura</strong>.
+					</p>
+				</div>
 			)}
 
-			{activeTab === "info" && (
-				<InformacionTab
+			{/* Phase Dashboard */}
+			<ProcessPhaseDashboard
+				process={{
+					...process,
+					risksCount: process.risksCount ?? 0,
+					hasIntelligence: process.hasIntelligence ?? false,
+				}}
+				organizationSlug={organizationSlug || ""}
+				onExpandPhase={(phase) => {
+					if (phase === "modelo") setModeloMounted(true);
+					setExpandedPhase(phase);
+				}}
+				expandedPhase={expandedPhase}
+			/>
+
+			{/* Expanded Phase Content — order matches phase cards */}
+			{expandedPhase === "contexto" && (
+				<ContextoTab
 					process={process}
 					processesPath={processesPath}
 					organizationSlug={organizationSlug || ""}
@@ -414,16 +571,7 @@ export function ProcessDetailView({
 				/>
 			)}
 
-			{activeTab === "analysis" && (
-				<AnalisisIATab
-					processId={process.id}
-					sessionsCount={process.sessionsCount}
-					raciCount={process.raciCount}
-					conflictsCount={process.conflictsCount}
-				/>
-			)}
-
-			{activeTab === "sessions" && (
+			{expandedPhase === "captura" && (
 				<div className="space-y-6">
 					<SessionsTab
 						sessions={process.sessions || []}
@@ -439,13 +587,29 @@ export function ProcessDetailView({
 					</CollapsibleSection>
 				</div>
 			)}
+
+			{/* DiagramTab stays mounted once opened to avoid costly bpmn-js remount */}
+			{modeloMounted && (
+				<div className={expandedPhase === "modelo" ? "" : "hidden"}>
+					<DiagramTab processId={process.id} bpmnXml={process.bpmnXml} versions={process.versions} />
+				</div>
+			)}
+
+			{expandedPhase === "analisis" && (
+				<AnalisisIATab
+					processId={process.id}
+					sessionsCount={process.sessionsCount}
+					raciCount={process.raciCount}
+					conflictsCount={process.conflictsCount}
+				/>
+			)}
 		</div>
 	);
 }
 
-// ─── Informacion Tab (merged: Details + Children + Documents + Versions) ────
+// ─── Contexto Tab (Sub-procesos + Documents + Details form) ─────────────────
 
-function InformacionTab({
+function ContextoTab({
 	process,
 	processesPath,
 	organizationSlug,
@@ -460,13 +624,11 @@ function InformacionTab({
 }) {
 	return (
 		<div className="space-y-3">
-			<CollapsibleSection
-				title="Detalles"
-				icon={FileText}
-				defaultOpen={true}
-			>
-				<DetailsContent process={process} onUpdate={onUpdate} />
-			</CollapsibleSection>
+			{/* AI Context Chat — describe the process, AI extracts structured data */}
+			<ContextChat
+				processId={process.id}
+				onContextUpdated={(updated) => onUpdate(updated as Partial<ProcessData>)}
+			/>
 
 			<CollapsibleSection
 				title="Sub-procesos"
@@ -476,6 +638,7 @@ function InformacionTab({
 						? { type: "count", count: process.children!.length }
 						: { type: "status", status: "empty", label: "Sin sub-procesos" }
 				}
+				defaultOpen={(process.children?.length ?? 0) > 0}
 			>
 				<ChildrenTab
 					processId={process.id}
@@ -493,29 +656,48 @@ function InformacionTab({
 				<DocumentsTab organizationSlug={organizationSlug} />
 			</CollapsibleSection>
 
+			<CollapsibleSection
+				title="Detalles del proceso"
+				icon={FileText}
+				defaultOpen={false}
+			>
+				<DetailsContent process={process} onUpdate={onUpdate} />
+			</CollapsibleSection>
+
 			{(process.versions?.length ?? 0) > 0 && (
 				<CollapsibleSection
 					title="Versiones"
 					icon={ClockIcon}
 					badge={{ type: "count", count: process.versions!.length }}
 				>
-					<div className="space-y-2">
-						{process.versions!.map((v) => (
-							<div
-								key={v.version}
-								className="flex items-center justify-between rounded-md border px-3 py-2 text-sm"
-							>
-								<div className="flex items-center gap-3">
-									<Badge status="info">v{v.version}</Badge>
-									<span className="text-muted-foreground">
-										{v.changeNote || "Sin nota"}
+					<div className="space-y-4">
+						{/* Version Diff — compare 2 versions */}
+						{(process.versions?.length ?? 0) >= 2 && (
+							<VersionDiff
+								processId={process.id}
+								versions={process.versions!}
+							/>
+						)}
+
+						{/* Version list */}
+						<div className="space-y-2">
+							{process.versions!.map((v) => (
+								<div
+									key={v.version}
+									className="flex items-center justify-between rounded-md border px-3 py-2 text-sm"
+								>
+									<div className="flex items-center gap-3">
+										<Badge status="info">v{v.version}</Badge>
+										<span className="text-muted-foreground">
+											{v.changeNote || "Sin nota"}
+										</span>
+									</div>
+									<span className="text-xs text-muted-foreground">
+										{new Date(v.createdAt).toLocaleDateString()}
 									</span>
 								</div>
-								<span className="text-xs text-muted-foreground">
-									{new Date(v.createdAt).toLocaleDateString()}
-								</span>
-							</div>
-						))}
+							))}
+						</div>
 					</div>
 				</CollapsibleSection>
 			)}
@@ -777,7 +959,7 @@ function DiagramTab({
 	const canvasHeight = fullscreen ? "100vh" : "600px";
 
 	const toolbar = (
-		<div className={`flex items-center justify-between ${fullscreen ? "px-4 py-2 border-b border-border bg-background" : "mb-2"}`}>
+		<div className={`flex items-center justify-between ${fullscreen ? "px-4 py-2 border-b border-border bg-white" : "mb-2"}`}>
 			<div className="flex items-center gap-1">
 				<Button variant="ghost" size="sm" onClick={undo} disabled={!canUndo}>
 					Undo
@@ -847,7 +1029,7 @@ function DiagramTab({
 			/>
 
 			{(renderError || repairing) && (
-				<div className="absolute left-1/2 top-2 z-10 -translate-x-1/2 rounded-md border border-amber-300 bg-amber-50 px-4 py-2 text-xs text-amber-800 shadow-sm" style={{ marginTop: fullscreen ? "-calc(100vh - 49px)" : "-600px", position: "relative" }}>
+				<div className="absolute left-1/2 top-2 z-10 -translate-x-1/2 rounded-md border border-[#D97706] bg-[#FEF3C7] px-4 py-2 text-xs text-amber-800 shadow-sm" style={{ marginTop: fullscreen ? "-calc(100vh - 49px)" : "-600px", position: "relative" }}>
 					<div className="flex items-center gap-3">
 						<span>{repairing ? "Reparando diagrama..." : renderError}</span>
 						{!repairing && (
@@ -855,14 +1037,14 @@ function DiagramTab({
 								<button
 									type="button"
 									onClick={handleRebuildFromNodes}
-									className="rounded bg-amber-200 px-2 py-0.5 text-[10px] font-medium text-amber-900 hover:bg-amber-300 transition-colors"
+									className="rounded bg-[#FDE68A] px-2 py-0.5 text-[10px] font-medium text-[#78350F] hover:bg-amber-300 transition-colors"
 								>
 									Regenerar
 								</button>
 								<button
 									type="button"
 									onClick={handleRepairWithAi}
-									className="rounded bg-blue-500 px-2 py-0.5 text-[10px] font-medium text-white hover:bg-blue-600 transition-colors"
+									className="rounded bg-[#2563EB] px-2 py-0.5 text-[10px] font-medium text-white hover:bg-blue-600 transition-colors"
 								>
 									Arreglar con IA
 								</button>
@@ -874,7 +1056,7 @@ function DiagramTab({
 
 			{!isReady && (
 				<div className="flex items-center justify-center" style={{ height: canvasHeight, marginTop: `-${canvasHeight}` }}>
-					<div className="h-16 w-16 animate-pulse rounded-lg bg-gray-100" />
+					<div className="h-16 w-16 animate-pulse rounded-lg bg-[#F1F5F9]" />
 				</div>
 			)}
 
@@ -885,7 +1067,7 @@ function DiagramTab({
 	// Fullscreen: fixed overlay covering entire screen
 	if (fullscreen) {
 		return (
-			<div className="fixed inset-0 z-50 flex flex-col bg-background">
+			<div className="fixed inset-0 z-50 flex flex-col bg-white">
 				{toolbar}
 				{canvas}
 			</div>
@@ -1012,7 +1194,7 @@ function TagField({
 						<button
 							type="button"
 							onClick={() => remove(i)}
-							className="ml-1 rounded-full p-0.5 hover:bg-accent"
+							className="ml-1 rounded-full p-0.5 hover:bg-[#F1F5F9]"
 						>
 							<XIcon className="h-3 w-3" />
 						</button>
@@ -1141,7 +1323,7 @@ function ChildrenTab({
 						const Icon = LEVEL_ICONS[child.level] ?? PackageIcon;
 						return (
 							<Link key={child.id} href={`${processesPath}/${child.id}`} className="block">
-								<Card className="transition-colors hover:bg-accent/50">
+								<Card className="transition-colors hover:bg-[#F1F5F9]">
 									<CardContent className="flex items-center gap-3 p-3">
 										<Icon className="h-4 w-4 shrink-0 text-muted-foreground" />
 										<span className="flex-1 font-medium">{child.name}</span>
@@ -1216,16 +1398,42 @@ function SessionsTab({
 						<Card key={session.id}>
 							<CardContent className="flex items-center justify-between p-4">
 								<div className="flex items-center gap-4">
-									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-										<ClockIcon className="h-5 w-5 text-primary" />
+									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#EFF6FF]">
+										<ClockIcon className="h-5 w-5 text-[#2563EB]" />
 									</div>
 									<div>
 										<p className="font-medium">
 											{session.type === "DISCOVERY" ? "Discovery" : "Deep Dive"}
 										</p>
-										<p className="text-xs text-muted-foreground">
-											{session._count.diagramNodes} nodos
-										</p>
+										<div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted-foreground">
+											<span>{session._count.diagramNodes} nodos</span>
+											{session.deliverables?.map((d) => {
+												if (d.type === "process_audit" && d.data) {
+													const audit = d.data as { completenessScore?: number; newGaps?: unknown[] };
+													return (
+														<span key={d.type} className="flex items-center gap-1">
+															{audit.completenessScore != null && (
+																<span className="font-medium text-[#2563EB]">{audit.completenessScore}%</span>
+															)}
+															{(audit.newGaps?.length ?? 0) > 0 && (
+																<span className="text-amber-600">{audit.newGaps!.length} gaps</span>
+															)}
+														</span>
+													);
+												}
+												if (d.type === "risk_audit" && d.data) {
+													const risks = d.data as { newRisks?: unknown[] };
+													if ((risks.newRisks?.length ?? 0) > 0) {
+														return (
+															<span key={d.type} className="text-red-600">
+																{risks.newRisks!.length} riesgos
+															</span>
+														);
+													}
+												}
+												return null;
+											})}
+										</div>
 									</div>
 								</div>
 								<div className="flex items-center gap-3">
@@ -1317,7 +1525,7 @@ function DocumentsTab({ organizationSlug }: { organizationSlug: string }) {
 	if (loading) {
 		return (
 			<div className="flex items-center justify-center py-8">
-				<div className="h-6 w-6 animate-pulse rounded-lg bg-gray-100" />
+				<div className="h-6 w-6 animate-pulse rounded-lg bg-[#F1F5F9]" />
 			</div>
 		);
 	}
@@ -1327,7 +1535,7 @@ function DocumentsTab({ organizationSlug }: { organizationSlug: string }) {
 			{/* Upload Zone */}
 			<div
 				className={`relative flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 text-center transition-colors ${
-					dragOver ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
+					dragOver ? "border-[#2563EB] bg-[#EFF6FF]" : "border-border hover:border-primary/50"
 				}`}
 				onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
 				onDragLeave={() => setDragOver(false)}

@@ -123,10 +123,10 @@ export function AiChat() {
 											}
 										}}
 										disabled={status === "streaming"}
-										className="group h-auto gap-2 rounded-2xl p-4 text-center bg-card"
+										className="group h-auto gap-2 rounded-2xl p-4 text-center bg-white"
 									>
-										<Icon className="size-6 text-primary" />
-										<span className="text-sm text-foreground">
+										<Icon className="size-6 text-[#2563EB]" />
+										<span className="text-sm text-[#0F172A]">
 											{suggestion.text}
 										</span>
 									</Button>
@@ -148,10 +148,10 @@ export function AiChat() {
 					>
 						<div
 							className={cn(
-								"flex max-w-2xl items-center gap-2 rounded-lg px-4 py-2 text-foreground **:max-w-full",
+								"flex max-w-2xl items-center gap-2 rounded-lg px-4 py-2 text-[#0F172A] **:max-w-full",
 								message.role === "user"
-									? "whitespace-pre-wrap bg-primary/10"
-									: "bg-muted prose prose-sm dark:prose-invert",
+									? "whitespace-pre-wrap bg-[#EFF6FF]"
+									: "bg-[#F8FAFC] prose prose-sm",
 							)}
 						>
 							{message.parts?.map((part, index) =>
@@ -181,7 +181,7 @@ export function AiChat() {
 
 				{(status === "streaming" || status === "submitted") && (
 					<div className="flex justify-start">
-						<div className="flex max-w-2xl items-center gap-2 rounded-lg bg-secondary/10 px-4 py-2 text-foreground">
+						<div className="flex max-w-2xl items-center gap-2 rounded-lg bg-[#F1F5F9] px-4 py-2 text-[#0F172A]">
 							<EllipsisIcon className="size-6 animate-pulse" />
 						</div>
 					</div>
@@ -190,13 +190,13 @@ export function AiChat() {
 
 			<form
 				onSubmit={handleSubmit}
-				className="relative shrink-0 rounded-2xl bg-card text-lg focus-within:outline-none focus-within:ring focus-within:ring-primary"
+				className="relative shrink-0 rounded-2xl bg-white text-lg focus-within:outline-none focus-within:ring focus-within:ring-primary"
 			>
 				<Textarea
 					value={input}
 					onChange={(e) => setInput(e.target.value)}
 					placeholder="Chat with your AI..."
-					className="min-h-8 border bg-card rounded-2xl focus:outline-hidden focus-visible:ring-0 shadow-none p-6 pr-14"
+					className="min-h-8 border bg-white rounded-2xl focus:outline-hidden focus-visible:ring-0 shadow-none p-6 pr-14"
 					onKeyDown={(e) => {
 						if (e.key === "Enter" && !e.shiftKey) {
 							e.preventDefault();

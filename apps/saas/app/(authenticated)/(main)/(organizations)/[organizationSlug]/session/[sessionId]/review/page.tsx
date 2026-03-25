@@ -103,7 +103,7 @@ function severityLabel(severity: number): {
 function priorityBadge(priority: number): string {
 	if (priority >= 4) return "bg-red-100 text-red-700";
 	if (priority >= 3) return "bg-amber-100 text-amber-700";
-	return "bg-slate-100 text-slate-600";
+	return "bg-[#F1F5F9] text-[#64748B]";
 }
 
 // -- Status Badge Component --
@@ -126,14 +126,14 @@ function DeliverableStatus({
 				label: "Generating...",
 			},
 			pending: {
-				dot: "bg-slate-300",
-				text: "text-slate-500",
+				dot: "bg-[#CBD5E1]",
+				text: "text-[#64748B]",
 				label: "Pending",
 			},
 			failed: { dot: "bg-red-500", text: "text-red-700", label: "Failed" },
 			skipped: {
-				dot: "bg-slate-300",
-				text: "text-slate-400",
+				dot: "bg-[#CBD5E1]",
+				text: "text-[#94A3B8]",
 				label: "Skipped",
 			},
 		};
@@ -160,9 +160,9 @@ function Section({
 	children: React.ReactNode;
 }) {
 	return (
-		<section className="rounded-md border border-slate-200 bg-white">
-			<div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
-				<h2 className="text-lg font-semibold text-slate-900">{title}</h2>
+		<section className="rounded-md border border-[#E2E8F0] bg-white">
+			<div className="flex items-center justify-between border-b border-[#F1F5F9] px-6 py-4">
+				<h2 className="text-lg font-semibold text-[#0F172A]">{title}</h2>
 				<DeliverableStatus status={status} />
 			</div>
 			<div className="px-6 py-5">{children}</div>
@@ -187,9 +187,9 @@ function SummarySection({
 		<Section title="Executive Summary" status={status}>
 			{status === "pending" || status === "running" ? (
 				<div className="space-y-3">
-					<div className="h-4 w-full animate-pulse rounded bg-slate-100" />
-					<div className="h-4 w-5/6 animate-pulse rounded bg-slate-100" />
-					<div className="h-4 w-4/6 animate-pulse rounded bg-slate-100" />
+					<div className="h-4 w-full animate-pulse rounded bg-[#F1F5F9]" />
+					<div className="h-4 w-5/6 animate-pulse rounded bg-[#F1F5F9]" />
+					<div className="h-4 w-4/6 animate-pulse rounded bg-[#F1F5F9]" />
 				</div>
 			) : status === "failed" ? (
 				<div className="flex items-center justify-between">
@@ -199,26 +199,26 @@ function SummarySection({
 					<RetryButton sessionId={sessionId} type="summary" />
 				</div>
 			) : status === "skipped" ? (
-				<p className="text-sm text-slate-400">
+				<p className="text-sm text-[#94A3B8]">
 					Summary generation was skipped for this session.
 				</p>
 			) : data ? (
 				<div className="space-y-5">
-					<p className="text-sm leading-relaxed text-slate-700 whitespace-pre-wrap">
+					<p className="text-sm leading-relaxed text-[#334155] whitespace-pre-wrap">
 						{data.summary}
 					</p>
 					{data.actionItems.length > 0 && (
 						<div>
-							<h3 className="mb-2 text-sm font-medium text-slate-900">
+							<h3 className="mb-2 text-sm font-medium text-[#0F172A]">
 								Action Items
 							</h3>
 							<ul className="space-y-1.5">
 								{data.actionItems.map((item, i) => (
 									<li
 										key={i}
-										className="flex items-start gap-2 text-sm text-slate-700"
+										className="flex items-start gap-2 text-sm text-[#334155]"
 									>
-										<span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border border-slate-200 text-xs text-slate-400">
+										<span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border border-[#E2E8F0] text-xs text-[#94A3B8]">
 											{i + 1}
 										</span>
 										{item}
@@ -229,7 +229,7 @@ function SummarySection({
 					)}
 				</div>
 			) : (
-				<p className="text-sm text-slate-400">No summary data available.</p>
+				<p className="text-sm text-[#94A3B8]">No summary data available.</p>
 			)}
 		</Section>
 	);
@@ -250,9 +250,9 @@ function ProcessAuditSection({
 		<Section title="Process Audit" status={status}>
 			{status === "pending" || status === "running" ? (
 				<div className="space-y-3">
-					<div className="h-4 w-1/3 animate-pulse rounded bg-slate-100" />
-					<div className="h-4 w-full animate-pulse rounded bg-slate-100" />
-					<div className="h-4 w-5/6 animate-pulse rounded bg-slate-100" />
+					<div className="h-4 w-1/3 animate-pulse rounded bg-[#F1F5F9]" />
+					<div className="h-4 w-full animate-pulse rounded bg-[#F1F5F9]" />
+					<div className="h-4 w-5/6 animate-pulse rounded bg-[#F1F5F9]" />
 				</div>
 			) : status === "failed" ? (
 				<div className="flex items-center justify-between">
@@ -262,7 +262,7 @@ function ProcessAuditSection({
 					<RetryButton sessionId={sessionId} type="process_audit" />
 				</div>
 			) : status === "skipped" ? (
-				<p className="text-sm text-slate-400">
+				<p className="text-sm text-[#94A3B8]">
 					Process audit was skipped for this session.
 				</p>
 			) : data ? (
@@ -270,14 +270,14 @@ function ProcessAuditSection({
 					{/* Completeness Score */}
 					<div>
 						<div className="mb-2 flex items-center justify-between">
-							<span className="text-sm font-medium text-slate-700">
+							<span className="text-sm font-medium text-[#334155]">
 								Completeness Score
 							</span>
-							<span className="text-sm font-semibold text-slate-900">
+							<span className="text-sm font-semibold text-[#0F172A]">
 								{data.completenessScore}%
 							</span>
 						</div>
-						<div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+						<div className="h-2 w-full overflow-hidden rounded-full bg-[#F1F5F9]">
 							<div
 								className={`h-full rounded-full transition-all ${
 									data.completenessScore >= 80
@@ -294,14 +294,14 @@ function ProcessAuditSection({
 					{/* Knowledge Gaps */}
 					{data.newGaps.length > 0 && (
 						<div>
-							<h3 className="mb-3 text-sm font-medium text-slate-900">
+							<h3 className="mb-3 text-sm font-medium text-[#0F172A]">
 								Knowledge Gaps ({data.newGaps.length})
 							</h3>
 							<div className="space-y-2">
 								{data.newGaps.map((gap, i) => (
 									<div
 										key={i}
-										className="rounded border border-slate-100 bg-slate-50 px-4 py-3"
+										className="rounded border border-[#F1F5F9] bg-[#F8FAFC] px-4 py-3"
 									>
 										<div className="mb-1 flex items-center gap-2">
 											<span
@@ -309,13 +309,13 @@ function ProcessAuditSection({
 											>
 												P{gap.priority}
 											</span>
-											<span className="text-xs text-slate-500">
+											<span className="text-xs text-[#64748B]">
 												{gap.category}
 											</span>
 										</div>
-										<p className="text-sm text-slate-700">{gap.question}</p>
+										<p className="text-sm text-[#334155]">{gap.question}</p>
 										{gap.context && (
-											<p className="mt-1 text-xs text-slate-500">
+											<p className="mt-1 text-xs text-[#64748B]">
 												{gap.context}
 											</p>
 										)}
@@ -328,7 +328,7 @@ function ProcessAuditSection({
 					{/* Contradictions */}
 					{data.contradictions && data.contradictions.length > 0 && (
 						<div>
-							<h3 className="mb-3 text-sm font-medium text-slate-900">
+							<h3 className="mb-3 text-sm font-medium text-[#0F172A]">
 								Contradictions ({data.contradictions.length})
 							</h3>
 							<div className="space-y-2">
@@ -357,7 +357,7 @@ function ProcessAuditSection({
 					)}
 				</div>
 			) : (
-				<p className="text-sm text-slate-400">No audit data available.</p>
+				<p className="text-sm text-[#94A3B8]">No audit data available.</p>
 			)}
 		</Section>
 	);
@@ -391,17 +391,17 @@ function RaciSection({
 	const cellColor: Record<string, string> = {
 		R: "bg-blue-100 text-blue-800 font-semibold",
 		A: "bg-purple-100 text-purple-800 font-semibold",
-		C: "bg-slate-100 text-slate-600",
-		I: "bg-slate-50 text-slate-400",
+		C: "bg-[#F1F5F9] text-[#64748B]",
+		I: "bg-[#F8FAFC] text-[#94A3B8]",
 	};
 
 	return (
 		<Section title="RACI Matrix" status={status}>
 			{status === "pending" || status === "running" ? (
 				<div className="space-y-3">
-					<div className="h-4 w-full animate-pulse rounded bg-slate-100" />
-					<div className="h-4 w-full animate-pulse rounded bg-slate-100" />
-					<div className="h-4 w-full animate-pulse rounded bg-slate-100" />
+					<div className="h-4 w-full animate-pulse rounded bg-[#F1F5F9]" />
+					<div className="h-4 w-full animate-pulse rounded bg-[#F1F5F9]" />
+					<div className="h-4 w-full animate-pulse rounded bg-[#F1F5F9]" />
 				</div>
 			) : status === "failed" ? (
 				<div className="flex items-center justify-between">
@@ -411,21 +411,21 @@ function RaciSection({
 					<RetryButton sessionId={sessionId} type="raci" />
 				</div>
 			) : status === "skipped" ? (
-				<p className="text-sm text-slate-400">
+				<p className="text-sm text-[#94A3B8]">
 					RACI generation was skipped for this session.
 				</p>
 			) : data && activities.length > 0 ? (
 				<div className="overflow-x-auto">
 					<table className="w-full text-sm">
 						<thead>
-							<tr className="border-b border-slate-200">
-								<th className="py-2 pr-4 text-left font-medium text-slate-600">
+							<tr className="border-b border-[#E2E8F0]">
+								<th className="py-2 pr-4 text-left font-medium text-[#64748B]">
 									Activity
 								</th>
 								{roles.map((role) => (
 									<th
 										key={role}
-										className="px-3 py-2 text-center font-medium text-slate-600"
+										className="px-3 py-2 text-center font-medium text-[#64748B]"
 										style={{ fontVariantNumeric: "tabular-nums" }}
 									>
 										{role}
@@ -437,9 +437,9 @@ function RaciSection({
 							{activities.map((activity) => (
 								<tr
 									key={activity}
-									className="border-b border-slate-50 last:border-0"
+									className="border-b border-[#F8FAFC] last:border-0"
 								>
-									<td className="py-2.5 pr-4 text-slate-700">{activity}</td>
+									<td className="py-2.5 pr-4 text-[#334155]">{activity}</td>
 									{roles.map((role) => {
 										const val = matrix[activity]?.[role];
 										return (
@@ -451,7 +451,7 @@ function RaciSection({
 														{val}
 													</span>
 												) : (
-													<span className="text-slate-200">-</span>
+													<span className="text-[#E2E8F0]">-</span>
 												)}
 											</td>
 										);
@@ -460,7 +460,7 @@ function RaciSection({
 							))}
 						</tbody>
 					</table>
-					<div className="mt-4 flex items-center gap-4 text-xs text-slate-500">
+					<div className="mt-4 flex items-center gap-4 text-xs text-[#64748B]">
 						<span>
 							<span className="inline-flex h-5 w-5 items-center justify-center rounded bg-blue-100 text-xs font-semibold text-blue-800">
 								R
@@ -474,13 +474,13 @@ function RaciSection({
 							Accountable
 						</span>
 						<span>
-							<span className="inline-flex h-5 w-5 items-center justify-center rounded bg-slate-100 text-xs text-slate-600">
+							<span className="inline-flex h-5 w-5 items-center justify-center rounded bg-[#F1F5F9] text-xs text-[#64748B]">
 								C
 							</span>{" "}
 							Consulted
 						</span>
 						<span>
-							<span className="inline-flex h-5 w-5 items-center justify-center rounded bg-slate-50 text-xs text-slate-400">
+							<span className="inline-flex h-5 w-5 items-center justify-center rounded bg-[#F8FAFC] text-xs text-[#94A3B8]">
 								I
 							</span>{" "}
 							Informed
@@ -488,7 +488,7 @@ function RaciSection({
 					</div>
 				</div>
 			) : (
-				<p className="text-sm text-slate-400">
+				<p className="text-sm text-[#94A3B8]">
 					No RACI data available. This may require swimlanes in the BPMN
 					diagram.
 				</p>
@@ -512,9 +512,9 @@ function RiskAuditSection({
 		<Section title="Risk Audit" status={status}>
 			{status === "pending" || status === "running" ? (
 				<div className="space-y-3">
-					<div className="h-4 w-1/3 animate-pulse rounded bg-slate-100" />
-					<div className="h-4 w-full animate-pulse rounded bg-slate-100" />
-					<div className="h-4 w-5/6 animate-pulse rounded bg-slate-100" />
+					<div className="h-4 w-1/3 animate-pulse rounded bg-[#F1F5F9]" />
+					<div className="h-4 w-full animate-pulse rounded bg-[#F1F5F9]" />
+					<div className="h-4 w-5/6 animate-pulse rounded bg-[#F1F5F9]" />
 				</div>
 			) : status === "failed" ? (
 				<div className="flex items-center justify-between">
@@ -524,18 +524,18 @@ function RiskAuditSection({
 					<RetryButton sessionId={sessionId} type="risk_audit" />
 				</div>
 			) : status === "skipped" ? (
-				<p className="text-sm text-slate-400">
+				<p className="text-sm text-[#94A3B8]">
 					Risk audit was skipped for this session.
 				</p>
 			) : data ? (
 				<div className="space-y-6">
 					{/* Risk Summary */}
 					<div className="grid grid-cols-4 gap-4">
-						<div className="rounded border border-slate-100 bg-slate-50 p-3 text-center">
-							<p className="text-2xl font-semibold text-slate-900">
+						<div className="rounded border border-[#F1F5F9] bg-[#F8FAFC] p-3 text-center">
+							<p className="text-2xl font-semibold text-[#0F172A]">
 								{data.riskSummary.totalRiskScore}
 							</p>
-							<p className="text-xs text-slate-500">Risk Score</p>
+							<p className="text-xs text-[#64748B]">Risk Score</p>
 						</div>
 						<div className="rounded border border-red-100 bg-red-50 p-3 text-center">
 							<p className="text-2xl font-semibold text-red-700">
@@ -549,18 +549,18 @@ function RiskAuditSection({
 							</p>
 							<p className="text-xs text-amber-600">High</p>
 						</div>
-						<div className="rounded border border-slate-100 bg-slate-50 p-3 text-center">
-							<p className="text-sm font-medium text-slate-700">
+						<div className="rounded border border-[#F1F5F9] bg-[#F8FAFC] p-3 text-center">
+							<p className="text-sm font-medium text-[#334155]">
 								{data.riskSummary.topRiskArea.replace(/_/g, " ")}
 							</p>
-							<p className="text-xs text-slate-500">Top Risk Area</p>
+							<p className="text-xs text-[#64748B]">Top Risk Area</p>
 						</div>
 					</div>
 
 					{/* Risk List */}
 					{data.newRisks.length > 0 && (
 						<div>
-							<h3 className="mb-3 text-sm font-medium text-slate-900">
+							<h3 className="mb-3 text-sm font-medium text-[#0F172A]">
 								Identified Risks ({data.newRisks.length})
 							</h3>
 							<div className="space-y-2">
@@ -569,7 +569,7 @@ function RiskAuditSection({
 									return (
 										<div
 											key={i}
-											className="rounded border border-slate-100 bg-slate-50 px-4 py-3"
+											className="rounded border border-[#F1F5F9] bg-[#F8FAFC] px-4 py-3"
 										>
 											<div className="mb-1.5 flex items-center gap-2">
 												<span
@@ -577,7 +577,7 @@ function RiskAuditSection({
 												>
 													{sev.text}
 												</span>
-												<span className="text-xs text-slate-500">
+												<span className="text-xs text-[#64748B]">
 													{risk.riskType.replace(/_/g, " ")}
 												</span>
 												{risk.isOpportunity && (
@@ -586,30 +586,30 @@ function RiskAuditSection({
 													</span>
 												)}
 											</div>
-											<p className="text-sm font-medium text-slate-800">
+											<p className="text-sm font-medium text-[#0F172A]">
 												{risk.title}
 											</p>
-											<p className="mt-0.5 text-sm text-slate-600">
+											<p className="mt-0.5 text-sm text-[#64748B]">
 												{risk.description}
 											</p>
 											{risk.affectedStep && (
-												<p className="mt-1 text-xs text-slate-500">
+												<p className="mt-1 text-xs text-[#64748B]">
 													Affected step: {risk.affectedStep}
 												</p>
 											)}
 											{risk.suggestedMitigations.length > 0 && (
 												<div className="mt-2">
-													<p className="text-xs font-medium text-slate-600">
+													<p className="text-xs font-medium text-[#64748B]">
 														Mitigations:
 													</p>
-													<ul className="mt-1 list-inside list-disc text-xs text-slate-500">
+													<ul className="mt-1 list-inside list-disc text-xs text-[#64748B]">
 														{risk.suggestedMitigations.map((m, j) => (
 															<li key={j}>{m}</li>
 														))}
 													</ul>
 												</div>
 											)}
-											<div className="mt-2 flex gap-3 text-xs text-slate-400">
+											<div className="mt-2 flex gap-3 text-xs text-[#94A3B8]">
 												<span>Severity: {risk.severity}/5</span>
 												<span>Probability: {risk.probability}/5</span>
 												<span>
@@ -624,7 +624,7 @@ function RiskAuditSection({
 					)}
 				</div>
 			) : (
-				<p className="text-sm text-slate-400">
+				<p className="text-sm text-[#94A3B8]">
 					No risk audit data available.
 				</p>
 			)}
@@ -665,6 +665,23 @@ export default async function SessionReviewPage({
 		session.sessionDeliverables.map((d) => [d.type, d]),
 	);
 
+	// Timeout stale deliverables: if running for >5 minutes, mark as failed
+	const DELIVERABLE_TIMEOUT_MS = 5 * 60 * 1000;
+	for (const [type, del] of deliverableMap) {
+		if (
+			del.status === "running" &&
+			del.startedAt &&
+			Date.now() - new Date(del.startedAt).getTime() > DELIVERABLE_TIMEOUT_MS
+		) {
+			await db.sessionDeliverable.update({
+				where: { sessionId_type: { sessionId, type } },
+				data: { status: "failed", error: "Timeout: la generacion tomo mas de 5 minutos", completedAt: new Date() },
+			});
+			del.status = "failed";
+			del.error = "Timeout: la generacion tomo mas de 5 minutos";
+		}
+	}
+
 	const summaryDel = deliverableMap.get("summary");
 	const auditDel = deliverableMap.get("process_audit");
 	const raciDel = deliverableMap.get("raci");
@@ -681,33 +698,33 @@ export default async function SessionReviewPage({
 	const hasInProgress = allStatuses.some((s) => !s || !terminalStatuses.has(s));
 
 	return (
-		<div className="min-h-screen bg-slate-50">
+		<div className="min-h-screen bg-[#F8FAFC]">
 			<ReviewPoller hasInProgress={hasInProgress} />
 			{/* Header */}
-			<header className="border-b border-slate-200 bg-white">
+			<header className="border-b border-[#E2E8F0] bg-white">
 				<div className="mx-auto max-w-5xl px-6 py-6">
 					<div className="flex items-start justify-between">
 						<div>
-							<p className="mb-1 text-xs font-medium uppercase tracking-wider text-slate-400">
+							<p className="mb-1 text-xs font-medium uppercase tracking-wider text-[#94A3B8]">
 								Session Review
 							</p>
 							<h1
-								className="text-2xl font-semibold text-slate-900"
-								style={{ fontFamily: "var(--font-instrument-serif, serif)" }}
+								className="text-2xl font-semibold text-[#0F172A]"
+								style={{ fontFamily: "Inter, system-ui, sans-serif" }}
 							>
 								{processName}
 							</h1>
-							<div className="mt-2 flex items-center gap-4 text-sm text-slate-500">
+							<div className="mt-2 flex items-center gap-4 text-sm text-[#64748B]">
 								<span>{formatDate(session.startedAt)}</span>
-								<span className="text-slate-300">|</span>
+								<span className="text-[#CBD5E1]">|</span>
 								<span>
 									Duration: {formatDuration(session.startedAt, session.endedAt)}
 								</span>
-								<span className="text-slate-300">|</span>
+								<span className="text-[#CBD5E1]">|</span>
 								<span>
 									{session._count.transcriptEntries} transcript entries
 								</span>
-								<span className="text-slate-300">|</span>
+								<span className="text-[#CBD5E1]">|</span>
 								<span>{session.organization.name}</span>
 							</div>
 						</div>
@@ -717,7 +734,7 @@ export default async function SessionReviewPage({
 							{hasBpmnXml && (
 								<a
 									href={`/api/sessions/${session.id}/export/bpmn`}
-									className="inline-flex h-9 items-center gap-1.5 rounded border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+									className="inline-flex h-9 items-center gap-1.5 rounded border border-[#E2E8F0] bg-white px-3 text-sm font-medium text-[#334155] transition-colors hover:bg-[#F8FAFC]"
 								>
 									<svg
 										className="h-4 w-4"
@@ -773,9 +790,9 @@ export default async function SessionReviewPage({
 			</main>
 
 			{/* Footer */}
-			<footer className="border-t border-slate-200 bg-white">
+			<footer className="border-t border-[#E2E8F0] bg-white">
 				<div className="mx-auto max-w-5xl px-6 py-4">
-					<div className="flex items-center justify-between text-xs text-slate-400">
+					<div className="flex items-center justify-between text-xs text-[#94A3B8]">
 						<span>
 							Generated by aiprocess.me
 						</span>
