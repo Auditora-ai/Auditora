@@ -10,8 +10,7 @@
  * Latency budget: 4-5s for LLM call (within 8s total pipeline budget)
  */
 
-import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { instrumentedGenerateText } from "../utils/instrumented-generate";
 import { z } from "zod";
 import {
   buildExtractionSystemPrompt,
@@ -173,6 +172,7 @@ function formatTranscriptWindow(
  * @param context - Optional session context for business-aware extraction
  */
 export async function extractProcessUpdates(
+  organizationId: string,
   currentNodes: BpmnNode[],
   recentTranscript: TranscriptEntry[],
   context?: SessionContext,
@@ -191,8 +191,9 @@ export async function extractProcessUpdates(
     lane: n.lane,
   }));
 
-  const { text } = await generateText({
-    model: anthropic("claude-sonnet-4-6"),
+  const { text } = await instrumentedGenerateText({
+    organizationId,
+    pipeline: "process-extraction",
     system: buildExtractionSystemPrompt(context),
     prompt: PROCESS_EXTRACTION_USER(nodesForPrompt, transcriptText, context),
     maxOutputTokens: 2048,

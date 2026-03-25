@@ -148,6 +148,9 @@ model Organization {
   businessModel      String?      @db.Text
   employeeCount      String?
   notes              String?      @db.Text
+  // AI tier configuration
+  aiTier             String?      @default("standard") // "budget" | "standard" | "premium"
+  aiTokenBudget      Int?         // monthly soft limit (null = unlimited)
   members            Member[]
   invitations        Invitation[]
   purchases          Purchase[]
@@ -157,6 +160,7 @@ model Organization {
   discoveryThreads   DiscoveryThread[]
   companyBrain       CompanyBrain?
   orgDeliverables    OrgDeliverable[]
+  aiUsageLogs        AiUsageLog[]
 
   @@unique([slug])
   @@map("organization")
@@ -323,6 +327,10 @@ model ProcessArchitecture {
   organization   Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   definitions    ProcessDefinition[]
   versions       ArchitectureVersion[]
+
+  // Project plan for Gantt chart (general tasks, process schedule, scope)
+  projectPlan    Json?
+
   createdAt      DateTime              @default(now())
   updatedAt      DateTime              @updatedAt
 
@@ -366,7 +374,7 @@ model MeetingSession {
   id                  String            @id @default(cuid())
   type                SessionType
   status              SessionStatus     @default(SCHEDULED)
-  meetingUrl          String
+  meetingUrl          String?
   organizationId      String
   organization        Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   processDefinitionId String?
@@ -382,6 +390,20 @@ model MeetingSession {
   // Call bot
   recallBotId         String?
   recallBotStatus     String?
+
+  // Scheduling
+  scheduledFor        DateTime?
+  scheduledEnd        DateTime?
+  sessionGoals        String?           @db.Text
+  sessionContext      String?           @db.Text  // AI-synthesized preparation brief from wizard
+
+  // Client intake
+  intakeToken         String?           @unique @default(cuid())
+  intakeStatus        String?           @default("pending") // pending | partial | complete
+  intakeResponses     ClientIntakeResponse[]
+
+  // Participants
+  participants        MeetingParticipant[]
 
   // Timing
   startedAt           DateTime?
@@ -409,6 +431,8 @@ model MeetingSession {
   @@index([organizationId])
   @@index([userId])
   @@index([shareToken])
+  @@index([intakeToken])
+  @@index([scheduledFor])
   @@map("meeting_session")
 }
 
@@ -434,6 +458,9 @@ model DiagramNode {
 
   // Parent reference for cascade rejection
   parentId    String?
+
+  // Task properties (description, SLA, systems, inputs/outputs, costs, etc.)
+  properties  Json?
 
   comments    NodeComment[]
 
@@ -545,16 +572,18 @@ model SessionDeliverable {
 }
 
 model MeetingParticipant {
-  id          String         @id @default(cuid())
-  sessionId   String
-  name        String
-  email       String?
-  role        String?
-  talkTimeMs  Int            @default(0)
-  joinedAt    DateTime?
-  leftAt      DateTime?
+  id              String         @id @default(cuid())
+  sessionId       String
+  session         MeetingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  name            String
+  email           String?
+  role            String?
+  participantType String?        // CLIENT | CONSULTANT | OBSERVER
+  talkTimeMs      Int            @default(0)
+  joinedAt        DateTime?
+  leftAt          DateTime?
 
-  createdAt   DateTime       @default(now())
+  createdAt       DateTime       @default(now())
 
   @@index([sessionId])
   @@map("meeting_participant")
@@ -1116,6 +1145,24 @@ model OrgDeliverable {
 }
 
 // ============================================
+// CLIENT INTAKE MODELS
+// ============================================
+
+model ClientIntakeResponse {
+  id           String          @id @default(cuid())
+  sessionId    String
+  session      MeetingSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  questionKey  String          // intelligenceItem:{id} | default:{1|2|3} | custom:{uuid}
+  questionText String          @db.Text
+  response     String?         @db.Text
+  respondedAt  DateTime?
+  createdAt    DateTime        @default(now())
+
+  @@index([sessionId])
+  @@map("client_intake_response")
+}
+
+// ============================================
 // BASE MODELS
 // ============================================
 
@@ -1140,5 +1187,29 @@ model Purchase {
 
   @@index([subscriptionId])
   @@map("purchase")
+}
+
+// ============================================
+// AI USAGE TRACKING
+// ============================================
+
+model AiUsageLog {
+  id             String       @id @default(cuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  pipeline       String       // "process-extraction" | "teleprompter" | etc.
+  model          String       // actual model used e.g. "claude-sonnet-4-6"
+  inputTokens    Int
+  outputTokens   Int
+  durationMs     Int?
+  success        Boolean      @default(true)
+  error          String?      @db.Text
+  metadata       Json?        // sessionId, processId for tracing
+  createdAt      DateTime     @default(now())
+
+  @@index([organizationId])
+  @@index([organizationId, createdAt])
+  @@index([pipeline])
+  @@map("ai_usage_log")
 }
 

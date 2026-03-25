@@ -266,6 +266,7 @@ export async function POST(request: NextRequest) {
 
 		// Run extraction pipeline
 		const result = await extractFromChat(
+			orgId,
 			allMessages,
 			existingProcesses,
 			{

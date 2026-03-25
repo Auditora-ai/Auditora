@@ -16,6 +16,7 @@ import {
   generateHorizontalView,
   generateProcedure,
 } from "@repo/ai";
+import { getAuthContext } from "@/lib/auth-helpers";
 
 const VALID_TYPES = [
   "mission_vision",
@@ -35,6 +36,11 @@ export async function GET(
   { params }: { params: Promise<{ type: string }> },
 ) {
   try {
+    const authCtx = await getAuthContext();
+    if (!authCtx) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { type } = await params;
     const organizationId = request.nextUrl.searchParams.get("organizationId");
 
@@ -43,6 +49,10 @@ export async function GET(
         { error: "organizationId is required" },
         { status: 400 },
       );
+    }
+
+    if (organizationId !== authCtx.org.id) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     if (!VALID_TYPES.includes(type as DeliverableType)) {
@@ -94,6 +104,11 @@ export async function POST(
   { params }: { params: Promise<{ type: string }> },
 ) {
   try {
+    const authCtx = await getAuthContext();
+    if (!authCtx) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { type } = await params;
     const body = await request.json();
     const { organizationId, processDefinitionId, targetFlow } = body;
@@ -103,6 +118,10 @@ export async function POST(
         { error: "organizationId is required" },
         { status: 400 },
       );
+    }
+
+    if (organizationId !== authCtx.org.id) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     if (!VALID_TYPES.includes(type as DeliverableType)) {
@@ -181,6 +200,7 @@ export async function POST(
       switch (type as DeliverableType) {
         case "mission_vision":
           result = await generateMissionVision({
+            organizationId,
             orgName: org.name,
             industry: org.industry ?? undefined,
             businessModel: org.businessModel ?? undefined,
@@ -196,6 +216,7 @@ export async function POST(
 
         case "value_chain":
           result = await generateValueChain({
+            organizationId,
             orgName: org.name,
             industry: org.industry ?? undefined,
             businessModel: org.businessModel ?? undefined,
@@ -222,6 +243,7 @@ export async function POST(
 
         case "landscape":
           result = await generateProcessLandscape({
+            organizationId,
             orgName: org.name,
             industry: org.industry ?? undefined,
             processDefinitions: processDefinitions.map((p) => ({
@@ -244,6 +266,7 @@ export async function POST(
 
         case "horizontal_view":
           result = await generateHorizontalView({
+            organizationId,
             orgName: org.name,
             targetFlow: targetFlow ?? undefined,
             processLinks: (brain?.processLinks ?? []).map((l) => {
@@ -306,6 +329,7 @@ export async function POST(
           });
 
           result = await generateProcedure({
+            organizationId,
             processName: process.name,
             activityName: process.name,
             processDescription: process.description ?? undefined,

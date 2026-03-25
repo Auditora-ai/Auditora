@@ -169,6 +169,7 @@ async function runManualExtraction(sessionId: string, entryId?: string) {
 	}
 
 	const result = await extractProcessUpdates(
+		session!.organizationId,
 		currentNodes.map((n) => ({
 			id: n.id,
 			type: n.nodeType.toLowerCase(),

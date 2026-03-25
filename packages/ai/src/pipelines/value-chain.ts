@@ -7,8 +7,7 @@
  *   COMPANY BRAIN + PROCESSES + ROLES + SYSTEMS → [This Pipeline] → VALUE CHAIN DOC
  */
 
-import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { instrumentedGenerateText } from "../utils/instrumented-generate";
 import {
   ValueChainResultSchema,
   type ValueChainResult,
@@ -17,6 +16,7 @@ import { VALUE_CHAIN_SYSTEM, VALUE_CHAIN_USER } from "../prompts/value-chain";
 import { parseLlmJson } from "../utils/parse-llm-json";
 
 export interface ValueChainInput {
+  organizationId: string;
   orgName: string;
   industry?: string;
   businessModel?: string;
@@ -31,8 +31,9 @@ export interface ValueChainInput {
 export async function generateValueChain(
   input: ValueChainInput,
 ): Promise<ValueChainResult> {
-  const { text, usage } = await generateText({
-    model: anthropic("claude-sonnet-4-6"),
+  const { text, usage } = await instrumentedGenerateText({
+    organizationId: input.organizationId,
+    pipeline: "value-chain",
     system: VALUE_CHAIN_SYSTEM,
     prompt: VALUE_CHAIN_USER(input),
     maxOutputTokens: 8192,

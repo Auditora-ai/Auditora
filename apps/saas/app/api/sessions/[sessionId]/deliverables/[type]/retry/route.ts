@@ -13,12 +13,16 @@ import {
 	generateRaci,
 	auditRisks,
 } from "@repo/ai";
+import { requireSessionAuth, isAuthError } from "@/lib/auth-helpers";
 
 export async function POST(
 	_request: NextRequest,
 	{ params }: { params: Promise<{ sessionId: string; type: string }> },
 ) {
 	const { sessionId, type } = await params;
+
+	const authResult = await requireSessionAuth(sessionId);
+	if (isAuthError(authResult)) return authResult;
 
 	const validTypes = ["summary", "process_audit", "raci", "risk_audit"];
 	if (!validTypes.includes(type)) {
@@ -89,6 +93,7 @@ async function retryPipeline(sessionId: string, type: string) {
 		switch (type) {
 			case "summary":
 				result = await generateSessionSummary(
+					session.organizationId,
 					session.type,
 					confirmedNodes.map((n) => ({ id: n.id, type: n.type, label: n.label, lane: n.lane })),
 					transcript,
@@ -97,6 +102,7 @@ async function retryPipeline(sessionId: string, type: string) {
 
 			case "process_audit":
 				result = await auditProcess({
+					organizationId: session.organizationId,
 					mode: "initial",
 					knowledgeSnapshot: {
 						roles: lanes.map((l) => ({ name: l, responsibilities: [], confirmed: true })),
@@ -139,6 +145,7 @@ async function retryPipeline(sessionId: string, type: string) {
 					return;
 				}
 				result = await generateRaci(
+					session.organizationId,
 					lanes,
 					confirmedNodes.filter((n) => n.type === "task" || n.type === "usertask").map((n) => n.label),
 					transcriptText,
@@ -147,6 +154,7 @@ async function retryPipeline(sessionId: string, type: string) {
 
 			case "risk_audit":
 				result = await auditRisks({
+					organizationId: session.organizationId,
 					mode: "risk",
 					processDefinition: {
 						name: session.processDefinition?.name || "Proceso",

@@ -8,8 +8,7 @@
  *   SESSIONS[] -> [This Pipeline] -> Consolidated BPMN + Conflicts[]
  */
 
-import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { instrumentedGenerateText } from "../utils/instrumented-generate";
 import { z } from "zod";
 import { parseLlmJson } from "../utils/parse-llm-json";
 
@@ -79,6 +78,7 @@ interface SessionPerspective {
 
 export async function consolidateStakeholders(
 	perspectives: SessionPerspective[],
+	organizationId: string,
 ): Promise<ConsolidationResult> {
 	if (perspectives.length < 2) {
 		return { conflicts: [], consolidatedSteps: [] };
@@ -93,8 +93,9 @@ Key quotes: ${p.transcriptExcerpt.slice(0, 2000)}`,
 		)
 		.join("\n\n---\n\n");
 
-	const { text } = await generateText({
-		model: anthropic("claude-sonnet-4-6"),
+	const { text } = await instrumentedGenerateText({
+		organizationId,
+		pipeline: "stakeholder-consolidation",
 		system: `You are a BPM consultant consolidating multiple stakeholder perspectives of the same business process.
 
 Compare the perspectives and:

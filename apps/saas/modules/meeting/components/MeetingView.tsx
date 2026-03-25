@@ -35,7 +35,8 @@ export function MeetingView({
 	organizationId,
 	organizationSlug,
 	bpmnXml,
-}: MeetingViewProps) {
+	shareToken,
+}: MeetingViewProps & { shareToken?: string }) {
 	const router = useRouter();
 	// UI state
 	const [aiEnabled, setAiEnabled] = useState(true);
@@ -154,6 +155,7 @@ export function MeetingView({
 	const contextValue: LiveSessionContextValue = {
 		sessionId,
 		processId,
+		shareToken,
 		...liveData,
 		aiEnabled,
 		selectedTool,

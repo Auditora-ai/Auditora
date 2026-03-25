@@ -1,6 +1,6 @@
 import { db } from "@repo/database";
 import { notFound } from "next/navigation";
-import { SessionDiagram } from "@meeting/components/SessionDiagram";
+import { LiveShareViewer } from "./LiveShareViewer";
 import { SparklesIcon, ListChecksIcon } from "lucide-react";
 
 export async function generateMetadata() {
@@ -25,6 +25,35 @@ export default async function SharedDiagramPage({
 	});
 
 	if (!session) return notFound();
+
+	// If session ended, show expiration message
+	if (session.status === "ENDED") {
+		return (
+			<div className="flex min-h-screen items-center justify-center bg-background">
+				<div className="text-center">
+					<div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
+						<svg className="h-8 w-8 text-muted-foreground" viewBox="0 0 32 32" fill="none">
+							<circle cx="8" cy="16" r="3" fill="currentColor" />
+							<circle cx="24" cy="8" r="3" fill="currentColor" />
+							<circle cx="24" cy="24" r="3" fill="currentColor" />
+							<path d="M11 16L21 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+							<path d="M11 16L21 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+						</svg>
+					</div>
+					<h1 className="text-lg font-semibold text-foreground">Sesion finalizada</h1>
+					<p className="mt-1 text-sm text-muted-foreground">
+						Este link de visualizacion ya no esta disponible.
+					</p>
+					<a
+						href="https://aiprocess.me"
+						className="mt-4 inline-block rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
+					>
+						Conocer aiprocess.me
+					</a>
+				</div>
+			</div>
+		);
+	}
 
 	const nodes = session.diagramNodes.map((n) => ({
 		id: n.id,
@@ -110,10 +139,15 @@ export default async function SharedDiagramPage({
 				</div>
 			)}
 
-			{/* Diagram - full width */}
+			{/* Diagram - live updates via polling */}
 			<div className="flex-1">
 				<div className="h-[calc(100vh-200px)] min-h-[400px]">
-					<SessionDiagram nodes={nodes} bpmnXml={session.bpmnXml} />
+					<LiveShareViewer
+						sessionId={session.id}
+						initialNodes={nodes}
+						initialXml={session.bpmnXml}
+						isActive={session.status === "ACTIVE" || session.status === "CONNECTING"}
+					/>
 				</div>
 			</div>
 

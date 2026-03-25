@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
-import { auth } from "@repo/auth";
-import { headers } from "next/headers";
+import { requireProcessAuth, isAuthError } from "@/lib/auth-helpers";
 import {
   auditProcess,
   mergeSnapshotPatch,
@@ -15,6 +14,9 @@ export async function GET(
 ) {
   try {
     const { processId } = await params;
+
+    const authResult = await requireProcessAuth(processId);
+    if (isAuthError(authResult)) return authResult;
 
     const intelligence = await db.processIntelligence.findFirst({
       where: {
@@ -57,15 +59,11 @@ export async function POST(
   { params }: { params: Promise<{ processId: string }> },
 ) {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-      query: { disableCookieCache: true },
-    });
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const { processId } = await params;
+
+    const authResult = await requireProcessAuth(processId);
+    if (isAuthError(authResult)) return authResult;
+
     const body = await request.json();
     const { action } = body as { action: "initialize" | "audit" };
 
@@ -196,6 +194,7 @@ export async function POST(
 
     // Run audit
     const result = await auditProcess({
+      organizationId: authResult.authCtx.org.id,
       mode: isInitial ? "initial" : "incremental",
       knowledgeSnapshot: existingSnapshot,
       confidenceScores:

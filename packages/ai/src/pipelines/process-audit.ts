@@ -14,8 +14,7 @@
  *   KNOWLEDGE SNAPSHOT + NEW DATA → LLM → DELTA → Apply to DB
  */
 
-import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { instrumentedGenerateText } from "../utils/instrumented-generate";
 import { z } from "zod";
 import {
   PROCESS_AUDIT_SYSTEM,
@@ -219,6 +218,7 @@ const AuditResultSchema = z.object({
 // ============================================
 
 export interface AuditInput {
+  organizationId: string;
   mode: "initial" | "incremental";
   knowledgeSnapshot: KnowledgeSnapshot;
   confidenceScores: Record<string, number>;
@@ -446,8 +446,9 @@ export async function auditProcess(input: AuditInput): Promise<AuditResult> {
     isSparseProcess,
   );
 
-  const { text, usage } = await generateText({
-    model: anthropic("claude-sonnet-4-6"),
+  const { text, usage } = await instrumentedGenerateText({
+    organizationId: input.organizationId,
+    pipeline: "process-audit",
     system: systemPrompt,
     prompt: userPrompt,
     maxOutputTokens: isInitial ? 8192 : 4096,

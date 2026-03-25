@@ -4,7 +4,7 @@ import { useState, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { PlusIcon, PencilIcon } from "lucide-react";
 import { toast } from "sonner";
-import { ScheduleSessionDialog } from "./ScheduleSessionDialog";
+import { SessionWizard, type SessionCloneData } from "./SessionWizard";
 import { ActiveSessionBanner } from "./ActiveSessionBanner";
 import { StatsBar } from "./StatsBar";
 import { NextSessionHero } from "./NextSessionHero";
@@ -63,7 +63,21 @@ export function CommandCenter({
 }: CommandCenterProps) {
 	const router = useRouter();
 	const [sessions, setSessions] = useState(initialSessions);
-	const [showSchedule, setShowSchedule] = useState(false);
+	const isFirstRun = initialSessions.length === 0 && processes.length === 0;
+	const [showSchedule, setShowSchedule] = useState(isFirstRun);
+	const [cloneData, setCloneData] = useState<SessionCloneData | undefined>(undefined);
+
+	const handleCloneSession = useCallback((session: SessionData) => {
+		setCloneData({
+			processId: session.processDefinition?.id,
+			processName: session.processDefinition?.name,
+			sessionType: session.type,
+			participants: session.participants
+				.filter((p) => p.participantType === "CLIENT")
+				.map((p) => ({ name: p.name, email: p.email ?? "", role: p.role ?? "" })),
+		});
+		setShowSchedule(true);
+	}, []);
 
 	const refreshSessions = useCallback(async () => {
 		try {
@@ -188,7 +202,7 @@ export function CommandCenter({
 		}
 	}, [organizationSlug, router]);
 
-	// Empty state — no sessions at all
+	// Empty state — no sessions at all → auto-open wizard in onboarding mode
 	if (sessions.length === 0 && processes.length === 0) {
 		return (
 			<div className="flex h-full flex-col items-center justify-center px-4 text-center" style={{ fontFamily: "Inter, system-ui, sans-serif" }}>
@@ -204,7 +218,13 @@ export function CommandCenter({
 				>
 					Programar Primera Sesión
 				</button>
-				<ScheduleSessionDialog open={showSchedule} onClose={() => setShowSchedule(false)} onCreated={refreshSessions} />
+				<SessionWizard
+					open={showSchedule}
+					onClose={() => setShowSchedule(false)}
+					onCreated={async () => { await refreshSessions(); setShowSchedule(false); }}
+					organizationSlug={organizationSlug}
+					isOnboarding
+				/>
 			</div>
 		);
 	}
@@ -272,6 +292,7 @@ export function CommandCenter({
 							onReschedule={handleReschedule}
 							onQuickEdit={handleQuickEdit}
 							onRefresh={refreshSessions}
+							onClone={handleCloneSession}
 						/>
 					</div>
 
@@ -308,11 +329,13 @@ export function CommandCenter({
 				)}
 			</div>
 
-			{/* Schedule Dialog */}
-			<ScheduleSessionDialog
+			{/* Session Wizard */}
+			<SessionWizard
 				open={showSchedule}
-				onClose={() => setShowSchedule(false)}
-				onCreated={refreshSessions}
+				onClose={() => { setShowSchedule(false); setCloneData(undefined); }}
+				onCreated={async () => { await refreshSessions(); setShowSchedule(false); setCloneData(undefined); }}
+				organizationSlug={organizationSlug}
+				cloneFrom={cloneData}
 			/>
 		</div>
 	);

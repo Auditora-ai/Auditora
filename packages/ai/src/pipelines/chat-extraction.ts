@@ -9,8 +9,7 @@
  *   CHAT MESSAGE -> [This Pipeline] -> PROCESS DEFINITIONS + FOLLOW-UP
  */
 
-import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { instrumentedGenerateText } from "../utils/instrumented-generate";
 import { z } from "zod";
 import {
   CHAT_EXTRACTION_SYSTEM,
@@ -82,6 +81,7 @@ export interface ProcessChatContext {
  * @param projectContext - Optional project context for business-aware extraction
  */
 export async function extractFromChat(
+  organizationId: string,
   messages: Array<{ role: string; content: string }>,
   existingProcesses: Array<{
     name: string;
@@ -111,8 +111,9 @@ export async function extractFromChat(
     };
   }
 
-  const { text } = await generateText({
-    model: anthropic("claude-sonnet-4-6"),
+  const { text } = await instrumentedGenerateText({
+    organizationId,
+    pipeline: "chat-extraction",
     system: CHAT_EXTRACTION_SYSTEM,
     prompt: CHAT_EXTRACTION_USER(messages, existingProcesses, projectContext, processContext, currentDiagramNodes),
     maxOutputTokens: 2048,

@@ -8,8 +8,7 @@
  *   TEXT DESCRIPTION -> [This Pipeline] -> SCORE + BREAKDOWN
  */
 
-import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { instrumentedGenerateText } from "../utils/instrumented-generate";
 import { z } from "zod";
 import { parseLlmJson } from "../utils/parse-llm-json";
 
@@ -43,9 +42,11 @@ export interface ComplexityResult {
 
 export async function scoreComplexity(
   processDescription: string,
+  organizationId: string,
 ): Promise<ComplexityResult> {
-  const { text } = await generateText({
-    model: anthropic("claude-sonnet-4-6"),
+  const { text } = await instrumentedGenerateText({
+    organizationId,
+    pipeline: "complexity-score",
     system: `You are a BPM analyst assessing process complexity.
 Given a process description, analyze its complexity on a scale of 1-10.
 

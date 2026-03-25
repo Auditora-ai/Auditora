@@ -43,6 +43,10 @@ export default async function ProcessDetailPage({
 					createdAt: true,
 					endedAt: true,
 					_count: { select: { diagramNodes: true } },
+					sessionDeliverables: {
+						select: { type: true, status: true, data: true },
+						where: { status: "completed" },
+					},
 				},
 				orderBy: { createdAt: "desc" },
 				take: 10,
@@ -52,8 +56,11 @@ export default async function ProcessDetailPage({
 				orderBy: { version: "desc" },
 				take: 20,
 			},
+			intelligence: {
+				select: { id: true },
+			},
 			_count: {
-				select: { sessions: true, versions: true, raciEntries: true, conflicts: true },
+				select: { sessions: true, versions: true, raciEntries: true, conflicts: true, risks: true },
 			},
 		},
 	});
@@ -87,6 +94,11 @@ export default async function ProcessDetailPage({
 					createdAt: s.createdAt.toISOString(),
 					endedAt: s.endedAt?.toISOString() ?? null,
 					_count: s._count,
+					deliverables: s.sessionDeliverables.map((d: any) => ({
+						type: d.type,
+						status: d.status,
+						data: d.data,
+					})),
 				})),
 				versions: process.versions.map((v) => ({
 					...v,
@@ -95,6 +107,8 @@ export default async function ProcessDetailPage({
 				sessionsCount: process._count.sessions,
 				versionsCount: process._count.versions,
 				raciCount: process._count.raciEntries,
+				risksCount: process._count.risks,
+				hasIntelligence: !!process.intelligence,
 				conflictsCount: process._count.conflicts,
 			}}
 			organizationSlug={organizationSlug}

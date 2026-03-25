@@ -18,6 +18,9 @@ export function ClientIntakeCard({
 	const [generating, setGenerating] = useState(false);
 	const [intakeStatus, setIntakeStatus] = useState(initialStatus);
 	const [progress, setProgress] = useState({ answered: 0, total: intakeResponseCount });
+	const [origin, setOrigin] = useState("");
+
+	useEffect(() => { setOrigin(window.location.origin); }, []);
 
 	// Polling for intake updates (every 15s when intake is active and not complete)
 	useEffect(() => {
@@ -46,7 +49,7 @@ export function ClientIntakeCard({
 	}, [intakeToken, intakeResponseCount, intakeStatus]);
 
 	const intakeUrl = intakeToken
-		? `${typeof window !== "undefined" ? window.location.origin : ""}/intake/${intakeToken}`
+		? `${origin}/intake/${intakeToken}`
 		: null;
 
 	const handleCopy = useCallback(async () => {

@@ -1,27 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
-import { auth } from "@repo/auth";
-import { headers } from "next/headers";
+import { requireProcessAuth, isAuthError } from "@/lib/auth-helpers";
 import { generateRiskReportHtml } from "../../../../../../lib/export/risk-report-generator";
-
-async function getSession() {
-  return auth.api.getSession({
-    headers: await headers(),
-    query: { disableCookieCache: true },
-  });
-}
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ processId: string }> },
 ) {
   try {
-    const session = await getSession();
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const { processId } = await params;
+
+    const authResult = await requireProcessAuth(processId);
+    if (isAuthError(authResult)) return authResult;
 
     const processDef = await db.processDefinition.findUnique({
       where: { id: processId },

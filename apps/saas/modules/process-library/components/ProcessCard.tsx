@@ -7,11 +7,18 @@ import {
 	CardContent,
 } from "@repo/ui/components/card";
 import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@repo/ui/components/dropdown-menu";
+import {
 	DownloadIcon,
 	EyeIcon,
-	ShareIcon,
 	GitBranchIcon,
 	LayersIcon,
+	MoreHorizontalIcon,
 	TrashIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -54,13 +61,51 @@ export function ProcessCard({
 			<CardContent className="p-4">
 				<div className="flex items-start justify-between">
 					<div className="min-w-0 flex-1">
-						<h3 className="truncate font-semibold text-sm">
+						<a
+							href={`${basePath}/procesos/${process.id}`}
+							className="truncate font-semibold text-sm hover:underline"
+						>
 							{process.name}
-						</h3>
+						</a>
 					</div>
-					<Badge status={statusBadge[process.processStatus] ?? "info"}>
-						{process.processStatus}
-					</Badge>
+					<div className="flex items-center gap-1.5">
+						<Badge status={statusBadge[process.processStatus] ?? "info"}>
+							{process.processStatus}
+						</Badge>
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button variant="ghost" size="sm" className="h-7 w-7 p-0">
+									<MoreHorizontalIcon className="size-4" />
+								</Button>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent align="end">
+								<DropdownMenuItem asChild>
+									<a href={`${basePath}/procesos/${process.id}`}>
+										<EyeIcon className="mr-2 size-4" />
+										{t("view")}
+									</a>
+								</DropdownMenuItem>
+								{process.hasBpmn && (
+									<DropdownMenuItem onClick={() => onExport?.(process.id)}>
+										<DownloadIcon className="mr-2 size-4" />
+										{t("export")}
+									</DropdownMenuItem>
+								)}
+								{onDelete && (
+									<>
+										<DropdownMenuSeparator />
+										<DropdownMenuItem
+											className="text-destructive focus:text-destructive"
+											onClick={() => onDelete(process.id)}
+										>
+											<TrashIcon className="mr-2 size-4" />
+											Eliminar
+										</DropdownMenuItem>
+									</>
+								)}
+							</DropdownMenuContent>
+						</DropdownMenu>
+					</div>
 				</div>
 
 				{process.description && (
@@ -78,45 +123,6 @@ export function ProcessCard({
 						<GitBranchIcon className="size-3" />
 						{t("versions", { count: process.versionsCount })}
 					</span>
-				</div>
-
-				<div className="mt-3 flex items-center gap-1">
-					<Button
-						variant="ghost"
-						size="sm"
-						className="h-7 text-xs"
-						asChild
-					>
-						<a href={`${basePath}/procesos/${process.id}`}>
-							<EyeIcon className="mr-1 size-3" />
-							{t("view")}
-						</a>
-					</Button>
-					{process.hasBpmn && (
-						<Button
-							variant="ghost"
-							size="sm"
-							className="h-7 text-xs"
-							onClick={() => onExport?.(process.id)}
-						>
-							<DownloadIcon className="mr-1 size-3" />
-							{t("export")}
-						</Button>
-					)}
-					{onDelete && (
-						<Button
-							variant="ghost"
-							size="sm"
-							className="h-7 text-xs text-destructive hover:text-destructive"
-							onClick={(e) => {
-								e.preventDefault();
-								onDelete(process.id);
-							}}
-						>
-							<TrashIcon className="mr-1 size-3" />
-							Eliminar
-						</Button>
-					)}
 				</div>
 			</CardContent>
 		</Card>

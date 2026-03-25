@@ -1,15 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
-import { auth } from "@repo/auth";
-import { headers } from "next/headers";
+import { requireProcessAuth, isAuthError } from "@/lib/auth-helpers";
 import { calculateResidualRisk } from "@repo/ai";
-
-async function getSession() {
-  return auth.api.getSession({
-    headers: await headers(),
-    query: { disableCookieCache: true },
-  });
-}
 
 async function recalculateResidualRisk(riskId: string) {
   const controls = await db.riskControl.findMany({ where: { riskId } });
@@ -47,12 +39,11 @@ export async function PATCH(
   },
 ) {
   try {
-    const session = await getSession();
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { processId, riskId, controlId } = await params;
 
-    const { riskId, controlId } = await params;
+    const authResult = await requireProcessAuth(processId);
+    if (isAuthError(authResult)) return authResult;
+
     const body = await request.json();
 
     const data: Record<string, unknown> = {};
@@ -92,12 +83,10 @@ export async function DELETE(
   },
 ) {
   try {
-    const session = await getSession();
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { processId, riskId, controlId } = await params;
 
-    const { riskId, controlId } = await params;
+    const authResult = await requireProcessAuth(processId);
+    if (isAuthError(authResult)) return authResult;
 
     await db.riskControl.delete({
       where: { id: controlId },

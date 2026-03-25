@@ -20,7 +20,9 @@ export interface DiagramHealth {
 export interface LiveSessionState {
 	sessionId: string;
 	processId?: string;
-	sessionStatus: "ACTIVE" | "ENDED";
+	shareToken?: string;
+	sessionStatus: "ACTIVE" | "ENDED" | "FAILED" | "CONNECTING";
+	connectionStatus: "connected" | "reconnecting" | "disconnected";
 	transcript: TranscriptEntry[];
 	nodes: DiagramNode[];
 	teleprompterQuestion: string | null;
@@ -35,8 +37,20 @@ export interface LiveSessionState {
 	aiEnabled: boolean;
 	selectedTool: "select" | "connect" | "text" | "ai-auto";
 
+	// Properties view tabs
+	/** Currently active central view: "diagram" or a property tab id (e.g. "props:Process_1") */
+	activeCentralTab: string;
+	/** Open property tabs: [{ id: "props:{elementId}", label: "Process Name", elementId }] */
+	openPropertyTabs: PropertyTab[];
+
 	// Modeler reference (any to avoid circular import with useBpmnModeler)
 	modelerApi: any | null;
+}
+
+export interface PropertyTab {
+	id: string;
+	label: string;
+	elementId: string;
 }
 
 export interface LiveSessionActions {
@@ -46,6 +60,12 @@ export interface LiveSessionActions {
 	rejectNode: (nodeId: string) => void;
 	endSession: () => void;
 	exportDiagram: (format: "svg" | "png" | "bpmn") => void;
+	/** Open a property tab for a process/subprocess. If already open, switch to it. */
+	openPropertyTab: (elementId: string, label: string) => void;
+	/** Close a property tab by its id */
+	closePropertyTab: (tabId: string) => void;
+	/** Switch the active central tab (diagram or a property tab) */
+	setActiveCentralTab: (tabId: string) => void;
 }
 
 export type LiveSessionContextValue = LiveSessionState & LiveSessionActions;

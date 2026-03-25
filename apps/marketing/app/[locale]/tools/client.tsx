@@ -17,14 +17,14 @@ import Link from "next/link";
 import type { ToolConfig } from "@tools/tools-config";
 
 const ICON_MAP: Record<string, React.ReactNode> = {
-  GitBranch: <GitBranchIcon className="h-6 w-6" />,
-  Table: <TableIcon className="h-6 w-6" />,
-  Grid3X3: <Grid3X3Icon className="h-6 w-6" />,
-  ShieldCheck: <ShieldCheckIcon className="h-6 w-6" />,
-  FileText: <FileTextIcon className="h-6 w-6" />,
-  Gauge: <GaugeIcon className="h-6 w-6" />,
-  BookOpen: <BookOpenIcon className="h-6 w-6" />,
-  Calculator: <CalculatorIcon className="h-6 w-6" />,
+  GitBranch: <GitBranchIcon className="h-5 w-5" />,
+  Table: <TableIcon className="h-5 w-5" />,
+  Grid3X3: <Grid3X3Icon className="h-5 w-5" />,
+  ShieldCheck: <ShieldCheckIcon className="h-5 w-5" />,
+  FileText: <FileTextIcon className="h-5 w-5" />,
+  Gauge: <GaugeIcon className="h-5 w-5" />,
+  BookOpen: <BookOpenIcon className="h-5 w-5" />,
+  Calculator: <CalculatorIcon className="h-5 w-5" />,
 };
 
 interface ToolsHubClientProps {
@@ -36,56 +36,58 @@ export function ToolsHubClient({ tools, locale }: ToolsHubClientProps) {
   const isEs = locale === "es";
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#0F172A]">
       {/* Hero */}
-      <section className="border-b border-border bg-surface px-4 pb-12 pt-24 text-center">
+      <section className="px-4 pb-12 pt-24 text-center">
         <div className="mx-auto max-w-3xl">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
             <SparklesIcon className="h-4 w-4" />
             {isEs ? "100% Gratis" : "100% Free"}
           </div>
-          <h1 className="font-display mb-4 text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+          <h1 className="font-display mb-4 text-4xl font-bold tracking-tight text-[#F1F5F9] md:text-5xl">
             {isEs
-              ? "Herramientas Gratuitas para Profesionales BPM"
-              : "Free Tools for BPM Professionals"}
+              ? "Herramientas IA para Profesionales BPM"
+              : "AI Tools for BPM Professionals"}
           </h1>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-lg text-[#94A3B8]">
             {isEs
-              ? "Genera diagramas BPMN, SIPOC, RACI y mas con inteligencia artificial. Sin registro requerido."
-              : "Generate BPMN diagrams, SIPOC, RACI and more with AI. No signup required."}
+              ? "El mismo AI que diagrama en reuniones, ahora en tus manos. Sin registro."
+              : "The same AI that diagrams in meetings, now in your hands. No signup required."}
           </p>
         </div>
       </section>
 
       {/* Tool Grid */}
-      <section className="mx-auto max-w-6xl px-4 py-12">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <section className="mx-auto max-w-5xl px-4 pb-16">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {tools.map((tool) => (
             <Link
               key={tool.slug}
               href={`/${locale}/tools/${tool.slug}`}
-              className="group rounded-xl border border-border bg-surface p-6 transition-all hover:border-primary/50 hover:shadow-lg"
+              className="group flex items-start gap-4 rounded-xl border border-[#334155] bg-[#1E293B] p-5 transition-all duration-200 hover:border-primary/50 hover:bg-[#1E293B]/80"
             >
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary/20">
-                {ICON_MAP[tool.icon] || <SparklesIcon className="h-6 w-6" />}
+              <div className="mt-0.5 flex-shrink-0 text-primary">
+                {ICON_MAP[tool.icon] || <SparklesIcon className="h-5 w-5" />}
               </div>
-              <h3 className="mb-2 text-lg font-semibold text-foreground">
-                {isEs ? tool.nameEs : tool.name}
-              </h3>
-              <p className="mb-4 text-sm text-muted-foreground line-clamp-2">
-                {isEs ? tool.descriptionEs : tool.description}
-              </p>
-              <span className="inline-flex items-center gap-1 text-sm font-medium text-primary">
-                {isEs ? "Usar gratis" : "Use free"}
-                <ArrowRightIcon className="h-3 w-3 transition-transform group-hover:translate-x-1" />
-              </span>
+              <div className="min-w-0">
+                <h3 className="text-base font-semibold text-[#F1F5F9]">
+                  {isEs ? tool.nameEs : tool.name}
+                </h3>
+                <p className="mt-1 text-sm text-[#64748B] line-clamp-2">
+                  {isEs ? tool.descriptionEs : tool.description}
+                </p>
+                <span className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary">
+                  {isEs ? "Usar gratis" : "Use free"}
+                  <ArrowRightIcon className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+                </span>
+              </div>
             </Link>
           ))}
         </div>
       </section>
 
       {/* CTA */}
-      <section className="border-t border-border bg-[#0F172A] px-4 py-16 text-center">
+      <section className="border-t border-[#334155] px-4 py-16 text-center">
         <div className="mx-auto max-w-2xl">
           <h2 className="font-display mb-4 text-3xl font-bold text-[#F1F5F9]">
             {isEs

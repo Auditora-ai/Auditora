@@ -10,6 +10,8 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
+import { requireSessionAuth, isAuthError } from "@/lib/auth-helpers";
+import { NodePropertiesSchema } from "@/modules/meeting/lib/node-properties-schema";
 
 export async function PATCH(
 	request: NextRequest,
@@ -17,6 +19,10 @@ export async function PATCH(
 ) {
 	try {
 		const { sessionId, nodeId } = await params;
+
+		const authResult = await requireSessionAuth(sessionId);
+		if (isAuthError(authResult)) return authResult;
+
 		const body = await request.json();
 		const { action } = body;
 
@@ -50,10 +56,22 @@ export async function PATCH(
 			if (body.lane !== undefined) {
 				updateData.lane = body.lane || null;
 			}
+			if (body.properties !== undefined) {
+				const parsed = NodePropertiesSchema.safeParse(body.properties);
+				if (!parsed.success) {
+					return NextResponse.json(
+						{ error: "Invalid properties", details: parsed.error.flatten() },
+						{ status: 400 },
+					);
+				}
+				// Merge with existing properties (partial update)
+				const existing = (node.properties as Record<string, unknown>) || {};
+				updateData.properties = { ...existing, ...parsed.data };
+			}
 
 			if (Object.keys(updateData).length === 0) {
 				return NextResponse.json(
-					{ error: "edit requires at least one of: label, type, lane" },
+					{ error: "edit requires at least one of: label, type, lane, properties" },
 					{ status: 400 },
 				);
 			}

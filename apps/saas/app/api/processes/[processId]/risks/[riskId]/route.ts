@@ -1,22 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
-import { auth } from "@repo/auth";
-import { headers } from "next/headers";
+import { requireProcessAuth, isAuthError } from "@/lib/auth-helpers";
 import { calculateResidualRisk } from "@repo/ai";
-
-async function getSession() {
-  return auth.api.getSession({
-    headers: await headers(),
-    query: { disableCookieCache: true },
-  });
-}
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ processId: string; riskId: string }> },
 ) {
   try {
-    const { riskId } = await params;
+    const { processId, riskId } = await params;
+
+    const authResult = await requireProcessAuth(processId);
+    if (isAuthError(authResult)) return authResult;
 
     const risk = await db.processRisk.findUnique({
       where: { id: riskId },
@@ -42,12 +37,11 @@ export async function PATCH(
   { params }: { params: Promise<{ processId: string; riskId: string }> },
 ) {
   try {
-    const session = await getSession();
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { processId, riskId } = await params;
 
-    const { riskId } = await params;
+    const authResult = await requireProcessAuth(processId);
+    if (isAuthError(authResult)) return authResult;
+
     const body = await request.json();
 
     const existing = await db.processRisk.findUnique({
@@ -122,7 +116,7 @@ export async function PATCH(
         riskId,
         action: "updated",
         delta: body,
-        userId: session.user.id,
+        userId: authResult.authCtx.user.id,
       },
     });
 
@@ -138,12 +132,10 @@ export async function DELETE(
   { params }: { params: Promise<{ processId: string; riskId: string }> },
 ) {
   try {
-    const session = await getSession();
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { processId, riskId } = await params;
 
-    const { riskId } = await params;
+    const authResult = await requireProcessAuth(processId);
+    if (isAuthError(authResult)) return authResult;
 
     await db.processRisk.delete({
       where: { id: riskId },

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
+import { requireSessionAuth, isAuthError } from "@/lib/auth-helpers";
 
 export async function POST(
 	request: NextRequest,
@@ -7,6 +8,10 @@ export async function POST(
 ) {
 	try {
 		const { sessionId } = await params;
+
+		const authResult = await requireSessionAuth(sessionId);
+		if (isAuthError(authResult)) return authResult;
+
 		const { bpmnXml } = await request.json();
 
 		if (!bpmnXml || typeof bpmnXml !== "string") {

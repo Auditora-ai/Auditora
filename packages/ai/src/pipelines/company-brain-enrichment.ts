@@ -16,8 +16,7 @@
  *   return {}   return {}    retry 1x    retry strict  mark as draft
  */
 
-import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { instrumentedGenerateText } from "../utils/instrumented-generate";
 import {
   CompanyBrainEnrichmentSchema,
   type CompanyBrainEnrichment,
@@ -40,6 +39,8 @@ const EMPTY_RESULT: CompanyBrainEnrichment = {
 const MIN_TEXT_LENGTH = 100; // Skip very short inputs
 
 export interface EnrichmentInput {
+  /** Organization ID for usage tracking */
+  organizationId: string;
   /** The text to analyze (transcript or document content) */
   text: string;
   /** Whether this is from a session transcript or an uploaded document */
@@ -91,8 +92,9 @@ export async function enrichCompanyBrain(
 
   // First attempt
   try {
-    const response = await generateText({
-      model: anthropic("claude-sonnet-4-6"),
+    const response = await instrumentedGenerateText({
+      organizationId: input.organizationId,
+      pipeline: "company-brain-enrichment",
       system: COMPANY_BRAIN_ENRICHMENT_SYSTEM,
       prompt: COMPANY_BRAIN_ENRICHMENT_USER(
         text,
@@ -119,8 +121,9 @@ export async function enrichCompanyBrain(
   // Retry with stricter prompt if first attempt failed
   if (!result) {
     try {
-      const response = await generateText({
-        model: anthropic("claude-sonnet-4-6"),
+      const response = await instrumentedGenerateText({
+        organizationId: input.organizationId,
+        pipeline: "company-brain-enrichment",
         system:
           COMPANY_BRAIN_ENRICHMENT_SYSTEM +
           "\n\nIMPORTANT: Return ONLY valid JSON. No prose, no explanation, no markdown. Just the JSON object.",

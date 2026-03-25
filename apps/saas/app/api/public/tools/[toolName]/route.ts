@@ -170,6 +170,7 @@ type ToolName = (typeof VALID_TOOLS)[number];
 
 async function handleBpmnGenerator(input: string) {
   const result = await extractFromChat(
+    "public",
     [{ role: "user", content: input }],
     [],
   );
@@ -186,13 +187,14 @@ async function handleBpmnGenerator(input: string) {
 }
 
 async function handleSipocGenerator(input: string) {
-  const result = await extractSipoc(input);
+  const result = await extractSipoc(input, "public");
   return { type: "sipoc" as const, ...result };
 }
 
 async function handleRaciGenerator(input: string) {
   // Step 1: Extract structure from text
   const extraction = await extractFromChat(
+    "public",
     [{ role: "user", content: input }],
     [],
   );
@@ -204,6 +206,7 @@ async function handleRaciGenerator(input: string) {
   if (lanes.length === 0 || tasks.length === 0) {
     // Fallback: generate RACI directly from text
     const directResult = await generateRaci(
+      "public",
       ["Process Owner", "Executor", "Reviewer"],
       tasks.length > 0
         ? tasks
@@ -214,15 +217,16 @@ async function handleRaciGenerator(input: string) {
   }
 
   // Step 2: Feed to RACI pipeline
-  const result = await generateRaci(lanes, tasks, input);
+  const result = await generateRaci("public", lanes, tasks, input);
   return { type: "raci" as const, ...result, processes: extraction.extractedProcesses };
 }
 
 async function handleProcessAudit(input: string) {
   // Use complexity score as a lightweight audit alternative for the free tool
-  const complexity = await scoreComplexity(input);
+  const complexity = await scoreComplexity(input, "public");
   // Extract processes for additional context
   const extraction = await extractFromChat(
+    "public",
     [{ role: "user", content: input }],
     [],
   );
@@ -237,6 +241,7 @@ async function handleProcessAudit(input: string) {
 async function handleMeetingToProcess(input: string) {
   // Same as BPMN generator but optimized for transcript-style input
   const result = await extractFromChat(
+    "public",
     [{ role: "user", content: input }],
     [],
   );
@@ -253,12 +258,12 @@ async function handleMeetingToProcess(input: string) {
 }
 
 async function handleComplexity(input: string) {
-  const result = await scoreComplexity(input);
+  const result = await scoreComplexity(input, "public");
   return { type: "complexity" as const, ...result };
 }
 
 async function handleBpmnToText(input: string) {
-  const result = await convertBpmnToText(input);
+  const result = await convertBpmnToText(input, "public");
   return { type: "bpmn-to-text" as const, ...result };
 }
 

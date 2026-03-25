@@ -13,7 +13,7 @@ async function getOrgId() {
 	return orgs?.[0]?.id ?? null;
 }
 
-// List available templates
+// Public endpoint — templates are shared across organizations
 export async function GET() {
 	const templates = await db.processTemplate.findMany({
 		orderBy: [{ industry: "asc" }, { name: "asc" }],

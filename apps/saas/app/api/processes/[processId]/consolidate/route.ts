@@ -1,25 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
-import { auth } from "@repo/auth";
-import { headers } from "next/headers";
+import { requireProcessAuth, isAuthError } from "@/lib/auth-helpers";
 import { consolidateStakeholders } from "@repo/ai";
-
-async function getSession() {
-	return auth.api.getSession({
-		headers: await headers(),
-		query: { disableCookieCache: true },
-	});
-}
 
 export async function POST(
 	_request: NextRequest,
 	{ params }: { params: Promise<{ processId: string }> },
 ) {
-	const session = await getSession();
-	if (!session?.user)
-		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
 	const { processId } = await params;
+
+	const authResult = await requireProcessAuth(processId);
+	if (isAuthError(authResult)) return authResult;
 
 	// Get all sessions for this process
 	const sessions = await db.meetingSession.findMany({
@@ -54,7 +45,7 @@ export async function POST(
 	}));
 
 	// Run consolidation
-	const result = await consolidateStakeholders(perspectives);
+	const result = await consolidateStakeholders(perspectives, authResult.authCtx.org.id);
 
 	// Save conflicts to database
 	if (result.conflicts.length > 0) {
@@ -88,9 +79,10 @@ export async function PATCH(
 	request: NextRequest,
 	{ params }: { params: Promise<{ processId: string }> },
 ) {
-	const session = await getSession();
-	if (!session?.user)
-		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+	const { processId } = await params;
+
+	const authResult = await requireProcessAuth(processId);
+	if (isAuthError(authResult)) return authResult;
 
 	const body = await request.json();
 	const { conflictId, resolution } = body;
@@ -101,8 +93,6 @@ export async function PATCH(
 			{ status: 400 },
 		);
 	}
-
-	const { processId } = await params;
 
 	const conflict = await db.stakeholderConflict.findFirst({
 		where: { id: conflictId, processId },

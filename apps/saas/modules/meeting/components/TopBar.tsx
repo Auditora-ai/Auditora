@@ -27,6 +27,8 @@ export function TopBar({ processName, clientName }: TopBarProps) {
 		toggleAi,
 		exportDiagram,
 		endSession,
+		sessionId,
+		shareToken,
 	} = useLiveSessionContext();
 
 	return (
@@ -74,13 +76,7 @@ export function TopBar({ processName, clientName }: TopBarProps) {
 					label="Exportar BPMN"
 					onClick={() => exportDiagram("bpmn")}
 				/>
-				<TopBarButton
-					icon={<LinkIcon className="h-3.5 w-3.5" />}
-					label="Compartir"
-					onClick={() => {
-						navigator.clipboard.writeText(window.location.href);
-					}}
-				/>
+				<ShareButton />
 				<TopBarButton
 					icon={<PowerIcon className="h-3.5 w-3.5" />}
 					label="Finalizar"
@@ -235,6 +231,118 @@ function LiveIndicator({ stale, activity }: { stale: boolean; activity: { type: 
 					<p className="mt-2 text-[10px] text-[#475569]">
 						Puedes seguir trabajando en el diagrama sin conexion. El bot se reconecta al link que pegues.
 					</p>
+				</div>
+			)}
+		</div>
+	);
+}
+
+function ShareButton() {
+	const { sessionId, shareToken } = useLiveSessionContext();
+	const [open, setOpen] = useState(false);
+	const [shared, setShared] = useState(!!shareToken);
+	const [token, setToken] = useState(shareToken || "");
+	const [loading, setLoading] = useState(false);
+
+	const toggleShare = async () => {
+		setLoading(true);
+		try {
+			if (shared) {
+				// Revoke share
+				await fetch(`/api/sessions/${sessionId}/share`, { method: "DELETE" });
+				setShared(false);
+				setToken("");
+				toast.success("Link de compartir desactivado", { duration: 2000 });
+			} else {
+				// Enable share
+				const res = await fetch(`/api/sessions/${sessionId}/share`, { method: "POST" });
+				const data = await res.json();
+				if (data.shareToken) {
+					setShared(true);
+					setToken(data.shareToken);
+					const url = `${window.location.origin}/share/${data.shareToken}`;
+					navigator.clipboard.writeText(url);
+					toast.success("Link copiado al portapapeles", { duration: 3000 });
+				}
+			}
+		} catch {
+			toast.error("Error al cambiar estado de compartir");
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const copyLink = () => {
+		if (!token) return;
+		const url = `${window.location.origin}/share/${token}`;
+		navigator.clipboard.writeText(url);
+		toast.success("Link copiado", { duration: 2000 });
+	};
+
+	return (
+		<div className="relative">
+			<button
+				type="button"
+				onClick={() => setOpen(!open)}
+				className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors duration-75 ${
+					shared ? "text-[#2563EB] hover:bg-[#2563EB]/10" : "text-[#94A3B8] hover:bg-[#1E293B] hover:text-white"
+				}`}
+			>
+				<LinkIcon className="h-3.5 w-3.5" />
+				<span className="hidden lg:inline">{shared ? "Compartiendo" : "Compartir"}</span>
+			</button>
+
+			{open && (
+				<div className="absolute right-0 top-full z-50 mt-2 w-72 rounded-xl bg-[#0F172A] p-3 shadow-xl ring-1 ring-[#334155]">
+					<div className="mb-2 flex items-center justify-between">
+						<span className="text-xs font-medium text-[#F1F5F9]">Link de visualizacion</span>
+						<button type="button" onClick={() => setOpen(false)} className="text-[#64748B] hover:text-white">
+							<XIcon className="h-3.5 w-3.5" />
+						</button>
+					</div>
+
+					{shared ? (
+						<>
+							<div className="mb-2 flex items-center gap-1.5 rounded-lg bg-[#1E293B] px-2.5 py-2">
+								<span className="h-2 w-2 rounded-full bg-green-500" />
+								<span className="flex-1 truncate text-[11px] text-[#94A3B8]">
+									/share/{token.slice(0, 12)}...
+								</span>
+								<button
+									type="button"
+									onClick={copyLink}
+									className="rounded px-1.5 py-0.5 text-[10px] font-medium text-[#2563EB] hover:bg-[#2563EB]/10"
+								>
+									Copiar
+								</button>
+							</div>
+							<button
+								type="button"
+								onClick={toggleShare}
+								disabled={loading}
+								className="w-full rounded-lg bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 transition-colors hover:bg-red-500/20 disabled:opacity-50"
+							>
+								{loading ? "Desactivando..." : "Dejar de compartir"}
+							</button>
+							<p className="mt-1.5 text-[10px] text-[#475569]">
+								El link se desactiva al dejar de compartir o al finalizar la sesion.
+							</p>
+						</>
+					) : (
+						<>
+							<button
+								type="button"
+								onClick={toggleShare}
+								disabled={loading}
+								className="w-full rounded-lg bg-[#2563EB] px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-[#1D4ED8] disabled:opacity-50"
+							>
+								{loading ? "Activando..." : "Activar link de compartir"}
+							</button>
+							<p className="mt-1.5 text-[10px] text-[#475569]">
+								Genera un link de solo lectura para que otros vean el diagrama en vivo.
+							</p>
+						</>
+					)}
 				</div>
 			)}
 		</div>

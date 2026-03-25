@@ -222,7 +222,7 @@ export async function POST(request: NextRequest) {
       content: m.content.replace(/<[^>]*>/g, "").trim(),
     }));
 
-    const result = await extractFromChat(sanitized, []);
+    const result = await extractFromChat("public", sanitized, []);
     dailyCost += COST_PER_CALL;
 
     const processes = result.extractedProcesses.map((p) => ({

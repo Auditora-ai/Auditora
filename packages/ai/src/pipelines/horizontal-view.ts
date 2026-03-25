@@ -8,8 +8,7 @@
  *   COMPANY BRAIN + PROCESS LINKS + DEFINITIONS → [This Pipeline] → HORIZONTAL FLOW
  */
 
-import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { instrumentedGenerateText } from "../utils/instrumented-generate";
 import {
   HorizontalViewResultSchema,
   type HorizontalViewResult,
@@ -21,6 +20,7 @@ import {
 import { parseLlmJson } from "../utils/parse-llm-json";
 
 export interface HorizontalViewInput {
+  organizationId: string;
   orgName: string;
   targetFlow?: string;
   processLinks: Array<{
@@ -44,8 +44,9 @@ export interface HorizontalViewInput {
 export async function generateHorizontalView(
   input: HorizontalViewInput,
 ): Promise<HorizontalViewResult> {
-  const { text, usage } = await generateText({
-    model: anthropic("claude-sonnet-4-6"),
+  const { text, usage } = await instrumentedGenerateText({
+    organizationId: input.organizationId,
+    pipeline: "horizontal-view",
     system: HORIZONTAL_VIEW_SYSTEM,
     prompt: HORIZONTAL_VIEW_USER(input),
     maxOutputTokens: 8192,

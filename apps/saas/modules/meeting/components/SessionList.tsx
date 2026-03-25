@@ -16,6 +16,7 @@ import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
+	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
 import {
@@ -143,7 +144,7 @@ export function SessionList({ organizationSlug }: { organizationSlug: string }) 
 							}
 						}
 					};
-					flatten(data.tree || data || []);
+					flatten(data.definitions || []);
 					setProcesses(flat);
 				}
 			} catch {
@@ -292,8 +293,9 @@ export function SessionList({ organizationSlug }: { organizationSlug: string }) 
 														<PencilIcon className="mr-2 h-4 w-4" />
 														Editar
 													</DropdownMenuItem>
+													<DropdownMenuSeparator />
 													<DropdownMenuItem
-														className="text-destructive"
+														className="text-destructive focus:text-destructive"
 														onClick={() => handleDelete(session)}
 													>
 														<TrashIcon className="mr-2 h-4 w-4" />

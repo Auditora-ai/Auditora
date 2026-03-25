@@ -10,6 +10,7 @@ import {
 import { deleteSessionActivity, runPostSessionPipelines } from "../../../webhook/recall/route";
 import { buildBpmnXml, layoutBpmnXml } from "@meeting/lib/bpmn-builder";
 import type { DiagramNode } from "@meeting/types";
+import { requireSessionAuth, isAuthError } from "@/lib/auth-helpers";
 
 export async function POST(
 	request: NextRequest,
@@ -17,6 +18,9 @@ export async function POST(
 ) {
 	try {
 		const { sessionId } = await params;
+
+		const authResult = await requireSessionAuth(sessionId);
+		if (isAuthError(authResult)) return authResult;
 
 		const session = await db.meetingSession.findUnique({
 			where: { id: sessionId },
@@ -60,7 +64,7 @@ export async function POST(
 		);
 
 		// Generate session summary async (non-blocking)
-		generateSummaryInBackground(sessionId, session.type).catch((err) =>
+		generateSummaryInBackground(sessionId, session.type, session.organizationId).catch((err) =>
 			console.error("[EndSession] Summary generation failed:", err),
 		);
 
@@ -202,6 +206,7 @@ async function autoVersionOnSessionEnd(
 async function generateSummaryInBackground(
 	sessionId: string,
 	sessionType: string,
+	organizationId: string,
 ) {
 	const [nodes, transcriptEntries] = await Promise.all([
 		db.diagramNode.findMany({
@@ -214,6 +219,7 @@ async function generateSummaryInBackground(
 	]);
 
 	const result = await generateSessionSummary(
+		organizationId,
 		sessionType,
 		nodes.map((n) => ({
 			id: n.id,
@@ -303,6 +309,7 @@ async function triggerIntelligenceAudit(
 	);
 
 	const result = await auditProcess({
+		organizationId: processDef.architecture?.organizationId || "",
 		mode: isInitial ? "initial" : "incremental",
 		knowledgeSnapshot: existingSnapshot,
 		confidenceScores:

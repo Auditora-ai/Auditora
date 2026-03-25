@@ -14,8 +14,7 @@
  * Token usage: ~8K input, ~4K output (risk), ~10K input, ~6K output (full)
  */
 
-import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { instrumentedGenerateText } from "../utils/instrumented-generate";
 import { z } from "zod";
 import {
   RISK_AUDIT_SYSTEM,
@@ -95,6 +94,7 @@ const RiskAuditResultSchema = z.object({
 // ============================================
 
 export interface RiskAuditInput {
+  organizationId: string;
   mode: "risk" | "fmea" | "full";
   processDefinition: {
     name: string;
@@ -222,8 +222,9 @@ export async function auditRisks(
 
   const maxTokens = input.mode === "full" ? 8192 : 4096;
 
-  const { text } = await generateText({
-    model: anthropic("claude-sonnet-4-6"),
+  const { text } = await instrumentedGenerateText({
+    organizationId: input.organizationId,
+    pipeline: "risk-audit",
     system: systemPrompt,
     prompt: userPrompt,
     maxOutputTokens: maxTokens,

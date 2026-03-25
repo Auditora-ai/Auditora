@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
-import { auth } from "@repo/auth";
-import { headers } from "next/headers";
+import { requireProcessAuth, isAuthError } from "@/lib/auth-helpers";
 import { repairDiagram } from "@repo/ai";
 
 /**
@@ -16,15 +15,10 @@ export async function POST(
 	{ params }: { params: Promise<{ processId: string }> },
 ) {
 	try {
-		const session = await auth.api.getSession({
-			headers: await headers(),
-			query: { disableCookieCache: true },
-		});
-		if (!session?.user) {
-			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-		}
-
 		const { processId } = await params;
+
+		const authResult = await requireProcessAuth(processId);
+		if (isAuthError(authResult)) return authResult;
 
 		// Find the most recent session with diagram nodes
 		const meetingSession = await db.meetingSession.findFirst({
@@ -74,6 +68,7 @@ export async function POST(
 
 		// Run AI repair
 		const result = await repairDiagram({
+			organizationId: authResult.authCtx.org.id,
 			nodes: inputNodes,
 			transcript: transcript || undefined,
 		});

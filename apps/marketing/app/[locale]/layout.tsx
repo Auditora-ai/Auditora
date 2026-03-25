@@ -61,7 +61,7 @@ export default async function MarketingLayout({
 		>
 			<body
 				className={cn(
-					"min-h-screen bg-background text-foreground antialiased",
+					"min-h-screen overflow-x-hidden bg-background text-foreground antialiased",
 				)}
 			>
 				<ConsentProvider

@@ -8,6 +8,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
 import { enrichCompanyBrain } from "@repo/ai/src/pipelines/company-brain-enrichment";
+import { getAuthContext } from "@/lib/auth-helpers";
 
 /**
  * GET /api/company-brain?organizationId=xxx
@@ -16,12 +17,21 @@ import { enrichCompanyBrain } from "@repo/ai/src/pipelines/company-brain-enrichm
  */
 export async function GET(request: NextRequest) {
   try {
+    const authCtx = await getAuthContext();
+    if (!authCtx) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const organizationId = request.nextUrl.searchParams.get("organizationId");
     if (!organizationId) {
       return NextResponse.json(
         { error: "organizationId is required" },
         { status: 400 },
       );
+    }
+
+    if (organizationId !== authCtx.org.id) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const brain = await db.companyBrain.findUnique({
@@ -60,6 +70,11 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
+    const authCtx = await getAuthContext();
+    if (!authCtx) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await request.json();
     const { organizationId, text, sourceType, sourceId } = body;
 
@@ -71,6 +86,10 @@ export async function POST(request: NextRequest) {
         },
         { status: 400 },
       );
+    }
+
+    if (organizationId !== authCtx.org.id) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     // Ensure Company Brain exists (create if first time)
@@ -109,6 +128,7 @@ export async function POST(request: NextRequest) {
 
     // Run enrichment
     const enrichmentResult = await enrichCompanyBrain({
+      organizationId,
       text,
       sourceType: sourceType as "transcript" | "document",
       existingContext: {

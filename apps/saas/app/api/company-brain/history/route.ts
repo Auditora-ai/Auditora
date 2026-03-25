@@ -7,18 +7,28 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
+import { getAuthContext } from "@/lib/auth-helpers";
 
 /**
  * GET /api/company-brain/history?organizationId=xxx&limit=50&field=orgContext.mission
  */
 export async function GET(request: NextRequest) {
   try {
+    const authCtx = await getAuthContext();
+    if (!authCtx) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const organizationId = request.nextUrl.searchParams.get("organizationId");
     if (!organizationId) {
       return NextResponse.json(
         { error: "organizationId is required" },
         { status: 400 },
       );
+    }
+
+    if (organizationId !== authCtx.org.id) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const limit = parseInt(

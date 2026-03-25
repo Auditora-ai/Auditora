@@ -1,11 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import type { DiagramNode, BotActivity, TranscriptEntry } from "../types";
 import type { DiagramHealth } from "../context/LiveSessionContext";
 
+export type ConnectionStatus = "connected" | "reconnecting" | "disconnected";
+
 interface LiveSessionData {
-	sessionStatus: "ACTIVE" | "ENDED";
+	sessionStatus: "ACTIVE" | "ENDED" | "FAILED" | "CONNECTING";
+	connectionStatus: ConnectionStatus;
 	transcript: TranscriptEntry[];
 	nodes: DiagramNode[];
 	teleprompterQuestion: string | null;
@@ -38,6 +42,7 @@ export function useLiveSession(
 ): LiveSessionData {
 	const [data, setData] = useState<LiveSessionData>({
 		sessionStatus: "ACTIVE",
+		connectionStatus: "connected",
 		transcript: [],
 		nodes: [],
 		teleprompterQuestion: null,
@@ -52,6 +57,8 @@ export function useLiveSession(
 	const prevNodesRef = useRef<string>("");
 	const failCountRef = useRef(0);
 	const stoppedRef = useRef(false);
+	/** Track nodes with properties so we can warn if AI rejects them */
+	const documentedNodesRef = useRef<Map<string, string>>(new Map()); // id -> label
 
 	// Use refs for modelerApi and aiEnabled to avoid recreating the poll callback
 	const modelerApiRef = useRef(modelerApi);
@@ -78,6 +85,11 @@ export function useLiveSession(
 
 				if (!res.ok) {
 					failCountRef.current++;
+					if (failCountRef.current >= 3) {
+						setData((prev) => ({ ...prev, connectionStatus: "disconnected" }));
+					} else {
+						setData((prev) => ({ ...prev, connectionStatus: "reconnecting" }));
+					}
 					return;
 				}
 
@@ -92,11 +104,31 @@ export function useLiveSession(
 					lane: n.lane || undefined,
 					connections: n.connections || [],
 					confidence: n.confidence ?? null,
+					properties: n.properties ?? null,
 				}));
 
 				// Diff nodes to avoid unnecessary mergeAiNodes calls
 				const nodesKey = JSON.stringify(newNodes.map((n) => `${n.id}:${n.state}:${n.label}`));
 				const nodesChanged = nodesKey !== prevNodesRef.current;
+
+				// Check for documented nodes that disappeared (rejected by AI)
+				const currentIds = new Set(newNodes.map((n) => n.id));
+				for (const [id, label] of documentedNodesRef.current) {
+					if (!currentIds.has(id)) {
+						toast.warning(`La IA rechazó '${label}' que tiene propiedades documentadas. Puedes restaurarlo.`, {
+							duration: 8000,
+						});
+						documentedNodesRef.current.delete(id);
+					}
+				}
+
+				// Update documented nodes tracker
+				for (const n of newNodes) {
+					const props = n.properties as Record<string, unknown> | null;
+					if (props && Object.keys(props).length > 0) {
+						documentedNodesRef.current.set(n.id, n.label);
+					}
+				}
 
 				const api = modelerApiRef.current;
 				if (nodesChanged && api?.isReady && aiEnabledRef.current) {
@@ -106,6 +138,7 @@ export function useLiveSession(
 
 				setData({
 					sessionStatus: json.status || "ACTIVE",
+					connectionStatus: "connected",
 					transcript: json.transcript || [],
 					nodes: newNodes,
 					teleprompterQuestion: json.teleprompterQuestion || null,
@@ -122,6 +155,11 @@ export function useLiveSession(
 				}
 			} catch {
 				failCountRef.current++;
+				if (failCountRef.current >= 3) {
+					setData((prev) => ({ ...prev, connectionStatus: "disconnected" }));
+				} else {
+					setData((prev) => ({ ...prev, connectionStatus: "reconnecting" }));
+				}
 			}
 		}
 

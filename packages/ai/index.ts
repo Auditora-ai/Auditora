@@ -105,6 +105,13 @@ export type { ComplexityResult, ComplexityBreakdown } from "./src/pipelines/comp
 export { convertBpmnToText } from "./src/pipelines/bpmn-to-text";
 export type { BpmnToTextResult, BpmnDecision } from "./src/pipelines/bpmn-to-text";
 
+// Session Wizard Pipelines
+export { discoverProcess } from "./src/pipelines/process-discovery";
+export type { ProcessDiscoveryInput, ProcessDiscoveryResult, ProcessSuggestion } from "./src/pipelines/process-discovery";
+export { prepareSessionInvitation } from "./src/pipelines/session-preparation";
+export type { SessionPreparationResult } from "./src/pipelines/session-preparation";
+export type { SessionPrepInput } from "./src/prompts/session-preparation";
+
 // Diagram Repair
 export { repairDiagram } from "./src/pipelines/diagram-repair";
 export type { RepairInput, RepairResult, RepairChange } from "./src/pipelines/diagram-repair";
@@ -112,6 +119,15 @@ export type { RepairInput, RepairResult, RepairChange } from "./src/pipelines/di
 // Redis-backed activity state
 export { setActivity, getActivity, deleteActivity } from "./src/utils/redis";
 export type { ActivityState } from "./src/utils/redis";
+
+// Utils
+export { parseLlmJson } from "./src/utils/parse-llm-json";
+
+// Model routing & instrumented AI calls
+export { getModelForOrg, preloadOrgTier, invalidateOrgTierCache } from "./src/utils/model-router";
+export type { AiTier } from "./src/utils/model-router";
+export { instrumentedGenerateText } from "./src/utils/instrumented-generate";
+export type { InstrumentedGenerateOptions } from "./src/utils/instrumented-generate";
 
 // aiprocess.me prompts (for testing/eval)
 export { PROCESS_EXTRACTION_SYSTEM, buildExtractionSystemPrompt } from "./src/prompts/process-extraction";

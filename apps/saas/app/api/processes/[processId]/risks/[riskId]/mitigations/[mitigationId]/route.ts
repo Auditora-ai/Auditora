@@ -1,14 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
-import { auth } from "@repo/auth";
-import { headers } from "next/headers";
-
-async function getSession() {
-  return auth.api.getSession({
-    headers: await headers(),
-    query: { disableCookieCache: true },
-  });
-}
+import { requireProcessAuth, isAuthError } from "@/lib/auth-helpers";
 
 export async function PATCH(
   request: NextRequest,
@@ -23,12 +15,11 @@ export async function PATCH(
   },
 ) {
   try {
-    const session = await getSession();
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { processId, mitigationId } = await params;
 
-    const { mitigationId } = await params;
+    const authResult = await requireProcessAuth(processId);
+    if (isAuthError(authResult)) return authResult;
+
     const body = await request.json();
 
     const data: Record<string, unknown> = {};
@@ -74,12 +65,10 @@ export async function DELETE(
   },
 ) {
   try {
-    const session = await getSession();
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { processId, mitigationId } = await params;
 
-    const { mitigationId } = await params;
+    const authResult = await requireProcessAuth(processId);
+    if (isAuthError(authResult)) return authResult;
 
     await db.riskMitigation.delete({
       where: { id: mitigationId },

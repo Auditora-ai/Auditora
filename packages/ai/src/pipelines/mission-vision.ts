@@ -8,8 +8,7 @@
  *   COMPANY BRAIN + TRANSCRIPTS + DOCS → [This Pipeline] → MISSION/VISION/VALUES DOC
  */
 
-import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { instrumentedGenerateText } from "../utils/instrumented-generate";
 import {
   MissionVisionResultSchema,
   type MissionVisionResult,
@@ -21,6 +20,7 @@ import {
 import { parseLlmJson } from "../utils/parse-llm-json";
 
 export interface MissionVisionInput {
+  organizationId: string;
   orgName: string;
   industry?: string;
   businessModel?: string;
@@ -36,8 +36,9 @@ export interface MissionVisionInput {
 export async function generateMissionVision(
   input: MissionVisionInput,
 ): Promise<MissionVisionResult> {
-  const { text, usage } = await generateText({
-    model: anthropic("claude-sonnet-4-6"),
+  const { text, usage } = await instrumentedGenerateText({
+    organizationId: input.organizationId,
+    pipeline: "mission-vision",
     system: MISSION_VISION_SYSTEM,
     prompt: MISSION_VISION_USER(input),
     maxOutputTokens: 4096,

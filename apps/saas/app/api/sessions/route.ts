@@ -50,7 +50,29 @@ export async function POST(request: NextRequest) {
 			contactName,
 			contactEmail,
 			contactRole,
-		} = body;
+			// Wizard fields (optional, additive)
+			participants,
+			sessionContext,
+			wizardNonce,
+			preBuildNodes,
+			preBuildLanes,
+		} = body as {
+			meetingUrl?: string;
+			sessionType?: string;
+			processDefinitionId?: string;
+			continuationOf?: string;
+			scheduledFor?: string;
+			scheduledEnd?: string;
+			sessionGoals?: string;
+			contactName?: string;
+			contactEmail?: string;
+			contactRole?: string;
+			participants?: Array<{ name: string; email?: string; role?: string }>;
+			sessionContext?: string;
+			wizardNonce?: string;
+			preBuildNodes?: Array<{ id: string; type: string; label: string; lane?: string; connectFrom?: string | null }>;
+			preBuildLanes?: string[];
+		};
 
 		const isEditMode = body.editMode === true && !meetingUrl;
 		const isScheduled = !!scheduledFor && !meetingUrl && !isEditMode;
@@ -104,7 +126,7 @@ export async function POST(request: NextRequest) {
 		// Create session in DB
 		const session = await db.meetingSession.create({
 			data: {
-				type: sessionType,
+				type: sessionType as "DISCOVERY" | "DEEP_DIVE" | "CONTINUATION",
 				status: initialStatus,
 				meetingUrl: meetingUrl || undefined,
 				organizationId: org.id,
@@ -114,11 +136,22 @@ export async function POST(request: NextRequest) {
 				scheduledFor: scheduledFor ? new Date(scheduledFor) : undefined,
 				scheduledEnd: scheduledEnd ? new Date(scheduledEnd) : undefined,
 				sessionGoals: sessionGoals || undefined,
+				sessionContext: sessionContext || undefined,
 			},
 		});
 
-		// Create client participant if contact info provided
-		if (contactName || contactEmail) {
+		// Create participants from wizard (multiple) or legacy single contact
+		if (participants && participants.length > 0) {
+			await db.meetingParticipant.createMany({
+				data: participants.map((p) => ({
+					sessionId: session.id,
+					name: p.name,
+					email: p.email || undefined,
+					role: p.role || undefined,
+					participantType: "CLIENT" as const,
+				})),
+			});
+		} else if (contactName || contactEmail) {
 			await db.meetingParticipant.create({
 				data: {
 					sessionId: session.id,
@@ -127,6 +160,46 @@ export async function POST(request: NextRequest) {
 					role: contactRole || undefined,
 					participantType: "CLIENT",
 				},
+			});
+		}
+
+		// Move staged wizard files if wizardNonce provided
+		if (wizardNonce) {
+			// File move is handled by Supabase Storage — fire-and-forget
+			// Staged files: session-context/pending/{wizardNonce}/
+			// Target: session-context/{sessionId}/
+			// Note: implemented in the client via Supabase Storage API
+		}
+
+		// Create pre-built diagram nodes from wizard Step 3
+		if (preBuildNodes && preBuildNodes.length > 0) {
+			const typeMap: Record<string, string> = {
+				startEvent: "START_EVENT",
+				endEvent: "END_EVENT",
+				task: "TASK",
+				userTask: "USER_TASK",
+				serviceTask: "SERVICE_TASK",
+				manualTask: "MANUAL_TASK",
+				exclusiveGateway: "EXCLUSIVE_GATEWAY",
+				parallelGateway: "PARALLEL_GATEWAY",
+				subProcess: "SUBPROCESS",
+				timerEvent: "TIMER_EVENT",
+				messageEvent: "MESSAGE_EVENT",
+				textAnnotation: "TEXT_ANNOTATION",
+			};
+			type NodeTypeEnum = "START_EVENT" | "END_EVENT" | "TASK" | "USER_TASK" | "SERVICE_TASK" | "MANUAL_TASK" | "EXCLUSIVE_GATEWAY" | "PARALLEL_GATEWAY" | "SUBPROCESS" | "TIMER_EVENT" | "MESSAGE_EVENT" | "TEXT_ANNOTATION";
+			await db.diagramNode.createMany({
+				data: preBuildNodes.map((node, i) => ({
+					sessionId: session.id,
+					nodeType: (typeMap[node.type] ?? "TASK") as NodeTypeEnum,
+					label: node.label,
+					lane: node.lane || (preBuildLanes?.[0]) || undefined,
+					state: "CONFIRMED" as const,
+					confidence: 0.7,
+					positionX: 250 * (i % 5),
+					positionY: 150 * Math.floor(i / 5),
+					connections: node.connectFrom ? [node.connectFrom] : [],
+				})),
 			});
 		}
 

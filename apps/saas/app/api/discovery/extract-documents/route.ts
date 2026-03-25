@@ -65,6 +65,7 @@ export async function POST(request: NextRequest) {
 
 	// Extract processes from document
 	const result = await extractFromDocument(
+		orgId,
 		document.extractedText,
 		existingNames,
 	);

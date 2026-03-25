@@ -8,8 +8,7 @@
  *   LANES + TRANSCRIPTS -> [This Pipeline] -> RaciEntry[]
  */
 
-import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { instrumentedGenerateText } from "../utils/instrumented-generate";
 import { z } from "zod";
 import { parseLlmJson } from "../utils/parse-llm-json";
 
@@ -34,6 +33,7 @@ export interface RaciGeneratorResult {
 }
 
 export async function generateRaci(
+	organizationId: string,
 	lanes: string[],
 	taskLabels: string[],
 	transcriptExcerpts: string,
@@ -42,8 +42,9 @@ export async function generateRaci(
 		return { assignments: [] };
 	}
 
-	const { text } = await generateText({
-		model: anthropic("claude-sonnet-4-6"),
+	const { text } = await instrumentedGenerateText({
+		organizationId,
+		pipeline: "raci-generator",
 		system: `You are a BPM consultant generating a RACI matrix.
 Given the roles (from swimlanes) and activities (from BPMN tasks), assign RACI responsibilities.
 
@@ -73,7 +74,7 @@ Transcript context:
 ${transcriptExcerpts.slice(0, 5000)}
 
 Generate the RACI matrix assignments.`,
-		maxOutputTokens: 2048,
+		maxOutputTokens: 4096,
 		temperature: 0.1,
 	});
 

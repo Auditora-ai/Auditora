@@ -10,8 +10,7 @@
  *   AUDIO -> [Deepgram STT] -> TRANSCRIPT -> [This Pipeline] -> PROCESS DEFINITIONS
  */
 
-import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { instrumentedGenerateText } from "../utils/instrumented-generate";
 import { z } from "zod";
 import {
   DISCOVERY_EXTRACTION_SYSTEM,
@@ -93,6 +92,7 @@ function formatTranscriptWindow(
  * @param context - Optional session context for business-aware extraction
  */
 export async function extractDiscoveryUpdates(
+  organizationId: string,
   recentTranscript: TranscriptEntry[],
   existingProcesses: Array<{ name: string; description?: string }>,
   context?: SessionContext,
@@ -103,8 +103,9 @@ export async function extractDiscoveryUpdates(
     return { processes: [], businessInsights: { keyRoles: [] } };
   }
 
-  const { text } = await generateText({
-    model: anthropic("claude-sonnet-4-6"),
+  const { text } = await instrumentedGenerateText({
+    organizationId,
+    pipeline: "discovery-extraction",
     system: DISCOVERY_EXTRACTION_SYSTEM,
     prompt: DISCOVERY_EXTRACTION_USER(
       transcriptText,

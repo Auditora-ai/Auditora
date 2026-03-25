@@ -79,16 +79,16 @@ export function ToolPage({ tool, locale, children }: ToolPageProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero */}
-      <section className="border-b border-border bg-surface px-4 pb-12 pt-24 text-center">
+      <section className="border-b border-[#334155] bg-[#0F172A] px-4 pb-12 pt-24 text-center">
         <div className="mx-auto max-w-3xl">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
             <SparklesIcon className="h-4 w-4" />
             {isEs ? "Herramienta Gratuita" : "Free Tool"}
           </div>
-          <h1 className="font-display mb-4 text-4xl font-bold tracking-tight text-foreground md:text-5xl">
+          <h1 className="font-display mb-4 text-4xl font-bold tracking-tight text-[#F1F5F9] md:text-5xl">
             {name}
           </h1>
-          <p className="text-lg text-muted-foreground">{description}</p>
+          <p className="text-lg text-[#94A3B8]">{description}</p>
         </div>
       </section>
 
@@ -202,7 +202,7 @@ export function ToolPage({ tool, locale, children }: ToolPageProps) {
 
         {/* Action bar below output */}
         {result && (
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-border bg-surface p-4">
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-border bg-muted p-4">
             <Button
               variant="outline"
               onClick={() => {

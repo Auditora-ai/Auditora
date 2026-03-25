@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
-import { auth } from "@repo/auth";
-import { headers } from "next/headers";
+import { requireProcessAuth, isAuthError } from "@/lib/auth-helpers";
 
 export async function GET(
 	request: NextRequest,
@@ -9,6 +8,9 @@ export async function GET(
 ) {
 	try {
 		const { processId } = await params;
+
+		const authResult = await requireProcessAuth(processId);
+		if (isAuthError(authResult)) return authResult;
 
 		const process = await db.processDefinition.findUnique({
 			where: { id: processId },
@@ -59,15 +61,11 @@ export async function PATCH(
 	{ params }: { params: Promise<{ processId: string }> },
 ) {
 	try {
-		const session = await auth.api.getSession({
-			headers: await headers(),
-			query: { disableCookieCache: true },
-		});
-		if (!session?.user) {
-			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-		}
-
 		const { processId } = await params;
+
+		const authResult = await requireProcessAuth(processId);
+		if (isAuthError(authResult)) return authResult;
+
 		const body = await request.json();
 
 		const { name, description, owner, goals, triggers, outputs, processStatus } = body;

@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
 import type { RiskType, RiskSource } from "@repo/database";
-import { auth } from "@repo/auth";
-import { headers } from "next/headers";
+import { requireProcessAuth, isAuthError } from "@/lib/auth-helpers";
 import {
   auditRisks,
   calculateResidualRisk,
@@ -10,19 +9,16 @@ import {
   type KnowledgeSnapshot,
 } from "@repo/ai";
 
-async function getSession() {
-  return auth.api.getSession({
-    headers: await headers(),
-    query: { disableCookieCache: true },
-  });
-}
-
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ processId: string }> },
 ) {
   try {
     const { processId } = await params;
+
+    const authResult = await requireProcessAuth(processId);
+    if (isAuthError(authResult)) return authResult;
+
     const url = new URL(request.url);
     const status = url.searchParams.get("status");
     const type = url.searchParams.get("type");
@@ -80,23 +76,22 @@ export async function POST(
   { params }: { params: Promise<{ processId: string }> },
 ) {
   try {
-    const session = await getSession();
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const { processId } = await params;
+
+    const authResult = await requireProcessAuth(processId);
+    if (isAuthError(authResult)) return authResult;
+
     const body = await request.json();
     const { action } = body as {
       action: "audit" | "fmea" | "full" | "create";
     };
 
     if (action === "create") {
-      return handleCreateRisk(processId, body, session.user.id);
+      return handleCreateRisk(processId, body, authResult.authCtx.user.id);
     }
 
     // Audit/FMEA/Full — trigger AI pipeline
-    return handleAuditRisks(processId, action, session.user.id);
+    return handleAuditRisks(processId, action, authResult.authCtx.user.id);
   } catch (error) {
     console.error("[Risks] POST Error:", error);
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
@@ -193,6 +188,7 @@ async function handleAuditRisks(
   const auditMode = mode === "audit" ? "risk" : mode === "fmea" ? "fmea" : "full";
 
   const input: RiskAuditInput = {
+    organizationId: processDef.architecture?.organizationId || "",
     mode: auditMode,
     processDefinition: {
       name: processDef.name,

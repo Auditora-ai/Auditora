@@ -8,8 +8,7 @@
  *   TEXT DESCRIPTION -> [This Pipeline] -> SIPOC TABLE
  */
 
-import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { instrumentedGenerateText } from "../utils/instrumented-generate";
 import { z } from "zod";
 import { parseLlmJson } from "../utils/parse-llm-json";
 
@@ -78,9 +77,11 @@ export interface SipocResult {
 
 export async function extractSipoc(
   processDescription: string,
+  organizationId: string,
 ): Promise<SipocResult> {
-  const { text } = await generateText({
-    model: anthropic("claude-sonnet-4-6"),
+  const { text } = await instrumentedGenerateText({
+    organizationId,
+    pipeline: "sipoc-extraction",
     system: `You are a BPM consultant specializing in SIPOC analysis.
 Given a process description, extract the SIPOC components:
 

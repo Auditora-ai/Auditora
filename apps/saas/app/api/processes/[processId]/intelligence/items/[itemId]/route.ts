@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
-import { auth } from "@repo/auth";
-import { headers } from "next/headers";
+import { requireProcessAuth, isAuthError } from "@/lib/auth-helpers";
 
 export async function PATCH(
   request: NextRequest,
@@ -10,15 +9,11 @@ export async function PATCH(
   }: { params: Promise<{ processId: string; itemId: string }> },
 ) {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-      query: { disableCookieCache: true },
-    });
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { processId, itemId } = await params;
 
-    const { itemId } = await params;
+    const authResult = await requireProcessAuth(processId);
+    if (isAuthError(authResult)) return authResult;
+
     const body = await request.json();
     const { resolution, status } = body;
 
@@ -29,7 +24,7 @@ export async function PATCH(
         ...(status !== undefined && { status }),
         ...(status === "RESOLVED" && {
           resolvedAt: new Date(),
-          resolvedBy: `manual:${session.user.id}`,
+          resolvedBy: `manual:${authResult.authCtx.user.id}`,
         }),
       },
     });
@@ -48,15 +43,10 @@ export async function DELETE(
   }: { params: Promise<{ processId: string; itemId: string }> },
 ) {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-      query: { disableCookieCache: true },
-    });
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    const { processId, itemId } = await params;
 
-    const { itemId } = await params;
+    const authResult = await requireProcessAuth(processId);
+    if (isAuthError(authResult)) return authResult;
 
     await db.intelligenceItem.update({
       where: { id: itemId },

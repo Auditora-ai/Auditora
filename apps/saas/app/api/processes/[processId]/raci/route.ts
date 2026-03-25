@@ -1,25 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
-import { auth } from "@repo/auth";
-import { headers } from "next/headers";
+import { requireProcessAuth, isAuthError } from "@/lib/auth-helpers";
 import { generateRaci } from "@repo/ai";
-
-async function getSession() {
-	return auth.api.getSession({
-		headers: await headers(),
-		query: { disableCookieCache: true },
-	});
-}
 
 export async function GET(
 	_request: NextRequest,
 	{ params }: { params: Promise<{ processId: string }> },
 ) {
-	const session = await getSession();
-	if (!session?.user)
-		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
 	const { processId } = await params;
+
+	const authResult = await requireProcessAuth(processId);
+	if (isAuthError(authResult)) return authResult;
 
 	const entries = await db.raciEntry.findMany({
 		where: { processId },
@@ -33,11 +24,10 @@ export async function POST(
 	_request: NextRequest,
 	{ params }: { params: Promise<{ processId: string }> },
 ) {
-	const session = await getSession();
-	if (!session?.user)
-		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
 	const { processId } = await params;
+
+	const authResult = await requireProcessAuth(processId);
+	if (isAuthError(authResult)) return authResult;
 
 	// Get sessions for this process
 	const sessions = await db.meetingSession.findMany({
@@ -85,7 +75,7 @@ export async function POST(
 		.join("\n");
 
 	// Generate RACI via AI
-	const result = await generateRaci(lanes, taskLabels, transcriptExcerpts);
+	const result = await generateRaci(authResult.authCtx.org.id, lanes, taskLabels, transcriptExcerpts);
 
 	// Delete existing entries and insert new ones
 	await db.raciEntry.deleteMany({ where: { processId } });
@@ -123,11 +113,11 @@ export async function PUT(
 	request: NextRequest,
 	{ params }: { params: Promise<{ processId: string }> },
 ) {
-	const session = await getSession();
-	if (!session?.user)
-		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
 	const { processId } = await params;
+
+	const authResult = await requireProcessAuth(processId);
+	if (isAuthError(authResult)) return authResult;
+
 	const body = await request.json();
 	const { entryId, activityName, role, assignment } = body;
 
@@ -189,11 +179,11 @@ export async function DELETE(
 	request: NextRequest,
 	{ params }: { params: Promise<{ processId: string }> },
 ) {
-	const session = await getSession();
-	if (!session?.user)
-		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
 	const { processId } = await params;
+
+	const authResult = await requireProcessAuth(processId);
+	if (isAuthError(authResult)) return authResult;
+
 	const body = await request.json();
 	const { entryId, activityName } = body;
 

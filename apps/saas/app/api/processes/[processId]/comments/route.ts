@@ -1,24 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
-import { auth } from "@repo/auth";
-import { headers } from "next/headers";
-
-async function getSession() {
-	return auth.api.getSession({
-		headers: await headers(),
-		query: { disableCookieCache: true },
-	});
-}
+import { requireProcessAuth, isAuthError } from "@/lib/auth-helpers";
 
 export async function GET(
 	_request: NextRequest,
 	{ params }: { params: Promise<{ processId: string }> },
 ) {
-	const session = await getSession();
-	if (!session?.user)
-		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
 	const { processId } = await params;
+
+	const authResult = await requireProcessAuth(processId);
+	if (isAuthError(authResult)) return authResult;
 
 	const comments = await db.nodeComment.findMany({
 		where: { node: { session: { processDefinitionId: processId } } },
@@ -32,11 +23,11 @@ export async function POST(
 	request: NextRequest,
 	{ params }: { params: Promise<{ processId: string }> },
 ) {
-	const session = await getSession();
-	if (!session?.user)
-		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
 	const { processId } = await params;
+
+	const authResult = await requireProcessAuth(processId);
+	if (isAuthError(authResult)) return authResult;
+
 	const body = await request.json();
 	const { nodeId, content } = body;
 
@@ -63,8 +54,8 @@ export async function POST(
 		data: {
 			nodeId,
 			content,
-			authorId: session.user.id,
-			authorName: session.user.name || session.user.email || "Unknown",
+			authorId: authResult.authCtx.user.id,
+			authorName: authResult.authCtx.user.name || authResult.authCtx.user.email || "Unknown",
 		},
 	});
 

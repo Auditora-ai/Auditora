@@ -8,8 +8,7 @@
  *   DiagramNode[] + Transcript → [Claude] → Repaired DiagramNode[] + Changes
  */
 
-import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { instrumentedGenerateText } from "../utils/instrumented-generate";
 import { z } from "zod";
 import { DIAGRAM_REPAIR_SYSTEM, DIAGRAM_REPAIR_USER } from "../prompts/diagram-repair";
 import { parseLlmJson } from "../utils/parse-llm-json";
@@ -34,6 +33,7 @@ const RepairResultSchema = z.object({
 });
 
 export interface RepairInput {
+	organizationId: string;
 	nodes: Array<{
 		id: string;
 		type: string;
@@ -73,8 +73,9 @@ export async function repairDiagram(input: RepairInput): Promise<RepairResult> {
 		return { repairedNodes: [], changes: [] };
 	}
 
-	const { text } = await generateText({
-		model: anthropic("claude-sonnet-4-6"),
+	const { text } = await instrumentedGenerateText({
+		organizationId: input.organizationId,
+		pipeline: "diagram-repair",
 		system: DIAGRAM_REPAIR_SYSTEM,
 		prompt: DIAGRAM_REPAIR_USER(input.nodes, input.transcript),
 		maxOutputTokens: 4096,

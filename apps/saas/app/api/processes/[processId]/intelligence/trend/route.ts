@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
+import { requireProcessAuth, isAuthError } from "@/lib/auth-helpers";
 
 export async function GET(
   request: NextRequest,
@@ -7,6 +8,9 @@ export async function GET(
 ) {
   try {
     const { processId } = await params;
+
+    const authResult = await requireProcessAuth(processId);
+    if (isAuthError(authResult)) return authResult;
 
     const intelligence = await db.processIntelligence.findFirst({
       where: { processDefinition: { id: processId } },

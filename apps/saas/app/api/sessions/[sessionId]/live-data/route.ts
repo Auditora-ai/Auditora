@@ -12,7 +12,7 @@ import { db } from "@repo/database";
 import { getSessionActivity } from "../../../webhook/recall/route";
 import { recordEvent } from "@meeting/lib/session-timeline";
 import { validateDiagram } from "@meeting/lib/bpmn-validator";
-
+import { requireSessionAuth, isAuthError } from "@/lib/auth-helpers";
 // One-time guards to avoid spamming diagnostic events
 const firstTranscriptPollRecorded = new Set<string>();
 const firstEmptyPollRecorded = new Set<string>();
@@ -23,6 +23,9 @@ export async function GET(
 ) {
 	try {
 		const { sessionId } = await params;
+
+		const authResult = await requireSessionAuth(sessionId);
+		if (isAuthError(authResult)) return authResult;
 
 		const session = await db.meetingSession.findUnique({
 			where: { id: sessionId },
@@ -72,6 +75,7 @@ export async function GET(
 				lane: true,
 				connections: true,
 				confidence: true,
+				properties: true,
 			},
 		});
 
@@ -128,6 +132,7 @@ export async function GET(
 				lane: n.lane,
 				connections: n.connections,
 				confidence: n.confidence,
+				properties: n.properties,
 			})),
 			teleprompterQuestion,
 			completenessScore,

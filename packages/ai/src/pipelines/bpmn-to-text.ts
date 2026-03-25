@@ -9,8 +9,7 @@
  *   BPMN XML -> [This Pipeline] -> NARRATIVE + ACTORS + KEY DECISIONS
  */
 
-import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { instrumentedGenerateText } from "../utils/instrumented-generate";
 import { z } from "zod";
 import { parseLlmJson } from "../utils/parse-llm-json";
 
@@ -44,9 +43,11 @@ export interface BpmnToTextResult {
 
 export async function convertBpmnToText(
   bpmnXml: string,
+  organizationId: string,
 ): Promise<BpmnToTextResult> {
-  const { text } = await generateText({
-    model: anthropic("claude-sonnet-4-6"),
+  const { text } = await instrumentedGenerateText({
+    organizationId,
+    pipeline: "bpmn-to-text",
     system: `You are a business analyst who translates BPMN diagrams into clear, plain-language narratives.
 
 Given BPMN 2.0 XML, produce:

@@ -9,8 +9,7 @@
  * If this pipeline is slow or fails, the last question stays visible.
  */
 
-import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { instrumentedGenerateText } from "../utils/instrumented-generate";
 import { z } from "zod";
 import {
   buildTeleprompterSystemPrompt,
@@ -118,6 +117,7 @@ function computeCompletenessScore(sipoc: SipocCoverage): number {
  * @param context - Optional session context for business-aware question generation
  */
 export async function generateNextQuestion(
+  organizationId: string,
   sessionType: "DISCOVERY" | "DEEP_DIVE" | "CONTINUATION",
   currentNodes: BpmnNodeSummary[],
   recentTranscript: TranscriptEntry[],
@@ -153,8 +153,9 @@ export async function generateNextQuestion(
     };
   }
 
-  const { text } = await generateText({
-    model: anthropic("claude-sonnet-4-6"),
+  const { text } = await instrumentedGenerateText({
+    organizationId,
+    pipeline: "teleprompter",
     system: buildTeleprompterSystemPrompt(context),
     prompt: TELEPROMPTER_USER(
       sessionType,

@@ -8,8 +8,7 @@
  *   TRANSCRIPT + CONFIRMED NODES → [This Pipeline] → SUMMARY + ACTION ITEMS → [DB]
  */
 
-import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { instrumentedGenerateText } from "../utils/instrumented-generate";
 import { z } from "zod";
 import {
 	SESSION_SUMMARY_SYSTEM,
@@ -56,6 +55,7 @@ function formatFullTranscript(entries: TranscriptEntry[]): string {
  * Generate a session summary from the full transcript and confirmed nodes.
  */
 export async function generateSessionSummary(
+	organizationId: string,
 	sessionType: string,
 	nodes: ProcessNode[],
 	transcript: TranscriptEntry[],
@@ -69,8 +69,9 @@ export async function generateSessionSummary(
 		};
 	}
 
-	const { text } = await generateText({
-		model: anthropic("claude-sonnet-4-6"),
+	const { text } = await instrumentedGenerateText({
+		organizationId,
+		pipeline: "session-summary",
 		system: SESSION_SUMMARY_SYSTEM,
 		prompt: SESSION_SUMMARY_USER(
 			sessionType,

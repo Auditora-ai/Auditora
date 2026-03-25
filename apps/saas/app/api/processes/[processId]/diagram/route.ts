@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
-import { auth } from "@repo/auth";
-import { headers } from "next/headers";
+import { requireProcessAuth, isAuthError } from "@/lib/auth-helpers";
 
 /**
  * Parse BPMN XML and extract elements (tasks, gateways, events)
@@ -204,15 +203,10 @@ export async function GET(
 	{ params }: { params: Promise<{ processId: string }> },
 ) {
 	try {
-		const session = await auth.api.getSession({
-			headers: await headers(),
-			query: { disableCookieCache: true },
-		});
-		if (!session?.user) {
-			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-		}
-
 		const { processId } = await params;
+
+		const authResult = await requireProcessAuth(processId);
+		if (isAuthError(authResult)) return authResult;
 
 		// Find the most recent session for this process that has diagram nodes
 		const meetingSession = await db.meetingSession.findFirst({
@@ -252,15 +246,11 @@ export async function POST(
 	{ params }: { params: Promise<{ processId: string }> },
 ) {
 	try {
-		const session = await auth.api.getSession({
-			headers: await headers(),
-			query: { disableCookieCache: true },
-		});
-		if (!session?.user) {
-			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-		}
-
 		const { processId } = await params;
+
+		const authResult = await requireProcessAuth(processId);
+		if (isAuthError(authResult)) return authResult;
+
 		const { bpmnXml, sessionId } = await request.json();
 
 		if (!bpmnXml || typeof bpmnXml !== "string") {
@@ -268,20 +258,6 @@ export async function POST(
 				{ error: "bpmnXml is required" },
 				{ status: 400 },
 			);
-		}
-
-		// Verify ownership
-		const process = await db.processDefinition.findUnique({
-			where: { id: processId },
-			include: {
-				architecture: {
-					select: { organizationId: true },
-				},
-			},
-		});
-
-		if (!process) {
-			return NextResponse.json({ error: "Process not found" }, { status: 404 });
 		}
 
 		// Save BPMN XML
@@ -303,6 +279,7 @@ export async function POST(
 
 		// Auto-create version (skip during live auto-save to avoid version spam)
 		if (!sessionId) {
+			const process = authResult.process!;
 			const lastVersion = await db.processVersion.findFirst({
 				where: { processDefinitionId: processId },
 				orderBy: { version: "desc" },
@@ -320,7 +297,7 @@ export async function POST(
 					triggers: process.triggers,
 					outputs: process.outputs,
 					changeNote: "Manual diagram edit",
-					createdBy: session.user.id,
+					createdBy: authResult.authCtx.user.id,
 				},
 			});
 

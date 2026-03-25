@@ -8,8 +8,7 @@
  *   ACTIVITY + BPMN CONTEXT + TRANSCRIPT → [This Pipeline] → WORK PROCEDURE DOC
  */
 
-import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { instrumentedGenerateText } from "../utils/instrumented-generate";
 import {
   ProcedureResultSchema,
   type ProcedureResult,
@@ -21,6 +20,7 @@ import {
 import { parseLlmJson } from "../utils/parse-llm-json";
 
 export interface ProcedureGenInput {
+  organizationId: string;
   processName: string;
   activityName: string;
   activityLane?: string;
@@ -35,11 +35,12 @@ export interface ProcedureGenInput {
 export async function generateProcedure(
   input: ProcedureGenInput,
 ): Promise<ProcedureResult> {
-  const { text, usage } = await generateText({
-    model: anthropic("claude-sonnet-4-6"),
+  const { text, usage } = await instrumentedGenerateText({
+    organizationId: input.organizationId,
+    pipeline: "procedure-gen",
     system: PROCEDURE_GEN_SYSTEM,
     prompt: PROCEDURE_GEN_USER(input),
-    maxOutputTokens: 4096,
+    maxOutputTokens: 8192,
     temperature: 0.2,
   });
 

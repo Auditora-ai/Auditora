@@ -1,14 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
-import { auth } from "@repo/auth";
-import { headers } from "next/headers";
-
-async function getSession() {
-	return auth.api.getSession({
-		headers: await headers(),
-		query: { disableCookieCache: true },
-	});
-}
+import { requireProcessAuth, isAuthError } from "@/lib/auth-helpers";
 
 /**
  * GET /api/processes/[processId]/diff?v1=versionId1&v2=versionId2
@@ -19,11 +11,11 @@ export async function GET(
 	request: NextRequest,
 	{ params }: { params: Promise<{ processId: string }> },
 ) {
-	const session = await getSession();
-	if (!session?.user)
-		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
 	const { processId } = await params;
+
+	const authResult = await requireProcessAuth(processId);
+	if (isAuthError(authResult)) return authResult;
+
 	const { searchParams } = new URL(request.url);
 	const v1 = searchParams.get("v1");
 	const v2 = searchParams.get("v2");

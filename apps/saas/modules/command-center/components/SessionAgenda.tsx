@@ -130,12 +130,14 @@ export function SessionAgenda({
 	onReschedule,
 	onQuickEdit,
 	onRefresh,
+	onClone,
 }: {
 	sessions: SessionData[];
 	organizationSlug: string;
 	onReschedule: (sessionId: string, newDate: string) => void;
 	onQuickEdit: (sessionId: string, data: Record<string, unknown>) => void;
 	onRefresh: () => void;
+	onClone?: (session: SessionData) => void;
 }) {
 	const [editingSession, setEditingSession] = useState<SessionData | null>(null);
 	const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }));

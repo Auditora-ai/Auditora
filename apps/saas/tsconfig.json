@@ -20,6 +20,7 @@
 			"@projects/*": ["./modules/projects/*"],
 			"@documents/*": ["./modules/documents/*"],
 			"@dashboard/*": ["./modules/dashboard/*"],
+			"@command-center/*": ["./modules/command-center/*"],
 			"@process-library/*": ["./modules/process-library/*"],
 			"@discovery/*": ["./modules/discovery/*"],
 			"@risk/*": ["./modules/risk/*"],

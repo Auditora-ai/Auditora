@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
+import { requireSessionAuth, isAuthError } from "@/lib/auth-helpers";
 
 /** Convert camelCase AI node type to UPPER_SNAKE_CASE Prisma enum */
 function toNodeType(type?: string): string {
@@ -28,6 +29,10 @@ export async function POST(
 ) {
 	try {
 		const { sessionId } = await params;
+
+		const authResult = await requireSessionAuth(sessionId);
+		if (isAuthError(authResult)) return authResult;
+
 		const body = await request.json();
 		const { nodes } = body;
 
@@ -35,18 +40,6 @@ export async function POST(
 			return NextResponse.json(
 				{ error: "nodes must be a non-empty array" },
 				{ status: 400 },
-			);
-		}
-
-		const session = await db.meetingSession.findUnique({
-			where: { id: sessionId },
-			select: { id: true },
-		});
-
-		if (!session) {
-			return NextResponse.json(
-				{ error: "Session not found" },
-				{ status: 404 },
 			);
 		}
 

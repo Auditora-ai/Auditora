@@ -8,8 +8,7 @@
  *   DOCUMENT TEXT -> [This Pipeline] -> ProcessDefinition drafts
  */
 
-import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { instrumentedGenerateText } from "../utils/instrumented-generate";
 import { z } from "zod";
 import {
 	buildDocumentExtractionPrompt,
@@ -45,6 +44,7 @@ export interface DocumentExtractionResult {
 }
 
 export async function extractFromDocument(
+	organizationId: string,
 	documentText: string,
 	existingProcessNames: string[],
 	context?: SessionContext,
@@ -56,8 +56,9 @@ export async function extractFromDocument(
 	// Truncate very long documents to avoid token limits
 	const truncated = documentText.slice(0, 15000);
 
-	const { text } = await generateText({
-		model: anthropic("claude-sonnet-4-6"),
+	const { text } = await instrumentedGenerateText({
+		organizationId,
+		pipeline: "document-extraction",
 		system: buildDocumentExtractionPrompt(existingProcessNames, context),
 		prompt: DOCUMENT_EXTRACTION_USER(truncated),
 		maxOutputTokens: 2048,

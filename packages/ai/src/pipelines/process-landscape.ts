@@ -8,8 +8,7 @@
  *   COMPANY BRAIN + PROCESS DEFINITIONS → [This Pipeline] → LANDSCAPE MAP
  */
 
-import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { instrumentedGenerateText } from "../utils/instrumented-generate";
 import {
   ProcessLandscapeResultSchema,
   type ProcessLandscapeResult,
@@ -21,6 +20,7 @@ import {
 import { parseLlmJson } from "../utils/parse-llm-json";
 
 export interface ProcessLandscapeInput {
+  organizationId: string;
   orgName: string;
   industry?: string;
   processDefinitions: Array<{
@@ -38,8 +38,9 @@ export interface ProcessLandscapeInput {
 export async function generateProcessLandscape(
   input: ProcessLandscapeInput,
 ): Promise<ProcessLandscapeResult> {
-  const { text, usage } = await generateText({
-    model: anthropic("claude-sonnet-4-6"),
+  const { text, usage } = await instrumentedGenerateText({
+    organizationId: input.organizationId,
+    pipeline: "process-landscape",
     system: PROCESS_LANDSCAPE_SYSTEM,
     prompt: PROCESS_LANDSCAPE_USER(input),
     maxOutputTokens: 4096,
