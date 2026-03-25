@@ -17,6 +17,8 @@ import {
 	XIcon,
 	FileTextIcon,
 	PlusIcon,
+	ChevronLeftIcon,
+	ChevronRightIcon,
 } from "lucide-react";
 import { NodePropertiesView } from "./NodePropertiesView";
 
@@ -27,9 +29,13 @@ import "../styles/bpmn-editor.css";
 
 interface CentralCanvasProps {
 	containerRef: RefObject<HTMLDivElement | null>;
+	leftCollapsed?: boolean;
+	rightCollapsed?: boolean;
+	onToggleLeft?: () => void;
+	onToggleRight?: () => void;
 }
 
-export function CentralCanvas({ containerRef }: CentralCanvasProps) {
+export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onToggleLeft, onToggleRight }: CentralCanvasProps) {
 	const {
 		modelerApi, diagramHealth, nodes, processId, sessionId,
 		activeCentralTab, openPropertyTabs, setActiveCentralTab, closePropertyTab, openPropertyTab,
@@ -534,6 +540,28 @@ export function CentralCanvas({ containerRef }: CentralCanvasProps) {
 						label={activePropertyTab.label}
 					/>
 				</div>
+			)}
+
+			{/* Edge tabs (cejas) for collapsing panels */}
+			{onToggleLeft && (
+				<button
+					type="button"
+					onClick={onToggleLeft}
+					className="absolute left-0 top-1/2 z-20 -translate-y-1/2 rounded-r-md border border-l-0 border-[#334155] bg-[#0F172A] px-0.5 py-3 text-[#64748B] transition-colors hover:bg-[#1E293B] hover:text-[#94A3B8]"
+					title={leftCollapsed ? "Mostrar elementos" : "Ocultar elementos"}
+				>
+					{leftCollapsed ? <ChevronRightIcon className="h-3.5 w-3.5" /> : <ChevronLeftIcon className="h-3.5 w-3.5" />}
+				</button>
+			)}
+			{onToggleRight && (
+				<button
+					type="button"
+					onClick={onToggleRight}
+					className="absolute right-0 top-1/2 z-20 -translate-y-1/2 rounded-l-md border border-r-0 border-[#334155] bg-[#0F172A] px-0.5 py-3 text-[#64748B] transition-colors hover:bg-[#1E293B] hover:text-[#94A3B8]"
+					title={rightCollapsed ? "Mostrar paneles" : "Ocultar paneles"}
+				>
+					{rightCollapsed ? <ChevronLeftIcon className="h-3.5 w-3.5" /> : <ChevronRightIcon className="h-3.5 w-3.5" />}
+				</button>
 			)}
 		</div>
 	);

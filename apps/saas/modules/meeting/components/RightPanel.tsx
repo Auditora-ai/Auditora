@@ -10,9 +10,10 @@ import { DocumentsSection } from "./DocumentsSection";
 interface RightPanelProps {
 	organizationId: string;
 	processId?: string;
+	collapsed: boolean;
 }
 
-export function RightPanel({ organizationId, processId }: RightPanelProps) {
+export function RightPanel({ organizationId, processId, collapsed }: RightPanelProps) {
 	const {
 		transcript,
 		teleprompterQuestion,
@@ -26,10 +27,12 @@ export function RightPanel({ organizationId, processId }: RightPanelProps) {
 	const [sipocOpen, setSipocOpen] = useState(true);
 	const [docsOpen, setDocsOpen] = useState(false);
 
+	if (collapsed) return <div style={{ gridArea: "right" }} />;
+
 	return (
 		<div
 			className="flex flex-col overflow-hidden border-l border-[#334155] bg-[#0F172A]"
-			style={{ gridArea: "right", width: 280 }}
+			style={{ gridArea: "right" }}
 		>
 			{/* Transcript — collapsible, compact by default */}
 			<div className={`flex flex-col border-b border-[#334155] ${transcriptOpen ? "max-h-[40%]" : ""}`}>

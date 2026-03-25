@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback, useImperativeHandle, forwardRef } from "react";
 import { toast } from "sonner";
 import { useLiveSessionContext } from "../context/LiveSessionContext";
 import { CompletenessRing } from "./CompletenessRing";
@@ -28,10 +28,23 @@ export function TopBar({ processName: initialName, clientName }: TopBarProps) {
 		exportDiagram,
 		endSession,
 		sessionId,
+		sessionStatus,
+		connectionStatus,
 		processId,
 		shareToken,
 		modelerApi,
 	} = useLiveSessionContext();
+
+	const isInCall = connectionStatus === "connected" && !botActivity.stale && sessionStatus !== "FAILED";
+	const liveIndicatorRef = useRef<{ flash: () => void }>(null);
+
+	const handleAiClick = useCallback(() => {
+		if (!isInCall) {
+			liveIndicatorRef.current?.flash();
+			return;
+		}
+		toggleAi();
+	}, [isInCall, toggleAi]);
 
 	const [processName, setProcessName] = useState(initialName || "");
 	const [editing, setEditing] = useState(false);
@@ -122,7 +135,7 @@ export function TopBar({ processName: initialName, clientName }: TopBarProps) {
 
 			{/* Center: Live indicator + Completeness */}
 			<div className="flex items-center gap-4">
-				<LiveIndicator stale={botActivity.stale} activity={botActivity} />
+				<LiveIndicator ref={liveIndicatorRef} stale={botActivity.stale} activity={botActivity} />
 				<CompletenessRing score={completenessScore} />
 			</div>
 
@@ -143,36 +156,87 @@ export function TopBar({ processName: initialName, clientName }: TopBarProps) {
 				<div className="ml-2 h-4 w-px bg-[#334155]" />
 				<button
 					type="button"
-					onClick={toggleAi}
+					onClick={handleAiClick}
 					className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors duration-75 ${
-						aiEnabled
-							? "bg-[#2563EB] text-white"
-							: "bg-[#1E293B] text-[#64748B]"
+						!isInCall
+							? "bg-[#1E293B]/60 text-[#475569]"
+							: aiEnabled
+								? "bg-[#2563EB] text-white"
+								: "bg-[#1E293B] text-[#64748B]"
 					}`}
 				>
 					<SparklesIcon className="h-3 w-3" />
-					IA {aiEnabled ? "Activado" : "Desactivado"}
+					{!isInCall ? "Activar IA en vivo" : aiEnabled ? "IA Analizando" : "IA Pausada"}
 				</button>
 			</div>
 		</div>
 	);
 }
 
-function LiveIndicator({ stale, activity }: { stale: boolean; activity: { type: string; detail: string | null } }) {
+const LiveIndicator = forwardRef<{ flash: () => void }, { stale: boolean; activity: { type: string; detail: string | null } }>(
+	function LiveIndicator({ stale, activity }, ref) {
 	const { sessionId, sessionStatus, connectionStatus } = useLiveSessionContext();
 	const [showPanel, setShowPanel] = useState(false);
 	const [newUrl, setNewUrl] = useState("");
 	const [reconnecting, setReconnecting] = useState(false);
+	const [flashing, setFlashing] = useState(false);
 
-	const labels: Record<string, { text: string; color: string }> = {
-		listening: { text: "Escuchando", color: "bg-green-500" },
-		extracting: { text: "Analizando...", color: "bg-blue-500" },
-		diagramming: { text: "Diagramando...", color: "bg-purple-500" },
-		suggesting: { text: "Sugiriendo...", color: "bg-amber-500" },
+	useImperativeHandle(ref, () => ({
+		flash: () => {
+			setFlashing(true);
+			setShowPanel(true);
+			setTimeout(() => setFlashing(false), 1000);
+		},
+	}));
+
+	// Determine visual state — "Local" is the calm default
+	const getIndicatorState = (): { color: string; textColor: string; text: string; animation: "pulse" | "ping" | "" } => {
+		// Error states — red, something is wrong
+		if (sessionStatus === "FAILED")
+			return { color: "bg-red-500", textColor: "text-red-400", text: "Bot desconectado", animation: "pulse" };
+		if (connectionStatus === "disconnected" && !stale)
+			return { color: "bg-red-500", textColor: "text-red-400", text: "Desconectado", animation: "pulse" };
+		// In-progress states — blue, working on it
+		if (sessionStatus === "CONNECTING")
+			return { color: "bg-blue-500", textColor: "text-blue-400", text: "Conectando...", animation: "pulse" };
+		if (connectionStatus === "reconnecting")
+			return { color: "bg-blue-500", textColor: "text-blue-400", text: "Reconectando...", animation: "pulse" };
+		// Connected — activity states with bot
+		if (connectionStatus === "connected" && !stale) {
+			const activityMap: Record<string, { color: string; textColor: string; text: string; animation: "ping" | "" }> = {
+				listening:   { color: "bg-green-500",  textColor: "text-[#94A3B8]", text: "En llamada",     animation: "" },
+				extracting:  { color: "bg-blue-500",   textColor: "text-[#94A3B8]", text: "Analizando...",  animation: "ping" },
+				diagramming: { color: "bg-purple-500", textColor: "text-[#94A3B8]", text: "Diagramando...", animation: "ping" },
+				suggesting:  { color: "bg-amber-500",  textColor: "text-[#94A3B8]", text: "Sugiriendo...",  animation: "" },
+			};
+			return activityMap[activity.type] || activityMap.listening;
+		}
+		// Default — Local mode, calm blue
+		return { color: "bg-blue-500", textColor: "text-blue-400", text: "Local", animation: "" };
 	};
-	const state = labels[activity.type] || labels.listening;
 
-	const isDisconnected = stale || sessionStatus === "FAILED" || connectionStatus === "disconnected";
+	const state = getIndicatorState();
+	const isError = sessionStatus === "FAILED" || (connectionStatus === "disconnected" && !stale);
+	const isLocal = state.text === "Local";
+	const isConnectedToCall = connectionStatus === "connected" && !stale && sessionStatus !== "FAILED";
+
+	const handleDisconnectBot = async () => {
+		setReconnecting(true);
+		try {
+			const res = await fetch(`/api/sessions/${sessionId}/disconnect-bot`, { method: "POST" });
+			if (res.ok) {
+				toast.success("Bot desconectado — modo local");
+				setShowPanel(false);
+			} else {
+				const data = await res.json();
+				toast.error(data.error || "Error al desconectar");
+			}
+		} catch {
+			toast.error("Error de conexión");
+		} finally {
+			setReconnecting(false);
+		}
+	};
 
 	const handleReconnect = async (url?: string) => {
 		setReconnecting(true);
@@ -202,36 +266,28 @@ function LiveIndicator({ stale, activity }: { stale: boolean; activity: { type: 
 			<button
 				type="button"
 				onClick={() => setShowPanel(!showPanel)}
-				className="flex items-center gap-2 rounded-lg px-2 py-1 transition-colors hover:bg-[#1E293B]"
+				className={`flex items-center gap-2 rounded-lg px-2 py-1 transition-all hover:bg-[#1E293B] ${flashing ? "ring-2 ring-blue-500/70 shadow-[0_0_12px_rgba(59,130,246,0.5)]" : ""}`}
+				style={{ transitionDuration: flashing ? "150ms" : "500ms" }}
 			>
-				{isDisconnected ? (
-					<>
-						<span className="inline-flex h-2 w-2 animate-pulse rounded-full bg-amber-400" />
-						<span className="text-xs text-amber-400">
-							{sessionStatus === "FAILED" ? "Bot desconectado" : "Reconectando..."}
-						</span>
-					</>
-				) : (
-					<>
-						<div className="relative flex h-2 w-2">
-							{(activity.type === "extracting" || activity.type === "diagramming") && (
-								<span className={`absolute inline-flex h-full w-full animate-ping rounded-full ${state.color} opacity-75`} />
-							)}
-							<span className={`relative inline-flex h-2 w-2 rounded-full ${state.color}`} />
-						</div>
-						<span className="text-xs text-[#94A3B8]">
-							{state.text}
-							{activity.detail && <span className="ml-1 text-[#64748B]">· {activity.detail}</span>}
-						</span>
-					</>
-				)}
+				<div className="relative flex h-2 w-2">
+					{state.animation === "ping" && (
+						<span className={`absolute inline-flex h-full w-full animate-ping rounded-full ${state.color} opacity-75`} />
+					)}
+					<span className={`relative inline-flex h-2 w-2 rounded-full ${state.color} ${state.animation === "pulse" ? "animate-pulse" : ""}`} />
+				</div>
+				<span className={`text-xs ${state.textColor}`}>
+					{state.text}
+					{activity.detail && state.animation !== "pulse" && <span className="ml-1 text-[#64748B]">· {activity.detail}</span>}
+				</span>
 			</button>
 
 			{/* Connection management panel */}
 			{showPanel && (
 				<div className="absolute left-1/2 top-full z-50 mt-2 w-80 -translate-x-1/2 rounded-xl bg-[#0F172A] p-4 shadow-xl ring-1 ring-[#334155]">
 					<div className="mb-3 flex items-center justify-between">
-						<span className="text-xs font-medium text-[#F1F5F9]">Conexion de llamada</span>
+						<span className="text-xs font-medium text-[#F1F5F9]">
+							{isConnectedToCall ? "Conexión activa" : "Conectar a llamada"}
+						</span>
 						<button type="button" onClick={() => setShowPanel(false)} className="text-[#64748B] hover:text-white">
 							<XIcon className="h-3.5 w-3.5" />
 						</button>
@@ -240,30 +296,34 @@ function LiveIndicator({ stale, activity }: { stale: boolean; activity: { type: 
 					{/* Status */}
 					<div className="mb-3 rounded-lg bg-[#1E293B] px-3 py-2">
 						<div className="flex items-center gap-2">
-							<span className={`h-2 w-2 rounded-full ${isDisconnected ? "bg-amber-400" : "bg-green-500"}`} />
+							<span className={`h-2 w-2 rounded-full ${state.color}`} />
 							<span className="text-xs text-[#94A3B8]">
 								{sessionStatus === "FAILED" ? "Bot no pudo unirse a la llamada"
-									: isDisconnected ? "Sin conexion al bot — la sesion sigue activa para trabajo manual"
-									: "Bot conectado y escuchando"}
+									: isError ? "Se perdió la conexión al bot"
+									: isConnectedToCall ? "Bot conectado y escuchando"
+									: connectionStatus === "reconnecting" ? "Reconectando al bot..."
+									: "Modo local — puedes conectar a una llamada"}
 							</span>
 						</div>
 					</div>
 
-					{/* Reconnect same link */}
-					<button
-						type="button"
-						onClick={() => handleReconnect()}
-						disabled={reconnecting}
-						className="mb-2 flex w-full items-center gap-2 rounded-lg bg-[#1E293B] px-3 py-2 text-xs text-[#94A3B8] transition-colors hover:bg-[#334155] hover:text-white disabled:opacity-50"
-					>
-						<RefreshCwIcon className={`h-3.5 w-3.5 ${reconnecting ? "animate-spin" : ""}`} />
-						Reconectar al mismo link
-					</button>
+					{/* Reconnect same link — only show if there was a prior connection */}
+					{!isLocal && (
+						<button
+							type="button"
+							onClick={() => handleReconnect()}
+							disabled={reconnecting}
+							className="mb-2 flex w-full items-center gap-2 rounded-lg bg-[#1E293B] px-3 py-2 text-xs text-[#94A3B8] transition-colors hover:bg-[#334155] hover:text-white disabled:opacity-50"
+						>
+							<RefreshCwIcon className={`h-3.5 w-3.5 ${reconnecting ? "animate-spin" : ""}`} />
+							Reconectar al mismo link
+						</button>
+					)}
 
-					{/* Change meeting link */}
+					{/* Connect / Change meeting link */}
 					<div className="rounded-lg bg-[#1E293B] p-2">
 						<label className="mb-1.5 block text-[10px] font-medium uppercase tracking-wider text-[#64748B]">
-							Cambiar link de llamada
+							{isLocal ? "Pegar link de llamada" : "Cambiar link de llamada"}
 						</label>
 						<div className="flex gap-1.5">
 							<input
@@ -286,13 +346,29 @@ function LiveIndicator({ stale, activity }: { stale: boolean; activity: { type: 
 
 					{/* Info */}
 					<p className="mt-2 text-[10px] text-[#475569]">
-						Puedes seguir trabajando en el diagrama sin conexion. El bot se reconecta al link que pegues.
+						{isLocal
+							? "Pega el link de tu videollamada para que el bot se una y transcriba en tiempo real."
+							: "Puedes seguir trabajando en el diagrama sin conexión. El bot se reconecta al link que pegues."}
 					</p>
+
+					{/* Disconnect / cancel — return to local mode */}
+					{!isLocal && (
+						<button
+							type="button"
+							onClick={handleDisconnectBot}
+							disabled={reconnecting}
+							className="mt-2 w-full rounded-lg px-3 py-1.5 text-[10px] text-[#64748B] transition-colors hover:bg-[#1E293B] hover:text-red-400 disabled:opacity-50"
+						>
+							{sessionStatus === "CONNECTING" || connectionStatus === "reconnecting"
+								? "Cancelar y volver a modo local"
+								: "Desconectar bot"}
+						</button>
+					)}
 				</div>
 			)}
 		</div>
 	);
-}
+});
 
 function ShareButton() {
 	const { sessionId, shareToken } = useLiveSessionContext();

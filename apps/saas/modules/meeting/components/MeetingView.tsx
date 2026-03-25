@@ -41,6 +41,8 @@ export function MeetingView({
 	// UI state
 	const [aiEnabled, setAiEnabled] = useState(true);
 	const [selectedTool, setSelectedTool] = useState<"select" | "connect" | "text" | "ai-auto">("select");
+	const [leftCollapsed, setLeftCollapsed] = useState(false);
+	const [rightCollapsed, setRightCollapsed] = useState(false);
 
 	// Properties view tab state
 	const [activeCentralTab, setActiveCentralTab] = useState("diagram");
@@ -179,20 +181,21 @@ export function MeetingView({
 				className="grid h-screen w-screen overflow-hidden bg-[#0F172A]"
 				style={{
 					gridTemplateRows: "48px 1fr 36px",
-					gridTemplateColumns: "220px 1fr 280px",
+					gridTemplateColumns: `${leftCollapsed ? "0px" : "220px"} 1fr ${rightCollapsed ? "0px" : "280px"}`,
 					gridTemplateAreas: `
 						"top    top    top"
 						"left   canvas right"
 						"bottom bottom bottom"
 					`,
+					transition: "grid-template-columns 200ms ease",
 					fontFamily: "Inter, system-ui, -apple-system, sans-serif",
 				}}
 			>
 				{/* Connection banners removed — managed by LiveIndicator in TopBar */}
 				<TopBar processName={processName} clientName={clientName} />
-				<LeftPanel />
-				<CentralCanvas containerRef={containerRef} />
-				<RightPanel organizationId={organizationId} processId={processId} />
+				<LeftPanel collapsed={leftCollapsed} />
+				<CentralCanvas containerRef={containerRef} leftCollapsed={leftCollapsed} rightCollapsed={rightCollapsed} onToggleLeft={() => setLeftCollapsed((p) => !p)} onToggleRight={() => setRightCollapsed((p) => !p)} />
+				<RightPanel organizationId={organizationId} processId={processId} collapsed={rightCollapsed} />
 				<BottomBar />
 			</div>
 		</LiveSessionProvider>

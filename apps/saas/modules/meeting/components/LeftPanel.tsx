@@ -85,13 +85,17 @@ const CATEGORIES: CategoryDef[] = [
 	},
 ];
 
-export function LeftPanel() {
-	// PatternLibrary reads nodes from context directly
+interface LeftPanelProps {
+	collapsed: boolean;
+}
+
+export function LeftPanel({ collapsed }: LeftPanelProps) {
+	if (collapsed) return <div style={{ gridArea: "left" }} />;
 
 	return (
 		<div
 			className="flex flex-col overflow-hidden border-r border-[#334155] bg-[#0F172A]"
-			style={{ gridArea: "left", width: 220, fontFamily: "Inter, system-ui, sans-serif" }}
+			style={{ gridArea: "left", fontFamily: "Inter, system-ui, sans-serif" }}
 		>
 			{/* Header */}
 			<div className="border-b border-[#334155] px-3 py-2">
