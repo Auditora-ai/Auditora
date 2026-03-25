@@ -1,11 +1,11 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useBpmnModeler } from "../hooks/useBpmnModeler";
 import { useLiveSession } from "../hooks/useLiveSession";
-import { LiveSessionProvider, type LiveSessionContextValue } from "../context/LiveSessionContext";
+import { LiveSessionProvider, type LiveSessionContextValue, type PropertyTab } from "../context/LiveSessionContext";
 import { exportSVG, exportPNG, exportXML } from "../lib/bpmn-export";
 import { TopBar } from "./TopBar";
 import { LeftPanel } from "./LeftPanel";
@@ -41,6 +41,24 @@ export function MeetingView({
 	const [aiEnabled, setAiEnabled] = useState(true);
 	const [selectedTool, setSelectedTool] = useState<"select" | "connect" | "text" | "ai-auto">("select");
 
+	// Properties view tab state
+	const [activeCentralTab, setActiveCentralTab] = useState("diagram");
+	const [openPropertyTabs, setOpenPropertyTabs] = useState<PropertyTab[]>([]);
+
+	const openPropertyTab = useCallback((elementId: string, label: string) => {
+		const tabId = `props:${elementId}`;
+		setOpenPropertyTabs((prev) => {
+			if (prev.some((t) => t.id === tabId)) return prev;
+			return [...prev, { id: tabId, label, elementId }];
+		});
+		setActiveCentralTab(tabId);
+	}, []);
+
+	const closePropertyTab = useCallback((tabId: string) => {
+		setOpenPropertyTabs((prev) => prev.filter((t) => t.id !== tabId));
+		setActiveCentralTab((current) => current === tabId ? "diagram" : current);
+	}, []);
+
 	// bpmn-js modeler
 	const containerRef = useRef<HTMLDivElement>(null);
 	const modelerApi = useBpmnModeler({
@@ -49,10 +67,38 @@ export function MeetingView({
 		processName,
 		onConfirmNode: (nodeId) => handleNodeAction(nodeId, "confirm"),
 		onRejectNode: (nodeId) => handleNodeAction(nodeId, "reject"),
+		onOpenProperties: (elementId, elementType, parentId) => {
+			// For tasks, open the parent process/subprocess tab and scroll to the task
+			// For subprocesses, open that subprocess's own tab
+			if (elementType === "bpmn:SubProcess") {
+				const modeler = modelerApi?.getModeler();
+				const el = modeler?.get("elementRegistry")?.get(elementId);
+				const label = el?.businessObject?.name || elementId;
+				openPropertyTab(elementId, label);
+			} else {
+				// Open the parent container (root process or subprocess)
+				const targetId = parentId || "Process_1";
+				const modeler = modelerApi?.getModeler();
+				const el = modeler?.get("elementRegistry")?.get(targetId);
+				const label = el?.businessObject?.name || processName || "Proceso";
+				openPropertyTab(targetId, label);
+			}
+		},
 	});
 
 	// Live session polling
 	const liveData = useLiveSession(sessionId, modelerApi, aiEnabled);
+
+	// Warn user before closing tab during active session
+	useEffect(() => {
+		const handler = (e: BeforeUnloadEvent) => {
+			if (liveData.sessionStatus === "ACTIVE" || liveData.sessionStatus === "CONNECTING") {
+				e.preventDefault();
+			}
+		};
+		window.addEventListener("beforeunload", handler);
+		return () => window.removeEventListener("beforeunload", handler);
+	}, [liveData.sessionStatus]);
 
 	// Node confirm/reject — uses existing API: { action: "confirm" | "reject" }
 	const handleNodeAction = useCallback(
@@ -111,6 +157,8 @@ export function MeetingView({
 		...liveData,
 		aiEnabled,
 		selectedTool,
+		activeCentralTab,
+		openPropertyTabs,
 		modelerApi,
 		toggleAi: () => setAiEnabled((prev) => !prev),
 		setSelectedTool,
@@ -118,6 +166,9 @@ export function MeetingView({
 		rejectNode: (nodeId) => handleNodeAction(nodeId, "reject"),
 		endSession: handleEndSession,
 		exportDiagram: handleExport,
+		openPropertyTab,
+		closePropertyTab,
+		setActiveCentralTab,
 	};
 
 	return (
@@ -135,6 +186,7 @@ export function MeetingView({
 					fontFamily: "Inter, system-ui, -apple-system, sans-serif",
 				}}
 			>
+				{/* Connection banners removed — managed by LiveIndicator in TopBar */}
 				<TopBar processName={processName} clientName={clientName} />
 				<LeftPanel />
 				<CentralCanvas containerRef={containerRef} />

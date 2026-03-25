@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { toast } from "sonner";
 import { useLiveSessionContext } from "../context/LiveSessionContext";
 import { CompletenessRing } from "./CompletenessRing";
 import {
@@ -7,6 +9,9 @@ import {
 	LinkIcon,
 	PowerIcon,
 	SparklesIcon,
+	RefreshCwIcon,
+	PhoneCallIcon,
+	XIcon,
 } from "lucide-react";
 
 interface TopBarProps {
@@ -101,6 +106,11 @@ export function TopBar({ processName, clientName }: TopBarProps) {
 }
 
 function LiveIndicator({ stale, activity }: { stale: boolean; activity: { type: string; detail: string | null } }) {
+	const { sessionId, sessionStatus, connectionStatus } = useLiveSessionContext();
+	const [showPanel, setShowPanel] = useState(false);
+	const [newUrl, setNewUrl] = useState("");
+	const [reconnecting, setReconnecting] = useState(false);
+
 	const labels: Record<string, { text: string; color: string }> = {
 		listening: { text: "Escuchando", color: "bg-green-500" },
 		extracting: { text: "Analizando...", color: "bg-blue-500" },
@@ -109,27 +119,124 @@ function LiveIndicator({ stale, activity }: { stale: boolean; activity: { type: 
 	};
 	const state = labels[activity.type] || labels.listening;
 
-	if (stale) {
-		return (
-			<div className="flex items-center gap-2">
-				<span className="inline-flex h-2 w-2 rounded-full bg-amber-400" />
-				<span className="text-xs text-[#94A3B8]">Reconectando...</span>
-			</div>
-		);
-	}
+	const isDisconnected = stale || sessionStatus === "FAILED" || connectionStatus === "disconnected";
+
+	const handleReconnect = async (url?: string) => {
+		setReconnecting(true);
+		try {
+			const res = await fetch(`/api/sessions/${sessionId}/reconnect`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(url ? { meetingUrl: url } : {}),
+			});
+			const data = await res.json();
+			if (res.ok) {
+				toast.success(url ? "Bot uniendose a nueva llamada..." : "Reconectando bot...");
+				setShowPanel(false);
+				setNewUrl("");
+			} else {
+				toast.error(data.error || "Error al reconectar");
+			}
+		} catch {
+			toast.error("Error de conexion");
+		} finally {
+			setReconnecting(false);
+		}
+	};
 
 	return (
-		<div className="flex items-center gap-2">
-			<div className="relative flex h-2 w-2">
-				{(activity.type === "extracting" || activity.type === "diagramming") && (
-					<span className={`absolute inline-flex h-full w-full animate-ping rounded-full ${state.color} opacity-75`} />
+		<div className="relative">
+			<button
+				type="button"
+				onClick={() => setShowPanel(!showPanel)}
+				className="flex items-center gap-2 rounded-lg px-2 py-1 transition-colors hover:bg-[#1E293B]"
+			>
+				{isDisconnected ? (
+					<>
+						<span className="inline-flex h-2 w-2 animate-pulse rounded-full bg-amber-400" />
+						<span className="text-xs text-amber-400">
+							{sessionStatus === "FAILED" ? "Bot desconectado" : "Reconectando..."}
+						</span>
+					</>
+				) : (
+					<>
+						<div className="relative flex h-2 w-2">
+							{(activity.type === "extracting" || activity.type === "diagramming") && (
+								<span className={`absolute inline-flex h-full w-full animate-ping rounded-full ${state.color} opacity-75`} />
+							)}
+							<span className={`relative inline-flex h-2 w-2 rounded-full ${state.color}`} />
+						</div>
+						<span className="text-xs text-[#94A3B8]">
+							{state.text}
+							{activity.detail && <span className="ml-1 text-[#64748B]">· {activity.detail}</span>}
+						</span>
+					</>
 				)}
-				<span className={`relative inline-flex h-2 w-2 rounded-full ${state.color}`} />
-			</div>
-			<span className="text-xs text-[#94A3B8]">
-				{state.text}
-				{activity.detail && <span className="ml-1 text-[#64748B]">· {activity.detail}</span>}
-			</span>
+			</button>
+
+			{/* Connection management panel */}
+			{showPanel && (
+				<div className="absolute left-1/2 top-full z-50 mt-2 w-80 -translate-x-1/2 rounded-xl bg-[#0F172A] p-4 shadow-xl ring-1 ring-[#334155]">
+					<div className="mb-3 flex items-center justify-between">
+						<span className="text-xs font-medium text-[#F1F5F9]">Conexion de llamada</span>
+						<button type="button" onClick={() => setShowPanel(false)} className="text-[#64748B] hover:text-white">
+							<XIcon className="h-3.5 w-3.5" />
+						</button>
+					</div>
+
+					{/* Status */}
+					<div className="mb-3 rounded-lg bg-[#1E293B] px-3 py-2">
+						<div className="flex items-center gap-2">
+							<span className={`h-2 w-2 rounded-full ${isDisconnected ? "bg-amber-400" : "bg-green-500"}`} />
+							<span className="text-xs text-[#94A3B8]">
+								{sessionStatus === "FAILED" ? "Bot no pudo unirse a la llamada"
+									: isDisconnected ? "Sin conexion al bot — la sesion sigue activa para trabajo manual"
+									: "Bot conectado y escuchando"}
+							</span>
+						</div>
+					</div>
+
+					{/* Reconnect same link */}
+					<button
+						type="button"
+						onClick={() => handleReconnect()}
+						disabled={reconnecting}
+						className="mb-2 flex w-full items-center gap-2 rounded-lg bg-[#1E293B] px-3 py-2 text-xs text-[#94A3B8] transition-colors hover:bg-[#334155] hover:text-white disabled:opacity-50"
+					>
+						<RefreshCwIcon className={`h-3.5 w-3.5 ${reconnecting ? "animate-spin" : ""}`} />
+						Reconectar al mismo link
+					</button>
+
+					{/* Change meeting link */}
+					<div className="rounded-lg bg-[#1E293B] p-2">
+						<label className="mb-1.5 block text-[10px] font-medium uppercase tracking-wider text-[#64748B]">
+							Cambiar link de llamada
+						</label>
+						<div className="flex gap-1.5">
+							<input
+								type="url"
+								value={newUrl}
+								onChange={(e) => setNewUrl(e.target.value)}
+								placeholder="https://meet.google.com/..."
+								className="flex-1 rounded-lg bg-[#0F172A] px-2.5 py-1.5 text-xs text-white placeholder-[#475569] outline-none ring-1 ring-[#334155] focus:ring-[#2563EB]"
+							/>
+							<button
+								type="button"
+								onClick={() => newUrl && handleReconnect(newUrl)}
+								disabled={reconnecting || !newUrl}
+								className="rounded-lg bg-[#2563EB] px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#1D4ED8] disabled:opacity-50"
+							>
+								<PhoneCallIcon className="h-3.5 w-3.5" />
+							</button>
+						</div>
+					</div>
+
+					{/* Info */}
+					<p className="mt-2 text-[10px] text-[#475569]">
+						Puedes seguir trabajando en el diagrama sin conexion. El bot se reconecta al link que pegues.
+					</p>
+				</div>
+			)}
 		</div>
 	);
 }
