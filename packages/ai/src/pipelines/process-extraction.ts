@@ -39,6 +39,20 @@ const VALID_NODE_TYPES = [
   "dataObject",
 ] as const;
 
+const NodePropertiesSchema = z.object({
+  description: z.string().optional(),
+  responsable: z.string().optional(),
+  slaValue: z.number().nullable().optional(),
+  slaUnit: z.enum(["minutes", "hours", "days"]).optional(),
+  frequency: z.enum(["daily", "weekly", "monthly", "per_event"]).optional(),
+  systems: z.array(z.string()).optional(),
+  inputs: z.array(z.string()).optional(),
+  outputs: z.array(z.string()).optional(),
+  estimatedDuration: z.number().nullable().optional(),
+  costPerExecution: z.number().nullable().optional(),
+  costCurrency: z.string().optional(),
+}).optional();
+
 const NewNodeSchema = z.object({
   id: z.string().min(1),
   type: z.enum(VALID_NODE_TYPES).catch("task"),
@@ -47,6 +61,7 @@ const NewNodeSchema = z.object({
   connectFrom: z.string().nullable().optional(),
   connectTo: z.string().nullable().optional(),
   confidence: z.number().min(0).max(1).catch(0.5),
+  properties: NodePropertiesSchema,
 });
 
 const OutOfScopeSchema = z.object({
@@ -67,6 +82,9 @@ const ExtractionResultSchema = z.object({
       z.object({
         id: z.string().min(1),
         label: z.string().optional(),
+        lane: z.string().optional(),
+        type: z.string().optional(),
+        properties: NodePropertiesSchema,
       }),
     )
     .catch([]),
@@ -100,10 +118,12 @@ export interface ExtractionResult {
     connectFrom?: string | null;
     connectTo?: string | null;
     confidence: number;
+    properties?: Record<string, any>;
   }>;
   updatedNodes: Array<{
     id: string;
     label?: string;
+    properties?: Record<string, any>;
   }>;
   outOfScope?: Array<{
     topic: string;

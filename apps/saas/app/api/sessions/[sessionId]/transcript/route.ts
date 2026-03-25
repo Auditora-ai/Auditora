@@ -9,12 +9,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
 import { extractProcessUpdates, buildSessionContext, setActivity } from "@repo/ai";
+import { requireSessionAuth, isAuthError } from "@/lib/auth-helpers";
 
 export async function PATCH(
 	request: NextRequest,
 	{ params }: { params: Promise<{ sessionId: string }> },
 ) {
 	const { sessionId } = await params;
+
+	const authResult = await requireSessionAuth(sessionId);
+	if (isAuthError(authResult)) return authResult;
+
 	const body = await request.json();
 	const { entryId, correctedText } = body;
 
@@ -47,6 +52,10 @@ export async function DELETE(
 	{ params }: { params: Promise<{ sessionId: string }> },
 ) {
 	const { sessionId } = await params;
+
+	const authResult = await requireSessionAuth(sessionId);
+	if (isAuthError(authResult)) return authResult;
+
 	const body = await request.json();
 	const { entryId } = body;
 
@@ -71,6 +80,10 @@ export async function POST(
 	{ params }: { params: Promise<{ sessionId: string }> },
 ) {
 	const { sessionId } = await params;
+
+	const authResult = await requireSessionAuth(sessionId);
+	if (isAuthError(authResult)) return authResult;
+
 	const body = await request.json();
 	const { text } = body;
 
@@ -112,11 +125,13 @@ export async function POST(
 	// Run for ANY session status (ACTIVE, ENDED, CONNECTING) so manual input always works
 	runManualExtraction(sessionId, entry.id).catch((err) => {
 		console.error(`[Transcript] Manual extraction failed for ${sessionId.substring(0, 8)}:`, err);
-		// Mark the entry as failed
+		// Mark the entry as failed so user sees feedback
 		db.transcriptEntry.update({
 			where: { id: entry.id },
-			data: { correctedText: "[ERROR] No se pudo procesar" },
-		}).catch(() => {});
+			data: { correctedText: "[ERROR] No se pudo procesar la nota" },
+		}).catch((updateErr) => {
+			console.error(`[Transcript] Failed to mark entry as failed:`, updateErr);
+		});
 	});
 
 	return NextResponse.json({ ok: true, entry }, { status: 202 });
@@ -190,6 +205,7 @@ async function runManualExtraction(sessionId: string, entryId?: string) {
 					state: "FORMING",
 					lane: node.lane || null,
 					connections: [],
+					...(node.properties ? { properties: node.properties } : {}),
 				},
 			});
 			aiIdToDbId.set(node.id, created.id);
@@ -246,10 +262,18 @@ async function runManualExtraction(sessionId: string, entryId?: string) {
 		for (const update of result.updatedNodes) {
 			const updateData: Record<string, any> = {};
 			if (update.label) updateData.label = update.label;
-			// updatedNodes may also include type/lane from extended extraction
+			// updatedNodes may also include type/lane/properties from extended extraction
 			const u = update as any;
 			if (u.type) updateData.nodeType = u.type.toUpperCase();
 			if (u.lane) updateData.lane = u.lane;
+			if (u.properties) {
+				// Merge with existing properties (don't overwrite all)
+				const existing = await db.diagramNode.findUnique({
+					where: { id: update.id },
+					select: { properties: true },
+				});
+				updateData.properties = { ...(existing?.properties as any || {}), ...u.properties };
+			}
 
 			if (Object.keys(updateData).length > 0) {
 				await db.diagramNode.updateMany({

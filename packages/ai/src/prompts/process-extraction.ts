@@ -126,7 +126,20 @@ Output ONLY valid JSON (no markdown, no explanation):
       "connectFrom": "existing_node_id or null",
       "connectTo": "existing_node_id or null",
       "flowCondition": "string or null (REQUIRED for connections FROM gateways: 'Sí', 'No', condition text)",
-      "confidence": 0.0-1.0
+      "confidence": 0.0-1.0,
+      "properties": {
+        "description": "string — brief description of what this step does, HOW it's done, any details mentioned",
+        "responsable": "string — specific person/role if mentioned (e.g. 'Juan Pérez', 'Jefe de Área')",
+        "slaValue": "number or null — time limit if mentioned",
+        "slaUnit": "minutes | hours | days",
+        "frequency": "daily | weekly | monthly | per_event — if mentioned",
+        "systems": ["array of system names used in this step: 'SAP', 'Excel', 'Portal Web'"],
+        "inputs": ["array of documents/data needed: 'Orden de compra', 'Factura', 'RFC'"],
+        "outputs": ["array of deliverables produced: 'Factura validada', 'Comprobante de pago'"],
+        "estimatedDuration": "number in minutes — if mentioned",
+        "costPerExecution": "number or null — if mentioned",
+        "costCurrency": "MXN | USD — if cost mentioned"
+      }
     }
   ],
   "updatedNodes": [
@@ -134,7 +147,8 @@ Output ONLY valid JSON (no markdown, no explanation):
       "id": "existing_node_id",
       "label": "updated label if mentioned correction",
       "lane": "corrected lane if responsibility changed",
-      "type": "corrected type if wrong (e.g. task should be gateway)"
+      "type": "corrected type if wrong (e.g. task should be gateway)",
+      "properties": "same structure as above — ONLY include fields that were mentioned/changed"
     }
   ],
   "outOfScope": [
@@ -237,6 +251,20 @@ CONSULTANT INSTRUCTIONS (HIGHEST PRIORITY):
   - "agregar gateway: ¿documentos completos?" → create exclusiveGateway "¿Documentos completos?"
   - "borrar el paso de revisión" → (not possible via extraction, ignore)
 - Consultant instructions have confidence 0.9 (they know their process)
+
+PROPERTY EXTRACTION RULES — Fill properties when information is mentioned:
+- "esto tarda como 2 días" → slaValue: 2, slaUnit: "days"
+- "lo hacen en SAP" → systems: ["SAP"]
+- "necesitan la orden de compra y la factura" → inputs: ["Orden de compra", "Factura"]
+- "de ahí sale el comprobante de pago" → outputs: ["Comprobante de pago"]
+- "eso lo hace la María de Contabilidad" → responsable: "María (Contabilidad)"
+- "se hace cada vez que llega una factura" → frequency: "per_event"
+- "lo revisan mensualmente" → frequency: "monthly"
+- "toma como 30 minutos" → estimatedDuration: 30
+- "cuesta como 500 pesos por factura" → costPerExecution: 500, costCurrency: "MXN"
+- "primero verifican que el RFC coincida, luego revisan los montos" → description: "Verificar que el RFC coincida con el proveedor registrado, luego revisar que los montos sean correctos"
+- ONLY include properties that were ACTUALLY MENTIONED — do not guess
+- properties is OPTIONAL — omit entirely if no relevant info was mentioned for that node
 
 EXTRACTION RULES:
 - ONLY output nodes for process steps that are NOT already in the current diagram
