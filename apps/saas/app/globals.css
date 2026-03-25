@@ -24,6 +24,30 @@
 	scrollbar-width: none;
 }
 
+@utility thin-scrollbar {
+	scrollbar-width: thin;
+	scrollbar-color: transparent transparent;
+	&:hover {
+		scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+	}
+	&::-webkit-scrollbar {
+		width: 4px;
+	}
+	&::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	&::-webkit-scrollbar-thumb {
+		background: transparent;
+		border-radius: 4px;
+	}
+	&:hover::-webkit-scrollbar-thumb {
+		background: rgba(148, 163, 184, 0.3);
+	}
+	&::-webkit-scrollbar-thumb:hover {
+		background: rgba(148, 163, 184, 0.5);
+	}
+}
+
 @layer base {
 	*,
 	::after,

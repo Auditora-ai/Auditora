@@ -29,6 +29,8 @@ export interface NodeProperties {
 	costPerExecution?: number | null;
 	costCurrency?: string;
 	estimatedDuration?: number | null;
+	/** Documentation mode: simple description or full SOP */
+	docMode?: "description" | "sop";
 }
 
 // Bot activity feedback types

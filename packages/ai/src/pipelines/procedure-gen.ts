@@ -40,7 +40,7 @@ export async function generateProcedure(
     pipeline: "procedure-gen",
     system: PROCEDURE_GEN_SYSTEM,
     prompt: PROCEDURE_GEN_USER(input),
-    maxOutputTokens: 8192,
+    maxOutputTokens: 16384,
     temperature: 0.2,
   });
 

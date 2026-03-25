@@ -22,11 +22,15 @@ import {
 	ArrowRightLeftIcon,
 	DollarSignIcon,
 	ClipboardListIcon,
+	SparklesIcon,
+	Loader2Icon,
+	FileTextIcon,
 } from "lucide-react";
 import { useLiveSessionContext } from "../context/LiveSessionContext";
 import type { DiagramNode, NodeProperties } from "../types";
 import { PROPERTY_FIELDS, PROPERTY_GROUPS } from "../lib/node-properties-schema";
 import { ProcedureEditor } from "./ProcedureEditor";
+import { SopDocumentView } from "./SopDocumentView";
 
 interface NodePropertiesViewProps {
 	tabId: string;
@@ -144,6 +148,7 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 	const selectedConfig = selectedNode ? getConfig(selectedNode.type) : getConfig("");
 	const selectedState = selectedNode?.dbNode?.state || "forming";
 	const stateBadge = STATE_BADGE[selectedState] || STATE_BADGE.forming;
+	const docMode: "description" | "sop" = (selectedProps as any).docMode === "sop" ? "sop" : "description";
 
 	// Count documented fields for progress
 	const getDocProgress = (nodeId: string) => {
@@ -180,7 +185,7 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 				</div>
 
 				{/* Node list */}
-				<div className="flex-1 overflow-auto py-1">
+				<div className="flex-1 overflow-auto thin-scrollbar py-1">
 					{childNodes.map((node) => {
 						const cfg = getConfig(node.type);
 						const Icon = cfg.icon;
@@ -280,10 +285,48 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 									</div>
 								</div>
 							</div>
+
+							{/* Doc mode toggle */}
+							<div className="mt-3 flex rounded-lg bg-[#F1F5F9] p-0.5">
+								<button
+									type="button"
+									onClick={() => saveProperties(selectedNodeId!, { docMode: "description" })}
+									className={`flex flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-[11px] font-medium transition-colors ${
+										docMode === "description"
+											? "bg-white text-[#0F172A] shadow-sm"
+											: "text-[#64748B] hover:text-[#334155]"
+									}`}
+								>
+									<FileTextIcon className="h-3 w-3" />
+									Propiedades
+								</button>
+								<button
+									type="button"
+									onClick={() => saveProperties(selectedNodeId!, { docMode: "sop" })}
+									className={`flex flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-[11px] font-medium transition-colors ${
+										docMode === "sop"
+											? "bg-white text-[#0F172A] shadow-sm"
+											: "text-[#64748B] hover:text-[#334155]"
+									}`}
+								>
+									<ClipboardListIcon className="h-3 w-3" />
+									SOP Completo
+								</button>
+							</div>
 						</div>
 
-						{/* Scrollable property form */}
-						<div className="flex-1 overflow-auto">
+						{docMode === "sop" ? (
+							<div className="flex-1 overflow-auto thin-scrollbar">
+								<SopDocumentView
+									nodeId={selectedNodeId!}
+									nodeLabel={selectedNode.label}
+									sessionId={sessionId || ""}
+									procedure={selectedNode.dbNode?.procedure as any}
+								/>
+							</div>
+						) : (
+						/* Scrollable property form */
+						<div className="flex-1 overflow-auto thin-scrollbar">
 							<div className="mx-auto max-w-[720px] px-8 py-6">
 								{PROPERTY_GROUPS.map((group) => {
 									const fields = PROPERTY_FIELDS.filter((f) => f.group === group.key);
@@ -308,7 +351,8 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 															field={field}
 															value={selectedProps[field.key as keyof NodeProperties]}
 															sessionId={sessionId}
-															onChange={(val) => saveProperties(selectedNodeId!, { [field.key]: val })}
+															nodeId={selectedNodeId || undefined}
+														onChange={(val) => saveProperties(selectedNodeId!, { [field.key]: val })}
 														/>
 													))}
 												</div>
@@ -320,7 +364,8 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 															field={field}
 															value={selectedProps[field.key as keyof NodeProperties]}
 															sessionId={sessionId}
-															onChange={(val) => saveProperties(selectedNodeId!, { [field.key]: val })}
+															nodeId={selectedNodeId || undefined}
+														onChange={(val) => saveProperties(selectedNodeId!, { [field.key]: val })}
 														/>
 													))}
 												</div>
@@ -332,7 +377,8 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 															field={field}
 															value={selectedProps[field.key as keyof NodeProperties]}
 															sessionId={sessionId}
-															onChange={(val) => saveProperties(selectedNodeId!, { [field.key]: val })}
+															nodeId={selectedNodeId || undefined}
+														onChange={(val) => saveProperties(selectedNodeId!, { [field.key]: val })}
 														/>
 													))}
 												</div>
@@ -357,6 +403,7 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 								</div>
 							</div>
 						</div>
+						)}
 					</>
 				) : (
 					<div className="flex h-full flex-col items-center justify-center text-[#94A3B8]">
@@ -377,19 +424,59 @@ function PropertyField({
 	value,
 	onChange,
 	sessionId,
+	nodeId,
 }: {
 	field: (typeof PROPERTY_FIELDS)[number];
 	value: any;
 	onChange: (val: any) => void;
 	sessionId?: string;
+	nodeId?: string;
 }) {
+	const [drafting, setDrafting] = useState(false);
 	const baseInputClass =
 		"w-full rounded-lg border border-[#E2E8F0] bg-white px-3 py-2 text-sm text-[#0F172A] placeholder:text-[#CBD5E1] focus:border-[#3B82F6] focus:outline-none focus:ring-1 focus:ring-[#3B82F6] transition-colors";
+
+	const handleGenerateDraft = useCallback(async () => {
+		if (!sessionId || !nodeId) return;
+		setDrafting(true);
+		try {
+			const res = await fetch(`/api/sessions/${sessionId}/nodes/${nodeId}/procedure-chat`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					message: "Genera una descripción concisa y profesional de esta actividad en 2-3 párrafos. Solo devuelve el texto de la descripción, sin JSON.",
+					history: [],
+				}),
+			});
+			if (!res.ok) throw new Error("Error");
+			const data = await res.json();
+			// The response message IS the description
+			if (data.message) onChange(data.message);
+		} catch { /* ignore */ }
+		finally { setDrafting(false); }
+	}, [sessionId, nodeId, onChange]);
 
 	if (field.type === "richtext") {
 		return (
 			<div>
-				<label className="mb-1.5 block text-xs font-medium text-[#334155]">{field.label}</label>
+				<div className="mb-1.5 flex items-center justify-between">
+					<label className="text-xs font-medium text-[#334155]">{field.label}</label>
+					{field.key === "description" && nodeId && (
+						<button
+							type="button"
+							onClick={handleGenerateDraft}
+							disabled={drafting}
+							className="flex items-center gap-1 rounded-md px-2 py-0.5 text-[10px] font-medium text-[#2563EB] transition-colors hover:bg-[#EFF6FF] disabled:opacity-50"
+						>
+							{drafting ? (
+								<Loader2Icon className="h-3 w-3 animate-spin" />
+							) : (
+								<SparklesIcon className="h-3 w-3" />
+							)}
+							{drafting ? "Generando..." : "Generar borrador"}
+						</button>
+					)}
+				</div>
 				<ProcedureEditor
 					content={value}
 					onChange={onChange}
