@@ -31,8 +31,19 @@ export function TopBar({ processName, clientName }: TopBarProps) {
 		>
 			{/* Left: Logo */}
 			<div className="flex items-center gap-3">
-				<span className="text-sm font-semibold tracking-tight text-white">
-					BPMN Live AI
+				<span className="flex items-center">
+					<svg className="h-6 w-6 text-[#2563EB]" viewBox="0 0 32 32" fill="none">
+						<circle cx="8" cy="16" r="3" fill="currentColor" />
+						<circle cx="24" cy="8" r="3" fill="currentColor" />
+						<circle cx="24" cy="24" r="3" fill="currentColor" />
+						<path d="M11 16L21 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+						<path d="M11 16L21 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+						<rect x="15" y="14" width="4" height="4" rx="1" fill="currentColor" opacity="0.4" transform="rotate(45 17 16)" />
+					</svg>
+					<span className="ml-1.5 text-sm tracking-tight">
+						<span className="font-bold text-white">AI</span>
+						<span className="font-light text-[#94A3B8]">process.me</span>
+					</span>
 				</span>
 				<div className="h-4 w-px bg-[#334155]" />
 				<span className="max-w-[280px] truncate text-sm text-[#F1F5F9]">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, type RefObject } from "react";
+import { Fragment, useCallback, useEffect, useRef, type RefObject } from "react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useLiveSessionContext } from "../context/LiveSessionContext";
@@ -14,7 +14,11 @@ import {
 	Loader2Icon,
 	LayoutDashboardIcon,
 	SaveIcon,
+	XIcon,
+	FileTextIcon,
+	PlusIcon,
 } from "lucide-react";
+import { NodePropertiesView } from "./NodePropertiesView";
 
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-js.css";
@@ -26,7 +30,11 @@ interface CentralCanvasProps {
 }
 
 export function CentralCanvas({ containerRef }: CentralCanvasProps) {
-	const { modelerApi, diagramHealth, nodes, processId, sessionId } = useLiveSessionContext();
+	const {
+		modelerApi, diagramHealth, nodes, processId, sessionId,
+		activeCentralTab, openPropertyTabs, setActiveCentralTab, closePropertyTab, openPropertyTab,
+	} = useLiveSessionContext();
+	const isDiagramActive = activeCentralTab === "diagram";
 	const [repairing, setRepairing] = useState(false);
 
 	// Rotating AI thinking phrases
@@ -264,13 +272,97 @@ export function CentralCanvas({ containerRef }: CentralCanvasProps) {
 		[modelerApi, containerRef],
 	);
 
+	const activePropertyTab = openPropertyTabs.find((t) => t.id === activeCentralTab);
+
 	return (
 		<div
-			className="live-session bpmn-canvas-light relative overflow-hidden"
+			className="relative flex flex-col overflow-hidden"
 			style={{ gridArea: "canvas" }}
-			onDragOver={handleDragOver}
-			onDrop={handleDrop}
 		>
+			{/* Tab bar — always visible */}
+			<div className="flex h-8 shrink-0 items-center gap-0 border-b border-[#E2E8F0] bg-[#F8FAFC]">
+				<button
+					type="button"
+					onClick={() => setActiveCentralTab("diagram")}
+					className={`flex h-full items-center gap-1.5 border-r border-[#E2E8F0] px-3 text-xs font-medium transition-colors ${
+						isDiagramActive
+							? "bg-white text-[#0F172A]"
+							: "text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#334155]"
+					}`}
+				>
+					<GridIcon className="h-3 w-3" />
+					Diagrama
+				</button>
+				{openPropertyTabs.map((tab) => (
+					<button
+						key={tab.id}
+						type="button"
+						onClick={() => setActiveCentralTab(tab.id)}
+						className={`group flex h-full items-center gap-1.5 border-r border-[#E2E8F0] px-3 text-xs font-medium transition-colors ${
+							activeCentralTab === tab.id
+								? "bg-white text-[#0F172A]"
+								: "text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#334155]"
+						}`}
+					>
+						<FileTextIcon className="h-3 w-3" />
+						<span className="max-w-[120px] truncate">{tab.label}</span>
+						<span
+							role="button"
+							tabIndex={0}
+							onClick={(e) => { e.stopPropagation(); closePropertyTab(tab.id); }}
+							onKeyDown={(e) => { if (e.key === "Enter") { e.stopPropagation(); closePropertyTab(tab.id); } }}
+							className="ml-1 rounded p-0.5 opacity-0 transition-opacity hover:bg-[#E2E8F0] group-hover:opacity-100"
+						>
+							<XIcon className="h-2.5 w-2.5" />
+						</span>
+					</button>
+				))}
+				{/* Open properties tab for root process */}
+				<button
+					type="button"
+					onClick={() => openPropertyTab("Process_1", "Proceso")}
+					title="Abrir propiedades del proceso"
+					className="flex h-full items-center px-2 text-[#94A3B8] transition-colors hover:bg-[#F1F5F9] hover:text-[#334155]"
+				>
+					<PlusIcon className="h-3.5 w-3.5" />
+				</button>
+			</div>
+
+			{/* Subprocess breadcrumb — visible when drilled into a subprocess */}
+			{isDiagramActive && modelerApi?.navigationStack?.length > 0 && (
+				<div className="flex h-6 shrink-0 items-center gap-1 border-b border-[#E2E8F0] bg-[#F1F5F9] px-4 text-[11px]">
+					<button
+						type="button"
+						onClick={() => modelerApi.navigateUp(0)}
+						className="text-[#3B82F6] hover:underline"
+					>
+						Proceso Principal
+					</button>
+					{modelerApi.navigationStack.map((item: { id: string; label: string }, idx: number) => (
+						<Fragment key={item.id}>
+							<span className="text-[#94A3B8]">›</span>
+							{idx < modelerApi.navigationStack.length - 1 ? (
+								<button
+									type="button"
+									onClick={() => modelerApi.navigateUp(idx + 1)}
+									className="text-[#3B82F6] hover:underline"
+								>
+									{item.label}
+								</button>
+							) : (
+								<span className="font-medium text-[#0F172A]">{item.label}</span>
+							)}
+						</Fragment>
+					))}
+				</div>
+			)}
+
+			{/* Diagram canvas — always mounted, hidden when property tab active */}
+			<div
+				className={`live-session bpmn-canvas-light relative flex-1 overflow-hidden ${isDiagramActive ? "" : "hidden"}`}
+				onDragOver={handleDragOver}
+				onDrop={handleDrop}
+			>
 			{/* AI thinking aura — full takeover of the canvas during reorganization */}
 			{repairing && (
 				<>
@@ -428,6 +520,18 @@ export function CentralCanvas({ containerRef }: CentralCanvasProps) {
 						onClick={handleRebuildLayout}
 						disabled={repairing}
 						title="Reorganizar diagrama"
+					/>
+				</div>
+			)}
+			</div>
+
+			{/* Property view — shown when a property tab is active */}
+			{activePropertyTab && (
+				<div className="flex-1 overflow-auto bg-white">
+					<NodePropertiesView
+						tabId={activePropertyTab.id}
+						elementId={activePropertyTab.elementId}
+						label={activePropertyTab.label}
 					/>
 				</div>
 			)}

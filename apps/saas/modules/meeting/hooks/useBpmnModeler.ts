@@ -28,6 +28,8 @@ interface UseBpmnModelerOptions {
 	onConfirmNode?: (nodeId: string) => void;
 	/** Callback when user rejects a forming node. Required for live AI mode. */
 	onRejectNode?: (nodeId: string) => void;
+	/** Callback when user clicks "Propiedades" in the context pad of an element. */
+	onOpenProperties?: (elementId: string, elementType: string, parentId?: string) => void;
 	sessionStatus?: "ACTIVE" | "ENDED";
 	/** Fallback nodes to rebuild XML from if importXML fails (auto-recovery). */
 	fallbackNodes?: DiagramNode[];
@@ -59,6 +61,8 @@ interface ModelerAPI {
 	navigationStack: { id: string; label: string }[];
 	drillDown: (elementId: string) => void;
 	navigateUp: (level: number) => void;
+	/** Get node hierarchy from modeler for properties view tree rendering */
+	getNodeHierarchy: () => { id: string; type: string; label: string; parentId: string | null }[];
 }
 
 import { X_GAP, Y_PAD, LANE_H, CONTENT_X } from "../lib/layout-constants";
@@ -70,6 +74,7 @@ export function useBpmnModeler({
 	processName,
 	onConfirmNode,
 	onRejectNode,
+	onOpenProperties,
 	sessionStatus = "ACTIVE",
 	fallbackNodes,
 }: UseBpmnModelerOptions): ModelerAPI {
@@ -81,6 +86,10 @@ export function useBpmnModeler({
 	const [canRedo, setCanRedo] = useState(false);
 	const [gridEnabled, setGridEnabled] = useState(false);
 	const [selectedElement, setSelectedElement] = useState<any>(null);
+
+	// Callback refs (stable reference for event handlers)
+	const onOpenPropertiesRef = useRef(onOpenProperties);
+	onOpenPropertiesRef.current = onOpenProperties;
 
 	// Incremental merge state
 	const bootstrappedRef = useRef(false);
@@ -124,7 +133,7 @@ export function useBpmnModeler({
 			try {
 				await modeler.importXML(initialXml || await defaultBpmnXml(processName));
 				const canvas = modeler.get("canvas");
-				canvas.zoom("fit-viewport", "auto");
+				try { canvas.zoom("fit-viewport", "auto"); } catch { /* non-finite SVG */ }
 				applyBizagiColors(modeler);
 
 				// Force white background on bpmn-js internals (dark theme override)
@@ -140,7 +149,7 @@ export function useBpmnModeler({
 						const recoveredXml = await buildBpmnXml(nodes);
 						await modeler.importXML(recoveredXml);
 						const canvas = modeler.get("canvas");
-						canvas.zoom("fit-viewport", "auto");
+						try { canvas.zoom("fit-viewport", "auto"); } catch { /* non-finite SVG */ }
 						applyBizagiColors(modeler);
 						setRecovered(true);
 						setRenderError("El diagrama se regeneró automáticamente desde los datos guardados.");
@@ -172,6 +181,40 @@ export function useBpmnModeler({
 				const selected = e.newSelection?.[0] || null;
 				setSelectedElement(selected);
 			});
+
+			// Register custom context pad provider for "Propiedades" button
+			try {
+				const contextPad = modeler.get("contextPad");
+				contextPad.registerProvider({
+					getContextPadEntries: (element: any) => {
+						const type = element.type;
+						// Only show for tasks, subprocesses, and activities
+						const taskTypes = [
+							"bpmn:Task", "bpmn:UserTask", "bpmn:ServiceTask",
+							"bpmn:ManualTask", "bpmn:BusinessRuleTask", "bpmn:SubProcess",
+						];
+						if (!taskTypes.includes(type)) return {};
+
+						return {
+							"open-properties": {
+								group: "edit",
+								className: "bpmn-icon-service",
+								title: "Propiedades",
+								action: {
+									click: (_event: any, el: any) => {
+										const parentId = el.parent?.type === "bpmn:SubProcess"
+											? el.parent.id
+											: undefined;
+										onOpenPropertiesRef.current?.(el.id, el.type, parentId);
+									},
+								},
+							},
+						};
+					},
+				});
+			} catch (err) {
+				console.warn("[useBpmnModeler] Could not register context pad provider:", err);
+			}
 
 			setIsReady(true);
 		}
@@ -225,7 +268,7 @@ export function useBpmnModeler({
 					}
 
 					const canvas = modeler.get("canvas");
-					try { canvas.zoom("fit-viewport", "auto"); } catch { /* empty canvas */ }
+					try { try { canvas.zoom("fit-viewport", "auto"); } catch { /* non-finite SVG */ } } catch { /* empty canvas */ }
 
 					// Populate known state from bootstrap
 					knownNodesRef.current.clear();
@@ -509,7 +552,7 @@ export function useBpmnModeler({
 					}
 				} catch { /* connectionDocking not available */ }
 
-				canvas.zoom("fit-viewport", "auto");
+				try { try { canvas.zoom("fit-viewport", "auto"); } catch { /* non-finite SVG */ } } catch { /* empty/zero-size canvas */ }
 				// Apply colors after a tick to ensure all shapes are fully rendered
 				setTimeout(() => {
 					try { applyBizagiColors(modeler); } catch { /* ok */ }
@@ -844,7 +887,7 @@ export function useBpmnModeler({
 		// Fit viewport if topology changed
 		if (topologyChanged) {
 			try {
-				canvas.zoom("fit-viewport", "auto");
+				try { canvas.zoom("fit-viewport", "auto"); } catch { /* non-finite SVG */ }
 			} catch {
 				// ok
 			}
@@ -863,7 +906,7 @@ export function useBpmnModeler({
 
 	const zoomFit = useCallback(() => {
 		const canvas = modelerRef.current?.get("canvas");
-		if (canvas) canvas.zoom("fit-viewport", "auto");
+		if (canvas) try { canvas.zoom("fit-viewport", "auto"); } catch { /* non-finite SVG */ }
 	}, []);
 
 	/**
@@ -1000,6 +1043,41 @@ export function useBpmnModeler({
 		if (root) canvas.setRootElement(root);
 	}, []);
 
+	/** Get node hierarchy from modeler's element registry for the properties view tree */
+	const getNodeHierarchy = useCallback(() => {
+		const modeler = modelerRef.current;
+		if (!modeler || !isReady) return [];
+
+		try {
+			const elementRegistry = modeler.get("elementRegistry");
+			const elements = elementRegistry.getAll();
+			const result: { id: string; type: string; label: string; parentId: string | null }[] = [];
+
+			for (const el of elements) {
+				// Only include BPMN flow elements (tasks, events, gateways, subprocesses)
+				const type = el.type;
+				if (!type?.startsWith("bpmn:") || type === "bpmn:Process" || type === "bpmn:Collaboration"
+					|| type === "bpmn:Participant" || type === "bpmn:Lane" || type === "bpmn:LaneSet"
+					|| type === "bpmn:SequenceFlow" || type === "bpmn:MessageFlow"
+					|| type === "label") continue;
+
+				const parentType = el.parent?.type;
+				const parentId = parentType === "bpmn:SubProcess" ? el.parent.id : null;
+
+				result.push({
+					id: el.id,
+					type,
+					label: el.businessObject?.name || el.id,
+					parentId,
+				});
+			}
+
+			return result;
+		} catch {
+			return [];
+		}
+	}, [isReady]);
+
 	// Register double-click handler for subprocesses
 	useEffect(() => {
 		const modeler = modelerRef.current;
@@ -1038,6 +1116,7 @@ export function useBpmnModeler({
 		navigationStack,
 		drillDown,
 		navigateUp,
+		getNodeHierarchy,
 	};
 }
 

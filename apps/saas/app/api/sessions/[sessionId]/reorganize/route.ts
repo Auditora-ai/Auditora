@@ -96,8 +96,28 @@ REGLAS DE LIMPIEZA:
 - SOLO ELIMINA nodos que sean duplicados exactos o que tengan labels vacíos/genéricos sin sentido
 - CORRIGE labels: tareas = verbo + sustantivo, gateways = pregunta con ¿?
 - CORRIGE lanes: asigna el rol/área correcto basado en el contexto del proceso
-- CORRIGE tipos: si una "tarea" es realmente una decisión, cámbiala a exclusiveGateway
 - Si un nodo no tiene label pero es un start_event o end_event, CONSÉRVALO con label "Inicio"/"Fin"
+
+CORRIGE TIPOS — usa el tipo MÁS ESPECÍFICO posible:
+- "task" genérico → cámbialo a userTask, serviceTask, manualTask, o businessRuleTask según contexto
+- userTask: persona hace algo CON un sistema. "Revisar en SAP", "Aprobar en portal"
+- serviceTask: sistema lo hace AUTOMÁTICAMENTE. "Enviar email", "Generar reporte", "Consultar API"
+- manualTask: persona lo hace SIN sistema. "Firmar documento", "Entregar paquete", "Inspeccionar"
+- businessRuleTask: decisión basada en REGLAS definidas. "Calcular descuento", "Clasificar riesgo", "Determinar nivel de aprobación"
+- exclusiveGateway: una decisión donde solo UN camino se toma
+- parallelGateway: TODOS los caminos se ejecutan al mismo tiempo
+- inclusiveGateway: UNO O MÁS caminos se ejecutan
+- intermediateEvent: espera o señal a mitad del flujo (timer, mensaje, etc.)
+- Si una "tarea" es realmente una decisión, cámbiala a exclusiveGateway
+- Si una tarea es una regla/política, cámbiala a businessRuleTask
+- Si algo es automático (enviar email, notificar, generar PDF), cámbialo a serviceTask
+
+DETECCIÓN DE SISTEMAS — Cuando un nodo menciona un sistema/aplicativo:
+- Si una tarea dice "en SAP", "en el ERP", "en el portal", "por email" → el sistema debe tener su PROPIO LANE
+- Crea un serviceTask adicional en el lane del sistema si no existe
+- Ejemplo: "Revisar factura en SAP" → userTask "Revisar factura" (Analista) + serviceTask "Consultar datos" (SAP)
+- Sistemas comunes: SAP, ERP, CRM, Portal Web, Email, SharePoint, Base de datos, API externa
+- Esto es CRÍTICO para mapeo de automatización y análisis de sistemas
 
 REGLAS DE CONEXIÓN:
 - El proceso fluye de INICIO a FIN en una secuencia lógica
@@ -230,12 +250,21 @@ Revisa cada nodo, elimina lo que no pertenece, corrige lo que esté mal, y organ
 			if (node.label) updateData.label = node.label;
 			if (node.type) {
 				const typeMap: Record<string, string> = {
-					task: "TASK", usertask: "USER_TASK", userTask: "USER_TASK",
-					servicetask: "SERVICE_TASK", serviceTask: "SERVICE_TASK",
+					task: "TASK",
+					usertask: "USER_TASK", userTask: "USER_TASK", user_task: "USER_TASK",
+					servicetask: "SERVICE_TASK", serviceTask: "SERVICE_TASK", service_task: "SERVICE_TASK",
+					manualtask: "MANUAL_TASK", manualTask: "MANUAL_TASK", manual_task: "MANUAL_TASK",
+					businessruletask: "BUSINESS_RULE_TASK", businessRuleTask: "BUSINESS_RULE_TASK", business_rule_task: "BUSINESS_RULE_TASK",
+					scripttask: "TASK", scriptTask: "TASK",
 					exclusivegateway: "EXCLUSIVE_GATEWAY", exclusiveGateway: "EXCLUSIVE_GATEWAY",
 					parallelgateway: "PARALLEL_GATEWAY", parallelGateway: "PARALLEL_GATEWAY",
+					inclusivegateway: "EXCLUSIVE_GATEWAY", inclusiveGateway: "EXCLUSIVE_GATEWAY",
 					startevent: "START_EVENT", startEvent: "START_EVENT",
 					endevent: "END_EVENT", endEvent: "END_EVENT",
+					intermediateevent: "TIMER_EVENT", intermediateEvent: "TIMER_EVENT",
+					intermediatecatchevent: "TIMER_EVENT", intermediateCatchEvent: "TIMER_EVENT",
+					intermediatethrowevent: "TIMER_EVENT", intermediateThrowEvent: "TIMER_EVENT",
+					subprocess: "SUBPROCESS", subProcess: "SUBPROCESS",
 				};
 				const mapped = typeMap[node.type] || typeMap[node.type.toLowerCase()];
 				if (mapped) updateData.nodeType = mapped;

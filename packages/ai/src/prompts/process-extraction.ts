@@ -120,7 +120,7 @@ Output ONLY valid JSON (no markdown, no explanation):
   "newNodes": [
     {
       "id": "node_<unique_id>",
-      "type": "startEvent" | "endEvent" | "task" | "userTask" | "serviceTask" | "exclusiveGateway" | "parallelGateway" | "intermediateEvent",
+      "type": "startEvent" | "endEvent" | "task" | "userTask" | "serviceTask" | "manualTask" | "businessRuleTask" | "exclusiveGateway" | "parallelGateway" | "inclusiveGateway" | "intermediateEvent" | "subProcess",
       "label": "string (see BPMN NAMING RULES below)",
       "lane": "string (role/department — consistent naming)",
       "connectFrom": "existing_node_id or null",
@@ -161,14 +161,43 @@ NAMING RULES (MANDATORY):
 - End Events: Describe the outcome. "Solicitud aprobada", "Pedido entregado", "Incidente resuelto". NEVER "Fin".
 - Intermediate Events: Describe what happens. "Esperar aprobación", "Tiempo límite alcanzado", "Documento recibido".
 
-ELEMENT TYPE RULES:
-- task: Generic work activity (when the system/tool is unknown)
-- userTask: Activity performed by a person using a system/application
-- serviceTask: Automated activity performed by a system without human intervention
-- exclusiveGateway: Decision point with mutually exclusive paths (use when only ONE path is taken)
-- parallelGateway: Fork/join where ALL paths execute simultaneously
-- intermediateEvent: Waiting point, timer, or signal within the process
+ELEMENT TYPE RULES — Choose the MOST SPECIFIC type:
+- task: ONLY when you cannot determine if it's user, service, manual, or business rule
+- userTask: A PERSON does this using a system/app. "Revisar en SAP", "Aprobar en portal", "Capturar datos en sistema"
+- serviceTask: A SYSTEM does this AUTOMATICALLY without human intervention. "Enviar email automático", "Generar reporte programado", "Consultar API", "Notificar por sistema"
+- manualTask: A PERSON does this WITHOUT a system. "Firmar documento físico", "Entregar paquete", "Inspeccionar mercancía", "Llamar por teléfono"
+- businessRuleTask: A DECISION based on DEFINED RULES/POLICIES. "Calcular descuento según política", "Validar crédito contra reglas", "Clasificar riesgo según matriz", "Determinar nivel de aprobación"
+- exclusiveGateway: Decision point — ONLY ONE path is taken. "¿Aprobado?", "¿Monto > $50,000?"
+- parallelGateway: Fork/join — ALL paths execute simultaneously. Use when multiple things happen at the same time: "enviar notificación Y actualizar sistema Y generar reporte"
+- inclusiveGateway: ONE OR MORE paths execute. "Notificar a gerente Y/O director según monto"
+- intermediateEvent: A WAIT or SIGNAL in the middle of the flow. "Esperar aprobación (24 hrs)", "Recibir confirmación del cliente", "Tiempo límite alcanzado"
+- subProcess: A GROUP of steps that belong together. Use when 3+ steps form a coherent sub-activity: "Validación de documentos", "Proceso de escalamiento"
+
+INTELLIGENCE RULES — Be a smart modeler:
+- If someone says "el sistema envía un correo" → serviceTask (system does it automatically)
+- If someone says "el analista revisa en el sistema" → userTask (person uses system)
+- If someone says "el mensajero entrega el paquete" → manualTask (physical, no system)
+- If someone says "si el monto supera 50 mil se necesita aprobación del director" → businessRuleTask for the rule + exclusiveGateway for the decision
+- If someone says "al mismo tiempo se notifica y se actualiza" → parallelGateway
+- If someone says "después hay que esperar 48 horas" → intermediateEvent (timer)
+- NEVER use generic "task" when you can infer the specific type from context
 - NEVER use a task for a decision — if someone "decides", "verifies", "approves/rejects", it's a gateway
+
+SYSTEM/APPLICATION DETECTION — When a system, app, or tool is mentioned:
+- Create the system as a LANE. "SAP", "Portal Web", "Email", "Sistema ERP", "Base de datos" → each gets its own lane
+- When a person uses a system: create TWO nodes:
+  1. userTask in the PERSON's lane: "Revisar factura" (lane: Analista)
+  2. serviceTask in the SYSTEM's lane: "Consultar datos de factura" (lane: SAP)
+  Connected: userTask triggers the serviceTask, or serviceTask provides data to userTask
+- When a system acts alone: create ONE serviceTask in the system's lane
+  "El sistema envía notificación automática" → serviceTask "Enviar notificación" (lane: Sistema de Notificaciones)
+- Examples:
+  - "El analista revisa en SAP" → userTask "Revisar factura" (Analista) + serviceTask "Consultar factura" (SAP)
+  - "Se registra en el ERP" → serviceTask "Registrar en ERP" (ERP)
+  - "El portal genera el PDF" → serviceTask "Generar PDF" (Portal Web)
+  - "Se envía un correo al proveedor" → serviceTask "Enviar correo al proveedor" (Sistema de Email)
+  - "Lo suben a SharePoint" → serviceTask "Almacenar documento" (SharePoint)
+- This makes the diagram show WHICH SYSTEMS are involved — critical for process automation and IT mapping
 
 STRUCTURAL RULES:
 - Every exclusiveGateway MUST have 2+ outgoing connections with flowCondition labels ("Sí"/"No", or descriptive conditions)
