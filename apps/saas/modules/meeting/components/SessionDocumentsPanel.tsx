@@ -129,7 +129,7 @@ export function SessionDocumentsPanel({
 	}
 
 	return (
-		<div className="flex h-full flex-col overflow-hidden">
+		<div className="flex flex-col">
 			{/* Upload Zone */}
 			<div className="border-b border-border p-3">
 				<div
@@ -171,9 +171,9 @@ export function SessionDocumentsPanel({
 			</div>
 
 			{/* Document List */}
-			<div className="flex-1 overflow-y-auto">
+			<div>
 				{documents.length === 0 ? (
-					<div className="flex h-full flex-col items-center justify-center gap-1 text-center text-sm text-muted-foreground">
+					<div className="flex flex-col items-center justify-center gap-1 py-4 text-center text-sm text-muted-foreground">
 						<FileTextIcon className="h-8 w-8 opacity-30" />
 						<p className="text-xs">Sin documentos</p>
 						<p className="max-w-[180px] text-[10px] text-muted-foreground/60">

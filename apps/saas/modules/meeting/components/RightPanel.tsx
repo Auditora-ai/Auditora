@@ -34,59 +34,53 @@ export function RightPanel({ organizationId, processId, collapsed }: RightPanelP
 			className="flex flex-col overflow-hidden border-l border-[#334155] bg-[#0F172A]"
 			style={{ gridArea: "right" }}
 		>
-			{/* Transcript — collapsible, compact by default */}
-			<div className={`flex flex-col border-b border-[#334155] ${transcriptOpen ? "max-h-[40%]" : ""}`}>
-				<AccordionHeader
-					title="Transcripcion"
-					open={transcriptOpen}
-					onToggle={() => setTranscriptOpen(!transcriptOpen)}
-					badge={transcript.length > 0 ? `${transcript.length}` : undefined}
-				/>
-				{transcriptOpen && (
-					<div className="min-h-0 flex-1 overflow-y-auto">
-						<TranscriptSection transcript={transcript} />
-					</div>
-				)}
-			</div>
+			{/* Transcript */}
+			<AccordionHeader
+				title="Transcripcion"
+				open={transcriptOpen}
+				onToggle={() => setTranscriptOpen(!transcriptOpen)}
+				badge={transcript.length > 0 ? `${transcript.length}` : undefined}
+			/>
+			{transcriptOpen && (
+				<div className="min-h-0 flex-1 overflow-y-auto">
+					<TranscriptSection transcript={transcript} />
+				</div>
+			)}
 
-			{/* Sugerencias IA — main section, always expanded */}
-			<div className="flex min-h-0 flex-1 flex-col border-t border-[#334155]">
-				<AccordionHeader
-					title="Sugerencias IA"
-					open={sipocOpen}
-					onToggle={() => setSipocOpen(!sipocOpen)}
-					badge={gapType || "SIPOC"}
-				/>
-				{sipocOpen && (
-					<div className="min-h-0 flex-1 overflow-y-auto">
-						<TeleprompterSection
-							currentQuestion={teleprompterQuestion}
-							questionQueue={questionQueue}
-							completenessScore={completenessScore}
-							sipocCoverage={sipocCoverage}
-							gapType={gapType}
-							compact
-						/>
-					</div>
-				)}
-			</div>
+			{/* Sugerencias IA */}
+			<AccordionHeader
+				title="Sugerencias IA"
+				open={sipocOpen}
+				onToggle={() => setSipocOpen(!sipocOpen)}
+				badge={gapType || "SIPOC"}
+			/>
+			{sipocOpen && (
+				<div className="min-h-0 flex-1 overflow-y-auto">
+					<TeleprompterSection
+						currentQuestion={teleprompterQuestion}
+						questionQueue={questionQueue}
+						completenessScore={completenessScore}
+						sipocCoverage={sipocCoverage}
+						gapType={gapType}
+						compact
+					/>
+				</div>
+			)}
 
-			{/* Documentos — accordion */}
-			<div className={`flex flex-col border-t border-[#334155] ${docsOpen ? "max-h-[35%]" : ""}`}>
-				<AccordionHeader
-					title="Documentos"
-					open={docsOpen}
-					onToggle={() => setDocsOpen(!docsOpen)}
-				/>
-				{docsOpen && (
-					<div className="min-h-0 flex-1 overflow-y-auto">
-						<DocumentsSection
-							organizationId={organizationId}
-							processId={processId}
-						/>
-					</div>
-				)}
-			</div>
+			{/* Documentos */}
+			<AccordionHeader
+				title="Documentos"
+				open={docsOpen}
+				onToggle={() => setDocsOpen(!docsOpen)}
+			/>
+			{docsOpen && (
+				<div className="min-h-0 flex-1 overflow-y-auto">
+					<DocumentsSection
+						organizationId={organizationId}
+						processId={processId}
+					/>
+				</div>
+			)}
 		</div>
 	);
 }
@@ -106,7 +100,7 @@ function AccordionHeader({
 		<button
 			type="button"
 			onClick={onToggle}
-			className="flex w-full items-center gap-2 px-3 py-2 text-left transition-colors hover:bg-[#1E293B]"
+			className="flex w-full shrink-0 items-center gap-2 border-t border-[#334155] px-3 py-2 text-left transition-colors first:border-t-0 hover:bg-[#1E293B]"
 		>
 			{open ? (
 				<ChevronDownIcon className="h-3 w-3 text-[#64748B]" />

@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
-	MessageSquareIcon,
 	SendIcon,
 	MicIcon,
 	MicOffIcon,
@@ -152,19 +151,6 @@ export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 
 	return (
 		<div className="flex h-full flex-col overflow-hidden">
-			{/* Header */}
-			<div className="flex items-center gap-2 border-b border-[#334155] px-3 py-2">
-				<MessageSquareIcon className="h-3.5 w-3.5 text-[#64748B]" />
-				<span className="text-xs font-medium text-[#94A3B8]">
-					Transcripcion en vivo
-				</span>
-				{transcript.length > 0 && (
-					<span className="ml-auto text-[10px] tabular-nums text-[#64748B]">
-						{transcript.length}
-					</span>
-				)}
-			</div>
-
 			{/* Transcript list */}
 			<div ref={scrollRef} className="flex-1 overflow-y-auto no-scrollbar">
 				{transcript.length === 0 ? (
