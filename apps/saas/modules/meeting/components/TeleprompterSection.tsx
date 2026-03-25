@@ -169,10 +169,20 @@ export function TeleprompterSection({
 
 	const [answeredAiQuestions, setAnsweredAiQuestions] = useState<Set<string>>(new Set());
 
+	const [sending, setSending] = useState(false);
+
 	const handleAnswerAiQuestion = useCallback(async (question?: string) => {
-		if (!sessionId || !answerText.trim()) return;
+		if (!sessionId || !answerText.trim() || sending) return;
 		const q = question || currentQuestion || "";
 		const fullText = `[Pregunta: ${q}] Respuesta: ${answerText.trim()}`;
+
+		// Immediate feedback — clear input and collapse BEFORE API call
+		const savedText = answerText.trim();
+		setAnswerText("");
+		setExpandedQ(null);
+		setAnsweredAiQuestions((prev) => new Set([...prev, q]));
+		setSending(true);
+
 		try {
 			const res = await fetch(`/api/sessions/${sessionId}/transcript`, {
 				method: "POST",
@@ -180,38 +190,37 @@ export function TeleprompterSection({
 				body: JSON.stringify({ text: fullText }),
 			});
 			if (!res.ok) throw new Error(`HTTP ${res.status}`);
-			toast.success("IA procesando respuesta...");
-			setAnswerText("");
-			setExpandedQ(null);
-			setAnsweredAiQuestions((prev) => new Set([...prev, q]));
 		} catch {
 			toast.error("Error al enviar respuesta");
+		} finally {
+			setSending(false);
 		}
-	}, [sessionId, answerText, currentQuestion]);
+	}, [sessionId, answerText, currentQuestion, sending]);
 
 	const handleAnswer = useCallback(async (questionIdx: number) => {
-		if (!sessionId || !answerText.trim()) return;
+		if (!sessionId || !answerText.trim() || sending) return;
 		const question = DEFAULT_SIPOC_QUESTIONS[questionIdx]?.question || "";
 		const fullText = `[Pregunta: ${question}] Respuesta: ${answerText.trim()}`;
+
+		// Immediate feedback — clear input and collapse BEFORE API call
+		setAnswerText("");
+		setExpandedQ(null);
+		setManuallyAnswered((prev) => new Set([...prev, questionIdx]));
+		setSending(true);
+
 		try {
-			// Send to transcript API — triggers AI extraction pipeline
-			// The AI understands context and creates the right node types
-			// (tasks, gateways, lanes, etc.) not just raw tasks
 			const res = await fetch(`/api/sessions/${sessionId}/transcript`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ text: fullText }),
 			});
 			if (!res.ok) throw new Error(`HTTP ${res.status}`);
-			toast.success("IA procesando respuesta...");
-			setAnswerText("");
-			setExpandedQ(null);
-			// Mark question as answered
-			setManuallyAnswered((prev) => new Set([...prev, questionIdx]));
 		} catch {
 			toast.error("Error al enviar respuesta");
+		} finally {
+			setSending(false);
 		}
-	}, [sessionId, answerText]);
+	}, [sessionId, answerText, sending]);
 
 	// Merge server coverage with local answered questions for immediate feedback
 	const localCoverage = useMemo(() => {
@@ -251,7 +260,7 @@ export function TeleprompterSection({
 	const hasAiSuggestions = !!currentQuestion;
 
 	return (
-		<div className="flex flex-col overflow-hidden">
+		<div className="flex h-full flex-col overflow-hidden">
 			{/* Header — hidden in compact mode (RightPanel provides accordion header) */}
 			{!compact && (
 				<div className="flex items-center gap-2 border-b border-[#334155] px-3 py-2">

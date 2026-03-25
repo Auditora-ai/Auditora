@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { toast } from "sonner";
 import { useLiveSessionContext } from "../context/LiveSessionContext";
 import { CompletenessRing } from "./CompletenessRing";
@@ -19,7 +19,7 @@ interface TopBarProps {
 	clientName?: string;
 }
 
-export function TopBar({ processName, clientName }: TopBarProps) {
+export function TopBar({ processName: initialName, clientName }: TopBarProps) {
 	const {
 		botActivity,
 		completenessScore,
@@ -28,8 +28,46 @@ export function TopBar({ processName, clientName }: TopBarProps) {
 		exportDiagram,
 		endSession,
 		sessionId,
+		processId,
 		shareToken,
+		modelerApi,
 	} = useLiveSessionContext();
+
+	const [processName, setProcessName] = useState(initialName || "");
+	const [editing, setEditing] = useState(false);
+	const inputRef = useRef<HTMLInputElement>(null);
+
+	const saveProcessName = async (name: string) => {
+		const trimmed = name.trim();
+		if (!trimmed || trimmed === processName) {
+			setEditing(false);
+			return;
+		}
+		setProcessName(trimmed);
+		setEditing(false);
+
+		// Update pool name in bpmn-js
+		try {
+			const modeler = modelerApi?.getModeler();
+			if (modeler) {
+				const elementRegistry = modeler.get("elementRegistry");
+				const modeling = modeler.get("modeling");
+				const participants = elementRegistry.filter((e: any) => e.type === "bpmn:Participant");
+				if (participants.length > 0) {
+					modeling.updateProperties(participants[0], { name: trimmed });
+				}
+			}
+		} catch { /* ok */ }
+
+		// Save to DB
+		if (processId) {
+			fetch(`/api/processes/${processId}`, {
+				method: "PATCH",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ name: trimmed }),
+			}).catch(() => {});
+		}
+	};
 
 	return (
 		<div
@@ -53,9 +91,28 @@ export function TopBar({ processName, clientName }: TopBarProps) {
 					</span>
 				</span>
 				<div className="h-4 w-px bg-[#334155]" />
-				<span className="max-w-[280px] truncate text-sm text-[#F1F5F9]">
-					{processName || "Nueva sesion"}
-				</span>
+				{editing ? (
+					<input
+						ref={inputRef}
+						defaultValue={processName}
+						onBlur={(e) => saveProcessName(e.target.value)}
+						onKeyDown={(e) => {
+							if (e.key === "Enter") saveProcessName(e.currentTarget.value);
+							if (e.key === "Escape") setEditing(false);
+						}}
+						autoFocus
+						className="max-w-[280px] rounded bg-[#1E293B] px-2 py-0.5 text-sm text-[#F1F5F9] outline-none ring-1 ring-[#2563EB]"
+					/>
+				) : (
+					<button
+						type="button"
+						onClick={() => setEditing(true)}
+						className="max-w-[280px] truncate rounded px-1 py-0.5 text-sm text-[#F1F5F9] transition-colors hover:bg-[#1E293B]"
+						title="Click para editar nombre del proceso"
+					>
+						{processName || "Nueva sesion"}
+					</button>
+				)}
 				{clientName && (
 					<span className="text-xs text-[#64748B]">
 						— {clientName}

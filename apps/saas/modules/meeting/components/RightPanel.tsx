@@ -40,7 +40,7 @@ export function RightPanel({ organizationId, processId }: RightPanelProps) {
 					badge={transcript.length > 0 ? `${transcript.length}` : undefined}
 				/>
 				{transcriptOpen && (
-					<div className="min-h-0 flex-1 overflow-hidden">
+					<div className="min-h-0 flex-1 overflow-y-auto">
 						<TranscriptSection transcript={transcript} />
 					</div>
 				)}
@@ -55,7 +55,7 @@ export function RightPanel({ organizationId, processId }: RightPanelProps) {
 					badge={gapType || "SIPOC"}
 				/>
 				{sipocOpen && (
-					<div className="min-h-0 flex-1 overflow-hidden">
+					<div className="min-h-0 flex-1 overflow-y-auto">
 						<TeleprompterSection
 							currentQuestion={teleprompterQuestion}
 							questionQueue={questionQueue}
@@ -76,7 +76,7 @@ export function RightPanel({ organizationId, processId }: RightPanelProps) {
 					onToggle={() => setDocsOpen(!docsOpen)}
 				/>
 				{docsOpen && (
-					<div className="min-h-0 flex-1 overflow-hidden">
+					<div className="min-h-0 flex-1 overflow-y-auto">
 						<DocumentsSection
 							organizationId={organizationId}
 							processId={processId}
