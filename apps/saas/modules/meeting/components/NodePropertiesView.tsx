@@ -21,6 +21,7 @@ import {
 	CpuIcon,
 	ArrowRightLeftIcon,
 	DollarSignIcon,
+	ClipboardListIcon,
 } from "lucide-react";
 import { useLiveSessionContext } from "../context/LiveSessionContext";
 import type { DiagramNode, NodeProperties } from "../types";
@@ -63,8 +64,7 @@ const GROUP_ICONS: Record<string, React.ElementType> = {
 };
 
 export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesViewProps) {
-	const { nodes, sessionId, modelerApi } = useLiveSessionContext();
-	const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+	const { nodes, sessionId, modelerApi, selectedNodeId, setSelectedNodeId } = useLiveSessionContext();
 
 	const [editingState, setEditingState] = useState<Record<string, NodeProperties>>({});
 	const saveTimers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
@@ -195,8 +195,8 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 								onClick={() => setSelectedNodeId(node.id)}
 								className={`flex w-full items-center gap-2.5 px-4 py-2.5 text-left transition-all ${
 									isSelected
-										? "border-l-2 border-[#2563EB] bg-white"
-										: "border-l-2 border-transparent hover:bg-white/60"
+										? "border-l-[3px] border-[#2563EB] bg-[#EFF6FF] shadow-[inset_0_0_0_1px_rgba(37,99,235,0.1)]"
+										: "border-l-[3px] border-transparent hover:bg-[#F8FAFC]"
 								}`}
 							>
 								{/* Node icon with type color */}
@@ -217,7 +217,7 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 											<span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#2563EB]" />
 										)}
 									</div>
-									{/* Progress bar */}
+									{/* Progress bar + procedure indicator */}
 									<div className="mt-1 flex items-center gap-1.5">
 										<div className="h-1 flex-1 rounded-full bg-[#E2E8F0]">
 											<div
@@ -229,6 +229,11 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 											/>
 										</div>
 										<span className="text-[9px] tabular-nums text-[#94A3B8]">{progress.pct}%</span>
+										{node.dbNode?.procedure && (
+											<span title="Tiene procedimiento">
+												<ClipboardListIcon className="h-3 w-3 shrink-0 text-[#2563EB]" />
+											</span>
+										)}
 									</div>
 								</div>
 							</button>

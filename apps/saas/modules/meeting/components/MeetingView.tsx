@@ -11,6 +11,7 @@ import { TopBar } from "./TopBar";
 import { LeftPanel } from "./LeftPanel";
 import { CentralCanvas } from "./CentralCanvas";
 import { RightPanel } from "./RightPanel";
+import { SopPanel } from "./SopPanel";
 import { BottomBar } from "./BottomBar";
 
 interface MeetingViewProps {
@@ -47,6 +48,7 @@ export function MeetingView({
 	// Properties view tab state
 	const [activeCentralTab, setActiveCentralTab] = useState("diagram");
 	const [openPropertyTabs, setOpenPropertyTabs] = useState<PropertyTab[]>([]);
+	const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
 	const openPropertyTab = useCallback((elementId: string, label: string) => {
 		const tabId = `props:${elementId}`;
@@ -163,6 +165,7 @@ export function MeetingView({
 		selectedTool,
 		activeCentralTab,
 		openPropertyTabs,
+		selectedNodeId,
 		modelerApi,
 		toggleAi: () => setAiEnabled((prev) => !prev),
 		setSelectedTool,
@@ -173,6 +176,7 @@ export function MeetingView({
 		openPropertyTab,
 		closePropertyTab,
 		setActiveCentralTab,
+		setSelectedNodeId,
 	};
 
 	return (
@@ -195,7 +199,11 @@ export function MeetingView({
 				<TopBar processName={processName} clientName={clientName} />
 				<LeftPanel collapsed={leftCollapsed} />
 				<CentralCanvas containerRef={containerRef} leftCollapsed={leftCollapsed} rightCollapsed={rightCollapsed} onToggleLeft={() => setLeftCollapsed((p) => !p)} onToggleRight={() => setRightCollapsed((p) => !p)} />
-				<RightPanel organizationId={organizationId} processId={processId} collapsed={rightCollapsed} />
+				{activeCentralTab !== "diagram" && selectedNodeId ? (
+					<SopPanel collapsed={rightCollapsed} />
+				) : (
+					<RightPanel organizationId={organizationId} processId={processId} collapsed={rightCollapsed} />
+				)}
 				<BottomBar />
 			</div>
 		</LiveSessionProvider>

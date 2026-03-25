@@ -43,6 +43,9 @@ export interface LiveSessionState {
 	/** Open property tabs: [{ id: "props:{elementId}", label: "Process Name", elementId }] */
 	openPropertyTabs: PropertyTab[];
 
+	// Selected node in properties view (shared with SopPanel)
+	selectedNodeId: string | null;
+
 	// Modeler reference (any to avoid circular import with useBpmnModeler)
 	modelerApi: any | null;
 }
@@ -66,6 +69,8 @@ export interface LiveSessionActions {
 	closePropertyTab: (tabId: string) => void;
 	/** Switch the active central tab (diagram or a property tab) */
 	setActiveCentralTab: (tabId: string) => void;
+	/** Set selected node in properties view */
+	setSelectedNodeId: (nodeId: string | null) => void;
 }
 
 export type LiveSessionContextValue = LiveSessionState & LiveSessionActions;

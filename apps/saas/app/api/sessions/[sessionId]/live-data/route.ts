@@ -76,6 +76,7 @@ export async function GET(
 				connections: true,
 				confidence: true,
 				properties: true,
+				procedure: true,
 			},
 		});
 
@@ -133,6 +134,7 @@ export async function GET(
 				connections: n.connections,
 				confidence: n.confidence,
 				properties: n.properties,
+				procedure: n.procedure,
 			})),
 			teleprompterQuestion,
 			completenessScore,

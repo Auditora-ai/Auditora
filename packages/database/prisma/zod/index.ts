@@ -84,7 +84,7 @@ export type MeetingSessionScalarFieldEnum = z.infer<typeof MeetingSessionScalarF
 
 // File: DiagramNodeScalarFieldEnum.schema.ts
 
-export const DiagramNodeScalarFieldEnumSchema = z.enum(['id', 'sessionId', 'nodeType', 'label', 'state', 'lane', 'confidence', 'positionX', 'positionY', 'connections', 'formedAt', 'confirmedAt', 'rejectedAt', 'parentId', 'properties', 'createdAt', 'updatedAt'])
+export const DiagramNodeScalarFieldEnumSchema = z.enum(['id', 'sessionId', 'nodeType', 'label', 'state', 'lane', 'confidence', 'positionX', 'positionY', 'connections', 'formedAt', 'confirmedAt', 'rejectedAt', 'parentId', 'properties', 'procedure', 'createdAt', 'updatedAt'])
 
 export type DiagramNodeScalarFieldEnum = z.infer<typeof DiagramNodeScalarFieldEnumSchema>;
 
@@ -689,6 +689,7 @@ export const DiagramNodeSchema = z.object({
   rejectedAt: z.date().nullish(),
   parentId: z.string().nullish(),
   properties: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  procedure: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });

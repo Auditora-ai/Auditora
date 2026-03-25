@@ -462,6 +462,9 @@ model DiagramNode {
   // Task properties (description, SLA, systems, inputs/outputs, costs, etc.)
   properties  Json?
 
+  // Generated SOP/procedure document (ProcedureResult JSON)
+  procedure   Json?
+
   comments    NodeComment[]
 
   createdAt   DateTime     @default(now())

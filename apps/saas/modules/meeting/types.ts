@@ -10,6 +10,8 @@ export interface DiagramNode {
 	confidence?: number | null;
 	/** Task properties: description, SLA, systems, inputs/outputs, costs, etc. */
 	properties?: NodeProperties | null;
+	/** Generated SOP/procedure document */
+	procedure?: Record<string, any> | null;
 }
 
 export interface NodeProperties {
