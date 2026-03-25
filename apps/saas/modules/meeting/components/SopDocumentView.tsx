@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import {
 	SparklesIcon,
 	RefreshCwIcon,
@@ -8,10 +8,15 @@ import {
 	CheckCircle2Icon,
 	Loader2Icon,
 	DownloadIcon,
-	ChevronDownIcon,
-	ChevronRightIcon,
+	ImageIcon,
+	VideoIcon,
+	PencilIcon,
 } from "lucide-react";
-import type { ProcedureResult } from "@repo/ai";
+import type { ProcedureResult, ProcedureStep } from "@repo/ai";
+import { ProcedureEditor } from "./ProcedureEditor";
+
+// Track in-flight generations globally so they survive component unmount
+export const pendingGenerations = new Map<string, Promise<ProcedureResult | null>>();
 
 interface SopDocumentViewProps {
 	nodeId: string;
@@ -24,20 +29,72 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 	const [procedure, setProcedure] = useState<ProcedureResult | null>(initialProcedure);
 	const [generating, setGenerating] = useState(false);
 	const [error, setError] = useState<string | null>(null);
+	const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-	// Sync with prop changes (e.g. live-data poll updates)
 	useEffect(() => {
 		if (initialProcedure) setProcedure(initialProcedure);
 	}, [initialProcedure]);
 
+	const fetchedRef = useRef(false);
+	useEffect(() => { fetchedRef.current = false; }, [nodeId]);
+	useEffect(() => {
+		if (procedure || initialProcedure || fetchedRef.current) return;
+		fetchedRef.current = true;
+		fetch(`/api/sessions/${sessionId}/nodes/${nodeId}/procedure`)
+			.then((r) => r.json())
+			.then((data) => { if (data.procedure) setProcedure(data.procedure as ProcedureResult); })
+			.catch(() => {});
+	}, [nodeId, sessionId, procedure, initialProcedure]);
+
+	useEffect(() => {
+		const pending = pendingGenerations.get(nodeId);
+		if (pending) {
+			setGenerating(true);
+			pending.then((result) => { if (result) setProcedure(result); }).catch(() => {}).finally(() => setGenerating(false));
+		}
+	}, [nodeId]);
+
+	// Debounced save to DB
+	const saveProcedure = useCallback((updated: ProcedureResult) => {
+		setProcedure(updated);
+		if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+		saveTimerRef.current = setTimeout(() => {
+			fetch(`/api/sessions/${sessionId}/nodes/${nodeId}/procedure`, {
+				method: "PATCH",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ procedure: updated }),
+			}).catch(() => {});
+		}, 1500);
+	}, [sessionId, nodeId]);
+
+	// Helper to update a top-level field
+	const updateField = useCallback((field: keyof ProcedureResult, value: any) => {
+		if (!procedure) return;
+		saveProcedure({ ...procedure, [field]: value });
+	}, [procedure, saveProcedure]);
+
+	// Helper to update a step field
+	const updateStep = useCallback((stepIndex: number, field: keyof ProcedureStep, value: any) => {
+		if (!procedure) return;
+		const steps = [...procedure.steps];
+		steps[stepIndex] = { ...steps[stepIndex], [field]: value };
+		saveProcedure({ ...procedure, steps });
+	}, [procedure, saveProcedure]);
+
 	const handleGenerate = useCallback(async () => {
 		setGenerating(true);
 		setError(null);
+		const promise = fetch(`/api/sessions/${sessionId}/nodes/${nodeId}/procedure`, { method: "POST" })
+			.then(async (res) => {
+				const data = await res.json();
+				if (!res.ok) throw new Error(data.error || "Error al generar");
+				return data.procedure as ProcedureResult;
+			})
+			.finally(() => pendingGenerations.delete(nodeId));
+		pendingGenerations.set(nodeId, promise);
 		try {
-			const res = await fetch(`/api/sessions/${sessionId}/nodes/${nodeId}/procedure`, { method: "POST" });
-			const data = await res.json();
-			if (!res.ok) throw new Error(data.error || "Error al generar");
-			if (data.procedure) setProcedure(data.procedure as ProcedureResult);
+			const result = await promise;
+			if (result) setProcedure(result);
 		} catch (err: any) {
 			setError(err.message);
 		} finally {
@@ -49,17 +106,11 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 		if (!procedure) return;
 		const lines: string[] = [];
 		lines.push(`PROCEDIMIENTO: ${procedure.activityName}`);
-		lines.push(`Codigo: ${procedure.procedureCode || "—"}`);
 		lines.push(`Proceso: ${procedure.processName}`);
 		lines.push(`Responsable: ${procedure.responsible}`);
-		if (procedure.frequency) lines.push(`Frecuencia: ${procedure.frequency}`);
 		lines.push("");
-		lines.push(`OBJETIVO`);
-		lines.push(procedure.objective);
-		lines.push("");
-		lines.push(`ALCANCE`);
-		lines.push(procedure.scope);
-		lines.push("");
+		lines.push(`OBJETIVO\n${procedure.objective}\n`);
+		lines.push(`ALCANCE\n${procedure.scope}\n`);
 		if (procedure.prerequisites.length > 0) {
 			lines.push("PRERREQUISITOS");
 			procedure.prerequisites.forEach((p) => lines.push(`  - ${p}`));
@@ -69,20 +120,10 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 		procedure.steps.forEach((step) => {
 			lines.push(`${step.stepNumber}. ${step.action}`);
 			lines.push(`   ${step.description}`);
-			if (step.responsible) lines.push(`   Responsable: ${step.responsible}`);
 			if (step.systems.length > 0) lines.push(`   Sistemas: ${step.systems.join(", ")}`);
-			if (step.inputs.length > 0) lines.push(`   Entradas: ${step.inputs.join(", ")}`);
-			if (step.outputs.length > 0) lines.push(`   Salidas: ${step.outputs.join(", ")}`);
-			if (step.controls.length > 0) lines.push(`   Controles: ${step.controls.join(", ")}`);
 			step.exceptions.forEach((ex) => lines.push(`   Si ${ex.condition} → ${ex.action}`));
-			if (step.estimatedTime) lines.push(`   Tiempo: ${step.estimatedTime}`);
 			lines.push("");
 		});
-		if (procedure.indicators.length > 0) {
-			lines.push("INDICADORES");
-			procedure.indicators.forEach((ind) => lines.push(`  - ${ind.name}${ind.target ? ` (Meta: ${ind.target})` : ""}`));
-			lines.push("");
-		}
 		if (procedure.gaps.length > 0) {
 			lines.push("INFORMACIÓN PENDIENTE");
 			procedure.gaps.forEach((g) => lines.push(`  - ${g}`));
@@ -127,7 +168,7 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 				<div className="text-center">
 					<p className="text-sm font-medium text-[#0F172A]">Sin procedimiento</p>
 					<p className="mt-1 max-w-sm text-xs text-[#64748B]">
-						Genera un documento SOP completo usando la transcripcion de la sesion y el contexto del diagrama BPMN. Puedes refinarlo con el chat de IA.
+						Genera un documento SOP completo usando la transcripcion de la sesion y el contexto del diagrama BPMN.
 					</p>
 				</div>
 				<button onClick={handleGenerate} className="flex items-center gap-2 rounded-lg bg-[#2563EB] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#1D4ED8]">
@@ -137,7 +178,6 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 		);
 	}
 
-	// Full document view
 	return (
 		<div className="mx-auto max-w-[720px] px-8 py-6">
 			{/* Document header */}
@@ -157,13 +197,11 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 						</button>
 					</div>
 				</div>
-				{/* Metadata grid */}
 				<div className="mt-4 grid grid-cols-3 gap-3">
 					<MetaField label="Codigo" value={procedure.procedureCode || "—"} />
 					<MetaField label="Responsable" value={procedure.responsible} />
 					<MetaField label="Frecuencia" value={procedure.frequency || "—"} />
 				</div>
-				{/* Confidence bar */}
 				{procedure.overallConfidence != null && (
 					<div className="mt-3 flex items-center gap-2">
 						<span className="text-[10px] text-[#94A3B8]">Confianza</span>
@@ -181,14 +219,22 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 				)}
 			</div>
 
-			{/* Objective */}
+			{/* Objective — editable */}
 			<DocSection title="Objetivo">
-				<p className="text-sm leading-relaxed text-[#334155]">{procedure.objective}</p>
+				<EditableText
+					value={procedure.objective}
+					onChange={(v) => updateField("objective", v)}
+					sessionId={sessionId}
+				/>
 			</DocSection>
 
-			{/* Scope */}
+			{/* Scope — editable */}
 			<DocSection title="Alcance">
-				<p className="text-sm leading-relaxed text-[#334155]">{procedure.scope}</p>
+				<EditableText
+					value={procedure.scope}
+					onChange={(v) => updateField("scope", v)}
+					sessionId={sessionId}
+				/>
 			</DocSection>
 
 			{/* Prerequisites */}
@@ -205,10 +251,10 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 				</DocSection>
 			)}
 
-			{/* Steps */}
+			{/* Steps — each step description is editable */}
 			<DocSection title={`Pasos del Procedimiento (${procedure.steps.length})`}>
 				<div className="space-y-4">
-					{procedure.steps.map((step) => (
+					{procedure.steps.map((step, idx) => (
 						<div key={step.stepNumber} className="rounded-xl border border-[#E2E8F0] bg-white p-4">
 							<div className="flex items-start gap-3">
 								<span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#2563EB] text-xs font-bold text-white">
@@ -216,19 +262,24 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 								</span>
 								<div className="min-w-0 flex-1">
 									<p className="text-sm font-semibold text-[#0F172A]">{step.action}</p>
-									<p className="mt-1 text-sm leading-relaxed text-[#64748B]">{step.description}</p>
+
+									{/* Editable description */}
+									<div className="mt-1">
+										<EditableText
+											value={step.description}
+											onChange={(v) => updateStep(idx, "description", v)}
+											sessionId={sessionId}
+											placeholder="Describe este paso en detalle..."
+										/>
+									</div>
 
 									{/* Metadata row */}
 									<div className="mt-2 flex flex-wrap items-center gap-2">
 										{step.responsible && (
-											<span className="rounded-md bg-[#F1F5F9] px-2 py-0.5 text-[10px] font-medium text-[#475569]">
-												{step.responsible}
-											</span>
+											<span className="rounded-md bg-[#F1F5F9] px-2 py-0.5 text-[10px] font-medium text-[#475569]">{step.responsible}</span>
 										)}
 										{step.systems.map((s) => (
-											<span key={s} className="rounded-md bg-[#EFF6FF] px-2 py-0.5 text-[10px] font-medium text-[#2563EB]">
-												{s}
-											</span>
+											<span key={s} className="rounded-md bg-[#EFF6FF] px-2 py-0.5 text-[10px] font-medium text-[#2563EB]">{s}</span>
 										))}
 										{step.estimatedTime && (
 											<span className="text-[10px] text-[#94A3B8]">{step.estimatedTime}</span>
@@ -281,9 +332,16 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 										</div>
 									)}
 
-									{step.notes && (
-										<p className="mt-2 text-[11px] italic text-[#94A3B8]">{step.notes}</p>
-									)}
+									{/* Editable notes + media area */}
+									<div className="mt-2">
+										<EditableText
+											value={step.notes || ""}
+											onChange={(v) => updateStep(idx, "notes", v)}
+											sessionId={sessionId}
+											placeholder="Notas, capturas de pantalla, videos..."
+											mini
+										/>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -306,7 +364,7 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 				</DocSection>
 			)}
 
-			{/* Gaps */}
+			{/* Gaps with media suggestions */}
 			{procedure.gaps.length > 0 && (
 				<DocSection title="Informacion Pendiente">
 					<div className="space-y-2">
@@ -320,22 +378,162 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 				</DocSection>
 			)}
 
-			{/* Definitions */}
-			{procedure.definitions && procedure.definitions.length > 0 && (
-				<DocSection title="Definiciones">
-					<div className="space-y-1.5">
-						{procedure.definitions.map((def, i) => (
-							<p key={i} className="text-sm">
-								<span className="font-medium text-[#0F172A]">{def.term}:</span>{" "}
-								<span className="text-[#64748B]">{def.definition}</span>
-							</p>
-						))}
-					</div>
-				</DocSection>
-			)}
+			{/* Media suggestions from AI */}
+			<DocSection title="Material de Apoyo">
+				<div className="space-y-2">
+					<MediaPlaceholder
+						icon={<ImageIcon className="h-4 w-4" />}
+						label="Agregar captura de pantalla"
+						hint="Captura del sistema, formulario o pantalla relevante a este procedimiento"
+						sessionId={sessionId}
+						onInsert={(content) => {
+							updateField("relatedDocuments", [...(procedure.relatedDocuments || []), content]);
+						}}
+					/>
+					<MediaPlaceholder
+						icon={<VideoIcon className="h-4 w-4" />}
+						label="Agregar video explicativo"
+						hint="Video de YouTube, Vimeo o Loom mostrando cómo ejecutar el procedimiento"
+						isVideo
+						sessionId={sessionId}
+						onInsert={(content) => {
+							updateField("relatedDocuments", [...(procedure.relatedDocuments || []), content]);
+						}}
+					/>
+				</div>
+			</DocSection>
 		</div>
 	);
 }
+
+// ─── Editable inline text with TipTap ───────────────────────────────
+
+function EditableText({
+	value,
+	onChange,
+	sessionId,
+	placeholder,
+	mini,
+}: {
+	value: string;
+	onChange: (value: string) => void;
+	sessionId: string;
+	placeholder?: string;
+	mini?: boolean;
+}) {
+	const [editing, setEditing] = useState(false);
+	const [richContent, setRichContent] = useState<Record<string, any> | undefined>(undefined);
+
+	if (editing) {
+		return (
+			<div className="rounded-lg ring-1 ring-[#2563EB]/30">
+				<ProcedureEditor
+					content={richContent || value}
+					onChange={(doc) => {
+						setRichContent(doc);
+						// Extract plain text from TipTap JSON for the procedure field
+						const text = extractText(doc);
+						onChange(text);
+					}}
+					sessionId={sessionId}
+				/>
+				<div className="flex justify-end border-t border-[#E2E8F0] px-2 py-1">
+					<button
+						type="button"
+						onClick={() => setEditing(false)}
+						className="rounded px-2 py-0.5 text-[10px] font-medium text-[#2563EB] hover:bg-[#EFF6FF]"
+					>
+						Listo
+					</button>
+				</div>
+			</div>
+		);
+	}
+
+	return (
+		<div
+			className={`group/edit relative cursor-text rounded-lg transition-colors hover:bg-[#F8FAFC] ${mini ? "px-2 py-1" : "px-3 py-2"}`}
+			onClick={() => setEditing(true)}
+		>
+			{value ? (
+				<p className={`leading-relaxed text-[#334155] ${mini ? "text-[11px] italic text-[#94A3B8]" : "text-sm"}`}>
+					{value}
+				</p>
+			) : (
+				<p className={`italic text-[#CBD5E1] ${mini ? "text-[11px]" : "text-sm"}`}>
+					{placeholder || "Click para editar..."}
+				</p>
+			)}
+			<PencilIcon className="absolute right-2 top-2 h-3 w-3 text-[#CBD5E1] opacity-0 transition-opacity group-hover/edit:opacity-100" />
+		</div>
+	);
+}
+
+/** Extract plain text from TipTap JSON doc */
+function extractText(doc: Record<string, any>): string {
+	if (!doc?.content) return "";
+	return doc.content
+		.map((node: any) => {
+			if (node.content) {
+				return node.content.map((c: any) => c.text || "").join("");
+			}
+			return "";
+		})
+		.join("\n")
+		.trim();
+}
+
+// ─── Media placeholder ──────────────────────────────────────────────
+
+function MediaPlaceholder({
+	icon,
+	label,
+	hint,
+	isVideo,
+	sessionId,
+	onInsert,
+}: {
+	icon: React.ReactNode;
+	label: string;
+	hint: string;
+	isVideo?: boolean;
+	sessionId: string;
+	onInsert: (content: string) => void;
+}) {
+	const handleClick = useCallback(() => {
+		if (isVideo) {
+			const url = prompt("URL del video (YouTube, Vimeo, Loom):");
+			if (url) onInsert(url);
+		} else {
+			const input = document.createElement("input");
+			input.type = "file";
+			input.accept = "image/*";
+			input.onchange = () => {
+				const file = input.files?.[0];
+				if (file) onInsert(file.name);
+			};
+			input.click();
+		}
+	}, [isVideo, onInsert]);
+
+	return (
+		<button
+			type="button"
+			onClick={handleClick}
+			className="flex w-full items-center gap-3 rounded-lg border border-dashed border-[#E2E8F0] px-4 py-3 text-left transition-colors hover:border-[#2563EB] hover:bg-[#EFF6FF]/50"
+		>
+			<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#F1F5F9] text-[#94A3B8]">
+				{icon}
+			</div>
+			<div>
+				<p className="text-xs font-medium text-[#334155]">{label}</p>
+				<p className="text-[10px] text-[#94A3B8]">{hint}</p>
+			</div>
+		</button>
+	);
+}
+
+// ─── Helpers ────────────────────────────────────────────────────────
 
 function MetaField({ label, value }: { label: string; value: string }) {
 	return (

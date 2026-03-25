@@ -37,7 +37,7 @@ export default async function LiveSessionPage({
 			processId={session.processDefinitionId || undefined}
 			organizationId={session.organizationId}
 			organizationSlug={organizationSlug}
-			bpmnXml={session.processDefinition?.bpmnXml || null}
+			bpmnXml={session.bpmnXml || session.processDefinition?.bpmnXml || null}
 		/>
 	);
 }

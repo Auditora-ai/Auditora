@@ -25,12 +25,13 @@ import {
 	SparklesIcon,
 	Loader2Icon,
 	FileTextIcon,
+	InfoIcon,
 } from "lucide-react";
 import { useLiveSessionContext } from "../context/LiveSessionContext";
 import type { DiagramNode, NodeProperties } from "../types";
 import { PROPERTY_FIELDS, PROPERTY_GROUPS } from "../lib/node-properties-schema";
 import { ProcedureEditor } from "./ProcedureEditor";
-import { SopDocumentView } from "./SopDocumentView";
+import { SopDocumentView, pendingGenerations } from "./SopDocumentView";
 
 interface NodePropertiesViewProps {
 	tabId: string;
@@ -148,7 +149,25 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 	const selectedConfig = selectedNode ? getConfig(selectedNode.type) : getConfig("");
 	const selectedState = selectedNode?.dbNode?.state || "forming";
 	const stateBadge = STATE_BADGE[selectedState] || STATE_BADGE.forming;
-	const docMode: "description" | "sop" = (selectedProps as any).docMode === "sop" ? "sop" : "description";
+	// docMode per node — persisted locally (ref survives re-renders) + DB
+	const docModeCache = useRef<Map<string, "description" | "sop">>(new Map());
+	const docMode: "description" | "sop" = selectedNodeId
+		? (docModeCache.current.get(selectedNodeId) ?? ((selectedProps as any).docMode === "sop" ? "sop" : "description"))
+		: "description";
+	const setDocMode = useCallback((mode: "description" | "sop") => {
+		if (!selectedNodeId) return;
+		docModeCache.current.set(selectedNodeId, mode);
+		saveProperties(selectedNodeId, { docMode: mode });
+	}, [selectedNodeId, saveProperties]);
+
+	// Re-render periodically to update working indicators from global maps
+	const [, setTick] = useState(0);
+	useEffect(() => {
+		const id = setInterval(() => setTick((t) => t + 1), 1500);
+		return () => clearInterval(id);
+	}, []);
+
+	const isNodeWorking = (nodeId: string) => pendingGenerations.has(nodeId) || pendingDrafts.has(nodeId);
 
 	// Count documented fields for progress
 	const getDocProgress = (nodeId: string) => {
@@ -205,11 +224,18 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 								}`}
 							>
 								{/* Node icon with type color */}
-								<div
-									className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md"
-									style={{ backgroundColor: cfg.bg, color: cfg.color }}
-								>
-									<Icon className="h-3.5 w-3.5" />
+								<div className="relative">
+									<div
+										className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md"
+										style={{ backgroundColor: cfg.bg, color: cfg.color }}
+									>
+										<Icon className="h-3.5 w-3.5" />
+									</div>
+									{isNodeWorking(node.id) && (
+										<div className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-[#2563EB]">
+											<div className="h-full w-full animate-ping rounded-full bg-[#2563EB]" />
+										</div>
+									)}
 								</div>
 
 								{/* Node info */}
@@ -290,7 +316,7 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 							<div className="mt-3 flex rounded-lg bg-[#F1F5F9] p-0.5">
 								<button
 									type="button"
-									onClick={() => saveProperties(selectedNodeId!, { docMode: "description" })}
+									onClick={() => setDocMode("description")}
 									className={`flex flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-[11px] font-medium transition-colors ${
 										docMode === "description"
 											? "bg-white text-[#0F172A] shadow-sm"
@@ -302,7 +328,7 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 								</button>
 								<button
 									type="button"
-									onClick={() => saveProperties(selectedNodeId!, { docMode: "sop" })}
+									onClick={() => setDocMode("sop")}
 									className={`flex flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-[11px] font-medium transition-colors ${
 										docMode === "sop"
 											? "bg-white text-[#0F172A] shadow-sm"
@@ -417,6 +443,9 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 	);
 }
 
+// ─── Fire-and-forget draft generation ────────────────────────────────
+const pendingDrafts = new Map<string, Promise<string | null>>();
+
 // ─── Property field renderers ────────────────────────────────────────
 
 function PropertyField({
@@ -436,31 +465,65 @@ function PropertyField({
 	const baseInputClass =
 		"w-full rounded-lg border border-[#E2E8F0] bg-white px-3 py-2 text-sm text-[#0F172A] placeholder:text-[#CBD5E1] focus:border-[#3B82F6] focus:outline-none focus:ring-1 focus:ring-[#3B82F6] transition-colors";
 
+	// Pick up pending draft on mount
+	useEffect(() => {
+		if (!nodeId) return;
+		const pending = pendingDrafts.get(nodeId);
+		if (pending) {
+			setDrafting(true);
+			pending.then((result) => { if (result) onChange(result); })
+				.catch(() => {})
+				.finally(() => setDrafting(false));
+		}
+	}, [nodeId, onChange]);
+
 	const handleGenerateDraft = useCallback(async () => {
 		if (!sessionId || !nodeId) return;
 		setDrafting(true);
+
+		const promise = fetch(`/api/sessions/${sessionId}/nodes/${nodeId}/procedure-chat`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				message: "Genera una descripción concisa y profesional de esta actividad en 2-3 párrafos. Solo devuelve el texto de la descripción, sin JSON.",
+				history: [],
+			}),
+		})
+			.then(async (res) => {
+				if (!res.ok) return null;
+				const data = await res.json();
+				return (data.message as string) || null;
+			})
+			.finally(() => pendingDrafts.delete(nodeId!));
+
+		pendingDrafts.set(nodeId, promise);
+
 		try {
-			const res = await fetch(`/api/sessions/${sessionId}/nodes/${nodeId}/procedure-chat`, {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					message: "Genera una descripción concisa y profesional de esta actividad en 2-3 párrafos. Solo devuelve el texto de la descripción, sin JSON.",
-					history: [],
-				}),
-			});
-			if (!res.ok) throw new Error("Error");
-			const data = await res.json();
-			// The response message IS the description
-			if (data.message) onChange(data.message);
+			const result = await promise;
+			if (result) onChange(result);
 		} catch { /* ignore */ }
 		finally { setDrafting(false); }
 	}, [sessionId, nodeId, onChange]);
 
+	const fieldLabel = (
+		<div className="group/tip relative mb-1.5 flex items-center gap-1">
+			<label className="text-xs font-medium text-[#334155]">{field.label}</label>
+			{(field as any).tooltip && (
+				<>
+					<InfoIcon className="h-3 w-3 cursor-help text-[#CBD5E1] transition-colors group-hover/tip:text-[#94A3B8]" />
+					<div className="pointer-events-none absolute left-0 top-full z-50 mt-1.5 w-64 rounded-lg bg-[#0F172A] px-3 py-2.5 text-[11px] leading-relaxed text-[#CBD5E1] opacity-0 shadow-xl ring-1 ring-[#334155] transition-opacity group-hover/tip:opacity-100">
+						{(field as any).tooltip}
+					</div>
+				</>
+			)}
+		</div>
+	);
+
 	if (field.type === "richtext") {
 		return (
 			<div>
-				<div className="mb-1.5 flex items-center justify-between">
-					<label className="text-xs font-medium text-[#334155]">{field.label}</label>
+				<div className="flex items-center justify-between">
+					{fieldLabel}
 					{field.key === "description" && nodeId && (
 						<button
 							type="button"
@@ -489,7 +552,7 @@ function PropertyField({
 	if (field.type === "number") {
 		return (
 			<div>
-				<label className="mb-1.5 block text-xs font-medium text-[#334155]">{field.label}</label>
+				{fieldLabel}
 				<input
 					type="number"
 					value={value ?? ""}
@@ -503,7 +566,7 @@ function PropertyField({
 	if (field.type === "select" && "options" in field) {
 		return (
 			<div>
-				<label className="mb-1.5 block text-xs font-medium text-[#334155]">{field.label}</label>
+				{fieldLabel}
 				<select value={value || ""} onChange={(e) => onChange(e.target.value || undefined)} className={baseInputClass}>
 					<option value="">—</option>
 					{field.options.map((opt) => (
@@ -518,6 +581,7 @@ function PropertyField({
 		return (
 			<TagField
 				label={field.label}
+				tooltip={(field as any).tooltip}
 				values={(value as string[]) || []}
 				onChange={onChange}
 				placeholder={"placeholder" in field ? (field.placeholder as string) : ""}
@@ -527,7 +591,7 @@ function PropertyField({
 
 	return (
 		<div>
-			<label className="mb-1.5 block text-xs font-medium text-[#334155]">{field.label}</label>
+			{fieldLabel}
 			<input
 				type="text"
 				value={value || ""}
@@ -540,9 +604,9 @@ function PropertyField({
 }
 
 function TagField({
-	label, values, onChange, placeholder,
+	label, tooltip, values, onChange, placeholder,
 }: {
-	label: string; values: string[]; onChange: (val: string[]) => void; placeholder: string;
+	label: string; tooltip?: string; values: string[]; onChange: (val: string[]) => void; placeholder: string;
 }) {
 	const [input, setInput] = useState("");
 	const addTag = () => { const t = input.trim(); if (!t || values.includes(t)) return; onChange([...values, t]); setInput(""); };
@@ -550,7 +614,17 @@ function TagField({
 
 	return (
 		<div>
-			<label className="mb-1.5 block text-xs font-medium text-[#334155]">{label}</label>
+			<div className="group/tip relative mb-1.5 flex items-center gap-1">
+				<label className="text-xs font-medium text-[#334155]">{label}</label>
+				{tooltip && (
+					<>
+						<InfoIcon className="h-3 w-3 cursor-help text-[#CBD5E1] transition-colors group-hover/tip:text-[#94A3B8]" />
+						<div className="pointer-events-none absolute left-0 top-full z-50 mt-1.5 w-64 rounded-lg bg-[#0F172A] px-3 py-2.5 text-[11px] leading-relaxed text-[#CBD5E1] opacity-0 shadow-xl ring-1 ring-[#334155] transition-opacity group-hover/tip:opacity-100">
+							{tooltip}
+						</div>
+					</>
+				)}
+			</div>
 			{values.length > 0 && (
 				<div className="mb-2 flex flex-wrap gap-1.5">
 					{values.map((tag, idx) => (

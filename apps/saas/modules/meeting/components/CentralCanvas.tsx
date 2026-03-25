@@ -222,6 +222,26 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 		}
 	}, [modelerApi, sessionId]);
 
+	// Auto-save BPMN XML every 30s so diagram persists across page reloads
+	useEffect(() => {
+		if (!modelerApi?.isReady || !sessionId) return;
+		const interval = setInterval(async () => {
+			try {
+				const modeler = modelerApi.getModeler();
+				if (!modeler) return;
+				const { xml } = await modeler.saveXML({ format: true });
+				if (xml) {
+					fetch(`/api/sessions/${sessionId}/diagram`, {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						body: JSON.stringify({ bpmnXml: xml }),
+					}).catch(() => {});
+				}
+			} catch { /* non-critical */ }
+		}, 30000);
+		return () => clearInterval(interval);
+	}, [modelerApi?.isReady, sessionId]);
+
 	const handleDragOver = useCallback((e: React.DragEvent) => {
 		const type = e.dataTransfer.types.includes("application/bpmn-element");
 		if (type) {
@@ -369,6 +389,12 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 				onDragOver={handleDragOver}
 				onDrop={handleDrop}
 			>
+			{/* Loading overlay — hides default empty diagram until first poll loads nodes */}
+			{isDiagramActive && nodes.length === 0 && (
+				<div className="absolute inset-0 z-30 flex items-center justify-center bg-white">
+					<Loader2Icon className="h-6 w-6 animate-spin text-[#2563EB]" />
+				</div>
+			)}
 			{/* AI thinking aura — full takeover of the canvas during reorganization */}
 			{repairing && (
 				<>
@@ -477,22 +503,7 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 				</div>
 			)}
 
-			{/* Diagram health banner — hidden during AI repair */}
-			{diagramHealth.needsRepair && !repairing && (
-				<div className="absolute left-1/2 top-3 z-10 flex -translate-x-1/2 items-center gap-2 rounded-xl bg-amber-50 px-4 py-2 text-xs text-amber-800 shadow-sm">
-					<AlertTriangleIcon className="h-3.5 w-3.5" />
-					{diagramHealth.warningCount} problemas
-					<button
-						type="button"
-						onClick={handleRebuildLayout}
-						disabled={repairing}
-						className="flex items-center gap-1 rounded-lg bg-[#2563EB] px-2 py-1 text-[10px] font-medium text-white transition-colors hover:bg-[#1D4ED8] disabled:opacity-50"
-					>
-						{repairing ? <Loader2Icon className="h-3 w-3 animate-spin" /> : <WrenchIcon className="h-3 w-3" />}
-						Reorganizar con IA
-					</button>
-				</div>
-			)}
+			{/* Diagram health banner removed — was not dismissible and blocked UI */}
 
 			{/* Floating tools — hidden during AI repair */}
 			{modelerApi?.isReady && !repairing && (
@@ -542,22 +553,22 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 				</div>
 			)}
 
-			{/* Edge tabs (cejas) for collapsing panels */}
-			{onToggleLeft && (
+			{/* Edge tabs (cejas) for collapsing panels — only on diagram view */}
+			{onToggleLeft && isDiagramActive && (
 				<button
 					type="button"
 					onClick={onToggleLeft}
-					className="absolute left-0 top-1/2 z-20 -translate-y-1/2 rounded-r-md border border-l-0 border-[#334155] bg-[#0F172A] px-0.5 py-3 text-[#64748B] transition-colors hover:bg-[#1E293B] hover:text-[#94A3B8]"
+					className="absolute left-1 top-1/2 z-20 -translate-y-1/2 rounded-md border border-[#334155] bg-[#0F172A] px-0.5 py-3 text-[#64748B] transition-colors hover:bg-[#1E293B] hover:text-[#94A3B8]"
 					title={leftCollapsed ? "Mostrar elementos" : "Ocultar elementos"}
 				>
 					{leftCollapsed ? <ChevronRightIcon className="h-3.5 w-3.5" /> : <ChevronLeftIcon className="h-3.5 w-3.5" />}
 				</button>
 			)}
-			{onToggleRight && (
+			{onToggleRight && isDiagramActive && (
 				<button
 					type="button"
 					onClick={onToggleRight}
-					className="absolute right-0 top-1/2 z-20 -translate-y-1/2 rounded-l-md border border-r-0 border-[#334155] bg-[#0F172A] px-0.5 py-3 text-[#64748B] transition-colors hover:bg-[#1E293B] hover:text-[#94A3B8]"
+					className="absolute right-1 top-1/2 z-20 -translate-y-1/2 rounded-md border border-[#334155] bg-[#0F172A] px-0.5 py-3 text-[#64748B] transition-colors hover:bg-[#1E293B] hover:text-[#94A3B8]"
 					title={rightCollapsed ? "Mostrar paneles" : "Ocultar paneles"}
 				>
 					{rightCollapsed ? <ChevronLeftIcon className="h-3.5 w-3.5" /> : <ChevronRightIcon className="h-3.5 w-3.5" />}

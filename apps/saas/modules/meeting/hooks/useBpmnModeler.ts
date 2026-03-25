@@ -821,11 +821,14 @@ export function useBpmnModeler({
 					applyTypeColors(gfx, node, element);
 				}
 
-				// Clear any stale overlays
+				// Clear any stale overlays and re-add if forming
 				try {
 					overlays.remove({ element: node.id });
 				} catch {
 					// ok
+				}
+				if (node.state === "forming") {
+					addFormingOverlay(overlays, node.id, onConfirmNode, onRejectNode);
 				}
 			}
 
