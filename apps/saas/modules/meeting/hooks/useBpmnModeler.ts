@@ -136,6 +136,41 @@ export function useBpmnModeler({
 				try { canvas.zoom("fit-viewport", "auto"); } catch { /* non-finite SVG */ }
 				applyBizagiColors(modeler);
 
+				// If we loaded a saved diagram (not the default empty one),
+				// mark as bootstrapped so mergeAiNodes does incremental updates
+				// instead of rebuilding from scratch.
+				if (initialXml) {
+					bootstrappedRef.current = true;
+					// Populate knownNodes from canvas elements so incremental merge
+					// doesn't treat existing nodes as "new"
+					const elementRegistry = modeler.get("elementRegistry");
+					const elements = elementRegistry.filter((e: any) =>
+						e.type?.startsWith("bpmn:") &&
+						e.type !== "bpmn:Participant" &&
+						e.type !== "bpmn:Lane" &&
+						e.type !== "bpmn:Collaboration" &&
+						e.type !== "bpmn:Process" &&
+						e.type !== "bpmn:SequenceFlow" &&
+						!e.type.includes("Plane") &&
+						!e.type.includes("Label"),
+					);
+					for (const el of elements) {
+						const outgoing = (el.outgoing || [])
+							.filter((c: any) => c.type === "bpmn:SequenceFlow" && c.target)
+							.map((c: any) => c.target.id);
+						knownNodesRef.current.set(el.id, {
+							id: el.id,
+							type: el.type.replace("bpmn:", "").replace(/([A-Z])/g, "_$1").toLowerCase().replace(/^_/, ""),
+							label: el.businessObject?.name || "",
+							state: "confirmed",
+							connections: outgoing,
+						});
+						for (const targetId of outgoing) {
+							knownConnectionsRef.current.add(`${el.id}->${targetId}`);
+						}
+					}
+				}
+
 				// Force white background on bpmn-js internals (dark theme override)
 				forceCanvasWhite(containerRef.current);
 			} catch (err) {
@@ -660,6 +695,12 @@ export function useBpmnModeler({
 		// --- Apply new nodes ---
 		for (const node of newNodes) {
 			try {
+				// Skip if element already exists on canvas (e.g. synced from DB after save)
+				if (elementRegistry.get(node.id)) {
+					known.set(node.id, { ...node });
+					continue;
+				}
+
 				const type = bpmnType(node.type);
 
 				// Find parent element (the process within the pool)
