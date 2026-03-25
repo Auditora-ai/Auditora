@@ -6,7 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@repo/database";
+import { db, getPurchasesByOrganizationId } from "@repo/database";
 import { createCallBotProvider } from "@repo/ai";
 import { auth } from "@repo/auth";
 import { headers } from "next/headers";
@@ -44,16 +44,43 @@ export async function POST(request: NextRequest) {
 			sessionType,
 			processDefinitionId,
 			continuationOf,
+			scheduledFor,
+			scheduledEnd,
+			sessionGoals,
+			contactName,
+			contactEmail,
+			contactRole,
 		} = body;
 
-		if (!meetingUrl || !sessionType) {
+		const isEditMode = body.editMode === true && !meetingUrl;
+		const isScheduled = !!scheduledFor && !meetingUrl && !isEditMode;
+
+		if (!isScheduled && !isEditMode && !meetingUrl) {
 			return NextResponse.json(
-				{ error: "meetingUrl and sessionType are required" },
+				{ error: "meetingUrl is required (or provide scheduledFor for pre-scheduled sessions, or editMode for offline editing)" },
+				{ status: 400 },
+			);
+		}
+		if (!sessionType) {
+			return NextResponse.json(
+				{ error: "sessionType is required" },
 				{ status: 400 },
 			);
 		}
 
 		const { user, org } = authCtx;
+
+		// Billing check: org must have active subscription or trial
+		const purchases = await getPurchasesByOrganizationId(org.id);
+		const hasActivePlan = purchases.some(
+			(p) => p.status === "active" || p.status === "trialing",
+		);
+		if (!hasActivePlan) {
+			return NextResponse.json(
+				{ error: "Se requiere un plan activo para crear sesiones. Activa tu suscripción en Configuración." },
+				{ status: 402 },
+			);
+		}
 
 		// For DISCOVERY: auto-create ProcessArchitecture if not exists
 		if (sessionType === "DISCOVERY") {
@@ -67,26 +94,70 @@ export async function POST(request: NextRequest) {
 			}
 		}
 
+		// Determine initial status
+		const initialStatus = isEditMode
+			? ("ACTIVE" as const)
+			: isScheduled
+				? ("SCHEDULED" as const)
+				: ("CONNECTING" as const);
+
 		// Create session in DB
 		const session = await db.meetingSession.create({
 			data: {
 				type: sessionType,
-				status: "CONNECTING",
-				meetingUrl,
+				status: initialStatus,
+				meetingUrl: meetingUrl || undefined,
 				organizationId: org.id,
 				userId: user.id,
 				processDefinitionId: processDefinitionId || undefined,
 				continuationOf: continuationOf || undefined,
+				scheduledFor: scheduledFor ? new Date(scheduledFor) : undefined,
+				scheduledEnd: scheduledEnd ? new Date(scheduledEnd) : undefined,
+				sessionGoals: sessionGoals || undefined,
 			},
 		});
+
+		// Create client participant if contact info provided
+		if (contactName || contactEmail) {
+			await db.meetingParticipant.create({
+				data: {
+					sessionId: session.id,
+					name: contactName || "Cliente",
+					email: contactEmail || undefined,
+					role: contactRole || undefined,
+					participantType: "CLIENT",
+				},
+			});
+		}
+
+		// For edit-mode sessions, return immediately (no bot needed)
+		if (isEditMode) {
+			recordEvent(session.id, "session_created", `type=${sessionType} mode=edit`);
+			return NextResponse.json({
+				sessionId: session.id,
+				shareToken: session.shareToken,
+				intakeToken: session.intakeToken,
+				status: "active",
+			});
+		}
+
+		// For scheduled sessions, return immediately without joining a call
+		if (isScheduled) {
+			return NextResponse.json({
+				sessionId: session.id,
+				shareToken: session.shareToken,
+				intakeToken: session.intakeToken,
+				status: "scheduled",
+			});
+		}
 
 		// Join the meeting via call bot
 		try {
 			const callBot = createCallBotProvider();
 			recordEvent(session.id, "session_created", `type=${sessionType}`);
-			recordEvent(session.id, "bot_join_requested", meetingUrl);
+			recordEvent(session.id, "bot_join_requested", meetingUrl!);
 
-			const { botId } = await callBot.joinMeeting(meetingUrl);
+			const { botId } = await callBot.joinMeeting(meetingUrl!);
 			recordEvent(session.id, "bot_join_api_returned", `botId=${botId}`);
 
 			await db.meetingSession.update({
@@ -182,7 +253,8 @@ export async function GET(request: NextRequest) {
 			},
 			include: {
 				processDefinition: true,
-				_count: { select: { diagramNodes: true, transcriptEntries: true } },
+				participants: true,
+				_count: { select: { diagramNodes: true, transcriptEntries: true, intakeResponses: true } },
 			},
 			orderBy: { createdAt: "desc" },
 			take: 50,

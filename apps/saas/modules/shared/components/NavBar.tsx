@@ -60,7 +60,7 @@ export function NavBar() {
 						icon: WorkflowIcon,
 						isActive: pathname.startsWith(`${basePath}/procesos`),
 					},
-					{
+	{
 						label: "Entregables",
 						href: `${basePath}/deliverables`,
 						icon: FileTextIcon,

@@ -1,10 +1,8 @@
 import { getActiveOrganization } from "@auth/lib/server";
-import { ClientDashboard } from "@dashboard/components/ClientDashboard";
-import type { ActivityItem } from "@dashboard/components/ActivityTimeline";
-import { PageHeader } from "@shared/components/PageHeader";
+import { CommandCenter, type SessionData, type ProcessData } from "@command-center/components/CommandCenter";
+import type { SessionSuggestion } from "@command-center/components/SessionSuggestions";
 import { db } from "@repo/database";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
 
 export async function generateMetadata({
 	params,
@@ -16,24 +14,47 @@ export async function generateMetadata({
 	return { title: activeOrganization?.name };
 }
 
-function generateInsight(
-	processCount: number,
-	stats: { core: number; strategic: number; support: number },
-	t: (key: string, values?: Record<string, string | number>) => string,
-): string {
-	if (processCount === 0) {
-		return t("insight.empty");
+/**
+ * Compute session suggestions from existing process data (zero extra queries).
+ * Rules:
+ * - Process with bpmnXml but 0 RACI entries → suggest DEEP_DIVE for RACI
+ * - Process with RACI but 0 risks → suggest risk session
+ * - Process with completeness < 50% → suggest CONTINUATION
+ */
+function computeSuggestions(
+	processes: ProcessData[],
+	sessions: SessionData[],
+): SessionSuggestion[] {
+	const suggestions: SessionSuggestion[] = [];
+	const now = new Date();
+
+	for (const proc of processes) {
+		// Skip processes that already have a scheduled session
+		const hasScheduled = sessions.some(
+			(s) => s.processDefinition?.id === proc.id && s.status === "SCHEDULED",
+		);
+		if (hasScheduled) continue;
+
+		if (proc.bpmnXml && proc._count.raciEntries === 0) {
+			suggestions.push({
+				type: "raci_gap",
+				processId: proc.id,
+				processName: proc.name,
+				message: "RACI pendiente — agenda un Deep Dive para asignar responsables",
+				suggestedType: "DEEP_DIVE",
+			});
+		} else if (proc._count.raciEntries > 0 && proc._count.risks === 0) {
+			suggestions.push({
+				type: "no_risks",
+				processId: proc.id,
+				processName: proc.name,
+				message: "Sin riesgos documentados — agenda una sesión de análisis de riesgos",
+				suggestedType: "DEEP_DIVE",
+			});
+		}
 	}
-	if (stats.support === 0 && processCount > 0) {
-		return t("insight.noSupport", { count: processCount });
-	}
-	if (stats.core < 3) {
-		return t("insight.fewCore", { count: stats.core });
-	}
-	if (stats.strategic === 0) {
-		return t("insight.noStrategic", { count: processCount });
-	}
-	return t("insight.continue", { count: processCount });
+
+	return suggestions.slice(0, 6);
 }
 
 export default async function OrganizationPage({
@@ -42,161 +63,80 @@ export default async function OrganizationPage({
 	params: Promise<{ organizationSlug: string }>;
 }) {
 	const { organizationSlug } = await params;
-	const t = await getTranslations("dashboard");
-
 	const activeOrganization = await getActiveOrganization(organizationSlug);
 	if (!activeOrganization) return notFound();
 
 	const orgId = activeOrganization.id;
-	const startOfMonth = new Date();
-	startOfMonth.setDate(1);
-	startOfMonth.setHours(0, 0, 0, 0);
 
-	// Fetch all metrics in parallel
-	const [
-		sessionsThisMonth,
-		processesMapped,
-		confirmedNodes,
-		rejectedNodes,
-		totalSessions,
-		sessionsWithTranscripts,
-		latestProcess,
-		recentProcesses,
-		coreCount,
-		strategicCount,
-		supportCount,
-		org,
-	] = await Promise.all([
-		db.meetingSession.count({
-			where: { organizationId: orgId, createdAt: { gte: startOfMonth } },
-		}),
-		db.processDefinition.count({
-			where: { architecture: { organizationId: orgId } },
-		}),
-		db.diagramNode.count({
-			where: { state: "CONFIRMED", session: { organizationId: orgId } },
-		}),
-		db.diagramNode.count({
-			where: { state: "REJECTED", session: { organizationId: orgId } },
-		}),
-		db.meetingSession.count({
+	// Fetch sessions + architecture with processes in parallel
+	const [sessions, architecture] = await Promise.all([
+		db.meetingSession.findMany({
 			where: { organizationId: orgId },
-		}),
-		// New: count sessions with transcripts (for AI stat)
-		db.meetingSession.count({
-			where: {
-				organizationId: orgId,
-				transcriptEntries: { some: {} },
-			},
-		}),
-		// New: latest process with BPMN XML for hero
-		db.processDefinition.findFirst({
-			where: {
-				architecture: { organizationId: orgId },
-				bpmnXml: { not: null },
+			include: {
+				processDefinition: { select: { id: true, name: true } },
+				participants: {
+					select: { name: true, email: true, role: true, participantType: true },
+				},
+				_count: {
+					select: { diagramNodes: true, transcriptEntries: true, intakeResponses: true },
+				},
 			},
 			orderBy: { createdAt: "desc" },
-			select: { id: true, name: true, bpmnXml: true },
+			take: 50,
 		}),
-		// Recent processes
-		db.processDefinition.findMany({
-			where: { architecture: { organizationId: orgId } },
-			select: { id: true, name: true, level: true, category: true, processStatus: true, createdAt: true },
-			orderBy: { createdAt: "desc" },
-			take: 5,
-		}),
-		// Process stats by category
-		db.processDefinition.count({
-			where: { architecture: { organizationId: orgId }, category: "core" },
-		}),
-		db.processDefinition.count({
-			where: { architecture: { organizationId: orgId }, category: "strategic" },
-		}),
-		db.processDefinition.count({
-			where: { architecture: { organizationId: orgId }, category: "support" },
-		}),
-		// Org profile
-		db.organization.findUnique({
-			where: { id: orgId },
-			select: { industry: true, employeeCount: true },
+		db.processArchitecture.findUnique({
+			where: { organizationId: orgId },
+			select: {
+				id: true,
+				definitions: {
+					where: { level: "PROCESS" },
+					orderBy: { priority: "asc" },
+					select: {
+						id: true,
+						name: true,
+						bpmnXml: true,
+						intelligence: { select: { id: true } },
+						_count: {
+							select: {
+								sessions: true,
+								children: true,
+								raciEntries: true,
+								risks: true,
+							},
+						},
+					},
+				},
+			},
 		}),
 	]);
 
-	const totalDecisions = confirmedNodes + rejectedNodes;
-	const aiAccuracy =
-		totalDecisions > 0
-			? Math.round((confirmedNodes / totalDecisions) * 100)
-			: 0;
+	const processes: ProcessData[] = (architecture?.definitions ?? []).map((d) => ({
+		id: d.id,
+		name: d.name,
+		bpmnXml: d.bpmnXml,
+		intelligence: d.intelligence,
+		_count: d._count,
+	}));
 
-	// Fetch recent sessions for activity timeline
-	const recentSessions = await db.meetingSession.findMany({
-		where: { organizationId: orgId },
-		include: { processDefinition: { select: { name: true } } },
-		orderBy: { createdAt: "desc" },
-		take: 10,
-	});
+	const processCount = processes.length;
+	const documentedCount = processes.filter((p) => p.bpmnXml).length;
+	const coveragePercent = processCount > 0 ? Math.round((documentedCount / processCount) * 100) : 0;
 
-	// Build activity timeline
-	const activities: ActivityItem[] = [
-		...recentSessions.map((s) => ({
-			id: `session-${s.id}`,
-			type: (s.status === "ENDED" ? "session_ended" : "session_created") as ActivityItem["type"],
-			title: s.status === "ENDED" ? t("activity.sessionEnded") : t("activity.sessionCreated"),
-			subtitle: `${s.type}${s.processDefinition ? ` — ${s.processDefinition.name}` : ""}`,
-			timestamp: s.createdAt,
-		})),
-		...recentProcesses.map((p) => ({
-			id: `process-${p.id}`,
-			type: "process_created" as const,
-			title: t("activity.processCreated"),
-			subtitle: p.name,
-			timestamp: p.createdAt,
-		})),
-	]
-		.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-		.slice(0, 15);
-
-	const processStats = { core: coreCount, strategic: strategicCount, support: supportCount };
-	const insight = generateInsight(recentProcesses.length, processStats, t);
+	const typedSessions = sessions as unknown as SessionData[];
+	const suggestions = computeSuggestions(processes, typedSessions);
 
 	return (
-		<div>
-			<PageHeader
-				title={activeOrganization.name}
-				subtitle={t("subtitle")}
+		<div className="h-[calc(100vh-64px)]">
+			<CommandCenter
+				sessions={typedSessions}
+				organizationId={orgId}
+				organizationName={activeOrganization.name}
+				organizationSlug={organizationSlug}
+				processCount={processCount}
+				coveragePercent={coveragePercent}
+				processes={processes}
+				suggestions={suggestions}
 			/>
-
-			<div className="mt-6">
-				<ClientDashboard
-					data={{
-						sessionsThisMonth,
-						processesMapped,
-						aiAccuracy,
-						processesGoal: 10,
-						activities,
-						totalSessions,
-						recentProcesses: recentProcesses.map((p) => ({
-							id: p.id,
-							name: p.name,
-							level: p.level,
-							category: p.category,
-							status: p.processStatus,
-						})),
-						processStats,
-						orgProfile: {
-							industry: org?.industry ?? null,
-							employeeCount: org?.employeeCount ?? null,
-						},
-						latestProcess: latestProcess
-							? { id: latestProcess.id, name: latestProcess.name, bpmnXml: latestProcess.bpmnXml }
-							: null,
-						aiExtractedNodes: confirmedNodes,
-						sessionsWithTranscripts,
-						insight,
-					}}
-					basePath={`/${organizationSlug}`}
-				/>
-			</div>
 		</div>
 	);
 }

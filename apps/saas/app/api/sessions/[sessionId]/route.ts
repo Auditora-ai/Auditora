@@ -1,7 +1,7 @@
 /**
  * Session CRUD API
  *
- * PATCH  /api/sessions/[sessionId] — Update session type or process
+ * PATCH  /api/sessions/[sessionId] — Update session type, process, schedule, or goals
  * DELETE /api/sessions/[sessionId] — Delete a session and its related data
  */
 
@@ -38,7 +38,7 @@ export async function PATCH(
 
 		const { sessionId } = await params;
 		const body = await request.json();
-		const { type, processDefinitionId } = body;
+		const { type, processDefinitionId, scheduledFor, scheduledEnd, sessionGoals } = body;
 
 		const session = await db.meetingSession.findUnique({
 			where: { id: sessionId },
@@ -55,9 +55,11 @@ export async function PATCH(
 			return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 		}
 
-		if (session.status === "ACTIVE" || session.status === "CONNECTING") {
+		// Block type/process changes on active sessions, but allow schedule/goals edits
+		const isStructuralChange = type !== undefined || processDefinitionId !== undefined;
+		if (isStructuralChange && (session.status === "ACTIVE" || session.status === "CONNECTING")) {
 			return NextResponse.json(
-				{ error: "Cannot edit an active or connecting session. End it first." },
+				{ error: "Cannot edit type or process of an active session. End it first." },
 				{ status: 409 },
 			);
 		}
@@ -68,6 +70,17 @@ export async function PATCH(
 				{ error: `Invalid session type. Must be one of: ${validTypes.join(", ")}` },
 				{ status: 400 },
 			);
+		}
+
+		// Validate scheduledFor is a valid date
+		if (scheduledFor !== undefined && scheduledFor !== null) {
+			const parsed = new Date(scheduledFor);
+			if (Number.isNaN(parsed.getTime())) {
+				return NextResponse.json(
+					{ error: "Invalid scheduledFor date" },
+					{ status: 400 },
+				);
+			}
 		}
 
 		// Validate processDefinitionId belongs to same org
@@ -87,6 +100,9 @@ export async function PATCH(
 		const data: Record<string, unknown> = {};
 		if (type) data.type = type;
 		if (processDefinitionId !== undefined) data.processDefinitionId = processDefinitionId || null;
+		if (scheduledFor !== undefined) data.scheduledFor = scheduledFor ? new Date(scheduledFor) : null;
+		if (scheduledEnd !== undefined) data.scheduledEnd = scheduledEnd ? new Date(scheduledEnd) : null;
+		if (sessionGoals !== undefined) data.sessionGoals = sessionGoals || null;
 
 		if (Object.keys(data).length === 0) {
 			return NextResponse.json(
@@ -100,7 +116,8 @@ export async function PATCH(
 			data,
 			include: {
 				processDefinition: true,
-				_count: { select: { diagramNodes: true, transcriptEntries: true } },
+				participants: true,
+				_count: { select: { diagramNodes: true, transcriptEntries: true, intakeResponses: true } },
 			},
 		});
 

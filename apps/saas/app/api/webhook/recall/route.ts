@@ -56,7 +56,10 @@ export async function deleteSessionActivity(sessionId: string): Promise<void> {
 
 function verifyWebhookSignature(body: string, signature: string | null): boolean {
 	const secret = process.env.RECALL_WEBHOOK_SECRET;
-	if (!secret) return true; // Skip verification if secret not configured
+	if (!secret) {
+		console.error("[Webhook] RECALL_WEBHOOK_SECRET not configured — rejecting request");
+		return false;
+	}
 	if (!signature) return false;
 
 	const expected = crypto
@@ -94,6 +97,16 @@ export async function POST(request: NextRequest) {
 				if (session) {
 					recordEvent(session.id, "bot_status_webhook", `status=${newStatus}`);
 					console.log(`[Webhook] Bot status change: ${newStatus} for session ${session.id.substring(0, 8)}`);
+
+					// Bot failed to join — mark session as FAILED
+					if (newStatus === "fatal" || newStatus === "analysis_failed") {
+						await db.meetingSession.update({
+							where: { id: session.id },
+							data: { status: "FAILED" },
+						});
+						recordEvent(session.id, "bot_failed", `Bot failed to join: ${newStatus}`);
+						console.error(`[Webhook] Session ${session.id.substring(0, 8)} FAILED — bot status: ${newStatus}`);
+					}
 
 					// Session ended — mark as ENDED and trigger post-session pipelines
 					if (newStatus === "done" || newStatus === "call_ended") {
@@ -288,7 +301,7 @@ export async function POST(request: NextRequest) {
 		if (now - lastExtraction >= EXTRACTION_INTERVAL) {
 			lastExtractionTime.set(session.id, now);
 			recordEvent(session.id, "extraction_triggered");
-			runExtraction(session.id).catch((err) =>
+			runExtraction(session.id, session.organizationId).catch((err) =>
 				console.error("[Webhook] Extraction error:", err),
 			);
 		}
@@ -298,7 +311,7 @@ export async function POST(request: NextRequest) {
 		if (now - lastTeleprompter >= TELEPROMPTER_INTERVAL) {
 			lastTeleprompterTime.set(session.id, now);
 			recordEvent(session.id, "teleprompter_triggered");
-			runTeleprompter(session.id).catch((err) =>
+			runTeleprompter(session.id, session.organizationId).catch((err) =>
 				console.error("[Webhook] Teleprompter error:", err),
 			);
 		}
@@ -306,12 +319,12 @@ export async function POST(request: NextRequest) {
 		return NextResponse.json({ ok: true });
 	} catch (error) {
 		console.error("[Webhook] Error:", error);
-		return NextResponse.json({ ok: true });
+		return NextResponse.json({ ok: false, error: "Internal error" }, { status: 500 });
 	}
 }
 
 /** Extract BPMN nodes from recent transcript */
-async function runExtraction(sessionId: string) {
+async function runExtraction(sessionId: string, organizationId?: string) {
 	setActivity(sessionId, "extracting");
 
 	try {
@@ -334,6 +347,7 @@ async function runExtraction(sessionId: string) {
 		});
 
 		const result = await extractProcessUpdates(
+			organizationId || "",
 			currentNodes.map((n) => ({
 				id: n.id,
 				type: n.nodeType.toLowerCase().replace(/_([a-z])/g, (_, c) =>
@@ -446,7 +460,7 @@ async function runExtraction(sessionId: string) {
 }
 
 /** Generate next teleprompter question */
-async function runTeleprompter(sessionId: string) {
+async function runTeleprompter(sessionId: string, organizationId?: string) {
 	setActivity(sessionId, "suggesting");
 
 	try {
@@ -478,6 +492,7 @@ async function runTeleprompter(sessionId: string) {
 		});
 
 		const result = await generateNextQuestion(
+			organizationId || "",
 			session.type as "DISCOVERY" | "DEEP_DIVE" | "CONTINUATION",
 			currentNodes.map((n) => ({
 				id: n.id,
@@ -624,6 +639,7 @@ export async function runPostSessionPipelines(sessionId: string, _diagramNodes: 
 		// 1. Session Summary
 		runPipeline("summary", () =>
 			generateSessionSummary(
+				session.organizationId,
 				session.type,
 				confirmedNodes.map((n) => ({ id: n.id, type: n.type, label: n.label, lane: n.lane })),
 				transcript,
@@ -633,6 +649,7 @@ export async function runPostSessionPipelines(sessionId: string, _diagramNodes: 
 		// 2. Process Audit
 		runPipeline("process_audit", () =>
 			auditProcess({
+				organizationId: session.organizationId,
 				mode: "initial",
 				knowledgeSnapshot: {
 					roles: lanes.map((l) => ({ name: l, responsibilities: [], confirmed: true })),
@@ -676,6 +693,7 @@ export async function runPostSessionPipelines(sessionId: string, _diagramNodes: 
 				return { assignments: [] };
 			}
 			return generateRaci(
+				session.organizationId,
 				lanes,
 				confirmedNodes.filter((n) => n.type === "task" || n.type === "usertask").map((n) => n.label),
 				transcriptText,
@@ -685,6 +703,7 @@ export async function runPostSessionPipelines(sessionId: string, _diagramNodes: 
 		// 4. Risk Audit
 		runPipeline("risk_audit", () =>
 			auditRisks({
+				organizationId: session.organizationId,
 				mode: "risk",
 				processDefinition: {
 					name: session.processDefinition?.name || "Proceso",
@@ -854,6 +873,7 @@ async function enrichCompanyBrainFromSession(
 	});
 
 	const result = await enrichCompanyBrain({
+		organizationId,
 		text: transcriptText,
 		sourceType: "transcript",
 		existingContext: {
