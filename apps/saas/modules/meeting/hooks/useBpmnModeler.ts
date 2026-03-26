@@ -630,7 +630,7 @@ export function useBpmnModeler({
 	 * Incremental update: diff known nodes vs incoming nodes,
 	 * then apply changes via Modeling API.
 	 */
-	function incrementalUpdate(
+	async function incrementalUpdate(
 		modeler: any,
 		visibleNodes: DiagramNode[],
 		allNodes: DiagramNode[],
@@ -703,9 +703,15 @@ export function useBpmnModeler({
 			}
 		}
 
-		// --- Apply new nodes ---
+		// --- Apply new nodes (skip phantom/empty nodes) ---
 		for (const node of newNodes) {
 			try {
+				// Skip phantom nodes: no label, not a start/end event
+				if (!node.label && !node.type.includes("start") && !node.type.includes("end")) {
+					known.set(node.id, { ...node });
+					continue;
+				}
+
 				// Skip if element already exists on canvas (e.g. synced from DB after save)
 				if (elementRegistry.get(node.id)) {
 					known.set(node.id, { ...node });
@@ -943,14 +949,79 @@ export function useBpmnModeler({
 			}
 		}
 
-		// Fit viewport if topology changed
-		if (topologyChanged) {
-			try {
-				try { canvas.zoom("fit-viewport", "auto"); } catch { /* non-finite SVG */ }
-			} catch {
-				// ok
+		// Fit viewport when topology changes
+		if (newNodes.length > 0 || topologyChanged) {
+			try { canvas.zoom("fit-viewport", "auto"); } catch { /* ok */ }
+		}
+	}
+
+	/**
+	 * Re-layout all nodes on canvas using ELK without destroying the modeler.
+	 * Moves existing shapes to new positions based on graph topology.
+	 */
+	async function relayoutWithElk(modeler: any, known: Map<string, DiagramNode>) {
+		const allNodes = [...known.values()];
+		if (allNodes.length < 2) return;
+
+		const ELK = (await import("elkjs/lib/elk.bundled.js")).default;
+		const elkInstance = new ELK();
+
+		const pp = preprocessForElk(allNodes);
+		const elkResult = await elkInstance.layout({
+			id: "root",
+			layoutOptions: { ...ELK_BPMN_CONFIG },
+			children: pp.elkNodes.map(({ _lane, ...n }) => n),
+			edges: pp.elkEdges,
+		});
+
+		const { positions: lanePositions } = assignLaneYPositions(elkResult, pp, LANE_H, 50);
+		const poolOffset = 40;
+		const modeling = modeler.get("modeling");
+		const elementRegistry = modeler.get("elementRegistry");
+		const canvas = modeler.get("canvas");
+
+		// Move each shape to its ELK-computed position
+		for (const [id, pos] of lanePositions) {
+			const element = elementRegistry.get(id);
+			if (!element) continue;
+
+			const dx = (pos.x + poolOffset) - element.x;
+			const dy = pos.y - element.y;
+			if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+				try {
+					modeling.moveShape(element, { x: dx, y: dy });
+				} catch { /* ok */ }
 			}
 		}
+
+		// Re-layout all connections for clean routing
+		const allConnections = elementRegistry.filter((e: any) => e.type === "bpmn:SequenceFlow");
+		for (const conn of allConnections) {
+			try {
+				modeling.layoutConnection(conn);
+			} catch { /* ok */ }
+		}
+
+		// Resize lanes to fit
+		const lanes = elementRegistry.filter((e: any) => e.type === "bpmn:Lane");
+		for (const lane of lanes) {
+			const laneChildren = elementRegistry.filter((e: any) => {
+				if (!e.type?.startsWith("bpmn:") || e.type === "bpmn:SequenceFlow") return false;
+				return e.y >= lane.y && e.y < lane.y + lane.height;
+			});
+			if (laneChildren.length > 0) {
+				const maxX = Math.max(...laneChildren.map((e: any) => e.x + (e.width || 100)));
+				const minX = Math.min(...laneChildren.map((e: any) => e.x));
+				const neededWidth = maxX - minX + 200;
+				if (neededWidth > lane.width) {
+					try {
+						modeling.resizeLane(lane, { x: lane.x, y: lane.y, width: neededWidth, height: lane.height });
+					} catch { /* ok */ }
+				}
+			}
+		}
+
+		try { canvas.zoom("fit-viewport", "auto"); } catch { /* ok */ }
 	}
 
 	const zoomIn = useCallback(() => {

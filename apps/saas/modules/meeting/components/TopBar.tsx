@@ -170,7 +170,59 @@ export function TopBar({ processName: initialName, clientName }: TopBarProps) {
 					<SparklesIcon className="h-3 w-3" />
 					{!isInCall ? "Activar IA en vivo" : aiEnabled ? "IA Analizando" : "IA Pausada"}
 				</button>
+				<FontScaleControl />
 			</div>
+		</div>
+	);
+}
+
+const FONT_SCALES = [0.9, 1, 1.15, 1.3];
+
+function FontScaleControl() {
+	const [scaleIndex, setScaleIndex] = useState(() => {
+		if (typeof window === "undefined") return 1;
+		const saved = localStorage.getItem("fontScale");
+		if (!saved) return 1;
+		const idx = FONT_SCALES.indexOf(Number(saved));
+		return idx >= 0 ? idx : 1;
+	});
+
+	const applyScale = useCallback((idx: number) => {
+		const clamped = Math.max(0, Math.min(FONT_SCALES.length - 1, idx));
+		setScaleIndex(clamped);
+		const value = String(FONT_SCALES[clamped]);
+		document.documentElement.style.setProperty("--font-scale", value);
+		localStorage.setItem("fontScale", value);
+	}, []);
+
+	return (
+		<div className="ml-1 flex items-center rounded-lg bg-[#1E293B] p-0.5">
+			<button
+				type="button"
+				onClick={() => applyScale(scaleIndex - 1)}
+				disabled={scaleIndex === 0}
+				className="rounded px-1.5 py-0.5 text-[10px] font-medium text-[#64748B] transition-colors hover:text-white disabled:opacity-30"
+				title="Reducir texto"
+			>
+				A-
+			</button>
+			<button
+				type="button"
+				onClick={() => applyScale(1)}
+				className={`rounded px-1.5 py-0.5 text-[10px] font-medium transition-colors ${scaleIndex === 1 ? "text-[#3B82F6]" : "text-[#64748B] hover:text-white"}`}
+				title="Tamaño normal"
+			>
+				A
+			</button>
+			<button
+				type="button"
+				onClick={() => applyScale(scaleIndex + 1)}
+				disabled={scaleIndex === FONT_SCALES.length - 1}
+				className="rounded px-1.5 py-0.5 text-[10px] font-medium text-[#64748B] transition-colors hover:text-white disabled:opacity-30"
+				title="Aumentar texto"
+			>
+				A+
+			</button>
 		</div>
 	);
 }

@@ -39,6 +39,13 @@ export function MeetingView({
 	shareToken,
 }: MeetingViewProps & { shareToken?: string }) {
 	const router = useRouter();
+
+	// Accessibility: restore font scale from localStorage
+	useEffect(() => {
+		const saved = localStorage.getItem("fontScale");
+		if (saved) document.documentElement.style.setProperty("--font-scale", saved);
+	}, []);
+
 	// UI state
 	const [aiEnabled, setAiEnabled] = useState(true);
 	const [selectedTool, setSelectedTool] = useState<"select" | "connect" | "text" | "ai-auto">("select");
@@ -182,8 +189,11 @@ export function MeetingView({
 	return (
 		<LiveSessionProvider value={contextValue}>
 			<div
-				className="grid h-screen w-screen overflow-hidden bg-[#0F172A]"
+				className="grid overflow-hidden bg-[#0F172A]"
 				style={{
+					zoom: "var(--font-scale, 1)",
+					width: "calc(100vw / var(--font-scale, 1))",
+					height: "calc(100vh / var(--font-scale, 1))",
 					gridTemplateRows: "48px 1fr 36px",
 					gridTemplateColumns: `${leftCollapsed ? "0px" : "220px"} 1fr ${rightCollapsed ? "0px" : "280px"}`,
 					gridTemplateAreas: `

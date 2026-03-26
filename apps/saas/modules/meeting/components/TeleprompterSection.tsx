@@ -1,10 +1,24 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { SparklesIcon, TelescopeIcon, MicroscopeIcon, ShieldCheckIcon } from "lucide-react";
 import { toast } from "sonner";
 import type { DiagramNode } from "../types";
 import { useLiveSessionContext } from "../context/LiveSessionContext";
+
+const GAP_LABELS: Record<string, string> = {
+	missing_role: "Roles",
+	missing_supplier: "Proveedores",
+	missing_input: "Entradas",
+	missing_output: "Salidas",
+	missing_customer: "Clientes",
+	missing_trigger: "Disparadores",
+	missing_decision: "Decisiones",
+	missing_exception: "Excepciones",
+	missing_sla: "Tiempos",
+	missing_system: "Sistemas",
+	general_exploration: "Exploración",
+};
 
 const QUESTION_MODES = [
 	{ key: "explore", label: "Explorar", icon: TelescopeIcon, hint: "Cubrir todas las dimensiones SIPOC" },
@@ -276,7 +290,7 @@ export function TeleprompterSection({
 					</span>
 					{gapType && (
 						<span className="ml-auto rounded-full bg-[#2563EB]/10 px-2 py-0.5 text-[10px] font-medium text-[#3B82F6]">
-							{gapType}
+							{GAP_LABELS[gapType] || gapType}
 						</span>
 					)}
 					{!gapType && (
@@ -326,10 +340,16 @@ export function TeleprompterSection({
 						{[currentQuestion, ...questionQueue]
 							.filter((q): q is string => !!q && !answeredAiQuestions.has(q))
 							.map((q, i) => {
-								const dimColor = gapType
-									? SIPOC_DIMENSIONS.find((d) => d.label === gapType)?.color || "#2563EB"
-									: "#2563EB";
-								const dimLabel = gapType || "P";
+								const gapToSipoc: Record<string, string> = {
+									missing_role: "S", missing_supplier: "S",
+									missing_input: "I", missing_trigger: "I",
+									missing_decision: "P", missing_exception: "P", missing_sla: "P", missing_system: "P",
+									missing_output: "O",
+									missing_customer: "C",
+									general_exploration: "P",
+								};
+								const dimLabel = gapType ? (gapToSipoc[gapType] || "P") : "P";
+								const dimColor = SIPOC_DIMENSIONS.find((d) => d.label === dimLabel)?.color || "#2563EB";
 								return (
 									<div key={`ai-${i}`}>
 										<button
@@ -442,8 +462,12 @@ export function TeleprompterSection({
 }
 
 function QuestionModePills() {
-	const { sessionId } = useLiveSessionContext();
-	const [mode, setMode] = useState<string>("explore");
+	const { sessionId, questionMode: contextMode } = useLiveSessionContext() as any;
+	const [mode, setMode] = useState<string>(contextMode || "explore");
+	// Sync with context when it loads from DB
+	useEffect(() => {
+		if (contextMode && contextMode !== mode) setMode(contextMode);
+	}, [contextMode]);
 	const [saving, setSaving] = useState(false);
 
 	const handleChange = useCallback(async (newMode: string) => {

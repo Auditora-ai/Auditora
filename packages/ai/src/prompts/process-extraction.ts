@@ -252,6 +252,18 @@ CONSULTANT INSTRUCTIONS (HIGHEST PRIORITY):
   - "borrar el paso de revisión" → (not possible via extraction, ignore)
 - Consultant instructions have confidence 0.9 (they know their process)
 
+TELEPROMPTER ANSWERS (CRITICAL — MUST ACT ON THESE):
+- Messages formatted as "[Pregunta: ...] Respuesta: ..." are answers to SIPOC gap questions
+- The QUESTION identifies a specific gap in the diagram (missing path, missing role, missing exception, etc.)
+- The ANSWER contains the information needed to FIX that gap
+- You MUST create new nodes, update connections, or add gateway paths based on the answer
+- Examples:
+  - Q: "¿Qué ocurre cuando X no se aprueba?" A: "se rechaza y vuelve al inicio" → create nodes for rejection path + connect back
+  - Q: "¿Quién hace la verificación?" A: "el analista de calidad" → update lane for the node
+  - Q: "¿Qué pasa si el candidato no acepta?" A: "se descarta y se reinicia la búsqueda" → create path from gateway with new node "Descartar candidato" and connect to restart
+- These answers are VERIFIED FACTS about the process — always act on them with confidence 0.85
+- If the answer describes a new path from an existing gateway, create the missing nodes AND connect them
+
 PROPERTY EXTRACTION RULES — Fill properties when information is mentioned:
 - "esto tarda como 2 días" → slaValue: 2, slaUnit: "days"
 - "lo hacen en SAP" → systems: ["SAP"]
@@ -273,7 +285,14 @@ EXTRACTION RULES:
 - Do NOT hallucinate steps that weren't discussed (except when following consultant instructions)
 - If a topic is mentioned that belongs to a different process (sibling), add it to outOfScope
 - confidence: High (>0.7) = explicitly described or consultant instruction. Medium (0.4-0.7) = implied. Low (<0.4) = inferred
-- suggestedPattern: suggest when confidence >= 0.6 and diagram has <4 nodes`;
+- suggestedPattern: suggest when confidence >= 0.6 and diagram has <4 nodes
+
+NODE QUALITY RULES (STRICT):
+- NEVER create a node without a meaningful label. "Sí", "No", "Si", "No aplica" are NOT valid node labels — these are gateway condition labels, use connectTo with the correct target instead
+- Every node MUST have a label that describes an ACTION (verb + noun) for tasks, or a QUESTION for gateways
+- Do NOT duplicate existing nodes — check the current diagram carefully before creating new ones
+- If a step already exists with a similar name, update it instead of creating a new one
+- Gateway paths ("Sí"/"No") are connection labels, NOT separate nodes`;
 
 /**
  * Build the context-enhanced system prompt.

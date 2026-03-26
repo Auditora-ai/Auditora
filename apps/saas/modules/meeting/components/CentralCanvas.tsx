@@ -391,7 +391,7 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 			>
 			{/* Loading overlay — hides default empty diagram until first poll loads nodes */}
 			{isDiagramActive && nodes.length === 0 && (
-				<div className="absolute inset-0 z-30 flex items-center justify-center bg-white">
+				<div className="absolute inset-0 z-30 flex items-center justify-center bg-[#F1F5F9]">
 					<Loader2Icon className="h-6 w-6 animate-spin text-[#2563EB]" />
 				</div>
 			)}
@@ -431,17 +431,15 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 						}
 						.ai-aura-border {
 							position: absolute; inset: 0; z-index: 30; pointer-events: none;
-							border: 2px solid transparent;
-							background:
-								linear-gradient(rgba(255,255,255,0), rgba(255,255,255,0)) padding-box,
-								linear-gradient(90deg, #2563EB, #0EA5E9, #7C3AED, #2563EB, #0EA5E9) border-box;
-							background-size: 300% 100%;
+							border: 2px solid rgba(37, 99, 235, 0.3);
+							border-image: linear-gradient(90deg, #2563EB, #0EA5E9, #7C3AED, #2563EB, #0EA5E9) 1;
 							animation: auraSweep 2s linear infinite;
+							background: transparent;
 						}
 						.ai-aura-scrim {
 							position: absolute; inset: 0; z-index: 29; pointer-events: none;
-							backdrop-filter: blur(3px);
-							background: radial-gradient(ellipse at center, rgba(255,255,255,0.4) 30%, rgba(255,255,255,0.6) 70%);
+							backdrop-filter: blur(2px);
+							background: rgba(248, 250, 252, 0.5);
 						}
 						.ai-aura-center {
 							position: absolute; inset: 0; z-index: 31; pointer-events: none;
@@ -492,14 +490,14 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 
 			{/* Loading state */}
 			{!modelerApi?.isReady && (
-				<div className="absolute inset-0 flex items-center justify-center bg-white">
+				<div className="absolute inset-0 flex items-center justify-center bg-[#F1F5F9]">
 					<div className="h-16 w-16 animate-pulse rounded-xl bg-gray-100" />
 				</div>
 			)}
 
 			{/* Render error */}
 			{modelerApi?.renderError && (
-				<div className="absolute inset-0 flex items-center justify-center bg-white">
+				<div className="absolute inset-0 flex items-center justify-center bg-[#F1F5F9]">
 					<p className="text-sm text-red-600">{modelerApi.renderError}</p>
 				</div>
 			)}

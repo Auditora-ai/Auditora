@@ -29,7 +29,7 @@ export async function GET(
 
 		const session = await db.meetingSession.findUnique({
 			where: { id: sessionId },
-			select: { id: true, status: true },
+			select: { id: true, status: true, questionMode: true },
 		});
 
 		if (!session) {
@@ -141,6 +141,7 @@ export async function GET(
 			gapType,
 			sipocCoverage,
 			questionQueue,
+			questionMode: session.questionMode || "explore",
 			botActivity: {
 				type: activity?.type ?? "listening",
 				detail: activity?.detail ?? null,

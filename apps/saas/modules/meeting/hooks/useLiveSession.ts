@@ -17,6 +17,7 @@ interface LiveSessionData {
 	completenessScore: number | null;
 	sipocCoverage: Record<string, number> | null;
 	gapType: string | null;
+	questionMode: string;
 	botActivity: BotActivity;
 	diagramHealth: DiagramHealth;
 }
@@ -50,6 +51,7 @@ export function useLiveSession(
 		completenessScore: null,
 		sipocCoverage: null,
 		gapType: null,
+		questionMode: "explore",
 		botActivity: DEFAULT_BOT_ACTIVITY,
 		diagramHealth: DEFAULT_HEALTH,
 	});
@@ -146,6 +148,7 @@ export function useLiveSession(
 					completenessScore: json.completenessScore ?? null,
 					sipocCoverage: json.sipocCoverage ?? null,
 					gapType: json.gapType ?? null,
+					questionMode: json.questionMode || "explore",
 					botActivity: json.botActivity || DEFAULT_BOT_ACTIVITY,
 					diagramHealth: json.diagramHealth || DEFAULT_HEALTH,
 				});

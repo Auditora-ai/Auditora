@@ -23,8 +23,8 @@
 
 .bpmn-editor-canvas {
 	background:
-		radial-gradient(circle, #d1d5db 0.8px, transparent 0.8px),
-		#ffffff !important;
+		radial-gradient(circle, #94a3b8 0.6px, transparent 0.6px),
+		#f1f5f9 !important;
 	background-size: 20px 20px !important;
 	position: relative;
 	flex: 1;
@@ -39,17 +39,23 @@
 	background: transparent !important;
 }
 
+/* Override any inline backgrounds bpmn-js injects */
+.bpmn-editor-canvas > div,
+.bpmn-editor-canvas > div > div {
+	background: transparent !important;
+}
+
 /* Force light mode on canvas — override dark theme CSS variables */
 .bpmn-canvas-light {
-	--background: #FFFFFF !important;
+	--background: #F1F5F9 !important;
 	--foreground: #0F172A !important;
 	--card: #ffffff !important;
 	--card-foreground: #0F172A !important;
-	--border: #E2E8F0 !important;
-	--muted: #F8FAFC !important;
+	--border: #CBD5E1 !important;
+	--muted: #E2E8F0 !important;
 	--muted-foreground: #64748B !important;
 	color-scheme: light !important;
-	background: #ffffff !important;
+	background: #F1F5F9 !important;
 	color: #0F172A !important;
 }
 
