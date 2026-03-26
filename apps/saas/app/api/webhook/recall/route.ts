@@ -379,8 +379,26 @@ async function runExtraction(sessionId: string, organizationId?: string) {
 
 		const aiIdToDbId = new Map<string, string>();
 
-		// Pass 1: Create all nodes without connections
+		// Build label set for dedup
+		const existingLabels = new Set(
+			currentNodes.map((n) => n.label.toLowerCase().trim()),
+		);
+
+		// Pass 1: Create all nodes without connections (skip duplicates and empty labels)
 		for (const newNode of result.newNodes) {
+			const label = (newNode.label || "").trim();
+			// Skip empty labels and gateway condition labels
+			if (!label || ["sí", "si", "no", "no aplica"].includes(label.toLowerCase())) {
+				console.log(`[Extraction] Skipped phantom node: "${label}"`);
+				continue;
+			}
+			// Skip if a node with very similar label already exists
+			if (existingLabels.has(label.toLowerCase())) {
+				console.log(`[Extraction] Skipped duplicate: "${label}"`);
+				continue;
+			}
+			existingLabels.add(label.toLowerCase());
+
 			const created = await db.diagramNode.create({
 				data: {
 					sessionId,

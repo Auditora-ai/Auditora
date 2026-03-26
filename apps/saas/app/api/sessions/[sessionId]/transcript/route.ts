@@ -196,8 +196,24 @@ async function runManualExtraction(sessionId: string, entryId?: string) {
 	if (result.newNodes && result.newNodes.length > 0) {
 		const aiIdToDbId = new Map<string, string>();
 
-		// Pass 1: Create all nodes (connections empty for now)
+		// Build label set for dedup
+		const existingLabels = new Set(
+			currentNodes.map((n) => n.label.toLowerCase().trim()),
+		);
+
+		// Pass 1: Create all nodes (skip duplicates and empty labels)
 		for (const node of result.newNodes) {
+			const label = (node.label || "").trim();
+			if (!label || ["sí", "si", "no", "no aplica"].includes(label.toLowerCase())) {
+				console.log(`[Transcript] Skipped phantom node: "${label}"`);
+				continue;
+			}
+			if (existingLabels.has(label.toLowerCase())) {
+				console.log(`[Transcript] Skipped duplicate: "${label}"`);
+				continue;
+			}
+			existingLabels.add(label.toLowerCase());
+
 			const created = await db.diagramNode.create({
 				data: {
 					sessionId,

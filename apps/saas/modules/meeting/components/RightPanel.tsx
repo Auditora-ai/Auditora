@@ -7,6 +7,13 @@ import { TranscriptSection } from "./TranscriptSection";
 import { TeleprompterSection } from "./TeleprompterSection";
 import { DocumentsSection } from "./DocumentsSection";
 
+const GAP_BADGE_LABELS: Record<string, string> = {
+	missing_role: "Roles", missing_supplier: "Proveedores", missing_input: "Entradas",
+	missing_output: "Salidas", missing_customer: "Clientes", missing_trigger: "Disparadores",
+	missing_decision: "Decisiones", missing_exception: "Excepciones", missing_sla: "Tiempos",
+	missing_system: "Sistemas", general_exploration: "Exploración",
+};
+
 interface RightPanelProps {
 	organizationId: string;
 	processId?: string;
@@ -52,7 +59,7 @@ export function RightPanel({ organizationId, processId, collapsed }: RightPanelP
 				title="Sugerencias IA"
 				open={sipocOpen}
 				onToggle={() => setSipocOpen(!sipocOpen)}
-				badge={gapType || "SIPOC"}
+				badge={gapType ? (GAP_BADGE_LABELS[gapType] || gapType) : "SIPOC"}
 			/>
 			{sipocOpen && (
 				<div className="min-h-0 flex-1 overflow-y-auto thin-scrollbar">
