@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback, useImperativeHandle, forwardRef } from "react";
+import { useState, useRef, useCallback, useImperativeHandle, forwardRef, useEffect } from "react";
 import { toast } from "sonner";
 import { useLiveSessionContext } from "../context/LiveSessionContext";
 import { CompletenessRing } from "./CompletenessRing";
@@ -18,6 +18,7 @@ import {
 	ClipboardListIcon,
 	FileIcon,
 	ChevronDownIcon,
+	Trash2Icon,
 } from "lucide-react";
 
 interface TopBarProps {
@@ -179,13 +180,16 @@ export function TopBar({ processName: initialName, clientName }: TopBarProps) {
 const FONT_SCALES = [0.9, 1, 1.15, 1.3];
 
 function FontScaleControl() {
-	const [scaleIndex, setScaleIndex] = useState(() => {
-		if (typeof window === "undefined") return 1;
+	const [scaleIndex, setScaleIndex] = useState(1);
+
+	// Sync from localStorage after mount (avoids hydration mismatch)
+	useEffect(() => {
 		const saved = localStorage.getItem("fontScale");
-		if (!saved) return 1;
-		const idx = FONT_SCALES.indexOf(Number(saved));
-		return idx >= 0 ? idx : 1;
-	});
+		if (saved) {
+			const idx = FONT_SCALES.indexOf(Number(saved));
+			if (idx >= 0 && idx !== 1) setScaleIndex(idx);
+		}
+	}, []);
 
 	const applyScale = useCallback((idx: number) => {
 		const clamped = Math.max(0, Math.min(FONT_SCALES.length - 1, idx));
@@ -566,6 +570,31 @@ function TopBarButton({
 function ExportDropdown() {
 	const { exportDiagram, transcript, nodes, sessionId, processId } = useLiveSessionContext();
 	const [open, setOpen] = useState(false);
+	const [resetting, setResetting] = useState(false);
+
+	const handleReset = useCallback(async (scope: "diagram" | "transcript" | "all") => {
+		const labels = { diagram: "el diagrama", transcript: "la transcripción", all: "toda la sesión" };
+		if (!confirm(`¿Estás seguro de que quieres limpiar ${labels[scope]}? Esta acción no se puede deshacer.`)) return;
+		setResetting(true);
+		try {
+			const res = await fetch(`/api/sessions/${sessionId}/reset`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ scope }),
+			});
+			if (!res.ok) throw new Error("Error");
+			toast.success(`${labels[scope].charAt(0).toUpperCase() + labels[scope].slice(1)} limpiado`);
+			if (scope === "diagram" || scope === "all") {
+				// Reload page to reset modeler state
+				window.location.reload();
+			}
+		} catch {
+			toast.error("Error al limpiar");
+		} finally {
+			setResetting(false);
+			setOpen(false);
+		}
+	}, [sessionId]);
 
 	const exportTranscript = useCallback(() => {
 		if (transcript.length === 0) { toast.error("No hay transcripción"); return; }
@@ -698,6 +727,14 @@ function ExportDropdown() {
 						{/* Reporte */}
 						<p className="px-2.5 pb-1 pt-1 text-[9px] font-semibold uppercase tracking-wider text-[#475569]">Reporte</p>
 						<ExportItem icon={<FileTextIcon className="h-3.5 w-3.5" />} label="Reporte de sesión (PDF)" onClick={openReport} />
+
+						<div className="my-1.5 h-px bg-[#1E293B]" />
+
+						{/* Reset */}
+						<p className="px-2.5 pb-1 pt-1 text-[9px] font-semibold uppercase tracking-wider text-[#475569]">Limpiar</p>
+						<ExportItem icon={<Trash2Icon className="h-3.5 w-3.5" />} label="Limpiar diagrama" onClick={() => handleReset("diagram")} disabled={resetting} />
+						<ExportItem icon={<Trash2Icon className="h-3.5 w-3.5" />} label="Limpiar transcripción" onClick={() => handleReset("transcript")} disabled={resetting} />
+						<ExportItem icon={<Trash2Icon className="h-3.5 w-3.5" />} label="Limpiar todo" onClick={() => handleReset("all")} disabled={resetting} />
 					</div>
 				</>
 			)}
