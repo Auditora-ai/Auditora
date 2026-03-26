@@ -450,15 +450,21 @@ function QuestionModePills() {
 		if (newMode === mode || saving) return;
 		setMode(newMode);
 		setSaving(true);
+		const label = QUESTION_MODES.find((m) => m.key === newMode)?.label || newMode;
+		toast.loading(`Cambiando a ${label}...`, { id: "mode-change" });
 		try {
+			// Save mode
 			await fetch(`/api/sessions/${sessionId}`, {
 				method: "PATCH",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ questionMode: newMode }),
 			});
-			const label = QUESTION_MODES.find((m) => m.key === newMode)?.label || newMode;
-			toast.success(`Modo: ${label}`, { duration: 2000 });
-		} catch { /* ok */ }
+			// Regenerate questions with new mode
+			await fetch(`/api/sessions/${sessionId}/regenerate-questions`, { method: "POST" });
+			toast.success(`Modo: ${label} — preguntas regeneradas`, { id: "mode-change", duration: 3000 });
+		} catch {
+			toast.error("Error al cambiar modo", { id: "mode-change" });
+		}
 		finally { setSaving(false); }
 	}, [sessionId, mode, saving]);
 
