@@ -409,6 +409,9 @@ model MeetingSession {
   startedAt           DateTime?
   endedAt             DateTime?
 
+  // Teleprompter mode (explore | deepen | validate)
+  questionMode        String            @default("explore")
+
   // BPMN data
   bpmnXml             String?           @db.Text
   diagramNodes        DiagramNode[]

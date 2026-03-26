@@ -38,7 +38,7 @@ export async function PATCH(
 
 		const { sessionId } = await params;
 		const body = await request.json();
-		const { type, processDefinitionId, scheduledFor, scheduledEnd, sessionGoals } = body;
+		const { type, processDefinitionId, scheduledFor, scheduledEnd, sessionGoals, questionMode } = body;
 
 		const session = await db.meetingSession.findUnique({
 			where: { id: sessionId },
@@ -103,6 +103,7 @@ export async function PATCH(
 		if (scheduledFor !== undefined) data.scheduledFor = scheduledFor ? new Date(scheduledFor) : null;
 		if (scheduledEnd !== undefined) data.scheduledEnd = scheduledEnd ? new Date(scheduledEnd) : null;
 		if (sessionGoals !== undefined) data.sessionGoals = sessionGoals || null;
+		if (questionMode && ["explore", "deepen", "validate"].includes(questionMode)) data.questionMode = questionMode;
 
 		if (Object.keys(data).length === 0) {
 			return NextResponse.json(

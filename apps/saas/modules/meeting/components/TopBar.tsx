@@ -12,6 +12,12 @@ import {
 	RefreshCwIcon,
 	PhoneCallIcon,
 	XIcon,
+	ImageIcon,
+	FileCodeIcon,
+	FileTextIcon,
+	ClipboardListIcon,
+	FileIcon,
+	ChevronDownIcon,
 } from "lucide-react";
 
 interface TopBarProps {
@@ -141,11 +147,7 @@ export function TopBar({ processName: initialName, clientName }: TopBarProps) {
 
 			{/* Right: Actions */}
 			<div className="flex items-center gap-2">
-				<TopBarButton
-					icon={<DownloadIcon className="h-3.5 w-3.5" />}
-					label="Exportar BPMN"
-					onClick={() => exportDiagram("bpmn")}
-				/>
+				<ExportDropdown />
 				<ShareButton />
 				<TopBarButton
 					icon={<PowerIcon className="h-3.5 w-3.5" />}
@@ -505,6 +507,171 @@ function TopBarButton({
 		>
 			{icon}
 			<span className="hidden lg:inline">{label}</span>
+		</button>
+	);
+}
+
+function ExportDropdown() {
+	const { exportDiagram, transcript, nodes, sessionId, processId } = useLiveSessionContext();
+	const [open, setOpen] = useState(false);
+
+	const exportTranscript = useCallback(() => {
+		if (transcript.length === 0) { toast.error("No hay transcripción"); return; }
+		const lines = transcript.map((t) => {
+			const ts = t.timestamp ? new Date(t.timestamp).toLocaleTimeString("es", { hour12: false }) : "??:??:??";
+			return `[${ts}] ${t.speaker || "?"}: ${t.text}`;
+		});
+		const blob = new Blob([lines.join("\n")], { type: "text/plain" });
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement("a");
+		a.href = url;
+		a.download = "transcripcion.txt";
+		a.click();
+		URL.revokeObjectURL(url);
+		toast.success("Transcripción descargada");
+		setOpen(false);
+	}, [transcript]);
+
+	const exportAllSops = useCallback(() => {
+		const nodesWithSop = nodes.filter((n) => n.procedure);
+		if (nodesWithSop.length === 0) { toast.error("No hay procedimientos generados"); return; }
+
+		const lines: string[] = [];
+		lines.push("═══════════════════════════════════════════════");
+		lines.push("  PROCEDIMIENTOS DE TRABAJO (SOPs)");
+		lines.push("═══════════════════════════════════════════════");
+		lines.push("");
+
+		for (const node of nodesWithSop) {
+			const proc = node.procedure as any;
+			lines.push("───────────────────────────────────────────────");
+			lines.push(`PROCEDIMIENTO: ${proc.activityName || node.label}`);
+			lines.push(`Código: ${proc.procedureCode || "—"}`);
+			lines.push(`Responsable: ${proc.responsible || "—"}`);
+			lines.push(`Frecuencia: ${proc.frequency || "—"}`);
+			lines.push("");
+			if (proc.objective) { lines.push("OBJETIVO"); lines.push(proc.objective); lines.push(""); }
+			if (proc.scope) { lines.push("ALCANCE"); lines.push(proc.scope); lines.push(""); }
+			if (proc.prerequisites?.length > 0) {
+				lines.push("PRERREQUISITOS");
+				proc.prerequisites.forEach((p: string) => lines.push(`  • ${p}`));
+				lines.push("");
+			}
+			if (proc.steps?.length > 0) {
+				lines.push("PASOS");
+				proc.steps.forEach((s: any) => {
+					lines.push(`  ${s.stepNumber}. ${s.action}`);
+					lines.push(`     ${s.description}`);
+					if (s.systems?.length > 0) lines.push(`     Sistemas: ${s.systems.join(", ")}`);
+					if (s.inputs?.length > 0) lines.push(`     Entradas: ${s.inputs.join(", ")}`);
+					if (s.outputs?.length > 0) lines.push(`     Salidas: ${s.outputs.join(", ")}`);
+					s.exceptions?.forEach((ex: any) => lines.push(`     ⚠ Si ${ex.condition} → ${ex.action}`));
+					lines.push("");
+				});
+			}
+			if (proc.gaps?.length > 0) {
+				lines.push("INFORMACIÓN PENDIENTE");
+				proc.gaps.forEach((g: string) => lines.push(`  ⚠ ${g}`));
+				lines.push("");
+			}
+			lines.push("");
+		}
+
+		const blob = new Blob([lines.join("\n")], { type: "text/plain" });
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement("a");
+		a.href = url;
+		a.download = "procedimientos-sop.txt";
+		a.click();
+		URL.revokeObjectURL(url);
+		toast.success(`${nodesWithSop.length} procedimiento(s) descargados`);
+		setOpen(false);
+	}, [nodes]);
+
+	const openReport = useCallback(() => {
+		window.open(`/api/sessions/${sessionId}/export/review`, "_blank");
+		setOpen(false);
+	}, [sessionId]);
+
+	const handleExport = useCallback((format: "svg" | "png" | "bpmn") => {
+		exportDiagram(format);
+		setOpen(false);
+	}, [exportDiagram]);
+
+	const sopCount = nodes.filter((n) => n.procedure).length;
+
+	return (
+		<div className="relative">
+			<button
+				type="button"
+				onClick={() => setOpen(!open)}
+				className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-[#94A3B8] transition-colors duration-75 hover:bg-[#1E293B] hover:text-white"
+			>
+				<DownloadIcon className="h-3.5 w-3.5" />
+				<span className="hidden lg:inline">Exportar</span>
+				<ChevronDownIcon className="h-3 w-3" />
+			</button>
+
+			{open && (
+				<>
+					<div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+					<div className="absolute right-0 top-full z-50 mt-1.5 w-56 rounded-xl bg-[#0F172A] p-1.5 shadow-xl ring-1 ring-[#334155]">
+						{/* Diagrama */}
+						<p className="px-2.5 pb-1 pt-2 text-[9px] font-semibold uppercase tracking-wider text-[#475569]">Diagrama</p>
+						<ExportItem icon={<ImageIcon className="h-3.5 w-3.5" />} label="PNG (imagen)" onClick={() => handleExport("png")} />
+						<ExportItem icon={<FileCodeIcon className="h-3.5 w-3.5" />} label="SVG (vectorial)" onClick={() => handleExport("svg")} />
+						<ExportItem icon={<FileIcon className="h-3.5 w-3.5" />} label="BPMN (XML)" onClick={() => handleExport("bpmn")} />
+
+						<div className="my-1.5 h-px bg-[#1E293B]" />
+
+						{/* Documentación */}
+						<p className="px-2.5 pb-1 pt-1 text-[9px] font-semibold uppercase tracking-wider text-[#475569]">Documentación</p>
+						<ExportItem
+							icon={<FileTextIcon className="h-3.5 w-3.5" />}
+							label="Transcripción"
+							badge={transcript.length > 0 ? `${transcript.length}` : undefined}
+							onClick={exportTranscript}
+							disabled={transcript.length === 0}
+						/>
+						<ExportItem
+							icon={<ClipboardListIcon className="h-3.5 w-3.5" />}
+							label="Procedimientos (SOPs)"
+							badge={sopCount > 0 ? `${sopCount}` : undefined}
+							onClick={exportAllSops}
+							disabled={sopCount === 0}
+						/>
+
+						<div className="my-1.5 h-px bg-[#1E293B]" />
+
+						{/* Reporte */}
+						<p className="px-2.5 pb-1 pt-1 text-[9px] font-semibold uppercase tracking-wider text-[#475569]">Reporte</p>
+						<ExportItem icon={<FileTextIcon className="h-3.5 w-3.5" />} label="Reporte de sesión (PDF)" onClick={openReport} />
+					</div>
+				</>
+			)}
+		</div>
+	);
+}
+
+function ExportItem({ icon, label, badge, onClick, disabled }: {
+	icon: React.ReactNode; label: string; badge?: string; onClick: () => void; disabled?: boolean;
+}) {
+	return (
+		<button
+			type="button"
+			onClick={onClick}
+			disabled={disabled}
+			className={`flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-[11px] transition-colors ${
+				disabled
+					? "cursor-not-allowed text-[#475569] opacity-50"
+					: "text-[#94A3B8] hover:bg-[#1E293B] hover:text-white"
+			}`}
+		>
+			{icon}
+			<span className="flex-1">{label}</span>
+			{badge && (
+				<span className="rounded-full bg-[#1E293B] px-1.5 py-0.5 text-[9px] tabular-nums text-[#64748B]">{badge}</span>
+			)}
 		</button>
 	);
 }

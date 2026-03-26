@@ -296,3 +296,30 @@ ${recentTranscript}
 ${contextHint}
 Analyze the SIPOC coverage, identify the most critical gap, and suggest the next question.`;
 };
+
+/**
+ * Additional instruction block based on consultant's chosen question mode.
+ * Appended to the user prompt to override default behavior.
+ */
+export const QUESTION_MODE_INSTRUCTION: Record<string, string> = {
+  explore: `
+CONSULTANT MODE: EXPLORAR (breadth-first)
+Prioriza cubrir TODAS las dimensiones SIPOC de manera equilibrada.
+NO profundices en una sola dimensión — si una ya tiene >40%, mueve a la siguiente más baja.
+Haz preguntas amplias que abran nuevos temas: "¿Quién más participa?", "¿Qué otros documentos se generan?", "¿Hay otros sistemas involucrados?"
+El objetivo es mapear el terreno completo antes de detallar.`,
+
+  deepen: `
+CONSULTANT MODE: PROFUNDIZAR (depth-first)
+Identifica la dimensión SIPOC con MENOR score y DRILLA ahí hasta llevarla a >70%.
+Haz preguntas específicas: excepciones, SLAs exactos, sistemas concretos, controles de calidad, qué pasa cuando falla.
+NO saltes a otra dimensión hasta que la actual esté suficientemente cubierta.
+Busca el nivel de detalle que necesitaría un nuevo empleado para ejecutar el proceso.`,
+
+  validate: `
+CONSULTANT MODE: VALIDAR (review & seal)
+Recorre los nodos del diagrama UNO POR UNO, empezando por el primero.
+Para CADA nodo pregunta: "Para [nombre del nodo], ¿está completo? ¿Falta algún detalle? ¿Hay excepciones que no hayamos documentado?"
+Confirma información existente: "Según lo que tenemos, [dato] — ¿es correcto?"
+El objetivo es SELLAR cada punto sin dejar huecos. No abras temas nuevos.`,
+};

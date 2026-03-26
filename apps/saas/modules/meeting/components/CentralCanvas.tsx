@@ -433,14 +433,15 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 							position: absolute; inset: 0; z-index: 30; pointer-events: none;
 							border: 2px solid transparent;
 							background:
-								linear-gradient(rgba(255,255,255,0.95), rgba(255,255,255,0.95)) padding-box,
+								linear-gradient(rgba(255,255,255,0), rgba(255,255,255,0)) padding-box,
 								linear-gradient(90deg, #2563EB, #0EA5E9, #7C3AED, #2563EB, #0EA5E9) border-box;
 							background-size: 300% 100%;
 							animation: auraSweep 2s linear infinite;
 						}
 						.ai-aura-scrim {
 							position: absolute; inset: 0; z-index: 29; pointer-events: none;
-							background: radial-gradient(ellipse at center, transparent 30%, rgba(37, 99, 235, 0.03) 70%);
+							backdrop-filter: blur(3px);
+							background: radial-gradient(ellipse at center, rgba(255,255,255,0.4) 30%, rgba(255,255,255,0.6) 70%);
 						}
 						.ai-aura-center {
 							position: absolute; inset: 0; z-index: 31; pointer-events: none;

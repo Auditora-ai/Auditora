@@ -78,7 +78,7 @@ export type ProcessDefinitionScalarFieldEnum = z.infer<typeof ProcessDefinitionS
 
 // File: MeetingSessionScalarFieldEnum.schema.ts
 
-export const MeetingSessionScalarFieldEnumSchema = z.enum(['id', 'type', 'status', 'meetingUrl', 'organizationId', 'processDefinitionId', 'userId', 'continuationOf', 'recallBotId', 'recallBotStatus', 'scheduledFor', 'scheduledEnd', 'sessionGoals', 'sessionContext', 'intakeToken', 'intakeStatus', 'startedAt', 'endedAt', 'bpmnXml', 'videoUrl', 'audioUrl', 'shareToken', 'createdAt', 'updatedAt'])
+export const MeetingSessionScalarFieldEnumSchema = z.enum(['id', 'type', 'status', 'meetingUrl', 'organizationId', 'processDefinitionId', 'userId', 'continuationOf', 'recallBotId', 'recallBotStatus', 'scheduledFor', 'scheduledEnd', 'sessionGoals', 'sessionContext', 'intakeToken', 'intakeStatus', 'startedAt', 'endedAt', 'questionMode', 'bpmnXml', 'videoUrl', 'audioUrl', 'shareToken', 'createdAt', 'updatedAt'])
 
 export type MeetingSessionScalarFieldEnum = z.infer<typeof MeetingSessionScalarFieldEnumSchema>;
 
@@ -660,6 +660,7 @@ export const MeetingSessionSchema = z.object({
   intakeStatus: z.string().default("pending").nullish(),
   startedAt: z.date().nullish(),
   endedAt: z.date().nullish(),
+  questionMode: z.string().default("explore"),
   bpmnXml: z.string().nullish(),
   videoUrl: z.string().nullish(),
   audioUrl: z.string().nullish(),

@@ -14,6 +14,7 @@ import { z } from "zod";
 import {
   buildTeleprompterSystemPrompt,
   TELEPROMPTER_USER,
+  QUESTION_MODE_INSTRUCTION,
 } from "../prompts/teleprompter";
 import type { SessionContext } from "../context/session-context";
 import { parseLlmJson } from "../utils/parse-llm-json";
@@ -123,6 +124,7 @@ export async function generateNextQuestion(
   recentTranscript: TranscriptEntry[],
   processName?: string,
   context?: SessionContext,
+  questionMode?: string,
 ): Promise<TeleprompterResult> {
   const transcriptText = formatTranscriptWindow(recentTranscript);
 
@@ -153,17 +155,22 @@ export async function generateNextQuestion(
     };
   }
 
+  const basePrompt = TELEPROMPTER_USER(
+    sessionType,
+    currentNodes,
+    transcriptText,
+    processName,
+    context,
+  );
+  const modeInstruction = questionMode && QUESTION_MODE_INSTRUCTION[questionMode]
+    ? `\n${QUESTION_MODE_INSTRUCTION[questionMode]}`
+    : "";
+
   const { text } = await instrumentedGenerateText({
     organizationId,
     pipeline: "teleprompter",
     system: buildTeleprompterSystemPrompt(context),
-    prompt: TELEPROMPTER_USER(
-      sessionType,
-      currentNodes,
-      transcriptText,
-      processName,
-      context,
-    ),
+    prompt: basePrompt + modeInstruction,
     maxOutputTokens: 1024,
     temperature: 0.3,
   });

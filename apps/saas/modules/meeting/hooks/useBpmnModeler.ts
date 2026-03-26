@@ -211,6 +211,17 @@ export function useBpmnModeler({
 			eventBus.on("commandStack.changed", () => {
 				setCanUndo(commandStack.canUndo());
 				setCanRedo(commandStack.canRedo());
+
+				// Sync knownNodesRef with manual canvas edits so mergeAiNodes respects them
+				try {
+					const reg = modeler.get("elementRegistry");
+					for (const [nodeId, known] of knownNodesRef.current.entries()) {
+						const el = reg.get(nodeId);
+						if (el?.businessObject?.name && el.businessObject.name !== known.label) {
+							knownNodesRef.current.set(nodeId, { ...known, label: el.businessObject.name });
+						}
+					}
+				} catch { /* ok */ }
 			});
 			eventBus.on("selection.changed", (e: any) => {
 				const selected = e.newSelection?.[0] || null;
@@ -784,20 +795,24 @@ export function useBpmnModeler({
 
 			const prev = known.get(node.id)!;
 
-			// Update label if changed
+			// Update label if changed — but respect manual canvas edits
 			if (prev.label !== node.label) {
-				try {
-					modeling.updateLabel(element, node.label);
-				} catch {
+				const canvasLabel = element.businessObject?.name || "";
+				// Only update if canvas still shows the old DB label (not manually edited)
+				if (canvasLabel === prev.label || !canvasLabel) {
 					try {
-						modeling.updateProperties(element, {
-							name: node.label,
-						});
-					} catch (err) {
-						console.warn(
-							`[useBpmnModeler] Failed to update label for ${node.id}:`,
-							err,
-						);
+						modeling.updateLabel(element, node.label);
+					} catch {
+						try {
+							modeling.updateProperties(element, {
+								name: node.label,
+							});
+						} catch (err) {
+							console.warn(
+								`[useBpmnModeler] Failed to update label for ${node.id}:`,
+								err,
+							);
+						}
 					}
 				}
 			}

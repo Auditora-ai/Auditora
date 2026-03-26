@@ -1,10 +1,16 @@
 "use client";
 
 import { useCallback, useMemo, useState } from "react";
-import { SparklesIcon } from "lucide-react";
+import { SparklesIcon, TelescopeIcon, MicroscopeIcon, ShieldCheckIcon } from "lucide-react";
 import { toast } from "sonner";
 import type { DiagramNode } from "../types";
 import { useLiveSessionContext } from "../context/LiveSessionContext";
+
+const QUESTION_MODES = [
+	{ key: "explore", label: "Explorar", icon: TelescopeIcon, hint: "Cubrir todas las dimensiones SIPOC" },
+	{ key: "deepen", label: "Profundizar", icon: MicroscopeIcon, hint: "Detallar la dimensión más débil" },
+	{ key: "validate", label: "Validar", icon: ShieldCheckIcon, hint: "Revisar cada nodo, sellar gaps" },
+] as const;
 
 interface TeleprompterSectionProps {
 	currentQuestion: string | null;
@@ -305,6 +311,9 @@ export function TeleprompterSection({
 				})}
 			</div>
 
+			{/* Mode pills */}
+			<QuestionModePills />
+
 			{/* Questions */}
 			<div className="flex-1 overflow-y-auto p-3">
 				{hasAiSuggestions ? (
@@ -428,6 +437,53 @@ export function TeleprompterSection({
 					</div>
 				)}
 			</div>
+		</div>
+	);
+}
+
+function QuestionModePills() {
+	const { sessionId } = useLiveSessionContext();
+	const [mode, setMode] = useState<string>("explore");
+	const [saving, setSaving] = useState(false);
+
+	const handleChange = useCallback(async (newMode: string) => {
+		if (newMode === mode || saving) return;
+		setMode(newMode);
+		setSaving(true);
+		try {
+			await fetch(`/api/sessions/${sessionId}`, {
+				method: "PATCH",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ questionMode: newMode }),
+			});
+			const label = QUESTION_MODES.find((m) => m.key === newMode)?.label || newMode;
+			toast.success(`Modo: ${label}`, { duration: 2000 });
+		} catch { /* ok */ }
+		finally { setSaving(false); }
+	}, [sessionId, mode, saving]);
+
+	return (
+		<div className="flex items-center gap-1 border-b border-[#334155]/50 px-3 py-1.5">
+			{QUESTION_MODES.map((m) => {
+				const Icon = m.icon;
+				const active = mode === m.key;
+				return (
+					<button
+						key={m.key}
+						type="button"
+						onClick={() => handleChange(m.key)}
+						title={m.hint}
+						className={`flex flex-1 items-center justify-center gap-1 rounded-md py-1 text-[10px] font-medium transition-colors ${
+							active
+								? "bg-[#2563EB]/15 text-[#3B82F6]"
+								: "text-[#64748B] hover:bg-[#1E293B] hover:text-[#94A3B8]"
+						}`}
+					>
+						<Icon className="h-3 w-3" />
+						{m.label}
+					</button>
+				);
+			})}
 		</div>
 	);
 }

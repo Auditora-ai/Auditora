@@ -508,6 +508,7 @@ async function runTeleprompter(sessionId: string, organizationId?: string) {
 			})),
 			session.processDefinition?.name,
 			context,
+			session.questionMode || "explore",
 		);
 
 		await db.teleprompterLog.create({
