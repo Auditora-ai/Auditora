@@ -25,13 +25,13 @@ const TIER_MODEL_MAP: Record<AiTier, () => LanguageModel> = {
 		});
 		return deepseek("deepseek-chat");
 	},
-	standard: () => anthropic("claude-sonnet-4-6"),
+	standard: () => anthropic("claude-opus-4-6"),
 	premium: () => anthropic("claude-opus-4-6"),
 };
 
 const MODEL_DISPLAY_NAME: Record<AiTier, string> = {
 	budget: "deepseek-chat",
-	standard: "claude-sonnet-4-6",
+	standard: "claude-opus-4-6",
 	premium: "claude-opus-4-6",
 };
 

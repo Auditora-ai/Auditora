@@ -92,7 +92,7 @@ User message:
 ${message.trim()}`;
 
 		const { text } = await generateText({
-			model: anthropic("claude-sonnet-4-20250514"),
+			model: anthropic("claude-opus-4-6"),
 			system: SYSTEM_PROMPT,
 			prompt: userPrompt,
 			maxOutputTokens: 1000,

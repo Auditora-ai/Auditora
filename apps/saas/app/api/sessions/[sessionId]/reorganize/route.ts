@@ -24,6 +24,107 @@ export async function POST(
 		if (isAuthError(authResult)) return authResult;
 		const { session } = authResult;
 
+		// Check mode: "labels_only" or "full" (default)
+		let mode = "full";
+		try {
+			const body = await request.json();
+			if (body?.mode === "labels_only") mode = "labels_only";
+		} catch { /* no body = full mode */ }
+
+		// ─── Labels-only mode: fix spelling/grammar/types without structural changes ───
+		if (mode === "labels_only") {
+			const allNodes = await db.diagramNode.findMany({
+				where: { sessionId, state: { not: "REJECTED" } },
+				orderBy: { createdAt: "asc" },
+			});
+
+			if (allNodes.length < 1) {
+				return NextResponse.json({ ok: true, fixes: [] });
+			}
+
+			const nodeList = allNodes.map((n) =>
+				`- id:"${n.id}" type:${n.nodeType} label:"${n.label}"`,
+			).join("\n");
+
+			const { text } = await generateText({
+				model: anthropic("claude-opus-4-6"),
+				system: `Eres un editor de etiquetas BPMN. Corrige SOLO ortografía, gramática y formato.
+
+REGLAS:
+- Tareas: verbo + sustantivo en infinitivo (ej: "Revisar factura", "Enviar notificación")
+- Gateways: pregunta con ¿? (ej: "¿Aprobado?", "¿Monto > $1000?")
+- Eventos de inicio: "Inicio" o descriptivo (ej: "Recepción de solicitud")
+- Eventos de fin: "Fin" o descriptivo (ej: "Proceso completado")
+- Corrige acentos, mayúsculas, typos
+- Corrige tipo SOLO si es obviamente incorrecto (ej: tarea que es decisión → exclusiveGateway)
+- NO cambies conexiones, lanes, ni agregues/elimines nodos
+- Si un label ya está bien, NO lo incluyas en fixes
+
+CRITICAL: Output ONLY a JSON object. NO text before or after.
+
+JSON format:
+{
+  "fixes": [
+    { "id": "node_id", "label": "Label corregido", "type": "tipo corregido si necesario" }
+  ]
+}`,
+				prompt: `NODOS:\n${nodeList}\n\nRevisa cada etiqueta y corrige solo lo necesario.`,
+				maxOutputTokens: 1024,
+				temperature: 0,
+			});
+
+			let fixes: { id: string; label?: string; type?: string }[] = [];
+			try {
+				const cleaned = text.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+				const parsed = JSON.parse(cleaned);
+				fixes = parsed.fixes || [];
+			} catch {
+				const jsonMatch = text.match(/\{[\s\S]*"fixes"[\s\S]*\}/);
+				if (jsonMatch) {
+					try { fixes = JSON.parse(jsonMatch[0]).fixes || []; } catch { /* */ }
+				}
+			}
+
+			const validIds = new Set(allNodes.map((n) => n.id));
+			const typeMap: Record<string, string> = {
+				task: "TASK", usertask: "USER_TASK", userTask: "USER_TASK", user_task: "USER_TASK",
+				servicetask: "SERVICE_TASK", serviceTask: "SERVICE_TASK", service_task: "SERVICE_TASK",
+				manualtask: "MANUAL_TASK", manualTask: "MANUAL_TASK", manual_task: "MANUAL_TASK",
+				businessruletask: "BUSINESS_RULE_TASK", businessRuleTask: "BUSINESS_RULE_TASK", business_rule_task: "BUSINESS_RULE_TASK",
+				exclusivegateway: "EXCLUSIVE_GATEWAY", exclusiveGateway: "EXCLUSIVE_GATEWAY",
+				parallelgateway: "PARALLEL_GATEWAY", parallelGateway: "PARALLEL_GATEWAY",
+				startevent: "START_EVENT", startEvent: "START_EVENT",
+				endevent: "END_EVENT", endEvent: "END_EVENT",
+				subprocess: "SUBPROCESS", subProcess: "SUBPROCESS",
+			};
+
+			let applied = 0;
+			for (const fix of fixes) {
+				if (!fix.id || !validIds.has(fix.id)) continue;
+				const updateData: any = {};
+				if (fix.label) updateData.label = fix.label;
+				if (fix.type) {
+					const mapped = typeMap[fix.type] || typeMap[fix.type.toLowerCase()];
+					if (mapped) updateData.nodeType = mapped;
+				}
+				if (Object.keys(updateData).length > 0) {
+					await db.diagramNode.update({ where: { id: fix.id }, data: updateData });
+					applied++;
+				}
+			}
+
+			console.log(`[Reorganize:labels_only] Applied ${applied} fixes out of ${fixes.length}`);
+
+			return NextResponse.json({
+				ok: true,
+				mode: "labels_only",
+				fixes: fixes.filter((f) => validIds.has(f.id)),
+				applied,
+			});
+		}
+
+		// ─── Full mode (default) ───────────────────────────────────────────
+
 		// Pre-clean: assign default lane to nodes without lane (instead of rejecting)
 		await db.diagramNode.updateMany({
 			where: { sessionId, lane: null, state: { not: "REJECTED" } },
@@ -78,7 +179,7 @@ export async function POST(
 			.substring(0, 3000);
 
 		const { text } = await generateText({
-			model: anthropic("claude-sonnet-4-6"),
+			model: anthropic("claude-opus-4-6"),
 			system: `Eres un consultor senior de BPM revisando un diagrama BPMN generado por IA durante una sesión de elicitación de procesos.
 
 TU ROL: Actúa como un ingeniero modelador profesional. Tu trabajo es limpiar, corregir y organizar el diagrama para que sea un entregable profesional.
