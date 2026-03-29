@@ -186,10 +186,10 @@ export function RiskTab({ processId }: RiskTabProps) {
 
   if (error && risks.length === 0) {
     return (
-      <Card className="border-slate-700 bg-slate-800">
+      <Card className="border-chrome-border bg-chrome-raised">
         <CardContent className="flex flex-col items-center justify-center py-12 text-center">
           <AlertTriangleIcon className="mb-4 h-10 w-10 text-red-400" />
-          <p className="mb-4 text-sm text-slate-300">
+          <p className="mb-4 text-sm text-muted-foreground">
             Error al analizar. Intenta de nuevo.
           </p>
           <Button onClick={fetchRisks} variant="outline">
@@ -205,13 +205,13 @@ export function RiskTab({ processId }: RiskTabProps) {
 
   if (risks.length === 0) {
     return (
-      <Card className="border-slate-700 bg-slate-800">
+      <Card className="border-chrome-border bg-chrome-raised">
         <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-          <ShieldAlertIcon className="mb-4 h-12 w-12 text-slate-600" />
-          <h3 className="mb-2 text-lg font-semibold text-slate-100">
+          <ShieldAlertIcon className="mb-4 h-12 w-12 text-muted-foreground" />
+          <h3 className="mb-2 text-lg font-semibold text-chrome-text">
             Sin riesgos analizados
           </h3>
-          <p className="mb-6 max-w-md text-sm text-slate-400">
+          <p className="mb-6 max-w-md text-sm text-muted-foreground">
             Sin riesgos analizados. Ejecuta el análisis para identificar
             riesgos.
           </p>
@@ -245,12 +245,12 @@ export function RiskTab({ processId }: RiskTabProps) {
   return (
     <div className="space-y-6">
       {/* ─── Header ────────────────────────────────────────────────── */}
-      <Card className="border-slate-700 bg-slate-800">
+      <Card className="border-chrome-border bg-chrome-raised">
         <CardContent className="p-4">
           <div className="flex flex-wrap items-center gap-4">
             {/* Average score */}
             <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-400">Riesgo promedio:</span>
+              <span className="text-xs text-muted-foreground">Riesgo promedio:</span>
               <span
                 className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-bold ${getScoreBadge(stats.avgScore)}`}
               >
@@ -285,16 +285,16 @@ export function RiskTab({ processId }: RiskTabProps) {
                 size="sm"
                 onClick={handleAudit}
                 disabled={auditing}
-                className="border-slate-600 text-slate-300"
+                className="border-chrome-border text-muted-foreground"
               >
                 {auditing ? (
                   <>
-                    <RefreshCwIcon className="mr-1 h-3 w-3 animate-spin" />
+                    <RefreshCwIcon className="mr-1 h-3.5 w-3.5 animate-spin" />
                     Analizando...
                   </>
                 ) : (
                   <>
-                    <ShieldAlertIcon className="mr-1 h-3 w-3" />
+                    <ShieldAlertIcon className="mr-1 h-3.5 w-3.5" />
                     Analizar Riesgos
                   </>
                 )}
@@ -304,9 +304,9 @@ export function RiskTab({ processId }: RiskTabProps) {
                 size="sm"
                 onClick={handleFmea}
                 disabled={auditing}
-                className="border-slate-600 text-slate-300"
+                className="border-chrome-border text-muted-foreground"
               >
-                <ClipboardListIcon className="mr-1 h-3 w-3" />
+                <ClipboardListIcon className="mr-1 h-3.5 w-3.5" />
                 FMEA
               </Button>
             </div>
@@ -315,9 +315,9 @@ export function RiskTab({ processId }: RiskTabProps) {
       </Card>
 
       {/* ─── Heat Matrix ──────────────────────────────────────────── */}
-      <Card className="border-slate-700 bg-slate-800">
+      <Card className="border-chrome-border bg-chrome-raised">
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm text-slate-200">
+          <CardTitle className="text-sm text-chrome-text-secondary">
             Matriz de Riesgo
           </CardTitle>
         </CardHeader>
@@ -334,14 +334,14 @@ export function RiskTab({ processId }: RiskTabProps) {
           />
           {activeCell && (
             <div className="mt-2 flex items-center justify-between">
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-muted-foreground">
                 Filtro: Severidad {activeCell.severity}, Probabilidad{" "}
                 {activeCell.probability}
               </span>
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-6 text-xs text-slate-400"
+                className="h-6 text-xs text-muted-foreground"
                 onClick={() => setActiveCell(null)}
               >
                 Limpiar filtro
@@ -352,7 +352,7 @@ export function RiskTab({ processId }: RiskTabProps) {
       </Card>
 
       {/* ─── Sub-tabs ─────────────────────────────────────────────── */}
-      <div className="flex gap-1 rounded-lg border border-slate-700 bg-slate-900/50 p-1">
+      <div className="flex gap-1 rounded-lg border border-chrome-border bg-chrome-base/50 p-1">
         {SUB_TABS.map((tab) => (
           <button
             key={tab.key}
@@ -360,8 +360,8 @@ export function RiskTab({ processId }: RiskTabProps) {
             onClick={() => setActiveSubTab(tab.key)}
             className={`flex-1 rounded-md px-3 py-2 text-xs font-medium transition-colors ${
               activeSubTab === tab.key
-                ? "bg-slate-700 text-slate-100"
-                : "text-slate-400 hover:text-slate-200"
+                ? "bg-chrome-hover text-chrome-text"
+                : "text-muted-foreground hover:text-chrome-text-secondary"
             }`}
           >
             {tab.label}
@@ -397,10 +397,10 @@ export function RiskTab({ processId }: RiskTabProps) {
               .map((risk) => (
                 <Card
                   key={risk.id}
-                  className="border-slate-700 bg-slate-800"
+                  className="border-chrome-border bg-chrome-raised"
                 >
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm text-slate-200">
+                    <CardTitle className="text-sm text-chrome-text-secondary">
                       {risk.title}
                       <span
                         className={`ml-2 inline-flex items-center rounded-full px-2 py-0.5 text-xs ${getScoreBadge(risk.riskScore)}`}
@@ -420,7 +420,7 @@ export function RiskTab({ processId }: RiskTabProps) {
                 </Card>
               ))}
             {risks.filter((r) => !r.isOpportunity).length === 0 && (
-              <p className="py-8 text-center text-sm text-slate-400">
+              <p className="py-8 text-center text-sm text-muted-foreground">
                 No hay riesgos para mapear controles.
               </p>
             )}
@@ -435,7 +435,7 @@ export function RiskTab({ processId }: RiskTabProps) {
         <button
           type="button"
           onClick={() => setShowTrend(!showTrend)}
-          className="flex w-full items-center justify-between rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-2 text-xs text-slate-400 transition-colors hover:bg-slate-800"
+          className="flex w-full items-center justify-between rounded-lg border border-chrome-border bg-chrome-raised/50 px-4 py-2 text-xs text-muted-foreground transition-colors hover:bg-chrome-raised"
         >
           <span className="flex items-center gap-2">
             <TrendingUpIcon className="h-3.5 w-3.5" />

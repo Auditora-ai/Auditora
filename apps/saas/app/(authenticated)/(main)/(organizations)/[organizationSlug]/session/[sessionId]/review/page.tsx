@@ -1,14 +1,24 @@
 import { db } from "@repo/database";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import { RetryButton } from "./RetryButton";
 import { ReviewPoller } from "./ReviewPoller";
 import { ExportPdfButton } from "./ExportPdfButton";
+import { MaturityScore } from "./MaturityScore";
+import { ProcessMap } from "./ProcessMap";
+import { SipocDashboard, computeSipocCoverage } from "./SipocDashboard";
+import { ActivityCards } from "./ActivityCards";
+import { RiskHeatMap } from "./RiskHeatMap";
+import { NextSessionIntel } from "./NextSessionIntel";
+import { ShareReportButton } from "./ShareReportButton";
+import { ReportSection } from "./ReportSection";
+import { CopyActionsButton } from "./CopyActionsButton";
+import { RegenerateButton } from "./RegenerateButton";
 
 export const metadata = {
-	title: "Session Review — aiprocess.me",
+	title: "Process Intelligence Report — Auditora.ai",
 };
 
-// -- Type helpers for deliverable data shapes --
+// -- Type helpers --
 
 interface SummaryData {
 	summary: string;
@@ -22,16 +32,17 @@ interface AuditGap {
 	priority: number;
 }
 
-interface AuditContradiction {
-	topic: string;
-	claim1: string;
-	claim2: string;
-}
-
 interface ProcessAuditData {
 	completenessScore: number;
+	updatedScores: Record<string, number>;
 	newGaps: AuditGap[];
-	contradictions?: AuditContradiction[];
+	contradictions?: Array<{ topic: string; claim1: string; claim2: string }>;
+	followUpSuggestion?: {
+		shouldSchedule: boolean;
+		focusAreas: string[];
+		estimatedDuration: string;
+		unresolved: number;
+	};
 }
 
 interface RaciAssignment {
@@ -44,25 +55,30 @@ interface RaciData {
 	assignments: RaciAssignment[];
 }
 
-interface RiskItem {
-	title: string;
-	description: string;
-	riskType: string;
-	severity: number;
-	probability: number;
-	affectedStep?: string;
-	isOpportunity: boolean;
-	suggestedMitigations: string[];
-}
-
 interface RiskAuditData {
-	newRisks: RiskItem[];
+	newRisks: Array<{
+		title: string;
+		description: string;
+		riskType: string;
+		severity: number;
+		probability: number;
+		affectedStep?: string;
+		isOpportunity: boolean;
+		suggestedMitigations: string[];
+	}>;
 	riskSummary: {
 		totalRiskScore: number;
 		criticalCount: number;
 		highCount: number;
 		topRiskArea: string;
 	};
+}
+
+interface ComplexityData {
+	score: number;
+	breakdown: Record<string, number>;
+	explanation: string;
+	recommendation: string;
 }
 
 // -- Helpers --
@@ -79,302 +95,51 @@ function formatDuration(startedAt: Date | null, endedAt: Date | null): string {
 
 function formatDate(date: Date | null): string {
 	if (!date) return "--";
-	return date.toLocaleDateString("en-US", {
+	return date.toLocaleDateString("es-MX", {
 		year: "numeric",
 		month: "long",
 		day: "numeric",
 	});
 }
 
-function severityLabel(severity: number): {
-	text: string;
-	color: string;
-	bg: string;
-} {
-	if (severity >= 4)
-		return { text: "Critical", color: "text-red-700", bg: "bg-red-50" };
-	if (severity >= 3)
-		return { text: "High", color: "text-amber-700", bg: "bg-amber-50" };
-	if (severity >= 2)
-		return { text: "Medium", color: "text-yellow-700", bg: "bg-yellow-50" };
-	return { text: "Low", color: "text-green-700", bg: "bg-green-50" };
-}
+// -- Skeleton component --
 
-function priorityBadge(priority: number): string {
-	if (priority >= 4) return "bg-red-100 text-red-700";
-	if (priority >= 3) return "bg-amber-100 text-amber-700";
-	return "bg-[#F1F5F9] text-[#64748B]";
-}
-
-// -- Status Badge Component --
-
-function DeliverableStatus({
-	status,
-}: {
-	status: string;
-}) {
-	const styles: Record<string, { dot: string; text: string; label: string }> =
-		{
-			completed: {
-				dot: "bg-green-500",
-				text: "text-green-700",
-				label: "Completed",
-			},
-			running: {
-				dot: "bg-amber-500 animate-pulse",
-				text: "text-amber-700",
-				label: "Generating...",
-			},
-			pending: {
-				dot: "bg-[#CBD5E1]",
-				text: "text-[#64748B]",
-				label: "Pending",
-			},
-			failed: { dot: "bg-red-500", text: "text-red-700", label: "Failed" },
-			skipped: {
-				dot: "bg-[#CBD5E1]",
-				text: "text-[#94A3B8]",
-				label: "Skipped",
-			},
-		};
-
-	const s = styles[status] ?? styles.pending;
-
+function SectionSkeleton({ title }: { title: string }) {
 	return (
-		<span className={`inline-flex items-center gap-1.5 text-xs ${s.text}`}>
-			<span className={`h-2 w-2 rounded-full ${s.dot}`} />
-			{s.label}
-		</span>
-	);
-}
-
-// -- Section Wrapper --
-
-function Section({
-	title,
-	status,
-	children,
-}: {
-	title: string;
-	status: string;
-	children: React.ReactNode;
-}) {
-	return (
-		<section className="rounded-md border border-[#E2E8F0] bg-white">
-			<div className="flex items-center justify-between border-b border-[#F1F5F9] px-6 py-4">
-				<h2 className="text-lg font-semibold text-[#0F172A]">{title}</h2>
-				<DeliverableStatus status={status} />
+		<section className="rounded-lg border border-stone-200 bg-white overflow-hidden">
+			<div className="border-b border-stone-100 px-6 py-4">
+				<h2 className="text-lg text-stone-900" style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}>
+					{title}
+				</h2>
 			</div>
-			<div className="px-6 py-5">{children}</div>
+			<div className="px-6 py-5 space-y-3">
+				<div className="h-4 w-full animate-pulse rounded bg-stone-100" />
+				<div className="h-4 w-5/6 animate-pulse rounded bg-stone-100" />
+				<div className="h-4 w-4/6 animate-pulse rounded bg-stone-100" />
+			</div>
 		</section>
 	);
 }
 
-// -- Deliverable Renderers --
-
-function SummarySection({
-	status,
-	data,
-	error,
-	sessionId,
-}: {
-	status: string;
-	data: SummaryData | null;
-	error: string | null;
-	sessionId: string;
-}) {
+function FailedSection({ title, error, sessionId, type }: { title: string; error: string | null; sessionId: string; type: string }) {
 	return (
-		<Section title="Executive Summary" status={status}>
-			{status === "pending" || status === "running" ? (
-				<div className="space-y-3">
-					<div className="h-4 w-full animate-pulse rounded bg-[#F1F5F9]" />
-					<div className="h-4 w-5/6 animate-pulse rounded bg-[#F1F5F9]" />
-					<div className="h-4 w-4/6 animate-pulse rounded bg-[#F1F5F9]" />
-				</div>
-			) : status === "failed" ? (
-				<div className="flex items-center justify-between">
-					<p className="text-sm text-red-600">
-						Failed to generate summary.{error ? ` ${error}` : ""}
-					</p>
-					<RetryButton sessionId={sessionId} type="summary" />
-				</div>
-			) : status === "skipped" ? (
-				<p className="text-sm text-[#94A3B8]">
-					Summary generation was skipped for this session.
-				</p>
-			) : data ? (
-				<div className="space-y-5">
-					<p className="text-sm leading-relaxed text-[#334155] whitespace-pre-wrap">
-						{data.summary}
-					</p>
-					{data.actionItems.length > 0 && (
-						<div>
-							<h3 className="mb-2 text-sm font-medium text-[#0F172A]">
-								Action Items
-							</h3>
-							<ul className="space-y-1.5">
-								{data.actionItems.map((item, i) => (
-									<li
-										key={i}
-										className="flex items-start gap-2 text-sm text-[#334155]"
-									>
-										<span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border border-[#E2E8F0] text-xs text-[#94A3B8]">
-											{i + 1}
-										</span>
-										{item}
-									</li>
-								))}
-							</ul>
-						</div>
-					)}
-				</div>
-			) : (
-				<p className="text-sm text-[#94A3B8]">No summary data available.</p>
-			)}
-		</Section>
+		<section className="rounded-lg border border-stone-200 bg-white overflow-hidden">
+			<div className="border-b border-stone-100 px-6 py-4">
+				<h2 className="text-lg text-stone-900" style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}>
+					{title}
+				</h2>
+			</div>
+			<div className="px-6 py-5 flex items-center justify-between">
+				<p className="text-sm text-red-600">Error al generar.{error ? ` ${error}` : ""}</p>
+				<RetryButton sessionId={sessionId} type={type} />
+			</div>
+		</section>
 	);
 }
 
-function ProcessAuditSection({
-	status,
-	data,
-	error,
-	sessionId,
-}: {
-	status: string;
-	data: ProcessAuditData | null;
-	error: string | null;
-	sessionId: string;
-}) {
-	return (
-		<Section title="Process Audit" status={status}>
-			{status === "pending" || status === "running" ? (
-				<div className="space-y-3">
-					<div className="h-4 w-1/3 animate-pulse rounded bg-[#F1F5F9]" />
-					<div className="h-4 w-full animate-pulse rounded bg-[#F1F5F9]" />
-					<div className="h-4 w-5/6 animate-pulse rounded bg-[#F1F5F9]" />
-				</div>
-			) : status === "failed" ? (
-				<div className="flex items-center justify-between">
-					<p className="text-sm text-red-600">
-						Failed to generate process audit.{error ? ` ${error}` : ""}
-					</p>
-					<RetryButton sessionId={sessionId} type="process_audit" />
-				</div>
-			) : status === "skipped" ? (
-				<p className="text-sm text-[#94A3B8]">
-					Process audit was skipped for this session.
-				</p>
-			) : data ? (
-				<div className="space-y-6">
-					{/* Completeness Score */}
-					<div>
-						<div className="mb-2 flex items-center justify-between">
-							<span className="text-sm font-medium text-[#334155]">
-								Completeness Score
-							</span>
-							<span className="text-sm font-semibold text-[#0F172A]">
-								{data.completenessScore}%
-							</span>
-						</div>
-						<div className="h-2 w-full overflow-hidden rounded-full bg-[#F1F5F9]">
-							<div
-								className={`h-full rounded-full transition-all ${
-									data.completenessScore >= 80
-										? "bg-green-500"
-										: data.completenessScore >= 50
-											? "bg-amber-500"
-											: "bg-red-500"
-								}`}
-								style={{ width: `${data.completenessScore}%` }}
-							/>
-						</div>
-					</div>
+// -- RACI Section (kept inline, polished) --
 
-					{/* Knowledge Gaps */}
-					{data.newGaps.length > 0 && (
-						<div>
-							<h3 className="mb-3 text-sm font-medium text-[#0F172A]">
-								Knowledge Gaps ({data.newGaps.length})
-							</h3>
-							<div className="space-y-2">
-								{data.newGaps.map((gap, i) => (
-									<div
-										key={i}
-										className="rounded border border-[#F1F5F9] bg-[#F8FAFC] px-4 py-3"
-									>
-										<div className="mb-1 flex items-center gap-2">
-											<span
-												className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${priorityBadge(gap.priority)}`}
-											>
-												P{gap.priority}
-											</span>
-											<span className="text-xs text-[#64748B]">
-												{gap.category}
-											</span>
-										</div>
-										<p className="text-sm text-[#334155]">{gap.question}</p>
-										{gap.context && (
-											<p className="mt-1 text-xs text-[#64748B]">
-												{gap.context}
-											</p>
-										)}
-									</div>
-								))}
-							</div>
-						</div>
-					)}
-
-					{/* Contradictions */}
-					{data.contradictions && data.contradictions.length > 0 && (
-						<div>
-							<h3 className="mb-3 text-sm font-medium text-[#0F172A]">
-								Contradictions ({data.contradictions.length})
-							</h3>
-							<div className="space-y-2">
-								{data.contradictions.map((c, i) => (
-									<div
-										key={i}
-										className="rounded border border-amber-100 bg-amber-50 px-4 py-3"
-									>
-										<p className="mb-1 text-sm font-medium text-amber-800">
-											{c.topic}
-										</p>
-										<div className="space-y-1 text-xs text-amber-700">
-											<p>
-												<span className="font-medium">Claim 1:</span>{" "}
-												{c.claim1}
-											</p>
-											<p>
-												<span className="font-medium">Claim 2:</span>{" "}
-												{c.claim2}
-											</p>
-										</div>
-									</div>
-								))}
-							</div>
-						</div>
-					)}
-				</div>
-			) : (
-				<p className="text-sm text-[#94A3B8]">No audit data available.</p>
-			)}
-		</Section>
-	);
-}
-
-function RaciSection({
-	status,
-	data,
-	error,
-	sessionId,
-}: {
-	status: string;
-	data: RaciData | null;
-	error: string | null;
-	sessionId: string;
-}) {
-	// Build matrix: rows = activities, columns = roles
+function RaciSection({ data, actions }: { data: RaciData | null; actions?: React.ReactNode }) {
 	const activities: string[] = [];
 	const roles: string[] = [];
 	const matrix: Record<string, Record<string, string>> = {};
@@ -391,43 +156,21 @@ function RaciSection({
 	const cellColor: Record<string, string> = {
 		R: "bg-blue-100 text-blue-800 font-semibold",
 		A: "bg-purple-100 text-purple-800 font-semibold",
-		C: "bg-[#F1F5F9] text-[#64748B]",
-		I: "bg-[#F8FAFC] text-[#94A3B8]",
+		C: "bg-stone-100 text-stone-500",
+		I: "bg-stone-50 text-stone-400",
 	};
 
+	if (!data || activities.length === 0) return null;
+
 	return (
-		<Section title="RACI Matrix" status={status}>
-			{status === "pending" || status === "running" ? (
-				<div className="space-y-3">
-					<div className="h-4 w-full animate-pulse rounded bg-[#F1F5F9]" />
-					<div className="h-4 w-full animate-pulse rounded bg-[#F1F5F9]" />
-					<div className="h-4 w-full animate-pulse rounded bg-[#F1F5F9]" />
-				</div>
-			) : status === "failed" ? (
-				<div className="flex items-center justify-between">
-					<p className="text-sm text-red-600">
-						Failed to generate RACI matrix.{error ? ` ${error}` : ""}
-					</p>
-					<RetryButton sessionId={sessionId} type="raci" />
-				</div>
-			) : status === "skipped" ? (
-				<p className="text-sm text-[#94A3B8]">
-					RACI generation was skipped for this session.
-				</p>
-			) : data && activities.length > 0 ? (
+		<ReportSection title="Matriz RACI" actions={actions}>
 				<div className="overflow-x-auto">
 					<table className="w-full text-sm">
 						<thead>
-							<tr className="border-b border-[#E2E8F0]">
-								<th className="py-2 pr-4 text-left font-medium text-[#64748B]">
-									Activity
-								</th>
+							<tr className="border-b border-stone-200">
+								<th className="py-2 pr-4 text-left font-medium text-stone-500">Actividad</th>
 								{roles.map((role) => (
-									<th
-										key={role}
-										className="px-3 py-2 text-center font-medium text-[#64748B]"
-										style={{ fontVariantNumeric: "tabular-nums" }}
-									>
+									<th key={role} className="px-3 py-2 text-center font-medium text-stone-500" style={{ fontVariantNumeric: "tabular-nums" }}>
 										{role}
 									</th>
 								))}
@@ -435,23 +178,18 @@ function RaciSection({
 						</thead>
 						<tbody>
 							{activities.map((activity) => (
-								<tr
-									key={activity}
-									className="border-b border-[#F8FAFC] last:border-0"
-								>
-									<td className="py-2.5 pr-4 text-[#334155]">{activity}</td>
+								<tr key={activity} className="border-b border-stone-50 last:border-0">
+									<td className="py-2.5 pr-4 text-stone-700">{activity}</td>
 									{roles.map((role) => {
 										const val = matrix[activity]?.[role];
 										return (
 											<td key={role} className="px-3 py-2.5 text-center">
 												{val ? (
-													<span
-														className={`inline-flex h-7 w-7 items-center justify-center rounded text-xs ${cellColor[val] ?? ""}`}
-													>
+													<span className={`inline-flex h-7 w-7 items-center justify-center rounded text-xs ${cellColor[val] ?? ""}`}>
 														{val}
 													</span>
 												) : (
-													<span className="text-[#E2E8F0]">-</span>
+													<span className="text-stone-300">-</span>
 												)}
 											</td>
 										);
@@ -460,175 +198,83 @@ function RaciSection({
 							))}
 						</tbody>
 					</table>
-					<div className="mt-4 flex items-center gap-4 text-xs text-[#64748B]">
-						<span>
-							<span className="inline-flex h-5 w-5 items-center justify-center rounded bg-blue-100 text-xs font-semibold text-blue-800">
-								R
-							</span>{" "}
-							Responsible
-						</span>
-						<span>
-							<span className="inline-flex h-5 w-5 items-center justify-center rounded bg-purple-100 text-xs font-semibold text-purple-800">
-								A
-							</span>{" "}
-							Accountable
-						</span>
-						<span>
-							<span className="inline-flex h-5 w-5 items-center justify-center rounded bg-[#F1F5F9] text-xs text-[#64748B]">
-								C
-							</span>{" "}
-							Consulted
-						</span>
-						<span>
-							<span className="inline-flex h-5 w-5 items-center justify-center rounded bg-[#F8FAFC] text-xs text-[#94A3B8]">
-								I
-							</span>{" "}
-							Informed
-						</span>
+					<div className="mt-4 flex items-center gap-4 text-xs text-stone-500">
+						<span><span className="inline-flex h-5 w-5 items-center justify-center rounded bg-blue-100 text-xs font-semibold text-blue-800">R</span> Responsable</span>
+						<span><span className="inline-flex h-5 w-5 items-center justify-center rounded bg-purple-100 text-xs font-semibold text-purple-800">A</span> Accountable</span>
+						<span><span className="inline-flex h-5 w-5 items-center justify-center rounded bg-stone-100 text-xs text-stone-500">C</span> Consultado</span>
+						<span><span className="inline-flex h-5 w-5 items-center justify-center rounded bg-stone-50 text-xs text-stone-400">I</span> Informado</span>
 					</div>
 				</div>
-			) : (
-				<p className="text-sm text-[#94A3B8]">
-					No RACI data available. This may require swimlanes in the BPMN
-					diagram.
-				</p>
-			)}
-		</Section>
+		</ReportSection>
 	);
 }
 
-function RiskAuditSection({
-	status,
-	data,
-	error,
-	sessionId,
-}: {
-	status: string;
-	data: RiskAuditData | null;
-	error: string | null;
-	sessionId: string;
-}) {
+// -- Knowledge Gaps (enhanced, grouped by category) --
+
+function priorityBadge(priority: number): { label: string; classes: string } {
+	if (priority >= 70) return { label: "P1", classes: "bg-red-100 text-red-700" };
+	if (priority >= 40) return { label: "P2", classes: "bg-amber-100 text-amber-700" };
+	return { label: "P3", classes: "bg-stone-100 text-stone-500" };
+}
+
+function KnowledgeGapsSection({ gaps, actions }: { gaps: AuditGap[]; actions?: React.ReactNode }) {
+	if (gaps.length === 0) return null;
+
+	// Sort all gaps by priority descending, then group
+	const sorted = [...gaps].sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
+	const grouped = new Map<string, AuditGap[]>();
+	for (const gap of sorted) {
+		const cat = gap.category || "GENERAL_GAP";
+		if (!grouped.has(cat)) grouped.set(cat, []);
+		grouped.get(cat)!.push(gap);
+	}
+
+	const categoryLabels: Record<string, string> = {
+		MISSING_PATH: "Caminos faltantes",
+		MISSING_ROLE: "Roles sin asignar",
+		MISSING_EXCEPTION: "Excepciones no definidas",
+		MISSING_DECISION: "Decisiones sin criterio",
+		MISSING_TRIGGER: "Disparadores no claros",
+		MISSING_OUTPUT: "Salidas no definidas",
+		CONTRADICTION: "Contradicciones",
+		UNCLEAR_HANDOFF: "Handoffs no claros",
+		MISSING_SLA: "SLAs faltantes",
+		MISSING_SYSTEM: "Sistemas no identificados",
+		GENERAL_GAP: "Otros",
+	};
+
 	return (
-		<Section title="Risk Audit" status={status}>
-			{status === "pending" || status === "running" ? (
-				<div className="space-y-3">
-					<div className="h-4 w-1/3 animate-pulse rounded bg-[#F1F5F9]" />
-					<div className="h-4 w-full animate-pulse rounded bg-[#F1F5F9]" />
-					<div className="h-4 w-5/6 animate-pulse rounded bg-[#F1F5F9]" />
-				</div>
-			) : status === "failed" ? (
-				<div className="flex items-center justify-between">
-					<p className="text-sm text-red-600">
-						Failed to generate risk audit.{error ? ` ${error}` : ""}
-					</p>
-					<RetryButton sessionId={sessionId} type="risk_audit" />
-				</div>
-			) : status === "skipped" ? (
-				<p className="text-sm text-[#94A3B8]">
-					Risk audit was skipped for this session.
-				</p>
-			) : data ? (
-				<div className="space-y-6">
-					{/* Risk Summary */}
-					<div className="grid grid-cols-4 gap-4">
-						<div className="rounded border border-[#F1F5F9] bg-[#F8FAFC] p-3 text-center">
-							<p className="text-2xl font-semibold text-[#0F172A]">
-								{data.riskSummary.totalRiskScore}
-							</p>
-							<p className="text-xs text-[#64748B]">Risk Score</p>
-						</div>
-						<div className="rounded border border-red-100 bg-red-50 p-3 text-center">
-							<p className="text-2xl font-semibold text-red-700">
-								{data.riskSummary.criticalCount}
-							</p>
-							<p className="text-xs text-red-600">Critical</p>
-						</div>
-						<div className="rounded border border-amber-100 bg-amber-50 p-3 text-center">
-							<p className="text-2xl font-semibold text-amber-700">
-								{data.riskSummary.highCount}
-							</p>
-							<p className="text-xs text-amber-600">High</p>
-						</div>
-						<div className="rounded border border-[#F1F5F9] bg-[#F8FAFC] p-3 text-center">
-							<p className="text-sm font-medium text-[#334155]">
-								{data.riskSummary.topRiskArea.replace(/_/g, " ")}
-							</p>
-							<p className="text-xs text-[#64748B]">Top Risk Area</p>
+		<ReportSection title={`Brechas de Conocimiento (${gaps.length})`} actions={actions}>
+			<div className="space-y-5">
+				{Array.from(grouped.entries()).map(([category, catGaps]) => (
+					<div key={category}>
+						<h3 className="text-sm font-semibold text-stone-700 mb-2 flex items-center gap-2">
+							<span className="w-2 h-2 rounded-full bg-amber-500" />
+							{categoryLabels[category] || category.replace(/_/g, " ")}
+							<span className="text-xs font-normal text-stone-400">({catGaps.length})</span>
+						</h3>
+						<div className="space-y-1.5">
+							{catGaps.map((gap, i) => {
+								const badge = priorityBadge(gap.priority ?? 0);
+								return (
+									<div key={i} className="rounded border border-stone-100 bg-stone-50 px-4 py-2.5">
+										<div className="flex items-center gap-2 mb-0.5">
+											<span className={`inline-flex rounded-full px-1.5 py-0.5 text-[10px] font-semibold ${badge.classes}`}>
+												{badge.label}
+											</span>
+										</div>
+										<p className="text-sm text-stone-700">{gap.question}</p>
+										{gap.context && (
+											<p className="mt-1 text-xs text-stone-400">{gap.context}</p>
+										)}
+									</div>
+								);
+							})}
 						</div>
 					</div>
-
-					{/* Risk List */}
-					{data.newRisks.length > 0 && (
-						<div>
-							<h3 className="mb-3 text-sm font-medium text-[#0F172A]">
-								Identified Risks ({data.newRisks.length})
-							</h3>
-							<div className="space-y-2">
-								{data.newRisks.map((risk, i) => {
-									const sev = severityLabel(risk.severity);
-									return (
-										<div
-											key={i}
-											className="rounded border border-[#F1F5F9] bg-[#F8FAFC] px-4 py-3"
-										>
-											<div className="mb-1.5 flex items-center gap-2">
-												<span
-													className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${sev.bg} ${sev.color}`}
-												>
-													{sev.text}
-												</span>
-												<span className="text-xs text-[#64748B]">
-													{risk.riskType.replace(/_/g, " ")}
-												</span>
-												{risk.isOpportunity && (
-													<span className="inline-flex rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
-														Opportunity
-													</span>
-												)}
-											</div>
-											<p className="text-sm font-medium text-[#0F172A]">
-												{risk.title}
-											</p>
-											<p className="mt-0.5 text-sm text-[#64748B]">
-												{risk.description}
-											</p>
-											{risk.affectedStep && (
-												<p className="mt-1 text-xs text-[#64748B]">
-													Affected step: {risk.affectedStep}
-												</p>
-											)}
-											{risk.suggestedMitigations.length > 0 && (
-												<div className="mt-2">
-													<p className="text-xs font-medium text-[#64748B]">
-														Mitigations:
-													</p>
-													<ul className="mt-1 list-inside list-disc text-xs text-[#64748B]">
-														{risk.suggestedMitigations.map((m, j) => (
-															<li key={j}>{m}</li>
-														))}
-													</ul>
-												</div>
-											)}
-											<div className="mt-2 flex gap-3 text-xs text-[#94A3B8]">
-												<span>Severity: {risk.severity}/5</span>
-												<span>Probability: {risk.probability}/5</span>
-												<span>
-													RPN: {risk.severity * risk.probability}
-												</span>
-											</div>
-										</div>
-									);
-								})}
-							</div>
-						</div>
-					)}
-				</div>
-			) : (
-				<p className="text-sm text-[#94A3B8]">
-					No risk audit data available.
-				</p>
-			)}
-		</Section>
+				))}
+			</div>
+		</ReportSection>
 	);
 }
 
@@ -647,6 +293,10 @@ export default async function SessionReviewPage({
 			processDefinition: true,
 			organization: { select: { name: true, slug: true } },
 			sessionDeliverables: true,
+			diagramNodes: {
+				where: { state: { not: "REJECTED" } },
+				orderBy: { formedAt: "asc" },
+			},
 			_count: { select: { transcriptEntries: true } },
 		},
 	});
@@ -655,24 +305,17 @@ export default async function SessionReviewPage({
 		redirect(`/${organizationSlug}/sessions`);
 	}
 
-	// Verify org membership by slug match
 	if (session.organization.slug !== organizationSlug) {
 		redirect(`/${organizationSlug}/sessions`);
 	}
 
 	// Build deliverable map
-	const deliverableMap = new Map(
-		session.sessionDeliverables.map((d) => [d.type, d]),
-	);
+	const deliverableMap = new Map(session.sessionDeliverables.map((d) => [d.type, d]));
 
-	// Timeout stale deliverables: if running for >5 minutes, mark as failed
+	// Timeout stale deliverables
 	const DELIVERABLE_TIMEOUT_MS = 5 * 60 * 1000;
 	for (const [type, del] of deliverableMap) {
-		if (
-			del.status === "running" &&
-			del.startedAt &&
-			Date.now() - new Date(del.startedAt).getTime() > DELIVERABLE_TIMEOUT_MS
-		) {
+		if (del.status === "running" && del.startedAt && Date.now() - new Date(del.startedAt).getTime() > DELIVERABLE_TIMEOUT_MS) {
 			await db.sessionDeliverable.update({
 				where: { sessionId_type: { sessionId, type } },
 				data: { status: "failed", error: "Timeout: la generacion tomo mas de 5 minutos", completedAt: new Date() },
@@ -682,125 +325,197 @@ export default async function SessionReviewPage({
 		}
 	}
 
+	// Extract deliverables
 	const summaryDel = deliverableMap.get("summary");
 	const auditDel = deliverableMap.get("process_audit");
 	const raciDel = deliverableMap.get("raci");
 	const riskDel = deliverableMap.get("risk_audit");
+	const complexityDel = deliverableMap.get("complexity_score");
 
-	const processName =
-		session.processDefinition?.name ?? "Untitled Process";
-	const hasBpmnXml = !!(
-		session.bpmnXml || session.processDefinition?.bpmnXml
-	);
+	const summaryData = summaryDel?.status === "completed" ? (summaryDel.data as unknown as SummaryData) : null;
+	const auditData = auditDel?.status === "completed" ? (auditDel.data as unknown as ProcessAuditData) : null;
+	const raciData = raciDel?.status === "completed" ? (raciDel.data as unknown as RaciData) : null;
+	const riskData = riskDel?.status === "completed" ? (riskDel.data as unknown as RiskAuditData) : null;
+	const complexityData = complexityDel?.status === "completed" ? (complexityDel.data as unknown as ComplexityData) : null;
 
+	const processName = session.processDefinition?.name ?? "Proceso";
+	const hasBpmnXml = !!(session.bpmnXml || session.processDefinition?.bpmnXml);
+	const confirmedNodes = session.diagramNodes.filter((n) => n.state === "CONFIRMED");
+	const sipocCoverage = auditData?.updatedScores ? computeSipocCoverage(auditData.updatedScores) : null;
+
+	// Polling
 	const terminalStatuses = new Set(["completed", "failed", "skipped"]);
-	const allStatuses = [summaryDel?.status, auditDel?.status, raciDel?.status, riskDel?.status];
+	const allStatuses = [summaryDel?.status, auditDel?.status, raciDel?.status, riskDel?.status, complexityDel?.status];
 	const hasInProgress = allStatuses.some((s) => !s || !terminalStatuses.has(s));
 
 	return (
-		<div className="min-h-screen bg-[#F8FAFC]">
+		<div className="min-h-screen bg-stone-50">
 			<ReviewPoller hasInProgress={hasInProgress} />
-			{/* Header */}
-			<header className="border-b border-[#E2E8F0] bg-white">
-				<div className="mx-auto max-w-5xl px-6 py-6">
-					<div className="flex items-start justify-between">
-						<div>
-							<p className="mb-1 text-xs font-medium uppercase tracking-wider text-[#94A3B8]">
-								Session Review
-							</p>
-							<h1
-								className="text-2xl font-semibold text-[#0F172A]"
-								style={{ fontFamily: "Inter, system-ui, sans-serif" }}
-							>
-								{processName}
-							</h1>
-							<div className="mt-2 flex items-center gap-4 text-sm text-[#64748B]">
-								<span>{formatDate(session.startedAt)}</span>
-								<span className="text-[#CBD5E1]">|</span>
-								<span>
-									Duration: {formatDuration(session.startedAt, session.endedAt)}
-								</span>
-								<span className="text-[#CBD5E1]">|</span>
-								<span>
-									{session._count.transcriptEntries} transcript entries
-								</span>
-								<span className="text-[#CBD5E1]">|</span>
-								<span>{session.organization.name}</span>
-							</div>
-						</div>
 
-						{/* Export Buttons */}
-						<div className="flex items-center gap-2">
-							{hasBpmnXml && (
-								<a
-									href={`/api/sessions/${session.id}/export/bpmn`}
-									className="inline-flex h-9 items-center gap-1.5 rounded border border-[#E2E8F0] bg-white px-3 text-sm font-medium text-[#334155] transition-colors hover:bg-[#F8FAFC]"
-								>
-									<svg
-										className="h-4 w-4"
-										fill="none"
-										viewBox="0 0 24 24"
-										strokeWidth={1.5}
-										stroke="currentColor"
-									>
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
-										/>
-									</svg>
-									BPMN XML
-								</a>
-							)}
-							<ExportPdfButton sessionId={sessionId} />
-						</div>
+			{/* 1. Hero — Process Maturity Score */}
+			<MaturityScore
+				processName={processName}
+				orgName={session.organization.name}
+				date={formatDate(session.startedAt)}
+				duration={formatDuration(session.startedAt, session.endedAt)}
+				transcriptCount={session._count.transcriptEntries}
+				nodeCount={session.diagramNodes.length}
+				confirmedCount={confirmedNodes.length}
+				completenessScore={auditData?.completenessScore ?? null}
+				complexityScore={complexityData?.score ?? null}
+				sipocCoverage={sipocCoverage}
+			/>
+
+			{/* Action bar */}
+			<div className="bg-stone-900 border-b border-stone-800">
+				<div className="mx-auto max-w-5xl px-6 py-3 flex items-center justify-between">
+					<a
+						href={`/${organizationSlug}/session/${sessionId}/live`}
+						className="text-xs text-stone-400 hover:text-stone-200 transition-colors"
+					>
+						← Volver a la sesion
+					</a>
+					<div className="flex items-center gap-2">
+						{hasBpmnXml && (
+							<a
+								href={`/api/sessions/${session.id}/export/bpmn`}
+								className="inline-flex h-9 items-center gap-1.5 rounded-md border border-stone-700 bg-stone-800 px-3 text-sm font-medium text-stone-200 transition-colors hover:bg-stone-700"
+							>
+								BPMN XML
+							</a>
+						)}
+						<ExportPdfButton sessionId={sessionId} />
+						<ShareReportButton sessionId={sessionId} shareToken={session.shareToken} />
 					</div>
 				</div>
-			</header>
+			</div>
 
-			{/* Deliverables */}
+			{/* Report body */}
 			<main className="mx-auto max-w-5xl space-y-6 px-6 py-8">
-				<SummarySection
-					status={summaryDel?.status ?? "pending"}
-					data={(summaryDel?.data as SummaryData | undefined) ?? null}
-					error={summaryDel?.error ?? null}
-					sessionId={sessionId}
+
+				{/* 2. Process Map */}
+				<ProcessMap
+					nodes={session.diagramNodes.map((n) => ({
+						id: n.id,
+						label: n.label,
+						nodeType: n.nodeType,
+						lane: n.lane,
+						state: n.state,
+						confidence: n.confidence,
+					}))}
 				/>
 
-				<ProcessAuditSection
-					status={auditDel?.status ?? "pending"}
-					data={(auditDel?.data as ProcessAuditData | undefined) ?? null}
-					error={auditDel?.error ?? null}
-					sessionId={sessionId}
+				{/* 3. SIPOC Dashboard */}
+				{auditDel?.status === "completed" && auditData?.updatedScores ? (
+					<SipocDashboard
+						updatedScores={auditData.updatedScores}
+						gaps={auditData.newGaps || []}
+						actions={<RegenerateButton sessionId={sessionId} type="process_audit" />}
+					/>
+				) : auditDel?.status === "failed" ? (
+					<FailedSection title="Cobertura SIPOC" error={auditDel.error} sessionId={sessionId} type="process_audit" />
+				) : (
+					<SectionSkeleton title="Cobertura SIPOC" />
+				)}
+
+				{/* 4. Executive Summary */}
+				{summaryDel?.status === "completed" && summaryData ? (
+					<ReportSection title="Resumen Ejecutivo" actions={<RegenerateButton sessionId={sessionId} type="summary" />}>
+						<div className="space-y-5">
+							<p className="text-sm leading-relaxed text-stone-600 whitespace-pre-wrap">
+								{summaryData.summary}
+							</p>
+							{summaryData.actionItems.length > 0 && (
+								<div>
+									<div className="flex items-center justify-between mb-2">
+										<h3 className="text-sm font-medium text-stone-700">Acciones Pendientes</h3>
+										<CopyActionsButton items={summaryData.actionItems} />
+									</div>
+									<ul className="space-y-1.5">
+										{summaryData.actionItems.map((item, i) => (
+											<li key={i} className="flex items-start gap-2 text-sm text-stone-600">
+												<span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-stone-200 text-xs text-stone-400">
+													{i + 1}
+												</span>
+												{item}
+											</li>
+										))}
+									</ul>
+								</div>
+							)}
+						</div>
+					</ReportSection>
+				) : summaryDel?.status === "failed" ? (
+					<FailedSection title="Resumen Ejecutivo" error={summaryDel.error} sessionId={sessionId} type="summary" />
+				) : (
+					<SectionSkeleton title="Resumen Ejecutivo" />
+				)}
+
+				{/* 5. Activity Detail Cards with SOPs */}
+				<ActivityCards
+					nodes={session.diagramNodes.map((n) => ({
+						id: n.id,
+						label: n.label,
+						nodeType: n.nodeType,
+						lane: n.lane,
+						state: n.state,
+						confidence: n.confidence,
+						properties: (n.properties as any) || null,
+						procedure: (n.procedure as any) || null,
+					}))}
 				/>
 
-				<RaciSection
-					status={raciDel?.status ?? "pending"}
-					data={(raciDel?.data as RaciData | undefined) ?? null}
-					error={raciDel?.error ?? null}
-					sessionId={sessionId}
-				/>
+				{/* 6. RACI Matrix */}
+				{raciDel?.status === "completed" ? (
+					<RaciSection data={raciData} actions={<RegenerateButton sessionId={sessionId} type="raci" />} />
+				) : raciDel?.status === "failed" ? (
+					<FailedSection title="Matriz RACI" error={raciDel.error} sessionId={sessionId} type="raci" />
+				) : raciDel?.status === "skipped" ? null : (
+					<SectionSkeleton title="Matriz RACI" />
+				)}
 
-				<RiskAuditSection
-					status={riskDel?.status ?? "pending"}
-					data={(riskDel?.data as RiskAuditData | undefined) ?? null}
-					error={riskDel?.error ?? null}
-					sessionId={sessionId}
-				/>
+				{/* 7. Risk Heat Map + Opportunities */}
+				{riskDel?.status === "completed" && riskData ? (
+					<RiskHeatMap
+						risks={riskData.newRisks || []}
+						summary={riskData.riskSummary || { totalRiskScore: 0, criticalCount: 0, highCount: 0, topRiskArea: "" }}
+						actions={<RegenerateButton sessionId={sessionId} type="risk_audit" />}
+					/>
+				) : riskDel?.status === "failed" ? (
+					<FailedSection title="Mapa de Riesgos" error={riskDel.error} sessionId={sessionId} type="risk_audit" />
+				) : (
+					<SectionSkeleton title="Mapa de Riesgos" />
+				)}
+
+				{/* 8. Knowledge Gaps */}
+				{auditData && <KnowledgeGapsSection gaps={auditData.newGaps || []} actions={<RegenerateButton sessionId={sessionId} type="process_audit" />} />}
+
+				{/* 9. Next Session Intelligence */}
+				{/* 9. Recommendations */}
+				{(auditDel?.status === "completed" || complexityData) ? (
+					<NextSessionIntel
+						followUp={auditData?.followUpSuggestion || null}
+						gapCount={auditData?.newGaps?.length || 0}
+						complexityExplanation={complexityData?.explanation}
+						complexityRecommendation={complexityData?.recommendation}
+						contradictions={auditData?.contradictions}
+						actions={<RegenerateButton sessionId={sessionId} type="complexity_score" />}
+					/>
+				) : auditDel?.status !== "failed" && auditDel?.status !== "skipped" ? (
+					<SectionSkeleton title="Recomendaciones" />
+				) : null}
 			</main>
 
 			{/* Footer */}
-			<footer className="border-t border-[#E2E8F0] bg-white">
+			<footer className="border-t border-stone-200 bg-white">
 				<div className="mx-auto max-w-5xl px-6 py-4">
-					<div className="flex items-center justify-between text-xs text-[#94A3B8]">
-						<span>
-							Generated by aiprocess.me
-						</span>
+					<div className="flex items-center justify-between text-xs text-stone-400">
+						<span>Generado por Auditora.ai</span>
 						<a
 							href={`/${organizationSlug}/session/${sessionId}/live`}
 							className="text-blue-600 hover:text-blue-700"
 						>
-							Back to session
+							Volver a la sesion
 						</a>
 					</div>
 				</div>

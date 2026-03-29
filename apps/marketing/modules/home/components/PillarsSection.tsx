@@ -5,60 +5,23 @@ import { cn } from "@repo/ui";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
-	BrainCircuit,
-	GitBranch,
-	Layers,
+	CheckCircle2,
+	GlobeIcon,
 	MessageSquareText,
-	Mic,
-	Search,
-	Share2,
-	Sparkles,
-	Users,
-	Video,
-	Workflow,
+	SearchIcon,
+	ShieldAlertIcon,
+	WorkflowIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRef } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const pillars = [
-	{
-		id: "pillar1",
-		icon: MessageSquareText,
-		benefits: [
-			{ icon: Sparkles, key: "benefit1" },
-			{ icon: Layers, key: "benefit2" },
-			{ icon: GitBranch, key: "benefit3" },
-		],
-	},
-	{
-		id: "pillar2",
-		icon: Video,
-		benefits: [
-			{ icon: Mic, key: "benefit1" },
-			{ icon: Sparkles, key: "benefit2" },
-			{ icon: Workflow, key: "benefit3" },
-		],
-	},
-	{
-		id: "pillar3",
-		icon: BrainCircuit,
-		benefits: [
-			{ icon: Search, key: "benefit1" },
-			{ icon: Search, key: "benefit2" },
-			{ icon: Users, key: "benefit3" },
-		],
-	},
-	{
-		id: "pillar4",
-		icon: Workflow,
-		benefits: [
-			{ icon: Layers, key: "benefit1" },
-			{ icon: GitBranch, key: "benefit2" },
-			{ icon: Share2, key: "benefit3" },
-		],
-	},
+const benefits = [
+	{ id: "benefit1", icon: GlobeIcon },
+	{ id: "benefit2", icon: ShieldAlertIcon },
+	{ id: "benefit3", icon: WorkflowIcon },
+	{ id: "benefit4", icon: MessageSquareText },
 ] as const;
 
 export function PillarsSection() {
@@ -94,7 +57,7 @@ export function PillarsSection() {
 				const direction = i % 2 === 0 ? 60 : -60;
 				const iconEl = card.querySelector(".pillar-icon");
 				const textEls = card.querySelectorAll(".pillar-text");
-				const benefitEls = card.querySelectorAll(".pillar-benefit");
+				const pointEls = card.querySelectorAll(".pillar-benefit");
 
 				const tl = gsap.timeline({
 					scrollTrigger: {
@@ -104,7 +67,6 @@ export function PillarsSection() {
 					},
 				});
 
-				// Card slides in from alternating direction
 				tl.from(card, {
 					opacity: 0,
 					x: direction,
@@ -112,7 +74,6 @@ export function PillarsSection() {
 					ease: "power3.out",
 				});
 
-				// Icon bounces in
 				if (iconEl) {
 					tl.from(
 						iconEl,
@@ -125,7 +86,6 @@ export function PillarsSection() {
 					);
 				}
 
-				// Text elements stagger
 				if (textEls.length) {
 					tl.from(
 						textEls,
@@ -140,10 +100,9 @@ export function PillarsSection() {
 					);
 				}
 
-				// Benefits cascade with slight directional shift
-				if (benefitEls.length) {
+				if (pointEls.length) {
 					tl.from(
-						benefitEls,
+						pointEls,
 						{
 							opacity: 0,
 							x: direction * 0.3,
@@ -164,24 +123,24 @@ export function PillarsSection() {
 			<div className="container">
 				<div ref={headerRef} className="mb-16 max-w-3xl mx-auto text-center">
 					<small className="font-medium text-xs uppercase tracking-wider text-primary mb-4 block">
-						{t("home.pillars.badge")}
+						{t("home.benefits.badge")}
 					</small>
 					<h2 className="font-display text-3xl lg:text-4xl xl:text-5xl text-foreground">
-						{t("home.pillars.title")}
+						{t("home.benefits.title")}
 					</h2>
 					<p className="mt-4 text-base lg:text-lg text-muted-foreground text-balance">
-						{t("home.pillars.description")}
+						{t("home.benefits.description")}
 					</p>
 				</div>
 
 				<div className="grid grid-cols-1 gap-8">
-					{pillars.map((pillar, index) => {
-						const Icon = pillar.icon;
+					{benefits.map((benefit, index) => {
+						const Icon = benefit.icon;
 						const isReversed = index % 2 === 1;
 
 						return (
 							<div
-								key={pillar.id}
+								key={benefit.id}
 								ref={(el) => {
 									cardsRef.current[index] = el;
 								}}
@@ -201,15 +160,15 @@ export function PillarsSection() {
 
 										<h3 className="pillar-text text-xl lg:text-2xl text-foreground leading-tight">
 											<span className="font-semibold">
-												{t(`home.pillars.${pillar.id}.title`)}.{" "}
+												{t(`home.benefits.${benefit.id}.title`)}.{" "}
 											</span>
 											<span className="text-muted-foreground">
-												{t(`home.pillars.${pillar.id}.subtitle`)}
+												{t(`home.benefits.${benefit.id}.subtitle`)}
 											</span>
 										</h3>
 
 										<p className="pillar-text mt-4 text-muted-foreground leading-relaxed">
-											{t(`home.pillars.${pillar.id}.description`)}
+											{t(`home.benefits.${benefit.id}.description`)}
 										</p>
 									</div>
 
@@ -219,30 +178,20 @@ export function PillarsSection() {
 											{ "md:order-1": isReversed },
 										)}
 									>
-										{pillar.benefits.map((benefit) => {
-											const BenefitIcon = benefit.icon;
-											return (
-												<div
-													key={benefit.key}
-													className="pillar-benefit flex gap-4 rounded-2xl p-4 bg-muted/50"
-												>
-													<div className="flex-shrink-0">
-														<BenefitIcon
-															className="size-5 text-primary mt-0.5"
-															strokeWidth={1.5}
-														/>
-													</div>
-													<div>
-														<strong className="block font-medium text-sm text-foreground">
-															{t(`home.pillars.${pillar.id}.${benefit.key}.title`)}
-														</strong>
-														<p className="mt-1 text-xs text-muted-foreground leading-relaxed">
-															{t(`home.pillars.${pillar.id}.${benefit.key}.description`)}
-														</p>
-													</div>
-												</div>
-											);
-										})}
+										{(["point1", "point2", "point3"] as const).map((pointKey) => (
+											<div
+												key={pointKey}
+												className="pillar-benefit flex gap-3 items-center rounded-2xl p-4 bg-muted/50"
+											>
+												<CheckCircle2
+													className="size-5 text-primary flex-shrink-0"
+													strokeWidth={1.5}
+												/>
+												<span className="text-sm text-foreground">
+													{t(`home.benefits.${benefit.id}.${pointKey}`)}
+												</span>
+											</div>
+										))}
 									</div>
 								</div>
 							</div>

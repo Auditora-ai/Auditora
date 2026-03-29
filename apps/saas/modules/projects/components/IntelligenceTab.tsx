@@ -89,15 +89,15 @@ const CATEGORY_COLORS: Record<string, string> = {
   MISSING_OUTPUT: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300",
   CONTRADICTION: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300",
   UNCLEAR_HANDOFF: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300",
-  MISSING_SLA: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300",
+  MISSING_SLA: "bg-muted text-foreground dark:bg-chrome-base/30 dark:text-muted-foreground",
   MISSING_SYSTEM: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-300",
-  GENERAL_GAP: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300",
+  GENERAL_GAP: "bg-muted text-foreground dark:bg-chrome-base/30 dark:text-muted-foreground",
 };
 
 function getPriorityColor(priority: number) {
   if (priority >= 70) return "text-red-500";
   if (priority >= 40) return "text-yellow-500";
-  return "text-gray-400";
+  return "text-muted-foreground";
 }
 
 function getScoreColor(score: number) {
@@ -292,9 +292,9 @@ export function IntelligenceTab({ processId }: { processId: string }) {
             disabled={auditing}
           >
             {auditing ? (
-              <RefreshCwIcon className="mr-1 h-3 w-3 animate-spin" />
+              <RefreshCwIcon className="mr-1 h-3.5 w-3.5 animate-spin" />
             ) : (
-              <RefreshCwIcon className="mr-1 h-3 w-3" />
+              <RefreshCwIcon className="mr-1 h-3.5 w-3.5" />
             )}
             Re-auditar
           </Button>
@@ -308,7 +308,7 @@ export function IntelligenceTab({ processId }: { processId: string }) {
               </span>
               {estimateText && (
                 <span className="mt-1 flex items-center text-xs text-muted-foreground">
-                  <TrendingUpIcon className="mr-1 h-3 w-3" />
+                  <TrendingUpIcon className="mr-1 h-3.5 w-3.5" />
                   {estimateText}
                 </span>
               )}
@@ -406,7 +406,7 @@ export function IntelligenceTab({ processId }: { processId: string }) {
                           className={`h-4 w-4 ${getPriorityColor(item.priority)}`}
                         />
                         <span
-                          className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${CATEGORY_COLORS[item.category] || "bg-gray-100 text-gray-800"}`}
+                          className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${CATEGORY_COLORS[item.category] || "bg-muted text-foreground"}`}
                         >
                           {CATEGORY_LABELS[item.category] || item.category}
                         </span>
@@ -440,7 +440,7 @@ export function IntelligenceTab({ processId }: { processId: string }) {
                         onClick={() => handleResolve(item.id)}
                         disabled={!resolveText.trim()}
                       >
-                        <SendIcon className="h-3 w-3" />
+                        <SendIcon className="h-3.5 w-3.5" />
                       </Button>
                       <Button
                         size="sm"

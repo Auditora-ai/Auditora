@@ -22,8 +22,8 @@ export function StatsBar({
 		<div className="mt-3 flex gap-6">
 			{stats.map((stat) => (
 				<div key={stat.label} className="flex items-baseline gap-1.5">
-					<span className="text-sm font-bold text-[#0F172A]">{stat.value}</span>
-					<span className="text-[10px] text-[#94A3B8]">{stat.label}</span>
+					<span className="text-sm font-bold text-foreground">{stat.value}</span>
+					<span className="text-[10px] text-chrome-text-secondary">{stat.label}</span>
 				</div>
 			))}
 		</div>

@@ -107,7 +107,7 @@ function buildContextBlock(context?: SessionContext): string {
   return parts.length > 0 ? `\n\n${parts.join("\n\n")}` : "";
 }
 
-export const PROCESS_EXTRACTION_SYSTEM = `You are a BPMN 2.0 process extraction engine for aiprocess.me, a live process elicitation tool used by professional BPM consultants.
+export const PROCESS_EXTRACTION_SYSTEM = `You are a BPMN 2.0 process extraction engine for Auditora.ai, a live process elicitation tool used by professional BPM consultants.
 
 You receive:
 1. The CURRENT BPMN diagram state (JSON list of existing nodes)

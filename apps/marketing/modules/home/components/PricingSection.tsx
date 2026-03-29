@@ -70,7 +70,7 @@ export function PricingSection() {
 				isEnterprise,
 				prices,
 				to: isEnterprise
-					? "mailto:sales@aiprocess.me?subject=aiprocess.me Enterprise"
+					? "mailto:sales@auditora.ai?subject=Auditora.ai Enterprise"
 					: (signupUrl ?? "#"),
 			});
 		}

@@ -259,7 +259,7 @@ export function SessionList({ organizationSlug }: { organizationSlug: string }) 
 								</TableCell>
 								<TableCell className="text-muted-foreground">
 									<div className="flex items-center gap-1">
-										<ClockIcon className="h-3 w-3" />
+										<ClockIcon className="h-3.5 w-3.5" />
 										{new Date(session.createdAt).toLocaleDateString()}
 									</div>
 								</TableCell>
@@ -268,14 +268,14 @@ export function SessionList({ organizationSlug }: { organizationSlug: string }) 
 										{isActive(session.status) ? (
 											<Button size="sm" variant="primary" asChild>
 												<Link href={`/${organizationSlug}/session/${session.id}/live`}>
-													<PlayIcon className="mr-1 h-3 w-3" />
+													<PlayIcon className="mr-1 h-3.5 w-3.5" />
 													Join
 												</Link>
 											</Button>
 										) : (
 											<Button size="sm" variant="secondary" asChild>
 												<Link href={`/${organizationSlug}/session/${session.id}`}>
-													<EyeIcon className="mr-1 h-3 w-3" />
+													<EyeIcon className="mr-1 h-3.5 w-3.5" />
 													View
 												</Link>
 											</Button>

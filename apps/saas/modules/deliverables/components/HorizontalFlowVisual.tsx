@@ -88,7 +88,7 @@ export function HorizontalFlowVisual({ processes, links, organizationSlug }: Pro
 
   return (
     <div className="space-y-4">
-      <div className="rounded-lg border border-slate-200 bg-white overflow-x-auto">
+      <div className="rounded-lg border border-border bg-background overflow-x-auto">
         <svg
           width={svgWidth}
           height={svgHeight}
@@ -206,7 +206,7 @@ export function HorizontalFlowVisual({ processes, links, organizationSlug }: Pro
       </div>
 
       {/* Legend */}
-      <div className="flex items-center gap-6 text-xs text-slate-500">
+      <div className="flex items-center gap-6 text-xs text-muted-foreground">
         {Object.entries(linkTypeColors).map(([type, color]) => (
           <span key={type} className="flex items-center gap-1.5">
             <span className="h-0.5 w-4 rounded" style={{ backgroundColor: color }} />

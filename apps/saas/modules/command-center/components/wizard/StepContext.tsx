@@ -129,31 +129,31 @@ export function StepContext({
 			{generating && (
 				<style>{`@keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }`}</style>
 			)}
-			<h2 className="mb-1 text-xl font-semibold text-[#F1F5F9]">Contexto</h2>
-			<p className="mb-6 text-sm text-[#64748B]">
+			<h2 className="mb-1 text-xl font-semibold text-chrome-text">Contexto</h2>
+			<p className="mb-6 text-sm text-chrome-text-muted">
 				La IA pre-llena un template basado en el proceso. Edita, expande o reemplaza con tu conocimiento.
 			</p>
 
 			{/* Context textarea with AI generation */}
 			<div className="mb-5">
 				<div className="mb-2 flex items-center justify-between">
-					<label className="text-xs font-medium text-[#94A3B8]">
+					<label className="text-xs font-medium text-chrome-text-secondary">
 						Contexto y notas previas
 					</label>
 					<button
 						type="button"
 						onClick={generateTemplate}
 						disabled={generating || !data.processName.trim()}
-						className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-[#60A5FA] transition-colors hover:bg-[#2563EB]/10 disabled:opacity-50"
+						className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-blue-400 transition-colors hover:bg-primary/10 disabled:opacity-50"
 					>
 						{generating ? (
 							<>
-								<Loader2Icon className="h-3 w-3 animate-spin" />
+								<Loader2Icon className="h-3.5 w-3.5 animate-spin" />
 								Generando...
 							</>
 						) : (
 							<>
-								<RefreshCwIcon className="h-3 w-3" />
+								<RefreshCwIcon className="h-3.5 w-3.5" />
 								Regenerar template
 							</>
 						)}
@@ -167,30 +167,30 @@ export function StepContext({
 						placeholder="Describe el contexto del proceso, objetivos de la sesión, información relevante del cliente..."
 						rows={8}
 						disabled={generating}
-						className="w-full resize-none rounded-lg border border-[#334155] bg-[#1E293B] px-4 py-3 text-sm leading-relaxed text-[#F1F5F9] placeholder:text-[#64748B] focus:border-[#2563EB] focus:outline-none focus:ring-1 focus:ring-[#2563EB] disabled:opacity-60"
+						className="w-full resize-none rounded-lg border border-chrome-border bg-chrome-raised px-4 py-3 text-sm leading-relaxed text-chrome-text placeholder:text-chrome-text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-60"
 					/>
 					{generating && (
-						<div className="absolute inset-0 flex flex-col items-center justify-center gap-4 rounded-lg bg-[#0F172A]/90 backdrop-blur-sm">
+						<div className="absolute inset-0 flex flex-col items-center justify-center gap-4 rounded-lg bg-chrome-base/90 backdrop-blur-sm">
 							{/* Animated dots */}
 							<div className="flex items-center gap-1.5">
-								<div className="h-2 w-2 animate-bounce rounded-full bg-[#2563EB]" style={{ animationDelay: "0ms" }} />
-								<div className="h-2 w-2 animate-bounce rounded-full bg-[#2563EB]" style={{ animationDelay: "150ms" }} />
-								<div className="h-2 w-2 animate-bounce rounded-full bg-[#2563EB]" style={{ animationDelay: "300ms" }} />
+								<div className="h-2 w-2 animate-bounce rounded-full bg-primary" style={{ animationDelay: "0ms" }} />
+								<div className="h-2 w-2 animate-bounce rounded-full bg-primary" style={{ animationDelay: "150ms" }} />
+								<div className="h-2 w-2 animate-bounce rounded-full bg-primary" style={{ animationDelay: "300ms" }} />
 							</div>
 							<div className="text-center">
-								<p className="text-sm font-medium text-[#F1F5F9]">Analizando proceso</p>
-								<p className="mt-1 text-xs text-[#64748B]">Preparando notas de contexto, participantes típicos y preguntas clave...</p>
+								<p className="text-sm font-medium text-chrome-text">Analizando proceso</p>
+								<p className="mt-1 text-xs text-chrome-text-muted">Preparando notas de contexto, participantes típicos y preguntas clave...</p>
 							</div>
 							{/* Progress bar animation */}
-							<div className="h-1 w-48 overflow-hidden rounded-full bg-[#1E293B]">
-								<div className="h-full animate-[shimmer_2s_ease-in-out_infinite] rounded-full bg-gradient-to-r from-transparent via-[#2563EB] to-transparent" style={{ width: "200%", marginLeft: "-50%" }} />
+							<div className="h-1 w-48 overflow-hidden rounded-full bg-chrome-raised">
+								<div className="h-full animate-[shimmer_2s_ease-in-out_infinite] rounded-full bg-gradient-to-r from-transparent via-primary to-transparent" style={{ width: "200%", marginLeft: "-50%" }} />
 							</div>
 						</div>
 					)}
 				</div>
 
 				{hasGenerated && data.contextText.trim() && (
-					<p className="mt-1.5 text-[11px] text-[#64748B]">
+					<p className="mt-1.5 text-[11px] text-chrome-text-muted">
 						Template generado por IA — edita libremente, agrega lo que sabes del cliente
 					</p>
 				)}
@@ -198,7 +198,7 @@ export function StepContext({
 
 			{/* File upload area */}
 			<div className="mb-4">
-				<label className="mb-2 block text-xs font-medium text-[#94A3B8]">
+				<label className="mb-2 block text-xs font-medium text-chrome-text-secondary">
 					Documentos de apoyo
 				</label>
 				<div
@@ -208,17 +208,17 @@ export function StepContext({
 					onClick={() => fileInputRef.current?.click()}
 					className={`flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed px-6 py-8 transition-colors ${
 						dragging
-							? "border-[#2563EB] bg-[#2563EB]/10"
-							: "border-[#334155] bg-[#1E293B] hover:border-[#64748B]"
+							? "border-primary bg-primary/10"
+							: "border-chrome-border bg-chrome-raised hover:border-chrome-text-muted"
 					}`}
 				>
 					<UploadCloudIcon
-						className={`mb-2 h-8 w-8 ${dragging ? "text-[#2563EB]" : "text-[#64748B]"}`}
+						className={`mb-2 h-8 w-8 ${dragging ? "text-primary" : "text-chrome-text-muted"}`}
 					/>
-					<p className="text-sm font-medium text-[#94A3B8]">
+					<p className="text-sm font-medium text-chrome-text-secondary">
 						Arrastra archivos aquí o haz clic para seleccionar
 					</p>
-					<p className="mt-1 text-xs text-[#64748B]">
+					<p className="mt-1 text-xs text-chrome-text-muted">
 						PDF, Word, Excel, imágenes (max. 10 MB por archivo)
 					</p>
 				</div>
@@ -238,17 +238,17 @@ export function StepContext({
 					{data.contextFiles.map((file, index) => (
 						<div
 							key={`${file.name}-${index}`}
-							className="flex items-center gap-3 rounded-lg border border-[#334155] bg-[#1E293B] px-3 py-2"
+							className="flex items-center gap-3 rounded-lg border border-chrome-border bg-chrome-raised px-3 py-2"
 						>
-							<FileIcon className="h-4 w-4 shrink-0 text-[#64748B]" />
+							<FileIcon className="h-4 w-4 shrink-0 text-chrome-text-muted" />
 							<div className="min-w-0 flex-1">
-								<p className="truncate text-sm text-[#F1F5F9]">{file.name}</p>
-								<p className="text-[11px] text-[#64748B]">{formatFileSize(file.size)}</p>
+								<p className="truncate text-sm text-chrome-text">{file.name}</p>
+								<p className="text-[11px] text-chrome-text-muted">{formatFileSize(file.size)}</p>
 							</div>
 							<button
 								type="button"
 								onClick={() => removeFile(index)}
-								className="rounded-md p-1 text-[#64748B] transition-colors hover:bg-[#334155] hover:text-[#DC2626]"
+								className="rounded-md p-1 text-chrome-text-muted transition-colors hover:bg-chrome-hover hover:text-destructive"
 							>
 								<TrashIcon className="h-4 w-4" />
 							</button>
@@ -260,16 +260,16 @@ export function StepContext({
 			{/* Pre-generate diagram */}
 			<div className="mt-auto">
 				{data.preBuildNodes && data.preBuildNodes.length > 0 ? (
-					<div className="flex items-center gap-2 rounded-lg border border-[#16A34A]/30 bg-[#16A34A]/10 px-3 py-2.5">
-						<CheckCircleIcon className="h-4 w-4 text-[#16A34A]" />
-						<span className="text-sm text-[#16A34A]">
+					<div className="flex items-center gap-2 rounded-lg border border-success/30 bg-success/10 px-3 py-2.5">
+						<CheckCircleIcon className="h-4 w-4 text-success" />
+						<span className="text-sm text-success">
 							Diagrama borrador generado — {data.preBuildNodes.length} nodos, {data.preBuildLanes?.length ?? 0} lanes
 						</span>
 						<button
 							type="button"
 							onClick={handlePreBuildDiagram}
 							disabled={generatingDiagram}
-							className="ml-auto text-xs text-[#64748B] hover:text-[#F1F5F9]"
+							className="ml-auto text-xs text-chrome-text-muted hover:text-chrome-text"
 						>
 							Regenerar
 						</button>
@@ -279,7 +279,7 @@ export function StepContext({
 						type="button"
 						onClick={handlePreBuildDiagram}
 						disabled={generatingDiagram || !data.processName.trim()}
-						className="inline-flex items-center gap-1.5 rounded-lg border border-[#334155] px-3 py-2.5 text-sm font-medium text-[#94A3B8] transition-colors hover:border-[#2563EB] hover:text-[#60A5FA] disabled:opacity-50"
+						className="inline-flex items-center gap-1.5 rounded-lg border border-chrome-border px-3 py-2.5 text-sm font-medium text-chrome-text-secondary transition-colors hover:border-primary hover:text-blue-400 disabled:opacity-50"
 					>
 						{generatingDiagram ? (
 							<>

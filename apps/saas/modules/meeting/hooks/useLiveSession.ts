@@ -20,6 +20,8 @@ interface LiveSessionData {
 	questionMode: string;
 	botActivity: BotActivity;
 	diagramHealth: DiagramHealth;
+	/** True after the first successful poll completes (used to dismiss loading overlay) */
+	firstPollDone: boolean;
 }
 
 const DEFAULT_BOT_ACTIVITY: BotActivity = {
@@ -54,6 +56,7 @@ export function useLiveSession(
 		questionMode: "explore",
 		botActivity: DEFAULT_BOT_ACTIVITY,
 		diagramHealth: DEFAULT_HEALTH,
+		firstPollDone: false,
 	});
 
 	const prevNodesRef = useRef<string>("");
@@ -105,6 +108,7 @@ export function useLiveSession(
 					state: n.state,
 					lane: n.lane || undefined,
 					connections: n.connections || [],
+					connectionLabels: n.connectionLabels || [],
 					confidence: n.confidence ?? null,
 					properties: n.properties ?? null,
 				}));
@@ -134,6 +138,10 @@ export function useLiveSession(
 
 				const api = modelerApiRef.current;
 				if (nodesChanged && api?.isReady && aiEnabledRef.current) {
+					console.group("[BPMN-DEBUG] Poll triggered mergeAiNodes");
+					console.log("node count:", newNodes.length);
+					console.log("sample IDs:", newNodes.slice(0, 5).map(n => `${n.id.slice(0,8)}:${n.label}`));
+					console.groupEnd();
 					api.mergeAiNodes(newNodes);
 					prevNodesRef.current = nodesKey;
 				}
@@ -151,6 +159,7 @@ export function useLiveSession(
 					questionMode: json.questionMode || "explore",
 					botActivity: json.botActivity || DEFAULT_BOT_ACTIVITY,
 					diagramHealth: json.diagramHealth || DEFAULT_HEALTH,
+					firstPollDone: true,
 				});
 
 				if (json.status === "ENDED") {

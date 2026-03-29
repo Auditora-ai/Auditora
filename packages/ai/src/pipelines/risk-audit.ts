@@ -11,7 +11,7 @@
  *   KNOWLEDGE SNAPSHOT + INTELLIGENCE ITEMS → LLM → RISKS + MITIGATIONS + CONTROLS
  *
  * Reuses KnowledgeSnapshot from process-audit.ts (same data source).
- * Token usage: ~8K input, ~4K output (risk), ~10K input, ~6K output (full)
+ * Token usage: ~8K input, ~8K output (risk), ~10K input, ~16K output (full)
  */
 
 import { instrumentedGenerateText } from "../utils/instrumented-generate";
@@ -220,7 +220,7 @@ export async function auditRisks(
       : undefined,
   });
 
-  const maxTokens = input.mode === "full" ? 8192 : 4096;
+  const maxTokens = input.mode === "full" ? 16384 : 8192;
 
   const { text } = await instrumentedGenerateText({
     organizationId: input.organizationId,

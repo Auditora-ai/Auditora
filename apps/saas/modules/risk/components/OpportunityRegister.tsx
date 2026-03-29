@@ -72,8 +72,8 @@ export function OpportunityRegister({
   if (opportunities.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
-        <SparklesIcon className="mb-4 h-10 w-10 text-slate-600" />
-        <p className="text-sm text-slate-400">
+        <SparklesIcon className="mb-4 h-10 w-10 text-muted-foreground" />
+        <p className="text-sm text-muted-foreground">
           No se han identificado oportunidades en este proceso.
         </p>
       </div>
@@ -83,7 +83,7 @@ export function OpportunityRegister({
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <span className="text-xs text-slate-400">
+        <span className="text-xs text-muted-foreground">
           {opportunities.length} oportunidad
           {opportunities.length !== 1 ? "es" : ""}
         </span>
@@ -96,7 +96,7 @@ export function OpportunityRegister({
         return (
           <Card
             key={opp.id}
-            className={`border-l-4 border-slate-700 bg-slate-800 ${value >= 4 ? "border-l-green-600" : value >= 3 ? "border-l-emerald-500" : "border-l-teal-500"}`}
+            className={`border-l-4 border-chrome-border bg-chrome-raised ${value >= 4 ? "border-l-green-600" : value >= 3 ? "border-l-emerald-500" : "border-l-teal-500"}`}
           >
             <CardContent className="p-4">
               <div
@@ -106,7 +106,7 @@ export function OpportunityRegister({
                 <div className="min-w-0 flex-1">
                   <div className="mb-1 flex items-center gap-2">
                     <TrendingUpIcon className="h-4 w-4 text-green-400" />
-                    <h4 className="truncate text-sm font-semibold text-slate-100">
+                    <h4 className="truncate text-sm font-semibold text-chrome-text">
                       {opp.title}
                     </h4>
                     <span className="inline-flex items-center rounded-full bg-green-600/20 px-2 py-0.5 text-xs font-medium text-green-400">
@@ -114,7 +114,7 @@ export function OpportunityRegister({
                     </span>
                   </div>
                   {opp.description && (
-                    <p className="line-clamp-2 text-xs text-slate-400">
+                    <p className="line-clamp-2 text-xs text-muted-foreground">
                       {opp.description}
                     </p>
                   )}
@@ -125,37 +125,37 @@ export function OpportunityRegister({
                       Valor: {VALUE_LABELS[value] || value}
                     </span>
                     {opp.affectedStep && (
-                      <span className="text-xs text-slate-500">
+                      <span className="text-xs text-muted-foreground">
                         Paso: {opp.affectedStep}
                       </span>
                     )}
                   </div>
                 </div>
                 <ChevronDownIcon
-                  className={`h-4 w-4 shrink-0 text-slate-400 transition-transform ${isExpanded ? "rotate-180" : ""}`}
+                  className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform ${isExpanded ? "rotate-180" : ""}`}
                 />
               </div>
 
               {/* Expanded: mitigations as actions */}
               {isExpanded && opp.mitigations && opp.mitigations.length > 0 && (
-                <div className="mt-4 border-t border-slate-700 pt-4">
-                  <h5 className="mb-2 text-xs font-medium text-slate-300">
+                <div className="mt-4 border-t border-chrome-border pt-4">
+                  <h5 className="mb-2 text-xs font-medium text-muted-foreground">
                     Acciones para capturar
                   </h5>
                   <div className="space-y-2">
                     {opp.mitigations.map((m: any) => (
                       <div
                         key={m.id}
-                        className="flex items-center justify-between rounded bg-slate-900/50 px-3 py-2 text-xs"
+                        className="flex items-center justify-between rounded bg-chrome-base/50 px-3 py-2 text-xs"
                       >
-                        <span className="text-slate-200">{m.action}</span>
+                        <span className="text-chrome-text-secondary">{m.action}</span>
                         <span
                           className={`rounded-full px-2 py-0.5 text-xs ${
                             m.status === "COMPLETED"
                               ? "bg-green-600/20 text-green-400"
                               : m.status === "IN_PROGRESS"
                                 ? "bg-blue-600/20 text-blue-400"
-                                : "bg-slate-700 text-slate-400"
+                                : "bg-chrome-hover text-muted-foreground"
                           }`}
                         >
                           {m.status}

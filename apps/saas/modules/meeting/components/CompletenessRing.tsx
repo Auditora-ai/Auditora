@@ -37,7 +37,7 @@ export function CompletenessRing({ score, size = 24 }: CompletenessRingProps) {
 					className="transition-all duration-500 ease-out"
 				/>
 			</svg>
-			<span className="text-[10px] font-medium text-[#94A3B8] tabular-nums">
+			<span className="text-[10px] font-medium text-chrome-text-secondary tabular-nums">
 				{pct}%
 			</span>
 		</div>

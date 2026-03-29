@@ -204,7 +204,7 @@ export function SessionDocumentsPanel({
 										className="h-6 w-6 flex-shrink-0 text-muted-foreground hover:text-destructive"
 										onClick={() => handleDelete(doc.id)}
 									>
-										<TrashIcon className="h-3 w-3" />
+										<TrashIcon className="h-3.5 w-3.5" />
 									</Button>
 								</div>
 							);

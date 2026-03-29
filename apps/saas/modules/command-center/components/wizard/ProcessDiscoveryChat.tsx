@@ -123,8 +123,8 @@ export function ProcessDiscoveryChat({ onSelectProcess }: ProcessDiscoveryChatPr
 							<div
 								className={`max-w-[85%] rounded-xl px-4 py-2.5 text-sm leading-relaxed ${
 									msg.role === "user"
-										? "bg-[#2563EB] text-white"
-										: "bg-[#1E293B] text-[#F1F5F9]"
+										? "bg-primary text-white"
+										: "bg-chrome-raised text-chrome-text"
 								}`}
 							>
 								{msg.content}
@@ -146,7 +146,7 @@ export function ProcessDiscoveryChat({ onSelectProcess }: ProcessDiscoveryChatPr
 													suggestion.sessionType ?? "DISCOVERY",
 												)
 											}
-											className="inline-flex items-center gap-1.5 rounded-lg border border-[#2563EB]/30 bg-[#2563EB]/10 px-3 py-1.5 text-sm font-medium text-[#60A5FA] transition-colors hover:bg-[#2563EB]/20"
+											className="inline-flex items-center gap-1.5 rounded-lg border border-primary/30 bg-primary/10 px-3 py-1.5 text-sm font-medium text-blue-400 transition-colors hover:bg-primary/20"
 										>
 											<SparklesIcon className="h-3.5 w-3.5" />
 											{suggestion.name}
@@ -159,7 +159,7 @@ export function ProcessDiscoveryChat({ onSelectProcess }: ProcessDiscoveryChatPr
 
 				{loading && (
 					<div className="flex justify-start">
-						<div className="flex items-center gap-2 rounded-xl bg-[#1E293B] px-4 py-2.5 text-sm text-[#64748B]">
+						<div className="flex items-center gap-2 rounded-xl bg-chrome-raised px-4 py-2.5 text-sm text-chrome-text-muted">
 							<Loader2Icon className="h-4 w-4 animate-spin" />
 							Analizando...
 						</div>
@@ -168,7 +168,7 @@ export function ProcessDiscoveryChat({ onSelectProcess }: ProcessDiscoveryChatPr
 			</div>
 
 			{/* Input */}
-			<div className="border-t border-[#334155] pt-3">
+			<div className="border-t border-chrome-border pt-3">
 				<div className="flex items-center gap-2">
 					<input
 						ref={inputRef}
@@ -178,13 +178,13 @@ export function ProcessDiscoveryChat({ onSelectProcess }: ProcessDiscoveryChatPr
 						onKeyDown={handleKeyDown}
 						placeholder="Describe el proceso..."
 						disabled={loading}
-						className="flex-1 rounded-lg border border-[#334155] bg-[#1E293B] px-4 py-2.5 text-sm text-[#F1F5F9] placeholder:text-[#64748B] focus:border-[#2563EB] focus:outline-none focus:ring-1 focus:ring-[#2563EB] disabled:opacity-50"
+						className="flex-1 rounded-lg border border-chrome-border bg-chrome-raised px-4 py-2.5 text-sm text-chrome-text placeholder:text-chrome-text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50"
 					/>
 					<button
 						type="button"
 						onClick={handleSend}
 						disabled={!input.trim() || loading}
-						className="flex h-[42px] w-[42px] items-center justify-center rounded-lg bg-[#2563EB] text-white transition-colors hover:bg-[#1D4ED8] disabled:opacity-50"
+						className="flex h-[42px] w-[42px] items-center justify-center rounded-lg bg-primary text-white transition-colors hover:bg-action-hover disabled:opacity-50"
 					>
 						<SendIcon className="h-4 w-4" />
 					</button>

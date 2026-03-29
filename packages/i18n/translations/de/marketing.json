@@ -5,11 +5,11 @@
 		"back": "Zurück zum Blog"
 	},
 	"changelog": {
-		"description": "Bleiben Sie über die neuesten Änderungen in aiprocess.me auf dem Laufenden.",
+		"description": "Bleiben Sie über die neuesten Änderungen in Auditora.ai auf dem Laufenden.",
 		"title": "Changelog"
 	},
 	"contact": {
-		"description": "Haben Sie Fragen zu aiprocess.me? Wir freuen uns auf Ihre Nachricht.",
+		"description": "Haben Sie Fragen zu Auditora.ai? Wir freuen uns auf Ihre Nachricht.",
 		"form": {
 			"email": "E-Mail",
 			"message": "Nachricht",
@@ -26,12 +26,12 @@
 		"title": "Dokumentation"
 	},
 	"faq": {
-		"description": "Alles, was Sie über aiprocess.me wissen müssen.",
+		"description": "Alles, was Sie über Auditora.ai wissen müssen.",
 		"title": "Häufig gestellte Fragen",
 		"items": {
 			"joinCall": {
-				"question": "Wie tritt aiprocess.me meinem Anruf bei?",
-				"answer": "aiprocess.me nutzt Recall.ai, um als Bot-Teilnehmer an Zoom-, Google Meet- oder Microsoft Teams-Meetings teilzunehmen. Teilen Sie einfach einen Meeting-Link oder laden Sie aiprocess.me direkt ein — es tritt leise bei und beginnt mit der Echtzeit-Transkription."
+				"question": "Wie tritt Auditora.ai meinem Anruf bei?",
+				"answer": "Auditora.ai nutzt Recall.ai, um als Bot-Teilnehmer an Zoom-, Google Meet- oder Microsoft Teams-Meetings teilzunehmen. Teilen Sie einfach einen Meeting-Link oder laden Sie Auditora.ai direkt ein — es tritt leise bei und beginnt mit der Echtzeit-Transkription."
 			},
 			"dataSecurity": {
 				"question": "Sind die Gesprächsdaten meiner Kunden sicher?",
@@ -39,7 +39,7 @@
 			},
 			"bpmnStandard": {
 				"question": "Welchen BPMN-Standard unterstützen Sie?",
-				"answer": "aiprocess.me erstellt BPMN 2.0-konforme Diagramme. Sie können diese exportieren und in jedem standardkonformen Tool wie Camunda, Signavio oder Visio öffnen."
+				"answer": "Auditora.ai erstellt BPMN 2.0-konforme Diagramme. Sie können diese exportieren und in jedem standardkonformen Tool wie Camunda, Signavio oder Visio öffnen."
 			},
 			"liveEditing": {
 				"question": "Kann ich das Diagramm während des Meetings bearbeiten?",
@@ -55,7 +55,7 @@
 		"hero": {
 			"badge": "KI-gestützte Prozesserhebung",
 			"title": "Verwandeln Sie jedes Kundenmeeting in eine fertige Prozesskarte",
-			"subtitle": "aiprocess.me nimmt an Ihrem Videoanruf teil, leitet Ihre Fragen mit einem KI-Teleprompter und erstellt automatisch Geschäftsprozessdiagramme in Echtzeit. Verlassen Sie jedes Meeting mit einem kundenfertigen BPMN-Ergebnis.",
+			"subtitle": "Auditora.ai nimmt an Ihrem Videoanruf teil, leitet Ihre Fragen mit einem KI-Teleprompter und erstellt automatisch Geschäftsprozessdiagramme in Echtzeit. Verlassen Sie jedes Meeting mit einem kundenfertigen BPMN-Ergebnis.",
 			"cta": "Kostenlos testen",
 			"ctaSecondary": "So funktioniert es"
 		},
@@ -82,8 +82,8 @@
 			"title": "Drei Schritte. Null Nachbereitung.",
 			"stepLabel": "Schritt {number}",
 			"step1": {
-				"title": "aiprocess.me tritt Ihrem Anruf bei",
-				"description": "Laden Sie aiprocess.me zu jeder Zoom-, Teams- oder Meet-Sitzung ein. Es tritt als stiller Teilnehmer bei und beginnt die Echtzeit-Transkription mit Sprecheridentifikation."
+				"title": "Auditora.ai tritt Ihrem Anruf bei",
+				"description": "Laden Sie Auditora.ai zu jeder Zoom-, Teams- oder Meet-Sitzung ein. Es tritt als stiller Teilnehmer bei und beginnt die Echtzeit-Transkription mit Sprecheridentifikation."
 			},
 			"step2": {
 				"title": "KI leitet Ihre Fragen",
@@ -97,11 +97,11 @@
 		"features": {
 			"badge": "Kernfunktionen",
 			"title": "Alles, was Sie brauchen, um Prozesse zu erheben — nicht zu dokumentieren",
-			"description": "aiprocess.me übernimmt die Dokumentation, damit Sie sich auf das konzentrieren können, was Sie am besten können — das Geschäft Ihres Kunden verstehen.",
+			"description": "Auditora.ai übernimmt die Dokumentation, damit Sie sich auf das konzentrieren können, was Sie am besten können — das Geschäft Ihres Kunden verstehen.",
 			"feature1": {
 				"title": "Echtzeit-Transkription",
 				"subtitle": "Jedes Wort erfasst, jeder Sprecher identifiziert.",
-				"description": "Angetrieben von Deepgram erfasst aiprocess.me jedes Wort mit Sprecherdiarisierung. Es weiß genau, wer was gesagt hat, damit Ihre Prozesskarte die richtigen Rollen und Verantwortlichkeiten widerspiegelt.",
+				"description": "Angetrieben von Deepgram erfasst Auditora.ai jedes Wort mit Sprecherdiarisierung. Es weiß genau, wer was gesagt hat, damit Ihre Prozesskarte die richtigen Rollen und Verantwortlichkeiten widerspiegelt.",
 				"benefit1": {
 					"title": "Sprecherdiarisierung",
 					"description": "Erkennt automatisch, wer spricht, und ordnet Stimmen den Rollen in Ihrem Prozessdiagramm zu."
@@ -151,7 +151,7 @@
 			}
 		},
 		"demo": {
-			"windowTitle": "aiprocess.me — Live-Sitzung",
+			"windowTitle": "Auditora.ai — Live-Sitzung",
 			"rec": "REC",
 			"teleprompterLabel": "Teleprompter",
 			"askNow": "Jetzt fragen",
@@ -198,13 +198,13 @@
 				"export": "Exportbereit"
 			},
 			"scene1": {
-				"title": "aiprocess.me tritt Ihrem Anruf bei",
-				"joining": "aiprocess.me tritt dem Meeting bei…",
+				"title": "Auditora.ai tritt Ihrem Anruf bei",
+				"joining": "Auditora.ai tritt dem Meeting bei…",
 				"participant1": "Ana López",
 				"participant2": "Marco Díaz",
 				"participant3": "Sarah Chen",
 				"you": "Sie (Berater)",
-				"prozea": "aiprocess.me AI"
+				"prozea": "Auditora.ai AI"
 			},
 			"scene2": {
 				"title": "Jedes Wort, erfasst",
@@ -238,12 +238,12 @@
 				"message": "Anmeldung fehlgeschlagen. Bitte versuchen Sie es später erneut."
 			},
 			"success": {
-				"message": "Sie sind auf der Liste. Wir benachrichtigen Sie, wenn aiprocess.me startet.",
+				"message": "Sie sind auf der Liste. Wir benachrichtigen Sie, wenn Auditora.ai startet.",
 				"title": "Angemeldet"
 			}
 		},
 		"submit": "Anmelden",
-		"subtitle": "Gehören Sie zu den Ersten, die Zugang zu aiprocess.me erhalten.",
+		"subtitle": "Gehören Sie zu den Ersten, die Zugang zu Auditora.ai erhalten.",
 		"title": "Frühzugang sichern"
 	},
 	"cta": {
@@ -265,7 +265,7 @@
 			"pricing": "Preise",
 			"privacyPolicy": "Datenschutz",
 			"termsAndConditions": "AGB",
-			"builtWith": "aiprocess.me"
+			"builtWith": "Auditora.ai"
 		},
 		"menu": {
 			"blog": "Blog",

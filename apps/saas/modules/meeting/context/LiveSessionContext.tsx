@@ -3,6 +3,8 @@
 import { createContext, useContext, type ReactNode } from "react";
 import type { DiagramNode, BotActivity, TranscriptEntry } from "../types";
 
+export type LayoutMode = "default" | "chat-focus";
+
 export interface DiagramWarning {
 	type: string;
 	nodeId: string;
@@ -32,10 +34,13 @@ export interface LiveSessionState {
 	gapType: string | null;
 	botActivity: BotActivity;
 	diagramHealth: DiagramHealth;
+	/** True after the first successful live-data poll completes */
+	firstPollDone: boolean;
 
 	// UI state
 	aiEnabled: boolean;
 	selectedTool: "select" | "connect" | "text" | "ai-auto";
+	layoutMode: LayoutMode;
 
 	// Properties view tabs
 	/** Currently active central view: "diagram" or a property tab id (e.g. "props:Process_1") */
@@ -71,6 +76,10 @@ export interface LiveSessionActions {
 	setActiveCentralTab: (tabId: string) => void;
 	/** Set selected node in properties view */
 	setSelectedNodeId: (nodeId: string | null) => void;
+	/** Update the processId after eager process creation */
+	setProcessId: (id: string) => void;
+	/** Switch layout mode */
+	setLayoutMode: (mode: LayoutMode) => void;
 }
 
 export type LiveSessionContextValue = LiveSessionState & LiveSessionActions;

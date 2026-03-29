@@ -258,7 +258,7 @@ ${processDef.risks.length > 0 ? `
 
 <!-- Footer -->
 <div class="footer">
-  Generado por aiprocess.me · ${date}
+  Generado por Auditora.ai · ${date}
 </div>
 
 </div>

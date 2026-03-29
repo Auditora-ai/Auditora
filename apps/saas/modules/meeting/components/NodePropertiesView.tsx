@@ -1,24 +1,17 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import {
 	ChevronRightIcon,
-	CircleDotIcon,
 	SquareIcon,
-	DiamondIcon,
-	BoxIcon,
 	PlusIcon,
 	XIcon,
 	PaperclipIcon,
 	FileIcon,
 	Trash2Icon,
-	CheckCircle2Icon,
-	ClockIcon,
-	AlertCircleIcon,
-	UserIcon,
 	TimerIcon,
-	CpuIcon,
 	ArrowRightLeftIcon,
 	DollarSignIcon,
 	ClipboardListIcon,
@@ -39,26 +32,9 @@ interface NodePropertiesViewProps {
 	label: string;
 }
 
-// ─── Node type config ─────────────────────────────────────────────
-const NODE_CONFIG: Record<string, { icon: React.ElementType; color: string; bg: string; label: string }> = {
-	"bpmn:StartEvent": { icon: CircleDotIcon, color: "#16A34A", bg: "#F0FDF4", label: "Inicio" },
-	"bpmn:EndEvent": { icon: CircleDotIcon, color: "#DC2626", bg: "#FEF2F2", label: "Fin" },
-	"bpmn:Task": { icon: SquareIcon, color: "#3B82F6", bg: "#EFF6FF", label: "Tarea" },
-	"bpmn:UserTask": { icon: UserIcon, color: "#3B82F6", bg: "#EFF6FF", label: "Tarea Usuario" },
-	"bpmn:ServiceTask": { icon: CpuIcon, color: "#3B82F6", bg: "#EFF6FF", label: "Tarea Servicio" },
-	"bpmn:ManualTask": { icon: SquareIcon, color: "#3B82F6", bg: "#EFF6FF", label: "Tarea Manual" },
-	"bpmn:ExclusiveGateway": { icon: DiamondIcon, color: "#EAB308", bg: "#FEF9C3", label: "Gateway" },
-	"bpmn:ParallelGateway": { icon: DiamondIcon, color: "#7C3AED", bg: "#F5F3FF", label: "Paralelo" },
-	"bpmn:SubProcess": { icon: BoxIcon, color: "#7C3AED", bg: "#F5F3FF", label: "Subproceso" },
-};
-
-const getConfig = (type: string) => NODE_CONFIG[type] || { icon: SquareIcon, color: "#64748B", bg: "#F8FAFC", label: "Elemento" };
-
-const STATE_BADGE: Record<string, { icon: React.ElementType; color: string; label: string }> = {
-	confirmed: { icon: CheckCircle2Icon, color: "#16A34A", label: "Confirmado" },
-	forming: { icon: ClockIcon, color: "#EAB308", label: "En formacion" },
-	rejected: { icon: AlertCircleIcon, color: "#DC2626", label: "Rechazado" },
-};
+// ─── Node type config (shared) ───────────────────────────────────
+import { getNodeConfig, STATE_BADGE } from "../lib/node-display-config";
+const getConfig = getNodeConfig;
 
 // ─── Group icons ──────────────────────────────────────────────────
 const GROUP_ICONS: Record<string, React.ElementType> = {
@@ -69,6 +45,7 @@ const GROUP_ICONS: Record<string, React.ElementType> = {
 };
 
 export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesViewProps) {
+	const t = useTranslations("meeting");
 	const { nodes, sessionId, modelerApi, selectedNodeId, setSelectedNodeId } = useLiveSessionContext();
 
 	const [editingState, setEditingState] = useState<Record<string, NodeProperties>>({});
@@ -122,7 +99,7 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 					if (!res.ok) throw new Error(`HTTP ${res.status}`);
 					setEditingState((prev) => { const next = { ...prev }; delete next[nodeId]; return next; });
 				} catch {
-					toast.error("Error al guardar propiedades");
+					toast.error(t("toast.savePropsError"));
 				}
 			}, 1000);
 		},
@@ -183,22 +160,22 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 	};
 
 	return (
-		<div className="flex h-full" style={{ fontFamily: "Inter, system-ui, sans-serif" }}>
+		<div className="flex h-full" style={{ fontFamily: "'Geist Sans', system-ui, sans-serif" }}>
 			{/* ─── Left sidebar: node list ─── */}
-			<div className="flex w-[240px] shrink-0 flex-col border-r border-[#E2E8F0] bg-[#FAFBFC]">
+			<div className="flex w-[240px] shrink-0 flex-col border-r border-canvas-border bg-secondary">
 				{/* Process header */}
-				<div className="border-b border-[#E2E8F0] px-4 py-3">
-					<h2 className="text-sm font-semibold text-[#0F172A]">{label}</h2>
+				<div className="border-b border-canvas-border px-4 py-3">
+					<h2 className="text-sm font-semibold text-canvas-text">{label}</h2>
 					<div className="mt-1 flex items-center gap-2">
-						<span className="text-[10px] text-[#94A3B8]">
-							{childNodes.length} elemento{childNodes.length !== 1 ? "s" : ""}
+						<span className="text-[10px] text-chrome-text-secondary">
+							{t("nodeProperties.elementCount", { count: childNodes.length })}
 						</span>
-						<span className="text-[10px] text-[#94A3B8]">·</span>
-						<span className="text-[10px] text-[#94A3B8]">
+						<span className="text-[10px] text-chrome-text-secondary">·</span>
+						<span className="text-[10px] text-chrome-text-secondary">
 							{childNodes.filter((n) => {
 								const p = getDocProgress(n.id);
 								return p.filled > 0;
-							}).length} documentados
+							}).length} {t("nodeProperties.documented")}
 						</span>
 					</div>
 				</div>
@@ -219,8 +196,8 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 								onClick={() => setSelectedNodeId(node.id)}
 								className={`flex w-full items-center gap-2.5 px-4 py-2.5 text-left transition-all ${
 									isSelected
-										? "border-l-[3px] border-[#2563EB] bg-[#EFF6FF] shadow-[inset_0_0_0_1px_rgba(37,99,235,0.1)]"
-										: "border-l-[3px] border-transparent hover:bg-[#F8FAFC]"
+										? "border-l-[3px] border-primary bg-accent shadow-[inset_0_0_0_1px_rgba(37,99,235,0.1)]"
+										: "border-l-[3px] border-transparent hover:bg-secondary"
 								}`}
 							>
 								{/* Node icon with type color */}
@@ -232,8 +209,8 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 										<Icon className="h-3.5 w-3.5" />
 									</div>
 									{isNodeWorking(node.id) && (
-										<div className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-[#2563EB]">
-											<div className="h-full w-full animate-ping rounded-full bg-[#2563EB]" />
+										<div className="absolute -right-0.5 -top-0.5 h-3.5 w-3.5 rounded-full border-2 border-white bg-primary">
+											<div className="h-full w-full animate-ping rounded-full bg-primary" />
 										</div>
 									)}
 								</div>
@@ -241,28 +218,28 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 								{/* Node info */}
 								<div className="min-w-0 flex-1">
 									<div className="flex items-center gap-1">
-										<span className={`truncate text-xs ${isSelected ? "font-semibold text-[#0F172A]" : "font-medium text-[#334155]"}`}>
+										<span className={`truncate text-xs ${isSelected ? "font-semibold text-canvas-text" : "font-medium text-canvas-text-secondary"}`}>
 											{node.label}
 										</span>
 										{isEditing && (
-											<span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#2563EB]" />
+											<span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
 										)}
 									</div>
 									{/* Progress bar + procedure indicator */}
 									<div className="mt-1 flex items-center gap-1.5">
-										<div className="h-1 flex-1 rounded-full bg-[#E2E8F0]">
+										<div className="h-1 flex-1 rounded-full bg-canvas-border">
 											<div
 												className="h-1 rounded-full transition-all"
 												style={{
 													width: `${progress.pct}%`,
-													backgroundColor: progress.pct === 0 ? "#E2E8F0" : progress.pct >= 70 ? "#16A34A" : "#EAB308",
+													backgroundColor: progress.pct === 0 ? "var(--palette-stone-200)" : progress.pct >= 70 ? "var(--palette-success)" : "var(--palette-warning)",
 												}}
 											/>
 										</div>
-										<span className="text-[9px] tabular-nums text-[#94A3B8]">{progress.pct}%</span>
+										<span className="text-[9px] tabular-nums text-chrome-text-secondary">{progress.pct}%</span>
 										{node.dbNode?.procedure && (
-											<span title="Tiene procedimiento">
-												<ClipboardListIcon className="h-3 w-3 shrink-0 text-[#2563EB]" />
+											<span title={t("nodeProperties.hasProcedure")}>
+												<ClipboardListIcon className="h-3.5 w-3.5 shrink-0 text-primary" />
 											</span>
 										)}
 									</div>
@@ -274,11 +251,11 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 			</div>
 
 			{/* ─── Right: property editor ─── */}
-			<div className="flex flex-1 flex-col overflow-hidden bg-white">
+			<div className="flex flex-1 flex-col overflow-hidden bg-background">
 				{selectedNode ? (
 					<>
 						{/* Node header */}
-						<div className="border-b border-[#E2E8F0] px-8 py-5">
+						<div className="border-b border-canvas-border px-8 py-5">
 							<div className="flex items-start gap-4">
 								{/* Large type icon */}
 								<div
@@ -288,7 +265,7 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 									<selectedConfig.icon className="h-6 w-6" />
 								</div>
 								<div className="min-w-0 flex-1">
-									<h3 className="text-lg font-semibold text-[#0F172A]">{selectedNode.label}</h3>
+									<h3 className="text-lg font-semibold text-canvas-text">{selectedNode.label}</h3>
 									<div className="mt-1 flex items-center gap-3">
 										<span
 											className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium"
@@ -300,11 +277,11 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 											className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium"
 											style={{ color: stateBadge.color, backgroundColor: `${stateBadge.color}10` }}
 										>
-											<stateBadge.icon className="h-3 w-3" />
+											<stateBadge.icon className="h-3.5 w-3.5" />
 											{stateBadge.label}
 										</span>
 										{selectedNode.dbNode?.lane && (
-											<span className="text-[10px] text-[#64748B]">
+											<span className="text-[10px] text-chrome-text-muted">
 												Lane: {selectedNode.dbNode.lane}
 											</span>
 										)}
@@ -313,30 +290,30 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 							</div>
 
 							{/* Doc mode toggle */}
-							<div className="mt-3 flex rounded-lg bg-[#F1F5F9] p-0.5">
+							<div className="mt-3 flex rounded-lg bg-canvas-surface p-0.5">
 								<button
 									type="button"
 									onClick={() => setDocMode("description")}
 									className={`flex flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-[11px] font-medium transition-colors ${
 										docMode === "description"
-											? "bg-white text-[#0F172A] shadow-sm"
-											: "text-[#64748B] hover:text-[#334155]"
+											? "bg-background text-canvas-text shadow-sm"
+											: "text-chrome-text-muted hover:text-canvas-text-secondary"
 									}`}
 								>
-									<FileTextIcon className="h-3 w-3" />
-									Propiedades
+									<FileTextIcon className="h-3.5 w-3.5" />
+									{t("nodeProperties.tabProperties")}
 								</button>
 								<button
 									type="button"
 									onClick={() => setDocMode("sop")}
 									className={`flex flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-1.5 text-[11px] font-medium transition-colors ${
 										docMode === "sop"
-											? "bg-white text-[#0F172A] shadow-sm"
-											: "text-[#64748B] hover:text-[#334155]"
+											? "bg-background text-canvas-text shadow-sm"
+											: "text-chrome-text-muted hover:text-canvas-text-secondary"
 									}`}
 								>
-									<ClipboardListIcon className="h-3 w-3" />
-									SOP Completo
+									<ClipboardListIcon className="h-3.5 w-3.5" />
+									{t("nodeProperties.tabSopComplete")}
 								</button>
 							</div>
 						</div>
@@ -362,11 +339,11 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 									return (
 										<div key={group.key} className="mb-8 last:mb-0">
 											<div className="mb-3 flex items-center gap-2">
-												<GroupIcon className="h-4 w-4 text-[#94A3B8]" />
-												<h4 className="text-xs font-semibold uppercase tracking-wider text-[#64748B]">
+												<GroupIcon className="h-4 w-4 text-chrome-text-secondary" />
+												<h4 className="text-xs font-semibold uppercase tracking-wider text-chrome-text-muted">
 													{group.label}
 												</h4>
-												<div className="h-px flex-1 bg-[#F1F5F9]" />
+												<div className="h-px flex-1 bg-canvas-surface" />
 											</div>
 
 											{group.key === "recursos" ? (
@@ -416,11 +393,11 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 								{/* Attachments */}
 								<div className="mb-8">
 									<div className="mb-3 flex items-center gap-2">
-										<PaperclipIcon className="h-4 w-4 text-[#94A3B8]" />
-										<h4 className="text-xs font-semibold uppercase tracking-wider text-[#64748B]">
-											Adjuntos
+										<PaperclipIcon className="h-4 w-4 text-chrome-text-secondary" />
+										<h4 className="text-xs font-semibold uppercase tracking-wider text-chrome-text-muted">
+											{t("nodeProperties.attachments")}
 										</h4>
-										<div className="h-px flex-1 bg-[#F1F5F9]" />
+										<div className="h-px flex-1 bg-canvas-surface" />
 									</div>
 									<AttachmentsZone
 										attachments={(selectedProps.attachments as any[]) || []}
@@ -432,10 +409,10 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 						)}
 					</>
 				) : (
-					<div className="flex h-full flex-col items-center justify-center text-[#94A3B8]">
+					<div className="flex h-full flex-col items-center justify-center text-chrome-text-secondary">
 						<SquareIcon className="mb-3 h-10 w-10 opacity-30" />
-						<p className="text-sm">Selecciona un elemento del proceso</p>
-						<p className="mt-1 text-xs">para documentar sus propiedades</p>
+						<p className="text-sm">{t("nodeProperties.selectElement")}</p>
+						<p className="mt-1 text-xs">{t("nodeProperties.selectElementSub")}</p>
 					</div>
 				)}
 			</div>
@@ -461,9 +438,10 @@ function PropertyField({
 	sessionId?: string;
 	nodeId?: string;
 }) {
+	const t = useTranslations("meeting");
 	const [drafting, setDrafting] = useState(false);
 	const baseInputClass =
-		"w-full rounded-lg border border-[#E2E8F0] bg-white px-3 py-2 text-sm text-[#0F172A] placeholder:text-[#CBD5E1] focus:border-[#3B82F6] focus:outline-none focus:ring-1 focus:ring-[#3B82F6] transition-colors";
+		"w-full rounded-lg border border-canvas-border bg-background px-3 py-2 text-sm text-canvas-text placeholder:text-chrome-text-secondary focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors";
 
 	// Pick up pending draft on mount
 	useEffect(() => {
@@ -507,11 +485,11 @@ function PropertyField({
 
 	const fieldLabel = (
 		<div className="group/tip relative mb-1.5 flex items-center gap-1">
-			<label className="text-xs font-medium text-[#334155]">{field.label}</label>
+			<label className="text-xs font-medium text-canvas-text-secondary">{field.label}</label>
 			{(field as any).tooltip && (
 				<>
-					<InfoIcon className="h-3 w-3 cursor-help text-[#CBD5E1] transition-colors group-hover/tip:text-[#94A3B8]" />
-					<div className="pointer-events-none absolute left-0 top-full z-50 mt-1.5 w-64 rounded-lg bg-[#0F172A] px-3 py-2.5 text-[11px] leading-relaxed text-[#CBD5E1] opacity-0 shadow-xl ring-1 ring-[#334155] transition-opacity group-hover/tip:opacity-100">
+					<InfoIcon className="h-3.5 w-3.5 cursor-help text-chrome-text-secondary transition-colors group-hover/tip:text-chrome-text-secondary" />
+					<div className="pointer-events-none absolute left-0 top-full z-50 mt-1.5 w-64 rounded-lg bg-chrome-base px-3 py-2.5 text-[11px] leading-relaxed text-chrome-text-secondary opacity-0 shadow-xl ring-1 ring-chrome-border transition-opacity group-hover/tip:opacity-100">
 						{(field as any).tooltip}
 					</div>
 				</>
@@ -529,14 +507,14 @@ function PropertyField({
 							type="button"
 							onClick={handleGenerateDraft}
 							disabled={drafting}
-							className="flex items-center gap-1 rounded-md px-2 py-0.5 text-[10px] font-medium text-[#2563EB] transition-colors hover:bg-[#EFF6FF] disabled:opacity-50"
+							className="flex items-center gap-1 rounded-md px-2 py-0.5 text-[10px] font-medium text-primary transition-colors hover:bg-accent disabled:opacity-50"
 						>
 							{drafting ? (
-								<Loader2Icon className="h-3 w-3 animate-spin" />
+								<Loader2Icon className="h-3.5 w-3.5 animate-spin" />
 							) : (
-								<SparklesIcon className="h-3 w-3" />
+								<SparklesIcon className="h-3.5 w-3.5" />
 							)}
-							{drafting ? "Generando..." : "Generar borrador"}
+							{drafting ? t("nodeProperties.generating") : t("nodeProperties.generateDraft")}
 						</button>
 					)}
 				</div>
@@ -582,7 +560,7 @@ function PropertyField({
 			<TagField
 				label={field.label}
 				tooltip={(field as any).tooltip}
-				values={(value as string[]) || []}
+				values={Array.isArray(value) ? value : []}
 				onChange={onChange}
 				placeholder={"placeholder" in field ? (field.placeholder as string) : ""}
 			/>
@@ -615,11 +593,11 @@ function TagField({
 	return (
 		<div>
 			<div className="group/tip relative mb-1.5 flex items-center gap-1">
-				<label className="text-xs font-medium text-[#334155]">{label}</label>
+				<label className="text-xs font-medium text-canvas-text-secondary">{label}</label>
 				{tooltip && (
 					<>
-						<InfoIcon className="h-3 w-3 cursor-help text-[#CBD5E1] transition-colors group-hover/tip:text-[#94A3B8]" />
-						<div className="pointer-events-none absolute left-0 top-full z-50 mt-1.5 w-64 rounded-lg bg-[#0F172A] px-3 py-2.5 text-[11px] leading-relaxed text-[#CBD5E1] opacity-0 shadow-xl ring-1 ring-[#334155] transition-opacity group-hover/tip:opacity-100">
+						<InfoIcon className="h-3.5 w-3.5 cursor-help text-chrome-text-secondary transition-colors group-hover/tip:text-chrome-text-secondary" />
+						<div className="pointer-events-none absolute left-0 top-full z-50 mt-1.5 w-64 rounded-lg bg-chrome-base px-3 py-2.5 text-[11px] leading-relaxed text-chrome-text-secondary opacity-0 shadow-xl ring-1 ring-chrome-border transition-opacity group-hover/tip:opacity-100">
 							{tooltip}
 						</div>
 					</>
@@ -628,10 +606,10 @@ function TagField({
 			{values.length > 0 && (
 				<div className="mb-2 flex flex-wrap gap-1.5">
 					{values.map((tag, idx) => (
-						<span key={`${tag}-${idx}`} className="inline-flex items-center gap-1 rounded-md bg-[#EFF6FF] px-2.5 py-1 text-xs font-medium text-[#2563EB]">
+						<span key={`${tag}-${idx}`} className="inline-flex items-center gap-1 rounded-md bg-accent px-2.5 py-1 text-xs font-medium text-primary">
 							{tag}
-							<button type="button" onClick={() => removeTag(idx)} className="rounded-sm p-0.5 hover:bg-[#DBEAFE]">
-								<XIcon className="h-2.5 w-2.5" />
+							<button type="button" onClick={() => removeTag(idx)} className="rounded-sm p-0.5 hover:bg-blue-100">
+								<XIcon className="h-3.5 w-3.5" />
 							</button>
 						</span>
 					))}
@@ -642,10 +620,10 @@ function TagField({
 					type="text" value={input} onChange={(e) => setInput(e.target.value)}
 					onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addTag(); } }}
 					placeholder={placeholder}
-					className="w-full rounded-lg border border-[#E2E8F0] bg-white px-3 py-2 text-sm text-[#0F172A] placeholder:text-[#CBD5E1] focus:border-[#3B82F6] focus:outline-none focus:ring-1 focus:ring-[#3B82F6]"
+					className="w-full rounded-lg border border-canvas-border bg-background px-3 py-2 text-sm text-canvas-text placeholder:text-chrome-text-secondary focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 				/>
 				<button type="button" onClick={addTag} disabled={!input.trim()}
-					className="flex shrink-0 items-center rounded-lg border border-[#E2E8F0] px-3 text-[#64748B] transition-colors hover:bg-[#F1F5F9] disabled:opacity-30">
+					className="flex shrink-0 items-center rounded-lg border border-canvas-border px-3 text-chrome-text-muted transition-colors hover:bg-canvas-surface disabled:opacity-30">
 					<PlusIcon className="h-3.5 w-3.5" />
 				</button>
 			</div>
@@ -688,12 +666,12 @@ function AttachmentsZone({
 			{attachments.length > 0 && (
 				<div className="mb-3 space-y-1.5">
 					{attachments.map((att, idx) => (
-						<div key={`${att.name}-${idx}`} className="flex items-center gap-3 rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2.5">
-							<FileIcon className="h-4 w-4 shrink-0 text-[#64748B]" />
-							<span className="flex-1 truncate text-sm text-[#0F172A]">{att.name}</span>
-							<span className="shrink-0 text-xs text-[#94A3B8]">{formatSize(att.size)}</span>
+						<div key={`${att.name}-${idx}`} className="flex items-center gap-3 rounded-lg border border-canvas-border bg-secondary px-3 py-2.5">
+							<FileIcon className="h-4 w-4 shrink-0 text-chrome-text-muted" />
+							<span className="flex-1 truncate text-sm text-canvas-text">{att.name}</span>
+							<span className="shrink-0 text-xs text-chrome-text-secondary">{formatSize(att.size)}</span>
 							<button type="button" onClick={() => onChange(attachments.filter((_, i) => i !== idx))}
-								className="shrink-0 rounded p-1 text-[#94A3B8] hover:bg-[#E2E8F0] hover:text-red-500">
+								className="shrink-0 rounded p-1 text-chrome-text-secondary hover:bg-canvas-border hover:text-red-500">
 								<Trash2Icon className="h-3.5 w-3.5" />
 							</button>
 						</div>
@@ -701,9 +679,9 @@ function AttachmentsZone({
 				</div>
 			)}
 			<button type="button" onClick={handleFileSelect}
-				className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-[#CBD5E1] px-4 py-3 text-xs font-medium text-[#64748B] transition-colors hover:border-[#3B82F6] hover:bg-[#F8FAFC] hover:text-[#3B82F6]">
+				className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-canvas-border px-4 py-3 text-xs font-medium text-chrome-text-muted transition-colors hover:border-primary hover:bg-secondary hover:text-primary">
 				<PaperclipIcon className="h-4 w-4" />
-				Adjuntar archivo (PDF, Word, PPT)
+				{t("nodeProperties.attachFile")}
 			</button>
 		</div>
 	);

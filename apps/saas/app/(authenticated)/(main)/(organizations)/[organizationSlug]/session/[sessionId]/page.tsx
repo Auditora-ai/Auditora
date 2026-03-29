@@ -80,7 +80,7 @@ export default async function SessionReviewPage({
 							href={`/api/sessions/${sessionId}/export?format=xml`}
 							download
 						>
-							<DownloadIcon className="mr-1 h-3 w-3" />
+							<DownloadIcon className="mr-1 h-3.5 w-3.5" />
 							BPMN XML
 						</a>
 					</Button>
@@ -90,7 +90,7 @@ export default async function SessionReviewPage({
 							target="_blank"
 							rel="noreferrer"
 						>
-							<ShareIcon className="mr-1 h-3 w-3" />
+							<ShareIcon className="mr-1 h-3.5 w-3.5" />
 							Share
 						</a>
 					</Button>

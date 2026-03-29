@@ -72,20 +72,20 @@ export default function PublicRiskSharePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="animate-pulse text-slate-400">Cargando...</div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-pulse text-muted-foreground">Cargando...</div>
       </div>
     );
   }
 
   if (error || !data) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-serif text-slate-900 mb-2">
+          <h1 className="text-2xl font-serif text-foreground mb-2">
             {error === "not_found" ? "Link no encontrado" : "Link expirado"}
           </h1>
-          <p className="text-slate-500">
+          <p className="text-muted-foreground">
             {error === "not_found"
               ? "Este enlace de riesgos no existe."
               : "Este enlace ha expirado. Solicita uno nuevo al consultor."}
@@ -105,7 +105,7 @@ export default function PublicRiskSharePage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="mb-8">
@@ -116,10 +116,10 @@ export default function PublicRiskSharePage() {
               className="h-10 mb-4"
             />
           )}
-          <h1 className="text-3xl font-serif text-slate-900">
+          <h1 className="text-3xl font-serif text-foreground">
             Analisis de Riesgos
           </h1>
-          <p className="text-slate-500 mt-1">
+          <p className="text-muted-foreground mt-1">
             {data.orgName} — {data.processName}
           </p>
         </div>
@@ -134,18 +134,18 @@ export default function PublicRiskSharePage() {
           ].map((item) => (
             <div
               key={item.label}
-              className="bg-slate-50 border border-slate-200 rounded-md p-4 text-center"
+              className="bg-muted border border-border rounded-md p-4 text-center"
             >
               <div className={`text-2xl font-semibold tabular-nums ${item.color}`}>
                 {item.count}
               </div>
-              <div className="text-xs text-slate-500 mt-1">{item.label}</div>
+              <div className="text-xs text-muted-foreground mt-1">{item.label}</div>
             </div>
           ))}
         </div>
 
         {/* Risk Register */}
-        <h2 className="text-xl font-serif text-slate-900 mb-4 border-b border-slate-200 pb-2">
+        <h2 className="text-xl font-serif text-foreground mb-4 border-b border-border pb-2">
           Registro de Riesgos
         </h2>
         <div className="space-y-3 mb-8">
@@ -154,7 +154,7 @@ export default function PublicRiskSharePage() {
             .map((risk) => (
               <div
                 key={risk.id}
-                className={`border border-slate-200 rounded-md p-4 border-l-4`}
+                className={`border border-border rounded-md p-4 border-l-4`}
                 style={{
                   borderLeftColor:
                     risk.riskScore >= 20
@@ -169,18 +169,18 @@ export default function PublicRiskSharePage() {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-medium text-slate-900">{risk.title}</h3>
+                      <h3 className="font-medium text-foreground">{risk.title}</h3>
                       <span
                         className={`text-xs px-2 py-0.5 rounded-full text-white ${scoreColor(risk.riskScore)}`}
                       >
                         {riskTypeLabel(risk.riskType)}
                       </span>
                     </div>
-                    <p className="text-sm text-slate-600 line-clamp-2">
+                    <p className="text-sm text-muted-foreground line-clamp-2">
                       {risk.description}
                     </p>
                     {risk.affectedStep && (
-                      <p className="text-xs text-slate-400 mt-1">
+                      <p className="text-xs text-muted-foreground mt-1">
                         Actividad: {risk.affectedStep}
                       </p>
                     )}
@@ -191,7 +191,7 @@ export default function PublicRiskSharePage() {
                     >
                       {risk.riskScore}
                     </div>
-                    <div className="text-xs text-slate-400 mt-1">
+                    <div className="text-xs text-muted-foreground mt-1">
                       {risk.severity}×{risk.probability}
                     </div>
                   </div>
@@ -199,25 +199,25 @@ export default function PublicRiskSharePage() {
 
                 {/* Mitigations */}
                 {risk.mitigations.length > 0 && (
-                  <div className="mt-3 pt-3 border-t border-slate-100">
-                    <p className="text-xs font-medium text-slate-500 mb-1">
+                  <div className="mt-3 pt-3 border-t border-border">
+                    <p className="text-xs font-medium text-muted-foreground mb-1">
                       Mitigaciones:
                     </p>
                     <ul className="space-y-1">
                       {risk.mitigations.map((m, i) => (
-                        <li key={i} className="text-sm text-slate-600 flex items-center gap-2">
+                        <li key={i} className="text-sm text-muted-foreground flex items-center gap-2">
                           <span
                             className={`w-2 h-2 rounded-full ${
                               m.status === "COMPLETED"
                                 ? "bg-green-500"
                                 : m.status === "IN_PROGRESS"
                                   ? "bg-blue-500"
-                                  : "bg-slate-300"
+                                  : "bg-border"
                             }`}
                           />
                           {m.action}
                           {m.owner && (
-                            <span className="text-xs text-slate-400">({m.owner})</span>
+                            <span className="text-xs text-muted-foreground">({m.owner})</span>
                           )}
                         </li>
                       ))}
@@ -227,7 +227,7 @@ export default function PublicRiskSharePage() {
               </div>
             ))}
           {actualRisks.length === 0 && (
-            <p className="text-center text-slate-400 py-8">
+            <p className="text-center text-muted-foreground py-8">
               Sin riesgos compartidos.
             </p>
           )}
@@ -236,7 +236,7 @@ export default function PublicRiskSharePage() {
         {/* Opportunities */}
         {opportunities.length > 0 && (
           <>
-            <h2 className="text-xl font-serif text-slate-900 mb-4 border-b border-slate-200 pb-2">
+            <h2 className="text-xl font-serif text-foreground mb-4 border-b border-border pb-2">
               Oportunidades
             </h2>
             <div className="space-y-3 mb-8">
@@ -254,8 +254,8 @@ export default function PublicRiskSharePage() {
         )}
 
         {/* Footer */}
-        <div className="text-center text-xs text-slate-400 pt-8 border-t border-slate-100">
-          Generado por aiprocess.me
+        <div className="text-center text-xs text-muted-foreground pt-8 border-t border-border">
+          Generado por Auditora.ai
         </div>
       </div>
     </div>

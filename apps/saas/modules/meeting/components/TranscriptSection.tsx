@@ -155,7 +155,7 @@ export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 			<div ref={scrollRef} className="flex-1 overflow-y-auto no-scrollbar">
 				{transcript.length === 0 ? (
 					<div className="flex h-full items-center justify-center p-4">
-						<p className="text-center text-xs text-[#64748B]">
+						<p className="text-center text-xs text-chrome-text-muted">
 							Escribe o dicta indicaciones para el diagrama
 						</p>
 					</div>
@@ -171,11 +171,11 @@ export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 						{processingText && (
 							<div className="rounded-lg px-2 py-1.5 animate-pulse">
 								<div className="flex items-baseline gap-2">
-									<span className="text-[10px] font-medium text-[#7C3AED]">IA</span>
-									<Loader2Icon className="h-2.5 w-2.5 animate-spin text-[#64748B]" />
-									<span className="text-[10px] text-[#64748B]">analizando</span>
+									<span className="text-[10px] font-medium text-violet-600">IA</span>
+									<Loader2Icon className="h-3.5 w-3.5 animate-spin text-chrome-text-muted" />
+									<span className="text-[10px] text-chrome-text-muted">analizando</span>
 								</div>
-								<p className="mt-0.5 text-xs leading-relaxed text-[#94A3B8]">{processingText}</p>
+								<p className="mt-0.5 text-xs leading-relaxed text-chrome-text-secondary">{processingText}</p>
 							</div>
 						)}
 					</div>
@@ -183,7 +183,7 @@ export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 			</div>
 
 			{/* Chat input */}
-			<div className="border-t border-[#334155] p-2">
+			<div className="border-t border-chrome-border p-2">
 				<div className="flex items-center gap-1.5">
 					<button
 						type="button"
@@ -191,7 +191,7 @@ export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 						className={`flex-shrink-0 rounded-lg p-2 transition-colors ${
 							listening
 								? "bg-red-500/20 text-red-400 animate-pulse"
-								: "text-[#64748B] hover:bg-[#1E293B] hover:text-[#94A3B8]"
+								: "text-chrome-text-muted hover:bg-chrome-raised hover:text-chrome-text-secondary"
 						}`}
 						title={listening ? "Detener dictado" : "Dictado por voz"}
 					>
@@ -207,15 +207,15 @@ export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 								? interimText || "Escuchando... habla ahora"
 								: "Escribe una indicacion para la IA..."
 						}
-						className={`flex-1 rounded-lg bg-[#1E293B] px-3 py-2 text-[11px] text-[#F1F5F9] outline-none ring-1 focus:ring-[#2563EB] ${
-							listening ? "ring-red-500/50 placeholder-[#94A3B8]" : "ring-[#334155] placeholder-[#64748B]"
+						className={`flex-1 rounded-lg bg-chrome-raised px-3 py-2 text-[11px] text-chrome-text outline-none ring-1 focus:ring-primary ${
+							listening ? "ring-red-500/50 placeholder-chrome-text-secondary" : "ring-chrome-border placeholder-chrome-text-muted"
 						}`}
 					/>
 					<button
 						type="button"
 						onClick={handleSend}
 						disabled={!message.trim() || sending}
-						className="flex-shrink-0 rounded-lg bg-[#2563EB] p-2 text-white transition-colors hover:bg-[#1D4ED8] disabled:opacity-40"
+						className="flex-shrink-0 rounded-lg bg-primary p-2 text-white transition-colors hover:bg-action-hover disabled:opacity-40"
 					>
 						{sending ? (
 							<Loader2Icon className="h-3.5 w-3.5 animate-spin" />
@@ -326,7 +326,7 @@ function TranscriptLine({ entry, sessionId }: { entry: TranscriptEntry; sessionI
 	if (hidden) return null;
 
 	return (
-		<div className="group rounded-lg px-2 py-1.5 transition-colors duration-75 hover:bg-[#1E293B]">
+		<div className="group rounded-lg px-2 py-1.5 transition-colors duration-75 hover:bg-chrome-raised">
 			<div className="flex items-baseline gap-2">
 				<span
 					className="text-[10px] font-medium"
@@ -334,20 +334,20 @@ function TranscriptLine({ entry, sessionId }: { entry: TranscriptEntry; sessionI
 				>
 					{isManual ? "Tu" : entry.speaker}
 				</span>
-				<span className="text-[10px] tabular-nums text-[#64748B]">{time}</span>
-				{isManual && <span className="text-[9px] text-[#2563EB]/60">chat</span>}
+				<span className="text-[10px] tabular-nums text-chrome-text-muted">{time}</span>
+				{isManual && <span className="text-[9px] text-primary/60">chat</span>}
 				{isEdited && <span className="text-[9px] text-amber-500/60">editado</span>}
 
 				{/* Action buttons — visible on hover */}
 				<div className="ml-auto flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
-					<button type="button" onClick={() => { setEditing(true); setEditText(displayText); }} className="rounded p-0.5 text-[#64748B] hover:text-white" title="Editar">
-						<PencilIcon className="h-2.5 w-2.5" />
+					<button type="button" onClick={() => { setEditing(true); setEditText(displayText); }} className="rounded p-0.5 text-chrome-text-muted hover:text-white" title="Editar">
+						<PencilIcon className="h-3.5 w-3.5" />
 					</button>
-					<button type="button" onClick={handleIgnore} disabled={saving} className="rounded p-0.5 text-[#64748B] hover:text-amber-400" title="Ignorar">
-						<EyeOffIcon className="h-2.5 w-2.5" />
+					<button type="button" onClick={handleIgnore} disabled={saving} className="rounded p-0.5 text-chrome-text-muted hover:text-amber-400" title="Ignorar">
+						<EyeOffIcon className="h-3.5 w-3.5" />
 					</button>
-					<button type="button" onClick={handleDelete} disabled={saving} className="rounded p-0.5 text-[#64748B] hover:text-red-400" title="Eliminar">
-						<TrashIcon className="h-2.5 w-2.5" />
+					<button type="button" onClick={handleDelete} disabled={saving} className="rounded p-0.5 text-chrome-text-muted hover:text-red-400" title="Eliminar">
+						<TrashIcon className="h-3.5 w-3.5" />
 					</button>
 				</div>
 			</div>
@@ -363,18 +363,18 @@ function TranscriptLine({ entry, sessionId }: { entry: TranscriptEntry; sessionI
 							if (e.key === "Escape") setEditing(false);
 						}}
 						autoFocus
-						className="flex-1 rounded bg-[#1E293B] px-2 py-1 text-[11px] text-[#F1F5F9] outline-none ring-1 ring-[#334155] focus:ring-[#2563EB]"
+						className="flex-1 rounded bg-chrome-raised px-2 py-1 text-[11px] text-chrome-text outline-none ring-1 ring-chrome-border focus:ring-primary"
 					/>
-					<button type="button" onClick={handleEdit} disabled={saving} className="rounded bg-[#2563EB] p-1 text-white disabled:opacity-50">
-						{saving ? <Loader2Icon className="h-3 w-3 animate-spin" /> : <CheckIcon className="h-3 w-3" />}
+					<button type="button" onClick={handleEdit} disabled={saving} className="rounded bg-primary p-1 text-white disabled:opacity-50">
+						{saving ? <Loader2Icon className="h-3.5 w-3.5 animate-spin" /> : <CheckIcon className="h-3.5 w-3.5" />}
 					</button>
-					<button type="button" onClick={() => setEditing(false)} className="rounded bg-[#334155] p-1 text-[#94A3B8]">
-						<XIcon className="h-3 w-3" />
+					<button type="button" onClick={() => setEditing(false)} className="rounded bg-chrome-hover p-1 text-chrome-text-secondary">
+						<XIcon className="h-3.5 w-3.5" />
 					</button>
 				</div>
 			) : (
 				<>
-					<p className="mt-0.5 text-xs leading-relaxed text-[#E2E8F0]">
+					<p className="mt-0.5 text-xs leading-relaxed text-chrome-text-secondary">
 						{displayText}
 					</p>
 					{aiStatus && (
@@ -382,7 +382,7 @@ function TranscriptLine({ entry, sessionId }: { entry: TranscriptEntry; sessionI
 							<span className={`text-[10px] ${
 								aiStatus.startsWith("[✓") ? "text-green-400" :
 								aiStatus.startsWith("[ERROR") ? "text-red-400" :
-								"text-[#64748B]"
+								"text-chrome-text-muted"
 							}`}>
 								{aiStatus}
 							</span>
@@ -390,7 +390,7 @@ function TranscriptLine({ entry, sessionId }: { entry: TranscriptEntry; sessionI
 								type="button"
 								onClick={handleRetry}
 								disabled={saving}
-								className="text-[9px] text-[#64748B] hover:text-[#2563EB]"
+								className="text-[9px] text-chrome-text-muted hover:text-primary"
 								title="Re-procesar con IA"
 							>
 								↻ reintentar
@@ -398,7 +398,7 @@ function TranscriptLine({ entry, sessionId }: { entry: TranscriptEntry; sessionI
 						</div>
 					)}
 					{isManual && !aiStatus && !isEdited && (
-						<span className="mt-0.5 block text-[10px] text-[#64748B] animate-pulse">procesando...</span>
+						<span className="mt-0.5 block text-[10px] text-chrome-text-muted animate-pulse">procesando...</span>
 					)}
 				</>
 			)}

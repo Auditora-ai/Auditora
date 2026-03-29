@@ -188,13 +188,13 @@ export function VersionDiff({ processId, versions }: VersionDiffProps) {
 									className="flex items-center gap-2 text-xs"
 								>
 									{change.type === "added" && (
-										<PlusIcon className="h-3 w-3 shrink-0 text-emerald-600" />
+										<PlusIcon className="h-3.5 w-3.5 shrink-0 text-emerald-600" />
 									)}
 									{change.type === "removed" && (
-										<MinusIcon className="h-3 w-3 shrink-0 text-red-600" />
+										<MinusIcon className="h-3.5 w-3.5 shrink-0 text-red-600" />
 									)}
 									{change.type === "modified" && (
-										<RefreshCwIcon className="h-3 w-3 shrink-0 text-amber-600" />
+										<RefreshCwIcon className="h-3.5 w-3.5 shrink-0 text-amber-600" />
 									)}
 									<Badge
 										status={

@@ -15,12 +15,12 @@
 		"subject": "Réinitialisez votre mot de passe"
 	},
 	"magicLink": {
-		"body": "Bonjour,\nvous avez demandé un e-mail de connexion de aiprocess.me.\n\nCliquez sur le lien ci-dessous pour vous connecter.",
+		"body": "Bonjour,\nvous avez demandé un e-mail de connexion de Auditora.ai.\n\nCliquez sur le lien ci-dessous pour vous connecter.",
 		"login": "Connexion",
-		"subject": "Connexion à aiprocess.me"
+		"subject": "Connexion à Auditora.ai"
 	},
 	"newUser": {
-		"body": "Bonjour,\nmerci de vous être inscrit sur aiprocess.me.\n\nPour commencer à utiliser notre application, veuillez confirmer votre adresse e-mail en cliquant sur le lien ci-dessous.",
+		"body": "Bonjour,\nmerci de vous être inscrit sur Auditora.ai.\n\nPour commencer à utiliser notre application, veuillez confirmer votre adresse e-mail en cliquant sur le lien ci-dessous.",
 		"confirmEmail": "Confirmer l'e-mail",
 		"subject": "Confirmez votre e-mail"
 	},

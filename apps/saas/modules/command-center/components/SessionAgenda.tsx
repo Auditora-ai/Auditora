@@ -27,10 +27,10 @@ const sessionTypeLabels: Record<string, string> = {
 };
 
 function getPreparationBadge(session: SessionData) {
-	if (session.intakeStatus === "complete") return { label: "Listo", bg: "bg-[#F0FDF4]", text: "text-[#16A34A]" };
-	if (session.intakeStatus === "partial") return { label: "Preparando", bg: "bg-[#FEF9C3]", text: "text-[#D97706]" };
-	if (session._count.intakeResponses > 0) return { label: "Pendiente", bg: "bg-[#FEF9C3]", text: "text-[#D97706]" };
-	return { label: "Nuevo", bg: "bg-[#EFF6FF]", text: "text-[#2563EB]" };
+	if (session.intakeStatus === "complete") return { label: "Listo", bg: "bg-green-50", text: "text-success" };
+	if (session.intakeStatus === "partial") return { label: "Preparando", bg: "bg-yellow-100", text: "text-orientation" };
+	if (session._count.intakeResponses > 0) return { label: "Pendiente", bg: "bg-yellow-100", text: "text-orientation" };
+	return { label: "Nuevo", bg: "bg-accent", text: "text-primary" };
 }
 
 function SortableSessionItem({
@@ -65,9 +65,9 @@ function SortableSessionItem({
 	};
 
 	return (
-		<div ref={setNodeRef} style={style} className="group flex items-center gap-2 rounded-lg px-2 py-2.5 transition-colors hover:bg-[#F8FAFC]">
+		<div ref={setNodeRef} style={style} className="group flex items-center gap-2 rounded-lg px-2 py-2.5 transition-colors hover:bg-secondary">
 			{/* Drag handle */}
-			<button type="button" {...attributes} {...listeners} className="cursor-grab touch-none text-[#CBD5E1] opacity-0 transition-opacity group-hover:opacity-100">
+			<button type="button" {...attributes} {...listeners} className="cursor-grab touch-none text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100">
 				<GripVerticalIcon className="h-4 w-4" />
 			</button>
 
@@ -75,22 +75,22 @@ function SortableSessionItem({
 			<div className="w-10 shrink-0 text-center">
 				{date ? (
 					<>
-						<div className="text-sm font-bold text-[#0F172A]">{date.getDate()}</div>
-						<div className="text-[9px] uppercase text-[#94A3B8]">
+						<div className="text-sm font-bold text-foreground">{date.getDate()}</div>
+						<div className="text-[9px] uppercase text-chrome-text-secondary">
 							{date.toLocaleDateString("es-MX", { month: "short" })}
 						</div>
 					</>
 				) : (
-					<div className="text-xs text-[#CBD5E1]">—</div>
+					<div className="text-xs text-muted-foreground">—</div>
 				)}
 			</div>
 
 			{/* Info */}
 			<div className="min-w-0 flex-1">
-				<div className="truncate text-xs font-medium text-[#0F172A]">
+				<div className="truncate text-xs font-medium text-foreground">
 					{session.processDefinition?.name ?? "Sesión general"}
 				</div>
-				<div className="truncate text-[10px] text-[#94A3B8]">
+				<div className="truncate text-[10px] text-chrome-text-secondary">
 					{sessionTypeLabels[session.type] ?? session.type}
 					{date && ` · ${date.toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit" })}`}
 				</div>
@@ -106,7 +106,7 @@ function SortableSessionItem({
 				<button
 					type="button"
 					onClick={handleAction}
-					className="rounded p-1 text-[#94A3B8] transition-colors hover:bg-[#E2E8F0] hover:text-[#334155]"
+					className="rounded p-1 text-chrome-text-secondary transition-colors hover:bg-border hover:text-foreground"
 					title={session.status === "ENDED" ? "Ver" : "Iniciar"}
 				>
 					{session.status === "ENDED" ? <EyeIcon className="h-3.5 w-3.5" /> : <PlayIcon className="h-3.5 w-3.5" />}
@@ -114,7 +114,7 @@ function SortableSessionItem({
 				<button
 					type="button"
 					onClick={() => onQuickEdit(session)}
-					className="rounded p-1 text-[#94A3B8] transition-colors hover:bg-[#E2E8F0] hover:text-[#334155]"
+					className="rounded p-1 text-chrome-text-secondary transition-colors hover:bg-border hover:text-foreground"
 					title="Editar"
 				>
 					<MoreVerticalIcon className="h-3.5 w-3.5" />
@@ -155,9 +155,9 @@ export function SessionAgenda({
 
 	if (sessions.length === 0) {
 		return (
-			<div className="rounded-xl border border-[#E2E8F0] bg-white p-5">
-				<h3 className="mb-2 text-sm font-semibold text-[#0F172A]">Agenda</h3>
-				<p className="text-xs text-[#94A3B8]">
+			<div className="rounded-xl border border-border bg-background p-5">
+				<h3 className="mb-2 text-sm font-semibold text-foreground">Agenda</h3>
+				<p className="text-xs text-chrome-text-secondary">
 					Sin sesiones programadas.
 				</p>
 			</div>
@@ -165,15 +165,15 @@ export function SessionAgenda({
 	}
 
 	return (
-		<div className="rounded-xl border border-[#E2E8F0] bg-white p-4">
+		<div className="rounded-xl border border-border bg-background p-4">
 			<div className="mb-3 flex items-center justify-between px-2">
-				<h3 className="text-sm font-semibold text-[#0F172A]">Agenda</h3>
-				<span className="text-[10px] text-[#94A3B8]">{sessions.length} sesiones</span>
+				<h3 className="text-sm font-semibold text-foreground">Agenda</h3>
+				<span className="text-[10px] text-chrome-text-secondary">{sessions.length} sesiones</span>
 			</div>
 
 			<DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
 				<SortableContext items={sessions.map((s) => s.id)} strategy={verticalListSortingStrategy}>
-					<div className="divide-y divide-[#F1F5F9]">
+					<div className="divide-y divide-muted">
 						{sessions.map((session) => (
 							<SortableSessionItem
 								key={session.id}

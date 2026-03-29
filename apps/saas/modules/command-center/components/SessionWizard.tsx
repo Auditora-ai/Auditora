@@ -268,14 +268,14 @@ export function SessionWizard({
 	if (!open) return null;
 
 	return (
-		<div className="fixed inset-0 z-50 flex bg-[#0F172A]">
+		<div className="fixed inset-0 z-50 flex bg-chrome-base">
 			{/* Left column: Step indicator */}
-			<div className="hidden w-[260px] shrink-0 flex-col border-r border-[#334155] bg-[#0F172A] p-6 lg:flex">
+			<div className="hidden w-[260px] shrink-0 flex-col border-r border-chrome-border bg-chrome-base p-6 lg:flex">
 				<div className="mb-8">
-					<h1 className="text-lg font-semibold text-[#F1F5F9]">
+					<h1 className="text-lg font-semibold text-chrome-text">
 						{isOnboarding ? "Primera sesion" : "Nueva sesion"}
 					</h1>
-					<p className="mt-1 text-xs text-[#64748B]">5 pasos para preparar todo</p>
+					<p className="mt-1 text-xs text-chrome-text-muted">5 pasos para preparar todo</p>
 				</div>
 
 				<nav className="flex-1 space-y-1">
@@ -296,19 +296,19 @@ export function SessionWizard({
 								disabled={!!createdSessionId}
 								className={`flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left transition-colors ${
 									isActive
-										? "bg-[#1E293B] text-[#F1F5F9]"
+										? "bg-chrome-raised text-chrome-text"
 										: isCompleted
-											? "text-[#94A3B8] hover:bg-[#1E293B]/50"
-											: "text-[#64748B]"
+											? "text-chrome-text-secondary hover:bg-chrome-raised/50"
+											: "text-chrome-text-muted"
 								} disabled:cursor-default`}
 							>
 								<div
 									className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium ${
 										isActive
-											? "bg-[#2563EB] text-white"
+											? "bg-primary text-white"
 											: isCompleted
-												? "bg-[#16A34A]/10 text-[#16A34A]"
-												: "bg-[#1E293B] text-[#64748B]"
+												? "bg-success/10 text-success"
+												: "bg-chrome-raised text-chrome-text-muted"
 									}`}
 								>
 									{isCompleted ? (
@@ -319,7 +319,7 @@ export function SessionWizard({
 								</div>
 								<div>
 									<p className="text-sm font-medium">{step.label}</p>
-									<p className="text-[11px] text-[#64748B]">Paso {step.number}</p>
+									<p className="text-[11px] text-chrome-text-muted">Paso {step.number}</p>
 								</div>
 							</button>
 						);
@@ -330,21 +330,21 @@ export function SessionWizard({
 			{/* Center: Active step content */}
 			<div className="flex min-w-0 flex-1 flex-col">
 				{/* Top bar (mobile step indicator + close) */}
-				<div className="flex items-center justify-between border-b border-[#334155] px-6 py-4">
+				<div className="flex items-center justify-between border-b border-chrome-border px-6 py-4">
 					<div className="flex items-center gap-3 lg:hidden">
-						<span className="text-sm font-medium text-[#F1F5F9]">
+						<span className="text-sm font-medium text-chrome-text">
 							Paso {currentStep} de 5
 						</span>
-						<span className="text-sm text-[#64748B]">
+						<span className="text-sm text-chrome-text-muted">
 							{STEPS[currentStep - 1].label}
 						</span>
 					</div>
 					<div className="hidden lg:block" />
 
 					{/* Progress bar (mobile) */}
-					<div className="mx-4 hidden h-1 flex-1 rounded-full bg-[#1E293B] sm:block lg:hidden">
+					<div className="mx-4 hidden h-1 flex-1 rounded-full bg-chrome-raised sm:block lg:hidden">
 						<div
-							className="h-full rounded-full bg-[#2563EB] transition-all"
+							className="h-full rounded-full bg-primary transition-all"
 							style={{ width: `${(currentStep / 5) * 100}%` }}
 						/>
 					</div>
@@ -352,7 +352,7 @@ export function SessionWizard({
 					<button
 						type="button"
 						onClick={handleGoToCommandCenter}
-						className="rounded-lg p-2 text-[#64748B] transition-colors hover:bg-[#1E293B] hover:text-[#F1F5F9]"
+						className="rounded-lg p-2 text-chrome-text-muted transition-colors hover:bg-chrome-raised hover:text-chrome-text"
 					>
 						<XIcon className="h-5 w-5" />
 					</button>
@@ -382,12 +382,12 @@ export function SessionWizard({
 
 				{/* Bottom navigation bar */}
 				{!createdSessionId && (
-					<div className="flex items-center justify-between border-t border-[#334155] px-6 py-4 sm:px-10">
+					<div className="flex items-center justify-between border-t border-chrome-border px-6 py-4 sm:px-10">
 						<button
 							type="button"
 							onClick={handleBack}
 							disabled={currentStep === 1}
-							className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2.5 text-sm font-medium text-[#94A3B8] transition-colors hover:bg-[#1E293B] hover:text-[#F1F5F9] disabled:invisible"
+							className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2.5 text-sm font-medium text-chrome-text-secondary transition-colors hover:bg-chrome-raised hover:text-chrome-text disabled:invisible"
 						>
 							<ChevronLeftIcon className="h-4 w-4" />
 							Atras
@@ -400,10 +400,10 @@ export function SessionWizard({
 									key={step.number}
 									className={`h-1.5 w-1.5 rounded-full transition-colors ${
 										step.number === currentStep
-											? "bg-[#2563EB]"
+											? "bg-primary"
 											: step.number < currentStep
-												? "bg-[#16A34A]"
-												: "bg-[#334155]"
+												? "bg-success"
+												: "bg-chrome-hover"
 									}`}
 								/>
 							))}
@@ -414,7 +414,7 @@ export function SessionWizard({
 								type="button"
 								onClick={handleNext}
 								disabled={!canGoNext()}
-								className="inline-flex items-center gap-1.5 rounded-lg bg-[#2563EB] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1D4ED8] disabled:opacity-50"
+								className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-action-hover disabled:opacity-50"
 							>
 								Siguiente
 								<ChevronRightIcon className="h-4 w-4" />
@@ -424,7 +424,7 @@ export function SessionWizard({
 								type="button"
 								onClick={handleCreate}
 								disabled={submitting || !canGoNext()}
-								className="inline-flex items-center gap-2 rounded-lg bg-[#2563EB] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1D4ED8] disabled:opacity-50"
+								className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-action-hover disabled:opacity-50"
 							>
 								{submitting ? (
 									<>

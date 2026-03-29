@@ -100,7 +100,7 @@ export function ProcessMapVisual({ processes, links, organizationSlug }: Props) 
 
   return (
     <div className="space-y-4">
-      <div className="rounded-lg border border-slate-200 bg-white overflow-x-auto">
+      <div className="rounded-lg border border-border bg-background overflow-x-auto">
         <svg
           width={svgWidth}
           height={svgHeight}
@@ -236,11 +236,11 @@ export function ProcessMapVisual({ processes, links, organizationSlug }: Props) 
         <div className="rounded-lg border border-blue-200 bg-blue-50/50 p-5">
           <div className="flex items-start justify-between">
             <div>
-              <h3 className="text-sm font-semibold text-slate-900">{selectedProcess.name}</h3>
+              <h3 className="text-sm font-semibold text-foreground">{selectedProcess.name}</h3>
               {selectedProcess.description && (
-                <p className="text-xs text-slate-500 mt-1">{selectedProcess.description}</p>
+                <p className="text-xs text-muted-foreground mt-1">{selectedProcess.description}</p>
               )}
-              <div className="flex gap-4 mt-2 text-xs text-slate-600">
+              <div className="flex gap-4 mt-2 text-xs text-muted-foreground">
                 <span>Owner: {selectedProcess.owner ?? "—"}</span>
                 <span>{selectedProcess.sessions} sesiones</span>
                 <span>{selectedProcess.raciEntries} RACI</span>
@@ -256,7 +256,7 @@ export function ProcessMapVisual({ processes, links, organizationSlug }: Props) 
               </Link>
               <button
                 onClick={() => setSelectedId(null)}
-                className="text-slate-400 hover:text-slate-600"
+                className="text-muted-foreground hover:text-muted-foreground"
               >
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -268,10 +268,10 @@ export function ProcessMapVisual({ processes, links, organizationSlug }: Props) 
       )}
 
       {/* Legend */}
-      <div className="flex items-center gap-6 text-xs text-slate-500">
+      <div className="flex items-center gap-6 text-xs text-muted-foreground">
         {Object.entries(statusColors).map(([status, colors]) => (
           <span key={status} className="flex items-center gap-1.5">
-            <span className="h-3 w-3 rounded" style={{ backgroundColor: colors.fill, border: `1px solid ${colors.stroke}` }} />
+            <span className="h-3.5 w-3.5 rounded" style={{ backgroundColor: colors.fill, border: `1px solid ${colors.stroke}` }} />
             {status === "APPROVED" ? "Aprobado" : status === "VALIDATED" ? "Validado" : status === "MAPPED" ? "Mapeado" : "Borrador"}
           </span>
         ))}

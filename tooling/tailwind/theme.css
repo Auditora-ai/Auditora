@@ -1,4 +1,133 @@
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN SYSTEM TOKENS — Auditora.ai
+   ═══════════════════════════════════════════════════════════════
+   Single source of truth. Change colors here → entire app updates.
+
+   Three layers:
+   1. Primitives   — raw palette values (never used by components)
+   2. Semantic      — :root / .dark tokens (pages, dashboard)
+   3. Chrome/Canvas — [data-chrome] / [data-canvas] (meeting view)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Layer 1: Primitive Palette ── */
+:root {
+	/* Stone scale (warm) */
+	--palette-stone-900: #1C1917;
+	--palette-stone-800: #292524;
+	--palette-stone-700: #44403C;
+	--palette-stone-600: #57534E;
+	--palette-stone-500: #78716C;
+	--palette-stone-400: #A8A29E;
+	--palette-stone-300: #D6D3D1;
+	--palette-stone-200: #E7E5E4;
+	--palette-stone-100: #F5F5F4;
+	--palette-stone-50:  #FAFAF9;
+
+	/* Warm whites */
+	--palette-warm-white: #FFFBF5;
+	--palette-warm-surface: #FAF9F7;
+
+	/* Action accent (blue) */
+	--palette-action: #2563EB;
+	--palette-action-hover: #1D4ED8;
+	--palette-action-subtle: #EFF6FF;
+	--palette-action-light: #DBEAFE;
+
+	/* Orientation accent (amber) */
+	--palette-orientation: #D97706;
+	--palette-orientation-subtle: #FEF3C7;
+	--palette-orientation-glow: rgba(217, 119, 6, 0.08);
+
+	/* Semantic */
+	--palette-success: #16A34A;
+	--palette-destructive: #DC2626;
+	--palette-info: #0EA5E9;
+	--palette-warning: #EAB308;
+}
+
+/* ── Layer 2: Semantic Tokens (pages, dashboard) ── */
+@layer base {
+	:root {
+		--background: var(--palette-warm-white);
+		--foreground: var(--palette-stone-900);
+		--card: #FFFFFF;
+		--card-foreground: var(--palette-stone-900);
+		--popover: #FFFFFF;
+		--popover-foreground: var(--palette-stone-900);
+		--primary: var(--palette-action);
+		--primary-foreground: #FFFFFF;
+		--secondary: var(--palette-warm-surface);
+		--secondary-foreground: var(--palette-stone-900);
+		--muted: var(--palette-stone-100);
+		--muted-foreground: var(--palette-stone-500);
+		--accent: var(--palette-action-subtle);
+		--accent-foreground: var(--palette-stone-900);
+		--success: var(--palette-success);
+		--success-foreground: #FFFFFF;
+		--destructive: var(--palette-destructive);
+		--destructive-foreground: #FFFFFF;
+		--border: var(--palette-stone-200);
+		--input: var(--palette-stone-200);
+		--ring: var(--palette-action);
+		--radius: 0.75rem;
+	}
+
+	.dark {
+		--background: var(--palette-stone-900);
+		--foreground: var(--palette-stone-50);
+		--card: var(--palette-stone-800);
+		--card-foreground: var(--palette-stone-50);
+		--popover: var(--palette-stone-800);
+		--popover-foreground: var(--palette-stone-50);
+		--primary: var(--palette-action);
+		--primary-foreground: #FFFFFF;
+		--secondary: var(--palette-stone-800);
+		--secondary-foreground: var(--palette-stone-50);
+		--muted: var(--palette-stone-800);
+		--muted-foreground: var(--palette-stone-400);
+		--accent: var(--palette-stone-800);
+		--accent-foreground: var(--palette-stone-50);
+		--success: var(--palette-success);
+		--success-foreground: #FFFFFF;
+		--destructive: var(--palette-destructive);
+		--destructive-foreground: #FFFFFF;
+		--border: var(--palette-stone-700);
+		--input: var(--palette-stone-700);
+		--ring: var(--palette-action);
+	}
+}
+
+/* ── Layer 3: Chrome Tokens (dark panel surfaces) ── */
+/* Available globally so any component can use chrome-* classes.
+   [data-chrome] can still be used for scoping overrides if needed. */
+:root {
+	--chrome-base: var(--palette-stone-900);
+	--chrome-raised: var(--palette-stone-800);
+	--chrome-hover: var(--palette-stone-700);
+	--chrome-subtle: var(--palette-stone-600);
+	--chrome-text: var(--palette-stone-50);
+	--chrome-text-secondary: var(--palette-stone-400);
+	--chrome-text-muted: var(--palette-stone-500);
+	--chrome-border: var(--palette-stone-700);
+	--chrome-border-subtle: var(--palette-stone-800);
+	--chrome-orientation: var(--palette-orientation);
+	--chrome-orientation-glow: var(--palette-orientation-glow);
+}
+
+/* ── Layer 3: Canvas Tokens (light surfaces, diagram area) ── */
+/* Available globally so any component can use canvas-* classes. */
+:root {
+	--canvas-bg: var(--palette-warm-white);
+	--canvas-surface: var(--palette-warm-surface);
+	--canvas-text: var(--palette-stone-900);
+	--canvas-text-secondary: var(--palette-stone-500);
+	--canvas-text-muted: var(--palette-stone-400);
+	--canvas-border: var(--palette-stone-200);
+}
+
+/* ── Tailwind @theme: expose tokens as utility classes ── */
 @theme {
+	/* Semantic (existing API) */
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
 	--color-card: var(--card);
@@ -20,78 +149,51 @@
 	--color-border: var(--border);
 	--color-input: var(--input);
 	--color-ring: var(--ring);
+
+	/* Chrome tokens → bg-chrome-base, text-chrome-text, etc. */
+	--color-chrome-base: var(--chrome-base);
+	--color-chrome-raised: var(--chrome-raised);
+	--color-chrome-hover: var(--chrome-hover);
+	--color-chrome-subtle: var(--chrome-subtle);
+	--color-chrome-text: var(--chrome-text);
+	--color-chrome-text-secondary: var(--chrome-text-secondary);
+	--color-chrome-text-muted: var(--chrome-text-muted);
+	--color-chrome-border: var(--chrome-border);
+	--color-chrome-border-subtle: var(--chrome-border-subtle);
+	--color-chrome-orientation: var(--chrome-orientation);
+
+	/* Canvas tokens → bg-canvas-bg, text-canvas-text, etc. */
+	--color-canvas-bg: var(--canvas-bg);
+	--color-canvas-surface: var(--canvas-surface);
+	--color-canvas-text: var(--canvas-text);
+	--color-canvas-text-secondary: var(--canvas-text-secondary);
+	--color-canvas-text-muted: var(--canvas-text-muted);
+	--color-canvas-border: var(--canvas-border);
+
+	/* Accent shortcuts */
+	--color-action: var(--palette-action);
+	--color-action-hover: var(--palette-action-hover);
+	--color-orientation: var(--palette-orientation);
+	--color-orientation-subtle: var(--palette-orientation-subtle);
+
+	/* Radius */
 	--radius-lg: var(--radius);
 	--radius-md: calc(var(--radius) - 2px);
 	--radius-sm: calc(var(--radius) - 4px);
 
+	/* Font families */
+	--font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+
+	/* Animations */
 	--animation-accordion-down: accordion-down 0.2s ease-out;
 	--animation-accordion-up: accordion-up 0.2s ease-out;
 
 	@keyframes accordion-down {
-		from {
-			height: 0;
-		}
-		to {
-			height: var(--radix-accordion-content-height);
-		}
+		from { height: 0; }
+		to { height: var(--radix-accordion-content-height); }
 	}
 	@keyframes accordion-up {
-		from {
-			height: var(--radix-accordion-content-height);
-		}
-		to {
-			height: 0;
-		}
-	}
-}
-
-@layer base {
-	:root {
-		--border: #E2E8F0;
-		--input: #E2E8F0;
-		--ring: #2563EB;
-		--background: #FFFFFF;
-		--foreground: #0F172A;
-		--primary: #2563EB;
-		--primary-foreground: #ffffff;
-		--secondary: #F8FAFC;
-		--secondary-foreground: #0F172A;
-		--destructive: #DC2626;
-		--destructive-foreground: #ffffff;
-		--success: #16A34A;
-		--success-foreground: #ffffff;
-		--muted: #F8FAFC;
-		--muted-foreground: #64748B;
-		--accent: #EFF6FF;
-		--accent-foreground: #0F172A;
-		--popover: #ffffff;
-		--popover-foreground: #0F172A;
-		--card: #ffffff;
-		--card-foreground: #0F172A;
-		--radius: 0.75rem;
-	}
-
-	.dark {
-		--border: #334155;
-		--input: #334155;
-		--ring: #3B82F6;
-		--background: #0F172A;
-		--foreground: #F1F5F9;
-		--primary: #3B82F6;
-		--primary-foreground: #ffffff;
-		--secondary: #1E293B;
-		--secondary-foreground: #F1F5F9;
-		--destructive: #DC2626;
-		--destructive-foreground: #ffffff;
-		--success: #16A34A;
-		--success-foreground: #ffffff;
-		--muted: #1E293B;
-		--muted-foreground: #94A3B8;
-		--accent: #1E293B;
-		--accent-foreground: #F1F5F9;
-		--popover: #1E293B;
-		--popover-foreground: #F1F5F9;
-		--card: #1E293B;
-		--card-foreground: #F1F5F9;
+		from { height: var(--radix-accordion-content-height); }
+		to { height: 0; }
 	}
 }

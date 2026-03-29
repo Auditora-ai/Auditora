@@ -66,28 +66,74 @@ function extractJsonString(text: string): string {
 
 /**
  * Attempt to close unclosed brackets/braces in truncated JSON.
- * Only adds missing closing tokens — never removes content.
+ *
+ * Uses a character-by-character state machine so it correctly handles:
+ * - Escaped quotes inside strings
+ * - Brackets/braces inside string values (ignored)
+ * - Truncation mid-string, mid-array, or mid-object at any nesting depth
  */
 function repairTruncatedJson(text: string): string {
-  // Remove trailing incomplete key-value pair (e.g. `"key": "unterminated...`)
-  let repaired = text.replace(/,?\s*"[^"]*":\s*"[^"]*$/, "");
-  // Also handle trailing incomplete number/bool/null
-  repaired = repaired.replace(/,?\s*"[^"]*":\s*\S*$/, "");
+  let inString = false;
+  let escaped = false;
+  const stack: string[] = []; // tracks open { and [
+  let lastSafePos = 0; // position after the last complete value
 
-  const openBraces = (repaired.match(/{/g) || []).length;
-  const closeBraces = (repaired.match(/}/g) || []).length;
-  const openBrackets = (repaired.match(/\[/g) || []).length;
-  const closeBrackets = (repaired.match(/]/g) || []).length;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
 
-  // Remove trailing comma before we close
+    if (escaped) {
+      escaped = false;
+      continue;
+    }
+
+    if (inString) {
+      if (ch === "\\") {
+        escaped = true;
+      } else if (ch === '"') {
+        inString = false;
+        // A closed string is a potential safe cut point
+        lastSafePos = i + 1;
+      }
+      continue;
+    }
+
+    // Outside a string
+    switch (ch) {
+      case '"':
+        inString = true;
+        break;
+      case "{":
+        stack.push("}");
+        break;
+      case "[":
+        stack.push("]");
+        break;
+      case "}":
+      case "]":
+        stack.pop();
+        lastSafePos = i + 1;
+        break;
+      default:
+        // After digits, booleans, null — mark safe at word boundaries
+        if (/[\d\w]/.test(ch) && (i + 1 === text.length || /[,\]\}\s]/.test(text[i + 1]))) {
+          lastSafePos = i + 1;
+        }
+        break;
+    }
+  }
+
+  // If we're not inside a string and the stack is empty, JSON may already be complete
+  if (!inString && stack.length === 0) {
+    return text;
+  }
+
+  // Truncate to last safe position and close open structures
+  let repaired = text.substring(0, lastSafePos);
   repaired = repaired.replace(/,\s*$/, "");
 
-  // Close open brackets/braces in reverse order
-  for (let i = 0; i < openBrackets - closeBrackets; i++) {
-    repaired += "]";
-  }
-  for (let i = 0; i < openBraces - closeBraces; i++) {
-    repaired += "}";
+  // Close all open brackets/braces in reverse order
+  for (let i = stack.length - 1; i >= 0; i--) {
+    repaired += stack[i];
   }
 
   return repaired;

@@ -16,6 +16,7 @@ import {
 	auditProcess,
 	generateRaci,
 	auditRisks,
+	scoreComplexity,
 	enrichCompanyBrain,
 	createCallBotProvider,
 	RecallAiProvider,
@@ -408,6 +409,7 @@ async function runExtraction(sessionId: string, organizationId?: string) {
 					lane: newNode.lane || null,
 					confidence: newNode.confidence,
 					connections: [],
+					...(newNode.properties ? { properties: newNode.properties } : {}),
 				},
 			});
 			aiIdToDbId.set(newNode.id, created.id);
@@ -445,6 +447,31 @@ async function runExtraction(sessionId: string, organizationId?: string) {
 			}
 		}
 
+		// Pass 3: Persist AI-suggested updates to existing nodes (label corrections, property enrichment)
+		if (result.updatedNodes && result.updatedNodes.length > 0) {
+			for (const update of result.updatedNodes) {
+				const updateData: Record<string, any> = {};
+				if (update.label) updateData.label = update.label;
+				const u = update as any;
+				if (u.type) updateData.nodeType = u.type.toUpperCase();
+				if (u.lane) updateData.lane = u.lane;
+				if (u.properties) {
+					const existing = await db.diagramNode.findUnique({
+						where: { id: update.id },
+						select: { properties: true },
+					});
+					updateData.properties = { ...(existing?.properties as any || {}), ...u.properties };
+				}
+				if (Object.keys(updateData).length > 0) {
+					await db.diagramNode.updateMany({
+						where: { id: update.id, sessionId },
+						data: updateData,
+					});
+					console.log(`[Extraction] ~Updated: "${update.id}" → ${JSON.stringify(updateData)}`);
+				}
+			}
+		}
+
 		// Log out-of-scope topics
 		if (result.outOfScope && result.outOfScope.length > 0) {
 			for (const item of result.outOfScope) {
@@ -461,11 +488,16 @@ async function runExtraction(sessionId: string, organizationId?: string) {
 			});
 		}
 
-		if (result.newNodes.length > 0) {
+		const newCount = result.newNodes.length;
+		const updCount = result.updatedNodes?.length ?? 0;
+		if (newCount > 0 || updCount > 0) {
+			const parts: string[] = [];
+			if (newCount > 0) parts.push(`${newCount} nodos nuevos`);
+			if (updCount > 0) parts.push(`${updCount} actualizados`);
 			console.log(
-				`[Extraction] Added ${result.newNodes.length} nodes for session ${sessionId}`,
+				`[Extraction] ${parts.join(", ")} for session ${sessionId}`,
 			);
-			setActivity(sessionId, "diagramming", `${result.newNodes.length} nodos nuevos`);
+			setActivity(sessionId, "diagramming", parts.join(", "));
 			// Hold "diagramming" for 3s so UI catches it on next poll
 			setTimeout(() => setActivity(sessionId, "listening"), 3000);
 		} else {
@@ -549,11 +581,11 @@ async function runTeleprompter(sessionId: string, organizationId?: string) {
 }
 
 /**
- * Run all 4 post-session pipelines and persist results as SessionDeliverables.
+ * Run all 5 post-session pipelines and persist results as SessionDeliverables.
  * Each pipeline runs independently — one failure doesn't block the others.
  */
 export async function runPostSessionPipelines(sessionId: string, _diagramNodes: any[]) {
-	const pipelineTypes = ["summary", "process_audit", "raci", "risk_audit"] as const;
+	const pipelineTypes = ["summary", "process_audit", "raci", "risk_audit", "complexity_score"] as const;
 
 	// Guard: skip if deliverables already exist with a terminal status (avoid double-run)
 	const existing = await db.sessionDeliverable.findMany({
@@ -653,7 +685,7 @@ export async function runPostSessionPipelines(sessionId: string, _diagramNodes: 
 	const confirmedNodes = nodes.filter((n) => n.state === "confirmed");
 	const transcriptText = transcript.map((t) => `${t.speaker}: ${t.text}`).join("\n");
 
-	// Run all 4 in parallel
+	// Run all 5 in parallel
 	await Promise.allSettled([
 		// 1. Session Summary
 		runPipeline("summary", () =>
@@ -702,22 +734,25 @@ export async function runPostSessionPipelines(sessionId: string, _diagramNodes: 
 			}),
 		),
 
-		// 3. RACI (skip if <2 lanes)
-		runPipeline("raci", async () => {
+		// 3. RACI (skip if <2 lanes — handle outside runPipeline to avoid status overwrite)
+		(async () => {
 			if (lanes.length < 2) {
 				await db.sessionDeliverable.update({
 					where: { sessionId_type: { sessionId, type: "raci" } },
 					data: { status: "skipped", error: "Se necesitan al menos 2 roles para generar RACI", completedAt: new Date() },
 				});
-				return { assignments: [] };
+				console.log(`[PostSession] raci skipped for ${sessionId.substring(0, 8)} (<2 lanes)`);
+				return;
 			}
-			return generateRaci(
-				session.organizationId,
-				lanes,
-				confirmedNodes.filter((n) => n.type === "task" || n.type === "usertask").map((n) => n.label),
-				transcriptText,
+			await runPipeline("raci", () =>
+				generateRaci(
+					session.organizationId,
+					lanes,
+					confirmedNodes.filter((n) => n.type === "task" || n.type === "usertask").map((n) => n.label),
+					transcriptText,
+				),
 			);
-		}),
+		})(),
 
 		// 4. Risk Audit
 		runPipeline("risk_audit", () =>
@@ -750,6 +785,15 @@ export async function runPostSessionPipelines(sessionId: string, _diagramNodes: 
 				transcriptExcerpts: [{ text: transcriptText }],
 			}),
 		),
+
+		// 5. Complexity Score
+		runPipeline("complexity_score", () => {
+			const processName = session.processDefinition?.name || "Proceso";
+			const nodeLabels = confirmedNodes.map((n) => n.label).join(", ");
+			const roleList = lanes.join(", ");
+			const description = `Process: ${processName}. Activities: ${nodeLabels}. Roles: ${roleList}. Total steps: ${confirmedNodes.length}, decision points: ${nodes.filter((n) => n.type.includes("gateway")).length}, roles: ${lanes.length}.`;
+			return scoreComplexity(description, session.organizationId);
+		}),
 	]);
 
 	console.log(`[PostSession] All pipelines finished for ${sessionId.substring(0, 8)}`);
@@ -778,11 +822,11 @@ export async function runPostSessionPipelines(sessionId: string, _diagramNodes: 
 					<div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto;">
 						<h2 style="color: #0F172A;">Sesion finalizada</h2>
 						<p style="color: #475569;">Los entregables de tu sesion de <strong>${processName}</strong> estan listos para revision.</p>
-						<p style="color: #475569;">Incluye: resumen ejecutivo, auditoria de proceso, matriz RACI, y analisis de riesgos.</p>
+						<p style="color: #475569;">Incluye: reporte de inteligencia de proceso, resumen ejecutivo, mapa visual, SIPOC, RACI, riesgos, y recomendaciones.</p>
 						<a href="${reviewUrl}" style="display: inline-block; background: #2563EB; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 500; margin-top: 16px;">
 							Revisar entregables
 						</a>
-						<p style="color: #94A3B8; font-size: 12px; margin-top: 24px;">— aiprocess.me</p>
+						<p style="color: #94A3B8; font-size: 12px; margin-top: 24px;">— Auditora.ai</p>
 					</div>
 				`,
 			});

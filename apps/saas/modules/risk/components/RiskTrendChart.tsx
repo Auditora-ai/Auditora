@@ -46,8 +46,8 @@ export function RiskTrendChart({ processId }: RiskTrendChartProps) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-4 text-slate-500">
-        <RefreshCwIcon className="mr-2 h-3 w-3 animate-spin" />
+      <div className="flex items-center justify-center py-4 text-muted-foreground">
+        <RefreshCwIcon className="mr-2 h-3.5 w-3.5 animate-spin" />
         <span className="text-xs">Cargando tendencia...</span>
       </div>
     );
@@ -55,9 +55,9 @@ export function RiskTrendChart({ processId }: RiskTrendChartProps) {
 
   if (trend.length < 2) {
     return (
-      <div className="flex items-center justify-center gap-2 rounded-lg border border-slate-700 bg-slate-800/50 px-4 py-3">
-        <TrendingUpIcon className="h-4 w-4 text-slate-500" />
-        <span className="text-xs text-slate-400">
+      <div className="flex items-center justify-center gap-2 rounded-lg border border-chrome-border bg-chrome-raised/50 px-4 py-3">
+        <TrendingUpIcon className="h-4 w-4 text-muted-foreground" />
+        <span className="text-xs text-muted-foreground">
           Necesitas al menos 2 auditorías para tendencia
         </span>
       </div>
@@ -68,10 +68,10 @@ export function RiskTrendChart({ processId }: RiskTrendChartProps) {
   const BAR_HEIGHT = 48;
 
   return (
-    <div className="rounded-lg border border-slate-700 bg-slate-800/50 p-4">
+    <div className="rounded-lg border border-chrome-border bg-chrome-raised/50 p-4">
       <div className="mb-2 flex items-center gap-2">
-        <TrendingUpIcon className="h-4 w-4 text-slate-400" />
-        <span className="text-xs font-medium text-slate-300">
+        <TrendingUpIcon className="h-4 w-4 text-muted-foreground" />
+        <span className="text-xs font-medium text-muted-foreground">
           Tendencia de Riesgo
         </span>
       </div>
@@ -134,7 +134,7 @@ export function RiskTrendChart({ processId }: RiskTrendChartProps) {
         {trend.map((point, i) => (
           <div
             key={i}
-            className="flex-1 text-center text-[8px] text-slate-500"
+            className="flex-1 text-center text-[8px] text-muted-foreground"
           >
             {new Date(point.date).toLocaleDateString("es", {
               month: "short",
@@ -145,7 +145,7 @@ export function RiskTrendChart({ processId }: RiskTrendChartProps) {
       </div>
 
       {/* Legend */}
-      <div className="mt-2 flex items-center gap-3 text-[9px] text-slate-500">
+      <div className="mt-2 flex items-center gap-3 text-[9px] text-muted-foreground">
         <span className="flex items-center gap-1">
           <span className="inline-block h-2 w-2 rounded-sm bg-red-600" />
           Crítico

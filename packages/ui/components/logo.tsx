@@ -15,18 +15,15 @@ export function Logo({
 			)}
 		>
 			<svg className="size-8 text-primary" viewBox="0 0 32 32" fill="none">
-				<title>aiprocess.me</title>
-				<circle cx="8" cy="16" r="3" fill="currentColor" />
-				<circle cx="24" cy="8" r="3" fill="currentColor" />
-				<circle cx="24" cy="24" r="3" fill="currentColor" />
-				<path d="M11 16L21 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-				<path d="M11 16L21 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-				<rect x="15" y="14" width="4" height="4" rx="1" fill="currentColor" opacity="0.4" transform="rotate(45 17 16)" />
+				<title>Auditora.ai</title>
+				<path d="M2 16Q9 6 16 6t14 10Q23 26 16 26T2 16z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" fill="none" />
+				<circle cx="16" cy="16" r="5" stroke="currentColor" strokeWidth="1.5" fill="none" opacity="0.5" />
+				<circle cx="16" cy="16" r="2.5" fill="currentColor" />
 			</svg>
 			{withLabel && (
 				<span className="ml-2 hidden text-xl md:block tracking-tight">
-					<span className="font-bold">AI</span>
-					<span className="font-light text-muted-foreground">process.me</span>
+					<span className="font-bold">Auditora</span>
+					<span className="font-light text-muted-foreground">.ai</span>
 				</span>
 			)}
 		</span>

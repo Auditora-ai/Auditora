@@ -127,6 +127,8 @@ export async function generateNextQuestion(
   questionMode?: string,
 ): Promise<TeleprompterResult> {
   const transcriptText = formatTranscriptWindow(recentTranscript);
+  // Resolve process name from multiple sources
+  const resolvedProcessName = processName || context?.targetProcess?.name;
 
   if (transcriptText === "(no transcript yet)") {
     // Return default opening question based on session type
@@ -146,7 +148,9 @@ export async function generateNextQuestion(
       nextQuestion:
         sessionType === "DISCOVERY"
           ? "Can you walk me through your company's main business areas and who the key customers are for your core operations?"
-          : `Let's start mapping the "${processName}" process. Who are the customers that receive the output of this process, and what triggers it?`,
+          : resolvedProcessName
+            ? `Let's start mapping the "${resolvedProcessName}" process. Who are the customers that receive the output of this process, and what triggers it?`
+            : "Can you describe the main process we'll be mapping today? Who are the key customers, and what triggers this process?",
       reasoning: "No conversation yet — opening with Customers and Inputs dimensions of SIPOC to frame the process boundaries.",
       gapType: sessionType === "DISCOVERY" ? "missing_customer" : "missing_trigger",
       completenessScore: 0,
@@ -159,7 +163,7 @@ export async function generateNextQuestion(
     sessionType,
     currentNodes,
     transcriptText,
-    processName,
+    resolvedProcessName,
     context,
   );
   const modeInstruction = questionMode && QUESTION_MODE_INSTRUCTION[questionMode]

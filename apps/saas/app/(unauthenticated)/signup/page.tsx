@@ -1,3 +1,4 @@
+import { LoginPageLayout } from "@auth/components/LoginPageLayout";
 import { SignupForm } from "@auth/components/SignupForm";
 import { getInvitation } from "@auth/lib/server";
 import { config } from "@repo/auth/config";
@@ -41,8 +42,16 @@ export default async function SignupPage({
 			redirect(withQuery("/login", params));
 		}
 
-		return <SignupForm prefillEmail={invitation.email} />;
+		return (
+			<LoginPageLayout variant="signup">
+				<SignupForm prefillEmail={invitation.email} />
+			</LoginPageLayout>
+		);
 	}
 
-	return <SignupForm />;
+	return (
+		<LoginPageLayout variant="signup">
+			<SignupForm />
+		</LoginPageLayout>
+	);
 }

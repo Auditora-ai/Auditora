@@ -48,7 +48,7 @@ export type TwoFactorScalarFieldEnum = z.infer<typeof TwoFactorScalarFieldEnumSc
 
 // File: OrganizationScalarFieldEnum.schema.ts
 
-export const OrganizationScalarFieldEnumSchema = z.enum(['id', 'name', 'slug', 'logo', 'createdAt', 'metadata', 'paymentsCustomerId', 'industry', 'operationsProfile', 'businessModel', 'employeeCount', 'notes', 'aiTier', 'aiTokenBudget'])
+export const OrganizationScalarFieldEnumSchema = z.enum(['id', 'name', 'slug', 'logo', 'createdAt', 'metadata', 'paymentsCustomerId', 'industry', 'operationsProfile', 'businessModel', 'employeeCount', 'notes', 'aiTier', 'aiTokenBudget', 'aiAnthropicKey', 'aiDeepseekKey', 'aiKeysUpdatedAt'])
 
 export type OrganizationScalarFieldEnum = z.infer<typeof OrganizationScalarFieldEnumSchema>;
 
@@ -84,7 +84,7 @@ export type MeetingSessionScalarFieldEnum = z.infer<typeof MeetingSessionScalarF
 
 // File: DiagramNodeScalarFieldEnum.schema.ts
 
-export const DiagramNodeScalarFieldEnumSchema = z.enum(['id', 'sessionId', 'nodeType', 'label', 'state', 'lane', 'confidence', 'positionX', 'positionY', 'connections', 'formedAt', 'confirmedAt', 'rejectedAt', 'parentId', 'properties', 'procedure', 'createdAt', 'updatedAt'])
+export const DiagramNodeScalarFieldEnumSchema = z.enum(['id', 'sessionId', 'nodeType', 'label', 'state', 'lane', 'confidence', 'positionX', 'positionY', 'connections', 'connectionLabels', 'formedAt', 'confirmedAt', 'rejectedAt', 'parentId', 'properties', 'procedure', 'createdAt', 'updatedAt'])
 
 export type DiagramNodeScalarFieldEnum = z.infer<typeof DiagramNodeScalarFieldEnumSchema>;
 
@@ -298,6 +298,18 @@ export const AiUsageLogScalarFieldEnumSchema = z.enum(['id', 'organizationId', '
 
 export type AiUsageLogScalarFieldEnum = z.infer<typeof AiUsageLogScalarFieldEnumSchema>;
 
+// File: ExternalCostLogScalarFieldEnum.schema.ts
+
+export const ExternalCostLogScalarFieldEnumSchema = z.enum(['id', 'organizationId', 'service', 'unitType', 'units', 'estimatedCostUsd', 'metadata', 'createdAt'])
+
+export type ExternalCostLogScalarFieldEnum = z.infer<typeof ExternalCostLogScalarFieldEnumSchema>;
+
+// File: AnonymousSessionScalarFieldEnum.schema.ts
+
+export const AnonymousSessionScalarFieldEnumSchema = z.enum(['id', 'fingerprint', 'phase', 'sourceUrl', 'businessContext', 'businessDescription', 'industry', 'processName', 'sipocData', 'knowledgeData', 'diagramNodes', 'riskResults', 'deepRiskResults', 'conversationLog', 'completenessScore', 'convertedToUserId', 'convertedAt', 'expiresAt', 'createdAt', 'updatedAt'])
+
+export type AnonymousSessionScalarFieldEnum = z.infer<typeof AnonymousSessionScalarFieldEnumSchema>;
+
 // File: SortOrder.schema.ts
 
 export const SortOrderSchema = z.enum(['asc', 'desc'])
@@ -348,7 +360,7 @@ export type SessionType = z.infer<typeof SessionTypeSchema>;
 
 // File: SessionStatus.schema.ts
 
-export const SessionStatusSchema = z.enum(['SCHEDULED', 'CONNECTING', 'ACTIVE', 'ENDED', 'FAILED'])
+export const SessionStatusSchema = z.enum(['SCHEDULED', 'CONNECTING', 'ACTIVE', 'ENDED', 'FAILED', 'CANCELLED'])
 
 export type SessionStatus = z.infer<typeof SessionStatusSchema>;
 
@@ -569,6 +581,9 @@ export const OrganizationSchema = z.object({
   notes: z.string().nullish(),
   aiTier: z.string().default("standard").nullish(),
   aiTokenBudget: z.number().int().nullish(),
+  aiAnthropicKey: z.string().nullish(),
+  aiDeepseekKey: z.string().nullish(),
+  aiKeysUpdatedAt: z.date().nullish(),
 });
 
 export type OrganizationType = z.infer<typeof OrganizationSchema>;
@@ -685,6 +700,7 @@ export const DiagramNodeSchema = z.object({
   positionX: z.number(),
   positionY: z.number(),
   connections: z.array(z.string()),
+  connectionLabels: z.array(z.string()),
   formedAt: z.date(),
   confirmedAt: z.date().nullish(),
   rejectedAt: z.date().nullish(),
@@ -1320,4 +1336,48 @@ export const AiUsageLogSchema = z.object({
 });
 
 export type AiUsageLogType = z.infer<typeof AiUsageLogSchema>;
+
+
+// File: ExternalCostLog.schema.ts
+
+export const ExternalCostLogSchema = z.object({
+  id: z.string(),
+  organizationId: z.string(),
+  service: z.string(),
+  unitType: z.string(),
+  units: z.number(),
+  estimatedCostUsd: z.number(),
+  metadata: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  createdAt: z.date(),
+});
+
+export type ExternalCostLogType = z.infer<typeof ExternalCostLogSchema>;
+
+
+// File: AnonymousSession.schema.ts
+
+export const AnonymousSessionSchema = z.object({
+  id: z.string(),
+  fingerprint: z.string(),
+  phase: z.string().default("input"),
+  sourceUrl: z.string().nullish(),
+  businessContext: z.string().nullish(),
+  businessDescription: z.string().nullish(),
+  industry: z.string().nullish(),
+  processName: z.string().nullish(),
+  sipocData: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  knowledgeData: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  diagramNodes: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  riskResults: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  deepRiskResults: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  conversationLog: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  completenessScore: z.number().int(),
+  convertedToUserId: z.string().nullish(),
+  convertedAt: z.date().nullish(),
+  expiresAt: z.date(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type AnonymousSessionType = z.infer<typeof AnonymousSessionSchema>;
 

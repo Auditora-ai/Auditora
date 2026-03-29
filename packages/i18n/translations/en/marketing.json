@@ -5,11 +5,11 @@
 		"back": "Back to blog"
 	},
 	"changelog": {
-		"description": "Stay up to date with the latest changes in aiprocess.me.",
+		"description": "Stay up to date with the latest changes in Auditora.ai.",
 		"title": "Changelog"
 	},
 	"contact": {
-		"description": "Have questions about aiprocess.me? We'd love to hear from you.",
+		"description": "Have questions about Auditora.ai? We'd love to hear from you.",
 		"form": {
 			"email": "Email",
 			"message": "Message",
@@ -26,267 +26,116 @@
 		"title": "Documentation"
 	},
 	"faq": {
-		"description": "Everything you need to know about aiprocess.me.",
+		"description": "Everything you need to know about Auditora.ai.",
 		"title": "Frequently asked questions",
 		"items": {
-			"extraction": {
-				"question": "How does aiprocess.me extract processes?",
-				"answer": "aiprocess.me extracts business processes from any conversation — chat, audio recordings, or live video calls. Its AI analyzes the conversation, identifies process steps, roles, decisions, and exceptions, and presents them as structured extraction cards you can accept, edit, or reject."
+			"howItWorks": {
+				"question": "How does URL analysis work?",
+				"answer": "Paste your company website URL and our AI reads your public pages to understand your business context — industry, services, and operations. From that context, it identifies your most critical process, maps it in BPMN notation, and runs a risk analysis. No internal data access required."
+			},
+			"dataAccess": {
+				"question": "What data do you access from my website?",
+				"answer": "We only read publicly available pages on your website — the same content any visitor would see. We crawl up to 5 pages (homepage, about, services) and extract text content. No login credentials, no internal systems, no private data."
+			},
+			"accuracy": {
+				"question": "How accurate is the AI analysis?",
+				"answer": "The instant analysis identifies industry-level risks and common process patterns. For deeper, company-specific insights, use the optional AI conversation to answer guided questions about your operations. The more context you provide, the more precise the risk findings become."
+			},
+			"deepening": {
+				"question": "Can I deepen the analysis beyond the instant report?",
+				"answer": "Yes. After the instant report, you can enter a guided AI conversation. The AI asks targeted questions about your operations — suppliers, inputs, outputs, customers — and builds a much richer process map with detailed risk analysis including failure modes for each activity."
+			},
+			"deliverables": {
+				"question": "What deliverables do I receive?",
+				"answer": "You receive a BPMN 2.0 process map and a detailed risk report with severity scoring, mitigation recommendations, and opportunity identification. After signing up, you can export diagrams, edit them, and track risk mitigation over time."
 			},
 			"dataSecurity": {
-				"question": "Is my client conversation data secure?",
-				"answer": "All data is encrypted in transit and at rest. We never use your client data to train AI models. You own your data completely. Transcriptions and chat threads are stored in your organization's private workspace."
+				"question": "Is my data secure?",
+				"answer": "All data is encrypted in transit and at rest. Anonymous sessions expire after 24 hours if you don't create an account. We never use your data to train AI models. Once you sign up, your data is stored in your organization's private workspace."
 			},
-			"bpmnStandard": {
-				"question": "What BPMN standard do you support?",
-				"answer": "aiprocess.me generates BPMN 2.0 compliant diagrams. You can export and open them in any standards-compliant tool like Camunda, Signavio, or Visio."
+			"bpmKnowledge": {
+				"question": "Do I need BPM or process mapping experience?",
+				"answer": "Not at all. Auditora.ai is designed for business owners and directors who have never mapped a process. The AI handles all the technical work — you just answer questions about how your business operates in plain language."
 			},
-			"liveEditing": {
-				"question": "Can I edit the diagram during the meeting?",
-				"answer": "Yes. The BPMN canvas is fully interactive. You can move nodes, add annotations, confirm or reject AI suggestions, and refine the diagram while still on the call with your client."
-			},
-			"intelligence": {
-				"question": "What is Process Intelligence?",
-				"answer": "Process Intelligence is aiprocess.me's AI audit system. It analyzes each process for completeness — identifying missing paths, roles, exceptions, decision points, and handoffs. It scores completeness and prioritizes what to ask in your next session."
-			},
-			"discoveryChat": {
-				"question": "How does the discovery chat work?",
-				"answer": "Open the discovery panel, describe a process by typing or upload an audio recording. aiprocess.me's AI analyzes the conversation and extracts process steps as cards. Accept, edit, or reject each one. The chat persists — you can close and come back where you left off."
-			},
-			"sharing": {
-				"question": "Can I share diagrams with clients?",
-				"answer": "Yes. Generate a public share link for any process diagram. You can also send pre-call preparation links where stakeholders answer targeted questions before the meeting — so you arrive with context already captured."
-			},
-			"integrations": {
-				"question": "What tools does aiprocess.me integrate with?",
-				"answer": "aiprocess.me joins Zoom, Microsoft Teams, and Google Meet video calls. You can also use AI chat, upload audio recordings, or import documents — every channel feeds the same extraction engine."
+			"afterSignup": {
+				"question": "What happens after I create an account?",
+				"answer": "Your process map and risk analysis are saved permanently. You can edit diagrams, map additional processes, run live AI-guided sessions with your team, track risk mitigation, and export professional deliverables."
 			}
 		}
 	},
 	"home": {
 		"hero": {
-			"badge": "AI-Powered BPM Elicitation Platform",
-			"title": "Extract business processes from any conversation",
-			"subtitle": "Chat, upload audio, or join a live call — aiprocess.me's AI extracts, organizes, and diagrams your client's processes in real-time. Walk out with BPMN deliverables, not meeting notes.",
-			"cta": "Start free trial",
-			"ctaSecondary": "Try Free Tools",
-			"counterLabel": "process steps captured"
-		},
-		"problem": {
-			"title": "Process consultants deserve better tools",
-			"stat1": {
-				"number": "60",
-				"unit": "%",
-				"label": "of consulting time spent on documentation instead of analysis"
-			},
-			"stat2": {
-				"number": "3",
-				"unit": "hrs",
-				"label": "average time to reconstruct one process map from notes"
-			},
-			"stat3": {
-				"number": "40",
-				"unit": "%",
-				"label": "of process steps missed or misremembered after a meeting"
-			},
-			"description": "You take notes during the call. You ask the client to repeat things. You spend hours afterward in Visio or Lucidchart reconstructing what was said. Steps get missed. Details get lost. Your client gets a deliverable days later instead of minutes.",
-			"beforeLabel": "Before: 3 hours reconstructing from notes",
-			"afterLabel": "After: Done during the conversation"
+			"badge": "Free AI Business Scanner",
+			"title": "Discover hidden risks in your business",
+			"subtitle": "Paste your website URL. Our AI analyzes your business and delivers a complete process map with risk analysis — in under 60 seconds.",
+			"inputPlaceholder": "https://your-company.com",
+			"cta": "Analyze Now",
+			"ctaSecondary": "Or describe your business manually",
+			"subtext": "Free. No signup required. Results in 60 seconds."
 		},
 		"howItWorks": {
-			"title": "Four phases. From conversation to deliverable.",
-			"stepLabel": "Phase {number}",
+			"badge": "How it works",
+			"title": "From URL to actionable insights in three steps",
 			"step1": {
-				"title": "Discover",
-				"description": "Chat with the AI, upload an audio recording, or let aiprocess.me join your video call. Every conversation channel feeds the same extraction engine."
+				"title": "Paste your URL",
+				"description": "Enter your company website. Our AI reads your public pages to understand your business — industry, services, and operations."
 			},
 			"step2": {
-				"title": "Organize",
-				"description": "Extracted processes automatically organize into your process architecture — strategic, core, and support. Build the full picture of your client's operations."
+				"title": "AI maps your processes",
+				"description": "Automatic industry detection, critical process mapping in BPMN notation, and risk identification — all in under 60 seconds."
 			},
 			"step3": {
-				"title": "Deep Dive",
-				"description": "For each process, start a live session. A private AI teleprompter guides your questions while the BPMN diagram builds itself in real-time."
+				"title": "Get your risk report",
+				"description": "Receive a visual process map and detailed risk analysis with severity scoring, bottlenecks, and improvement opportunities."
 			},
 			"step4": {
-				"title": "Deliver",
-				"description": "Export BPMN 2.0 diagrams, generate shareable links, and send pre-call preparation questionnaires. Walk out with client-ready deliverables."
+				"title": "Deepen and act",
+				"description": "Optionally answer AI-guided questions for deeper analysis. Sign up to save, edit, and track risk mitigation over time."
 			}
 		},
-		"pillars": {
-			"badge": "The platform",
-			"title": "Four pillars of modern process elicitation",
-			"description": "aiprocess.me replaces scattered tools with one platform that covers the entire BPM consulting workflow.",
-			"pillar1": {
-				"title": "Conversational Discovery",
-				"subtitle": "Extract processes from any conversation.",
-				"description": "Describe a process by chat, upload a recorded meeting, or let the AI join your call. Every conversation channel feeds the same extraction engine.",
-				"benefit1": {
-					"title": "Multi-Channel Input",
-					"description": "Chat, audio upload, and live video calls — all feeding the same AI extraction pipeline."
-				},
-				"benefit2": {
-					"title": "Extraction Cards",
-					"description": "Each extracted process appears as a card you can accept, edit, or reject. You control the output."
-				},
-				"benefit3": {
-					"title": "Persistent Threads",
-					"description": "Discovery conversations persist. Close and come back where you left off — your context is never lost."
-				}
+		"benefits": {
+			"badge": "Why Auditora.ai",
+			"title": "Process discovery that starts from your website",
+			"description": "No data uploads. No meetings. No system logs. Just your public URL and 60 seconds.",
+			"benefit1": {
+				"title": "Zero Friction Discovery",
+				"subtitle": "No internal data required.",
+				"description": "Traditional process mining requires system logs, interviews, and weeks of preparation. Auditora.ai starts from your public website — the AI infers your critical processes from what's already visible.",
+				"point1": "No data uploads or integrations",
+				"point2": "No meetings or interviews needed",
+				"point3": "Results in under 60 seconds"
 			},
-			"pillar2": {
-				"title": "Live Sessions",
-				"subtitle": "AI-guided meetings with real-time diagramming.",
-				"description": "aiprocess.me joins Zoom, Teams, or Meet. A private teleprompter guides your questions. The BPMN diagram builds itself while you talk.",
-				"benefit1": {
-					"title": "Real-Time Transcription",
-					"description": "Every word captured with speaker diarization. Know exactly who said what."
-				},
-				"benefit2": {
-					"title": "AI Teleprompter",
-					"description": "Context-aware questions surface in real-time. Covers edge cases and exceptions you'd normally miss."
-				},
-				"benefit3": {
-					"title": "Live BPMN Canvas",
-					"description": "Tasks, gateways, and flows appear as the conversation unfolds. Confirm or reject each step."
-				}
+			"benefit2": {
+				"title": "Instant Risk Analysis",
+				"subtitle": "Spot what you're missing.",
+				"description": "Every business has hidden operational risks — bottlenecks, compliance gaps, single points of failure. Our AI identifies them automatically and scores them by severity and probability.",
+				"point1": "Bottlenecks and inefficiencies detected",
+				"point2": "Compliance and operational gaps flagged",
+				"point3": "Severity scoring with mitigation recommendations"
 			},
-			"pillar3": {
-				"title": "Process Intelligence",
-				"subtitle": "AI that audits your processes for completeness.",
-				"description": "AI audits every process for completeness. Identifies missing paths, roles, exceptions, and handoffs. Prioritizes what to ask next.",
-				"benefit1": {
-					"title": "Completeness Scoring",
-					"description": "Each process gets a completeness score based on identified gaps. Track progress toward full coverage."
-				},
-				"benefit2": {
-					"title": "Gap Detection",
-					"description": "Missing decision paths, exception flows, role assignments, and handoffs — automatically identified and prioritized."
-				},
-				"benefit3": {
-					"title": "Stakeholder Prep",
-					"description": "Share preparation links with stakeholders before your next session. Arrive with answers already captured."
-				}
+			"benefit3": {
+				"title": "Professional Process Maps",
+				"subtitle": "BPMN diagrams you can actually use.",
+				"description": "Get industry-standard BPMN 2.0 process diagrams — not generic flowcharts. Export them, share them with your team, or import them into Camunda, Signavio, or any BPMN-compatible tool.",
+				"point1": "BPMN 2.0 compliant diagrams",
+				"point2": "Export and share with your team",
+				"point3": "Compatible with industry tools"
 			},
-			"pillar4": {
-				"title": "Process Library",
-				"subtitle": "Your client's full process architecture.",
-				"description": "Organize processes as strategic, core, or support. Track versions. Build your client's full process architecture in one place.",
-				"benefit1": {
-					"title": "Architecture Trees",
-					"description": "Hierarchical process organization with parent-child relationships. See the full picture at a glance."
-				},
-				"benefit2": {
-					"title": "Version History",
-					"description": "Every process change is versioned. Roll back, compare, and track how processes evolve over time."
-				},
-				"benefit3": {
-					"title": "Export & Share",
-					"description": "Export BPMN 2.0 diagrams, generate reports, and share public links with your clients."
-				}
+			"benefit4": {
+				"title": "AI-Guided Deep Analysis",
+				"subtitle": "Go deeper when you need to.",
+				"description": "The instant report is just the beginning. Answer guided questions and the AI builds a complete SIPOC analysis with failure modes for every activity — consulting-grade deliverables in minutes, not weeks.",
+				"point1": "Guided conversation, no jargon required",
+				"point2": "FMEA analysis for every process step",
+				"point3": "From 5 general risks to 15+ specific findings"
 			}
 		},
-		"demo": {
-			"windowTitle": "aiprocess.me — Consultant Workflow",
-			"scene1": {
-				"title": "Discover through conversation",
-				"chatMessage1": "We receive purchase orders via email and the assistant logs them in the system.",
-				"chatMessage2": "Then what happens after they're logged?",
-				"chatMessage3": "The department manager reviews and approves. If it's over $5,000, the VP also needs to sign off.",
-				"extractionLabel": "Extracted processes",
-				"process1": "Receive Purchase Order",
-				"process2": "Manager Approval",
-				"process3": "VP Sign-off",
-				"audioLabel": "Or upload audio"
-			},
-			"scene2": {
-				"title": "Organize into architecture",
-				"strategic": "Strategic",
-				"core": "Core",
-				"support": "Support",
-				"processCount": "{count} processes"
-			},
-			"scene3": {
-				"title": "Deep dive with AI guidance",
-				"teleprompterLabel": "Teleprompter",
-				"transcriptLabel": "Live Transcript",
-				"askNow": "Ask now",
-				"q1": "What happens when the VP rejects it?",
-				"q2": "Are there dollar thresholds for escalation?",
-				"t1": "It goes back to the requestor with notes for revision.",
-				"t2": "If it's over $5,000, it needs VP sign-off.",
-				"rec": "REC",
-				"consultantLabel": "Consultant",
-				"clientLabel": "Client"
-			},
-			"scene4": {
-				"title": "Walk out with deliverables",
-				"stats": {
-					"duration": "38 min",
-					"steps": "12 steps",
-					"confidence": "94%",
-					"durationLabel": "Session",
-					"stepsLabel": "Captured",
-					"confidenceLabel": "Confidence",
-					"export": "Ready to export"
-				},
-				"nodeSubmit": "Receive PO",
-				"nodeGateway": "$5k?",
-				"nodeMgr": "Mgr Approval",
-				"nodeVp": "VP Approval",
-				"nodeRevise": "Revise",
-				"labelLt": "< $5k",
-				"labelGte": "≥ $5k",
-				"labelApproved": "Approved",
-				"labelRejected": "Rejected",
-				"shareLink": "Share with client",
-				"exportBpmn": "Export BPMN"
-			},
-			"caption": {
-				"discover": "AI extracts from conversation",
-				"organize": "Processes find their place",
-				"deepDive": "AI guides every question",
-				"deliver": "Deliverable ready"
-			}
-		},
-		"tryIt": {
-			"badge": "Try it now",
-			"title": "Describe a process. Watch it come to life.",
-			"description": "Speak or type a process description. AI extracts it and diagrams it in real-time with BPMN notation.",
-			"placeholder": "Describe a business process... e.g., 'When a customer submits a support ticket, it goes to the triage team who categorizes it by severity...'",
-			"send": "Extract",
-			"analyzing": "Analyzing...",
-			"extractedTitle": "Extracted processes",
-			"accept": "Accept",
-			"edit": "Edit",
-			"reject": "Reject",
-			"voiceButton": "Speak",
-			"voiceListening": "Listening...",
-			"voiceUnsupported": "Voice not supported in this browser",
-			"diagramTitle": "Your process diagram",
-			"diagramEmpty": "Describe a process to see it diagrammed",
-			"editOverlayTitle": "Want to edit this diagram?",
-			"editOverlaySubtitle": "Sign up free to customize, export BPMN 2.0, and share with clients",
-			"editOverlayButton": "Sign up — it's free",
-			"editOverlayNote": "Your diagram is saved and will be waiting for you",
-			"signupPrompt": "Want to keep going?",
-			"signupCta": "Start your free trial to extract unlimited processes",
-			"signupButton": "Start free trial",
-			"error": "Our AI is busy right now. Try again in a moment.",
-			"rateLimited": "Too many requests. Please wait a moment.",
-			"messagesRemaining": "{count} messages remaining"
-		},
-		"integrations": {
-			"worksWithTitle": "Works with every conversation channel",
-			"chat": "AI Chat",
-			"audio": "Audio Upload",
-			"documents": "Documents",
-			"zoom": "Zoom",
-			"teams": "Microsoft Teams",
-			"meet": "Google Meet"
+		"socialProof": {
+			"title": "Join the companies discovering risks they didn't know existed",
+			"counter": "businesses analyzed"
 		},
 		"tools": {
-			"title": "Free AI Tools for BPM Professionals",
+			"title": "Free AI Tools for Process Professionals",
 			"viewAll": "View all tools"
 		}
 	},
@@ -297,19 +146,19 @@
 				"message": "Could not subscribe. Please try again later."
 			},
 			"success": {
-				"message": "You're on the list. We'll notify you when aiprocess.me launches.",
+				"message": "You're on the list. We'll notify you when Auditora.ai launches.",
 				"title": "Subscribed"
 			}
 		},
 		"submit": "Subscribe",
-		"subtitle": "Be among the first to get access to aiprocess.me.",
+		"subtitle": "Be among the first to get access to Auditora.ai.",
 		"title": "Get early access"
 	},
 	"cta": {
-		"title": "Stop documenting. Start consulting.",
-		"subtitle": "Join the consultants who extract processes from conversations instead of reconstructing them from memory.",
-		"button": "Start your free trial",
-		"note": "No credit card required"
+		"title": "Your business has hidden risks. Find them now.",
+		"subtitle": "Join the companies that discovered operational risks they didn't know existed.",
+		"button": "Scan My Business Free",
+		"note": "No credit card. No signup. Results in 60 seconds."
 	},
 	"notFound": {
 		"code": "404",
@@ -325,7 +174,7 @@
 			"privacyPolicy": "Privacy policy",
 			"termsAndConditions": "Terms and conditions",
 			"tools": "Free Tools",
-			"builtWith": "aiprocess.me"
+			"builtWith": "Auditora.ai"
 		},
 		"menu": {
 			"blog": "Blog",
@@ -337,7 +186,7 @@
 			"howItWorks": "How it works",
 			"login": "Sign in",
 			"pricing": "Pricing",
-			"tools": "Free Tools",
+			"tools": "Scan Your Business",
 			"trial": "Start free trial"
 		},
 		"aria": {

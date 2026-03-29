@@ -75,7 +75,7 @@ export function VersionHistory({
 								onClick={() => onRollback(version.version)}
 								className="text-xs"
 							>
-								<RotateCcwIcon className="mr-1 h-3 w-3" />
+								<RotateCcwIcon className="mr-1 h-3.5 w-3.5" />
 								Rollback
 							</Button>
 						)}

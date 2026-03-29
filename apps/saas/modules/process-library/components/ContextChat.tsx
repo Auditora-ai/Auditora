@@ -69,9 +69,9 @@ export function ContextChat({ processId, onContextUpdated }: ContextChatProps) {
 		<div className="space-y-3">
 			{/* Intro hint when empty */}
 			{messages.length === 0 && (
-				<div className="flex items-start gap-2 rounded-lg bg-[#EFF6FF] p-3">
-					<SparklesIcon className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" />
-					<p className="text-xs text-[#94A3B8]">
+				<div className="flex items-start gap-2 rounded-lg bg-accent p-3">
+					<SparklesIcon className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+					<p className="text-xs text-chrome-text-secondary">
 						Describe el proceso en lenguaje natural y la AI extraerá
 						automáticamente la descripción, objetivos, triggers y outputs.
 					</p>
@@ -80,14 +80,14 @@ export function ContextChat({ processId, onContextUpdated }: ContextChatProps) {
 
 			{/* Messages */}
 			{messages.length > 0 && (
-				<div className="max-h-48 space-y-2 overflow-y-auto rounded-lg border bg-[#F8FAFC] p-3">
+				<div className="max-h-48 space-y-2 overflow-y-auto rounded-lg border bg-secondary p-3">
 					{messages.map((msg, i) => (
 						<div
 							key={i}
 							className={`text-xs ${
 								msg.role === "user"
 									? "text-foreground"
-									: "text-[#94A3B8]"
+									: "text-chrome-text-secondary"
 							}`}
 						>
 							<span className="font-medium">
@@ -95,15 +95,15 @@ export function ContextChat({ processId, onContextUpdated }: ContextChatProps) {
 							</span>{" "}
 							{msg.content}
 							{msg.updatedFields && msg.updatedFields.length > 0 && (
-								<span className="ml-1 text-[#2563EB]">
+								<span className="ml-1 text-primary">
 									✓ {msg.updatedFields.join(", ")}
 								</span>
 							)}
 						</div>
 					))}
 					{loading && (
-						<div className="flex items-center gap-1.5 text-xs text-[#94A3B8]">
-							<Loader2Icon className="h-3 w-3 animate-spin" />
+						<div className="flex items-center gap-1.5 text-xs text-chrome-text-secondary">
+							<Loader2Icon className="h-3.5 w-3.5 animate-spin" />
 							Analizando...
 						</div>
 					)}

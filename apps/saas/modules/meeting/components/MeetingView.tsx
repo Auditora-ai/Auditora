@@ -1,11 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import { useBpmnModeler } from "../hooks/useBpmnModeler";
 import { useLiveSession } from "../hooks/useLiveSession";
-import { LiveSessionProvider, type LiveSessionContextValue, type PropertyTab } from "../context/LiveSessionContext";
+import { useKeyboardShortcuts, type ShortcutDef } from "../hooks/useKeyboardShortcuts";
+import { LiveSessionProvider, type LiveSessionContextValue, type PropertyTab, type LayoutMode } from "../context/LiveSessionContext";
 import { exportSVG, exportPNG, exportXML } from "../lib/bpmn-export";
 import { TopBar } from "./TopBar";
 import { LeftPanel } from "./LeftPanel";
@@ -13,6 +15,8 @@ import { CentralCanvas } from "./CentralCanvas";
 import { RightPanel } from "./RightPanel";
 import { SopPanel } from "./SopPanel";
 import { BottomBar } from "./BottomBar";
+import { EndSessionDialog, type EndMode } from "./EndSessionDialog";
+import { ExpandedSipocChat } from "./ExpandedSipocChat";
 
 interface MeetingViewProps {
 	sessionId: string;
@@ -39,6 +43,7 @@ export function MeetingView({
 	shareToken,
 }: MeetingViewProps & { shareToken?: string }) {
 	const router = useRouter();
+	const t = useTranslations("meeting");
 
 	// Accessibility: restore font scale from localStorage
 	useEffect(() => {
@@ -46,11 +51,15 @@ export function MeetingView({
 		if (saved) document.documentElement.style.setProperty("--font-scale", saved);
 	}, []);
 
+	// Process ID — mutable so TopBar can set it after eager process creation
+	const [currentProcessId, setCurrentProcessId] = useState(processId);
+
 	// UI state
 	const [aiEnabled, setAiEnabled] = useState(true);
 	const [selectedTool, setSelectedTool] = useState<"select" | "connect" | "text" | "ai-auto">("select");
 	const [leftCollapsed, setLeftCollapsed] = useState(false);
 	const [rightCollapsed, setRightCollapsed] = useState(false);
+	const [layoutMode, setLayoutMode] = useState<LayoutMode>("default");
 
 	// Properties view tab state
 	const [activeCentralTab, setActiveCentralTab] = useState("diagram");
@@ -128,21 +137,62 @@ export function MeetingView({
 		[sessionId],
 	);
 
-	// End session
-	const handleEndSession = useCallback(async () => {
+	// End session dialog
+	const [showEndDialog, setShowEndDialog] = useState(false);
+	const [endLoading, setEndLoading] = useState(false);
+
+	const handleEndSession = useCallback(() => {
+		setShowEndDialog(true);
+	}, []);
+
+	const handleEndConfirm = useCallback(async (mode: EndMode, newProcessName?: string) => {
+		setEndLoading(true);
 		try {
-			toast.info("Finalizando sesion...");
-			const res = await fetch(`/api/sessions/${sessionId}/end`, { method: "POST" });
+			// Save current BPMN state before ending (except discard)
+			if (mode !== "discard" && modelerApi?.isReady) {
+				const modeler = modelerApi.getModeler();
+				if (modeler) {
+					try {
+						const { xml } = await modeler.saveXML({ format: true });
+						if (xml) {
+							await fetch(`/api/sessions/${sessionId}/diagram`, {
+								method: "POST",
+								headers: { "Content-Type": "application/json" },
+								body: JSON.stringify({ bpmnXml: xml }),
+							});
+						}
+					} catch {
+						// Non-critical — endpoint has fallback from nodes
+					}
+				}
+			}
+
+			const res = await fetch(`/api/sessions/${sessionId}/end`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ endMode: mode, newProcessName }),
+			});
 			if (!res.ok) throw new Error(`HTTP ${res.status}`);
-			toast.success("Sesion finalizada. Generando entregables...");
-			// Navigate to review page
+
 			const slug = organizationSlug || "default";
-			router.push(`/${slug}/session/${sessionId}/review`);
+			if (mode === "full") {
+				toast.success(t("toast.sessionEndedFull"));
+				router.push(`/${slug}/session/${sessionId}/review`);
+			} else if (mode === "save_only") {
+				toast.success(t("toast.sessionEndedSave"));
+				router.push(`/${slug}/procesos`);
+			} else {
+				toast.info(t("toast.sessionDiscarded"));
+				router.push(`/${slug}`);
+			}
 		} catch (err) {
 			console.error("[MeetingView] End session failed:", err);
-			toast.error("Error al finalizar la sesion");
+			toast.error(t("toast.sessionEndError"));
+		} finally {
+			setEndLoading(false);
+			setShowEndDialog(false);
 		}
-	}, [sessionId, organizationSlug, router]);
+	}, [sessionId, organizationSlug, router, modelerApi]);
 
 	// Export diagram
 	const handleExport = useCallback(
@@ -162,14 +212,34 @@ export function MeetingView({
 		[modelerApi],
 	);
 
+	// Zen mode: toggle both panels at once
+	const zenRef = useRef(false);
+	const toggleZenMode = useCallback(() => {
+		// If entering zen mode, collapse both. If already in zen, restore both.
+		const entering = !zenRef.current;
+		zenRef.current = entering;
+		setLeftCollapsed(entering);
+		setRightCollapsed(entering);
+	}, []);
+
+	// Keyboard shortcuts for panel toggles
+	const panelShortcuts = useMemo<ShortcutDef[]>(() => [
+		{ key: "\\", ctrl: true, handler: () => { if (layoutMode === "default") toggleZenMode(); }, description: "Zen mode (toggle ambos paneles)" },
+		{ key: "[", ctrl: true, handler: () => { if (layoutMode === "default") setLeftCollapsed((p) => !p); }, description: "Toggle panel izquierdo" },
+		{ key: "]", ctrl: true, handler: () => { if (layoutMode === "default") setRightCollapsed((p) => !p); }, description: "Toggle panel derecho" },
+		{ key: "l", ctrl: true, shift: true, handler: () => setLayoutMode((m) => m === "default" ? "chat-focus" : "default"), description: "Cambiar layout" },
+	], [toggleZenMode, layoutMode]);
+	useKeyboardShortcuts(panelShortcuts);
+
 	// Assemble context value
 	const contextValue: LiveSessionContextValue = {
 		sessionId,
-		processId,
+		processId: currentProcessId,
 		shareToken,
 		...liveData,
 		aiEnabled,
 		selectedTool,
+		layoutMode,
 		activeCentralTab,
 		openPropertyTabs,
 		selectedNodeId,
@@ -184,38 +254,57 @@ export function MeetingView({
 		closePropertyTab,
 		setActiveCentralTab,
 		setSelectedNodeId,
+		setProcessId: setCurrentProcessId,
+		setLayoutMode,
 	};
 
 	return (
 		<LiveSessionProvider value={contextValue}>
 			<div
-				className="grid overflow-hidden bg-[#0F172A]"
+				className="grid overflow-hidden bg-chrome-base font-sans"
+				data-chrome=""
 				style={{
 					zoom: "var(--font-scale, 1)",
 					width: "calc(100vw / var(--font-scale, 1))",
 					height: "calc(100vh / var(--font-scale, 1))",
 					gridTemplateRows: "48px 1fr 36px",
-					gridTemplateColumns: `${leftCollapsed ? "0px" : "220px"} 1fr ${rightCollapsed ? "0px" : "280px"}`,
+					gridTemplateColumns: layoutMode === "chat-focus"
+						? "1fr 1fr 0px"
+						: `${leftCollapsed ? "0px" : "220px"} 1fr ${rightCollapsed ? "0px" : "280px"}`,
 					gridTemplateAreas: `
 						"top    top    top"
 						"left   canvas right"
 						"bottom bottom bottom"
 					`,
 					transition: "grid-template-columns 200ms ease",
-					fontFamily: "Inter, system-ui, -apple-system, sans-serif",
 				}}
 			>
 				{/* Connection banners removed — managed by LiveIndicator in TopBar */}
 				<TopBar processName={processName} clientName={clientName} />
-				<LeftPanel collapsed={leftCollapsed} />
-				<CentralCanvas containerRef={containerRef} leftCollapsed={leftCollapsed} rightCollapsed={rightCollapsed} onToggleLeft={() => setLeftCollapsed((p) => !p)} onToggleRight={() => setRightCollapsed((p) => !p)} />
-				{activeCentralTab !== "diagram" && selectedNodeId ? (
-					<SopPanel collapsed={rightCollapsed} />
+				{layoutMode === "default" ? (
+					<LeftPanel collapsed={leftCollapsed} />
 				) : (
-					<RightPanel organizationId={organizationId} processId={processId} collapsed={rightCollapsed} />
+					<ExpandedSipocChat />
+				)}
+				<CentralCanvas containerRef={containerRef} leftCollapsed={layoutMode === "chat-focus" || leftCollapsed} rightCollapsed={layoutMode === "chat-focus" || rightCollapsed} onToggleLeft={layoutMode === "default" ? () => setLeftCollapsed((p) => !p) : undefined} onToggleRight={layoutMode === "default" ? () => setRightCollapsed((p) => !p) : undefined} />
+				{layoutMode === "default" && (
+					activeCentralTab !== "diagram" && selectedNodeId ? (
+						<SopPanel collapsed={rightCollapsed} />
+					) : (
+						<RightPanel organizationId={organizationId} processId={currentProcessId} collapsed={rightCollapsed} />
+					)
 				)}
 				<BottomBar />
 			</div>
+
+			<EndSessionDialog
+				open={showEndDialog}
+				onOpenChange={setShowEndDialog}
+				onConfirm={handleEndConfirm}
+				loading={endLoading}
+				hasProcess={!!currentProcessId}
+				defaultProcessName={processName}
+			/>
 		</LiveSessionProvider>
 	);
 }

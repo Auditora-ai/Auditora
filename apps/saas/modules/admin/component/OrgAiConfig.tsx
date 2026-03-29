@@ -86,7 +86,7 @@ export function OrgAiConfig({ organizationId }: { organizationId: string }) {
 			{/* Back link */}
 			<Link
 				href="/admin/overview"
-				className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700"
+				className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
 			>
 				<ArrowLeftIcon className="size-3" />
 				Volver al overview
@@ -96,7 +96,7 @@ export function OrgAiConfig({ organizationId }: { organizationId: string }) {
 			{org ? (
 				<div>
 					<h2 className="text-xl font-semibold">{org.name}</h2>
-					<p className="text-sm text-slate-500">Configuracion AI y consumo de tokens</p>
+					<p className="text-sm text-muted-foreground">Configuracion AI y consumo de tokens</p>
 				</div>
 			) : (
 				<Skeleton className="h-8 w-64" />
@@ -121,7 +121,7 @@ export function OrgAiConfig({ organizationId }: { organizationId: string }) {
 									<SelectItem key={t.value} value={t.value}>
 										<div>
 											<div className="font-medium">{t.label}</div>
-											<div className="text-xs text-slate-400">{t.description}</div>
+											<div className="text-xs text-muted-foreground">{t.description}</div>
 										</div>
 									</SelectItem>
 								))}
@@ -137,7 +137,7 @@ export function OrgAiConfig({ organizationId }: { organizationId: string }) {
 							value={budget}
 							onChange={(e) => setBudget(e.target.value)}
 						/>
-						<p className="text-xs text-slate-400">
+						<p className="text-xs text-muted-foreground">
 							Dejar vacio para sin limite. Limite soft: alerta en dashboard, no bloquea.
 						</p>
 					</div>
@@ -168,29 +168,29 @@ export function OrgAiConfig({ organizationId }: { organizationId: string }) {
 								<p className="text-2xl font-semibold tabular-nums">
 									{formatTokens(usageData.totals.totalTokens)}
 								</p>
-								<p className="text-sm text-slate-500">Tokens totales</p>
+								<p className="text-sm text-muted-foreground">Tokens totales</p>
 							</div>
 							<div>
 								<p className="text-2xl font-semibold tabular-nums">
 									{usageData.totals.calls}
 								</p>
-								<p className="text-sm text-slate-500">Llamadas AI</p>
+								<p className="text-sm text-muted-foreground">Llamadas AI</p>
 							</div>
 							<div>
 								<p className="text-2xl font-semibold tabular-nums">
 									{formatTokens(usageData.totals.inputTokens)}
 								</p>
-								<p className="text-sm text-slate-500">Input tokens</p>
+								<p className="text-sm text-muted-foreground">Input tokens</p>
 							</div>
 							<div>
 								<p className="text-2xl font-semibold tabular-nums text-red-500">
 									{usageData.totals.errors}
 								</p>
-								<p className="text-sm text-slate-500">Errores</p>
+								<p className="text-sm text-muted-foreground">Errores</p>
 							</div>
 						</div>
 					) : (
-						<p className="text-sm text-slate-400">Sin datos de consumo</p>
+						<p className="text-sm text-muted-foreground">Sin datos de consumo</p>
 					)}
 				</Card>
 			</div>
@@ -270,7 +270,7 @@ export function OrgAiConfig({ organizationId }: { organizationId: string }) {
 										style={{ height: `${height}%` }}
 									/>
 									{usageData.byDay.length <= 15 && (
-										<span className="text-[9px] text-slate-400 tabular-nums">
+										<span className="text-[9px] text-muted-foreground tabular-nums">
 											{day.date.slice(5)}
 										</span>
 									)}

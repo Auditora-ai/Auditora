@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import {
 	SparklesIcon,
 	RefreshCwIcon,
@@ -30,6 +31,7 @@ interface NodeCache {
 }
 
 export function SopPanel({ collapsed }: SopPanelProps) {
+	const t = useTranslations("meeting");
 	const { sessionId, selectedNodeId, nodes } = useLiveSessionContext();
 	const cacheRef = useRef<Map<string, NodeCache>>(new Map());
 
@@ -145,7 +147,7 @@ export function SopPanel({ collapsed }: SopPanelProps) {
 			setError(err.message);
 			setMessages((prev) => [
 				...prev,
-				{ role: "assistant", content: "Error al procesar. Intenta de nuevo." },
+				{ role: "assistant", content: t("sopPanel.errorMessage") },
 			]);
 		} finally {
 			setLoading(false);
@@ -193,12 +195,12 @@ export function SopPanel({ collapsed }: SopPanelProps) {
 	if (!selectedNodeId || !node) {
 		return (
 			<div
-				className="flex flex-col items-center justify-center overflow-hidden border-l border-[#334155] bg-[#0F172A]"
+				className="flex flex-col items-center justify-center overflow-hidden border-l border-chrome-border bg-chrome-base"
 				style={{ gridArea: "right" }}
 			>
-				<ClipboardListIcon className="mb-2 h-6 w-6 text-[#475569]" />
-				<p className="px-4 text-center text-xs text-[#64748B]">
-					Selecciona una tarea para documentar su procedimiento
+				<ClipboardListIcon className="mb-2 h-6 w-6 text-chrome-subtle" />
+				<p className="px-4 text-center text-xs text-chrome-text-muted">
+					{t("sopPanel.selectTask")}
 				</p>
 			</div>
 		);
@@ -206,15 +208,15 @@ export function SopPanel({ collapsed }: SopPanelProps) {
 
 	return (
 		<div
-			className="flex flex-col overflow-hidden border-l border-[#334155] bg-[#0F172A]"
+			className="flex flex-col overflow-hidden border-l border-chrome-border bg-chrome-base"
 			style={{ gridArea: "right" }}
 		>
 			{/* Header */}
-			<div className="shrink-0 border-b border-[#334155] px-3 py-2">
+			<div className="shrink-0 border-b border-chrome-border px-3 py-2">
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-2">
-						<ClipboardListIcon className="h-3.5 w-3.5 text-[#2563EB]" />
-						<span className="text-xs font-medium text-[#F1F5F9]">SOP</span>
+						<ClipboardListIcon className="h-3.5 w-3.5 text-primary" />
+						<span className="text-xs font-medium text-chrome-text">{t("sopPanel.headerSop")}</span>
 					</div>
 					<div className="flex items-center gap-2">
 						{completeness > 0 && (
@@ -228,15 +230,15 @@ export function SopPanel({ collapsed }: SopPanelProps) {
 							<button
 								type="button"
 								onClick={handleNewConversation}
-								className="rounded p-0.5 text-[#475569] transition-colors hover:bg-[#1E293B] hover:text-[#94A3B8]"
-								title="Nueva conversación"
+								className="rounded p-0.5 text-chrome-subtle transition-colors hover:bg-chrome-raised hover:text-chrome-text-secondary"
+								title={t("sopPanel.newConversation")}
 							>
-								<RefreshCwIcon className="h-3 w-3" />
+								<RefreshCwIcon className="h-3.5 w-3.5" />
 							</button>
 						)}
 					</div>
 				</div>
-				<p className="mt-0.5 truncate text-[10px] text-[#64748B]">{node.label}</p>
+				<p className="mt-0.5 truncate text-[10px] text-chrome-text-muted">{node.label}</p>
 			</div>
 
 			{/* Chat content */}
@@ -244,10 +246,10 @@ export function SopPanel({ collapsed }: SopPanelProps) {
 					{/* Chat messages */}
 					<div ref={scrollRef} className="flex-1 overflow-y-auto thin-scrollbar p-3 space-y-3">
 						{messages.length === 0 && !loading && (
-							<div className="flex items-start gap-2 rounded-lg bg-[#1E293B] p-3">
-								<SparklesIcon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#2563EB]" />
-								<p className="text-[11px] leading-relaxed text-[#94A3B8]">
-									La IA te hará las preguntas correctas para documentar esta tarea. Responde y el procedimiento se va construyendo.
+							<div className="flex items-start gap-2 rounded-lg bg-chrome-raised p-3">
+								<SparklesIcon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+								<p className="text-[11px] leading-relaxed text-chrome-text-secondary">
+									{t("sopPanel.aiIntro")}
 								</p>
 							</div>
 						)}
@@ -256,14 +258,14 @@ export function SopPanel({ collapsed }: SopPanelProps) {
 							<div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
 								<div className={`max-w-[85%] rounded-lg px-3 py-2 ${
 									msg.role === "user"
-										? "bg-[#2563EB] text-white"
-										: "bg-[#1E293B] text-[#CBD5E1]"
+										? "bg-primary text-white"
+										: "bg-chrome-raised text-chrome-text-secondary"
 								}`}>
 									<p className="text-[11px] leading-relaxed">{msg.content}</p>
 									{msg.updatedFields && msg.updatedFields.length > 0 && (
 										<div className="mt-1.5 flex flex-wrap gap-1">
 											{msg.updatedFields.map((f) => (
-												<span key={f} className="rounded bg-[#22C55E]/20 px-1.5 py-0.5 text-[9px] text-[#4ADE80]">
+												<span key={f} className="rounded bg-green-500/20 px-1.5 py-0.5 text-[9px] text-green-400">
 													✓ {f}
 												</span>
 											))}
@@ -275,30 +277,30 @@ export function SopPanel({ collapsed }: SopPanelProps) {
 
 						{loading && (
 							<div className="flex justify-start">
-								<div className="flex items-center gap-2 rounded-lg bg-[#1E293B] px-3 py-2">
-									<Loader2Icon className="h-3 w-3 animate-spin text-[#2563EB]" />
-									<span className="text-[11px] text-[#64748B]">Pensando...</span>
+								<div className="flex items-center gap-2 rounded-lg bg-chrome-raised px-3 py-2">
+									<Loader2Icon className="h-3.5 w-3.5 animate-spin text-primary" />
+									<span className="text-[11px] text-chrome-text-muted">{t("sopPanel.thinking")}</span>
 								</div>
 							</div>
 						)}
 					</div>
 
 					{/* Chat input */}
-					<div className="shrink-0 border-t border-[#334155] p-2">
+					<div className="shrink-0 border-t border-chrome-border p-2">
 						{/* Quick action */}
 						{messages.length > 2 && !procedure && (
 							<button
 								type="button"
 								onClick={handleGenerateFull}
 								disabled={generating}
-								className="mb-2 flex w-full items-center justify-center gap-1.5 rounded-lg bg-[#2563EB]/10 py-1.5 text-[10px] font-medium text-[#3B82F6] transition-colors hover:bg-[#2563EB]/20"
+								className="mb-2 flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary/10 py-1.5 text-[10px] font-medium text-primary transition-colors hover:bg-primary/20"
 							>
 								{generating ? (
-									<Loader2Icon className="h-3 w-3 animate-spin" />
+									<Loader2Icon className="h-3.5 w-3.5 animate-spin" />
 								) : (
-									<SparklesIcon className="h-3 w-3" />
+									<SparklesIcon className="h-3.5 w-3.5" />
 								)}
-								{generating ? "Generando..." : "Generar SOP completo con lo que sabemos"}
+								{generating ? t("sopPanel.generatingFull") : t("sopPanel.generateFull")}
 							</button>
 						)}
 
@@ -314,15 +316,15 @@ export function SopPanel({ collapsed }: SopPanelProps) {
 										handleSubmit();
 									}
 								}}
-								placeholder="Responde aquí..."
+								placeholder={t("sopPanel.inputPlaceholder")}
 								disabled={loading}
-								className="flex-1 rounded-lg bg-[#1E293B] px-3 py-2 text-xs text-white placeholder-[#475569] outline-none ring-1 ring-[#334155] transition-colors focus:ring-[#2563EB]"
+								className="flex-1 rounded-lg bg-chrome-raised px-3 py-2 text-xs text-white placeholder-chrome-subtle outline-none ring-1 ring-chrome-border transition-colors focus:ring-primary"
 							/>
 							<button
 								type="button"
 								onClick={handleSubmit}
 								disabled={!input.trim() || loading}
-								className="rounded-lg bg-[#2563EB] px-2.5 py-2 text-white transition-colors hover:bg-[#1D4ED8] disabled:opacity-40"
+								className="rounded-lg bg-primary px-2.5 py-2 text-white transition-colors hover:bg-action-hover disabled:opacity-40"
 							>
 								<SendIcon className="h-3.5 w-3.5" />
 							</button>

@@ -1,7 +1,7 @@
-# aiprocess.me — Development Guide
+# Auditora.ai — Development Guide
 
 ## What is this?
-aiprocess.me is an AI-powered process elicitation platform. It joins video calls, provides consultants with a teleprompter of guided questions, and auto-diagrams business processes live during the meeting using BPMN notation.
+Auditora.ai is an AI-powered process elicitation platform. It joins video calls, provides consultants with a teleprompter of guided questions, and auto-diagrams business processes live during the meeting using BPMN notation.
 
 ## Tech Stack
 - **Framework**: Next.js

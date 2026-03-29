@@ -1,6 +1,6 @@
 # Coding Agent Guidelines
 
-> Comprehensive guide for AI coding agents working with this aiprocess.me Next.js codebase.
+> Comprehensive guide for AI coding agents working with this Auditora.ai Next.js codebase.
 
 ## Purpose
 

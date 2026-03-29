@@ -1,4 +1,4 @@
-# Design System — aiprocess.me
+# Design System — Auditora.ai
 
 ## Product Context
 - **What this is:** AI-powered process elicitation platform that joins video calls, guides consultants with a teleprompter, and auto-diagrams business processes live during the meeting
@@ -7,53 +7,66 @@
 - **Project type:** Web app with real-time collaboration (3-panel meeting view)
 
 ## Aesthetic Direction
-- **Direction:** Industrial/Utilitarian meets Luxury/Refined — function-first with premium craft details
-- **Decoration level:** Intentional — subtle grain texture on dark surfaces, clean flat on light surfaces. No gradients, no shadows-for-decoration.
-- **Mood:** Precision instrument. The product feels like a tool built by someone who understands the craft of process consulting — serious, authoritative, but with enough warmth that it doesn't feel clinical. Think Linear's engineering precision meets the authority of a consulting deliverable.
-- **Key design insight:** Dual-temperature UI — dark chrome for the consultant's private view (teleprompter, transcript, controls), light canvas for the shared BPMN diagram. The diagram area must be pristine enough to screenshot and send to a Fortune 500 client.
+- **Direction:** Warm Luxury — function-first with premium craft details. The tool feels like it was designed by someone who respects the consulting profession.
+- **Decoration level:** Intentional — subtle grain texture on warm dark surfaces, clean warm whites on light surfaces. No cold grays, no gradients-for-decoration.
+- **Mood:** Precision instrument in a warm study. Think walnut and leather, not steel and glass. The product feels authoritative and serious, but the warmth keeps it from feeling clinical. Linear's engineering precision meets the authority of a McKinsey deliverable, wrapped in a private club aesthetic.
+- **Key design insight:** Dual-temperature UI — warm dark chrome for the consultant's private view (teleprompter, transcript, controls), warm white canvas for the shared BPMN diagram. The diagram area must be pristine enough to screenshot and send to a Fortune 500 client. The warmth of both zones creates visual cohesion instead of a jarring cold contrast.
+- **Dual accent system:** Blue (`#2563EB`) = action (buttons, links, interactive states). Amber (`#D97706`) = orientation (panel edges, section markers, status indicators in chrome). Each color has one job — never cross roles.
 
 ## Typography
-- **Display/Hero:** Inter — clean, modern, premium feel. Use for page titles, session names, hero text.
-- **Body:** Inter — excellent at all sizes, optimized for UI. All body copy, UI labels, navigation, form labels.
-- **UI/Labels:** Inter (same as body) — at 12-14px with medium weight for UI controls
-- **Data/Tables:** Inter with `font-variant-numeric: tabular-nums` — aligned numbers in analytics, timestamps, node counts
+- **Display/Hero:** Instrument Serif — signals consulting authority. Serif in SaaS is a deliberate differentiator. Use for page titles, session names, panel headers, hero text. Italic variant for emphasis.
+- **Body/UI:** Geist Sans — modern, excellent at all sizes, Vercel ecosystem alignment. All body copy, UI labels, navigation, buttons, form labels, transcript lines, teleprompter questions.
+- **UI/Labels:** Geist Sans at 12-14px with medium weight for UI controls
+- **Data/Tables:** Geist Sans with `font-variant-numeric: tabular-nums` — aligned numbers in analytics, timestamps, node counts
 - **Code:** Geist Mono — for BPMN XML preview, technical identifiers
-- **Loading:** Google Fonts for Inter, self-hosted for Geist Mono
-- **Font stack:** `font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`
+- **Loading:** Google Fonts for Instrument Serif, self-hosted for Geist Sans + Geist Mono (Vercel ecosystem)
+- **Font stack display:** `font-family: 'Instrument Serif', Georgia, 'Times New Roman', serif`
+- **Font stack body:** `font-family: 'Geist Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`
+- **Font stack code:** `font-family: 'Geist Mono', 'SF Mono', 'Fira Code', monospace`
 - **Scale:**
-  - `3xl`: 48px / 3rem — page hero (session name on dashboard)
-  - `2xl`: 36px / 2.25rem — section headings
-  - `xl`: 24px / 1.5rem — teleprompter "Ask Now" question
-  - `lg`: 20px / 1.25rem — card titles, panel headers
-  - `md`: 16px / 1rem — body text, transcript lines
-  - `sm`: 14px / 0.875rem — UI labels, secondary text, table cells
-  - `xs`: 12px / 0.75rem — timestamps, status indicators, meta text
-  - `2xs`: 10px / 0.625rem — badges, tags, node labels in diagram
+  - `3xl`: 48px / 3rem — page hero (session name on dashboard) — Instrument Serif
+  - `2xl`: 36px / 2.25rem — section headings — Instrument Serif
+  - `xl`: 24px / 1.5rem — teleprompter "Ask Now" question — Instrument Serif
+  - `lg`: 20px / 1.25rem — card titles, panel headers — Geist Sans semibold
+  - `md`: 16px / 1rem — body text, transcript lines — Geist Sans
+  - `sm`: 14px / 0.875rem — UI labels, secondary text, table cells — Geist Sans
+  - `xs`: 12px / 0.75rem — timestamps, status indicators, meta text — Geist Sans
+  - `2xs`: 10px / 0.625rem — badges, tags, node labels in diagram — Geist Sans
 
 ## Color
-- **Approach:** Restrained — 1 accent + neutrals. Color is rare and meaningful. The BPMN diagram's node colors ARE the color in the product; everything else steps back.
+- **Approach:** Dual accent + warm neutrals. The BPMN diagram's node colors ARE the color in the product. Chrome uses warm stone tones with amber orientation accents. Canvas is warm white so diagrams feel premium and screenshot-ready.
 
-### Light Mode (diagram canvas, shared client view)
-- **Primary:** `#2563EB` — confident deep blue. Links, active states, primary buttons
-- **Primary hover:** `#1D4ED8`
-- **Primary subtle:** `#EFF6FF` — light blue for selected states, highlights
-- **Background:** `#FFFFFF` — diagram canvas
-- **Surface:** `#F8FAFC` — card backgrounds, input fields
-- **Border:** `#E2E8F0` — dividers, panel borders
-- **Text primary:** `#0F172A` — headings, body text
-- **Text secondary:** `#64748B` — labels, placeholders, meta
-- **Text muted:** `#94A3B8` — timestamps, disabled
+### Warm Chrome (consultant panels: teleprompter, transcript, sidebar, status bar, top bar)
+Warm stone palette with 4 surface levels for depth and hierarchy.
+- **Base:** `#1C1917` (stone-900) — panel backgrounds, deepest surface
+- **Raised:** `#292524` (stone-800) — cards, elevated surfaces, dropdown menus
+- **Hover:** `#44403C` (stone-700) — hover states, active surfaces, pressed states
+- **Subtle:** `#57534E` (stone-600) — muted backgrounds, secondary panels
+- **Border:** `#44403C` (stone-700) — dividers, panel edges
+- **Border subtle:** `#292524` (stone-800) — inner dividers, faint separator lines
+- **Text primary:** `#FAFAF9` (stone-50) — headings, body text on chrome
+- **Text secondary:** `#A8A29E` (stone-400) — labels, meta, secondary info
+- **Text muted:** `#78716C` (stone-500) — timestamps, disabled text
 
-### Dark Mode (consultant chrome: teleprompter, transcript, sidebar, status bar)
-- **Background:** `#0F172A` — deep slate, not pure black
-- **Surface:** `#1E293B` — elevated surfaces, cards in dark areas
-- **Surface hover:** `#334155`
-- **Border:** `#334155` — subtle dividers
-- **Text primary:** `#F1F5F9` — high contrast text
-- **Text secondary:** `#94A3B8` — labels, meta
-- **Text muted:** `#64748B` — timestamps, disabled
+### Warm Canvas (diagram area, shared client view, dashboard light mode)
+Warm white palette — papel crema, not sterile white.
+- **Background:** `#FFFBF5` — diagram canvas, warm white
+- **Surface:** `#FAF9F7` — card backgrounds, input fields
+- **Border:** `#E7E5E4` (stone-200) — dividers, panel borders
+- **Text primary:** `#1C1917` (stone-900) — headings, body text
+- **Text secondary:** `#78716C` (stone-500) — labels, placeholders, meta
+- **Text muted:** `#A8A29E` (stone-400) — timestamps, disabled
 
-### Semantic Colors (consistent across both modes)
+### Accent Colors
+Dual accent system — each color has one role.
+- **Action (blue):** `#2563EB` — buttons, links, active states, primary actions
+- **Action hover:** `#1D4ED8` — button/link hover
+- **Action subtle:** `#EFF6FF` — selected backgrounds, highlights on light surfaces
+- **Orientation (amber):** `#D97706` — panel edge accents, section icons, "LIVE" badge, dark chrome decorative highlights
+- **Orientation subtle:** `#FEF3C7` — warm highlights on light surfaces
+- **Orientation glow:** `rgba(217, 119, 6, 0.08)` — panel edge glow line (1px), subtle ambient warmth
+
+### Semantic Colors (consistent across both zones)
 - **Success:** `#16A34A` — confirmed nodes, connected status, positive indicators
 - **Warning:** `#D97706` — forming nodes, degraded state, pending actions
 - **Error:** `#DC2626` — rejected nodes, disconnected, critical alerts
@@ -69,7 +82,7 @@ Bizagi-inspired warm palette. Type-based coloring makes diagrams instantly reada
 - **Boundary Event:** `#A16207` border, `#FEF3C7` fill (warm brown)
 - **End Event:** `#DC2626` border, `#FEF2F2` fill (red circle)
 - **Sub-Process:** `#7C3AED` border, `#F5F3FF` fill (purple)
-- **Connection lines:** `#64748B`
+- **Connection lines:** `#78716C` (stone-500, warmer than previous `#64748B`)
 
 ### Node Colors — State Overrides (override type colors when active)
 State-based coloring takes priority over type-based colors via CSS markers.
@@ -79,10 +92,21 @@ State-based coloring takes priority over type-based colors via CSS markers.
 - **Node active (discussing now):** `#2563EB` border (3px solid) with `#DBEAFE` background — thicker border + darker fill than confirmed tasks for visual distinction
 
 ### Speaker Colors (transcript)
-- **Consultant:** `#2563EB` — matches primary, "you" are the brand
+- **Consultant:** `#2563EB` — matches action accent, "you" are the brand
 - **Client 1:** `#7C3AED` — purple, distinct from blue
 - **Client 2:** `#059669` — teal, third voice
 - **Client 3+:** `#D97706` — amber, additional speakers
+
+## Panel Edge Transitions
+The boundary between warm chrome and warm canvas should feel like a gentle bridge, not a cliff.
+- **Edge line:** 1px border of `rgba(217, 119, 6, 0.08)` (amber glow) at left/right edges of center canvas where it meets dark panels
+- **Inner shadow:** 4px soft `box-shadow` inset from dark panels toward canvas using `rgba(28, 25, 23, 0.15)` — creates depth without a hard line
+- **Effect:** The warm amber glow at the boundary ties both temperature zones together. The transition feels intentional, not accidental.
+
+## Canvas Grid Pattern
+- **Background:** `#FFFBF5` (warm white)
+- **Grid dots:** `#D6D3D1` (stone-300) at 0.5px radius on 20px spacing
+- **Effect:** Warm, soft grid that provides spatial reference without competing with diagram nodes. Feels like quality paper, not a spreadsheet.
 
 ## Spacing
 - **Base unit:** 4px
@@ -134,18 +158,18 @@ State-based coloring takes priority over type-based colors via CSS markers.
 ## Component Patterns
 
 ### Buttons
-- **Primary:** `#2563EB` bg, white text, `sm` radius, medium weight
-- **Secondary:** transparent bg, `#2563EB` text, `#E2E8F0` border
-- **Ghost:** transparent bg, `#64748B` text, no border (hover: `#F1F5F9` bg)
+- **Primary:** `#2563EB` bg, white text, `sm` radius, medium weight (Geist Sans)
+- **Secondary:** transparent bg, `#2563EB` text, `#E7E5E4` border
+- **Ghost:** transparent bg, `#78716C` text, no border (hover: `#FAF9F7` bg on light, `#292524` bg on chrome)
 - **Danger:** `#DC2626` bg, white text (only for destructive actions)
 - **All buttons:** 44px min height (touch target), 16px horizontal padding
 
 ### Cards
-- Light mode: `#FFFFFF` bg, `#E2E8F0` border, `md` radius, `lg` padding
-- Dark mode: `#1E293B` bg, `#334155` border, `md` radius, `lg` padding
+- Canvas/light: `#FFFBF5` bg, `#E7E5E4` border, `md` radius, `lg` padding
+- Chrome/dark: `#292524` bg, `#44403C` border, `md` radius, `lg` padding
 
 ### Inputs
-- Light: `#F8FAFC` bg, `#E2E8F0` border, `sm` radius
+- Light: `#FAF9F7` bg, `#E7E5E4` border, `sm` radius
 - Focus: `#2563EB` border (2px), `#EFF6FF` bg
 - Error: `#DC2626` border, `#FEF2F2` bg
 - 44px height (touch target)
@@ -156,15 +180,16 @@ State-based coloring takes priority over type-based colors via CSS markers.
 - Disconnected: `#DC2626` dot (static)
 - Recording: `#DC2626` dot (pulsing) + "REC" label
 
-## Dark/Light Mode Strategy
-- **Not a full toggle.** The meeting view uses BOTH simultaneously:
-  - Teleprompter panel: always dark
-  - BPMN diagram canvas: always light
-  - Transcript panel: always dark
-  - Status bar: always dark
-  - Shared client view: always light
-- **Dashboard/non-meeting pages:** follow system preference (prefers-color-scheme)
-- **Dark mode surfaces:** reduce color saturation by 10-15%, increase contrast
+## Warm Chrome / Warm Canvas Strategy
+- **Not a full dark/light toggle.** The meeting view uses BOTH simultaneously:
+  - Teleprompter panel: warm chrome (always)
+  - BPMN diagram canvas: warm canvas (always)
+  - Transcript panel: warm chrome (always)
+  - Top bar: warm chrome (always)
+  - Status bar: warm chrome (always)
+  - Shared client view: warm canvas (always)
+- **Dashboard/non-meeting pages:** follow system preference (prefers-color-scheme), using warm canvas tokens for light mode and warm chrome tokens for dark mode
+- **Chrome surfaces:** 4 levels of depth (`#1C1917` → `#292524` → `#44403C` → `#57534E`) for visual hierarchy without relying on borders alone
 
 ## Decisions Log
 | Date | Decision | Rationale |
@@ -178,3 +203,4 @@ State-based coloring takes priority over type-based colors via CSS markers.
 | 2026-03-22 | Dark chrome toolbar | Professional BPMN toolbar with edit/view/export sections. Dark (#0F172A) to match consultant chrome. Light canvas preserved for screenshot-ready diagrams. |
 | 2026-03-22 | Bizagi-inspired warm palette | Updated from cool blue/amber to warm palette: tasks=soft blue (#3B82F6), gateways=true yellow (#EAB308), intermediate events=warm brown (#A16207). More professional, screenshot-ready for client deliverables. |
 | 2026-03-22 | bpmn.io watermark styling | Cannot legally remove watermark. Styled to blend: 30% opacity + grayscale. License-compliant, visually unobtrusive. |
+| 2026-03-27 | Warm Luxury redesign | Cold slate (#0F172A) + Inter replaced with warm stone palette + Instrument Serif + Geist. Dual accent (blue=action, amber=orientation). Warm white canvas (#FFFBF5). Panel edge transitions with amber glow. The original typography decisions (Instrument Serif + Geist) are restored. |

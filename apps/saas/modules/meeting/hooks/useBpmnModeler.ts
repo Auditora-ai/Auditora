@@ -44,6 +44,8 @@ interface ModelerAPI {
 	mergeAiNodes: (nodes: DiagramNode[]) => void;
 	/** Force-rebuild the diagram from the given nodes (or fallbackNodes). */
 	rebuildFromNodes: (nodes?: DiagramNode[]) => Promise<void>;
+	/** Re-layout existing shapes using ELK without AI. Pure client-side. */
+	relayout: () => Promise<void>;
 	zoomIn: () => void;
 	zoomOut: () => void;
 	zoomFit: () => void;
@@ -294,6 +296,12 @@ export function useBpmnModeler({
 
 			const visibleNodes = nodes.filter((n) => n.state !== "rejected");
 
+			console.group("[BPMN-DEBUG] mergeAiNodes called");
+			console.log("bootstrapped:", bootstrappedRef.current);
+			console.log("visible nodes:", visibleNodes.length, visibleNodes.map(n => `${n.id.slice(0,8)}:${n.label}`));
+			console.log("known nodes:", knownNodesRef.current.size, [...knownNodesRef.current.keys()].map(k => k.slice(0,8)));
+			console.groupEnd();
+
 			importingRef.current = true;
 			try {
 				if (!bootstrappedRef.current) {
@@ -410,6 +418,11 @@ export function useBpmnModeler({
 			}
 
 			try {
+				console.group("[BPMN-DEBUG] rebuildFromNodes FULL REBUILD");
+				console.log("node count:", rebuildNodes.length);
+				console.log("nodes:", rebuildNodes.map(n => `${n.id.slice(0,8)}:${n.label}:${n.lane}`));
+				console.groupEnd();
+
 				// Step 1: Preprocess graph + calculate positions with ELK
 				const ELK = (await import("elkjs/lib/elk.bundled.js")).default;
 				const elkInstance = new ELK();
@@ -460,7 +473,7 @@ export function useBpmnModeler({
 				const rootProcess = canvas.getRootElement();
 
 				// Step 3: Create Pool (Participant)
-				const participantShape = elementFactory.createParticipantShape({ type: "bpmn:Participant" });
+				const participantShape = elementFactory.createParticipantShape({ type: "bpmn:Participant", id: "Pool" });
 				modeling.createShape(participantShape, { x: poolW / 2, y: poolH / 2, width: poolW, height: poolH }, rootProcess);
 				const participant = elementRegistry.filter((e: any) => e.type === "bpmn:Participant")[0];
 
@@ -507,7 +520,7 @@ export function useBpmnModeler({
 					const d = dims(n.type);
 
 					try {
-						const shape = elementFactory.createShape({ type });
+						const shape = elementFactory.createShape({ type, id: n.id });
 						const created = modeling.createShape(
 							shape,
 							{ x: pos.x + d.w / 2, y: pos.y + d.h / 2 },
@@ -674,6 +687,15 @@ export function useBpmnModeler({
 				removedIds.push(id);
 			}
 		}
+
+		console.group("[BPMN-DEBUG] incrementalUpdate diff");
+		console.log("new:", newNodes.length, newNodes.map(n => `${n.id.slice(0,8)}:${n.label}`));
+		console.log("updated:", updatedNodes.length, updatedNodes.map(n => `${n.id.slice(0,8)}:${n.label}`));
+		console.log("removed:", removedIds.length, removedIds.map(id => id.slice(0,8)));
+		if (newNodes.length > 3 || removedIds.length > 3) {
+			console.warn("⚠️ LARGE DIFF — possible ID mismatch between canvas and DB");
+		}
+		console.groupEnd();
 
 		// Track if topology changed (needs fit-viewport)
 		let topologyChanged = newNodes.length > 0 || removedIds.length > 0;
@@ -1106,6 +1128,86 @@ export function useBpmnModeler({
 		modelerRef.current?.get("commandStack")?.redo();
 	}, []);
 
+	/** Re-layout existing shapes on canvas using ELK without AI. Pure client-side.
+	 *  Extracts current nodes from canvas and rebuilds the diagram with proper ELK layout.
+	 *  Saves XML before rebuild and restores on failure. */
+	const relayout = useCallback(async () => {
+		const modeler = modelerRef.current;
+		if (!modeler) return;
+
+		// Save current XML as safety net
+		let backupXml: string | null = null;
+		try {
+			const result = await modeler.saveXML({ format: true });
+			backupXml = result.xml || null;
+		} catch { /* ok */ }
+
+		// Extract fresh node data from the canvas (connections + lanes)
+		const elementRegistry = modeler.get("elementRegistry");
+		const elements = elementRegistry.filter((e: any) =>
+			e.type?.startsWith("bpmn:") &&
+			e.type !== "bpmn:Participant" &&
+			e.type !== "bpmn:Lane" &&
+			e.type !== "bpmn:LaneSet" &&
+			e.type !== "bpmn:Collaboration" &&
+			e.type !== "bpmn:Process" &&
+			e.type !== "bpmn:SequenceFlow" &&
+			!e.type.includes("Plane") &&
+			!e.type.includes("Label"),
+		);
+
+		const freshNodes: DiagramNode[] = [];
+		for (const el of elements) {
+			const outgoing = (el.outgoing || [])
+				.filter((c: any) => c.type === "bpmn:SequenceFlow" && c.target)
+				.map((c: any) => c.target.id);
+			const outLabels = (el.outgoing || [])
+				.filter((c: any) => c.type === "bpmn:SequenceFlow" && c.target)
+				.map((c: any) => c.businessObject?.name || "");
+			// Find lane
+			let lane = "General";
+			let parent = el.parent;
+			while (parent) {
+				if (parent.type === "bpmn:Lane") {
+					lane = parent.businessObject?.name || "General";
+					break;
+				}
+				parent = parent.parent;
+			}
+			const rawType = el.type.replace("bpmn:", "");
+			const snakeType = rawType.replace(/([A-Z])/g, "_$1").toLowerCase().replace(/^_/, "");
+			freshNodes.push({
+				id: el.id,
+				type: snakeType,
+				label: el.businessObject?.name || "",
+				state: "confirmed",
+				lane,
+				connections: outgoing,
+				connectionLabels: outLabels,
+			});
+		}
+
+		if (freshNodes.length < 2) {
+			console.warn("[relayout] Not enough nodes to relayout:", freshNodes.length);
+			return;
+		}
+
+		try {
+			await rebuildFromNodes(freshNodes);
+		} catch (err) {
+			console.error("[relayout] Rebuild failed, restoring backup:", err);
+			// Restore from backup
+			if (backupXml) {
+				try {
+					await modeler.importXML(backupXml);
+					const canvas = modeler.get("canvas");
+					canvas.zoom("fit-viewport", "auto");
+				} catch { /* last resort failed */ }
+			}
+			throw err;
+		}
+	}, [rebuildFromNodes]);
+
 	const toggleGrid = useCallback(() => {
 		setGridEnabled((prev) => !prev);
 		try {
@@ -1231,6 +1333,7 @@ export function useBpmnModeler({
 		recovered,
 		mergeAiNodes,
 		rebuildFromNodes,
+		relayout,
 		zoomIn,
 		zoomOut,
 		zoomFit,
@@ -1446,9 +1549,9 @@ function forceCanvasWhite(container: HTMLElement | null): void {
 	}
 
 	// Also set inline styles as belt-and-suspenders
-	djsContainer.style.setProperty("background", "#ffffff", "important");
+	djsContainer.style.setProperty("background", "var(--palette-warm-white, #FFFBF5)", "important");
 	const svg = djsContainer.querySelector(":scope > svg") as SVGElement | null;
 	if (svg) {
-		svg.style.setProperty("background", "#ffffff", "important");
+		svg.style.setProperty("background", "var(--palette-warm-white, #FFFBF5)", "important");
 	}
 }

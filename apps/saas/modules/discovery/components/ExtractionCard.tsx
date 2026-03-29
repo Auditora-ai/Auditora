@@ -79,13 +79,13 @@ export function ExtractionCard({
 	return (
 		<div className="rounded-md border border-primary/30 bg-primary/10 p-3">
 			<div className="mb-1 flex items-center gap-2">
-				<span className="text-[10px] font-medium uppercase tracking-wider text-slate-400">
+				<span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
 					Proceso extraído
 				</span>
-				<span className="rounded-full bg-slate-700 px-2 py-0.5 text-[10px] text-slate-300">
+				<span className="rounded-full bg-chrome-hover px-2 py-0.5 text-[10px] text-muted-foreground">
 					{CATEGORY_LABELS[process.suggestedCategory] ?? process.suggestedCategory}
 				</span>
-				<span className="rounded-full bg-slate-700 px-2 py-0.5 text-[10px] text-slate-300">
+				<span className="rounded-full bg-chrome-hover px-2 py-0.5 text-[10px] text-muted-foreground">
 					{LEVEL_LABELS[process.suggestedLevel] ?? process.suggestedLevel}
 				</span>
 			</div>
@@ -95,23 +95,23 @@ export function ExtractionCard({
 					<Input
 						value={editedName}
 						onChange={(e) => setEditedName(e.target.value)}
-						className="h-8 border-slate-600 bg-slate-800 text-sm text-slate-100"
+						className="h-8 border-chrome-border bg-chrome-raised text-sm text-chrome-text"
 						placeholder="Nombre del proceso"
 					/>
 					<Input
 						value={editedDescription}
 						onChange={(e) => setEditedDescription(e.target.value)}
-						className="h-8 border-slate-600 bg-slate-800 text-sm text-slate-100"
+						className="h-8 border-chrome-border bg-chrome-raised text-sm text-chrome-text"
 						placeholder="Descripción"
 					/>
 				</div>
 			) : (
 				<>
-					<div className="text-sm font-medium text-slate-100">
+					<div className="text-sm font-medium text-chrome-text">
 						{process.name}
 					</div>
 					{process.description && (
-						<div className="mt-1 text-xs text-slate-400">
+						<div className="mt-1 text-xs text-muted-foreground">
 							{process.description}
 						</div>
 					)}
@@ -143,7 +143,7 @@ export function ExtractionCard({
 					variant="ghost"
 					onClick={() => setIsEditing(!isEditing)}
 					disabled={disabled}
-					className="h-7 gap-1 px-2 text-xs text-slate-400 hover:text-slate-300"
+					className="h-7 gap-1 px-2 text-xs text-muted-foreground hover:text-muted-foreground"
 				>
 					<PencilIcon className="size-3" />
 				</Button>

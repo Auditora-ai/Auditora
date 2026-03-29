@@ -276,7 +276,7 @@ export function SessionReviewClient({
 							onClick={() => setEditorOpen(true)}
 							className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
 						>
-							<PencilIcon className="h-3 w-3" />
+							<PencilIcon className="h-3.5 w-3.5" />
 							Edit
 						</button>
 						<button
@@ -284,7 +284,7 @@ export function SessionReviewClient({
 							onClick={handleExportPNG}
 							className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
 						>
-							<ImageIcon className="h-3 w-3" />
+							<ImageIcon className="h-3.5 w-3.5" />
 							PNG
 						</button>
 					</div>

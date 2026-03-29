@@ -133,8 +133,8 @@ export function RiskRegister({
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-2">
         <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortKey)}>
-          <SelectTrigger className="w-[160px] border-slate-700 bg-slate-800 text-slate-100">
-            <ArrowUpDownIcon className="mr-1 h-3 w-3 text-slate-400" />
+          <SelectTrigger className="w-[160px] border-chrome-border bg-chrome-raised text-chrome-text">
+            <ArrowUpDownIcon className="mr-1 h-3.5 w-3.5 text-muted-foreground" />
             <SelectValue placeholder="Ordenar" />
           </SelectTrigger>
           <SelectContent>
@@ -146,7 +146,7 @@ export function RiskRegister({
         </Select>
 
         <Select value={filterType} onValueChange={setFilterType}>
-          <SelectTrigger className="w-[160px] border-slate-700 bg-slate-800 text-slate-100">
+          <SelectTrigger className="w-[160px] border-chrome-border bg-chrome-raised text-chrome-text">
             <SelectValue placeholder="Tipo" />
           </SelectTrigger>
           <SelectContent>
@@ -160,7 +160,7 @@ export function RiskRegister({
         </Select>
 
         <Select value={filterStatus} onValueChange={setFilterStatus}>
-          <SelectTrigger className="w-[160px] border-slate-700 bg-slate-800 text-slate-100">
+          <SelectTrigger className="w-[160px] border-chrome-border bg-chrome-raised text-chrome-text">
             <SelectValue placeholder="Estado" />
           </SelectTrigger>
           <SelectContent>
@@ -173,14 +173,14 @@ export function RiskRegister({
           </SelectContent>
         </Select>
 
-        <span className="ml-auto text-xs text-slate-400">
+        <span className="ml-auto text-xs text-muted-foreground">
           {filteredRisks.length} riesgo{filteredRisks.length !== 1 ? "s" : ""}
         </span>
       </div>
 
       {/* Risk cards */}
       {filteredRisks.length === 0 ? (
-        <p className="py-8 text-center text-sm text-slate-400">
+        <p className="py-8 text-center text-sm text-muted-foreground">
           No hay riesgos que coincidan con los filtros.
         </p>
       ) : (
@@ -189,7 +189,7 @@ export function RiskRegister({
           return (
             <Card
               key={risk.id}
-              className={`border-l-4 ${getScoreColor(risk.riskScore)} border-slate-700 bg-slate-800`}
+              className={`border-l-4 ${getScoreColor(risk.riskScore)} border-chrome-border bg-chrome-raised`}
             >
               <CardContent className="p-4">
                 <div
@@ -198,7 +198,7 @@ export function RiskRegister({
                 >
                   <div className="min-w-0 flex-1">
                     <div className="mb-1 flex items-center gap-2">
-                      <h4 className="truncate text-sm font-semibold text-slate-100">
+                      <h4 className="truncate text-sm font-semibold text-chrome-text">
                         {risk.title}
                       </h4>
                       <span
@@ -208,25 +208,25 @@ export function RiskRegister({
                       </span>
                     </div>
                     {risk.description && (
-                      <p className="line-clamp-2 text-xs text-slate-400">
+                      <p className="line-clamp-2 text-xs text-muted-foreground">
                         {risk.description}
                       </p>
                     )}
                     <div className="mt-2 flex flex-wrap items-center gap-2">
-                      <span className="inline-flex items-center rounded-full bg-slate-700 px-2 py-0.5 text-xs text-slate-300">
+                      <span className="inline-flex items-center rounded-full bg-chrome-hover px-2 py-0.5 text-xs text-muted-foreground">
                         {TYPE_LABELS[risk.riskType] || risk.riskType}
                       </span>
                       {risk.affectedStep && (
-                        <span className="text-xs text-slate-500">
+                        <span className="text-xs text-muted-foreground">
                           Paso: {risk.affectedStep}
                         </span>
                       )}
-                      <span className="flex items-center gap-1 text-xs text-slate-500">
+                      <span className="flex items-center gap-1 text-xs text-muted-foreground">
                         <span className="flex gap-0.5">
                           {Array.from({ length: 5 }, (_, i) => (
                             <CircleDotIcon
                               key={`s-${i}`}
-                              className={`h-2.5 w-2.5 ${i < risk.severity ? "text-red-400" : "text-slate-700"}`}
+                              className={`h-3.5 w-3.5 ${i < risk.severity ? "text-red-400" : "text-foreground"}`}
                             />
                           ))}
                         </span>
@@ -235,7 +235,7 @@ export function RiskRegister({
                           {Array.from({ length: 5 }, (_, i) => (
                             <CircleDotIcon
                               key={`p-${i}`}
-                              className={`h-2.5 w-2.5 ${i < risk.probability ? "text-amber-400" : "text-slate-700"}`}
+                              className={`h-3.5 w-3.5 ${i < risk.probability ? "text-amber-400" : "text-foreground"}`}
                             />
                           ))}
                         </span>
@@ -243,13 +243,13 @@ export function RiskRegister({
                     </div>
                   </div>
                   <ChevronDownIcon
-                    className={`h-4 w-4 shrink-0 text-slate-400 transition-transform ${isExpanded ? "rotate-180" : ""}`}
+                    className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform ${isExpanded ? "rotate-180" : ""}`}
                   />
                 </div>
 
                 {/* Expanded content */}
                 {isExpanded && (
-                  <div className="mt-4 border-t border-slate-700 pt-4">
+                  <div className="mt-4 border-t border-chrome-border pt-4">
                     <MitigationTracker
                       riskId={risk.id}
                       mitigations={risk.mitigations || []}

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { ToolsHubClient } from "./client";
 
 export const metadata: Metadata = {
-  title: "Free Process Tools | aiprocess.me",
+  title: "Free Process Tools | Auditora.ai",
   description:
     "Free AI-powered tools for BPM professionals: BPMN generator, SIPOC generator, RACI matrix maker, process audit, and more.",
   keywords: [

@@ -8,6 +8,7 @@ import { PageHeader } from "@shared/components/PageHeader";
 import {
 	CreditCardIcon,
 	Settings2Icon,
+	SparklesIcon,
 	TriangleAlertIcon,
 	Users2Icon,
 } from "lucide-react";
@@ -72,6 +73,17 @@ export default async function SettingsLayout({
 						]
 					: []),
 				...(userIsOrganizationAdmin
+					? [
+							{
+								title: t("menu.organization.ai"),
+								href: `${organizationSettingsBasePath}/ai`,
+								icon: (
+									<SparklesIcon className="size-4 opacity-50" />
+								),
+							},
+						]
+					: []),
+			...(userIsOrganizationAdmin
 					? [
 							{
 								title: t("menu.organization.dangerZone"),

@@ -330,7 +330,7 @@ export function ProcessPhaseDashboard({
 						onClick={() => onExpandPhase(null)}
 						className="text-xs text-muted-foreground"
 					>
-						<ChevronUpIcon className="mr-1 h-3 w-3" />
+						<ChevronUpIcon className="mr-1 h-3.5 w-3.5" />
 						Cerrar
 					</Button>
 				</div>

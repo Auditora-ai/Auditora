@@ -68,7 +68,7 @@ export function CrossProcessRiskDashboard() {
         <CardContent>
           <div className="animate-pulse space-y-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-16 bg-slate-100 rounded-md" />
+              <div key={i} className="h-16 bg-muted rounded-md" />
             ))}
           </div>
         </CardContent>
@@ -159,7 +159,7 @@ export function CrossProcessRiskDashboard() {
             ].map((item) => (
               <div
                 key={item.label}
-                className="bg-slate-50 border border-slate-200 rounded-md p-3 text-center"
+                className="bg-muted border border-border rounded-md p-3 text-center"
               >
                 <div className={`text-xl font-semibold tabular-nums ${item.color}`}>
                   {item.count}
@@ -192,7 +192,7 @@ export function CrossProcessRiskDashboard() {
                 </div>
                 <div className="flex items-center gap-2">
                   {/* Mini risk distribution bar */}
-                  <div className="flex h-3 w-20 rounded-full overflow-hidden bg-slate-100">
+                  <div className="flex h-3 w-20 rounded-full overflow-hidden bg-muted">
                     {process.criticalCount > 0 && (
                       <div
                         className="bg-red-600"
@@ -223,7 +223,7 @@ export function CrossProcessRiskDashboard() {
 
         {/* Top risk types */}
         {orgSummary && orgSummary.topRiskTypes.length > 0 && (
-          <div className="mt-4 pt-4 border-t border-slate-100">
+          <div className="mt-4 pt-4 border-t border-border">
             <p className="text-xs font-medium text-muted-foreground mb-2">
               Tipos de riesgo mas frecuentes:
             </p>

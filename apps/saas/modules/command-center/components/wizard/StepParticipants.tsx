@@ -125,8 +125,8 @@ export function StepParticipants({
 
 	return (
 		<div className="flex h-full flex-col">
-			<h2 className="mb-1 text-xl font-semibold text-[#F1F5F9]">Participantes</h2>
-			<p className="mb-6 text-sm text-[#64748B]">
+			<h2 className="mb-1 text-xl font-semibold text-chrome-text">Participantes</h2>
+			<p className="mb-6 text-sm text-chrome-text-muted">
 				Agrega las personas que participaran en la sesion.
 			</p>
 
@@ -135,7 +135,7 @@ export function StepParticipants({
 				<button
 					type="button"
 					onClick={addParticipant}
-					className="inline-flex items-center gap-1.5 rounded-lg bg-[#2563EB] px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-[#1D4ED8]"
+					className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-action-hover"
 				>
 					<PlusIcon className="h-4 w-4" />
 					Agregar
@@ -146,7 +146,7 @@ export function StepParticipants({
 						type="button"
 						onClick={importFromRaci}
 						disabled={loadingRaci}
-						className="inline-flex items-center gap-1.5 rounded-lg border border-[#334155] px-3 py-2 text-sm font-medium text-[#94A3B8] transition-colors hover:border-[#64748B] hover:text-[#F1F5F9] disabled:opacity-50"
+						className="inline-flex items-center gap-1.5 rounded-lg border border-chrome-border px-3 py-2 text-sm font-medium text-chrome-text-secondary transition-colors hover:border-chrome-text-muted hover:text-chrome-text disabled:opacity-50"
 					>
 						{loadingRaci ? (
 							<Loader2Icon className="h-4 w-4 animate-spin" />
@@ -161,10 +161,10 @@ export function StepParticipants({
 			{/* Participants list */}
 			<div className="flex-1 space-y-3 overflow-y-auto">
 				{participants.length === 0 ? (
-					<div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-[#334155] py-12 text-center">
-						<UsersIcon className="mb-3 h-8 w-8 text-[#334155]" />
-						<p className="text-sm font-medium text-[#64748B]">Sin participantes</p>
-						<p className="mt-1 text-xs text-[#64748B]">
+					<div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-chrome-border py-12 text-center">
+						<UsersIcon className="mb-3 h-8 w-8 text-foreground" />
+						<p className="text-sm font-medium text-chrome-text-muted">Sin participantes</p>
+						<p className="mt-1 text-xs text-chrome-text-muted">
 							Agrega al menos un participante para la sesion
 						</p>
 					</div>
@@ -172,7 +172,7 @@ export function StepParticipants({
 					participants.map((participant, index) => (
 						<div
 							key={index}
-							className="flex items-start gap-3 rounded-lg border border-[#334155] bg-[#1E293B] p-3"
+							className="flex items-start gap-3 rounded-lg border border-chrome-border bg-chrome-raised p-3"
 						>
 							<div className="grid flex-1 grid-cols-3 gap-2">
 								{/* Name */}
@@ -181,7 +181,7 @@ export function StepParticipants({
 									value={participant.name}
 									onChange={(e) => updateParticipant(index, { name: e.target.value })}
 									placeholder="Nombre"
-									className="rounded-md border border-[#334155] bg-[#0F172A] px-3 py-2 text-sm text-[#F1F5F9] placeholder:text-[#64748B] focus:border-[#2563EB] focus:outline-none focus:ring-1 focus:ring-[#2563EB]"
+									className="rounded-md border border-chrome-border bg-chrome-base px-3 py-2 text-sm text-chrome-text placeholder:text-chrome-text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 								/>
 
 								{/* Email */}
@@ -190,14 +190,14 @@ export function StepParticipants({
 									value={participant.email}
 									onChange={(e) => updateParticipant(index, { email: e.target.value })}
 									placeholder="email@empresa.com"
-									className="rounded-md border border-[#334155] bg-[#0F172A] px-3 py-2 text-sm text-[#F1F5F9] placeholder:text-[#64748B] focus:border-[#2563EB] focus:outline-none focus:ring-1 focus:ring-[#2563EB]"
+									className="rounded-md border border-chrome-border bg-chrome-base px-3 py-2 text-sm text-chrome-text placeholder:text-chrome-text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 								/>
 
 								{/* Role */}
 								<select
 									value={participant.role}
 									onChange={(e) => updateParticipant(index, { role: e.target.value })}
-									className="rounded-md border border-[#334155] bg-[#0F172A] px-3 py-2 text-sm text-[#F1F5F9] focus:border-[#2563EB] focus:outline-none focus:ring-1 focus:ring-[#2563EB]"
+									className="rounded-md border border-chrome-border bg-chrome-base px-3 py-2 text-sm text-chrome-text focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 								>
 									{ROLES.map((r) => (
 										<option key={r.value} value={r.value}>
@@ -211,7 +211,7 @@ export function StepParticipants({
 							<button
 								type="button"
 								onClick={() => removeParticipant(index)}
-								className="mt-1 rounded-md p-1.5 text-[#64748B] transition-colors hover:bg-[#334155] hover:text-[#DC2626]"
+								className="mt-1 rounded-md p-1.5 text-chrome-text-muted transition-colors hover:bg-chrome-hover hover:text-destructive"
 							>
 								<TrashIcon className="h-4 w-4" />
 							</button>

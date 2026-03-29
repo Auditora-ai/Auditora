@@ -3,7 +3,7 @@ import { db } from "@repo/database";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
-export const metadata = { title: "Registro de Riesgos — aiprocess.me" };
+export const metadata = { title: "Registro de Riesgos — Auditora.ai" };
 
 export default async function RiskRegisterPage({
   params,
@@ -45,7 +45,7 @@ export default async function RiskRegisterPage({
 
   const heatColor = (count: number, si: number, pi: number) => {
     const score = (si + 1) * (pi + 1);
-    if (count === 0) return "bg-slate-50 text-slate-300";
+    if (count === 0) return "bg-muted text-muted-foreground";
     if (score >= 16) return "bg-red-500 text-white font-semibold";
     if (score >= 12) return "bg-red-300 text-red-900";
     if (score >= 8) return "bg-amber-300 text-amber-900";
@@ -58,7 +58,7 @@ export default async function RiskRegisterPage({
       <div>
         <Link
           href={`/${organizationSlug}/deliverables`}
-          className="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-slate-600 mb-2"
+          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-muted-foreground mb-2"
         >
           <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
@@ -66,25 +66,25 @@ export default async function RiskRegisterPage({
           Volver a Documentacion
         </Link>
         <h1
-          className="text-2xl font-semibold text-slate-900"
-          style={{ fontFamily: "Inter, system-ui, sans-serif" }}
+          className="text-2xl font-semibold text-foreground"
+          style={{ fontFamily: "'Geist Sans', system-ui, sans-serif" }}
         >
           Registro de Riesgos
         </h1>
-        <p className="mt-1 text-sm text-slate-500">{risks.length} riesgos identificados</p>
+        <p className="mt-1 text-sm text-muted-foreground">{risks.length} riesgos identificados</p>
       </div>
 
       {risks.length === 0 ? (
-        <div className="rounded-lg border border-slate-200 bg-white p-8 text-center">
-          <p className="text-sm text-slate-400">No hay riesgos registrados. Se identifican automaticamente durante las sesiones.</p>
+        <div className="rounded-lg border border-border bg-background p-8 text-center">
+          <p className="text-sm text-muted-foreground">No hay riesgos registrados. Se identifican automaticamente durante las sesiones.</p>
         </div>
       ) : (
         <>
           {/* Summary stats */}
           <div className="grid grid-cols-4 gap-4">
-            <div className="rounded-lg border border-slate-200 bg-white p-4 text-center">
-              <p className="text-2xl font-semibold text-slate-900">{risks.length}</p>
-              <p className="text-xs text-slate-500">Total Riesgos</p>
+            <div className="rounded-lg border border-border bg-background p-4 text-center">
+              <p className="text-2xl font-semibold text-foreground">{risks.length}</p>
+              <p className="text-xs text-muted-foreground">Total Riesgos</p>
             </div>
             <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-center">
               <p className="text-2xl font-semibold text-red-700">{criticalCount}</p>
@@ -94,17 +94,17 @@ export default async function RiskRegisterPage({
               <p className="text-2xl font-semibold text-amber-700">{highCount}</p>
               <p className="text-xs text-amber-600">Altos</p>
             </div>
-            <div className="rounded-lg border border-slate-200 bg-white p-4 text-center">
-              <p className="text-2xl font-semibold text-slate-900">{avgScore}</p>
-              <p className="text-xs text-slate-500">RPN Promedio</p>
+            <div className="rounded-lg border border-border bg-background p-4 text-center">
+              <p className="text-2xl font-semibold text-foreground">{avgScore}</p>
+              <p className="text-xs text-muted-foreground">RPN Promedio</p>
             </div>
           </div>
 
           {/* Heat map */}
-          <div className="rounded-lg border border-slate-200 bg-white p-6">
-            <h2 className="text-sm font-semibold text-slate-800 mb-4">Mapa de Calor — Severidad × Probabilidad</h2>
+          <div className="rounded-lg border border-border bg-background p-6">
+            <h2 className="text-sm font-semibold text-foreground mb-4">Mapa de Calor — Severidad × Probabilidad</h2>
             <div className="flex items-end gap-2">
-              <div className="flex flex-col items-end gap-1 text-xs text-slate-500 pr-2">
+              <div className="flex flex-col items-end gap-1 text-xs text-muted-foreground pr-2">
                 {["5-Catastrofico", "4-Mayor", "3-Moderado", "2-Menor", "1-Insignificante"].map((label, i) => (
                   <div key={i} className="h-12 flex items-center">{label}</div>
                 ))}
@@ -122,52 +122,52 @@ export default async function RiskRegisterPage({
                     )),
                   )}
                 </div>
-                <div className="flex justify-between mt-2 text-xs text-slate-500 px-1">
+                <div className="flex justify-between mt-2 text-xs text-muted-foreground px-1">
                   {["1-Raro", "2-Poco prob.", "3-Posible", "4-Probable", "5-Casi seguro"].map((l) => (
                     <span key={l} className="w-16 text-center">{l}</span>
                   ))}
                 </div>
-                <p className="text-center text-xs text-slate-400 mt-1">Probabilidad →</p>
+                <p className="text-center text-xs text-muted-foreground mt-1">Probabilidad →</p>
               </div>
             </div>
-            <p className="text-xs text-slate-400 mt-2 -rotate-0">↑ Severidad</p>
+            <p className="text-xs text-muted-foreground mt-2 -rotate-0">↑ Severidad</p>
           </div>
 
           {/* Risk table */}
-          <div className="rounded-lg border border-slate-200 bg-white overflow-x-auto">
+          <div className="rounded-lg border border-border bg-background overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-slate-200 bg-slate-50">
-                  <th className="px-4 py-3 text-left font-medium text-slate-600">Riesgo</th>
-                  <th className="px-4 py-3 text-left font-medium text-slate-600">Proceso</th>
-                  <th className="px-4 py-3 text-center font-medium text-slate-600">Tipo</th>
-                  <th className="px-4 py-3 text-center font-medium text-slate-600">Sev.</th>
-                  <th className="px-4 py-3 text-center font-medium text-slate-600">Prob.</th>
-                  <th className="px-4 py-3 text-center font-medium text-slate-600">RPN</th>
-                  <th className="px-4 py-3 text-center font-medium text-slate-600">Estado</th>
-                  <th className="px-4 py-3 text-center font-medium text-slate-600">Controles</th>
-                  <th className="px-4 py-3 text-center font-medium text-slate-600">Mitigaciones</th>
+                <tr className="border-b border-border bg-muted">
+                  <th className="px-4 py-3 text-left font-medium text-muted-foreground">Riesgo</th>
+                  <th className="px-4 py-3 text-left font-medium text-muted-foreground">Proceso</th>
+                  <th className="px-4 py-3 text-center font-medium text-muted-foreground">Tipo</th>
+                  <th className="px-4 py-3 text-center font-medium text-muted-foreground">Sev.</th>
+                  <th className="px-4 py-3 text-center font-medium text-muted-foreground">Prob.</th>
+                  <th className="px-4 py-3 text-center font-medium text-muted-foreground">RPN</th>
+                  <th className="px-4 py-3 text-center font-medium text-muted-foreground">Estado</th>
+                  <th className="px-4 py-3 text-center font-medium text-muted-foreground">Controles</th>
+                  <th className="px-4 py-3 text-center font-medium text-muted-foreground">Mitigaciones</th>
                 </tr>
               </thead>
               <tbody>
                 {risks.map((risk) => {
                   const sev = sevLabel(risk.severity);
                   return (
-                    <tr key={risk.id} className="border-b border-slate-50 last:border-0 hover:bg-slate-50/30">
+                    <tr key={risk.id} className="border-b border-border last:border-0 hover:bg-muted/30">
                       <td className="px-4 py-3">
-                        <p className="font-medium text-slate-800">{risk.title}</p>
-                        <p className="text-xs text-slate-500 line-clamp-1 mt-0.5">{risk.description}</p>
+                        <p className="font-medium text-foreground">{risk.title}</p>
+                        <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{risk.description}</p>
                       </td>
-                      <td className="px-4 py-3 text-slate-600">{risk.processDefinition.name}</td>
+                      <td className="px-4 py-3 text-muted-foreground">{risk.processDefinition.name}</td>
                       <td className="px-4 py-3 text-center">
-                        <span className="text-xs text-slate-500">{risk.riskType.replace(/_/g, " ")}</span>
+                        <span className="text-xs text-muted-foreground">{risk.riskType.replace(/_/g, " ")}</span>
                       </td>
                       <td className="px-4 py-3 text-center">
                         <span className={`inline-flex h-6 w-6 items-center justify-center rounded text-xs ${sev.cls}`}>
                           {risk.severity}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-center text-slate-600">{risk.probability}</td>
+                      <td className="px-4 py-3 text-center text-muted-foreground">{risk.probability}</td>
                       <td className="px-4 py-3 text-center">
                         <span className={`inline-flex h-7 min-w-[28px] items-center justify-center rounded text-xs font-semibold ${
                           risk.riskScore >= 16 ? "bg-red-100 text-red-800"
@@ -179,10 +179,10 @@ export default async function RiskRegisterPage({
                         </span>
                       </td>
                       <td className="px-4 py-3 text-center">
-                        <span className="text-xs text-slate-500">{risk.status.replace(/_/g, " ")}</span>
+                        <span className="text-xs text-muted-foreground">{risk.status.replace(/_/g, " ")}</span>
                       </td>
-                      <td className="px-4 py-3 text-center text-slate-600">{risk.controls.length}</td>
-                      <td className="px-4 py-3 text-center text-slate-600">{risk.mitigations.length}</td>
+                      <td className="px-4 py-3 text-center text-muted-foreground">{risk.controls.length}</td>
+                      <td className="px-4 py-3 text-center text-muted-foreground">{risk.mitigations.length}</td>
                     </tr>
                   );
                 })}

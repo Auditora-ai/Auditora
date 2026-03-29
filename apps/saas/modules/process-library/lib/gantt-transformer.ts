@@ -172,7 +172,7 @@ export function transformToGanttTasks(
 			end: new Date(startTask.endDate),
 			progress: startTask.progress,
 			displayOrder: order++,
-			styles: { backgroundColor: "#0F172A", progressColor: "#334155" },
+			styles: { backgroundColor: "#1C1917", progressColor: "#44403C" },
 		});
 	}
 
@@ -209,8 +209,8 @@ export function transformToGanttTasks(
 			hideChildren: false,
 			isDisabled: isOutOfScope,
 			styles: isOutOfScope
-				? { backgroundColor: "#E2E8F0", progressColor: "#CBD5E1" }
-				: { backgroundColor: "#1E293B", progressColor: "#334155" },
+				? { backgroundColor: "#E7E5E4", progressColor: "#D6D3D1" }
+				: { backgroundColor: "#292524", progressColor: "#44403C" },
 		});
 
 		// Phase tasks
@@ -258,7 +258,7 @@ export function transformToGanttTasks(
 			end: new Date(closeTask.endDate),
 			progress: closeTask.progress,
 			displayOrder: order++,
-			styles: { backgroundColor: "#0F172A", progressColor: "#334155" },
+			styles: { backgroundColor: "#1C1917", progressColor: "#44403C" },
 		});
 	}
 

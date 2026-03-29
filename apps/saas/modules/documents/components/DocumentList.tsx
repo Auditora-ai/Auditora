@@ -97,10 +97,10 @@ export function DocumentList({
 		return (
 			<Card>
 				<div className="flex flex-col items-center justify-center p-12 text-center">
-					<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#EFF6FF]">
-						<FileTextIcon className="h-6 w-6 text-[#2563EB]" />
+					<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-accent">
+						<FileTextIcon className="h-6 w-6 text-primary" />
 					</div>
-					<p className="text-sm text-[#94A3B8]">
+					<p className="text-sm text-chrome-text-secondary">
 						No documents uploaded yet.
 					</p>
 				</div>
@@ -129,7 +129,7 @@ export function DocumentList({
 							<TableRow key={doc.id}>
 								<TableCell>
 									<div className="flex items-center gap-2">
-										<Icon className="h-4 w-4 text-[#94A3B8]" />
+										<Icon className="h-4 w-4 text-chrome-text-secondary" />
 										{editingId === doc.id ? (
 											<div className="flex items-center gap-1">
 												<Input
@@ -156,13 +156,13 @@ export function DocumentList({
 										)}
 									</div>
 								</TableCell>
-								<TableCell className="text-[#94A3B8]">
+								<TableCell className="text-chrome-text-secondary">
 									{doc.mimeType.split("/").pop()}
 								</TableCell>
-								<TableCell className="text-[#94A3B8]">
+								<TableCell className="text-chrome-text-secondary">
 									{formatFileSize(doc.fileSize)}
 								</TableCell>
-								<TableCell className="text-[#94A3B8]">
+								<TableCell className="text-chrome-text-secondary">
 									{new Date(
 										doc.createdAt,
 									).toLocaleDateString()}

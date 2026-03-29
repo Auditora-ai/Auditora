@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
@@ -44,6 +45,7 @@ function toTipTapDoc(content: string | Record<string, any> | undefined): Record<
 }
 
 export function ProcedureEditor({ content, onChange, sessionId }: ProcedureEditorProps) {
+	const t = useTranslations("meeting");
 	const onChangeRef = useRef(onChange);
 	onChangeRef.current = onChange;
 	const suppressUpdate = useRef(false);
@@ -63,7 +65,7 @@ export function ProcedureEditor({ content, onChange, sessionId }: ProcedureEdito
 				autolink: true,
 			}),
 			Placeholder.configure({
-				placeholder: "Describe el procedimiento paso a paso...",
+				placeholder: t("procedureEditor.placeholder"),
 			}),
 			Underline,
 		],
@@ -182,74 +184,74 @@ export function ProcedureEditor({ content, onChange, sessionId }: ProcedureEdito
 	if (!editor) return null;
 
 	return (
-		<div className="rounded-md border border-[#E2E8F0] bg-white">
+		<div className="rounded-md border border-canvas-border bg-background">
 			{/* Toolbar */}
-			<div className="flex flex-wrap items-center gap-0.5 border-b border-[#E2E8F0] px-1.5 py-1">
+			<div className="flex flex-wrap items-center gap-0.5 border-b border-canvas-border px-1.5 py-1">
 				<ToolBtn
 					active={editor.isActive("bold")}
 					onClick={() => editor.chain().focus().toggleBold().run()}
-					title="Negrita"
+					title={t("procedureEditor.bold")}
 				>
 					<BoldIcon className="h-3.5 w-3.5" />
 				</ToolBtn>
 				<ToolBtn
 					active={editor.isActive("italic")}
 					onClick={() => editor.chain().focus().toggleItalic().run()}
-					title="Cursiva"
+					title={t("procedureEditor.italic")}
 				>
 					<ItalicIcon className="h-3.5 w-3.5" />
 				</ToolBtn>
 				<ToolBtn
 					active={editor.isActive("underline")}
 					onClick={() => editor.chain().focus().toggleUnderline().run()}
-					title="Subrayado"
+					title={t("procedureEditor.underline")}
 				>
 					<UnderlineIcon className="h-3.5 w-3.5" />
 				</ToolBtn>
 
-				<div className="mx-1 h-4 w-px bg-[#E2E8F0]" />
+				<div className="mx-1 h-4 w-px bg-canvas-border" />
 
 				<ToolBtn
 					active={editor.isActive("heading", { level: 1 })}
 					onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-					title="Título 1"
+					title={t("procedureEditor.heading1")}
 				>
 					<Heading1Icon className="h-3.5 w-3.5" />
 				</ToolBtn>
 				<ToolBtn
 					active={editor.isActive("heading", { level: 2 })}
 					onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-					title="Título 2"
+					title={t("procedureEditor.heading2")}
 				>
 					<Heading2Icon className="h-3.5 w-3.5" />
 				</ToolBtn>
 
-				<div className="mx-1 h-4 w-px bg-[#E2E8F0]" />
+				<div className="mx-1 h-4 w-px bg-canvas-border" />
 
 				<ToolBtn
 					active={editor.isActive("bulletList")}
 					onClick={() => editor.chain().focus().toggleBulletList().run()}
-					title="Lista"
+					title={t("procedureEditor.bulletList")}
 				>
 					<ListIcon className="h-3.5 w-3.5" />
 				</ToolBtn>
 				<ToolBtn
 					active={editor.isActive("orderedList")}
 					onClick={() => editor.chain().focus().toggleOrderedList().run()}
-					title="Lista numerada"
+					title={t("procedureEditor.orderedList")}
 				>
 					<ListOrderedIcon className="h-3.5 w-3.5" />
 				</ToolBtn>
 
-				<div className="mx-1 h-4 w-px bg-[#E2E8F0]" />
+				<div className="mx-1 h-4 w-px bg-canvas-border" />
 
-				<ToolBtn onClick={handleLinkInsert} title="Enlace">
+				<ToolBtn onClick={handleLinkInsert} title={t("procedureEditor.link")}>
 					<LinkIcon className="h-3.5 w-3.5" />
 				</ToolBtn>
-				<ToolBtn onClick={handleImageInsert} title="Imagen">
+				<ToolBtn onClick={handleImageInsert} title={t("procedureEditor.image")}>
 					<ImageIcon className="h-3.5 w-3.5" />
 				</ToolBtn>
-				<ToolBtn onClick={handleVideoEmbed} title="Video">
+				<ToolBtn onClick={handleVideoEmbed} title={t("procedureEditor.video")}>
 					<VideoIcon className="h-3.5 w-3.5" />
 				</ToolBtn>
 			</div>
@@ -298,8 +300,8 @@ function ToolBtn({
 			title={title}
 			className={`rounded p-1 transition-colors ${
 				active
-					? "bg-[#EFF6FF] text-[#2563EB]"
-					: "text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#334155]"
+					? "bg-accent text-primary"
+					: "text-chrome-text-muted hover:bg-canvas-surface hover:text-canvas-text-secondary"
 			}`}
 		>
 			{children}

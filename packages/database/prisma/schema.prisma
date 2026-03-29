@@ -151,6 +151,10 @@ model Organization {
   // AI tier configuration
   aiTier             String?      @default("standard") // "budget" | "standard" | "premium"
   aiTokenBudget      Int?         // monthly soft limit (null = unlimited)
+  // BYOK: encrypted API keys (AES-256-GCM)
+  aiAnthropicKey     String?      @db.Text
+  aiDeepseekKey      String?      @db.Text
+  aiKeysUpdatedAt    DateTime?
   members            Member[]
   invitations        Invitation[]
   purchases          Purchase[]
@@ -161,6 +165,7 @@ model Organization {
   companyBrain       CompanyBrain?
   orgDeliverables    OrgDeliverable[]
   aiUsageLogs        AiUsageLog[]
+  externalCostLogs   ExternalCostLog[]
 
   @@unique([slug])
   @@map("organization")
@@ -223,6 +228,7 @@ enum SessionStatus {
   ACTIVE
   ENDED
   FAILED
+  CANCELLED
 }
 
 enum NodeState {
@@ -452,7 +458,8 @@ model DiagramNode {
   positionY Float          @default(0)
 
   // Connections stored as JSON array of target node IDs
-  connections String[]
+  connections      String[]
+  connectionLabels String[]
 
   // Timing
   formedAt    DateTime     @default(now())
@@ -1217,5 +1224,51 @@ model AiUsageLog {
   @@index([organizationId, createdAt])
   @@index([pipeline])
   @@map("ai_usage_log")
+}
+
+model ExternalCostLog {
+  id               String       @id @default(cuid())
+  organizationId   String
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  service          String       // "deepgram-stt" | "recall-bot"
+  unitType         String       // "audio_minutes" | "bot_minutes"
+  units            Float
+  estimatedCostUsd Float
+  metadata         Json?        // sessionId for tracing
+  createdAt        DateTime     @default(now())
+
+  @@index([organizationId, createdAt])
+  @@map("external_cost_log")
+}
+
+// ============================================
+// ANONYMOUS ONBOARDING (RADIOGRAFIA)
+// ============================================
+
+model AnonymousSession {
+  id                  String    @id @default(cuid())
+  fingerprint         String    // IP hash + user-agent hash for rate limiting
+  phase               String    @default("input") // input|crawl|instant|deepen|sipoc|reveal|risks|convert
+  sourceUrl           String?   // Company website URL (primary input)
+  businessContext     String?   @db.Text // Crawled website text (up to 3000 words)
+  businessDescription String?   @db.Text // Manual fallback paragraph
+  industry            String?
+  processName         String?
+  sipocData           Json?     // SipocResult from extraction
+  knowledgeData       Json?     // KnowledgeSnapshot
+  diagramNodes        Json?     // DiagramNode[]
+  riskResults         Json?     // RiskAuditResult (instant mode)
+  deepRiskResults     Json?     // RiskAuditResult (full mode with FMEA)
+  conversationLog     Json?     // Array<{ role, content, timestamp }>
+  completenessScore   Int       @default(0)
+  convertedToUserId   String?
+  convertedAt         DateTime?
+  expiresAt           DateTime  // 24h from creation
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@index([fingerprint])
+  @@index([expiresAt])
+  @@map("anonymous_session")
 }
 

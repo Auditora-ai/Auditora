@@ -121,20 +121,20 @@ export function StepProcess({
 
 	return (
 		<div className="flex h-full flex-col">
-			<h2 className="mb-1 text-xl font-semibold text-[#F1F5F9]">Proceso</h2>
-			<p className="mb-6 text-sm text-[#64748B]">
+			<h2 className="mb-1 text-xl font-semibold text-chrome-text">Proceso</h2>
+			<p className="mb-6 text-sm text-chrome-text-muted">
 				Selecciona un proceso existente o descubre uno nuevo con ayuda de IA.
 			</p>
 
 			{/* Tabs */}
-			<div className="mb-5 flex gap-1 rounded-lg bg-[#1E293B] p-1">
+			<div className="mb-5 flex gap-1 rounded-lg bg-chrome-raised p-1">
 				<button
 					type="button"
 					onClick={() => setTab("select")}
 					className={`flex flex-1 items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
 						tab === "select"
-							? "bg-[#334155] text-[#F1F5F9]"
-							: "text-[#64748B] hover:text-[#94A3B8]"
+							? "bg-chrome-hover text-chrome-text"
+							: "text-chrome-text-muted hover:text-chrome-text-secondary"
 					}`}
 				>
 					<ListIcon className="h-4 w-4" />
@@ -145,8 +145,8 @@ export function StepProcess({
 					onClick={() => setTab("discover")}
 					className={`flex flex-1 items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
 						tab === "discover"
-							? "bg-[#334155] text-[#F1F5F9]"
-							: "text-[#64748B] hover:text-[#94A3B8]"
+							? "bg-chrome-hover text-chrome-text"
+							: "text-chrome-text-muted hover:text-chrome-text-secondary"
 					}`}
 				>
 					<SparklesIcon className="h-4 w-4" />
@@ -158,7 +158,7 @@ export function StepProcess({
 				<div className="flex-1">
 					{/* Search input */}
 					<div className="relative mb-5">
-						<SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#64748B]" />
+						<SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-chrome-text-muted" />
 						<input
 							ref={inputRef}
 							type="text"
@@ -178,17 +178,17 @@ export function StepProcess({
 									? "Cargando procesos..."
 									: "Buscar proceso o escribir nombre nuevo..."
 							}
-							className="w-full rounded-lg border border-[#334155] bg-[#1E293B] py-3 pl-10 pr-4 text-sm text-[#F1F5F9] placeholder:text-[#64748B] focus:border-[#2563EB] focus:outline-none focus:ring-1 focus:ring-[#2563EB]"
+							className="w-full rounded-lg border border-chrome-border bg-chrome-raised py-3 pl-10 pr-4 text-sm text-chrome-text placeholder:text-chrome-text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 						/>
 
 						{/* Dropdown */}
 						{showDropdown && (
 							<div
 								ref={dropdownRef}
-								className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-lg border border-[#334155] bg-[#1E293B] shadow-xl"
+								className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-lg border border-chrome-border bg-chrome-raised shadow-xl"
 							>
 								{loadingProcesses && (
-									<div className="flex items-center gap-2 px-4 py-3 text-sm text-[#64748B]">
+									<div className="flex items-center gap-2 px-4 py-3 text-sm text-chrome-text-muted">
 										<Loader2Icon className="h-4 w-4 animate-spin" />
 										Cargando...
 									</div>
@@ -200,10 +200,10 @@ export function StepProcess({
 											key={p.id}
 											type="button"
 											onClick={() => handleSelectProcess(p)}
-											className="flex w-full items-center px-4 py-2.5 text-left text-sm text-[#F1F5F9] transition-colors hover:bg-[#334155]"
+											className="flex w-full items-center px-4 py-2.5 text-left text-sm text-chrome-text transition-colors hover:bg-chrome-hover"
 										>
 											{p.name}
-											<span className="ml-auto text-[11px] text-[#64748B]">{p.level}</span>
+											<span className="ml-auto text-[11px] text-chrome-text-muted">{p.level}</span>
 										</button>
 									))}
 
@@ -215,7 +215,7 @@ export function StepProcess({
 										<button
 											type="button"
 											onClick={handleCreateNew}
-											className="flex w-full items-center gap-2 border-t border-[#334155] px-4 py-2.5 text-left text-sm font-medium text-[#60A5FA] transition-colors hover:bg-[#334155]"
+											className="flex w-full items-center gap-2 border-t border-chrome-border px-4 py-2.5 text-left text-sm font-medium text-blue-400 transition-colors hover:bg-chrome-hover"
 										>
 											<PlusIcon className="h-3.5 w-3.5" />
 											Crear &ldquo;{search.trim()}&rdquo;
@@ -223,7 +223,7 @@ export function StepProcess({
 									)}
 
 								{!loadingProcesses && filtered.length === 0 && !search.trim() && (
-									<div className="px-4 py-4 text-center text-xs text-[#64748B]">
+									<div className="px-4 py-4 text-center text-xs text-chrome-text-muted">
 										Sin procesos. Escribe un nombre para crear uno nuevo.
 									</div>
 								)}
@@ -233,15 +233,15 @@ export function StepProcess({
 
 					{/* Selected badge */}
 					{data.isNewProcess && data.processName.trim() && (
-						<div className="mb-5 inline-flex items-center gap-1 rounded-full bg-[#2563EB]/10 px-3 py-1 text-xs font-medium text-[#60A5FA]">
-							<PlusIcon className="h-3 w-3" />
+						<div className="mb-5 inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-blue-400">
+							<PlusIcon className="h-3.5 w-3.5" />
 							Nuevo proceso
 						</div>
 					)}
 
 					{/* Session type */}
 					<div>
-						<label className="mb-2 block text-xs font-medium text-[#94A3B8]">
+						<label className="mb-2 block text-xs font-medium text-chrome-text-secondary">
 							Tipo de sesión
 						</label>
 						<div className="grid grid-cols-3 gap-2">
@@ -252,14 +252,14 @@ export function StepProcess({
 									onClick={() => onChange({ sessionType: t.value })}
 									className={`rounded-lg border px-3 py-3 text-center transition-all ${
 										data.sessionType === t.value
-											? "border-[#2563EB] bg-[#2563EB]/10 text-[#F1F5F9]"
-											: "border-[#334155] bg-[#1E293B] text-[#64748B] hover:border-[#64748B]"
+											? "border-primary bg-primary/10 text-chrome-text"
+											: "border-chrome-border bg-chrome-raised text-chrome-text-muted hover:border-chrome-text-muted"
 									}`}
 								>
 									<div className="text-sm font-medium">{t.label}</div>
 									<div
 										className={`mt-0.5 text-[11px] ${
-											data.sessionType === t.value ? "text-[#94A3B8]" : "text-[#64748B]"
+											data.sessionType === t.value ? "text-chrome-text-secondary" : "text-chrome-text-muted"
 										}`}
 									>
 										{t.desc}

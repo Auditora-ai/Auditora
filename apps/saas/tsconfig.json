@@ -24,7 +24,8 @@
 			"@process-library/*": ["./modules/process-library/*"],
 			"@discovery/*": ["./modules/discovery/*"],
 			"@risk/*": ["./modules/risk/*"],
-			"@deliverables/*": ["./modules/deliverables/*"]
+			"@deliverables/*": ["./modules/deliverables/*"],
+			"@radiografia/*": ["./modules/radiografia/*"]
 		}
 	},
 	"include": [

@@ -199,7 +199,7 @@ export function ConsolidationView({
 											key={i}
 											className="flex items-start gap-2 text-xs"
 										>
-											<MessageSquare className="h-3 w-3 mt-0.5 text-muted-foreground shrink-0" />
+											<MessageSquare className="h-3.5 w-3.5 mt-0.5 text-muted-foreground shrink-0" />
 											<div>
 												<span className="font-medium">
 													{p.stakeholder}:

@@ -1,9 +1,11 @@
 "use client";
 
-import { Fragment, useCallback, useEffect, useRef, type RefObject } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef, type RefObject } from "react";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useLiveSessionContext } from "../context/LiveSessionContext";
+import { useKeyboardShortcuts, type ShortcutDef } from "../hooks/useKeyboardShortcuts";
 import {
 	Undo2Icon,
 	Redo2Icon,
@@ -19,8 +21,12 @@ import {
 	PlusIcon,
 	ChevronLeftIcon,
 	ChevronRightIcon,
+	ListTreeIcon,
+	SpellCheckIcon,
+	SparklesIcon,
 } from "lucide-react";
 import { NodePropertiesView } from "./NodePropertiesView";
+import { ProcessTreeEditor } from "./ProcessTreeEditor";
 
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-js.css";
@@ -37,22 +43,24 @@ interface CentralCanvasProps {
 
 export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onToggleLeft, onToggleRight }: CentralCanvasProps) {
 	const {
-		modelerApi, diagramHealth, nodes, processId, sessionId,
+		modelerApi, diagramHealth, nodes, processId, sessionId, firstPollDone,
 		activeCentralTab, openPropertyTabs, setActiveCentralTab, closePropertyTab, openPropertyTab,
 	} = useLiveSessionContext();
+	const t = useTranslations("meeting");
 	const isDiagramActive = activeCentralTab === "diagram";
+	const isTreeActive = activeCentralTab === "tree";
 	const [repairing, setRepairing] = useState(false);
 
 	// Rotating AI thinking phrases
 	const AI_PHASES = [
-		"Analizando tareas y conexiones",
-		"Identificando roles y lanes",
-		"Evaluando flujo del proceso",
-		"Detectando faltantes",
-		"Corrigiendo etiquetas",
-		"Reorganizando nodos",
-		"Optimizando layout",
-		"Aplicando mejores prácticas BPMN",
+		t("canvas.aiPhase1"),
+		t("canvas.aiPhase2"),
+		t("canvas.aiPhase3"),
+		t("canvas.aiPhase4"),
+		t("canvas.aiPhase5"),
+		t("canvas.aiPhase6"),
+		t("canvas.aiPhase7"),
+		t("canvas.aiPhase8"),
 	];
 	const [thinkingPhase, setThinkingPhase] = useState(0);
 	const phaseInterval = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -133,6 +141,17 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 	const handleRebuildLayout = async () => {
 		if (!modelerApi?.isReady || !sessionId) return;
 		setRepairing(true);
+
+		// Save backup XML before destructive operations
+		let backupXml: string | null = null;
+		try {
+			const modeler = modelerApi.getModeler();
+			if (modeler) {
+				const result = await modeler.saveXML({ format: true });
+				backupXml = result.xml || null;
+			}
+		} catch { /* ok */ }
+
 		try {
 			// Step 1: Extract current canvas elements and sync to DB
 			const canvasNodes = extractCanvasNodes();
@@ -149,6 +168,7 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 			const res = await fetch(`/api/sessions/${sessionId}/reorganize`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ mode: "full" }),
 			});
 
 			const data = await res.json().catch(() => ({}));
@@ -176,24 +196,38 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 				const score = data.completeness?.score;
 				if (score !== undefined) {
 					const emoji = score >= 80 ? "🟢" : score >= 50 ? "🟡" : "🔴";
-					toast.success(`${emoji} ${score}% completo`, { duration: 4000 });
+					toast.success(`${emoji} ${t("toast.complete", { score })}`, { duration: 4000 });
 				}
 				if (data.gaps?.length > 0) {
-					toast.info(`${data.gaps.length} preguntas nuevas`, { duration: 3000 });
+					toast.info(t("toast.newQuestions", { count: data.gaps.length }), { duration: 3000 });
 				}
 			} else {
 				// Fallback: just rebuild layout from canvas nodes
 				if (canvasNodes.length > 0) {
-					toast.info("Reorganizando layout...");
+					toast.info(t("canvas.reorganizingLayout"));
 					await modelerApi.rebuildFromNodes();
-					toast.success("Diagrama reorganizado");
+					toast.success(t("toast.diagramReorganized"));
 				} else {
-					toast.error(data.error || "No se encontraron nodos para reorganizar");
+					toast.error(data.error || t("toast.noNodesFound"));
 				}
 			}
 		} catch (err) {
 			console.error("[CentralCanvas] Rebuild failed:", err);
-			toast.error("Error al reorganizar. Intenta de nuevo.");
+			// Restore backup if diagram was destroyed
+			if (backupXml) {
+				try {
+					const modeler = modelerApi.getModeler();
+					if (modeler) {
+						await modeler.importXML(backupXml);
+						modeler.get("canvas").zoom("fit-viewport", "auto");
+						toast.error(t("toast.reorganizeErrorRestored"));
+					}
+				} catch {
+					toast.error(t("toast.reorganizeErrorRetry"));
+				}
+			} else {
+				toast.error(t("toast.reorganizeErrorRetry"));
+			}
 		} finally {
 			setRepairing(false);
 		}
@@ -205,8 +239,21 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 			const modeler = modelerApi.getModeler();
 			if (!modeler) return;
 
-			// Only save BPMN XML to session — do NOT sync to DB here
-			// (syncing to DB triggers polling which creates duplicate nodes)
+			// Sync canvas elements to DB (upsert = no duplicates)
+			const canvasNodes = extractCanvasNodes();
+			console.group("[BPMN-DEBUG] handleSave");
+			console.log("canvas nodes:", canvasNodes.length);
+			console.log("IDs:", canvasNodes.map(n => `${n.id.slice(0,8)}:${n.label}:${n.lane}`));
+			console.groupEnd();
+			if (canvasNodes.length > 0) {
+				await fetch(`/api/sessions/${sessionId}/sync-canvas`, {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ nodes: canvasNodes }),
+				});
+			}
+
+			// Save BPMN XML to session
 			const { xml } = await modeler.saveXML({ format: true });
 			if (xml) {
 				await fetch(`/api/sessions/${sessionId}/diagram`, {
@@ -216,19 +263,48 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 				});
 			}
 
-			toast.success("Diagrama guardado", { duration: 2000 });
+			toast.success(t("toast.diagramSaved"), { duration: 2000 });
 		} catch {
-			toast.error("Error al guardar");
+			toast.error(t("toast.saveError"));
 		}
-	}, [modelerApi, sessionId]);
+	}, [modelerApi, sessionId, extractCanvasNodes]);
 
-	// Auto-save BPMN XML every 30s so diagram persists across page reloads
-	useEffect(() => {
+	// Shared persist function — used by handleSave, 30s interval, and debounced change listener
+	const lastXmlRef = useRef<string | null>(null);
+	const persistDiagram = useCallback(async () => {
+		const modeler = modelerApi?.getModeler();
+		if (!modeler || !sessionId) return;
+		try {
+			const canvasNodes = extractCanvasNodes();
+			if (canvasNodes.length > 0) {
+				fetch(`/api/sessions/${sessionId}/sync-canvas`, {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ nodes: canvasNodes }),
+				}).catch(() => {});
+			}
+			const { xml } = await modeler.saveXML({ format: true });
+			if (xml) {
+				lastXmlRef.current = xml;
+				fetch(`/api/sessions/${sessionId}/diagram`, {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ bpmnXml: xml }),
+				}).catch(() => {});
+			}
+		} catch { /* non-critical */ }
+	}, [modelerApi, sessionId, extractCanvasNodes]);
+
+	/** ELK-only re-layout: rearrange positions without AI */
+	const [relaying, setRelaying] = useState(false);
+	const handleRelayoutOnly = useCallback(async () => {
 		if (!modelerApi?.isReady || !sessionId) return;
-		const interval = setInterval(async () => {
-			try {
-				const modeler = modelerApi.getModeler();
-				if (!modeler) return;
+		setRelaying(true);
+		try {
+			await modelerApi.relayout();
+			// Save the new layout
+			const modeler = modelerApi.getModeler();
+			if (modeler) {
 				const { xml } = await modeler.saveXML({ format: true });
 				if (xml) {
 					fetch(`/api/sessions/${sessionId}/diagram`, {
@@ -237,10 +313,118 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 						body: JSON.stringify({ bpmnXml: xml }),
 					}).catch(() => {});
 				}
-			} catch { /* non-critical */ }
-		}, 30000);
+			}
+			toast.success(t("toast.relayoutDone"), { duration: 2000 });
+		} catch {
+			toast.error(t("toast.relayoutError"));
+		} finally {
+			setRelaying(false);
+		}
+	}, [modelerApi, sessionId]);
+
+	/** AI labels-only: fix spelling/grammar/types without structural changes */
+	const [fixingLabels, setFixingLabels] = useState(false);
+	const handleFixLabelsOnly = useCallback(async () => {
+		if (!modelerApi?.isReady || !sessionId) return;
+		setFixingLabels(true);
+		try {
+			// Sync canvas first
+			const canvasNodes = extractCanvasNodes();
+			if (canvasNodes.length > 0) {
+				await fetch(`/api/sessions/${sessionId}/sync-canvas`, {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ nodes: canvasNodes }),
+				}).catch(() => {});
+			}
+
+			const res = await fetch(`/api/sessions/${sessionId}/reorganize`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ mode: "labels_only" }),
+			});
+			const data = await res.json().catch(() => ({}));
+
+			if (res.ok && data.fixes?.length > 0) {
+				// Apply label/type fixes directly on canvas without rebuild
+				const modeler = modelerApi.getModeler();
+				if (modeler) {
+					const modeling = modeler.get("modeling");
+					const elementRegistry = modeler.get("elementRegistry");
+					for (const fix of data.fixes) {
+						const el = elementRegistry.get(fix.id);
+						if (!el) continue;
+						if (fix.label) {
+							try { modeling.updateLabel(el, fix.label); } catch { /* */ }
+						}
+					}
+				}
+				toast.success(t("toast.labelsFixed", { count: data.applied || data.fixes.length }), { duration: 3000 });
+			} else if (res.ok) {
+				toast.info(t("toast.allLabelsCorrect"), { duration: 2000 });
+			} else {
+				toast.error(data.error || t("toast.fixLabelsError"));
+			}
+		} catch {
+			toast.error(t("toast.fixLabelsError"));
+		} finally {
+			setFixingLabels(false);
+		}
+	}, [modelerApi, sessionId, extractCanvasNodes]);
+
+	// Auto-save BPMN XML + sync canvas nodes every 30s (fallback)
+	useEffect(() => {
+		if (!modelerApi?.isReady || !sessionId) return;
+		const interval = setInterval(() => { persistDiagram(); }, 30000);
 		return () => clearInterval(interval);
-	}, [modelerApi?.isReady, sessionId]);
+	}, [modelerApi?.isReady, sessionId, persistDiagram]);
+
+	// Debounced auto-save on diagram changes (3s after last change)
+	useEffect(() => {
+		if (!modelerApi?.isReady || !sessionId) return;
+		const modeler = modelerApi.getModeler();
+		if (!modeler) return;
+
+		let timeoutId: ReturnType<typeof setTimeout> | null = null;
+		const eventBus = modeler.get("eventBus");
+
+		const debouncedSave = () => {
+			if (timeoutId) clearTimeout(timeoutId);
+			timeoutId = setTimeout(() => { persistDiagram(); }, 3000);
+		};
+
+		eventBus.on("commandStack.changed", debouncedSave);
+		return () => {
+			eventBus.off("commandStack.changed", debouncedSave);
+			if (timeoutId) clearTimeout(timeoutId);
+		};
+	}, [modelerApi?.isReady, sessionId, persistDiagram]);
+
+	// sendBeacon on beforeunload — last-chance save of cached BPMN XML
+	useEffect(() => {
+		if (!sessionId) return;
+		const handler = () => {
+			if (lastXmlRef.current) {
+				const blob = new Blob(
+					[JSON.stringify({ bpmnXml: lastXmlRef.current })],
+					{ type: "application/json" },
+				);
+				navigator.sendBeacon(`/api/sessions/${sessionId}/diagram`, blob);
+			}
+		};
+		window.addEventListener("beforeunload", handler);
+		return () => window.removeEventListener("beforeunload", handler);
+	}, [sessionId]);
+
+	// Keyboard shortcuts for diagram actions
+	const canvasShortcuts = useMemo<ShortcutDef[]>(() => [
+		{ key: "s", ctrl: true, handler: () => handleSave(), description: t("canvas.shortcutSave") },
+		{ key: "0", ctrl: true, handler: () => modelerApi?.zoomFit(), description: t("canvas.shortcutFit") },
+		{ key: "l", ctrl: true, shift: true, handler: () => handleRelayoutOnly(), description: t("canvas.shortcutRelayout") },
+		{ key: "f", ctrl: true, shift: true, handler: () => handleFixLabelsOnly(), description: t("canvas.shortcutFixLabels") },
+		{ key: "r", ctrl: true, shift: true, handler: () => handleRebuildLayout(), description: t("canvas.shortcutFullReorganize") },
+	], [handleSave, handleRelayoutOnly, handleFixLabelsOnly, handleRebuildLayout, modelerApi]);
+	useKeyboardShortcuts(canvasShortcuts);
 
 	const handleDragOver = useCallback((e: React.DragEvent) => {
 		const type = e.dataTransfer.types.includes("application/bpmn-element");
@@ -303,52 +487,64 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 	return (
 		<div
 			className="relative flex flex-col overflow-hidden"
-			style={{ gridArea: "canvas" }}
+			style={{ gridArea: "canvas", boxShadow: "inset 4px 0 8px -4px rgba(28, 25, 23, 0.15), inset -4px 0 8px -4px rgba(28, 25, 23, 0.15)" }}
 		>
 			{/* Tab bar — always visible */}
-			<div className="flex h-8 shrink-0 items-center gap-0 border-b border-[#E2E8F0] bg-[#F8FAFC]">
+			<div className="flex h-8 shrink-0 items-center gap-0 border-b border-canvas-border bg-secondary">
 				<button
 					type="button"
 					onClick={() => setActiveCentralTab("diagram")}
-					className={`flex h-full items-center gap-1.5 border-r border-[#E2E8F0] px-3 text-xs font-medium transition-colors ${
+					className={`flex h-full items-center gap-1.5 border-r border-canvas-border px-3 text-xs font-medium transition-colors ${
 						isDiagramActive
-							? "bg-white text-[#0F172A]"
-							: "text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#334155]"
+							? "bg-background text-canvas-text"
+							: "text-chrome-text-muted hover:bg-canvas-surface hover:text-canvas-text-secondary"
 					}`}
 				>
-					<GridIcon className="h-3 w-3" />
-					Diagrama
+					<GridIcon className="h-3.5 w-3.5" />
+					{t("canvas.tabDiagram")}
+				</button>
+				<button
+					type="button"
+					onClick={() => setActiveCentralTab("tree")}
+					className={`flex h-full items-center gap-1.5 border-r border-canvas-border px-3 text-xs font-medium transition-colors ${
+						isTreeActive
+							? "bg-background text-canvas-text"
+							: "text-chrome-text-muted hover:bg-canvas-surface hover:text-canvas-text-secondary"
+					}`}
+				>
+					<ListTreeIcon className="h-3.5 w-3.5" />
+					{t("canvas.tabTree")}
 				</button>
 				{openPropertyTabs.map((tab) => (
 					<button
 						key={tab.id}
 						type="button"
 						onClick={() => setActiveCentralTab(tab.id)}
-						className={`group flex h-full items-center gap-1.5 border-r border-[#E2E8F0] px-3 text-xs font-medium transition-colors ${
+						className={`group flex h-full items-center gap-1.5 border-r border-canvas-border px-3 text-xs font-medium transition-colors ${
 							activeCentralTab === tab.id
-								? "bg-white text-[#0F172A]"
-								: "text-[#64748B] hover:bg-[#F1F5F9] hover:text-[#334155]"
+								? "bg-background text-canvas-text"
+								: "text-chrome-text-muted hover:bg-canvas-surface hover:text-canvas-text-secondary"
 						}`}
 					>
-						<FileTextIcon className="h-3 w-3" />
+						<FileTextIcon className="h-3.5 w-3.5" />
 						<span className="max-w-[120px] truncate">{tab.label}</span>
 						<span
 							role="button"
 							tabIndex={0}
 							onClick={(e) => { e.stopPropagation(); closePropertyTab(tab.id); }}
 							onKeyDown={(e) => { if (e.key === "Enter") { e.stopPropagation(); closePropertyTab(tab.id); } }}
-							className="ml-1 rounded p-0.5 opacity-0 transition-opacity hover:bg-[#E2E8F0] group-hover:opacity-100"
+							className="ml-1 rounded p-0.5 opacity-0 transition-opacity hover:bg-canvas-border group-hover:opacity-100"
 						>
-							<XIcon className="h-2.5 w-2.5" />
+							<XIcon className="h-3.5 w-3.5" />
 						</span>
 					</button>
 				))}
 				{/* Open properties tab for root process */}
 				<button
 					type="button"
-					onClick={() => openPropertyTab("Process_1", "Proceso")}
-					title="Abrir propiedades del proceso"
-					className="flex h-full items-center px-2 text-[#94A3B8] transition-colors hover:bg-[#F1F5F9] hover:text-[#334155]"
+					onClick={() => openPropertyTab("Process_1", t("canvas.processDefault"))}
+					title={t("canvas.openProcessProps")}
+					className="flex h-full items-center px-2 text-chrome-text-secondary transition-colors hover:bg-canvas-surface hover:text-canvas-text-secondary"
 				>
 					<PlusIcon className="h-3.5 w-3.5" />
 				</button>
@@ -356,27 +552,27 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 
 			{/* Subprocess breadcrumb — visible when drilled into a subprocess */}
 			{isDiagramActive && modelerApi?.navigationStack?.length > 0 && (
-				<div className="flex h-6 shrink-0 items-center gap-1 border-b border-[#E2E8F0] bg-[#F1F5F9] px-4 text-[11px]">
+				<div className="flex h-6 shrink-0 items-center gap-1 border-b border-canvas-border bg-canvas-surface px-4 text-[11px]">
 					<button
 						type="button"
 						onClick={() => modelerApi.navigateUp(0)}
-						className="text-[#3B82F6] hover:underline"
+						className="text-primary hover:underline"
 					>
-						Proceso Principal
+						{t("canvas.breadcrumbRoot")}
 					</button>
 					{modelerApi.navigationStack.map((item: { id: string; label: string }, idx: number) => (
 						<Fragment key={item.id}>
-							<span className="text-[#94A3B8]">›</span>
+							<span className="text-chrome-text-secondary">›</span>
 							{idx < modelerApi.navigationStack.length - 1 ? (
 								<button
 									type="button"
 									onClick={() => modelerApi.navigateUp(idx + 1)}
-									className="text-[#3B82F6] hover:underline"
+									className="text-primary hover:underline"
 								>
 									{item.label}
 								</button>
 							) : (
-								<span className="font-medium text-[#0F172A]">{item.label}</span>
+								<span className="font-medium text-canvas-text">{item.label}</span>
 							)}
 						</Fragment>
 					))}
@@ -385,14 +581,15 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 
 			{/* Diagram canvas — always mounted, hidden when property tab active */}
 			<div
+				data-canvas=""
 				className={`live-session bpmn-canvas-light relative flex-1 overflow-hidden ${isDiagramActive ? "" : "hidden"}`}
 				onDragOver={handleDragOver}
 				onDrop={handleDrop}
 			>
 			{/* Loading overlay — hides default empty diagram until first poll loads nodes */}
-			{isDiagramActive && nodes.length === 0 && (
-				<div className="absolute inset-0 z-30 flex items-center justify-center bg-[#F1F5F9]">
-					<Loader2Icon className="h-6 w-6 animate-spin text-[#2563EB]" />
+			{isDiagramActive && nodes.length === 0 && !firstPollDone && (
+				<div className="absolute inset-0 z-30 flex items-center justify-center bg-canvas-surface">
+					<Loader2Icon className="h-6 w-6 animate-spin text-primary" />
 				</div>
 			)}
 			{/* AI thinking aura — full takeover of the canvas during reorganization */}
@@ -481,6 +678,49 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 				</>
 			)}
 
+			{/* Lightweight AI indicator for labels-only fix */}
+			{fixingLabels && (
+				<div className="absolute bottom-16 left-1/2 z-30 -translate-x-1/2" style={{ pointerEvents: "none" }}>
+					<div className="ai-aura-pill">
+						<div className="ai-aura-dot" />
+						<span className="ai-aura-text">{t("canvas.fixingLabels")}</span>
+					</div>
+					<style>{`
+						@keyframes dotPulse {
+							0%, 100% { transform: scale(1); box-shadow: 0 0 8px #60A5FA; }
+							50% { transform: scale(1.3); box-shadow: 0 0 16px #3B82F6, 0 0 32px rgba(37, 99, 235, 0.3); }
+						}
+						@keyframes pillFloat {
+							0%, 100% { transform: translateY(0); }
+							50% { transform: translateY(-4px); }
+						}
+						@keyframes auraFade {
+							0%, 100% { opacity: 0.6; }
+							50% { opacity: 1; }
+						}
+						.ai-aura-pill {
+							position: relative;
+							display: flex; align-items: center; gap: 10px;
+							padding: 10px 20px; border-radius: 100px;
+							background: rgba(15, 23, 42, 0.92);
+							backdrop-filter: blur(12px);
+							color: #93C5FD; font-size: 13px; font-weight: 500;
+							letter-spacing: 0.02em;
+							box-shadow: 0 0 30px rgba(37, 99, 235, 0.2), 0 8px 24px rgba(0, 0, 0, 0.15);
+							animation: pillFloat 3s ease-in-out infinite, auraFade 2s ease-in-out infinite;
+						}
+						.ai-aura-dot {
+							width: 8px; height: 8px; border-radius: 50%;
+							background: #60A5FA; flex-shrink: 0;
+							animation: dotPulse 1.5s ease-in-out infinite;
+						}
+						.ai-aura-text {
+							white-space: nowrap;
+						}
+					`}</style>
+				</div>
+			)}
+
 			{/* bpmn-js mounts here — matches ProcessDetailView pattern exactly */}
 			<div
 				ref={containerRef}
@@ -490,60 +730,46 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 
 			{/* Loading state */}
 			{!modelerApi?.isReady && (
-				<div className="absolute inset-0 flex items-center justify-center bg-[#F1F5F9]">
-					<div className="h-16 w-16 animate-pulse rounded-xl bg-gray-100" />
+				<div className="absolute inset-0 flex items-center justify-center bg-canvas-surface">
+					<div className="h-16 w-16 animate-pulse rounded-xl bg-muted" />
 				</div>
 			)}
 
 			{/* Render error */}
 			{modelerApi?.renderError && (
-				<div className="absolute inset-0 flex items-center justify-center bg-[#F1F5F9]">
+				<div className="absolute inset-0 flex items-center justify-center bg-canvas-surface">
 					<p className="text-sm text-red-600">{modelerApi.renderError}</p>
 				</div>
 			)}
 
 			{/* Diagram health banner removed — was not dismissible and blocked UI */}
 
-			{/* Floating tools — hidden during AI repair */}
-			{modelerApi?.isReady && !repairing && (
-				<div className="absolute bottom-4 left-4 z-10 flex items-center gap-1 rounded-xl bg-[#0F172A]/90 p-1.5 shadow-lg backdrop-blur-sm">
-					<ToolButton
-						icon={<Undo2Icon className="h-4 w-4" />}
-						onClick={() => modelerApi.undo()}
-						disabled={!modelerApi.canUndo}
-						title="Deshacer"
-					/>
-					<ToolButton
-						icon={<Redo2Icon className="h-4 w-4" />}
-						onClick={() => modelerApi.redo()}
-						disabled={!modelerApi.canRedo}
-						title="Rehacer"
-					/>
-					<div className="mx-1 h-5 w-px bg-[#334155]" />
-					<ToolButton
-						icon={<MaximizeIcon className="h-4 w-4" />}
-						onClick={() => modelerApi.zoomFit()}
-						title="Ajustar al viewport"
-					/>
-					<ToolButton
-						icon={<SaveIcon className="h-4 w-4" />}
-						onClick={handleSave}
-						title="Guardar diagrama"
-					/>
-					<div className="mx-1 h-5 w-px bg-[#334155]" />
-					<ToolButton
-						icon={<LayoutDashboardIcon className="h-4 w-4" />}
-						onClick={handleRebuildLayout}
-						disabled={repairing}
-						title="Reorganizar diagrama"
-					/>
+			{/* Floating toolbar — hidden during full AI repair */}
+			{modelerApi?.isReady && !repairing && !fixingLabels && (
+				<div className="absolute bottom-4 left-4 z-10 flex items-center gap-0.5 rounded-xl bg-chrome-base/90 p-1.5 shadow-lg backdrop-blur-sm">
+					<ToolButton icon={<Undo2Icon className="h-4 w-4" />} onClick={() => modelerApi.undo()} disabled={!modelerApi.canUndo} label={t("canvas.toolUndo")} shortcut="⌘Z" />
+					<ToolButton icon={<Redo2Icon className="h-4 w-4" />} onClick={() => modelerApi.redo()} disabled={!modelerApi.canRedo} label={t("canvas.toolRedo")} shortcut="⌘⇧Z" />
+					<div className="mx-1 h-5 w-px bg-chrome-hover" />
+					<ToolButton icon={<MaximizeIcon className="h-4 w-4" />} onClick={() => modelerApi.zoomFit()} label={t("canvas.toolFit")} shortcut="⌘0" />
+					<ToolButton icon={<SaveIcon className="h-4 w-4" />} onClick={handleSave} label={t("canvas.toolSave")} shortcut="⌘S" />
+					<div className="mx-1 h-5 w-px bg-chrome-hover" />
+					<ToolButton icon={<LayoutDashboardIcon className="h-4 w-4" />} onClick={handleRelayoutOnly} disabled={relaying} label={t("canvas.toolSort")} shortcut="⌘⇧L" />
+					<ToolButton icon={<SpellCheckIcon className="h-4 w-4" />} onClick={handleFixLabelsOnly} label={t("canvas.toolSpelling")} shortcut="⌘⇧F" />
+					<ToolButton icon={<SparklesIcon className="h-4 w-4" />} onClick={handleRebuildLayout} label={t("canvas.toolAiFull")} shortcut="⌘⇧R" />
 				</div>
 			)}
 			</div>
 
+			{/* Tree view — shown when tree tab is active */}
+			{isTreeActive && (
+				<div className="flex-1 overflow-hidden">
+					<ProcessTreeEditor />
+				</div>
+			)}
+
 			{/* Property view — shown when a property tab is active */}
 			{activePropertyTab && (
-				<div className="flex-1 overflow-auto bg-white">
+				<div className="flex-1 overflow-auto bg-background">
 					<NodePropertiesView
 						tabId={activePropertyTab.id}
 						elementId={activePropertyTab.elementId}
@@ -557,8 +783,8 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 				<button
 					type="button"
 					onClick={onToggleLeft}
-					className="absolute left-1 top-1/2 z-20 -translate-y-1/2 rounded-md border border-[#334155] bg-[#0F172A] px-0.5 py-3 text-[#64748B] transition-colors hover:bg-[#1E293B] hover:text-[#94A3B8]"
-					title={leftCollapsed ? "Mostrar elementos" : "Ocultar elementos"}
+					className="absolute left-1 top-1/2 z-20 -translate-y-1/2 rounded-md border border-chrome-border bg-chrome-base px-0.5 py-3 text-chrome-text-muted transition-colors hover:bg-chrome-raised hover:text-chrome-text-secondary"
+					title={leftCollapsed ? t("canvas.toggleShowElements") : t("canvas.toggleHideElements")}
 				>
 					{leftCollapsed ? <ChevronRightIcon className="h-3.5 w-3.5" /> : <ChevronLeftIcon className="h-3.5 w-3.5" />}
 				</button>
@@ -567,8 +793,8 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 				<button
 					type="button"
 					onClick={onToggleRight}
-					className="absolute right-1 top-1/2 z-20 -translate-y-1/2 rounded-md border border-[#334155] bg-[#0F172A] px-0.5 py-3 text-[#64748B] transition-colors hover:bg-[#1E293B] hover:text-[#94A3B8]"
-					title={rightCollapsed ? "Mostrar paneles" : "Ocultar paneles"}
+					className="absolute right-1 top-1/2 z-20 -translate-y-1/2 rounded-md border border-chrome-border bg-chrome-base px-0.5 py-3 text-chrome-text-muted transition-colors hover:bg-chrome-raised hover:text-chrome-text-secondary"
+					title={rightCollapsed ? t("canvas.toggleShowPanels") : t("canvas.toggleHidePanels")}
 				>
 					{rightCollapsed ? <ChevronLeftIcon className="h-3.5 w-3.5" /> : <ChevronRightIcon className="h-3.5 w-3.5" />}
 				</button>
@@ -582,25 +808,29 @@ function ToolButton({
 	onClick,
 	disabled,
 	active,
-	title,
+	label,
+	shortcut,
 }: {
 	icon: React.ReactNode;
 	onClick: () => void;
 	disabled?: boolean;
 	active?: boolean;
-	title: string;
+	label: string;
+	shortcut?: string;
 }) {
 	return (
 		<button
 			type="button"
 			onClick={onClick}
 			disabled={disabled}
-			title={title}
-			className={`rounded-lg p-2 text-[#94A3B8] transition-colors duration-75 hover:bg-[#334155] hover:text-white disabled:cursor-not-allowed disabled:opacity-30 ${
-				active ? "bg-[#334155] text-white" : ""
+			title={shortcut ? `${label} (${shortcut})` : label}
+			className={`flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-chrome-text-secondary transition-colors duration-75 hover:bg-chrome-hover hover:text-white disabled:cursor-not-allowed disabled:opacity-30 ${
+				active ? "bg-chrome-hover text-white" : ""
 			}`}
 		>
 			{icon}
+			<span className="text-[11px] leading-none">{label}</span>
+			{shortcut && <span className="text-[10px] leading-none text-chrome-subtle">{shortcut}</span>}
 		</button>
 	);
 }

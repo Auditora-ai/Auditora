@@ -2,9 +2,10 @@ import { getActiveOrganization } from "@auth/lib/server";
 import { db } from "@repo/database";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { PageHeader } from "@shared/components/PageHeader";
 
 export const metadata = {
-  title: "Documentacion — aiprocess.me",
+  title: "Documentacion — Auditora.ai",
 };
 
 export default async function DeliverablesDashboardPage({
@@ -122,22 +123,14 @@ export default async function DeliverablesDashboardPage({
   ];
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8 p-6">
-      {/* Header */}
-      <div>
-        <p className="text-xs font-medium uppercase tracking-wider text-[#94A3B8]">
-          {activeOrganization.name}
-        </p>
-        <h1
-          className="mt-1 text-3xl font-semibold text-[#0F172A]"
-          style={{ fontFamily: "Inter, system-ui, sans-serif" }}
-        >
-          Documentacion de Procesos
-        </h1>
-        <p className="mt-2 text-sm text-[#64748B]">
-          Fuente de verdad de tu organizacion. Todos los datos provienen de sesiones reales.
-        </p>
-      </div>
+    <div className="flex h-full flex-col overflow-auto">
+      <PageHeader
+        title="Documentacion de Procesos"
+        subtitle={`${activeOrganization.name} — Fuente de verdad. Todos los datos provienen de sesiones reales.`}
+        className="mb-0 border-b border-border px-6 py-4"
+      />
+
+      <div className="flex-1 overflow-auto p-6 space-y-6">
 
       {/* Stats overview */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -150,41 +143,41 @@ export default async function DeliverablesDashboardPage({
       </div>
 
       {/* Coverage bar */}
-      <div className="rounded-xl border border-[#E2E8F0] bg-white p-5">
+      <div className="rounded-xl border border-border bg-background p-5">
         <div className="flex items-center justify-between mb-3">
           <div>
-            <h2 className="text-sm font-semibold text-[#0F172A]">Cobertura de Documentacion</h2>
-            <p className="text-xs text-[#64748B] mt-0.5">
+            <h2 className="text-sm font-semibold text-foreground">Cobertura de Documentacion</h2>
+            <p className="text-xs text-muted-foreground mt-0.5">
               {documentedCount} de {processCount} procesos documentados
             </p>
           </div>
-          <span className="text-2xl font-semibold text-[#0F172A]">{coveragePct}%</span>
+          <span className="text-2xl font-semibold text-foreground">{coveragePct}%</span>
         </div>
-        <div className="h-3 w-full rounded-full bg-[#F1F5F9]">
+        <div className="h-3 w-full rounded-full bg-muted">
           <div
             className={`h-3 rounded-full transition-all duration-700 ${
-              coveragePct >= 80 ? "bg-green-500" : coveragePct >= 50 ? "bg-blue-500" : "bg-amber-500"
+              coveragePct >= 80 ? "bg-success" : coveragePct >= 50 ? "bg-primary" : "bg-orientation"
             }`}
             style={{ width: `${coveragePct}%` }}
           />
         </div>
         {/* Category breakdown */}
-        <div className="mt-3 flex gap-4 text-xs text-[#64748B]">
+        <div className="mt-3 flex gap-4 text-xs text-muted-foreground">
           <span className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-[#7C3AED]" />
+            <span className="h-2 w-2 rounded-full bg-violet-600" />
             {strategicCount} estrategicos
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-[#2563EB]" />
+            <span className="h-2 w-2 rounded-full bg-primary" />
             {coreCount} core
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-slate-400" />
+            <span className="h-2 w-2 rounded-full bg-muted-foreground" />
             {supportCount} soporte
           </span>
           {uncategorizedCount > 0 && (
             <span className="flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-[#E2E8F0]" />
+              <span className="h-2 w-2 rounded-full bg-border" />
               {uncategorizedCount} sin clasificar
             </span>
           )}
@@ -193,36 +186,36 @@ export default async function DeliverablesDashboardPage({
 
       {/* Deliverable cards */}
       <div>
-        <h2 className="text-lg font-semibold text-[#0F172A] mb-4">Entregables</h2>
+        <h2 className="text-lg font-semibold text-foreground mb-4">Entregables</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {deliverables.map((d) => (
             <Link
               key={d.href}
               href={d.ready ? d.href : "#"}
-              className={`group rounded-xl border bg-white p-5 flex flex-col gap-3 transition-all ${
+              className={`group rounded-xl border bg-background p-5 flex flex-col gap-3 transition-all ${
                 d.ready
-                  ? "border-[#E2E8F0] hover:border-blue-300 hover:shadow-sm cursor-pointer"
-                  : "border-[#F1F5F9] opacity-50 cursor-not-allowed"
+                  ? "border-border hover:border-primary/30 hover:shadow-sm cursor-pointer"
+                  : "border-muted opacity-50 cursor-not-allowed"
               }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
                   <span className="text-xl">{d.icon}</span>
-                  <h3 className="text-sm font-semibold text-[#0F172A] group-hover:text-blue-700 transition-colors">
+                  <h3 className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
                     {d.title}
                   </h3>
                 </div>
                 {d.ready ? (
-                  <svg className="h-4 w-4 text-[#CBD5E1] group-hover:text-blue-500 transition-colors" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                  <svg className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                   </svg>
                 ) : (
-                  <span className="text-xs text-[#94A3B8]">Sin datos</span>
+                  <span className="text-xs text-muted-foreground">Sin datos</span>
                 )}
               </div>
-              <p className="text-xs text-[#64748B] leading-relaxed">{d.description}</p>
+              <p className="text-xs text-muted-foreground leading-relaxed">{d.description}</p>
               <div className="mt-auto pt-1">
-                <span className="text-xs font-medium text-[#64748B]">{d.stat}</span>
+                <span className="text-xs font-medium text-muted-foreground">{d.stat}</span>
               </div>
             </Link>
           ))}
@@ -234,27 +227,27 @@ export default async function DeliverablesDashboardPage({
             rel="noopener noreferrer"
             className={`rounded-xl border-2 p-5 flex flex-col gap-3 md:col-span-2 lg:col-span-3 transition-all ${
               processCount > 0
-                ? "border-blue-300 bg-blue-50/50 hover:border-blue-400 hover:shadow-sm cursor-pointer"
-                : "border-[#E2E8F0] bg-[#F8FAFC] opacity-50 cursor-not-allowed"
+                ? "border-primary/30 bg-accent hover:border-primary/50 hover:shadow-sm cursor-pointer"
+                : "border-border bg-secondary opacity-50 cursor-not-allowed"
             }`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <span className="text-xl">📕</span>
-                <h3 className="text-sm font-semibold text-[#0F172A]">Manual de Procesos</h3>
+                <h3 className="text-sm font-semibold text-foreground">Manual de Procesos</h3>
               </div>
               {processCount > 0 ? (
-                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-blue-600">
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-primary">
                   Generar PDF
                   <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                   </svg>
                 </span>
               ) : (
-                <span className="text-xs text-[#94A3B8]">Sin datos</span>
+                <span className="text-xs text-muted-foreground">Sin datos</span>
               )}
             </div>
-            <p className="text-xs text-[#64748B]">
+            <p className="text-xs text-muted-foreground">
               Documento compilado profesional con todo lo documentado: panorama de procesos, fichas, RACI, riesgos, roles y sistemas.
               Un click → documento listo para imprimir como PDF.
             </p>
@@ -265,34 +258,34 @@ export default async function DeliverablesDashboardPage({
       {/* Recent processes quick view */}
       {processes.length > 0 && (
         <div>
-          <h2 className="text-lg font-semibold text-[#0F172A] mb-4">Procesos Registrados</h2>
-          <div className="rounded-xl border border-[#E2E8F0] bg-white overflow-hidden">
+          <h2 className="text-lg font-semibold text-foreground mb-4">Procesos Registrados</h2>
+          <div className="rounded-xl border border-border bg-background overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-[#F1F5F9] bg-[#F8FAFC]">
-                  <th className="px-4 py-2.5 text-left font-medium text-[#64748B]">Proceso</th>
-                  <th className="px-4 py-2.5 text-left font-medium text-[#64748B]">Categoria</th>
-                  <th className="px-4 py-2.5 text-left font-medium text-[#64748B]">Owner</th>
-                  <th className="px-4 py-2.5 text-center font-medium text-[#64748B]">Estado</th>
-                  <th className="px-4 py-2.5 text-center font-medium text-[#64748B]">Sesiones</th>
-                  <th className="px-4 py-2.5 text-center font-medium text-[#64748B]">RACI</th>
-                  <th className="px-4 py-2.5 text-center font-medium text-[#64748B]">Riesgos</th>
+                <tr className="border-b border-muted bg-secondary">
+                  <th className="px-4 py-2.5 text-left font-medium text-muted-foreground">Proceso</th>
+                  <th className="px-4 py-2.5 text-left font-medium text-muted-foreground">Categoria</th>
+                  <th className="px-4 py-2.5 text-left font-medium text-muted-foreground">Owner</th>
+                  <th className="px-4 py-2.5 text-center font-medium text-muted-foreground">Estado</th>
+                  <th className="px-4 py-2.5 text-center font-medium text-muted-foreground">Sesiones</th>
+                  <th className="px-4 py-2.5 text-center font-medium text-muted-foreground">RACI</th>
+                  <th className="px-4 py-2.5 text-center font-medium text-muted-foreground">Riesgos</th>
                 </tr>
               </thead>
               <tbody>
                 {processes.map((p) => (
-                  <tr key={p.id} className="border-b border-[#F8FAFC] last:border-0 hover:bg-[#F8FAFC]/50">
-                    <td className="px-4 py-2.5 font-medium text-[#0F172A]">{p.name}</td>
+                  <tr key={p.id} className="border-b border-secondary last:border-0 hover:bg-secondary/50">
+                    <td className="px-4 py-2.5 font-medium text-foreground">{p.name}</td>
                     <td className="px-4 py-2.5">
                       <CategoryBadge category={p.category} />
                     </td>
-                    <td className="px-4 py-2.5 text-[#64748B]">{p.owner ?? "—"}</td>
+                    <td className="px-4 py-2.5 text-muted-foreground">{p.owner ?? "—"}</td>
                     <td className="px-4 py-2.5 text-center">
                       <StatusBadge status={p.processStatus} />
                     </td>
-                    <td className="px-4 py-2.5 text-center text-[#64748B]">{p._count.sessions}</td>
-                    <td className="px-4 py-2.5 text-center text-[#64748B]">{p._count.raciEntries}</td>
-                    <td className="px-4 py-2.5 text-center text-[#64748B]">{p._count.risks}</td>
+                    <td className="px-4 py-2.5 text-center text-muted-foreground">{p._count.sessions}</td>
+                    <td className="px-4 py-2.5 text-center text-muted-foreground">{p._count.raciEntries}</td>
+                    <td className="px-4 py-2.5 text-center text-muted-foreground">{p._count.risks}</td>
                   </tr>
                 ))}
               </tbody>
@@ -300,6 +293,7 @@ export default async function DeliverablesDashboardPage({
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }
@@ -317,34 +311,34 @@ function StatCard({
 }) {
   const valueColor = accent
     ? accent === "green"
-      ? "text-green-700"
+      ? "text-success"
       : accent === "amber"
-        ? "text-amber-700"
-        : "text-red-700"
-    : "text-[#0F172A]";
+        ? "text-orientation"
+        : "text-destructive"
+    : "text-foreground";
 
   return (
-    <div className="rounded-xl border border-[#E2E8F0] bg-white p-4">
+    <div className="rounded-xl border border-border bg-background p-4">
       <p className={`text-2xl font-semibold ${valueColor}`}>{value}</p>
-      <p className="text-xs text-[#64748B] mt-0.5">{label}</p>
+      <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
     </div>
   );
 }
 
 function CategoryBadge({ category }: { category: string | null }) {
-  if (!category) return <span className="text-xs text-[#CBD5E1]">—</span>;
+  if (!category) return <span className="text-xs text-muted-foreground">—</span>;
   const styles: Record<string, string> = {
     strategic: "bg-purple-100 text-purple-700",
     core: "bg-blue-100 text-blue-700",
-    support: "bg-[#F1F5F9] text-[#64748B]",
+    support: "bg-muted text-muted-foreground",
   };
   const labels: Record<string, string> = {
-    strategic: "Estrategico",
+    strategic: "Estratégico",
     core: "Core",
     support: "Soporte",
   };
   return (
-    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${styles[category] ?? "bg-[#F1F5F9] text-[#64748B]"}`}>
+    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${styles[category] ?? "bg-muted text-muted-foreground"}`}>
       {labels[category] ?? category}
     </span>
   );
@@ -352,7 +346,7 @@ function CategoryBadge({ category }: { category: string | null }) {
 
 function StatusBadge({ status }: { status: string }) {
   const styles: Record<string, string> = {
-    DRAFT: "bg-[#F1F5F9] text-[#64748B]",
+    DRAFT: "bg-muted text-muted-foreground",
     MAPPED: "bg-blue-100 text-blue-700",
     VALIDATED: "bg-green-100 text-green-700",
     APPROVED: "bg-green-100 text-green-800",
@@ -364,7 +358,8 @@ function StatusBadge({ status }: { status: string }) {
     APPROVED: "Aprobado",
   };
   return (
-    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${styles[status] ?? "bg-[#F1F5F9] text-[#64748B]"}`}>
+    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${styles[status] ?? "bg-muted text-muted-foreground"}`}>
+
       {labels[status] ?? status}
     </span>
   );

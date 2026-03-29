@@ -3,7 +3,7 @@ import { db } from "@repo/database";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
-export const metadata = { title: "RACI Consolidado — aiprocess.me" };
+export const metadata = { title: "RACI Consolidado — Auditora.ai" };
 
 export default async function RaciConsolidadoPage({
   params,
@@ -41,8 +41,8 @@ export default async function RaciConsolidadoPage({
   const cellColor: Record<string, string> = {
     R: "bg-blue-100 text-blue-800 font-semibold",
     A: "bg-purple-100 text-purple-800 font-semibold",
-    C: "bg-slate-100 text-slate-600",
-    I: "bg-slate-50 text-slate-400",
+    C: "bg-muted text-muted-foreground",
+    I: "bg-muted text-muted-foreground",
   };
 
   return (
@@ -50,7 +50,7 @@ export default async function RaciConsolidadoPage({
       <div>
         <Link
           href={`/${organizationSlug}/deliverables`}
-          className="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-slate-600 mb-2"
+          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-muted-foreground mb-2"
         >
           <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
@@ -58,30 +58,30 @@ export default async function RaciConsolidadoPage({
           Volver a Documentacion
         </Link>
         <h1
-          className="text-2xl font-semibold text-slate-900"
-          style={{ fontFamily: "Inter, system-ui, sans-serif" }}
+          className="text-2xl font-semibold text-foreground"
+          style={{ fontFamily: "'Geist Sans', system-ui, sans-serif" }}
         >
           RACI Consolidado
         </h1>
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 text-sm text-muted-foreground">
           {entries.length} asignaciones en {processeMap.size} procesos · {allRoles.length} roles
         </p>
       </div>
 
       {entries.length === 0 ? (
-        <div className="rounded-lg border border-slate-200 bg-white p-8 text-center">
-          <p className="text-sm text-slate-400">No hay asignaciones RACI. Se generan automaticamente al documentar procesos en sesiones.</p>
+        <div className="rounded-lg border border-border bg-background p-8 text-center">
+          <p className="text-sm text-muted-foreground">No hay asignaciones RACI. Se generan automaticamente al documentar procesos en sesiones.</p>
         </div>
       ) : (
-        <div className="rounded-lg border border-slate-200 bg-white overflow-x-auto">
+        <div className="rounded-lg border border-border bg-background overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-200 bg-slate-50">
-                <th className="sticky left-0 bg-slate-50 px-4 py-3 text-left font-medium text-slate-600 min-w-[200px] z-10">
+              <tr className="border-b border-border bg-muted">
+                <th className="sticky left-0 bg-muted px-4 py-3 text-left font-medium text-muted-foreground min-w-[200px] z-10">
                   Actividad
                 </th>
                 {allRoles.map((role) => (
-                  <th key={role} className="px-3 py-3 text-center font-medium text-slate-600 min-w-[100px]">
+                  <th key={role} className="px-3 py-3 text-center font-medium text-muted-foreground min-w-[100px]">
                     {role}
                   </th>
                 ))}
@@ -91,17 +91,17 @@ export default async function RaciConsolidadoPage({
               {Array.from(processeMap.entries()).map(([procId, proc]) => (
                 <>
                   {/* Process group header */}
-                  <tr key={`header-${procId}`} className="bg-slate-50/80">
+                  <tr key={`header-${procId}`} className="bg-muted/80">
                     <td
                       colSpan={allRoles.length + 1}
-                      className="sticky left-0 bg-slate-50/80 px-4 py-2 text-xs font-semibold text-slate-700 uppercase tracking-wide z-10"
+                      className="sticky left-0 bg-muted/80 px-4 py-2 text-xs font-semibold text-foreground uppercase tracking-wide z-10"
                     >
                       {proc.name}
                     </td>
                   </tr>
                   {Array.from(proc.activities.entries()).map(([activity, roleMap]) => (
-                    <tr key={`${procId}-${activity}`} className="border-b border-slate-50 last:border-0 hover:bg-slate-50/30">
-                      <td className="sticky left-0 bg-white px-4 py-2.5 text-slate-700 z-10">
+                    <tr key={`${procId}-${activity}`} className="border-b border-border last:border-0 hover:bg-muted/30">
+                      <td className="sticky left-0 bg-background px-4 py-2.5 text-foreground z-10">
                         {activity}
                       </td>
                       {allRoles.map((role) => {
@@ -113,7 +113,7 @@ export default async function RaciConsolidadoPage({
                                 {val}
                               </span>
                             ) : (
-                              <span className="text-slate-200">—</span>
+                              <span className="text-chrome-text-secondary">—</span>
                             )}
                           </td>
                         );
@@ -129,7 +129,7 @@ export default async function RaciConsolidadoPage({
 
       {/* Legend */}
       {entries.length > 0 && (
-        <div className="flex items-center gap-6 text-xs text-slate-500">
+        <div className="flex items-center gap-6 text-xs text-muted-foreground">
           <span className="flex items-center gap-1.5">
             <span className="inline-flex h-5 w-5 items-center justify-center rounded bg-blue-100 text-xs font-semibold text-blue-800">R</span>
             Responsible
@@ -139,11 +139,11 @@ export default async function RaciConsolidadoPage({
             Accountable
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="inline-flex h-5 w-5 items-center justify-center rounded bg-slate-100 text-xs text-slate-600">C</span>
+            <span className="inline-flex h-5 w-5 items-center justify-center rounded bg-muted text-xs text-muted-foreground">C</span>
             Consulted
           </span>
           <span className="flex items-center gap-1.5">
-            <span className="inline-flex h-5 w-5 items-center justify-center rounded bg-slate-50 text-xs text-slate-400">I</span>
+            <span className="inline-flex h-5 w-5 items-center justify-center rounded bg-muted text-xs text-muted-foreground">I</span>
             Informed
           </span>
         </div>

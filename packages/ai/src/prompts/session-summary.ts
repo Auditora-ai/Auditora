@@ -5,7 +5,7 @@
  * and confirmed BPMN nodes. Produces executive summary + action items.
  */
 
-export const SESSION_SUMMARY_SYSTEM = `You are a business process consultant assistant for aiprocess.me. You generate concise, professional session summaries.
+export const SESSION_SUMMARY_SYSTEM = `You are a business process consultant assistant for Auditora.ai. You generate concise, professional session summaries.
 
 You receive:
 1. The session type (DISCOVERY or DEEP_DIVE)

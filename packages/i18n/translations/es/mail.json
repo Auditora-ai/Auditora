@@ -15,12 +15,12 @@
 		"subject": "Restablece tu contraseña"
 	},
 	"magicLink": {
-		"body": "Hola,\nsolicitaste un correo de inicio de sesión de aiprocess.me.\n\nHaz clic en el enlace de abajo para iniciar sesión.",
+		"body": "Hola,\nsolicitaste un correo de inicio de sesión de Auditora.ai.\n\nHaz clic en el enlace de abajo para iniciar sesión.",
 		"login": "Iniciar sesión",
-		"subject": "Iniciar sesión en aiprocess.me"
+		"subject": "Iniciar sesión en Auditora.ai"
 	},
 	"newUser": {
-		"body": "Hola,\ngracias por registrarte en aiprocess.me.\n\nPara comenzar a usar nuestra aplicación, por favor confirma tu dirección de correo electrónico haciendo clic en el enlace de abajo.",
+		"body": "Hola,\ngracias por registrarte en Auditora.ai.\n\nPara comenzar a usar nuestra aplicación, por favor confirma tu dirección de correo electrónico haciendo clic en el enlace de abajo.",
 		"confirmEmail": "Confirmar correo",
 		"subject": "Confirma tu correo electrónico"
 	},

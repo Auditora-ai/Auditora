@@ -6,7 +6,7 @@ export const textModel = openai("gpt-4o-mini");
 export const imageModel = openai("dall-e-3");
 export const audioModel = openai("whisper-1");
 
-// aiprocess.me AI models
+// Auditora.ai AI models
 export const processExtractionModel = anthropic("claude-opus-4-6");
 export const teleprompterModel = anthropic("claude-opus-4-6");
 
@@ -14,7 +14,7 @@ export const teleprompterModel = anthropic("claude-opus-4-6");
 export * from "ai";
 export * from "./lib";
 
-// aiprocess.me pipelines
+// Auditora.ai pipelines
 export { extractProcessUpdates } from "./src/pipelines/process-extraction";
 export type { BpmnNode, ExtractionResult, SuggestedPattern } from "./src/pipelines/process-extraction";
 export { generateNextQuestion } from "./src/pipelines/teleprompter";
@@ -24,11 +24,11 @@ export type { DiscoveryResult, DiscoveryProcess, BusinessInsights } from "./src/
 export { extractFromChat } from "./src/pipelines/chat-extraction";
 export type { ChatExtractionResult, ExtractedProcess, ProcessChatContext } from "./src/pipelines/chat-extraction";
 
-// aiprocess.me context
+// Auditora.ai context
 export { buildSessionContext, clearSessionContextCache } from "./src/context/session-context";
 export type { SessionContext } from "./src/context/session-context";
 
-// aiprocess.me providers
+// Auditora.ai providers
 export { createCallBotProvider, RecallAiProvider } from "./src/providers/call-bot";
 export type { CallBotProvider, BotStatus } from "./src/providers/call-bot";
 export { createSTTProvider } from "./src/providers/stt";
@@ -37,7 +37,7 @@ export type { TranscriptionEvent } from "./src/providers/stt";
 export { generateSessionSummary } from "./src/pipelines/session-summary";
 export type { SummaryResult } from "./src/pipelines/session-summary";
 
-// aiprocess.me new pipelines (Caballo de Troya)
+// Auditora.ai new pipelines (Caballo de Troya)
 export { extractFromDocument } from "./src/pipelines/document-extraction";
 export type { DocumentExtractionResult } from "./src/pipelines/document-extraction";
 export { generateRaci } from "./src/pipelines/raci-generator";
@@ -122,6 +122,7 @@ export type { ActivityState } from "./src/utils/redis";
 
 // Utils
 export { parseLlmJson } from "./src/utils/parse-llm-json";
+export { estimateTokenCostUsd, EXTERNAL_COST_RATES } from "./src/utils/cost-estimator";
 
 // Model routing & instrumented AI calls
 export { getModelForOrg, preloadOrgTier, invalidateOrgTierCache } from "./src/utils/model-router";
@@ -129,7 +130,7 @@ export type { AiTier } from "./src/utils/model-router";
 export { instrumentedGenerateText } from "./src/utils/instrumented-generate";
 export type { InstrumentedGenerateOptions } from "./src/utils/instrumented-generate";
 
-// aiprocess.me prompts (for testing/eval)
+// Auditora.ai prompts (for testing/eval)
 export { PROCESS_EXTRACTION_SYSTEM, buildExtractionSystemPrompt } from "./src/prompts/process-extraction";
 export { TELEPROMPTER_SYSTEM, buildTeleprompterSystemPrompt } from "./src/prompts/teleprompter";
 export { DISCOVERY_EXTRACTION_SYSTEM } from "./src/prompts/discovery-extraction";

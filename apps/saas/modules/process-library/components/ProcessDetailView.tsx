@@ -199,31 +199,31 @@ function CollapsibleSection({
 			<button
 				type="button"
 				onClick={() => setOpen(!open)}
-				className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-[#F1F5F9]"
+				className="flex w-full items-center justify-between p-4 text-left transition-colors hover:bg-muted"
 			>
 				<div className="flex items-center gap-2.5">
 					<Icon className="h-4 w-4 text-muted-foreground" />
 					<span className="text-sm font-semibold">{title}</span>
 					{badge?.type === "count" && badge.count > 0 && (
-						<span className="rounded-full bg-[#EFF6FF] px-1.5 text-xs text-[#2563EB]">
+						<span className="rounded-full bg-accent px-1.5 text-xs text-primary">
 							{badge.count}
 						</span>
 					)}
 					{badge?.type === "status" && badge.status === "success" && (
 						<span className="flex items-center gap-1 text-xs text-emerald-600">
-							<CheckCircleIcon className="h-3 w-3" />
+							<CheckCircleIcon className="h-3.5 w-3.5" />
 							{badge.label}
 						</span>
 					)}
 					{badge?.type === "status" && badge.status === "empty" && (
 						<span className="flex items-center gap-1 text-xs text-muted-foreground">
-							<CircleIcon className="h-3 w-3" />
+							<CircleIcon className="h-3.5 w-3.5" />
 							{badge.label}
 						</span>
 					)}
 					{badge?.type === "status" && badge.status === "warning" && (
 						<span className="flex items-center gap-1 text-xs text-amber-600">
-							<AlertTriangleIcon className="h-3 w-3" />
+							<AlertTriangleIcon className="h-3.5 w-3.5" />
 							{badge.label}
 						</span>
 					)}
@@ -240,7 +240,7 @@ function CollapsibleSection({
 							loading={action.loading}
 							className="text-xs"
 						>
-							<SparklesIcon className="mr-1 h-3 w-3" />
+							<SparklesIcon className="mr-1 h-3.5 w-3.5" />
 							{action.label}
 						</Button>
 					)}
@@ -391,7 +391,7 @@ export function ProcessDetailView({
 							{editingField === "name" ? (
 								<input
 									autoFocus
-									className="text-2xl font-bold bg-transparent border-b-2 border-[#2563EB] outline-none px-0 py-0"
+									className="text-2xl font-bold bg-transparent border-b-2 border-primary outline-none px-0 py-0"
 									value={editName}
 									onChange={(e) => setEditName(e.target.value)}
 									onBlur={() => saveInlineField("name", editName)}
@@ -423,7 +423,7 @@ export function ProcessDetailView({
 						{editingField === "description" ? (
 							<input
 								autoFocus
-								className="text-sm text-muted-foreground bg-transparent border-b border-[#2563EB] outline-none w-full max-w-xl px-0 py-0"
+								className="text-sm text-muted-foreground bg-transparent border-b border-primary outline-none w-full max-w-xl px-0 py-0"
 								value={editDescription}
 								onChange={(e) => setEditDescription(e.target.value)}
 								onBlur={() => saveInlineField("description", editDescription)}
@@ -452,10 +452,10 @@ export function ProcessDetailView({
 						{/* Owner — inline editable */}
 						{editingField === "owner" ? (
 							<div className="flex items-center gap-1.5 text-xs">
-								<User className="h-3 w-3 text-muted-foreground" />
+								<User className="h-3.5 w-3.5 text-muted-foreground" />
 								<input
 									autoFocus
-									className="text-xs bg-transparent border-b border-[#2563EB] outline-none px-0 py-0"
+									className="text-xs bg-transparent border-b border-primary outline-none px-0 py-0"
 									value={editOwner}
 									onChange={(e) => setEditOwner(e.target.value)}
 									onBlur={() => saveInlineField("owner", editOwner)}
@@ -478,7 +478,7 @@ export function ProcessDetailView({
 								}}
 								title="Click para editar"
 							>
-								<User className="h-3 w-3" />
+								<User className="h-3.5 w-3.5" />
 								<span>{process.owner || "Asignar responsable..."}</span>
 							</div>
 						)}
@@ -528,7 +528,7 @@ export function ProcessDetailView({
 
 			{/* Onboarding banner for new processes */}
 			{healthScore === 0 && !expandedPhase && (
-				<div className="rounded-lg border border-[#BFDBFE] bg-[#EFF6FF] p-4">
+				<div className="rounded-lg border border-blue-200 bg-accent p-4">
 					<p className="text-sm font-medium">¿Primera vez con este proceso?</p>
 					<p className="mt-1 text-sm text-muted-foreground">
 						Empieza por <strong>Contexto</strong>: sube documentos y define los
@@ -959,7 +959,7 @@ function DiagramTab({
 	const canvasHeight = fullscreen ? "100vh" : "600px";
 
 	const toolbar = (
-		<div className={`flex items-center justify-between ${fullscreen ? "px-4 py-2 border-b border-border bg-white" : "mb-2"}`}>
+		<div className={`flex items-center justify-between ${fullscreen ? "px-4 py-2 border-b border-border bg-background" : "mb-2"}`}>
 			<div className="flex items-center gap-1">
 				<Button variant="ghost" size="sm" onClick={undo} disabled={!canUndo}>
 					Undo
@@ -1029,7 +1029,7 @@ function DiagramTab({
 			/>
 
 			{(renderError || repairing) && (
-				<div className="absolute left-1/2 top-2 z-10 -translate-x-1/2 rounded-md border border-[#D97706] bg-[#FEF3C7] px-4 py-2 text-xs text-amber-800 shadow-sm" style={{ marginTop: fullscreen ? "-calc(100vh - 49px)" : "-600px", position: "relative" }}>
+				<div className="absolute left-1/2 top-2 z-10 -translate-x-1/2 rounded-md border border-orientation bg-amber-100 px-4 py-2 text-xs text-amber-800 shadow-sm" style={{ marginTop: fullscreen ? "-calc(100vh - 49px)" : "-600px", position: "relative" }}>
 					<div className="flex items-center gap-3">
 						<span>{repairing ? "Reparando diagrama..." : renderError}</span>
 						{!repairing && (
@@ -1037,14 +1037,14 @@ function DiagramTab({
 								<button
 									type="button"
 									onClick={handleRebuildFromNodes}
-									className="rounded bg-[#FDE68A] px-2 py-0.5 text-[10px] font-medium text-[#78350F] hover:bg-amber-300 transition-colors"
+									className="rounded bg-yellow-200 px-2 py-0.5 text-[10px] font-medium text-amber-900 hover:bg-amber-300 transition-colors"
 								>
 									Regenerar
 								</button>
 								<button
 									type="button"
 									onClick={handleRepairWithAi}
-									className="rounded bg-[#2563EB] px-2 py-0.5 text-[10px] font-medium text-white hover:bg-blue-600 transition-colors"
+									className="rounded bg-primary px-2 py-0.5 text-[10px] font-medium text-white hover:bg-blue-600 transition-colors"
 								>
 									Arreglar con IA
 								</button>
@@ -1056,7 +1056,7 @@ function DiagramTab({
 
 			{!isReady && (
 				<div className="flex items-center justify-center" style={{ height: canvasHeight, marginTop: `-${canvasHeight}` }}>
-					<div className="h-16 w-16 animate-pulse rounded-lg bg-[#F1F5F9]" />
+					<div className="h-16 w-16 animate-pulse rounded-lg bg-muted" />
 				</div>
 			)}
 
@@ -1067,7 +1067,7 @@ function DiagramTab({
 	// Fullscreen: fixed overlay covering entire screen
 	if (fullscreen) {
 		return (
-			<div className="fixed inset-0 z-50 flex flex-col bg-white">
+			<div className="fixed inset-0 z-50 flex flex-col bg-background">
 				{toolbar}
 				{canvas}
 			</div>
@@ -1194,9 +1194,9 @@ function TagField({
 						<button
 							type="button"
 							onClick={() => remove(i)}
-							className="ml-1 rounded-full p-0.5 hover:bg-[#F1F5F9]"
+							className="ml-1 rounded-full p-0.5 hover:bg-muted"
 						>
-							<XIcon className="h-3 w-3" />
+							<XIcon className="h-3.5 w-3.5" />
 						</button>
 					</Badge>
 				))}
@@ -1323,7 +1323,7 @@ function ChildrenTab({
 						const Icon = LEVEL_ICONS[child.level] ?? PackageIcon;
 						return (
 							<Link key={child.id} href={`${processesPath}/${child.id}`} className="block">
-								<Card className="transition-colors hover:bg-[#F1F5F9]">
+								<Card className="transition-colors hover:bg-muted">
 									<CardContent className="flex items-center gap-3 p-3">
 										<Icon className="h-4 w-4 shrink-0 text-muted-foreground" />
 										<span className="flex-1 font-medium">{child.name}</span>
@@ -1398,8 +1398,8 @@ function SessionsTab({
 						<Card key={session.id}>
 							<CardContent className="flex items-center justify-between p-4">
 								<div className="flex items-center gap-4">
-									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#EFF6FF]">
-										<ClockIcon className="h-5 w-5 text-[#2563EB]" />
+									<div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent">
+										<ClockIcon className="h-5 w-5 text-primary" />
 									</div>
 									<div>
 										<p className="font-medium">
@@ -1413,7 +1413,7 @@ function SessionsTab({
 													return (
 														<span key={d.type} className="flex items-center gap-1">
 															{audit.completenessScore != null && (
-																<span className="font-medium text-[#2563EB]">{audit.completenessScore}%</span>
+																<span className="font-medium text-primary">{audit.completenessScore}%</span>
 															)}
 															{(audit.newGaps?.length ?? 0) > 0 && (
 																<span className="text-amber-600">{audit.newGaps!.length} gaps</span>
@@ -1446,14 +1446,14 @@ function SessionsTab({
 									{session.status === "ACTIVE" || session.status === "CONNECTING" ? (
 										<Button size="sm" asChild>
 											<Link href={`/${organizationSlug}/session/${session.id}/live`}>
-												<PlayIcon className="mr-1 h-3 w-3" />
+												<PlayIcon className="mr-1 h-3.5 w-3.5" />
 												Unirse
 											</Link>
 										</Button>
 									) : (
 										<Button size="sm" variant="secondary" asChild>
 											<Link href={`/${organizationSlug}/session/${session.id}`}>
-												<EyeIcon className="mr-1 h-3 w-3" />
+												<EyeIcon className="mr-1 h-3.5 w-3.5" />
 												Ver
 											</Link>
 										</Button>
@@ -1525,7 +1525,7 @@ function DocumentsTab({ organizationSlug }: { organizationSlug: string }) {
 	if (loading) {
 		return (
 			<div className="flex items-center justify-center py-8">
-				<div className="h-6 w-6 animate-pulse rounded-lg bg-[#F1F5F9]" />
+				<div className="h-6 w-6 animate-pulse rounded-lg bg-muted" />
 			</div>
 		);
 	}
@@ -1535,7 +1535,7 @@ function DocumentsTab({ organizationSlug }: { organizationSlug: string }) {
 			{/* Upload Zone */}
 			<div
 				className={`relative flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 text-center transition-colors ${
-					dragOver ? "border-[#2563EB] bg-[#EFF6FF]" : "border-border hover:border-primary/50"
+					dragOver ? "border-primary bg-accent" : "border-border hover:border-primary/50"
 				}`}
 				onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
 				onDragLeave={() => setDragOver(false)}

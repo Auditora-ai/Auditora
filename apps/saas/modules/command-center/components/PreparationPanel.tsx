@@ -20,9 +20,9 @@ interface PreparationBrief {
 }
 
 function StatusIcon({ status }: { status: PreparationItem["status"] }) {
-	if (status === "done") return <CheckCircle2Icon className="h-4 w-4 shrink-0 text-[#16A34A]" />;
-	if (status === "partial") return <AlertTriangleIcon className="h-4 w-4 shrink-0 text-[#D97706]" />;
-	return <XCircleIcon className="h-4 w-4 shrink-0 text-[#DC2626]" />;
+	if (status === "done") return <CheckCircle2Icon className="h-4 w-4 shrink-0 text-success" />;
+	if (status === "partial") return <AlertTriangleIcon className="h-4 w-4 shrink-0 text-orientation" />;
+	return <XCircleIcon className="h-4 w-4 shrink-0 text-destructive" />;
 }
 
 export function PreparationPanel({
@@ -61,10 +61,10 @@ export function PreparationPanel({
 
 	if (loading) {
 		return (
-			<div className="rounded-xl border border-[#E2E8F0] bg-white p-5">
-				<h3 className="mb-4 text-sm font-semibold text-[#0F172A]">Preparación: {processName}</h3>
+			<div className="rounded-xl border border-border bg-background p-5">
+				<h3 className="mb-4 text-sm font-semibold text-foreground">Preparación: {processName}</h3>
 				<div className="flex items-center justify-center py-6">
-					<Loader2Icon className="h-5 w-5 animate-spin text-[#94A3B8]" />
+					<Loader2Icon className="h-5 w-5 animate-spin text-chrome-text-secondary" />
 				</div>
 			</div>
 		);
@@ -72,9 +72,9 @@ export function PreparationPanel({
 
 	if (error || !brief) {
 		return (
-			<div className="rounded-xl border border-[#E2E8F0] bg-white p-5">
-				<h3 className="mb-2 text-sm font-semibold text-[#0F172A]">Preparación: {processName}</h3>
-				<p className="text-xs text-[#DC2626]">Error cargando preparación</p>
+			<div className="rounded-xl border border-border bg-background p-5">
+				<h3 className="mb-2 text-sm font-semibold text-foreground">Preparación: {processName}</h3>
+				<p className="text-xs text-destructive">Error cargando preparación</p>
 			</div>
 		);
 	}
@@ -82,10 +82,10 @@ export function PreparationPanel({
 	const doneCount = brief.items.filter((i) => i.status === "done").length;
 
 	return (
-		<div className="rounded-xl border border-[#E2E8F0] bg-white p-5">
+		<div className="rounded-xl border border-border bg-background p-5">
 			<div className="mb-4 flex items-center justify-between">
-				<h3 className="text-sm font-semibold text-[#0F172A]">Preparación</h3>
-				<span className="text-xs text-[#94A3B8]">
+				<h3 className="text-sm font-semibold text-foreground">Preparación</h3>
+				<span className="text-xs text-chrome-text-secondary">
 					{doneCount}/{brief.items.length} listos
 				</span>
 			</div>
@@ -97,10 +97,10 @@ export function PreparationPanel({
 						key={item.key}
 						className={`h-1.5 flex-1 rounded-full ${
 							item.status === "done"
-								? "bg-[#16A34A]"
+								? "bg-success"
 								: item.status === "partial"
-									? "bg-[#D97706]"
-									: "bg-[#E2E8F0]"
+									? "bg-orientation"
+									: "bg-border"
 						}`}
 					/>
 				))}
@@ -111,8 +111,8 @@ export function PreparationPanel({
 					<div key={item.key} className="flex items-start gap-2.5">
 						<StatusIcon status={item.status} />
 						<div className="min-w-0">
-							<div className="text-xs font-medium text-[#334155]">{item.label}</div>
-							<div className="text-[11px] text-[#94A3B8]">{item.detail}</div>
+							<div className="text-xs font-medium text-foreground">{item.label}</div>
+							<div className="text-[11px] text-chrome-text-secondary">{item.detail}</div>
 						</div>
 					</div>
 				))}
@@ -120,23 +120,23 @@ export function PreparationPanel({
 
 			{/* Key metrics */}
 			{(brief.completenessScore !== null || brief.raciGapCount > 0 || brief.uncontrolledRiskCount > 0) && (
-				<div className="mt-4 flex gap-4 border-t border-[#E2E8F0] pt-3">
+				<div className="mt-4 flex gap-4 border-t border-border pt-3">
 					{brief.completenessScore !== null && (
 						<div>
-							<div className="text-sm font-bold text-[#0F172A]">{brief.completenessScore}%</div>
-							<div className="text-[9px] text-[#94A3B8]">Completeness</div>
+							<div className="text-sm font-bold text-foreground">{brief.completenessScore}%</div>
+							<div className="text-[9px] text-chrome-text-secondary">Completeness</div>
 						</div>
 					)}
 					{brief.raciGapCount > 0 && (
 						<div>
-							<div className="text-sm font-bold text-[#D97706]">{brief.raciGapCount}</div>
-							<div className="text-[9px] text-[#94A3B8]">RACI gaps</div>
+							<div className="text-sm font-bold text-orientation">{brief.raciGapCount}</div>
+							<div className="text-[9px] text-chrome-text-secondary">RACI gaps</div>
 						</div>
 					)}
 					{brief.uncontrolledRiskCount > 0 && (
 						<div>
-							<div className="text-sm font-bold text-[#DC2626]">{brief.uncontrolledRiskCount}</div>
-							<div className="text-[9px] text-[#94A3B8]">Riesgos sin ctrl</div>
+							<div className="text-sm font-bold text-destructive">{brief.uncontrolledRiskCount}</div>
+							<div className="text-[9px] text-chrome-text-secondary">Riesgos sin ctrl</div>
 						</div>
 					)}
 				</div>

@@ -67,7 +67,7 @@ export function FmeaView({ risks }: FmeaViewProps) {
   if (fmeaRisks.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-muted-foreground">
           No hay datos FMEA disponibles. El análisis FMEA identifica modos de
           fallo en cada actividad.
         </p>
@@ -85,13 +85,13 @@ export function FmeaView({ risks }: FmeaViewProps) {
     className?: string;
   }) => (
     <th
-      className={`cursor-pointer select-none px-3 py-2 text-left text-xs font-medium text-slate-400 hover:text-slate-200 ${className || ""}`}
+      className={`cursor-pointer select-none px-3 py-2 text-left text-xs font-medium text-muted-foreground hover:text-chrome-text-secondary ${className || ""}`}
       onClick={() => toggleSort(sortKey)}
     >
       <span className="flex items-center gap-1">
         {label}
         <ArrowUpDownIcon
-          className={`h-3 w-3 ${sortBy === sortKey ? "text-blue-400" : "text-slate-600"}`}
+          className={`h-3.5 w-3.5 ${sortBy === sortKey ? "text-blue-400" : "text-muted-foreground"}`}
         />
       </span>
     </th>
@@ -101,14 +101,14 @@ export function FmeaView({ risks }: FmeaViewProps) {
     <div className="overflow-x-auto">
       <table className="w-full text-left">
         <thead>
-          <tr className="border-b border-slate-700">
-            <th className="px-3 py-2 text-left text-xs font-medium text-slate-400">
+          <tr className="border-b border-chrome-border">
+            <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground">
               Actividad
             </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-slate-400">
+            <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground">
               Modo de Fallo
             </th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-slate-400">
+            <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground">
               Efecto
             </th>
             <SortHeader label="Severidad" sortKey="severity" />
@@ -123,24 +123,24 @@ export function FmeaView({ risks }: FmeaViewProps) {
             return (
               <tr
                 key={risk.id}
-                className="border-b border-slate-800 transition-colors hover:bg-slate-800/50"
+                className="border-b border-chrome-border-subtle transition-colors hover:bg-chrome-raised/50"
               >
-                <td className="max-w-[140px] truncate px-3 py-2.5 text-xs text-slate-200">
+                <td className="max-w-[140px] truncate px-3 py-2.5 text-xs text-chrome-text-secondary">
                   {risk.affectedStep || "—"}
                 </td>
-                <td className="max-w-[180px] truncate px-3 py-2.5 text-xs text-slate-200">
+                <td className="max-w-[180px] truncate px-3 py-2.5 text-xs text-chrome-text-secondary">
                   {risk.failureMode}
                 </td>
-                <td className="max-w-[180px] truncate px-3 py-2.5 text-xs text-slate-400">
+                <td className="max-w-[180px] truncate px-3 py-2.5 text-xs text-muted-foreground">
                   {risk.failureEffect || "—"}
                 </td>
-                <td className="px-3 py-2.5 text-xs text-slate-300">
+                <td className="px-3 py-2.5 text-xs text-muted-foreground">
                   {risk.severity}
                 </td>
-                <td className="px-3 py-2.5 text-xs text-slate-300">
+                <td className="px-3 py-2.5 text-xs text-muted-foreground">
                   {risk.probability}
                 </td>
-                <td className="px-3 py-2.5 text-xs text-slate-300">
+                <td className="px-3 py-2.5 text-xs text-muted-foreground">
                   {risk.detection ?? "—"}
                 </td>
                 <td className="px-3 py-2.5 text-right">

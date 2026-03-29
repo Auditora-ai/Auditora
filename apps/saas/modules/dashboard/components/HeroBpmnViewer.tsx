@@ -134,7 +134,7 @@ export function HeroBpmnViewer({
 	}, [xmlToRender]);
 
 	const content = (
-		<Card className="relative overflow-hidden border-border/50 bg-white">
+		<Card className="relative overflow-hidden border-border/50 bg-background">
 			{/* Loading skeleton */}
 			{isLoading && (
 				<div className="absolute inset-0 z-10">

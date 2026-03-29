@@ -17,7 +17,7 @@ export function ToolResult({
 			</Text>
 
 			<Text>
-				Thanks for using aiprocess.me's free {toolName}. Your result has been generated
+				Thanks for using Auditora.ai's free {toolName}. Your result has been generated
 				and is ready to download.
 			</Text>
 
@@ -26,13 +26,13 @@ export function ToolResult({
 			</PrimaryButton>
 
 			<Text style={{ color: "#64748B", fontSize: "14px", marginTop: "24px" }}>
-				<strong>Did you know?</strong> aiprocess.me can generate BPMN diagrams, SIPOC,
+				<strong>Did you know?</strong> Auditora.ai can generate BPMN diagrams, SIPOC,
 				RACI matrices, and process audits <em>live during your meetings</em>.
 				The AI joins your video call and does everything automatically.
 			</Text>
 
-			<Link href="https://aiprocess.me" style={{ color: "#2563EB", fontSize: "14px" }}>
-				Learn more about aiprocess.me →
+			<Link href="https://auditora.ai" style={{ color: "#2563EB", fontSize: "14px" }}>
+				Learn more about Auditora.ai →
 			</Link>
 		</Wrapper>
 	);
@@ -40,7 +40,7 @@ export function ToolResult({
 
 ToolResult.PreviewProps = {
 	toolName: "BPMN Generator",
-	resultUrl: "https://aiprocess.me/tools/bpmn-generator",
+	resultUrl: "https://auditora.ai/tools/bpmn-generator",
 };
 
 export default ToolResult;

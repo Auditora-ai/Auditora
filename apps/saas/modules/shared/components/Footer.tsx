@@ -7,7 +7,7 @@ export function Footer() {
 				"container max-w-6xl py-6 text-center text-foreground/60 text-xs",
 			)}
 		>
-			<span>&copy; {new Date().getFullYear()} aiprocess.me</span>
+			<span>&copy; {new Date().getFullYear()} Auditora.ai</span>
 		</footer>
 	);
 }

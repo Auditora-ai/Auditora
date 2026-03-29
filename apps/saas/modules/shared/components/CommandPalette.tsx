@@ -7,8 +7,13 @@ import {
 import { Input } from "@repo/ui/components/input";
 import {
 	FileTextIcon,
+	FolderOpenIcon,
+	LayoutDashboardIcon,
+	MicIcon,
 	PlusIcon,
+	ScanSearchIcon,
 	SearchIcon,
+	ShieldAlertIcon,
 	WorkflowIcon,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -52,18 +57,53 @@ export function CommandPalette() {
 		if (basePath) {
 			actions.push(
 				{
-					id: "go-dashboard",
-					label: "Dashboard",
-					section: t("sections.actions"),
-					icon: WorkflowIcon,
+					id: "go-panorama",
+					label: "Panorama",
+					section: t("sections.navigation"),
+					icon: LayoutDashboardIcon,
 					action: () => router.push(basePath),
+				},
+				{
+					id: "go-risks",
+					label: "Riesgos",
+					section: t("sections.navigation"),
+					icon: ShieldAlertIcon,
+					action: () => router.push(`${basePath}/deliverables/risks`),
+				},
+				{
+					id: "go-sessions",
+					label: "Sesiones",
+					section: t("sections.navigation"),
+					icon: MicIcon,
+					action: () => router.push(`${basePath}/sessions`),
 				},
 				{
 					id: "go-processes",
 					label: t("sections.processes"),
-					section: t("sections.actions"),
-					icon: FileTextIcon,
+					section: t("sections.navigation"),
+					icon: WorkflowIcon,
 					action: () => router.push(`${basePath}/procesos`),
+				},
+				{
+					id: "go-deliverables",
+					label: "Entregables",
+					section: t("sections.navigation"),
+					icon: FileTextIcon,
+					action: () => router.push(`${basePath}/deliverables`),
+				},
+				{
+					id: "go-documents",
+					label: "Documentos",
+					section: t("sections.navigation"),
+					icon: FolderOpenIcon,
+					action: () => router.push(`${basePath}/documents`),
+				},
+				{
+					id: "go-scan",
+					label: "Radiografía",
+					section: t("sections.navigation"),
+					icon: ScanSearchIcon,
+					action: () => router.push(`${basePath}/scan`),
 				},
 			);
 		}

@@ -74,6 +74,7 @@ Reglas:
 - NO dupliques riesgos ya existentes. Si hay nueva información sobre un riesgo existente, usa updatedRisks.
 - Mitigaciones deben ser ACCIONES CONCRETAS, no genéricas.
 - Controles: PREVENTIVE (evita), DETECTIVE (detecta), CORRECTIVE (corrige).
+- Si hay demasiados riesgos potenciales, prioriza los de mayor severity x probability. Maximo 15 riesgos en newRisks.
 - Todas las descripciones en ESPAÑOL.`;
 
 export const FMEA_ADDENDUM = `

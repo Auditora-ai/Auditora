@@ -16,7 +16,7 @@ export function RoiCalculator({ locale }: RoiCalculatorProps) {
   const [hoursPost, setHoursPost] = useState(6);
   const [hourlyRate, setHourlyRate] = useState(150);
 
-  // aiprocess.me reduces post-session work by ~75%
+  // Auditora.ai reduces post-session work by ~75%
   const savedHoursPerSession = hoursPost * 0.75;
   const savedHoursPerMonth = savedHoursPerSession * sessions;
   const savedMoneyPerMonth = savedHoursPerMonth * hourlyRate;
@@ -37,8 +37,8 @@ export function RoiCalculator({ locale }: RoiCalculatorProps) {
           </h1>
           <p className="text-lg text-muted-foreground">
             {isEs
-              ? "Calcula cuanto tiempo y dinero ahorras con aiprocess.me."
-              : "Calculate how much time and money you save with aiprocess.me."}
+              ? "Calcula cuanto tiempo y dinero ahorras con Auditora.ai."
+              : "Calculate how much time and money you save with Auditora.ai."}
           </p>
         </div>
       </section>
@@ -107,7 +107,7 @@ export function RoiCalculator({ locale }: RoiCalculatorProps) {
           {/* Results */}
           <div className="rounded-xl border border-border bg-[#0F172A] p-6">
             <h3 className="mb-6 text-sm font-medium uppercase tracking-wider text-[#94A3B8]">
-              {isEs ? "Tu ahorro con aiprocess.me" : "Your savings with aiprocess.me"}
+              {isEs ? "Tu ahorro con Auditora.ai" : "Your savings with Auditora.ai"}
             </h3>
 
             <div className="space-y-6">
@@ -146,7 +146,7 @@ export function RoiCalculator({ locale }: RoiCalculatorProps) {
             <div className="mt-8">
               <a href={config.saasUrl}>
                 <Button className="w-full gap-2" size="lg">
-                  {isEs ? "Probar aiprocess.me Gratis" : "Try aiprocess.me Free"}
+                  {isEs ? "Probar Auditora.ai Gratis" : "Try Auditora.ai Free"}
                   <ArrowRightIcon className="h-4 w-4" />
                 </Button>
               </a>

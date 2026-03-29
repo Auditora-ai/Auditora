@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ProcessMapVisual } from "@deliverables/components/ProcessMapVisual";
 
-export const metadata = { title: "Mapa de Procesos — aiprocess.me" };
+export const metadata = { title: "Mapa de Procesos — Auditora.ai" };
 
 export default async function ProcessMapPage({
   params,
@@ -50,7 +50,7 @@ export default async function ProcessMapPage({
       <div>
         <Link
           href={`/${organizationSlug}/deliverables`}
-          className="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-slate-600 mb-2"
+          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-muted-foreground mb-2"
         >
           <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
@@ -58,19 +58,19 @@ export default async function ProcessMapPage({
           Volver a Documentacion
         </Link>
         <h1
-          className="text-2xl font-semibold text-slate-900"
-          style={{ fontFamily: "Inter, system-ui, sans-serif" }}
+          className="text-2xl font-semibold text-foreground"
+          style={{ fontFamily: "'Geist Sans', system-ui, sans-serif" }}
         >
           Mapa de Procesos
         </h1>
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 text-sm text-muted-foreground">
           Vista de 3 bandas: estrategicos, core y soporte. Click en un proceso para ver detalle.
         </p>
       </div>
 
       {processes.length === 0 ? (
-        <div className="rounded-lg border border-slate-200 bg-white p-8 text-center">
-          <p className="text-sm text-slate-400">No hay procesos registrados.</p>
+        <div className="rounded-lg border border-border bg-background p-8 text-center">
+          <p className="text-sm text-muted-foreground">No hay procesos registrados.</p>
         </div>
       ) : (
         <ProcessMapVisual

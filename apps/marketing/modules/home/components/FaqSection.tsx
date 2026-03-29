@@ -17,14 +17,14 @@ import { useRef } from "react";
 gsap.registerPlugin(ScrollTrigger);
 
 const FAQ_ITEM_KEYS = [
-	"extraction",
+	"howItWorks",
+	"dataAccess",
+	"accuracy",
+	"deepening",
+	"deliverables",
 	"dataSecurity",
-	"bpmnStandard",
-	"liveEditing",
-	"intelligence",
-	"discoveryChat",
-	"sharing",
-	"integrations",
+	"bpmKnowledge",
+	"afterSignup",
 ] as const;
 
 export function FaqSection({ className }: { className?: string }) {

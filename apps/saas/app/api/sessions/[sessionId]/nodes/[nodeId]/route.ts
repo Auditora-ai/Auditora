@@ -2,10 +2,10 @@
  * Node lifecycle API
  *
  * PATCH /api/sessions/[sessionId]/nodes/[nodeId]
- * Body: { action: "confirm" | "reject" | "edit", label?, type?, lane? }
+ * Body: { action: "confirm" | "reject" | "edit", label?, type?, lane?, connections?, connectionLabels? }
  *
  * confirm/reject: Changes node state with cascade.
- * edit: Updates label, type, or lane (BPMN best practices corrections).
+ * edit: Updates label, type, lane, connections, connectionLabels, or properties.
  */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -56,6 +56,12 @@ export async function PATCH(
 			if (body.lane !== undefined) {
 				updateData.lane = body.lane || null;
 			}
+			if (Array.isArray(body.connections)) {
+				updateData.connections = body.connections;
+			}
+			if (Array.isArray(body.connectionLabels)) {
+				updateData.connectionLabels = body.connectionLabels;
+			}
 			if (body.properties !== undefined) {
 				const parsed = NodePropertiesSchema.safeParse(body.properties);
 				if (!parsed.success) {
@@ -71,7 +77,7 @@ export async function PATCH(
 
 			if (Object.keys(updateData).length === 0) {
 				return NextResponse.json(
-					{ error: "edit requires at least one of: label, type, lane, properties" },
+					{ error: "edit requires at least one of: label, type, lane, connections, connectionLabels, properties" },
 					{ status: 400 },
 				);
 			}

@@ -270,7 +270,7 @@ export function RaciTab({ processId }: RaciTabProps) {
 			</div>
 
 			{error && (
-				<div className="flex items-center gap-2 rounded-lg bg-[#FEF2F2] p-3 text-sm text-[#DC2626]">
+				<div className="flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-destructive">
 					<AlertCircle className="h-4 w-4 shrink-0" />
 					{error}
 				</div>
@@ -278,11 +278,11 @@ export function RaciTab({ processId }: RaciTabProps) {
 
 			{entries.length === 0 ? (
 				<div className="flex flex-col items-center justify-center rounded-xl border border-dashed py-12 text-center">
-					<Table2 className="mb-3 h-10 w-10 text-[#CBD5E1]" />
-					<p className="text-sm font-medium text-[#94A3B8]">
+					<Table2 className="mb-3 h-10 w-10 text-muted-foreground" />
+					<p className="text-sm font-medium text-chrome-text-secondary">
 						No RACI matrix yet
 					</p>
-					<p className="mt-1 text-xs text-[#94A3B8]">
+					<p className="mt-1 text-xs text-chrome-text-secondary">
 						Run a session first, then generate the RACI matrix
 					</p>
 				</div>
@@ -291,7 +291,7 @@ export function RaciTab({ processId }: RaciTabProps) {
 					<div className="overflow-x-auto rounded-lg border">
 						<table className="w-full text-sm">
 							<thead>
-								<tr className="border-b bg-[#F8FAFC]">
+								<tr className="border-b bg-secondary">
 									<th className="px-3 py-2 text-left font-medium">
 										Activity
 									</th>
@@ -318,7 +318,7 @@ export function RaciTab({ processId }: RaciTabProps) {
 											return (
 												<td
 													key={r}
-													className="cursor-pointer px-3 py-2 text-center transition-colors hover:bg-[#F1F5F9]"
+													className="cursor-pointer px-3 py-2 text-center transition-colors hover:bg-muted"
 													onClick={() => handleCellClick(a, r)}
 													title="Click para cambiar asignación"
 												>
@@ -336,7 +336,7 @@ export function RaciTab({ processId }: RaciTabProps) {
 											<button
 												type="button"
 												onClick={() => handleDeleteRow(a)}
-												className="rounded p-1 text-[#94A3B8] opacity-0 transition-all group-hover:opacity-100 hover:bg-[#FEF2F2] hover:text-[#DC2626]"
+												className="rounded p-1 text-chrome-text-secondary opacity-0 transition-all group-hover:opacity-100 hover:bg-red-50 hover:text-destructive"
 												title="Eliminar actividad"
 											>
 												<TrashIcon className="h-3.5 w-3.5" />
@@ -347,7 +347,7 @@ export function RaciTab({ processId }: RaciTabProps) {
 							</tbody>
 						</table>
 
-						<div className="flex items-center gap-4 border-t bg-[#F8FAFC] px-3 py-2">
+						<div className="flex items-center gap-4 border-t bg-secondary px-3 py-2">
 							{Object.entries(ASSIGNMENT_LABELS).map(([key, label]) => (
 								<div key={key} className="flex items-center gap-1.5 text-xs">
 									<span
@@ -355,12 +355,12 @@ export function RaciTab({ processId }: RaciTabProps) {
 									>
 										{label}
 									</span>
-									<span className="text-[#94A3B8] capitalize">
+									<span className="text-chrome-text-secondary capitalize">
 										{key.toLowerCase()}
 									</span>
 								</div>
 							))}
-							<span className="ml-auto text-xs text-[#94A3B8]">
+							<span className="ml-auto text-xs text-chrome-text-secondary">
 								Click en celda para editar
 							</span>
 						</div>

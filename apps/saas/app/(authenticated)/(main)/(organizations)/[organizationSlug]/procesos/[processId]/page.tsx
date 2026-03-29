@@ -1,7 +1,7 @@
 import { getActiveOrganization } from "@auth/lib/server";
 import { db } from "@repo/database";
 import { notFound } from "next/navigation";
-import { ProcessDetailView } from "@process-library/components/ProcessDetailView";
+import { ProcessWorkspace } from "@process-library/components/ProcessWorkspace";
 
 export async function generateMetadata({
 	params,
@@ -56,6 +56,10 @@ export default async function ProcessDetailPage({
 				orderBy: { version: "desc" },
 				take: 20,
 			},
+			// Full RACI entries for per-node health badges
+			raciEntries: {
+				select: { activityName: true, role: true, assignment: true },
+			},
 			intelligence: {
 				select: { id: true },
 			},
@@ -69,7 +73,7 @@ export default async function ProcessDetailPage({
 	if (process.architecture.organizationId !== activeOrganization.id) return notFound();
 
 	return (
-		<ProcessDetailView
+		<ProcessWorkspace
 			process={{
 				id: process.id,
 				name: process.name,
@@ -103,6 +107,11 @@ export default async function ProcessDetailPage({
 				versions: process.versions.map((v) => ({
 					...v,
 					createdAt: v.createdAt.toISOString(),
+				})),
+				raciEntries: process.raciEntries.map((r) => ({
+					activityName: r.activityName,
+					role: r.role,
+					assignment: r.assignment,
 				})),
 				sessionsCount: process._count.sessions,
 				versionsCount: process._count.versions,

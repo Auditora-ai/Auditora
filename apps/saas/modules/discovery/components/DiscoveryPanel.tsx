@@ -278,22 +278,22 @@ export function DiscoveryPanel({
 	};
 
 	return (
-		<div className="fixed inset-y-0 right-0 z-50 flex w-[420px] flex-col bg-[#0F172A] text-slate-100 shadow-[-4px_0_24px_rgba(0,0,0,0.3)] max-md:w-full">
+		<div className="fixed inset-y-0 right-0 z-50 flex w-[420px] flex-col bg-chrome-base text-chrome-text shadow-[-4px_0_24px_rgba(0,0,0,0.3)] max-md:w-full">
 			{/* Header */}
-			<div className="flex items-center justify-between border-b border-slate-700 px-5 py-4">
+			<div className="flex items-center justify-between border-b border-chrome-border px-5 py-4">
 				<div>
 					<h2 className="text-base font-semibold">
 						{processName ? `Discovery — ${processName}` : "Discovery"}
 					</h2>
 					{clientName && (
-						<p className="text-xs text-slate-400">{clientName}</p>
+						<p className="text-xs text-muted-foreground">{clientName}</p>
 					)}
 				</div>
 				<Button
 					variant="ghost"
 					size="icon"
 					onClick={onClose}
-					className="text-slate-400 hover:text-slate-200"
+					className="text-muted-foreground hover:text-chrome-text-secondary"
 				>
 					<XIcon className="size-5" />
 				</Button>
@@ -303,10 +303,10 @@ export function DiscoveryPanel({
 			<div ref={messagesContainerRef} className="flex-1 overflow-y-auto px-5 py-4">
 				{initialLoading ? (
 					<div className="flex items-center justify-center py-8">
-						<Loader2Icon className="size-5 animate-spin text-slate-400" />
+						<Loader2Icon className="size-5 animate-spin text-muted-foreground" />
 					</div>
 				) : messages.length === 0 ? (
-					<div className="rounded-lg bg-[#1E293B] p-4 text-sm leading-relaxed text-slate-300">
+					<div className="rounded-lg bg-chrome-raised p-4 text-sm leading-relaxed text-muted-foreground">
 						Hola! Estoy lista para ayudarte a descubrir procesos.
 						Puedes describir los procesos por texto, enviarme un
 						audio, o subir un documento. ¿Qué sabes sobre esta
@@ -320,7 +320,7 @@ export function DiscoveryPanel({
 									className={
 										msg.role === "user"
 											? "ml-8 self-end rounded-lg rounded-br-sm bg-primary px-3 py-2 text-sm text-white"
-											: "mr-8 self-start rounded-lg rounded-bl-sm bg-[#1E293B] px-3 py-2 text-sm text-slate-200"
+											: "mr-8 self-start rounded-lg rounded-bl-sm bg-chrome-raised px-3 py-2 text-sm text-chrome-text-secondary"
 									}
 								>
 									{msg.content}
@@ -349,8 +349,8 @@ export function DiscoveryPanel({
 						))}
 
 						{isLoading && (
-							<div className="mr-8 self-start rounded-lg bg-[#1E293B] px-4 py-2">
-								<div className="flex items-center gap-2 text-sm text-slate-400">
+							<div className="mr-8 self-start rounded-lg bg-chrome-raised px-4 py-2">
+								<div className="flex items-center gap-2 text-sm text-muted-foreground">
 									<Loader2Icon className="size-4 animate-spin" />
 									Analizando...
 								</div>
@@ -358,8 +358,8 @@ export function DiscoveryPanel({
 						)}
 
 						{isTranscribing && (
-							<div className="mr-8 self-start rounded-lg bg-[#1E293B] px-4 py-2">
-								<div className="flex items-center gap-2 text-sm text-slate-400">
+							<div className="mr-8 self-start rounded-lg bg-chrome-raised px-4 py-2">
+								<div className="flex items-center gap-2 text-sm text-muted-foreground">
 									<Loader2Icon className="size-4 animate-spin" />
 									Transcribiendo audio...
 								</div>
@@ -372,14 +372,14 @@ export function DiscoveryPanel({
 			</div>
 
 			{/* Input area */}
-			<div className="border-t border-slate-700 p-4">
+			<div className="border-t border-chrome-border p-4">
 				{/* Action buttons */}
 				<div className="mb-2 flex gap-2">
 					<button
 						type="button"
 						onClick={() => fileInputRef.current?.click()}
 						disabled={isTranscribing}
-						className="flex items-center gap-1 rounded-md border border-slate-600 bg-[#1E293B] px-2.5 py-1.5 text-xs text-slate-400 hover:border-slate-500 hover:text-slate-200 disabled:opacity-50"
+						className="flex items-center gap-1 rounded-md border border-chrome-border bg-chrome-raised px-2.5 py-1.5 text-xs text-muted-foreground hover:border-chrome-border hover:text-chrome-text-secondary disabled:opacity-50"
 					>
 						<MicIcon className="size-3" />
 						Audio
@@ -393,14 +393,14 @@ export function DiscoveryPanel({
 					/>
 					<button
 						type="button"
-						className="flex items-center gap-1 rounded-md border border-slate-600 bg-[#1E293B] px-2.5 py-1.5 text-xs text-slate-400 hover:border-slate-500 hover:text-slate-200"
+						className="flex items-center gap-1 rounded-md border border-chrome-border bg-chrome-raised px-2.5 py-1.5 text-xs text-muted-foreground hover:border-chrome-border hover:text-chrome-text-secondary"
 					>
 						<PaperclipIcon className="size-3" />
 						Archivo
 					</button>
 					<button
 						type="button"
-						className="flex items-center gap-1 rounded-md border border-slate-600 bg-[#1E293B] px-2.5 py-1.5 text-xs text-slate-400 hover:border-slate-500 hover:text-slate-200"
+						className="flex items-center gap-1 rounded-md border border-chrome-border bg-chrome-raised px-2.5 py-1.5 text-xs text-muted-foreground hover:border-chrome-border hover:text-chrome-text-secondary"
 					>
 						<LinkIcon className="size-3" />
 						Reunión
@@ -415,7 +415,7 @@ export function DiscoveryPanel({
 						onKeyDown={handleKeyDown}
 						placeholder="Describe procesos, haz preguntas, o pega notas..."
 						rows={1}
-						className="min-h-[40px] flex-1 resize-none border-slate-600 bg-[#1E293B] text-sm text-slate-100 placeholder:text-slate-500 focus:border-primary"
+						className="min-h-[40px] flex-1 resize-none border-chrome-border bg-chrome-raised text-sm text-chrome-text placeholder:text-muted-foreground focus:border-primary"
 					/>
 					<Button
 						type="submit"

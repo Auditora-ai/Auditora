@@ -177,7 +177,7 @@ function generateLayoutHtml(
 <meta charset="utf-8" />
 <title>${title}</title>
 <style>
-body { margin: 20px; font-family: Inter, system-ui, sans-serif; background: #FAFAFA; }
+body { margin: 20px; font-family: 'Geist Sans', system-ui, sans-serif; background: #FAFAFA; }
 h1 { font-size: 18px; color: #1E293B; margin-bottom: 4px; }
 .meta { font-size: 12px; color: #64748B; margin-bottom: 16px; }
 .canvas { background: white; border: 1px solid #E2E8F0; border-radius: 8px; padding: 10px; display: inline-block; }

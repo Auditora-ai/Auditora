@@ -49,7 +49,7 @@ export function StepSchedule({
 		const icsContent = [
 			"BEGIN:VCALENDAR",
 			"VERSION:2.0",
-			"PRODID:-//aiprocess.me//Session//ES",
+			"PRODID:-//Auditora.ai//Session//ES",
 			"BEGIN:VEVENT",
 			`DTSTART:${formatIcsDate(start)}`,
 			`DTEND:${formatIcsDate(end)}`,
@@ -72,14 +72,14 @@ export function StepSchedule({
 
 	return (
 		<div className="flex h-full flex-col">
-			<h2 className="mb-1 text-xl font-semibold text-[#F1F5F9]">Agendar</h2>
-			<p className="mb-6 text-sm text-[#64748B]">
+			<h2 className="mb-1 text-xl font-semibold text-chrome-text">Agendar</h2>
+			<p className="mb-6 text-sm text-chrome-text-muted">
 				Define cuando sera la sesion y como se conectaran.
 			</p>
 
 			{/* Date/time */}
 			<div className="mb-5">
-				<label className="mb-2 flex items-center gap-2 text-xs font-medium text-[#94A3B8]">
+				<label className="mb-2 flex items-center gap-2 text-xs font-medium text-chrome-text-secondary">
 					<CalendarIcon className="h-3.5 w-3.5" />
 					Fecha y hora
 				</label>
@@ -87,13 +87,13 @@ export function StepSchedule({
 					type="datetime-local"
 					value={data.scheduledFor}
 					onChange={(e) => onChange({ scheduledFor: e.target.value })}
-					className="w-full rounded-lg border border-[#334155] bg-[#1E293B] px-4 py-3 text-sm text-[#F1F5F9] focus:border-[#2563EB] focus:outline-none focus:ring-1 focus:ring-[#2563EB] [color-scheme:dark]"
+					className="w-full rounded-lg border border-chrome-border bg-chrome-raised px-4 py-3 text-sm text-chrome-text focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary [color-scheme:dark]"
 				/>
 			</div>
 
 			{/* Duration pills */}
 			<div className="mb-5">
-				<label className="mb-2 flex items-center gap-2 text-xs font-medium text-[#94A3B8]">
+				<label className="mb-2 flex items-center gap-2 text-xs font-medium text-chrome-text-secondary">
 					<ClockIcon className="h-3.5 w-3.5" />
 					Duracion
 				</label>
@@ -105,8 +105,8 @@ export function StepSchedule({
 							onClick={() => onChange({ duration: d.value })}
 							className={`flex-1 rounded-lg border px-3 py-3 text-center text-sm font-medium transition-all ${
 								data.duration === d.value
-									? "border-[#2563EB] bg-[#2563EB]/10 text-[#F1F5F9]"
-									: "border-[#334155] bg-[#1E293B] text-[#64748B] hover:border-[#64748B]"
+									? "border-primary bg-primary/10 text-chrome-text"
+									: "border-chrome-border bg-chrome-raised text-chrome-text-muted hover:border-chrome-text-muted"
 							}`}
 						>
 							{d.label}
@@ -122,33 +122,33 @@ export function StepSchedule({
 					onClick={() => onChange({ isNoCall: !data.isNoCall })}
 					className={`flex w-full items-center gap-3 rounded-lg border px-4 py-3 transition-all ${
 						data.isNoCall
-							? "border-[#D97706] bg-[#D97706]/10"
-							: "border-[#334155] bg-[#1E293B] hover:border-[#64748B]"
+							? "border-orientation bg-orientation/10"
+							: "border-chrome-border bg-chrome-raised hover:border-chrome-text-muted"
 					}`}
 				>
 					<PhoneOffIcon
-						className={`h-5 w-5 ${data.isNoCall ? "text-[#D97706]" : "text-[#64748B]"}`}
+						className={`h-5 w-5 ${data.isNoCall ? "text-orientation" : "text-chrome-text-muted"}`}
 					/>
 					<div className="flex-1 text-left">
 						<p
 							className={`text-sm font-medium ${
-								data.isNoCall ? "text-[#F1F5F9]" : "text-[#94A3B8]"
+								data.isNoCall ? "text-chrome-text" : "text-chrome-text-secondary"
 							}`}
 						>
 							Sesion sin llamada
 						</p>
-						<p className="text-xs text-[#64748B]">
+						<p className="text-xs text-chrome-text-muted">
 							El cliente completa el intake de forma asincrona
 						</p>
 					</div>
 					{/* Toggle switch */}
 					<div
 						className={`relative h-6 w-11 rounded-full transition-colors ${
-							data.isNoCall ? "bg-[#D97706]" : "bg-[#334155]"
+							data.isNoCall ? "bg-orientation" : "bg-chrome-hover"
 						}`}
 					>
 						<div
-							className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-transform ${
+							className={`absolute top-0.5 h-5 w-5 rounded-full bg-background transition-transform ${
 								data.isNoCall ? "translate-x-[22px]" : "translate-x-0.5"
 							}`}
 						/>
@@ -159,7 +159,7 @@ export function StepSchedule({
 			{/* Meeting link */}
 			{!data.isNoCall && (
 				<div className="mb-5">
-					<label className="mb-2 flex items-center gap-2 text-xs font-medium text-[#94A3B8]">
+					<label className="mb-2 flex items-center gap-2 text-xs font-medium text-chrome-text-secondary">
 						<LinkIcon className="h-3.5 w-3.5" />
 						Link de la reunion
 					</label>
@@ -168,7 +168,7 @@ export function StepSchedule({
 						value={data.meetingUrl}
 						onChange={(e) => onChange({ meetingUrl: e.target.value })}
 						placeholder="Pega aqui tu link de Zoom, Meet o Teams"
-						className="w-full rounded-lg border border-[#334155] bg-[#1E293B] px-4 py-3 text-sm text-[#F1F5F9] placeholder:text-[#64748B] focus:border-[#2563EB] focus:outline-none focus:ring-1 focus:ring-[#2563EB]"
+						className="w-full rounded-lg border border-chrome-border bg-chrome-raised px-4 py-3 text-sm text-chrome-text placeholder:text-chrome-text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 					/>
 				</div>
 			)}
@@ -179,7 +179,7 @@ export function StepSchedule({
 					type="button"
 					onClick={handleIcsDownload}
 					disabled={!data.scheduledFor}
-					className="inline-flex items-center gap-1.5 rounded-lg border border-[#334155] px-3 py-2 text-sm font-medium text-[#94A3B8] transition-colors hover:border-[#64748B] hover:text-[#F1F5F9] disabled:opacity-50"
+					className="inline-flex items-center gap-1.5 rounded-lg border border-chrome-border px-3 py-2 text-sm font-medium text-chrome-text-secondary transition-colors hover:border-chrome-text-muted hover:text-chrome-text disabled:opacity-50"
 				>
 					<DownloadIcon className="h-4 w-4" />
 					Descargar .ics

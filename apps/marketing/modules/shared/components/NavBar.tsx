@@ -79,8 +79,8 @@ export function NavBar() {
 		href: string;
 	}[] = [
 		{
-			label: t("common.menu.tools") || "Free Tools",
-			href: "/tools",
+			label: t("common.menu.tools"),
+			href: `${config.saasUrl}/scan`,
 		},
 		{
 			label: t("common.menu.howItWorks"),

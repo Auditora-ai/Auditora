@@ -4,7 +4,7 @@ import { LiveShareViewer } from "./LiveShareViewer";
 import { SparklesIcon, ListChecksIcon } from "lucide-react";
 
 export async function generateMetadata() {
-	return { title: "Shared Process Diagram — aiprocess.me" };
+	return { title: "Shared Process Diagram — Auditora.ai" };
 }
 
 export default async function SharedDiagramPage({
@@ -45,10 +45,10 @@ export default async function SharedDiagramPage({
 						Este link de visualizacion ya no esta disponible.
 					</p>
 					<a
-						href="https://aiprocess.me"
+						href="https://auditora.ai"
 						className="mt-4 inline-block rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
 					>
-						Conocer aiprocess.me
+						Conocer Auditora.ai
 					</a>
 				</div>
 			</div>
@@ -115,7 +115,7 @@ export default async function SharedDiagramPage({
 						{session.sessionSummary.actionItems.length > 0 && (
 							<div className="mt-3">
 								<div className="mb-1.5 flex items-center gap-1.5">
-									<ListChecksIcon className="h-3 w-3 text-muted-foreground" />
+									<ListChecksIcon className="h-3.5 w-3.5 text-muted-foreground" />
 									<span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
 										Next Steps
 									</span>
@@ -155,10 +155,10 @@ export default async function SharedDiagramPage({
 			<div className="border-t border-border bg-card px-6 py-4">
 				<div className="mx-auto flex max-w-6xl items-center justify-between">
 					<span className="text-xs text-muted-foreground">
-						Powered by aiprocess.me
+						Powered by Auditora.ai
 					</span>
 					<a
-						href="https://aiprocess.me"
+						href="https://auditora.ai"
 						target="_blank"
 						rel="noreferrer"
 						className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"

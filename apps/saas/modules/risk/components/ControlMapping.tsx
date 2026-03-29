@@ -139,21 +139,21 @@ export function ControlMapping({
   return (
     <div className="space-y-4">
       {/* Score header */}
-      <div className="rounded-lg border border-slate-700 bg-slate-900/50 p-4">
+      <div className="rounded-lg border border-chrome-border bg-chrome-base/50 p-4">
         <div className="flex items-center gap-2 text-sm">
-          <ShieldCheckIcon className="h-4 w-4 text-slate-400" />
-          <span className="text-slate-300">Riesgo Inherente:</span>
+          <ShieldCheckIcon className="h-4 w-4 text-muted-foreground" />
+          <span className="text-muted-foreground">Riesgo Inherente:</span>
           <span className={`font-bold ${getScoreClass(inherentScore)}`}>
             {risk.severity}x{risk.probability}={inherentScore}
           </span>
-          <span className="text-slate-500 mx-2">&rarr;</span>
-          <span className="text-slate-300">Residual:</span>
+          <span className="text-muted-foreground mx-2">&rarr;</span>
+          <span className="text-muted-foreground">Residual:</span>
           <span className={`font-bold ${getScoreClass(resScore)}`}>
             {resSev}x{resProb}={resScore}
           </span>
         </div>
         {controls.length > 0 && (
-          <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-slate-700">
+          <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-chrome-hover">
             <div
               className="h-full rounded-full bg-gradient-to-r from-green-600 to-blue-600 transition-all"
               style={{
@@ -166,22 +166,22 @@ export function ControlMapping({
 
       {/* Controls list */}
       <div className="flex items-center justify-between">
-        <h5 className="text-xs font-medium text-slate-300">
+        <h5 className="text-xs font-medium text-muted-foreground">
           Controles ({controls.length})
         </h5>
         <Button
           variant="ghost"
           size="sm"
-          className="h-6 text-xs text-slate-400 hover:text-slate-200"
+          className="h-6 text-xs text-muted-foreground hover:text-chrome-text-secondary"
           onClick={() => setShowForm(!showForm)}
         >
-          <PlusIcon className="mr-1 h-3 w-3" />
+          <PlusIcon className="mr-1 h-3.5 w-3.5" />
           Agregar
         </Button>
       </div>
 
       {controls.length === 0 && !showForm && (
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-muted-foreground">
           Sin controles definidos. Agrega controles para reducir el riesgo
           residual.
         </p>
@@ -198,10 +198,10 @@ export function ControlMapping({
         return (
           <div
             key={ctrl.id}
-            className="flex items-center gap-3 rounded bg-slate-900/50 px-3 py-2"
+            className="flex items-center gap-3 rounded bg-chrome-base/50 px-3 py-2"
           >
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-medium text-slate-200">
+              <p className="text-xs font-medium text-chrome-text-secondary">
                 {ctrl.name}
               </p>
             </div>
@@ -229,16 +229,16 @@ export function ControlMapping({
 
       {/* Add form */}
       {showForm && (
-        <div className="space-y-2 rounded border border-slate-700 bg-slate-900/50 p-3">
+        <div className="space-y-2 rounded border border-chrome-border bg-chrome-base/50 p-3">
           <Input
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
             placeholder="Nombre del control..."
-            className="border-slate-700 bg-slate-800 text-sm text-slate-100"
+            className="border-chrome-border bg-chrome-raised text-sm text-chrome-text"
           />
           <div className="flex gap-2">
             <Select value={newType} onValueChange={setNewType}>
-              <SelectTrigger className="border-slate-700 bg-slate-800 text-sm text-slate-100">
+              <SelectTrigger className="border-chrome-border bg-chrome-raised text-sm text-chrome-text">
                 <SelectValue placeholder="Tipo" />
               </SelectTrigger>
               <SelectContent>
@@ -250,7 +250,7 @@ export function ControlMapping({
               </SelectContent>
             </Select>
             <Select value={newEffectiveness} onValueChange={setNewEffectiveness}>
-              <SelectTrigger className="border-slate-700 bg-slate-800 text-sm text-slate-100">
+              <SelectTrigger className="border-chrome-border bg-chrome-raised text-sm text-chrome-text">
                 <SelectValue placeholder="Efectividad" />
               </SelectTrigger>
               <SelectContent>
@@ -262,12 +262,12 @@ export function ControlMapping({
               </SelectContent>
             </Select>
           </div>
-          <label className="flex items-center gap-2 text-xs text-slate-300">
+          <label className="flex items-center gap-2 text-xs text-muted-foreground">
             <input
               type="checkbox"
               checked={newAutomated}
               onChange={(e) => setNewAutomated(e.target.checked)}
-              className="rounded border-slate-600"
+              className="rounded border-chrome-border"
             />
             Control automatizado
           </label>
@@ -288,7 +288,7 @@ export function ControlMapping({
               disabled={!newName.trim() || saving}
             >
               {saving ? (
-                <RefreshCwIcon className="mr-1 h-3 w-3 animate-spin" />
+                <RefreshCwIcon className="mr-1 h-3.5 w-3.5 animate-spin" />
               ) : null}
               Guardar
             </Button>

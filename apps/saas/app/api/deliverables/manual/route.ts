@@ -169,7 +169,7 @@ export async function GET(request: NextRequest) {
     <p>${esc(date)}</p>
     <p>${totalProcesses} procesos · ${totalRisks} riesgos · ${coveragePct}% cobertura</p>
   </div>
-  <p class="powered">Generado por aiprocess.me</p>
+  <p class="powered">Generado por Auditora.ai</p>
 </div>
 
 <!-- TABLE OF CONTENTS -->
@@ -331,7 +331,7 @@ ${(brain?.globalSystems?.length ?? 0) > 0 ? `
 
 <!-- Footer -->
 <div style="margin-top: 40px; padding-top: 16px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 10px; color: #94a3b8;">
-  Generado por aiprocess.me · ${esc(date)}
+  Generado por Auditora.ai · ${esc(date)}
 </div>
 
 </body>

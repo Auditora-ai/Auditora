@@ -11,6 +11,9 @@ import { createCallBotProvider } from "@repo/ai";
 import { auth } from "@repo/auth";
 import { headers } from "next/headers";
 import { recordEvent } from "@meeting/lib/session-timeline";
+import { randomBytes } from "crypto";
+import { buildBpmnXml } from "@meeting/lib/bpmn-builder";
+import type { DiagramNode } from "@meeting/types";
 
 async function getAuthContext() {
 	const session = await auth.api.getSession({
@@ -139,6 +142,38 @@ export async function POST(request: NextRequest) {
 				sessionContext: sessionContext || undefined,
 			},
 		});
+
+		// Auto-link to previous session for context continuity (teleprompter, AI context)
+		if (processDefinitionId && !continuationOf) {
+			const prevSession = await db.meetingSession.findFirst({
+				where: { processDefinitionId, status: "ENDED" },
+				orderBy: { endedAt: "desc" },
+				select: { id: true, sessionGoals: true, sessionContext: true },
+			});
+			if (prevSession) {
+				const inheritData: Record<string, any> = { continuationOf: prevSession.id };
+				// Inherit goals/context if not provided for this session
+				if (!sessionGoals && prevSession.sessionGoals) {
+					inheritData.sessionGoals = prevSession.sessionGoals;
+				}
+				if (!sessionContext && prevSession.sessionContext) {
+					inheritData.sessionContext = prevSession.sessionContext;
+				}
+				await db.meetingSession.update({
+					where: { id: session.id },
+					data: inheritData,
+				});
+			}
+		}
+
+		// Seed diagram nodes from previous session for process continuations
+		if (processDefinitionId && (!preBuildNodes || preBuildNodes.length === 0)) {
+			try {
+				await seedNodesFromPreviousSession(session.id, processDefinitionId);
+			} catch (err) {
+				console.warn("[Sessions API] Failed to seed nodes from previous session:", err);
+			}
+		}
 
 		// Create participants from wizard (multiple) or legacy single contact
 		if (participants && participants.length > 0) {
@@ -323,6 +358,7 @@ export async function GET(request: NextRequest) {
 		const sessions = await db.meetingSession.findMany({
 			where: {
 				organizationId: authCtx.org.id,
+				status: { in: ["SCHEDULED", "CONNECTING", "ACTIVE"] },
 			},
 			include: {
 				processDefinition: true,
@@ -338,4 +374,94 @@ export async function GET(request: NextRequest) {
 		console.error("[Sessions API] Error listing sessions:", error);
 		return NextResponse.json({ error: "Internal error" }, { status: 500 });
 	}
+}
+
+/**
+ * Seed a new session with confirmed diagram nodes from the most recent
+ * ended session of the same process. Regenerates BPMN XML so that canvas
+ * element IDs align with the new DiagramNode record IDs.
+ */
+async function seedNodesFromPreviousSession(
+	newSessionId: string,
+	processDefinitionId: string,
+): Promise<void> {
+	// Find the most recent ended session for this process
+	const sourceSession = await db.meetingSession.findFirst({
+		where: { processDefinitionId, status: "ENDED" },
+		orderBy: { endedAt: "desc" },
+		select: { id: true },
+	});
+	if (!sourceSession) return;
+
+	// Fetch confirmed nodes from the source session
+	const sourceNodes = await db.diagramNode.findMany({
+		where: { sessionId: sourceSession.id, state: "CONFIRMED" },
+	});
+	if (sourceNodes.length === 0) return;
+
+	// Build old-ID → new-ID mapping
+	const idMap = new Map<string, string>();
+	for (const node of sourceNodes) {
+		idMap.set(node.id, randomBytes(12).toString("hex"));
+	}
+
+	// Remap connections, filtering orphans (targets not in the copied set)
+	const remappedNodes = sourceNodes.map((node) => {
+		const filteredConnections: string[] = [];
+		const filteredLabels: string[] = [];
+		for (let i = 0; i < (node.connections || []).length; i++) {
+			const targetId = node.connections[i];
+			const newTargetId = idMap.get(targetId);
+			if (newTargetId) {
+				filteredConnections.push(newTargetId);
+				filteredLabels.push((node.connectionLabels || [])[i] || "");
+			}
+		}
+
+		return {
+			id: idMap.get(node.id)!,
+			sessionId: newSessionId,
+			nodeType: node.nodeType,
+			label: node.label,
+			state: "CONFIRMED" as const,
+			lane: node.lane,
+			confidence: node.confidence,
+			positionX: node.positionX,
+			positionY: node.positionY,
+			connections: filteredConnections,
+			connectionLabels: filteredLabels,
+			parentId: node.parentId ? (idMap.get(node.parentId) ?? null) : null,
+			properties: node.properties ?? undefined,
+			procedure: node.procedure ?? undefined,
+			formedAt: new Date(),
+			confirmedAt: new Date(),
+		};
+	});
+
+	await db.diagramNode.createMany({ data: remappedNodes });
+
+	// Regenerate BPMN XML so element IDs match the new DB node IDs
+	try {
+		const diagramNodes: DiagramNode[] = remappedNodes.map((n) => ({
+			id: n.id,
+			type: n.nodeType.toLowerCase(),
+			label: n.label,
+			state: "confirmed" as const,
+			lane: n.lane || undefined,
+			connections: n.connections,
+			connectionLabels: n.connectionLabels,
+			confidence: n.confidence,
+		}));
+		const bpmnXml = await buildBpmnXml(diagramNodes);
+		await db.meetingSession.update({
+			where: { id: newSessionId },
+			data: { bpmnXml },
+		});
+	} catch (err) {
+		console.error("[Sessions API] Failed to generate BPMN XML for seeded nodes:", err);
+	}
+
+	console.log(
+		`[Sessions API] Seeded ${remappedNodes.length} nodes from session ${sourceSession.id} to session ${newSessionId}`,
+	);
 }

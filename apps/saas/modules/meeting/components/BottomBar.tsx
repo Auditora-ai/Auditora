@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useLiveSessionContext } from "../context/LiveSessionContext";
 import { validateDiagram, type DiagramWarning } from "../lib/bpmn-validator";
@@ -16,17 +17,20 @@ import {
 	CheckCircleIcon,
 	WrenchIcon,
 	Loader2Icon,
+	LayoutDashboardIcon,
+	MessageSquareIcon,
 } from "lucide-react";
 
 const TOOLS = [
-	{ id: "select" as const, icon: MousePointerIcon, label: "Select" },
-	{ id: "connect" as const, icon: ArrowRightLeftIcon, label: "Connect" },
-	{ id: "text" as const, icon: TypeIcon, label: "Text" },
-];
+	{ id: "select" as const, icon: MousePointerIcon, labelKey: "bottomBar.toolSelect" },
+	{ id: "connect" as const, icon: ArrowRightLeftIcon, labelKey: "bottomBar.toolConnect" },
+	{ id: "text" as const, icon: TypeIcon, labelKey: "bottomBar.toolText" },
+] as const;
 
 export function BottomBar() {
-	const { selectedTool, setSelectedTool, nodes, modelerApi, sessionId } =
+	const { selectedTool, setSelectedTool, nodes, modelerApi, sessionId, layoutMode, setLayoutMode } =
 		useLiveSessionContext();
+	const t = useTranslations("meeting");
 	const [auditResults, setAuditResults] = useState<ReturnType<typeof validateDiagram> | null>(null);
 	const [showAudit, setShowAudit] = useState(false);
 	const [fixingIdx, setFixingIdx] = useState<number | null>(null);
@@ -47,7 +51,7 @@ export function BottomBar() {
 							headers: { "Content-Type": "application/json" },
 							body: JSON.stringify({ action: "edit", label: warning.suggestion }),
 						});
-						toast.success(`Renombrado a "${warning.suggestion}"`);
+						toast.success(t("toast.renamed", { name: warning.suggestion }));
 					}
 					break;
 				}
@@ -60,24 +64,24 @@ export function BottomBar() {
 							headers: { "Content-Type": "application/json" },
 							body: JSON.stringify({ action: "edit", type: "exclusiveGateway", label: `¿${node.label}?` }),
 						});
-						toast.success(`Convertido a gateway: "¿${node.label}?"`);
+						toast.success(t("toast.convertedGateway"));
 					} else if (node) {
 						await fetch(`/api/sessions/${sessionId}/nodes/${warning.nodeId}`, {
 							method: "PATCH",
 							headers: { "Content-Type": "application/json" },
 							body: JSON.stringify({ action: "edit", type: "exclusiveGateway", label: `¿${node.label}?` }),
 						});
-						toast.success("Convertido a gateway");
+						toast.success(t("toast.convertedGateway"));
 					}
 					break;
 				}
 
 				case "gateway_no_conditions": {
 					// Gateway missing flow labels → rebuild diagram to fix
-					toast.info("Reorganizando diagrama para corregir flujos...");
+					toast.info(t("toast.reorganizingFlows"));
 					if (modelerApi?.isReady) {
 						await modelerApi.rebuildFromNodes(nodes);
-						toast.success("Diagrama reorganizado");
+						toast.success(t("toast.diagramReorganized"));
 					}
 					break;
 				}
@@ -95,7 +99,7 @@ export function BottomBar() {
 							}],
 						}),
 					});
-					toast.success("Gateway de reunion creado");
+					toast.success(t("toast.mergeCreated"));
 					break;
 				}
 
@@ -108,10 +112,10 @@ export function BottomBar() {
 				// Structural issues → rebuild fixes them
 				// The builder auto-connects: orphans to chain, dead-ends to _end,
 				// missing start/end added, cycles broken
-				toast.info("Reorganizando — el builder conectara nodos sueltos...");
+				toast.info(t("toast.reorganizingBuilder"));
 				if (modelerApi?.isReady) {
 					await modelerApi.rebuildFromNodes(nodes);
-					toast.success("Diagrama reorganizado — nodos reconectados");
+					toast.success(t("toast.reorganizedReconnected"));
 				}
 				break;
 			}
@@ -127,7 +131,7 @@ export function BottomBar() {
 								headers: { "Content-Type": "application/json" },
 								body: JSON.stringify({ action: "edit", lane: targetLane }),
 							});
-							toast.success(`Lane unificado a "${targetLane}"`);
+							toast.success(t("toast.laneUnified", { name: targetLane }));
 						}
 					}
 					break;
@@ -135,10 +139,10 @@ export function BottomBar() {
 
 				default: {
 					// Rebuild as fallback
-					toast.info("Reorganizando diagrama...");
+					toast.info(t("toast.reorganizing"));
 					if (modelerApi?.isReady) {
 						await modelerApi.rebuildFromNodes(nodes);
-						toast.success("Diagrama reorganizado");
+						toast.success(t("toast.diagramReorganized"));
 					}
 					break;
 				}
@@ -150,7 +154,7 @@ export function BottomBar() {
 				setAuditResults({ ...auditResults, warnings: updated, bestPracticesScore: Math.min(100, auditResults.bestPracticesScore + 5) });
 			}
 		} catch {
-			toast.error("Error al aplicar corrección");
+			toast.error(t("toast.fixError"));
 		} finally {
 			setFixingIdx(null);
 		}
@@ -170,7 +174,7 @@ export function BottomBar() {
 			try {
 				modeler.get("globalConnect").toggle();
 			} catch {
-				toast.error("Herramienta Connect no disponible");
+				toast.error(t("toast.connectNotAvailable"));
 				setSelectedTool("select");
 				return;
 			}
@@ -179,7 +183,7 @@ export function BottomBar() {
 
 	const handleAudit = () => {
 		if (nodes.length === 0) {
-			toast.info("No hay nodos para auditar");
+			toast.info(t("toast.noAuditNodes"));
 			return;
 		}
 		const result = validateDiagram(nodes);
@@ -187,17 +191,17 @@ export function BottomBar() {
 		setShowAudit(true);
 
 		if (result.warnings.length === 0) {
-			toast.success(`Diagrama BPMN correcto — Score: ${result.bestPracticesScore}/100`);
+			toast.success(t("toast.auditScore", { score: result.bestPracticesScore }));
 		} else {
-			toast.info(`${result.warnings.length} observaciones encontradas`);
+			toast.info(t("toast.auditObservations", { count: result.warnings.length }));
 		}
 	};
 
 	return (
 		<>
 			<div
-				className="flex items-center justify-between border-t border-[#334155] bg-[#0F172A] px-4"
-				style={{ gridArea: "bottom", height: 36, fontFamily: "Inter, system-ui, sans-serif" }}
+				className="flex items-center justify-between border-t border-chrome-border bg-chrome-base px-4"
+				style={{ gridArea: "bottom", height: 36, fontFamily: "'Geist Sans', system-ui, sans-serif" }}
 			>
 				{/* Tools */}
 				<div className="flex items-center gap-1">
@@ -211,17 +215,17 @@ export function BottomBar() {
 								onClick={() => handleToolSelect(tool.id)}
 								className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-[10px] font-medium transition-colors duration-75 ${
 									active
-										? "bg-[#2563EB] text-white"
-										: "text-[#64748B] hover:bg-[#1E293B] hover:text-[#94A3B8]"
+										? "bg-primary text-white"
+										: "text-chrome-text-muted hover:bg-chrome-raised hover:text-chrome-text-secondary"
 								}`}
 							>
-								<Icon className="h-3 w-3" />
-								<span className="hidden sm:inline">{tool.label}</span>
+								<Icon className="h-3.5 w-3.5" />
+								<span className="hidden sm:inline">{t(tool.labelKey)}</span>
 							</button>
 						);
 					})}
 
-					<div className="mx-1 h-4 w-px bg-[#334155]" />
+					<div className="mx-1 h-4 w-px bg-chrome-hover" />
 
 					{/* Audit BPMN button */}
 					<button
@@ -229,17 +233,47 @@ export function BottomBar() {
 						onClick={handleAudit}
 						className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-[10px] font-medium transition-colors duration-75 ${
 							showAudit
-								? "bg-[#7C3AED] text-white"
-								: "text-[#64748B] hover:bg-[#1E293B] hover:text-[#94A3B8]"
+								? "bg-violet-600 text-white"
+								: "text-chrome-text-muted hover:bg-chrome-raised hover:text-chrome-text-secondary"
 						}`}
 					>
-						<ShieldCheckIcon className="h-3 w-3" />
-						<span className="hidden sm:inline">Auditar BPMN</span>
+						<ShieldCheckIcon className="h-3.5 w-3.5" />
+						<span className="hidden sm:inline">{t("bottomBar.auditBpmn")}</span>
 					</button>
+
+					<div className="mx-1 h-4 w-px bg-chrome-hover" />
+
+					{/* Layout switcher */}
+					<div className="flex items-center gap-0.5 rounded-lg bg-chrome-raised p-0.5">
+						<button
+							type="button"
+							onClick={() => setLayoutMode("default")}
+							className={`flex items-center rounded px-2 py-1 text-[10px] font-medium transition-colors duration-75 ${
+								layoutMode === "default"
+									? "bg-primary text-white"
+									: "text-chrome-text-muted hover:text-chrome-text-secondary"
+							}`}
+							title={t("bottomBar.layoutDefault")}
+						>
+							<LayoutDashboardIcon className="h-3.5 w-3.5" />
+						</button>
+						<button
+							type="button"
+							onClick={() => setLayoutMode("chat-focus")}
+							className={`flex items-center rounded px-2 py-1 text-[10px] font-medium transition-colors duration-75 ${
+								layoutMode === "chat-focus"
+									? "bg-primary text-white"
+									: "text-chrome-text-muted hover:text-chrome-text-secondary"
+							}`}
+							title={t("bottomBar.layoutChatFocus")}
+						>
+							<MessageSquareIcon className="h-3.5 w-3.5" />
+						</button>
+					</div>
 				</div>
 
 				{/* AI Element Counter */}
-				<div className="flex items-center gap-2 text-[10px] text-[#64748B]">
+				<div className="flex items-center gap-2 text-[10px] text-chrome-text-muted">
 					{auditResults && (
 						<span className={`mr-2 rounded-full px-2 py-0.5 text-[9px] font-bold ${
 							auditResults.bestPracticesScore >= 80 ? "bg-green-500/10 text-green-400" :
@@ -249,9 +283,9 @@ export function BottomBar() {
 							BPMN {auditResults.bestPracticesScore}/100
 						</span>
 					)}
-					<SparklesIcon className="h-3 w-3 text-[#2563EB]" />
+					<SparklesIcon className="h-3.5 w-3.5 text-primary" />
 					<span className="tabular-nums">
-						Elementos IA: {confirmedCount}/{totalCount}
+						{t("bottomBar.aiElements")}: {confirmedCount}/{totalCount}
 					</span>
 				</div>
 			</div>
@@ -259,13 +293,15 @@ export function BottomBar() {
 			{/* Audit results panel (slides up from bottom bar) */}
 			{showAudit && auditResults && (
 				<div
-					className="fixed bottom-[36px] left-[220px] right-[280px] z-20 max-h-[300px] overflow-y-auto border-t border-[#334155] bg-[#0F172A]/95 backdrop-blur-sm"
+					className={`fixed bottom-[36px] z-20 max-h-[300px] overflow-y-auto border-t border-chrome-border bg-chrome-base/95 backdrop-blur-sm ${
+					layoutMode === "chat-focus" ? "left-[50%] right-0" : "left-[220px] right-[280px]"
+				}`}
 				>
-					<div className="flex items-center justify-between border-b border-[#334155] px-4 py-2">
+					<div className="flex items-center justify-between border-b border-chrome-border px-4 py-2">
 						<div className="flex items-center gap-2">
-							<ShieldCheckIcon className="h-3.5 w-3.5 text-[#7C3AED]" />
-							<span className="text-xs font-medium text-[#F1F5F9]">
-								Auditoria BPMN
+							<ShieldCheckIcon className="h-3.5 w-3.5 text-violet-600" />
+							<span className="font-display text-sm text-chrome-text">
+								{t("bottomBar.auditHeader")}
 							</span>
 							<span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
 								auditResults.bestPracticesScore >= 80 ? "bg-green-500/10 text-green-400" :
@@ -274,14 +310,14 @@ export function BottomBar() {
 							}`}>
 								{auditResults.bestPracticesScore}/100
 							</span>
-							<span className="text-[10px] text-[#64748B]">
-								{auditResults.warnings.length} observaciones
+							<span className="text-[10px] text-chrome-text-muted">
+								{t("bottomBar.observations", { count: auditResults.warnings.length })}
 							</span>
 						</div>
 						<button
 							type="button"
 							onClick={() => setShowAudit(false)}
-							className="rounded-md p-1 text-[#64748B] hover:bg-[#1E293B] hover:text-white"
+							className="rounded-md p-1 text-chrome-text-muted hover:bg-chrome-raised hover:text-white"
 						>
 							<XIcon className="h-3.5 w-3.5" />
 						</button>
@@ -290,10 +326,10 @@ export function BottomBar() {
 					{auditResults.warnings.length === 0 ? (
 						<div className="flex items-center gap-2 p-4 text-xs text-green-400">
 							<CheckCircleIcon className="h-4 w-4" />
-							El diagrama cumple con las buenas practicas de BPMN 2.0
+							{t("bottomBar.diagramCorrect")}
 						</div>
 					) : (
-						<div className="divide-y divide-[#334155]/50">
+						<div className="divide-y divide-chrome-border/50">
 							{auditResults.warnings.map((w, i) => (
 								<div key={i} className="flex items-start gap-2.5 px-4 py-2">
 									{w.severity === "error" ? (
@@ -304,10 +340,10 @@ export function BottomBar() {
 										<InfoIcon className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-blue-400" />
 									)}
 									<div className="flex-1">
-										<p className="text-[11px] text-[#E2E8F0]">{w.message}</p>
+										<p className="text-[11px] text-chrome-text-secondary">{w.message}</p>
 										{w.suggestion && (
-											<p className="mt-0.5 text-[10px] text-[#7C3AED]">
-												Sugerencia: {w.suggestion}
+											<p className="mt-0.5 text-[10px] text-violet-600">
+												{t("bottomBar.suggestion")}: {w.suggestion}
 											</p>
 										)}
 									</div>
@@ -315,14 +351,14 @@ export function BottomBar() {
 										type="button"
 										onClick={() => handleFixWithAi(w, i)}
 										disabled={fixingIdx === i}
-										className="flex flex-shrink-0 items-center gap-1 rounded-md bg-[#7C3AED]/10 px-2 py-1 text-[9px] font-medium text-[#7C3AED] transition-colors hover:bg-[#7C3AED]/20 disabled:opacity-50"
+										className="flex flex-shrink-0 items-center gap-1 rounded-md bg-violet-600/10 px-2 py-1 text-[9px] font-medium text-violet-600 transition-colors hover:bg-violet-600/20 disabled:opacity-50"
 									>
 										{fixingIdx === i ? (
-											<Loader2Icon className="h-3 w-3 animate-spin" />
+											<Loader2Icon className="h-3.5 w-3.5 animate-spin" />
 										) : (
-											<WrenchIcon className="h-3 w-3" />
+											<WrenchIcon className="h-3.5 w-3.5" />
 										)}
-										Corregir
+										{t("bottomBar.fix")}
 									</button>
 								</div>
 							))}

@@ -199,16 +199,16 @@ export function ScheduleSessionDialog({
 
 			{/* Dialog */}
 			<div
-				className="relative mx-4 w-full max-w-md rounded-2xl bg-white shadow-2xl"
+				className="relative mx-4 w-full max-w-md rounded-2xl bg-background shadow-2xl"
 				onClick={(e) => e.stopPropagation()}
 			>
 				{/* Header */}
-				<div className="flex items-center justify-between border-b border-[#F1F5F9] px-6 py-4">
-					<h2 className="text-base font-semibold text-[#0F172A]">Nueva sesión</h2>
+				<div className="flex items-center justify-between border-b border-muted px-6 py-4">
+					<h2 className="text-base font-semibold text-foreground">Nueva sesión</h2>
 					<button
 						type="button"
 						onClick={onClose}
-						className="rounded-lg p-1 text-[#94A3B8] transition-colors hover:bg-[#F1F5F9] hover:text-[#334155]"
+						className="rounded-lg p-1 text-chrome-text-secondary transition-colors hover:bg-muted hover:text-foreground"
 					>
 						<XIcon className="h-4 w-4" />
 					</button>
@@ -217,9 +217,9 @@ export function ScheduleSessionDialog({
 				<form onSubmit={handleSubmit} className="px-6 py-5">
 					{/* Process — searchable combobox with "create new" option */}
 					<div className="relative mb-5">
-						<label className="mb-1.5 block text-xs font-medium text-[#64748B]">Proceso</label>
+						<label className="mb-1.5 block text-xs font-medium text-chrome-text-muted">Proceso</label>
 						<div className="relative">
-							<SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94A3B8]" />
+							<SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-chrome-text-secondary" />
 							<input
 								ref={processInputRef}
 								type="text"
@@ -232,19 +232,19 @@ export function ScheduleSessionDialog({
 								}}
 								onFocus={() => setShowProcessDropdown(true)}
 								placeholder={loadingProcesses ? "Cargando procesos..." : "Buscar o crear proceso..."}
-								className="w-full rounded-lg border border-[#E2E8F0] py-2.5 pl-9 pr-3 text-sm text-[#0F172A] placeholder:text-[#CBD5E1] focus:border-[#2563EB] focus:outline-none focus:ring-1 focus:ring-[#2563EB]"
+								className="w-full rounded-lg border border-border py-2.5 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 							/>
 						</div>
 
 						{/* Dropdown */}
 						{showProcessDropdown && (
-							<div className="absolute z-10 mt-1 max-h-48 w-full overflow-auto rounded-lg border border-[#E2E8F0] bg-white shadow-lg">
+							<div className="absolute z-10 mt-1 max-h-48 w-full overflow-auto rounded-lg border border-border bg-background shadow-lg">
 								{filteredProcesses.map((p) => (
 									<button
 										key={p.id}
 										type="button"
 										onClick={() => handleSelectProcess(p)}
-										className="flex w-full items-center px-3 py-2 text-left text-sm text-[#334155] transition-colors hover:bg-[#F8FAFC]"
+										className="flex w-full items-center px-3 py-2 text-left text-sm text-foreground transition-colors hover:bg-secondary"
 									>
 										{p.name}
 									</button>
@@ -255,14 +255,14 @@ export function ScheduleSessionDialog({
 									<button
 										type="button"
 										onClick={handleCreateNewProcess}
-										className="flex w-full items-center gap-2 border-t border-[#F1F5F9] px-3 py-2 text-left text-sm font-medium text-[#2563EB] transition-colors hover:bg-[#EFF6FF]"
+										className="flex w-full items-center gap-2 border-t border-muted px-3 py-2 text-left text-sm font-medium text-primary transition-colors hover:bg-accent"
 									>
 										<PlusIcon className="h-3.5 w-3.5" />
 										Crear &ldquo;{processSearch.trim()}&rdquo;
 									</button>
 								)}
 								{filteredProcesses.length === 0 && !processSearch.trim() && !loadingProcesses && (
-									<div className="px-3 py-3 text-center text-xs text-[#94A3B8]">
+									<div className="px-3 py-3 text-center text-xs text-chrome-text-secondary">
 										Sin procesos. Escribe un nombre para crear uno nuevo.
 									</div>
 								)}
@@ -271,8 +271,8 @@ export function ScheduleSessionDialog({
 
 						{/* Selected badge */}
 						{isNewProcess && processSearch.trim() && (
-							<div className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-[#EFF6FF] px-2 py-0.5 text-[11px] font-medium text-[#2563EB]">
-								<PlusIcon className="h-3 w-3" />
+							<div className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-accent px-2 py-0.5 text-[11px] font-medium text-primary">
+								<PlusIcon className="h-3.5 w-3.5" />
 								Nuevo proceso
 							</div>
 						)}
@@ -280,7 +280,7 @@ export function ScheduleSessionDialog({
 
 					{/* Session type — pill selector */}
 					<div className="mb-5">
-						<label className="mb-1.5 block text-xs font-medium text-[#64748B]">Tipo de sesión</label>
+						<label className="mb-1.5 block text-xs font-medium text-chrome-text-muted">Tipo de sesión</label>
 						<div className="flex gap-2">
 							{SESSION_TYPES.map((t) => (
 								<button
@@ -289,12 +289,12 @@ export function ScheduleSessionDialog({
 									onClick={() => setSessionType(t.value)}
 									className={`flex-1 rounded-lg border px-3 py-2 text-center transition-all ${
 										sessionType === t.value
-											? "border-[#0F172A] bg-[#0F172A] text-white"
-											: "border-[#E2E8F0] bg-white text-[#64748B] hover:border-[#CBD5E1]"
+											? "border-foreground bg-chrome-base text-white"
+											: "border-border bg-background text-chrome-text-muted hover:border-border"
 									}`}
 								>
 									<div className="text-xs font-medium">{t.label}</div>
-									<div className={`text-[10px] ${sessionType === t.value ? "text-[#94A3B8]" : "text-[#CBD5E1]"}`}>
+									<div className={`text-[10px] ${sessionType === t.value ? "text-chrome-text-secondary" : "text-muted-foreground"}`}>
 										{t.desc}
 									</div>
 								</button>
@@ -305,17 +305,17 @@ export function ScheduleSessionDialog({
 					{/* Date + Duration — side by side */}
 					<div className="mb-5 grid grid-cols-3 gap-3">
 						<div className="col-span-2">
-							<label className="mb-1.5 block text-xs font-medium text-[#64748B]">Fecha y hora</label>
+							<label className="mb-1.5 block text-xs font-medium text-chrome-text-muted">Fecha y hora</label>
 							<input
 								type="datetime-local"
 								value={scheduledFor}
 								onChange={(e) => setScheduledFor(e.target.value)}
 								required
-								className="w-full rounded-lg border border-[#E2E8F0] px-3 py-2.5 text-sm text-[#0F172A] focus:border-[#2563EB] focus:outline-none focus:ring-1 focus:ring-[#2563EB]"
+								className="w-full rounded-lg border border-border px-3 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 							/>
 						</div>
 						<div>
-							<label className="mb-1.5 block text-xs font-medium text-[#64748B]">Duración</label>
+							<label className="mb-1.5 block text-xs font-medium text-chrome-text-muted">Duración</label>
 							<div className="grid grid-cols-2 gap-1">
 								{DURATIONS.map((d) => (
 									<button
@@ -324,8 +324,8 @@ export function ScheduleSessionDialog({
 										onClick={() => setDuration(d.value)}
 										className={`rounded-md px-1 py-2.5 text-center text-[11px] font-medium transition-all ${
 											duration === d.value
-												? "bg-[#0F172A] text-white"
-												: "border border-[#E2E8F0] text-[#64748B] hover:border-[#CBD5E1]"
+												? "bg-chrome-base text-white"
+												: "border border-border text-chrome-text-muted hover:border-border"
 										}`}
 									>
 										{d.label}
@@ -337,34 +337,34 @@ export function ScheduleSessionDialog({
 
 					{/* Contact — compact inline */}
 					<div className="mb-5">
-						<label className="mb-1.5 block text-xs font-medium text-[#64748B]">Contacto del cliente (opcional)</label>
+						<label className="mb-1.5 block text-xs font-medium text-chrome-text-muted">Contacto del cliente (opcional)</label>
 						<div className="flex gap-2">
 							<input
 								type="text"
 								value={contactName}
 								onChange={(e) => setContactName(e.target.value)}
 								placeholder="Nombre"
-								className="flex-1 rounded-lg border border-[#E2E8F0] px-3 py-2 text-sm placeholder:text-[#CBD5E1] focus:border-[#2563EB] focus:outline-none focus:ring-1 focus:ring-[#2563EB]"
+								className="flex-1 rounded-lg border border-border px-3 py-2 text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 							/>
 							<input
 								type="email"
 								value={contactEmail}
 								onChange={(e) => setContactEmail(e.target.value)}
 								placeholder="email@empresa.com"
-								className="flex-1 rounded-lg border border-[#E2E8F0] px-3 py-2 text-sm placeholder:text-[#CBD5E1] focus:border-[#2563EB] focus:outline-none focus:ring-1 focus:ring-[#2563EB]"
+								className="flex-1 rounded-lg border border-border px-3 py-2 text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 							/>
 						</div>
 					</div>
 
 					{/* Goals — optional */}
 					<div className="mb-6">
-						<label className="mb-1.5 block text-xs font-medium text-[#64748B]">Notas (opcional)</label>
+						<label className="mb-1.5 block text-xs font-medium text-chrome-text-muted">Notas (opcional)</label>
 						<textarea
 							value={sessionGoals}
 							onChange={(e) => setSessionGoals(e.target.value)}
 							placeholder="Qué cubrir, contexto previo..."
 							rows={2}
-							className="w-full resize-none rounded-lg border border-[#E2E8F0] px-3 py-2 text-sm placeholder:text-[#CBD5E1] focus:border-[#2563EB] focus:outline-none focus:ring-1 focus:ring-[#2563EB]"
+							className="w-full resize-none rounded-lg border border-border px-3 py-2 text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 						/>
 					</div>
 
@@ -372,7 +372,7 @@ export function ScheduleSessionDialog({
 					<button
 						type="submit"
 						disabled={submitting || !scheduledFor}
-						className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#0F172A] py-3 text-sm font-medium text-white transition-colors hover:bg-[#1E293B] disabled:opacity-50"
+						className="flex w-full items-center justify-center gap-2 rounded-lg bg-chrome-base py-3 text-sm font-medium text-white transition-colors hover:bg-chrome-raised disabled:opacity-50"
 					>
 						{submitting ? (
 							<>

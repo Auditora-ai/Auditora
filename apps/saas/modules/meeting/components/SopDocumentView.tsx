@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import {
 	SparklesIcon,
 	RefreshCwIcon,
@@ -26,6 +27,7 @@ interface SopDocumentViewProps {
 }
 
 export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initialProcedure }: SopDocumentViewProps) {
+	const t = useTranslations("meeting");
 	const [procedure, setProcedure] = useState<ProcedureResult | null>(initialProcedure);
 	const [generating, setGenerating] = useState(false);
 	const [error, setError] = useState<string | null>(null);
@@ -87,7 +89,7 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 		const promise = fetch(`/api/sessions/${sessionId}/nodes/${nodeId}/procedure`, { method: "POST" })
 			.then(async (res) => {
 				const data = await res.json();
-				if (!res.ok) throw new Error(data.error || "Error al generar");
+				if (!res.ok) throw new Error(data.error || t("toast.generateError"));
 				return data.procedure as ProcedureResult;
 			})
 			.finally(() => pendingGenerations.delete(nodeId));
@@ -140,9 +142,9 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 	if (generating) {
 		return (
 			<div className="flex h-full flex-col items-center justify-center gap-3">
-				<Loader2Icon className="h-8 w-8 animate-spin text-[#2563EB]" />
-				<p className="text-sm text-[#94A3B8]">Generando procedimiento...</p>
-				<p className="text-xs text-[#CBD5E1]">Analizando transcript y contexto BPMN</p>
+				<Loader2Icon className="h-8 w-8 animate-spin text-primary" />
+				<p className="text-sm text-chrome-text-secondary">{t("sop.generating")}</p>
+				<p className="text-xs text-chrome-text-secondary">{t("sop.generatingContext")}</p>
 			</div>
 		);
 	}
@@ -150,10 +152,10 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 	if (error) {
 		return (
 			<div className="flex h-full flex-col items-center justify-center gap-3">
-				<AlertTriangleIcon className="h-8 w-8 text-[#EAB308]" />
-				<p className="text-sm text-[#94A3B8]">{error}</p>
-				<button onClick={handleGenerate} className="flex items-center gap-2 rounded-lg bg-[#2563EB] px-4 py-2 text-xs font-medium text-white hover:bg-[#1D4ED8]">
-					<RefreshCwIcon className="h-3.5 w-3.5" /> Reintentar
+				<AlertTriangleIcon className="h-8 w-8 text-yellow-500" />
+				<p className="text-sm text-chrome-text-secondary">{error}</p>
+				<button onClick={handleGenerate} className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-xs font-medium text-white hover:bg-action-hover">
+					<RefreshCwIcon className="h-3.5 w-3.5" /> {t("sop.retry")}
 				</button>
 			</div>
 		);
@@ -162,17 +164,17 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 	if (!procedure) {
 		return (
 			<div className="flex h-full flex-col items-center justify-center gap-4">
-				<div className="rounded-2xl bg-[#EFF6FF] p-5">
-					<SparklesIcon className="h-10 w-10 text-[#2563EB]" />
+				<div className="rounded-2xl bg-accent p-5">
+					<SparklesIcon className="h-10 w-10 text-primary" />
 				</div>
 				<div className="text-center">
-					<p className="text-sm font-medium text-[#0F172A]">Sin procedimiento</p>
-					<p className="mt-1 max-w-sm text-xs text-[#64748B]">
-						Genera un documento SOP completo usando la transcripcion de la sesion y el contexto del diagrama BPMN.
+					<p className="text-sm font-medium text-canvas-text">{t("sop.noProcedure")}</p>
+					<p className="mt-1 max-w-sm text-xs text-chrome-text-muted">
+						{t("sop.noProcedureDescription")}
 					</p>
 				</div>
-				<button onClick={handleGenerate} className="flex items-center gap-2 rounded-lg bg-[#2563EB] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#1D4ED8]">
-					<SparklesIcon className="h-4 w-4" /> Generar SOP con IA
+				<button onClick={handleGenerate} className="flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white hover:bg-action-hover">
+					<SparklesIcon className="h-4 w-4" /> {t("sop.generateSop")}
 				</button>
 			</div>
 		);
@@ -181,46 +183,46 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 	return (
 		<div className="mx-auto max-w-[720px] px-8 py-6">
 			{/* Document header */}
-			<div className="mb-6 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-5">
+			<div className="mb-6 rounded-xl border border-canvas-border bg-secondary p-5">
 				<div className="flex items-start justify-between">
 					<div>
-						<p className="text-[10px] font-semibold uppercase tracking-wider text-[#94A3B8]">Procedimiento</p>
-						<h2 className="mt-1 text-lg font-bold text-[#0F172A]">{procedure.activityName}</h2>
-						<p className="mt-0.5 text-xs text-[#64748B]">{procedure.processName}</p>
+						<p className="text-[10px] font-semibold uppercase tracking-wider text-chrome-text-secondary">{t("sop.procedureLabel")}</p>
+						<h2 className="mt-1 text-lg font-bold text-canvas-text">{procedure.activityName}</h2>
+						<p className="mt-0.5 text-xs text-chrome-text-muted">{procedure.processName}</p>
 					</div>
 					<div className="flex items-center gap-2">
-						<button onClick={handleGenerate} className="flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] px-3 py-1.5 text-[11px] text-[#64748B] hover:bg-white hover:text-[#334155]">
-							<RefreshCwIcon className="h-3 w-3" /> Regenerar
+						<button onClick={handleGenerate} className="flex items-center gap-1.5 rounded-lg border border-canvas-border px-3 py-1.5 text-[11px] text-chrome-text-muted hover:bg-background hover:text-canvas-text-secondary">
+							<RefreshCwIcon className="h-3.5 w-3.5" /> {t("sop.regenerate")}
 						</button>
-						<button onClick={handleExport} className="flex items-center gap-1.5 rounded-lg bg-[#2563EB] px-3 py-1.5 text-[11px] font-medium text-white hover:bg-[#1D4ED8]">
-							<DownloadIcon className="h-3 w-3" /> Exportar
+						<button onClick={handleExport} className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-[11px] font-medium text-white hover:bg-action-hover">
+							<DownloadIcon className="h-3.5 w-3.5" /> {t("sop.export")}
 						</button>
 					</div>
 				</div>
 				<div className="mt-4 grid grid-cols-3 gap-3">
-					<MetaField label="Codigo" value={procedure.procedureCode || "—"} />
-					<MetaField label="Responsable" value={procedure.responsible} />
-					<MetaField label="Frecuencia" value={procedure.frequency || "—"} />
+					<MetaField label={t("sop.codeField")} value={procedure.procedureCode || "—"} />
+					<MetaField label={t("sop.responsibleField")} value={procedure.responsible} />
+					<MetaField label={t("sop.frequencyField")} value={procedure.frequency || "—"} />
 				</div>
 				{procedure.overallConfidence != null && (
 					<div className="mt-3 flex items-center gap-2">
-						<span className="text-[10px] text-[#94A3B8]">Confianza</span>
-						<div className="h-1.5 flex-1 rounded-full bg-[#E2E8F0]">
+						<span className="text-[10px] text-chrome-text-secondary">{t("sop.confidenceLabel")}</span>
+						<div className="h-1.5 flex-1 rounded-full bg-canvas-border">
 							<div
 								className="h-1.5 rounded-full transition-all"
 								style={{
 									width: `${Math.round(procedure.overallConfidence * 100)}%`,
-									backgroundColor: procedure.overallConfidence > 0.7 ? "#16A34A" : procedure.overallConfidence > 0.4 ? "#EAB308" : "#EF4444",
+									backgroundColor: procedure.overallConfidence > 0.7 ? "var(--palette-success)" : procedure.overallConfidence > 0.4 ? "var(--palette-warning)" : "var(--palette-destructive)",
 								}}
 							/>
 						</div>
-						<span className="text-[10px] font-medium tabular-nums text-[#64748B]">{Math.round(procedure.overallConfidence * 100)}%</span>
+						<span className="text-[10px] font-medium tabular-nums text-chrome-text-muted">{Math.round(procedure.overallConfidence * 100)}%</span>
 					</div>
 				)}
 			</div>
 
 			{/* Objective — editable */}
-			<DocSection title="Objetivo">
+			<DocSection title={t("sop.objectiveSection")}>
 				<EditableText
 					value={procedure.objective}
 					onChange={(v) => updateField("objective", v)}
@@ -229,7 +231,7 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 			</DocSection>
 
 			{/* Scope — editable */}
-			<DocSection title="Alcance">
+			<DocSection title={t("sop.scopeSection")}>
 				<EditableText
 					value={procedure.scope}
 					onChange={(v) => updateField("scope", v)}
@@ -239,11 +241,11 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 
 			{/* Prerequisites */}
 			{procedure.prerequisites.length > 0 && (
-				<DocSection title="Prerrequisitos">
+				<DocSection title={t("sop.prerequisitesSection")}>
 					<ul className="space-y-1.5">
 						{procedure.prerequisites.map((p, i) => (
-							<li key={i} className="flex items-start gap-2 text-sm text-[#334155]">
-								<CheckCircle2Icon className="mt-0.5 h-4 w-4 shrink-0 text-[#16A34A]" />
+							<li key={i} className="flex items-start gap-2 text-sm text-canvas-text-secondary">
+								<CheckCircle2Icon className="mt-0.5 h-4 w-4 shrink-0 text-success" />
 								{p}
 							</li>
 						))}
@@ -252,16 +254,16 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 			)}
 
 			{/* Steps — each step description is editable */}
-			<DocSection title={`Pasos del Procedimiento (${procedure.steps.length})`}>
+			<DocSection title={`${t("sop.stepsSection")} (${procedure.steps.length})`}>
 				<div className="space-y-4">
 					{procedure.steps.map((step, idx) => (
-						<div key={step.stepNumber} className="rounded-xl border border-[#E2E8F0] bg-white p-4">
+						<div key={step.stepNumber} className="rounded-xl border border-canvas-border bg-background p-4">
 							<div className="flex items-start gap-3">
-								<span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#2563EB] text-xs font-bold text-white">
+								<span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
 									{step.stepNumber}
 								</span>
 								<div className="min-w-0 flex-1">
-									<p className="text-sm font-semibold text-[#0F172A]">{step.action}</p>
+									<p className="text-sm font-semibold text-canvas-text">{step.action}</p>
 
 									{/* Editable description */}
 									<div className="mt-1">
@@ -269,20 +271,20 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 											value={step.description}
 											onChange={(v) => updateStep(idx, "description", v)}
 											sessionId={sessionId}
-											placeholder="Describe este paso en detalle..."
+											placeholder={t("sop.describeStep")}
 										/>
 									</div>
 
 									{/* Metadata row */}
 									<div className="mt-2 flex flex-wrap items-center gap-2">
 										{step.responsible && (
-											<span className="rounded-md bg-[#F1F5F9] px-2 py-0.5 text-[10px] font-medium text-[#475569]">{step.responsible}</span>
+											<span className="rounded-md bg-canvas-surface px-2 py-0.5 text-[10px] font-medium text-chrome-subtle">{step.responsible}</span>
 										)}
 										{step.systems.map((s) => (
-											<span key={s} className="rounded-md bg-[#EFF6FF] px-2 py-0.5 text-[10px] font-medium text-[#2563EB]">{s}</span>
+											<span key={s} className="rounded-md bg-accent px-2 py-0.5 text-[10px] font-medium text-primary">{s}</span>
 										))}
 										{step.estimatedTime && (
-											<span className="text-[10px] text-[#94A3B8]">{step.estimatedTime}</span>
+											<span className="text-[10px] text-chrome-text-secondary">{step.estimatedTime}</span>
 										)}
 									</div>
 
@@ -290,18 +292,18 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 									{(step.inputs.length > 0 || step.outputs.length > 0) && (
 										<div className="mt-2 grid grid-cols-2 gap-2">
 											{step.inputs.length > 0 && (
-												<div className="rounded-lg bg-[#F8FAFC] p-2">
-													<p className="text-[9px] font-semibold uppercase tracking-wider text-[#94A3B8]">Entradas</p>
+												<div className="rounded-lg bg-secondary p-2">
+													<p className="text-[9px] font-semibold uppercase tracking-wider text-chrome-text-secondary">{t("sop.inputsLabel")}</p>
 													{step.inputs.map((inp) => (
-														<p key={inp} className="mt-0.5 text-[11px] text-[#475569]">{inp}</p>
+														<p key={inp} className="mt-0.5 text-[11px] text-chrome-subtle">{inp}</p>
 													))}
 												</div>
 											)}
 											{step.outputs.length > 0 && (
-												<div className="rounded-lg bg-[#F0FDF4] p-2">
-													<p className="text-[9px] font-semibold uppercase tracking-wider text-[#94A3B8]">Salidas</p>
+												<div className="rounded-lg bg-green-50 p-2">
+													<p className="text-[9px] font-semibold uppercase tracking-wider text-chrome-text-secondary">{t("sop.outputsLabel")}</p>
 													{step.outputs.map((out) => (
-														<p key={out} className="mt-0.5 text-[11px] text-[#475569]">{out}</p>
+														<p key={out} className="mt-0.5 text-[11px] text-chrome-subtle">{out}</p>
 													))}
 												</div>
 											)}
@@ -312,8 +314,8 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 									{step.controls.length > 0 && (
 										<div className="mt-2">
 											{step.controls.map((c) => (
-												<p key={c} className="flex items-start gap-1.5 text-[11px] text-[#475569]">
-													<CheckCircle2Icon className="mt-0.5 h-3 w-3 shrink-0 text-[#16A34A]" />{c}
+												<p key={c} className="flex items-start gap-1.5 text-[11px] text-chrome-subtle">
+													<CheckCircle2Icon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-success" />{c}
 												</p>
 											))}
 										</div>
@@ -323,10 +325,10 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 									{step.exceptions.length > 0 && (
 										<div className="mt-2 space-y-1">
 											{step.exceptions.map((ex, i) => (
-												<div key={i} className="rounded-lg bg-[#FEF9C3] px-3 py-1.5 text-[11px]">
-													<span className="font-medium text-[#92400E]">Si: </span>
-													<span className="text-[#78350F]">{ex.condition}</span>
-													<span className="text-[#92400E]"> → {ex.action}</span>
+												<div key={i} className="rounded-lg bg-yellow-100 px-3 py-1.5 text-[11px]">
+													<span className="font-medium text-amber-800">{t("sop.exceptionPrefix")}</span>
+													<span className="text-amber-900">{ex.condition}</span>
+													<span className="text-amber-800"> → {ex.action}</span>
 												</div>
 											))}
 										</div>
@@ -338,7 +340,7 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 											value={step.notes || ""}
 											onChange={(v) => updateStep(idx, "notes", v)}
 											sessionId={sessionId}
-											placeholder="Notas, capturas de pantalla, videos..."
+											placeholder={t("sop.notesPlaceholder")}
 											mini
 										/>
 									</div>
@@ -351,13 +353,13 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 
 			{/* KPIs */}
 			{procedure.indicators.length > 0 && (
-				<DocSection title="Indicadores">
+				<DocSection title={t("sop.indicatorsSection")}>
 					<div className="grid grid-cols-2 gap-3">
 						{procedure.indicators.map((ind, i) => (
-							<div key={i} className="rounded-lg border border-[#E2E8F0] p-3">
-								<p className="text-xs font-medium text-[#0F172A]">{ind.name}</p>
-								{ind.formula && <p className="mt-0.5 text-[11px] text-[#64748B]">{ind.formula}</p>}
-								{ind.target && <p className="mt-1 text-[11px] font-medium text-[#2563EB]">Meta: {ind.target}</p>}
+							<div key={i} className="rounded-lg border border-canvas-border p-3">
+								<p className="text-xs font-medium text-canvas-text">{ind.name}</p>
+								{ind.formula && <p className="mt-0.5 text-[11px] text-chrome-text-muted">{ind.formula}</p>}
+								{ind.target && <p className="mt-1 text-[11px] font-medium text-primary">{t("sop.targetLabel")}: {ind.target}</p>}
 							</div>
 						))}
 					</div>
@@ -366,12 +368,12 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 
 			{/* Gaps with media suggestions */}
 			{procedure.gaps.length > 0 && (
-				<DocSection title="Informacion Pendiente">
+				<DocSection title={t("sop.pendingInfoSection")}>
 					<div className="space-y-2">
 						{procedure.gaps.map((gap, i) => (
-							<div key={i} className="flex items-start gap-2 rounded-lg bg-[#FEF9C3] px-3 py-2 text-sm">
-								<AlertTriangleIcon className="mt-0.5 h-4 w-4 shrink-0 text-[#EAB308]" />
-								<span className="text-[#78350F]">{gap}</span>
+							<div key={i} className="flex items-start gap-2 rounded-lg bg-yellow-100 px-3 py-2 text-sm">
+								<AlertTriangleIcon className="mt-0.5 h-4 w-4 shrink-0 text-yellow-500" />
+								<span className="text-amber-900">{gap}</span>
 							</div>
 						))}
 					</div>
@@ -379,11 +381,11 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 			)}
 
 			{/* Media suggestions from AI */}
-			<DocSection title="Material de Apoyo">
+			<DocSection title={t("sop.supportMaterialSection")}>
 				<div className="space-y-2">
 					<MediaPlaceholder
 						icon={<ImageIcon className="h-4 w-4" />}
-						label="Agregar captura de pantalla"
+						label={t("sop.addScreenshot")}
 						hint="Captura del sistema, formulario o pantalla relevante a este procedimiento"
 						sessionId={sessionId}
 						onInsert={(content) => {
@@ -392,7 +394,7 @@ export function SopDocumentView({ nodeId, nodeLabel, sessionId, procedure: initi
 					/>
 					<MediaPlaceholder
 						icon={<VideoIcon className="h-4 w-4" />}
-						label="Agregar video explicativo"
+						label={t("sop.addVideo")}
 						hint="Video de YouTube, Vimeo o Loom mostrando cómo ejecutar el procedimiento"
 						isVideo
 						sessionId={sessionId}
@@ -421,12 +423,13 @@ function EditableText({
 	placeholder?: string;
 	mini?: boolean;
 }) {
+	const t = useTranslations("meeting");
 	const [editing, setEditing] = useState(false);
 	const [richContent, setRichContent] = useState<Record<string, any> | undefined>(undefined);
 
 	if (editing) {
 		return (
-			<div className="rounded-lg ring-1 ring-[#2563EB]/30">
+			<div className="rounded-lg ring-1 ring-primary/30">
 				<ProcedureEditor
 					content={richContent || value}
 					onChange={(doc) => {
@@ -437,13 +440,13 @@ function EditableText({
 					}}
 					sessionId={sessionId}
 				/>
-				<div className="flex justify-end border-t border-[#E2E8F0] px-2 py-1">
+				<div className="flex justify-end border-t border-canvas-border px-2 py-1">
 					<button
 						type="button"
 						onClick={() => setEditing(false)}
-						className="rounded px-2 py-0.5 text-[10px] font-medium text-[#2563EB] hover:bg-[#EFF6FF]"
+						className="rounded px-2 py-0.5 text-[10px] font-medium text-primary hover:bg-accent"
 					>
-						Listo
+						{t("sop.doneEditing")}
 					</button>
 				</div>
 			</div>
@@ -452,19 +455,19 @@ function EditableText({
 
 	return (
 		<div
-			className={`group/edit relative cursor-text rounded-lg transition-colors hover:bg-[#F8FAFC] ${mini ? "px-2 py-1" : "px-3 py-2"}`}
+			className={`group/edit relative cursor-text rounded-lg transition-colors hover:bg-secondary ${mini ? "px-2 py-1" : "px-3 py-2"}`}
 			onClick={() => setEditing(true)}
 		>
 			{value ? (
-				<p className={`leading-relaxed text-[#334155] ${mini ? "text-[11px] italic text-[#94A3B8]" : "text-sm"}`}>
+				<p className={`leading-relaxed text-canvas-text-secondary ${mini ? "text-[11px] italic text-chrome-text-secondary" : "text-sm"}`}>
 					{value}
 				</p>
 			) : (
-				<p className={`italic text-[#CBD5E1] ${mini ? "text-[11px]" : "text-sm"}`}>
-					{placeholder || "Click para editar..."}
+				<p className={`italic text-chrome-text-secondary ${mini ? "text-[11px]" : "text-sm"}`}>
+					{placeholder || t("sop.clickToEdit")}
 				</p>
 			)}
-			<PencilIcon className="absolute right-2 top-2 h-3 w-3 text-[#CBD5E1] opacity-0 transition-opacity group-hover/edit:opacity-100" />
+			<PencilIcon className="absolute right-2 top-2 h-3.5 w-3.5 text-chrome-text-secondary opacity-0 transition-opacity group-hover/edit:opacity-100" />
 		</div>
 	);
 }
@@ -520,14 +523,14 @@ function MediaPlaceholder({
 		<button
 			type="button"
 			onClick={handleClick}
-			className="flex w-full items-center gap-3 rounded-lg border border-dashed border-[#E2E8F0] px-4 py-3 text-left transition-colors hover:border-[#2563EB] hover:bg-[#EFF6FF]/50"
+			className="flex w-full items-center gap-3 rounded-lg border border-dashed border-canvas-border px-4 py-3 text-left transition-colors hover:border-primary hover:bg-accent/50"
 		>
-			<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#F1F5F9] text-[#94A3B8]">
+			<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-canvas-surface text-chrome-text-secondary">
 				{icon}
 			</div>
 			<div>
-				<p className="text-xs font-medium text-[#334155]">{label}</p>
-				<p className="text-[10px] text-[#94A3B8]">{hint}</p>
+				<p className="text-xs font-medium text-canvas-text-secondary">{label}</p>
+				<p className="text-[10px] text-chrome-text-secondary">{hint}</p>
 			</div>
 		</button>
 	);
@@ -537,9 +540,9 @@ function MediaPlaceholder({
 
 function MetaField({ label, value }: { label: string; value: string }) {
 	return (
-		<div className="rounded-lg bg-white px-3 py-2">
-			<p className="text-[9px] font-semibold uppercase tracking-wider text-[#94A3B8]">{label}</p>
-			<p className="mt-0.5 text-xs font-medium text-[#334155]">{value}</p>
+		<div className="rounded-lg bg-background px-3 py-2">
+			<p className="text-[9px] font-semibold uppercase tracking-wider text-chrome-text-secondary">{label}</p>
+			<p className="mt-0.5 text-xs font-medium text-canvas-text-secondary">{value}</p>
 		</div>
 	);
 }
@@ -547,9 +550,9 @@ function MetaField({ label, value }: { label: string; value: string }) {
 function DocSection({ title, children }: { title: string; children: React.ReactNode }) {
 	return (
 		<div className="mb-6">
-			<h3 className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#94A3B8]">
+			<h3 className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-chrome-text-secondary">
 				{title}
-				<div className="h-px flex-1 bg-[#E2E8F0]" />
+				<div className="h-px flex-1 bg-canvas-border" />
 			</h3>
 			{children}
 		</div>

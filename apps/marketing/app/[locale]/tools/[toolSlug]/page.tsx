@@ -40,8 +40,8 @@ function buildJsonLd(tool: NonNullable<ReturnType<typeof getToolBySlug>>, locale
     },
     author: {
       "@type": "Organization",
-      name: "aiprocess.me",
-      url: "https://aiprocess.me",
+      name: "Auditora.ai",
+      url: "https://auditora.ai",
     },
   };
 }

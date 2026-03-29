@@ -5,6 +5,7 @@ import { cn } from "@repo/ui";
 import { useEffect, useState, type PropsWithChildren } from "react";
 import { SidebarProvider, useSidebar } from "../lib/sidebar-context";
 import { CommandPalette } from "./CommandPalette";
+import { MobileBottomBar } from "./MobileBottomBar";
 import { NavBar } from "./NavBar";
 
 function AppContent({ children }: PropsWithChildren) {
@@ -39,15 +40,17 @@ function AppContent({ children }: PropsWithChildren) {
 		<div className="bg-background">
 			<NavBar />
 			<CommandPalette />
+			<MobileBottomBar />
 			<div
 				className={cn("flex min-h-screen", {
 					"md:ml-[280px]": useSidebarLayout && !isCollapsed,
-					"md:ml-[80px]": useSidebarLayout && isCollapsed,
+					"md:ml-[72px]": useSidebarLayout && isCollapsed,
 				})}
 			>
 				<main
 					className={cn(
 						"bg-background py-4 w-full border-t md:border-t-0 md:border-l",
+						"pb-20 md:pb-4", // Bottom padding for mobile bottom bar
 					)}
 				>
 					<div className="container h-full">{children}</div>

@@ -127,5 +127,5 @@ export function SessionDiagram({
 		);
 	}
 
-	return <div ref={containerRef} className="h-full w-full bg-white" />;
+	return <div ref={containerRef} className="h-full w-full bg-background" />;
 }

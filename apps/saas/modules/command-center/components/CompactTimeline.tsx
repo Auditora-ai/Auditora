@@ -53,14 +53,14 @@ export function CompactTimeline({ sessions }: { sessions: SessionData[] }) {
 	if (processes.length === 0) return null;
 
 	return (
-		<div className="rounded-xl border border-[#E2E8F0] bg-white p-4">
-			<h3 className="mb-3 px-1 text-sm font-semibold text-[#0F172A]">Timeline</h3>
+		<div className="rounded-xl border border-border bg-background p-4">
+			<h3 className="mb-3 px-1 text-sm font-semibold text-foreground">Timeline</h3>
 
 			{/* Header: week labels */}
 			<div className="mb-2 grid" style={{ gridTemplateColumns: `120px repeat(${weeks.length}, 1fr)` }}>
 				<div />
 				{weeks.map((w) => (
-					<div key={w.label} className="text-center text-[10px] text-[#94A3B8]">
+					<div key={w.label} className="text-center text-[10px] text-chrome-text-secondary">
 						{w.label}
 					</div>
 				))}
@@ -70,10 +70,10 @@ export function CompactTimeline({ sessions }: { sessions: SessionData[] }) {
 			{processes.map(([procId, procName], idx) => (
 				<div
 					key={procId}
-					className="grid items-center border-t border-[#F1F5F9] py-1.5"
+					className="grid items-center border-t border-muted py-1.5"
 					style={{ gridTemplateColumns: `120px repeat(${weeks.length}, 1fr)` }}
 				>
-					<div className="truncate pr-2 text-xs text-[#334155]">{procName}</div>
+					<div className="truncate pr-2 text-xs text-foreground">{procName}</div>
 					{weeks.map((_, weekIdx) => {
 						const key = `${weekIdx}-${procId}`;
 						const sessionsInCell = sessionsByWeekProcess.get(key);

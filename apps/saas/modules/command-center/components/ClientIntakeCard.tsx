@@ -71,23 +71,23 @@ export function ClientIntakeCard({
 	// No intake generated yet
 	if (intakeResponseCount === 0) {
 		return (
-			<div className="rounded-xl border border-dashed border-[#93C5FD] bg-[#EFF6FF] p-5">
+			<div className="rounded-xl border border-dashed border-blue-300 bg-accent p-5">
 				<div className="mb-1 flex items-center gap-2">
-					<LinkIcon className="h-4 w-4 text-[#2563EB]" />
-					<span className="text-sm font-semibold text-[#2563EB]">Link para el Cliente</span>
+					<LinkIcon className="h-4 w-4 text-primary" />
+					<span className="text-sm font-semibold text-primary">Link para el Cliente</span>
 				</div>
-				<p className="mb-3 text-xs text-[#64748B]">
+				<p className="mb-3 text-xs text-chrome-text-muted">
 					Genera un link con preguntas específicas para que el cliente prepare información.
 				</p>
 				<button
 					type="button"
 					onClick={handleGenerate}
 					disabled={generating}
-					className="rounded-md bg-[#2563EB] px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-[#1D4ED8] disabled:opacity-50"
+					className="rounded-md bg-primary px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-action-hover disabled:opacity-50"
 				>
 					{generating ? (
 						<span className="flex items-center gap-1.5">
-							<Loader2Icon className="h-3 w-3 animate-spin" />
+							<Loader2Icon className="h-3.5 w-3.5 animate-spin" />
 							Generando...
 						</span>
 					) : (
@@ -99,31 +99,31 @@ export function ClientIntakeCard({
 	}
 
 	const statusConfig: Record<string, { icon: string; label: string; color: string }> = {
-		pending: { icon: "⏳", label: "Sin respuestas aún", color: "text-[#94A3B8]" },
-		partial: { icon: "⏳", label: `${progress.answered}/${progress.total} respondidas`, color: "text-[#D97706]" },
-		complete: { icon: "✅", label: "Todas respondidas", color: "text-[#16A34A]" },
+		pending: { icon: "⏳", label: "Sin respuestas aún", color: "text-chrome-text-secondary" },
+		partial: { icon: "⏳", label: `${progress.answered}/${progress.total} respondidas`, color: "text-orientation" },
+		complete: { icon: "✅", label: "Todas respondidas", color: "text-success" },
 	};
 	const status = statusConfig[intakeStatus ?? "pending"] ?? statusConfig.pending;
 
 	return (
-		<div className="rounded-xl border border-dashed border-[#93C5FD] bg-[#EFF6FF] p-5">
+		<div className="rounded-xl border border-dashed border-blue-300 bg-accent p-5">
 			<div className="mb-1 flex items-center gap-2">
-				<LinkIcon className="h-4 w-4 text-[#2563EB]" />
-				<span className="text-sm font-semibold text-[#2563EB]">Link para el Cliente</span>
+				<LinkIcon className="h-4 w-4 text-primary" />
+				<span className="text-sm font-semibold text-primary">Link para el Cliente</span>
 			</div>
 
 			{/* URL + Copy */}
 			<div
 				onClick={handleCopy}
-				className="mb-2 flex cursor-pointer items-center gap-2 rounded-md border border-[#E2E8F0] bg-white px-3 py-2 transition-colors hover:border-[#2563EB]"
+				className="mb-2 flex cursor-pointer items-center gap-2 rounded-md border border-border bg-background px-3 py-2 transition-colors hover:border-primary"
 			>
-				<span className="flex-1 truncate font-mono text-[11px] text-[#64748B]">
+				<span className="flex-1 truncate font-mono text-[11px] text-chrome-text-muted">
 					{intakeUrl ?? "—"}
 				</span>
 				{copied ? (
-					<CheckIcon className="h-3.5 w-3.5 shrink-0 text-[#16A34A]" />
+					<CheckIcon className="h-3.5 w-3.5 shrink-0 text-success" />
 				) : (
-					<CopyIcon className="h-3.5 w-3.5 shrink-0 text-[#94A3B8]" />
+					<CopyIcon className="h-3.5 w-3.5 shrink-0 text-chrome-text-secondary" />
 				)}
 			</div>
 

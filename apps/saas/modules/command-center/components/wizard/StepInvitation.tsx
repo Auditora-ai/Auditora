@@ -130,7 +130,7 @@ export function StepInvitation({
 <a href="${intakeUrl}" style="display:inline-block;padding:10px 20px;background:#2563EB;color:white;text-decoration:none;border-radius:6px;font-weight:500;font-size:14px">Completar formulario</a>
 </div>`
 			: "";
-		return `<div style="font-family:Inter,system-ui,sans-serif;max-width:600px">
+		return `<div style="font-family:'Geist Sans',system-ui,sans-serif;max-width:600px">
 <h2 style="color:#0F172A;margin-bottom:8px">${invitation.title}</h2>
 <p style="color:#334155;line-height:1.6">${invitation.intro}</p>
 <h3 style="color:#0F172A;margin-top:20px;margin-bottom:8px;font-size:14px;text-transform:uppercase;letter-spacing:0.05em">Instrucciones por rol</h3>
@@ -177,25 +177,25 @@ ${invitation.suggestedDuration ? `<p style="margin-top:12px;color:#64748B;font-s
 
 		return (
 			<div className="flex h-full flex-col items-center justify-center text-center">
-				<div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#16A34A]/10">
-					<PartyPopperIcon className="h-8 w-8 text-[#16A34A]" />
+				<div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-success/10">
+					<PartyPopperIcon className="h-8 w-8 text-success" />
 				</div>
 
-				<h2 className="mb-2 text-2xl font-semibold text-[#F1F5F9]">
+				<h2 className="mb-2 text-2xl font-semibold text-chrome-text">
 					Sesion creada
 				</h2>
-				<p className="mb-8 max-w-sm text-sm text-[#64748B]">
+				<p className="mb-8 max-w-sm text-sm text-chrome-text-muted">
 					Tu sesion ha sido programada exitosamente. Comparte el link de intake con
 					los participantes para que se preparen antes de la reunion.
 				</p>
 
 				{intakeUrl && (
 					<div className="mb-6 w-full max-w-md">
-						<label className="mb-2 block text-xs font-medium text-[#94A3B8]">
+						<label className="mb-2 block text-xs font-medium text-chrome-text-secondary">
 							Link de Intake
 						</label>
-						<div className="flex items-center gap-2 rounded-lg border border-[#334155] bg-[#1E293B] p-1">
-							<span className="flex-1 truncate px-3 text-sm text-[#F1F5F9]">
+						<div className="flex items-center gap-2 rounded-lg border border-chrome-border bg-chrome-raised p-1">
+							<span className="flex-1 truncate px-3 text-sm text-chrome-text">
 								{intakeUrl}
 							</span>
 							<button
@@ -204,7 +204,7 @@ ${invitation.suggestedDuration ? `<p style="margin-top:12px;color:#64748B;font-s
 									await navigator.clipboard.writeText(intakeUrl);
 									toast.success("Link copiado");
 								}}
-								className="shrink-0 rounded-md bg-[#2563EB] px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-[#1D4ED8]"
+								className="shrink-0 rounded-md bg-primary px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-action-hover"
 							>
 								<CopyIcon className="h-4 w-4" />
 							</button>
@@ -215,7 +215,7 @@ ${invitation.suggestedDuration ? `<p style="margin-top:12px;color:#64748B;font-s
 				<button
 					type="button"
 					onClick={onGoToCommandCenter}
-					className="inline-flex items-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-[#1D4ED8]"
+					className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-action-hover"
 				>
 					<ExternalLinkIcon className="h-4 w-4" />
 					Ir al Centro de Comando
@@ -226,8 +226,8 @@ ${invitation.suggestedDuration ? `<p style="margin-top:12px;color:#64748B;font-s
 
 	return (
 		<div className="flex h-full flex-col">
-			<h2 className="mb-1 text-xl font-semibold text-[#F1F5F9]">Invitacion</h2>
-			<p className="mb-6 text-sm text-[#64748B]">
+			<h2 className="mb-1 text-xl font-semibold text-chrome-text">Invitacion</h2>
+			<p className="mb-6 text-sm text-chrome-text-muted">
 				Genera una invitacion inteligente con instrucciones personalizadas para cada
 				participante.
 			</p>
@@ -235,17 +235,17 @@ ${invitation.suggestedDuration ? `<p style="margin-top:12px;color:#64748B;font-s
 			{/* Generate button or loading state */}
 			{!invitation && !generating && (
 				<div className="flex flex-1 flex-col items-center justify-center">
-					<div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#2563EB]/10">
-						<SparklesIcon className="h-7 w-7 text-[#2563EB]" />
+					<div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
+						<SparklesIcon className="h-7 w-7 text-primary" />
 					</div>
-					<p className="mb-6 max-w-xs text-center text-sm text-[#64748B]">
+					<p className="mb-6 max-w-xs text-center text-sm text-chrome-text-muted">
 						La IA generará una invitación con instrucciones por rol, preguntas
 						previas y un resumen del contexto.
 					</p>
 					<button
 						type="button"
 						onClick={handleGenerate}
-						className="inline-flex items-center gap-2 rounded-lg bg-[#2563EB] px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-[#1D4ED8]"
+						className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-action-hover"
 					>
 						<SparklesIcon className="h-4 w-4" />
 						Generar Invitación
@@ -258,16 +258,16 @@ ${invitation.suggestedDuration ? `<p style="margin-top:12px;color:#64748B;font-s
 				<div className="flex flex-1 flex-col items-center justify-center">
 					<style>{`@keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }`}</style>
 					<div className="flex items-center gap-1.5 mb-4">
-						<div className="h-2 w-2 animate-bounce rounded-full bg-[#2563EB]" style={{ animationDelay: "0ms" }} />
-						<div className="h-2 w-2 animate-bounce rounded-full bg-[#2563EB]" style={{ animationDelay: "150ms" }} />
-						<div className="h-2 w-2 animate-bounce rounded-full bg-[#2563EB]" style={{ animationDelay: "300ms" }} />
+						<div className="h-2 w-2 animate-bounce rounded-full bg-primary" style={{ animationDelay: "0ms" }} />
+						<div className="h-2 w-2 animate-bounce rounded-full bg-primary" style={{ animationDelay: "150ms" }} />
+						<div className="h-2 w-2 animate-bounce rounded-full bg-primary" style={{ animationDelay: "300ms" }} />
 					</div>
-					<p className="text-sm font-medium text-[#F1F5F9]">Generando invitación inteligente</p>
-					<p className="mt-1 mb-4 max-w-xs text-center text-xs text-[#64748B]">
+					<p className="text-sm font-medium text-chrome-text">Generando invitación inteligente</p>
+					<p className="mt-1 mb-4 max-w-xs text-center text-xs text-chrome-text-muted">
 						Creando instrucciones por rol, preguntas de preparación y resumen de contexto...
 					</p>
-					<div className="h-1 w-48 overflow-hidden rounded-full bg-[#1E293B]">
-						<div className="h-full animate-[shimmer_2s_ease-in-out_infinite] rounded-full bg-gradient-to-r from-transparent via-[#2563EB] to-transparent" style={{ width: "200%", marginLeft: "-50%" }} />
+					<div className="h-1 w-48 overflow-hidden rounded-full bg-chrome-raised">
+						<div className="h-full animate-[shimmer_2s_ease-in-out_infinite] rounded-full bg-gradient-to-r from-transparent via-primary to-transparent" style={{ width: "200%", marginLeft: "-50%" }} />
 					</div>
 				</div>
 			)}
@@ -276,25 +276,25 @@ ${invitation.suggestedDuration ? `<p style="margin-top:12px;color:#64748B;font-s
 			{invitation && (
 				<div className="flex-1 space-y-4 overflow-y-auto">
 					{/* Title + Intro */}
-					<div className="rounded-lg border border-[#334155] bg-[#1E293B] p-4">
-						<h3 className="mb-2 text-lg font-semibold text-[#F1F5F9]">
+					<div className="rounded-lg border border-chrome-border bg-chrome-raised p-4">
+						<h3 className="mb-2 text-lg font-semibold text-chrome-text">
 							{invitation.title}
 						</h3>
-						<p className="text-sm leading-relaxed text-[#94A3B8]">{invitation.intro}</p>
+						<p className="text-sm leading-relaxed text-chrome-text-secondary">{invitation.intro}</p>
 					</div>
 
 					{/* Role instructions */}
 					{Object.entries(invitation.roleInstructions).length > 0 && (
-						<div className="rounded-lg border border-[#334155] bg-[#1E293B] p-4">
-							<h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#64748B]">
+						<div className="rounded-lg border border-chrome-border bg-chrome-raised p-4">
+							<h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-chrome-text-muted">
 								Instrucciones por rol
 							</h4>
 							<div className="space-y-3">
 								{Object.entries(invitation.roleInstructions).map(
 									([role, instruction]) => (
 										<div key={role}>
-											<span className="text-sm font-medium text-[#F1F5F9]">{role}</span>
-											<p className="mt-0.5 text-sm text-[#94A3B8]">{instruction}</p>
+											<span className="text-sm font-medium text-chrome-text">{role}</span>
+											<p className="mt-0.5 text-sm text-chrome-text-secondary">{instruction}</p>
 										</div>
 									),
 								)}
@@ -304,14 +304,14 @@ ${invitation.suggestedDuration ? `<p style="margin-top:12px;color:#64748B;font-s
 
 					{/* Intake questions */}
 					{invitation.intakeQuestions.length > 0 && (
-						<div className="rounded-lg border border-[#334155] bg-[#1E293B] p-4">
-							<h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[#64748B]">
+						<div className="rounded-lg border border-chrome-border bg-chrome-raised p-4">
+							<h4 className="mb-3 text-xs font-semibold uppercase tracking-wider text-chrome-text-muted">
 								Preguntas previas
 							</h4>
 							<ol className="space-y-2">
 								{invitation.intakeQuestions.map((q, i) => (
-									<li key={i} className="flex gap-2 text-sm text-[#94A3B8]">
-										<span className="shrink-0 font-medium text-[#F1F5F9]">
+									<li key={i} className="flex gap-2 text-sm text-chrome-text-secondary">
+										<span className="shrink-0 font-medium text-chrome-text">
 											{i + 1}.
 										</span>
 										{q}
@@ -323,11 +323,11 @@ ${invitation.suggestedDuration ? `<p style="margin-top:12px;color:#64748B;font-s
 
 					{/* Context summary */}
 					{invitation.contextSummary && (
-						<div className="rounded-lg border border-[#334155] bg-[#1E293B] p-4">
-							<h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-[#64748B]">
+						<div className="rounded-lg border border-chrome-border bg-chrome-raised p-4">
+							<h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-chrome-text-muted">
 								Resumen de contexto
 							</h4>
-							<p className="text-sm leading-relaxed text-[#94A3B8]">
+							<p className="text-sm leading-relaxed text-chrome-text-secondary">
 								{invitation.contextSummary}
 							</p>
 						</div>
@@ -335,9 +335,9 @@ ${invitation.suggestedDuration ? `<p style="margin-top:12px;color:#64748B;font-s
 
 					{/* Duration suggestion */}
 					{invitation.suggestedDuration && (
-						<p className="text-xs text-[#64748B]">
+						<p className="text-xs text-chrome-text-muted">
 							Duracion sugerida por IA:{" "}
-							<span className="font-medium text-[#94A3B8]">
+							<span className="font-medium text-chrome-text-secondary">
 								{invitation.suggestedDuration} minutos
 							</span>
 						</p>
@@ -351,35 +351,35 @@ ${invitation.suggestedDuration ? `<p style="margin-top:12px;color:#64748B;font-s
 									type="checkbox"
 									checked={includeIntakeLink}
 									onChange={(e) => setIncludeIntakeLink(e.target.checked)}
-									className="h-4 w-4 rounded border-[#334155] bg-[#1E293B] text-[#2563EB] focus:ring-[#2563EB] focus:ring-offset-0"
+									className="h-4 w-4 rounded border-chrome-border bg-chrome-raised text-primary focus:ring-primary focus:ring-offset-0"
 								/>
-								<span className="text-xs text-[#94A3B8]">Incluir link del formulario de preparación</span>
+								<span className="text-xs text-chrome-text-secondary">Incluir link del formulario de preparación</span>
 							</label>
 						)}
-						<p className="mb-2 text-xs font-medium text-[#64748B]">Copiar invitación</p>
+						<p className="mb-2 text-xs font-medium text-chrome-text-muted">Copiar invitación</p>
 						<div className="flex flex-wrap gap-2">
 							<button
 								type="button"
 								onClick={() => handleCopy("plain")}
-								className="inline-flex items-center gap-1.5 rounded-lg border border-[#334155] px-3 py-2 text-sm font-medium text-[#94A3B8] transition-colors hover:border-[#64748B] hover:text-[#F1F5F9]"
+								className="inline-flex items-center gap-1.5 rounded-lg border border-chrome-border px-3 py-2 text-sm font-medium text-chrome-text-secondary transition-colors hover:border-chrome-text-muted hover:text-chrome-text"
 							>
-								{copied === "plain" ? <CheckIcon className="h-3.5 w-3.5 text-[#16A34A]" /> : <CopyIcon className="h-3.5 w-3.5" />}
+								{copied === "plain" ? <CheckIcon className="h-3.5 w-3.5 text-success" /> : <CopyIcon className="h-3.5 w-3.5" />}
 								Texto plano
 							</button>
 							<button
 								type="button"
 								onClick={() => handleCopy("email")}
-								className="inline-flex items-center gap-1.5 rounded-lg border border-[#334155] px-3 py-2 text-sm font-medium text-[#94A3B8] transition-colors hover:border-[#64748B] hover:text-[#F1F5F9]"
+								className="inline-flex items-center gap-1.5 rounded-lg border border-chrome-border px-3 py-2 text-sm font-medium text-chrome-text-secondary transition-colors hover:border-chrome-text-muted hover:text-chrome-text"
 							>
-								{copied === "email" ? <CheckIcon className="h-3.5 w-3.5 text-[#16A34A]" /> : <MailIcon className="h-3.5 w-3.5" />}
+								{copied === "email" ? <CheckIcon className="h-3.5 w-3.5 text-success" /> : <MailIcon className="h-3.5 w-3.5" />}
 								Email
 							</button>
 							<button
 								type="button"
 								onClick={() => handleCopy("whatsapp")}
-								className="inline-flex items-center gap-1.5 rounded-lg border border-[#334155] px-3 py-2 text-sm font-medium text-[#94A3B8] transition-colors hover:border-[#64748B] hover:text-[#F1F5F9]"
+								className="inline-flex items-center gap-1.5 rounded-lg border border-chrome-border px-3 py-2 text-sm font-medium text-chrome-text-secondary transition-colors hover:border-chrome-text-muted hover:text-chrome-text"
 							>
-								{copied === "whatsapp" ? <CheckIcon className="h-3.5 w-3.5 text-[#16A34A]" /> : <MessageCircleIcon className="h-3.5 w-3.5" />}
+								{copied === "whatsapp" ? <CheckIcon className="h-3.5 w-3.5 text-success" /> : <MessageCircleIcon className="h-3.5 w-3.5" />}
 								WhatsApp
 							</button>
 						</div>

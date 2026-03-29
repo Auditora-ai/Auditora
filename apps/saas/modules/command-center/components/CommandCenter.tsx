@@ -3,6 +3,7 @@
 import { useState, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { PlusIcon, PencilIcon } from "lucide-react";
+import { PageHeader } from "@shared/components/PageHeader";
 import { toast } from "sonner";
 import { SessionWizard, type SessionCloneData } from "./SessionWizard";
 import { ActiveSessionBanner } from "./ActiveSessionBanner";
@@ -205,16 +206,16 @@ export function CommandCenter({
 	// Empty state — no sessions at all → auto-open wizard in onboarding mode
 	if (sessions.length === 0 && processes.length === 0) {
 		return (
-			<div className="flex h-full flex-col items-center justify-center px-4 text-center" style={{ fontFamily: "Inter, system-ui, sans-serif" }}>
+			<div className="flex h-full flex-col items-center justify-center px-4 text-center">
 				<div className="mb-6 text-6xl opacity-20">📋</div>
-				<h2 className="mb-2 text-xl font-semibold text-[#0F172A]">Centro de Comando</h2>
-				<p className="mb-6 max-w-md text-sm text-[#64748B]">
+				<h2 className="mb-2 font-display text-xl text-foreground">Centro de Comando</h2>
+				<p className="mb-6 max-w-md text-sm text-muted-foreground">
 					Programa tu primera sesión de levantamiento para comenzar a mapear procesos con IA.
 				</p>
 				<button
 					type="button"
 					onClick={() => setShowSchedule(true)}
-					className="rounded-lg bg-[#2563EB] px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-[#1D4ED8]"
+					className="rounded-lg bg-primary px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-action-hover"
 				>
 					Programar Primera Sesión
 				</button>
@@ -230,7 +231,7 @@ export function CommandCenter({
 	}
 
 	return (
-		<div className="flex h-full flex-col overflow-auto" style={{ fontFamily: "Inter, system-ui, sans-serif" }}>
+		<div className="flex h-full flex-col overflow-auto">
 			{/* Active Session Banner */}
 			{activeSessions.length > 0 && (
 				<ActiveSessionBanner
@@ -240,17 +241,16 @@ export function CommandCenter({
 			)}
 
 			{/* Header + Actions */}
-			<div className="border-b border-[#E2E8F0] px-6 py-4">
-				<div className="flex items-center justify-between">
-					<div>
-						<h1 className="text-lg font-bold text-[#0F172A]">Centro de Comando</h1>
-						<p className="text-xs text-[#64748B]">{organizationName}</p>
-					</div>
-					<div className="flex gap-2">
+			<PageHeader
+				title="Centro de Comando"
+				subtitle={organizationName}
+				className="mb-0 border-b border-border px-6 py-4"
+				actions={
+					<>
 						<button
 							type="button"
 							onClick={() => handleEditMode(nextSession?.processDefinition?.id)}
-							className="flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-3 py-2 text-xs font-medium text-[#334155] transition-colors hover:bg-[#F8FAFC]"
+							className="flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-2 text-xs font-medium text-foreground transition-colors hover:bg-secondary"
 						>
 							<PencilIcon className="h-3.5 w-3.5" />
 							Editar en Vivo
@@ -258,14 +258,14 @@ export function CommandCenter({
 						<button
 							type="button"
 							onClick={() => setShowSchedule(true)}
-							className="flex items-center gap-1.5 rounded-lg bg-[#2563EB] px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-[#1D4ED8]"
+							className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-action-hover"
 						>
 							<PlusIcon className="h-3.5 w-3.5" />
 							Nueva Sesión
 						</button>
-					</div>
-				</div>
-
+					</>
+				}
+			>
 				{/* Stats */}
 				<StatsBar
 					sessionsThisWeek={sessionsThisWeek}
@@ -273,7 +273,7 @@ export function CommandCenter({
 					coveragePercent={coveragePercent}
 					pendingIntake={pendingIntake}
 				/>
-			</div>
+			</PageHeader>
 
 			{/* Main content — 2-column responsive */}
 			<div className="flex-1 overflow-auto p-6">

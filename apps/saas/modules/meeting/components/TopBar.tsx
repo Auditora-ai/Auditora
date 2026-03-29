@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback, useImperativeHandle, forwardRef, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useLiveSessionContext } from "../context/LiveSessionContext";
 import { CompletenessRing } from "./CompletenessRing";
@@ -27,6 +28,7 @@ interface TopBarProps {
 }
 
 export function TopBar({ processName: initialName, clientName }: TopBarProps) {
+	const t = useTranslations("meeting");
 	const {
 		botActivity,
 		completenessScore,
@@ -40,6 +42,7 @@ export function TopBar({ processName: initialName, clientName }: TopBarProps) {
 		processId,
 		shareToken,
 		modelerApi,
+		setProcessId,
 	} = useLiveSessionContext();
 
 	const isInCall = connectionStatus === "connected" && !botActivity.stale && sessionStatus !== "FAILED";
@@ -79,25 +82,31 @@ export function TopBar({ processName: initialName, clientName }: TopBarProps) {
 			}
 		} catch { /* ok */ }
 
-		// Save to DB
-		if (processId) {
-			fetch(`/api/processes/${processId}`, {
-				method: "PATCH",
+		// Save to DB — creates process if none exists, updates name if it does
+		try {
+			const res = await fetch(`/api/sessions/${sessionId}/ensure-process`, {
+				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ name: trimmed }),
-			}).catch(() => {});
-		}
+			});
+			if (res.ok) {
+				const data = await res.json();
+				if (data.created && data.processId) {
+					setProcessId(data.processId);
+				}
+			}
+		} catch { /* non-critical */ }
 	};
 
 	return (
 		<div
-			className="flex items-center justify-between border-b border-[#334155] bg-[#0F172A] px-4"
-			style={{ gridArea: "top", height: 48, fontFamily: "Inter, system-ui, sans-serif" }}
+			className="flex items-center justify-between border-b border-chrome-border bg-chrome-base px-4"
+			style={{ gridArea: "top", height: 48 }}
 		>
 			{/* Left: Logo */}
 			<div className="flex items-center gap-3">
 				<span className="flex items-center">
-					<svg className="h-6 w-6 text-[#2563EB]" viewBox="0 0 32 32" fill="none">
+					<svg className="h-6 w-6 text-primary" viewBox="0 0 32 32" fill="none">
 						<circle cx="8" cy="16" r="3" fill="currentColor" />
 						<circle cx="24" cy="8" r="3" fill="currentColor" />
 						<circle cx="24" cy="24" r="3" fill="currentColor" />
@@ -107,10 +116,10 @@ export function TopBar({ processName: initialName, clientName }: TopBarProps) {
 					</svg>
 					<span className="ml-1.5 text-sm tracking-tight">
 						<span className="font-bold text-white">AI</span>
-						<span className="font-light text-[#94A3B8]">process.me</span>
+						<span className="font-light text-chrome-text-secondary">process.me</span>
 					</span>
 				</span>
-				<div className="h-4 w-px bg-[#334155]" />
+				<div className="h-4 w-px bg-chrome-hover" />
 				{editing ? (
 					<input
 						ref={inputRef}
@@ -121,20 +130,20 @@ export function TopBar({ processName: initialName, clientName }: TopBarProps) {
 							if (e.key === "Escape") setEditing(false);
 						}}
 						autoFocus
-						className="max-w-[280px] rounded bg-[#1E293B] px-2 py-0.5 text-sm text-[#F1F5F9] outline-none ring-1 ring-[#2563EB]"
+						className="max-w-[280px] rounded bg-chrome-raised px-2 py-0.5 text-sm text-chrome-text outline-none ring-1 ring-primary"
 					/>
 				) : (
 					<button
 						type="button"
 						onClick={() => setEditing(true)}
-						className="max-w-[280px] truncate rounded px-1 py-0.5 text-sm text-[#F1F5F9] transition-colors hover:bg-[#1E293B]"
-						title="Click para editar nombre del proceso"
+						className="max-w-[280px] truncate rounded px-1 py-0.5 font-display text-sm text-chrome-text transition-colors hover:bg-chrome-raised"
+						title={t("topBar.processNameTitle")}
 					>
-						{processName || "Nueva sesion"}
+						{processName || t("topBar.newSession")}
 					</button>
 				)}
 				{clientName && (
-					<span className="text-xs text-[#64748B]">
+					<span className="text-xs text-chrome-text-muted">
 						— {clientName}
 					</span>
 				)}
@@ -152,24 +161,24 @@ export function TopBar({ processName: initialName, clientName }: TopBarProps) {
 				<ShareButton />
 				<TopBarButton
 					icon={<PowerIcon className="h-3.5 w-3.5" />}
-					label="Finalizar"
+					label={t("topBar.endButton")}
 					onClick={endSession}
 					variant="danger"
 				/>
-				<div className="ml-2 h-4 w-px bg-[#334155]" />
+				<div className="ml-2 h-4 w-px bg-chrome-hover" />
 				<button
 					type="button"
 					onClick={handleAiClick}
 					className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors duration-75 ${
 						!isInCall
-							? "bg-[#1E293B]/60 text-[#475569]"
+							? "bg-chrome-raised/60 text-chrome-subtle"
 							: aiEnabled
-								? "bg-[#2563EB] text-white"
-								: "bg-[#1E293B] text-[#64748B]"
+								? "bg-primary text-white"
+								: "bg-chrome-raised text-chrome-text-muted"
 					}`}
 				>
-					<SparklesIcon className="h-3 w-3" />
-					{!isInCall ? "Activar IA en vivo" : aiEnabled ? "IA Analizando" : "IA Pausada"}
+					<SparklesIcon className="h-3.5 w-3.5" />
+					{!isInCall ? t("topBar.aiNotInCall") : aiEnabled ? t("topBar.aiAnalyzing") : t("topBar.aiPaused")}
 				</button>
 				<FontScaleControl />
 			</div>
@@ -180,6 +189,7 @@ export function TopBar({ processName: initialName, clientName }: TopBarProps) {
 const FONT_SCALES = [0.9, 1, 1.15, 1.3];
 
 function FontScaleControl() {
+	const t = useTranslations("meeting");
 	const [scaleIndex, setScaleIndex] = useState(1);
 
 	// Sync from localStorage after mount (avoids hydration mismatch)
@@ -200,21 +210,21 @@ function FontScaleControl() {
 	}, []);
 
 	return (
-		<div className="ml-1 flex items-center rounded-lg bg-[#1E293B] p-0.5">
+		<div className="ml-1 flex items-center rounded-lg bg-chrome-raised p-0.5">
 			<button
 				type="button"
 				onClick={() => applyScale(scaleIndex - 1)}
 				disabled={scaleIndex === 0}
-				className="rounded px-1.5 py-0.5 text-[10px] font-medium text-[#64748B] transition-colors hover:text-white disabled:opacity-30"
-				title="Reducir texto"
+				className="rounded px-1.5 py-0.5 text-[10px] font-medium text-chrome-text-muted transition-colors hover:text-white disabled:opacity-30"
+				title={t("topBar.fontDecrease")}
 			>
 				A-
 			</button>
 			<button
 				type="button"
 				onClick={() => applyScale(1)}
-				className={`rounded px-1.5 py-0.5 text-[10px] font-medium transition-colors ${scaleIndex === 1 ? "text-[#3B82F6]" : "text-[#64748B] hover:text-white"}`}
-				title="Tamaño normal"
+				className={`rounded px-1.5 py-0.5 text-[10px] font-medium transition-colors ${scaleIndex === 1 ? "text-primary" : "text-chrome-text-muted hover:text-white"}`}
+				title={t("topBar.fontNormal")}
 			>
 				A
 			</button>
@@ -222,8 +232,8 @@ function FontScaleControl() {
 				type="button"
 				onClick={() => applyScale(scaleIndex + 1)}
 				disabled={scaleIndex === FONT_SCALES.length - 1}
-				className="rounded px-1.5 py-0.5 text-[10px] font-medium text-[#64748B] transition-colors hover:text-white disabled:opacity-30"
-				title="Aumentar texto"
+				className="rounded px-1.5 py-0.5 text-[10px] font-medium text-chrome-text-muted transition-colors hover:text-white disabled:opacity-30"
+				title={t("topBar.fontIncrease")}
 			>
 				A+
 			</button>
@@ -233,6 +243,7 @@ function FontScaleControl() {
 
 const LiveIndicator = forwardRef<{ flash: () => void }, { stale: boolean; activity: { type: string; detail: string | null } }>(
 	function LiveIndicator({ stale, activity }, ref) {
+	const t = useTranslations("meeting");
 	const { sessionId, sessionStatus, connectionStatus } = useLiveSessionContext();
 	const [showPanel, setShowPanel] = useState(false);
 	const [newUrl, setNewUrl] = useState("");
@@ -251,31 +262,31 @@ const LiveIndicator = forwardRef<{ flash: () => void }, { stale: boolean; activi
 	const getIndicatorState = (): { color: string; textColor: string; text: string; animation: "pulse" | "ping" | "" } => {
 		// Error states — red, something is wrong
 		if (sessionStatus === "FAILED")
-			return { color: "bg-red-500", textColor: "text-red-400", text: "Bot desconectado", animation: "pulse" };
+			return { color: "bg-red-500", textColor: "text-red-400", text: t("topBar.botDisconnected"), animation: "pulse" };
 		if (connectionStatus === "disconnected" && !stale)
-			return { color: "bg-red-500", textColor: "text-red-400", text: "Desconectado", animation: "pulse" };
+			return { color: "bg-red-500", textColor: "text-red-400", text: t("topBar.disconnected"), animation: "pulse" };
 		// In-progress states — blue, working on it
 		if (sessionStatus === "CONNECTING")
-			return { color: "bg-blue-500", textColor: "text-blue-400", text: "Conectando...", animation: "pulse" };
+			return { color: "bg-blue-500", textColor: "text-blue-400", text: t("topBar.connecting"), animation: "pulse" };
 		if (connectionStatus === "reconnecting")
-			return { color: "bg-blue-500", textColor: "text-blue-400", text: "Reconectando...", animation: "pulse" };
+			return { color: "bg-blue-500", textColor: "text-blue-400", text: t("topBar.reconnecting"), animation: "pulse" };
 		// Connected — activity states with bot
 		if (connectionStatus === "connected" && !stale) {
 			const activityMap: Record<string, { color: string; textColor: string; text: string; animation: "ping" | "" }> = {
-				listening:   { color: "bg-green-500",  textColor: "text-[#94A3B8]", text: "En llamada",     animation: "" },
-				extracting:  { color: "bg-blue-500",   textColor: "text-[#94A3B8]", text: "Analizando...",  animation: "ping" },
-				diagramming: { color: "bg-purple-500", textColor: "text-[#94A3B8]", text: "Diagramando...", animation: "ping" },
-				suggesting:  { color: "bg-amber-500",  textColor: "text-[#94A3B8]", text: "Sugiriendo...",  animation: "" },
+				listening:   { color: "bg-green-500",  textColor: "text-chrome-text-secondary", text: t("topBar.inCall"),      animation: "" },
+				extracting:  { color: "bg-blue-500",   textColor: "text-chrome-text-secondary", text: t("topBar.analyzing"),   animation: "ping" },
+				diagramming: { color: "bg-purple-500", textColor: "text-chrome-text-secondary", text: t("topBar.diagramming"), animation: "ping" },
+				suggesting:  { color: "bg-amber-500",  textColor: "text-chrome-text-secondary", text: t("topBar.suggesting"),  animation: "" },
 			};
 			return activityMap[activity.type] || activityMap.listening;
 		}
 		// Default — Local mode, calm blue
-		return { color: "bg-blue-500", textColor: "text-blue-400", text: "Local", animation: "" };
+		return { color: "bg-blue-500", textColor: "text-blue-400", text: t("topBar.local"), animation: "" };
 	};
 
 	const state = getIndicatorState();
 	const isError = sessionStatus === "FAILED" || (connectionStatus === "disconnected" && !stale);
-	const isLocal = state.text === "Local";
+	const isLocal = state.text === t("topBar.local");
 	const isConnectedToCall = connectionStatus === "connected" && !stale && sessionStatus !== "FAILED";
 
 	const handleDisconnectBot = async () => {
@@ -283,14 +294,14 @@ const LiveIndicator = forwardRef<{ flash: () => void }, { stale: boolean; activi
 		try {
 			const res = await fetch(`/api/sessions/${sessionId}/disconnect-bot`, { method: "POST" });
 			if (res.ok) {
-				toast.success("Bot desconectado — modo local");
+				toast.success(t("toast.botDisconnected"));
 				setShowPanel(false);
 			} else {
 				const data = await res.json();
-				toast.error(data.error || "Error al desconectar");
+				toast.error(data.error || t("toast.disconnectError"));
 			}
 		} catch {
-			toast.error("Error de conexión");
+			toast.error(t("toast.connectionError"));
 		} finally {
 			setReconnecting(false);
 		}
@@ -306,14 +317,14 @@ const LiveIndicator = forwardRef<{ flash: () => void }, { stale: boolean; activi
 			});
 			const data = await res.json();
 			if (res.ok) {
-				toast.success(url ? "Bot uniendose a nueva llamada..." : "Reconectando bot...");
+				toast.success(url ? t("toast.reconnectNew") : t("toast.reconnecting"));
 				setShowPanel(false);
 				setNewUrl("");
 			} else {
-				toast.error(data.error || "Error al reconectar");
+				toast.error(data.error || t("toast.reconnectError"));
 			}
 		} catch {
-			toast.error("Error de conexion");
+			toast.error(t("toast.connectionError"));
 		} finally {
 			setReconnecting(false);
 		}
@@ -324,7 +335,7 @@ const LiveIndicator = forwardRef<{ flash: () => void }, { stale: boolean; activi
 			<button
 				type="button"
 				onClick={() => setShowPanel(!showPanel)}
-				className={`flex items-center gap-2 rounded-lg px-2 py-1 transition-all hover:bg-[#1E293B] ${flashing ? "ring-2 ring-blue-500/70 shadow-[0_0_12px_rgba(59,130,246,0.5)]" : ""}`}
+				className={`flex items-center gap-2 rounded-lg px-2 py-1 transition-all hover:bg-chrome-raised ${flashing ? "ring-2 ring-blue-500/70 shadow-[0_0_12px_rgba(59,130,246,0.5)]" : ""}`}
 				style={{ transitionDuration: flashing ? "150ms" : "500ms" }}
 			>
 				<div className="relative flex h-2 w-2">
@@ -335,32 +346,32 @@ const LiveIndicator = forwardRef<{ flash: () => void }, { stale: boolean; activi
 				</div>
 				<span className={`text-xs ${state.textColor}`}>
 					{state.text}
-					{activity.detail && state.animation !== "pulse" && <span className="ml-1 text-[#64748B]">· {activity.detail}</span>}
+					{activity.detail && state.animation !== "pulse" && <span className="ml-1 text-chrome-text-muted">· {activity.detail}</span>}
 				</span>
 			</button>
 
 			{/* Connection management panel */}
 			{showPanel && (
-				<div className="absolute left-1/2 top-full z-50 mt-2 w-80 -translate-x-1/2 rounded-xl bg-[#0F172A] p-4 shadow-xl ring-1 ring-[#334155]">
+				<div className="absolute left-1/2 top-full z-50 mt-2 w-80 -translate-x-1/2 rounded-xl bg-chrome-base p-4 shadow-xl ring-1 ring-chrome-border">
 					<div className="mb-3 flex items-center justify-between">
-						<span className="text-xs font-medium text-[#F1F5F9]">
-							{isConnectedToCall ? "Conexión activa" : "Conectar a llamada"}
+						<span className="text-xs font-medium text-chrome-text">
+							{isConnectedToCall ? t("topBar.activeConnection") : t("topBar.connectToCall")}
 						</span>
-						<button type="button" onClick={() => setShowPanel(false)} className="text-[#64748B] hover:text-white">
+						<button type="button" onClick={() => setShowPanel(false)} className="text-chrome-text-muted hover:text-white">
 							<XIcon className="h-3.5 w-3.5" />
 						</button>
 					</div>
 
 					{/* Status */}
-					<div className="mb-3 rounded-lg bg-[#1E293B] px-3 py-2">
+					<div className="mb-3 rounded-lg bg-chrome-raised px-3 py-2">
 						<div className="flex items-center gap-2">
 							<span className={`h-2 w-2 rounded-full ${state.color}`} />
-							<span className="text-xs text-[#94A3B8]">
-								{sessionStatus === "FAILED" ? "Bot no pudo unirse a la llamada"
-									: isError ? "Se perdió la conexión al bot"
-									: isConnectedToCall ? "Bot conectado y escuchando"
-									: connectionStatus === "reconnecting" ? "Reconectando al bot..."
-									: "Modo local — puedes conectar a una llamada"}
+							<span className="text-xs text-chrome-text-secondary">
+								{sessionStatus === "FAILED" ? t("topBar.statusFailed")
+									: isError ? t("topBar.statusLostConnection")
+									: isConnectedToCall ? t("topBar.statusConnected")
+									: connectionStatus === "reconnecting" ? t("topBar.statusReconnecting")
+									: t("topBar.statusLocal")}
 							</span>
 						</div>
 					</div>
@@ -371,17 +382,17 @@ const LiveIndicator = forwardRef<{ flash: () => void }, { stale: boolean; activi
 							type="button"
 							onClick={() => handleReconnect()}
 							disabled={reconnecting}
-							className="mb-2 flex w-full items-center gap-2 rounded-lg bg-[#1E293B] px-3 py-2 text-xs text-[#94A3B8] transition-colors hover:bg-[#334155] hover:text-white disabled:opacity-50"
+							className="mb-2 flex w-full items-center gap-2 rounded-lg bg-chrome-raised px-3 py-2 text-xs text-chrome-text-secondary transition-colors hover:bg-chrome-hover hover:text-white disabled:opacity-50"
 						>
 							<RefreshCwIcon className={`h-3.5 w-3.5 ${reconnecting ? "animate-spin" : ""}`} />
-							Reconectar al mismo link
+							{t("topBar.reconnectSameLink")}
 						</button>
 					)}
 
 					{/* Connect / Change meeting link */}
-					<div className="rounded-lg bg-[#1E293B] p-2">
-						<label className="mb-1.5 block text-[10px] font-medium uppercase tracking-wider text-[#64748B]">
-							{isLocal ? "Pegar link de llamada" : "Cambiar link de llamada"}
+					<div className="rounded-lg bg-chrome-raised p-2">
+						<label className="mb-1.5 block text-[10px] font-medium uppercase tracking-wider text-chrome-text-muted">
+							{isLocal ? t("topBar.pasteCallLink") : t("topBar.changeCallLink")}
 						</label>
 						<div className="flex gap-1.5">
 							<input
@@ -389,13 +400,13 @@ const LiveIndicator = forwardRef<{ flash: () => void }, { stale: boolean; activi
 								value={newUrl}
 								onChange={(e) => setNewUrl(e.target.value)}
 								placeholder="https://meet.google.com/..."
-								className="flex-1 rounded-lg bg-[#0F172A] px-2.5 py-1.5 text-xs text-white placeholder-[#475569] outline-none ring-1 ring-[#334155] focus:ring-[#2563EB]"
+								className="flex-1 rounded-lg bg-chrome-base px-2.5 py-1.5 text-xs text-white placeholder-chrome-subtle outline-none ring-1 ring-chrome-border focus:ring-primary"
 							/>
 							<button
 								type="button"
 								onClick={() => newUrl && handleReconnect(newUrl)}
 								disabled={reconnecting || !newUrl}
-								className="rounded-lg bg-[#2563EB] px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#1D4ED8] disabled:opacity-50"
+								className="rounded-lg bg-primary px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:bg-action-hover disabled:opacity-50"
 							>
 								<PhoneCallIcon className="h-3.5 w-3.5" />
 							</button>
@@ -403,10 +414,10 @@ const LiveIndicator = forwardRef<{ flash: () => void }, { stale: boolean; activi
 					</div>
 
 					{/* Info */}
-					<p className="mt-2 text-[10px] text-[#475569]">
+					<p className="mt-2 text-[10px] text-chrome-subtle">
 						{isLocal
-							? "Pega el link de tu videollamada para que el bot se una y transcriba en tiempo real."
-							: "Puedes seguir trabajando en el diagrama sin conexión. El bot se reconecta al link que pegues."}
+							? t("topBar.infoLocal")
+							: t("topBar.infoConnected")}
 					</p>
 
 					{/* Disconnect / cancel — return to local mode */}
@@ -415,11 +426,11 @@ const LiveIndicator = forwardRef<{ flash: () => void }, { stale: boolean; activi
 							type="button"
 							onClick={handleDisconnectBot}
 							disabled={reconnecting}
-							className="mt-2 w-full rounded-lg px-3 py-1.5 text-[10px] text-[#64748B] transition-colors hover:bg-[#1E293B] hover:text-red-400 disabled:opacity-50"
+							className="mt-2 w-full rounded-lg px-3 py-1.5 text-[10px] text-chrome-text-muted transition-colors hover:bg-chrome-raised hover:text-red-400 disabled:opacity-50"
 						>
 							{sessionStatus === "CONNECTING" || connectionStatus === "reconnecting"
-								? "Cancelar y volver a modo local"
-								: "Desconectar bot"}
+								? t("topBar.cancelLocalMode")
+								: t("topBar.disconnectBot")}
 						</button>
 					)}
 				</div>
@@ -429,6 +440,7 @@ const LiveIndicator = forwardRef<{ flash: () => void }, { stale: boolean; activi
 });
 
 function ShareButton() {
+	const t = useTranslations("meeting");
 	const { sessionId, shareToken } = useLiveSessionContext();
 	const [open, setOpen] = useState(false);
 	const [shared, setShared] = useState(!!shareToken);
@@ -443,7 +455,7 @@ function ShareButton() {
 				await fetch(`/api/sessions/${sessionId}/share`, { method: "DELETE" });
 				setShared(false);
 				setToken("");
-				toast.success("Link de compartir desactivado", { duration: 2000 });
+				toast.success(t("toast.shareDisabled"), { duration: 2000 });
 			} else {
 				// Enable share
 				const res = await fetch(`/api/sessions/${sessionId}/share`, { method: "POST" });
@@ -453,11 +465,11 @@ function ShareButton() {
 					setToken(data.shareToken);
 					const url = `${window.location.origin}/share/${data.shareToken}`;
 					navigator.clipboard.writeText(url);
-					toast.success("Link copiado al portapapeles", { duration: 3000 });
+					toast.success(t("toast.linkCopied"), { duration: 3000 });
 				}
 			}
 		} catch {
-			toast.error("Error al cambiar estado de compartir");
+			toast.error(t("toast.shareError"));
 		} finally {
 			setLoading(false);
 		}
@@ -467,7 +479,7 @@ function ShareButton() {
 		if (!token) return;
 		const url = `${window.location.origin}/share/${token}`;
 		navigator.clipboard.writeText(url);
-		toast.success("Link copiado", { duration: 2000 });
+		toast.success(t("toast.linkCopiedShort"), { duration: 2000 });
 	};
 
 	return (
@@ -476,35 +488,35 @@ function ShareButton() {
 				type="button"
 				onClick={() => setOpen(!open)}
 				className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors duration-75 ${
-					shared ? "text-[#2563EB] hover:bg-[#2563EB]/10" : "text-[#94A3B8] hover:bg-[#1E293B] hover:text-white"
+					shared ? "text-primary hover:bg-primary/10" : "text-chrome-text-secondary hover:bg-chrome-raised hover:text-white"
 				}`}
 			>
 				<LinkIcon className="h-3.5 w-3.5" />
-				<span className="hidden lg:inline">{shared ? "Compartiendo" : "Compartir"}</span>
+				<span className="hidden lg:inline">{shared ? t("topBar.sharing") : t("topBar.share")}</span>
 			</button>
 
 			{open && (
-				<div className="absolute right-0 top-full z-50 mt-2 w-72 rounded-xl bg-[#0F172A] p-3 shadow-xl ring-1 ring-[#334155]">
+				<div className="absolute right-0 top-full z-50 mt-2 w-72 rounded-xl bg-chrome-base p-3 shadow-xl ring-1 ring-chrome-border">
 					<div className="mb-2 flex items-center justify-between">
-						<span className="text-xs font-medium text-[#F1F5F9]">Link de visualizacion</span>
-						<button type="button" onClick={() => setOpen(false)} className="text-[#64748B] hover:text-white">
+						<span className="text-xs font-medium text-chrome-text">{t("topBar.viewLink")}</span>
+						<button type="button" onClick={() => setOpen(false)} className="text-chrome-text-muted hover:text-white">
 							<XIcon className="h-3.5 w-3.5" />
 						</button>
 					</div>
 
 					{shared ? (
 						<>
-							<div className="mb-2 flex items-center gap-1.5 rounded-lg bg-[#1E293B] px-2.5 py-2">
+							<div className="mb-2 flex items-center gap-1.5 rounded-lg bg-chrome-raised px-2.5 py-2">
 								<span className="h-2 w-2 rounded-full bg-green-500" />
-								<span className="flex-1 truncate text-[11px] text-[#94A3B8]">
+								<span className="flex-1 truncate text-[11px] text-chrome-text-secondary">
 									/share/{token.slice(0, 12)}...
 								</span>
 								<button
 									type="button"
 									onClick={copyLink}
-									className="rounded px-1.5 py-0.5 text-[10px] font-medium text-[#2563EB] hover:bg-[#2563EB]/10"
+									className="rounded px-1.5 py-0.5 text-[10px] font-medium text-primary hover:bg-primary/10"
 								>
-									Copiar
+									{t("topBar.copy")}
 								</button>
 							</div>
 							<button
@@ -513,10 +525,10 @@ function ShareButton() {
 								disabled={loading}
 								className="w-full rounded-lg bg-red-500/10 px-3 py-1.5 text-xs font-medium text-red-400 transition-colors hover:bg-red-500/20 disabled:opacity-50"
 							>
-								{loading ? "Desactivando..." : "Dejar de compartir"}
+								{loading ? t("topBar.disabling") : t("topBar.stopSharing")}
 							</button>
-							<p className="mt-1.5 text-[10px] text-[#475569]">
-								El link se desactiva al dejar de compartir o al finalizar la sesion.
+							<p className="mt-1.5 text-[10px] text-chrome-subtle">
+								{t("topBar.shareInfoActive")}
 							</p>
 						</>
 					) : (
@@ -525,12 +537,12 @@ function ShareButton() {
 								type="button"
 								onClick={toggleShare}
 								disabled={loading}
-								className="w-full rounded-lg bg-[#2563EB] px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-[#1D4ED8] disabled:opacity-50"
+								className="w-full rounded-lg bg-primary px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-action-hover disabled:opacity-50"
 							>
-								{loading ? "Activando..." : "Activar link de compartir"}
+								{loading ? t("topBar.enabling") : t("topBar.enableShareLink")}
 							</button>
-							<p className="mt-1.5 text-[10px] text-[#475569]">
-								Genera un link de solo lectura para que otros vean el diagrama en vivo.
+							<p className="mt-1.5 text-[10px] text-chrome-subtle">
+								{t("topBar.shareInfoInactive")}
 							</p>
 						</>
 					)}
@@ -558,7 +570,7 @@ function TopBarButton({
 			className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors duration-75 ${
 				variant === "danger"
 					? "text-red-400 hover:bg-red-500/10"
-					: "text-[#94A3B8] hover:bg-[#1E293B] hover:text-white"
+					: "text-chrome-text-secondary hover:bg-chrome-raised hover:text-white"
 			}`}
 		>
 			{icon}
@@ -568,13 +580,14 @@ function TopBarButton({
 }
 
 function ExportDropdown() {
+	const t = useTranslations("meeting");
 	const { exportDiagram, transcript, nodes, sessionId, processId } = useLiveSessionContext();
 	const [open, setOpen] = useState(false);
 	const [resetting, setResetting] = useState(false);
 
 	const handleReset = useCallback(async (scope: "diagram" | "transcript" | "all") => {
-		const labels = { diagram: "el diagrama", transcript: "la transcripción", all: "toda la sesión" };
-		if (!confirm(`¿Estás seguro de que quieres limpiar ${labels[scope]}? Esta acción no se puede deshacer.`)) return;
+		const labels = { diagram: t("topBar.confirmCleanDiagram"), transcript: t("topBar.confirmCleanTranscript"), all: t("topBar.confirmCleanAll") };
+		if (!confirm(t("topBar.confirmCleanPrompt", { label: labels[scope] }))) return;
 		setResetting(true);
 		try {
 			const res = await fetch(`/api/sessions/${sessionId}/reset`, {
@@ -583,24 +596,24 @@ function ExportDropdown() {
 				body: JSON.stringify({ scope }),
 			});
 			if (!res.ok) throw new Error("Error");
-			toast.success(`${labels[scope].charAt(0).toUpperCase() + labels[scope].slice(1)} limpiado`);
+			toast.success(t("toast.cleaned", { label: labels[scope] }));
 			if (scope === "diagram" || scope === "all") {
 				// Reload page to reset modeler state
 				window.location.reload();
 			}
 		} catch {
-			toast.error("Error al limpiar");
+			toast.error(t("toast.cleanError"));
 		} finally {
 			setResetting(false);
 			setOpen(false);
 		}
-	}, [sessionId]);
+	}, [sessionId, t]);
 
 	const exportTranscript = useCallback(() => {
-		if (transcript.length === 0) { toast.error("No hay transcripción"); return; }
-		const lines = transcript.map((t) => {
-			const ts = t.timestamp ? new Date(t.timestamp).toLocaleTimeString("es", { hour12: false }) : "??:??:??";
-			return `[${ts}] ${t.speaker || "?"}: ${t.text}`;
+		if (transcript.length === 0) { toast.error(t("toast.noTranscription")); return; }
+		const lines = transcript.map((tr) => {
+			const ts = tr.timestamp ? new Date(tr.timestamp).toLocaleTimeString("es", { hour12: false }) : "??:??:??";
+			return `[${ts}] ${tr.speaker || "?"}: ${tr.text}`;
 		});
 		const blob = new Blob([lines.join("\n")], { type: "text/plain" });
 		const url = URL.createObjectURL(blob);
@@ -609,49 +622,49 @@ function ExportDropdown() {
 		a.download = "transcripcion.txt";
 		a.click();
 		URL.revokeObjectURL(url);
-		toast.success("Transcripción descargada");
+		toast.success(t("toast.transcriptionDownloaded"));
 		setOpen(false);
-	}, [transcript]);
+	}, [transcript, t]);
 
 	const exportAllSops = useCallback(() => {
 		const nodesWithSop = nodes.filter((n) => n.procedure);
-		if (nodesWithSop.length === 0) { toast.error("No hay procedimientos generados"); return; }
+		if (nodesWithSop.length === 0) { toast.error(t("toast.noProcedures")); return; }
 
 		const lines: string[] = [];
 		lines.push("═══════════════════════════════════════════════");
-		lines.push("  PROCEDIMIENTOS DE TRABAJO (SOPs)");
+		lines.push(`  ${t("topBar.exportSopHeader")}`);
 		lines.push("═══════════════════════════════════════════════");
 		lines.push("");
 
 		for (const node of nodesWithSop) {
 			const proc = node.procedure as any;
 			lines.push("───────────────────────────────────────────────");
-			lines.push(`PROCEDIMIENTO: ${proc.activityName || node.label}`);
-			lines.push(`Código: ${proc.procedureCode || "—"}`);
-			lines.push(`Responsable: ${proc.responsible || "—"}`);
-			lines.push(`Frecuencia: ${proc.frequency || "—"}`);
+			lines.push(`${t("topBar.exportProcedure")}: ${proc.activityName || node.label}`);
+			lines.push(`${t("topBar.exportCode")}: ${proc.procedureCode || "—"}`);
+			lines.push(`${t("topBar.exportResponsible")}: ${proc.responsible || "—"}`);
+			lines.push(`${t("topBar.exportFrequency")}: ${proc.frequency || "—"}`);
 			lines.push("");
-			if (proc.objective) { lines.push("OBJETIVO"); lines.push(proc.objective); lines.push(""); }
-			if (proc.scope) { lines.push("ALCANCE"); lines.push(proc.scope); lines.push(""); }
+			if (proc.objective) { lines.push(t("topBar.exportObjective")); lines.push(proc.objective); lines.push(""); }
+			if (proc.scope) { lines.push(t("topBar.exportScope")); lines.push(proc.scope); lines.push(""); }
 			if (proc.prerequisites?.length > 0) {
-				lines.push("PRERREQUISITOS");
+				lines.push(t("topBar.exportPrerequisites"));
 				proc.prerequisites.forEach((p: string) => lines.push(`  • ${p}`));
 				lines.push("");
 			}
 			if (proc.steps?.length > 0) {
-				lines.push("PASOS");
+				lines.push(t("topBar.exportSteps"));
 				proc.steps.forEach((s: any) => {
 					lines.push(`  ${s.stepNumber}. ${s.action}`);
 					lines.push(`     ${s.description}`);
-					if (s.systems?.length > 0) lines.push(`     Sistemas: ${s.systems.join(", ")}`);
-					if (s.inputs?.length > 0) lines.push(`     Entradas: ${s.inputs.join(", ")}`);
-					if (s.outputs?.length > 0) lines.push(`     Salidas: ${s.outputs.join(", ")}`);
+					if (s.systems?.length > 0) lines.push(`     ${t("topBar.exportSystems")}: ${s.systems.join(", ")}`);
+					if (s.inputs?.length > 0) lines.push(`     ${t("topBar.exportInputs")}: ${s.inputs.join(", ")}`);
+					if (s.outputs?.length > 0) lines.push(`     ${t("topBar.exportOutputs")}: ${s.outputs.join(", ")}`);
 					s.exceptions?.forEach((ex: any) => lines.push(`     ⚠ Si ${ex.condition} → ${ex.action}`));
 					lines.push("");
 				});
 			}
 			if (proc.gaps?.length > 0) {
-				lines.push("INFORMACIÓN PENDIENTE");
+				lines.push(t("topBar.exportPendingInfo"));
 				proc.gaps.forEach((g: string) => lines.push(`  ⚠ ${g}`));
 				lines.push("");
 			}
@@ -665,9 +678,9 @@ function ExportDropdown() {
 		a.download = "procedimientos-sop.txt";
 		a.click();
 		URL.revokeObjectURL(url);
-		toast.success(`${nodesWithSop.length} procedimiento(s) descargados`);
+		toast.success(t("toast.sopsDownloaded", { count: nodesWithSop.length }));
 		setOpen(false);
-	}, [nodes]);
+	}, [nodes, t]);
 
 	const openReport = useCallback(() => {
 		window.open(`/api/sessions/${sessionId}/export/review`, "_blank");
@@ -686,55 +699,55 @@ function ExportDropdown() {
 			<button
 				type="button"
 				onClick={() => setOpen(!open)}
-				className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-[#94A3B8] transition-colors duration-75 hover:bg-[#1E293B] hover:text-white"
+				className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium text-chrome-text-secondary transition-colors duration-75 hover:bg-chrome-raised hover:text-white"
 			>
 				<DownloadIcon className="h-3.5 w-3.5" />
-				<span className="hidden lg:inline">Exportar</span>
-				<ChevronDownIcon className="h-3 w-3" />
+				<span className="hidden lg:inline">{t("topBar.export")}</span>
+				<ChevronDownIcon className="h-3.5 w-3.5" />
 			</button>
 
 			{open && (
 				<>
 					<div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-					<div className="absolute right-0 top-full z-50 mt-1.5 w-56 rounded-xl bg-[#0F172A] p-1.5 shadow-xl ring-1 ring-[#334155]">
+					<div className="absolute right-0 top-full z-50 mt-1.5 w-56 rounded-xl bg-chrome-base p-1.5 shadow-xl ring-1 ring-chrome-border">
 						{/* Diagrama */}
-						<p className="px-2.5 pb-1 pt-2 text-[9px] font-semibold uppercase tracking-wider text-[#475569]">Diagrama</p>
-						<ExportItem icon={<ImageIcon className="h-3.5 w-3.5" />} label="PNG (imagen)" onClick={() => handleExport("png")} />
-						<ExportItem icon={<FileCodeIcon className="h-3.5 w-3.5" />} label="SVG (vectorial)" onClick={() => handleExport("svg")} />
-						<ExportItem icon={<FileIcon className="h-3.5 w-3.5" />} label="BPMN (XML)" onClick={() => handleExport("bpmn")} />
+						<p className="px-2.5 pb-1 pt-2 text-[9px] font-semibold uppercase tracking-wider text-chrome-subtle">{t("topBar.diagramSection")}</p>
+						<ExportItem icon={<ImageIcon className="h-3.5 w-3.5" />} label={t("topBar.pngLabel")} onClick={() => handleExport("png")} />
+						<ExportItem icon={<FileCodeIcon className="h-3.5 w-3.5" />} label={t("topBar.svgLabel")} onClick={() => handleExport("svg")} />
+						<ExportItem icon={<FileIcon className="h-3.5 w-3.5" />} label={t("topBar.bpmnLabel")} onClick={() => handleExport("bpmn")} />
 
-						<div className="my-1.5 h-px bg-[#1E293B]" />
+						<div className="my-1.5 h-px bg-chrome-raised" />
 
 						{/* Documentación */}
-						<p className="px-2.5 pb-1 pt-1 text-[9px] font-semibold uppercase tracking-wider text-[#475569]">Documentación</p>
+						<p className="px-2.5 pb-1 pt-1 text-[9px] font-semibold uppercase tracking-wider text-chrome-subtle">{t("topBar.documentationSection")}</p>
 						<ExportItem
 							icon={<FileTextIcon className="h-3.5 w-3.5" />}
-							label="Transcripción"
+							label={t("topBar.transcription")}
 							badge={transcript.length > 0 ? `${transcript.length}` : undefined}
 							onClick={exportTranscript}
 							disabled={transcript.length === 0}
 						/>
 						<ExportItem
 							icon={<ClipboardListIcon className="h-3.5 w-3.5" />}
-							label="Procedimientos (SOPs)"
+							label={t("topBar.proceduresSops")}
 							badge={sopCount > 0 ? `${sopCount}` : undefined}
 							onClick={exportAllSops}
 							disabled={sopCount === 0}
 						/>
 
-						<div className="my-1.5 h-px bg-[#1E293B]" />
+						<div className="my-1.5 h-px bg-chrome-raised" />
 
 						{/* Reporte */}
-						<p className="px-2.5 pb-1 pt-1 text-[9px] font-semibold uppercase tracking-wider text-[#475569]">Reporte</p>
-						<ExportItem icon={<FileTextIcon className="h-3.5 w-3.5" />} label="Reporte de sesión (PDF)" onClick={openReport} />
+						<p className="px-2.5 pb-1 pt-1 text-[9px] font-semibold uppercase tracking-wider text-chrome-subtle">{t("topBar.reportSection")}</p>
+						<ExportItem icon={<FileTextIcon className="h-3.5 w-3.5" />} label={t("topBar.sessionReport")} onClick={openReport} />
 
-						<div className="my-1.5 h-px bg-[#1E293B]" />
+						<div className="my-1.5 h-px bg-chrome-raised" />
 
 						{/* Reset */}
-						<p className="px-2.5 pb-1 pt-1 text-[9px] font-semibold uppercase tracking-wider text-[#475569]">Limpiar</p>
-						<ExportItem icon={<Trash2Icon className="h-3.5 w-3.5" />} label="Limpiar diagrama" onClick={() => handleReset("diagram")} disabled={resetting} />
-						<ExportItem icon={<Trash2Icon className="h-3.5 w-3.5" />} label="Limpiar transcripción" onClick={() => handleReset("transcript")} disabled={resetting} />
-						<ExportItem icon={<Trash2Icon className="h-3.5 w-3.5" />} label="Limpiar todo" onClick={() => handleReset("all")} disabled={resetting} />
+						<p className="px-2.5 pb-1 pt-1 text-[9px] font-semibold uppercase tracking-wider text-chrome-subtle">{t("topBar.cleanSection")}</p>
+						<ExportItem icon={<Trash2Icon className="h-3.5 w-3.5" />} label={t("topBar.cleanDiagram")} onClick={() => handleReset("diagram")} disabled={resetting} />
+						<ExportItem icon={<Trash2Icon className="h-3.5 w-3.5" />} label={t("topBar.cleanTranscription")} onClick={() => handleReset("transcript")} disabled={resetting} />
+						<ExportItem icon={<Trash2Icon className="h-3.5 w-3.5" />} label={t("topBar.cleanAll")} onClick={() => handleReset("all")} disabled={resetting} />
 					</div>
 				</>
 			)}
@@ -752,14 +765,14 @@ function ExportItem({ icon, label, badge, onClick, disabled }: {
 			disabled={disabled}
 			className={`flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-[11px] transition-colors ${
 				disabled
-					? "cursor-not-allowed text-[#475569] opacity-50"
-					: "text-[#94A3B8] hover:bg-[#1E293B] hover:text-white"
+					? "cursor-not-allowed text-chrome-subtle opacity-50"
+					: "text-chrome-text-secondary hover:bg-chrome-raised hover:text-white"
 			}`}
 		>
 			{icon}
 			<span className="flex-1">{label}</span>
 			{badge && (
-				<span className="rounded-full bg-[#1E293B] px-1.5 py-0.5 text-[9px] tabular-nums text-[#64748B]">{badge}</span>
+				<span className="rounded-full bg-chrome-raised px-1.5 py-0.5 text-[9px] tabular-nums text-chrome-text-muted">{badge}</span>
 			)}
 		</button>
 	);

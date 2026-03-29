@@ -1,4 +1,4 @@
-# aiprocess.me Constitution
+# Auditora.ai Constitution
 
 ## Core Principles
 

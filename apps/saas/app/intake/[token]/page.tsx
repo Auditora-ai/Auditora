@@ -79,18 +79,18 @@ export default function IntakePage() {
 
 	if (loading) {
 		return (
-			<div className="flex min-h-screen items-center justify-center bg-slate-50">
-				<div className="text-slate-400">Cargando...</div>
+			<div className="flex min-h-screen items-center justify-center bg-muted">
+				<div className="text-muted-foreground">Cargando...</div>
 			</div>
 		);
 	}
 
 	if (error && !data) {
 		return (
-			<div className="flex min-h-screen items-center justify-center bg-slate-50">
+			<div className="flex min-h-screen items-center justify-center bg-muted">
 				<div className="max-w-md text-center">
-					<h1 className="mb-2 text-2xl font-semibold text-slate-900">Enlace no válido</h1>
-					<p className="text-slate-500">{error}</p>
+					<h1 className="mb-2 text-2xl font-semibold text-foreground">Enlace no válido</h1>
+					<p className="text-muted-foreground">{error}</p>
 				</div>
 			</div>
 		);
@@ -119,15 +119,15 @@ export default function IntakePage() {
 
 	if (submitted) {
 		return (
-			<div className="flex min-h-screen items-center justify-center bg-slate-50">
+			<div className="flex min-h-screen items-center justify-center bg-muted">
 				<div className="max-w-md text-center">
 					<div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
 						<svg className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
 						</svg>
 					</div>
-					<h1 className="mb-2 text-2xl font-semibold text-slate-900">Respuestas enviadas</h1>
-					<p className="text-slate-500">
+					<h1 className="mb-2 text-2xl font-semibold text-foreground">Respuestas enviadas</h1>
+					<p className="text-muted-foreground">
 						Gracias por tu tiempo. Tu consultor revisará esta información antes de la sesión
 						{scheduledDate ? ` del ${scheduledDate}` : ""}.
 					</p>
@@ -137,37 +137,37 @@ export default function IntakePage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-slate-50 py-8">
+		<div className="min-h-screen bg-muted py-8">
 			<div className="mx-auto max-w-2xl px-4">
 				{/* Header */}
 				<div className="mb-8">
-					<div className="mb-1 text-sm font-medium text-blue-600">aiprocess.me</div>
-					<h1 className="mb-2 text-2xl font-semibold text-slate-900">
+					<div className="mb-1 text-sm font-medium text-blue-600">Auditora.ai</div>
+					<h1 className="mb-2 text-2xl font-semibold text-foreground">
 						Preparación para sesión de levantamiento
 					</h1>
-					<p className="text-slate-500">
+					<p className="text-muted-foreground">
 						{data.organizationName} te invita a preparar información para la sesión sobre{" "}
-						<span className="font-medium text-slate-700">{data.processName}</span>.
+						<span className="font-medium text-foreground">{data.processName}</span>.
 					</p>
 				</div>
 
 				{/* Session info */}
-				<div className="mb-8 rounded-lg border border-slate-200 bg-white p-4">
+				<div className="mb-8 rounded-lg border border-border bg-background p-4">
 					<div className="flex flex-wrap gap-4 text-sm">
 						<div>
-							<span className="text-slate-400">Proceso:</span>{" "}
-							<span className="font-medium text-slate-700">{data.processName}</span>
+							<span className="text-muted-foreground">Proceso:</span>{" "}
+							<span className="font-medium text-foreground">{data.processName}</span>
 						</div>
 						<div>
-							<span className="text-slate-400">Tipo:</span>{" "}
-							<span className="font-medium text-slate-700">
+							<span className="text-muted-foreground">Tipo:</span>{" "}
+							<span className="font-medium text-foreground">
 								{sessionTypeLabels[data.sessionType] ?? data.sessionType}
 							</span>
 						</div>
 						{scheduledDate && (
 							<div>
-								<span className="text-slate-400">Fecha:</span>{" "}
-								<span className="font-medium text-slate-700">{scheduledDate}</span>
+								<span className="text-muted-foreground">Fecha:</span>{" "}
+								<span className="font-medium text-foreground">{scheduledDate}</span>
 							</div>
 						)}
 					</div>
@@ -175,17 +175,17 @@ export default function IntakePage() {
 
 				{/* Questions */}
 				<div className="space-y-6">
-					<h2 className="text-lg font-semibold text-slate-900">
+					<h2 className="text-lg font-semibold text-foreground">
 						Preguntas ({answeredCount}/{data.questions.length} respondidas)
 					</h2>
 
 					{data.questions.map((q, i) => (
-						<div key={q.questionKey} className="rounded-lg border border-slate-200 bg-white p-4">
-							<label className="mb-2 block text-sm font-medium text-slate-700">
+						<div key={q.questionKey} className="rounded-lg border border-border bg-background p-4">
+							<label className="mb-2 block text-sm font-medium text-foreground">
 								{i + 1}. {q.questionText}
 							</label>
 							<textarea
-								className="w-full resize-none rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+								className="w-full resize-none rounded-md border border-border px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
 								rows={3}
 								placeholder="Escribe tu respuesta aquí..."
 								value={answers[q.questionKey] ?? ""}
@@ -217,8 +217,8 @@ export default function IntakePage() {
 					</button>
 				</div>
 
-				<p className="mt-4 text-center text-xs text-slate-400">
-					Powered by aiprocess.me — Plataforma de levantamiento de procesos con IA
+				<p className="mt-4 text-center text-xs text-muted-foreground">
+					Powered by Auditora.ai — Plataforma de levantamiento de procesos con IA
 				</p>
 			</div>
 		</div>

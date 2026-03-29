@@ -4,6 +4,8 @@ import type { SessionSuggestion } from "@command-center/components/SessionSugges
 import { db } from "@repo/database";
 import { notFound } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({
 	params,
 }: {
@@ -71,7 +73,10 @@ export default async function OrganizationPage({
 	// Fetch sessions + architecture with processes in parallel
 	const [sessions, architecture] = await Promise.all([
 		db.meetingSession.findMany({
-			where: { organizationId: orgId },
+			where: {
+				organizationId: orgId,
+				status: { in: ["SCHEDULED", "CONNECTING", "ACTIVE"] },
+			},
 			include: {
 				processDefinition: { select: { id: true, name: true } },
 				participants: {

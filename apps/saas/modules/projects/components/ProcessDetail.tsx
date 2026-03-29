@@ -516,8 +516,8 @@ function DiagramTab({
 					style={{ background: "#fff" }}
 				/>
 				{!isReady && (
-					<div className="absolute inset-0 flex items-center justify-center bg-white">
-						<div className="h-16 w-16 animate-pulse rounded-lg bg-gray-100" />
+					<div className="absolute inset-0 flex items-center justify-center bg-background">
+						<div className="h-16 w-16 animate-pulse rounded-lg bg-muted" />
 					</div>
 				)}
 			</Card>
@@ -682,7 +682,7 @@ function TagField({
 							onClick={() => remove(i)}
 							className="ml-1 rounded-full p-0.5 hover:bg-accent"
 						>
-							<XIcon className="h-3 w-3" />
+							<XIcon className="h-3.5 w-3.5" />
 						</button>
 					</Badge>
 				))}
@@ -935,7 +935,7 @@ function SessionsTab({
 											<Link
 												href={`/${organizationSlug}/session/${session.id}/live`}
 											>
-												<PlayIcon className="mr-1 h-3 w-3" />
+												<PlayIcon className="mr-1 h-3.5 w-3.5" />
 												Join
 											</Link>
 										</Button>
@@ -944,7 +944,7 @@ function SessionsTab({
 											<Link
 												href={`/${organizationSlug}/session/${session.id}`}
 											>
-												<EyeIcon className="mr-1 h-3 w-3" />
+												<EyeIcon className="mr-1 h-3.5 w-3.5" />
 												View
 											</Link>
 										</Button>

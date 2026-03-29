@@ -5,26 +5,25 @@ import { useGSAP } from "@gsap/react";
 import { Button } from "@repo/ui/components/button";
 import { SplitWords } from "@shared/components/SplitWords";
 import gsap from "gsap";
-import { ArrowRightIcon } from "lucide-react";
+import { ArrowRightIcon, SearchIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { BpmnHeroBackground } from "./BpmnHeroBackground";
 
 export function HeroSection() {
 	const t = useTranslations();
 	const sectionRef = useRef<HTMLElement>(null);
-	const [processCount, setProcessCount] = useState<number | null>(null);
+	const [url, setUrl] = useState("");
 
-	useEffect(() => {
-		fetch(`${config.saasUrl}/api/public/stats`)
-			.then((r) => r.ok ? r.json() : null)
-			.then((data) => {
-				if (data?.processSteps && data.processSteps >= 100) {
-					setProcessCount(data.processSteps);
-				}
-			})
-			.catch(() => {});
-	}, []);
+	function handleSubmit() {
+		if (!url.trim()) return;
+		let finalUrl = url.trim();
+		if (!/^https?:\/\//i.test(finalUrl)) {
+			finalUrl = `https://${finalUrl}`;
+		}
+		const encoded = encodeURIComponent(finalUrl);
+		window.location.href = `${config.saasUrl}/scan?url=${encoded}&ref=hero`;
+	}
 
 	useGSAP(
 		() => {
@@ -64,23 +63,21 @@ export function HeroSection() {
 				0.4,
 			);
 
-			// CTA buttons: stagger with overshoot
+			// URL input: slide up
 			tl.from(
-				".hero-cta > *",
+				".hero-input-group",
 				{
 					opacity: 0,
 					y: 20,
-					scale: 0.95,
-					stagger: 0.1,
 					duration: 0.6,
 					ease: "back.out(1.4)",
 				},
 				0.6,
 			);
 
-			// Counter fade in
+			// Subtext fade
 			tl.from(
-				".hero-counter",
+				".hero-subtext",
 				{
 					opacity: 0,
 					y: 10,
@@ -112,27 +109,32 @@ export function HeroSection() {
 					{t("home.hero.subtitle")}
 				</p>
 
-				<div className="hero-cta mt-10 flex items-center justify-center gap-4">
-					<Button size="lg" variant="primary" asChild>
-						<a href={config.saasUrl}>
+				<div className="hero-input-group mt-10 mx-auto max-w-xl">
+					<div className="flex items-center gap-2 rounded-lg border border-border bg-card p-2 shadow-lg">
+						<SearchIcon className="ml-2 size-5 text-muted-foreground shrink-0" />
+						<input
+							type="url"
+							value={url}
+							onChange={(e) => setUrl(e.target.value)}
+							onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+							placeholder={t("home.hero.inputPlaceholder")}
+							className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground text-base outline-none min-h-[44px]"
+						/>
+						<Button
+							size="lg"
+							variant="primary"
+							onClick={handleSubmit}
+							disabled={!url.trim()}
+							className="shrink-0"
+						>
 							{t("home.hero.cta")}
 							<ArrowRightIcon className="ml-2 size-4" />
-						</a>
-					</Button>
-					<Button variant="ghost" size="lg" asChild>
-						<a href="/tools">
-							{t("home.hero.ctaSecondary")}
-						</a>
-					</Button>
-				</div>
-
-				{processCount !== null && (
-					<div className="hero-counter mt-8 inline-flex items-center gap-2 rounded-full bg-muted/60 px-4 py-2 text-sm text-muted-foreground">
-						<span className="inline-block size-2 rounded-full bg-green-500 animate-pulse" />
-						<span className="font-medium tabular-nums text-foreground">{processCount.toLocaleString()}</span>
-						{t("home.hero.counterLabel")}
+						</Button>
 					</div>
-				)}
+					<p className="hero-subtext mt-3 text-muted-foreground text-sm">
+						{t("home.hero.subtext")}
+					</p>
+				</div>
 			</div>
 
 			{/* Animated BPMN diagram background — hidden on mobile */}

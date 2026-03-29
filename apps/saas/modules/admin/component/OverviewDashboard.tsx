@@ -36,7 +36,7 @@ const BUDGET_STATUS_COLORS: Record<string, string> = {
 	ok: "text-emerald-600",
 	warning: "text-amber-500",
 	exceeded: "text-red-500",
-	unlimited: "text-slate-400",
+	unlimited: "text-muted-foreground",
 };
 
 function formatTokens(tokens: number): string {
@@ -62,37 +62,37 @@ export function OverviewDashboard() {
 				<div className="grid grid-cols-4 gap-4">
 					<Card className="p-4">
 						<div className="flex items-center gap-3">
-							<Building2Icon className="size-5 text-slate-400" />
+							<Building2Icon className="size-5 text-muted-foreground" />
 							<div>
 								<p className="text-2xl font-semibold tabular-nums">{data.platform.totalOrgs}</p>
-								<p className="text-sm text-slate-500">Organizaciones</p>
+								<p className="text-sm text-muted-foreground">Organizaciones</p>
 							</div>
 						</div>
 					</Card>
 					<Card className="p-4">
 						<div className="flex items-center gap-3">
-							<UsersIcon className="size-5 text-slate-400" />
+							<UsersIcon className="size-5 text-muted-foreground" />
 							<div>
 								<p className="text-2xl font-semibold tabular-nums">{data.platform.totalMembers}</p>
-								<p className="text-sm text-slate-500">Usuarios</p>
+								<p className="text-sm text-muted-foreground">Usuarios</p>
 							</div>
 						</div>
 					</Card>
 					<Card className="p-4">
 						<div className="flex items-center gap-3">
-							<ActivityIcon className="size-5 text-slate-400" />
+							<ActivityIcon className="size-5 text-muted-foreground" />
 							<div>
 								<p className="text-2xl font-semibold tabular-nums">{data.platform.totalSessions}</p>
-								<p className="text-sm text-slate-500">Sesiones</p>
+								<p className="text-sm text-muted-foreground">Sesiones</p>
 							</div>
 						</div>
 					</Card>
 					<Card className="p-4">
 						<div className="flex items-center gap-3">
-							<BrainIcon className="size-5 text-slate-400" />
+							<BrainIcon className="size-5 text-muted-foreground" />
 							<div>
 								<p className="text-2xl font-semibold tabular-nums">{formatTokens(data.platform.totalTokens30d)}</p>
-								<p className="text-sm text-slate-500">Tokens (30d)</p>
+								<p className="text-sm text-muted-foreground">Tokens (30d)</p>
 							</div>
 						</div>
 					</Card>
@@ -150,7 +150,7 @@ export function OverviewDashboard() {
 											{org.name}
 										</Link>
 										{org.slug && (
-											<span className="ml-2 text-xs text-slate-400">
+											<span className="ml-2 text-xs text-muted-foreground">
 												/{org.slug}
 											</span>
 										)}
@@ -191,7 +191,7 @@ export function OverviewDashboard() {
 						})}
 						{data?.organizations?.length === 0 && (
 							<TableRow>
-								<TableCell colSpan={8} className="text-center text-slate-400 py-8">
+								<TableCell colSpan={8} className="text-center text-muted-foreground py-8">
 									No se encontraron organizaciones
 								</TableCell>
 							</TableRow>

@@ -96,12 +96,12 @@ export function ToolsHubClient({ tools, locale }: ToolsHubClientProps) {
           </h2>
           <p className="mb-8 text-[#94A3B8]">
             {isEs
-              ? "aiprocess.me se une a tu videollamada y genera todo automaticamente."
-              : "aiprocess.me joins your video call and generates everything automatically."}
+              ? "Auditora.ai se une a tu videollamada y genera todo automaticamente."
+              : "Auditora.ai joins your video call and generates everything automatically."}
           </p>
           <Button size="lg" className="gap-2" asChild>
             <a href="/signup">
-              {isEs ? "Probar aiprocess.me Gratis" : "Try aiprocess.me Free"}
+              {isEs ? "Probar Auditora.ai Gratis" : "Try Auditora.ai Free"}
               <ArrowRightIcon className="h-4 w-4" />
             </a>
           </Button>

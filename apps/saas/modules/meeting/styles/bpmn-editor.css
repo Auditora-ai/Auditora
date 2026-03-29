@@ -2,10 +2,11 @@
  * BPMN Editor Styles
  *
  * Dual-temperature UI per DESIGN.md:
- * - Toolbar & properties panel: dark chrome (#0F172A)
- * - Canvas: light white (#FFFFFF)
+ * - Toolbar & properties panel: warm chrome (var(--chrome-*))
+ * - Canvas: warm white (var(--canvas-*))
  *
  * State-based markers override type-based colors via CSS specificity.
+ * All colors reference CSS variables from theme.css — change theme once, updates everywhere.
  */
 
 /* ═══════════════════════════════════════════
@@ -23,12 +24,12 @@
 
 .bpmn-editor-canvas {
 	background:
-		radial-gradient(circle, #94a3b8 0.6px, transparent 0.6px),
-		#f1f5f9 !important;
+		radial-gradient(circle, var(--palette-stone-300) 0.5px, transparent 0.5px),
+		var(--palette-warm-white) !important;
 	background-size: 20px 20px !important;
 	position: relative;
 	flex: 1;
-	color: #1e293b;
+	color: var(--canvas-text, var(--palette-stone-900));
 }
 
 .bpmn-editor-canvas .djs-container {
@@ -47,16 +48,16 @@
 
 /* Force light mode on canvas — override dark theme CSS variables */
 .bpmn-canvas-light {
-	--background: #F1F5F9 !important;
-	--foreground: #0F172A !important;
+	--background: var(--palette-warm-white) !important;
+	--foreground: var(--palette-stone-900) !important;
 	--card: #ffffff !important;
-	--card-foreground: #0F172A !important;
-	--border: #CBD5E1 !important;
-	--muted: #E2E8F0 !important;
-	--muted-foreground: #64748B !important;
+	--card-foreground: var(--palette-stone-900) !important;
+	--border: var(--palette-stone-200) !important;
+	--muted: var(--palette-stone-200) !important;
+	--muted-foreground: var(--palette-stone-500) !important;
 	color-scheme: light !important;
-	background: #F1F5F9 !important;
-	color: #0F172A !important;
+	background: var(--palette-warm-white) !important;
+	color: var(--palette-stone-900) !important;
 }
 
 .bpmn-canvas-light * {
@@ -65,11 +66,11 @@
 
 /* Force light mode on canvas SVG elements regardless of app theme */
 .bpmn-editor-canvas .djs-container svg {
-	color: #1e293b;
+	color: var(--canvas-text, var(--palette-stone-900));
 }
 
 .bpmn-editor-canvas .djs-container .djs-visual text {
-	fill: #1e293b !important;
+	fill: var(--canvas-text, var(--palette-stone-900)) !important;
 }
 
 /* ═══════════════════════════════════════════
@@ -82,9 +83,9 @@
 .state-forming .djs-visual polygon,
 .state-forming .djs-visual circle,
 .state-forming .djs-visual ellipse {
-	stroke: #eab308 !important;
+	stroke: var(--palette-warning) !important;
 	stroke-dasharray: 5, 5 !important;
-	fill: #fef9c3 !important;
+	fill: var(--palette-orientation-subtle) !important;
 	animation: forming-pulse 2s ease-in-out infinite;
 }
 
@@ -106,9 +107,9 @@
 .state-active .djs-visual polygon,
 .state-active .djs-visual circle,
 .state-active .djs-visual ellipse {
-	stroke: #2563eb !important;
+	stroke: var(--palette-action) !important;
 	stroke-width: 3px !important;
-	fill: #dbeafe !important;
+	fill: var(--palette-action-light) !important;
 }
 
 /* ═══════════════════════════════════════════
@@ -135,11 +136,11 @@
 	right: -6px;
 	width: 16px;
 	height: 16px;
-	background: #f59e0b;
+	background: var(--palette-orientation);
 	color: white;
 	font-size: 10px;
 	font-weight: 700;
-	font-family: 'Geist', -apple-system, sans-serif;
+	font-family: var(--font-sans, 'Geist Sans', system-ui, sans-serif);
 	line-height: 16px;
 	text-align: center;
 	border-radius: 50%;
@@ -153,7 +154,7 @@
    ═══════════════════════════════════════════ */
 
 .djs-outline {
-	stroke: #2563eb !important;
+	stroke: var(--palette-action) !important;
 	stroke-width: 2px !important;
 	fill: none !important;
 }
@@ -174,9 +175,9 @@
 .highlight .djs-visual polygon,
 .highlight .djs-visual circle,
 .highlight .djs-visual ellipse {
-	stroke: #2563eb !important;
+	stroke: var(--palette-action) !important;
 	stroke-width: 3px !important;
-	fill: #dbeafe !important;
+	fill: var(--palette-action-light) !important;
 	filter: drop-shadow(0 0 6px rgba(37, 99, 235, 0.4));
 }
 
@@ -210,70 +211,70 @@
 }
 
 /* ═══════════════════════════════════════════
-   Dark chrome — ONLY for meeting/live session view
-   Scoped under .bpmn-dark-chrome parent class
+   Warm chrome — ONLY for meeting/live session view
+   Scoped under [data-chrome] parent
    ═══════════════════════════════════════════ */
 
-.bpmn-dark-chrome .djs-palette {
-	background: #0f172a !important;
-	border: 1px solid #334155 !important;
+[data-chrome] .djs-palette {
+	background: var(--chrome-base) !important;
+	border: 1px solid var(--chrome-border) !important;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
 }
 
-.bpmn-dark-chrome .djs-palette .entry {
-	color: #f1f5f9 !important;
+[data-chrome] .djs-palette .entry {
+	color: var(--chrome-text) !important;
 }
 
-.bpmn-dark-chrome .djs-palette .entry:hover {
-	background: #334155 !important;
+[data-chrome] .djs-palette .entry:hover {
+	background: var(--chrome-hover) !important;
 	border-radius: 4px;
 }
 
-.bpmn-dark-chrome .djs-palette .separator {
-	border-color: #334155 !important;
+[data-chrome] .djs-palette .separator {
+	border-color: var(--chrome-border) !important;
 }
 
-.bpmn-dark-chrome .djs-context-pad {
-	background: #0f172a !important;
-	border: 1px solid #334155 !important;
+[data-chrome] .djs-context-pad {
+	background: var(--chrome-base) !important;
+	border: 1px solid var(--chrome-border) !important;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
 	padding: 2px !important;
 }
 
-.bpmn-dark-chrome .djs-context-pad .entry {
-	color: #f1f5f9 !important;
+[data-chrome] .djs-context-pad .entry {
+	color: var(--chrome-text) !important;
 	border-radius: 4px !important;
 }
 
-.bpmn-dark-chrome .djs-context-pad .entry::before {
-	color: #f1f5f9 !important;
+[data-chrome] .djs-context-pad .entry::before {
+	color: var(--chrome-text) !important;
 }
 
-.bpmn-dark-chrome .djs-context-pad .entry:hover {
-	background: #334155 !important;
+[data-chrome] .djs-context-pad .entry:hover {
+	background: var(--chrome-hover) !important;
 }
 
-.bpmn-dark-chrome .djs-popup {
-	background: #0f172a !important;
-	border: 1px solid #334155 !important;
+[data-chrome] .djs-popup {
+	background: var(--chrome-base) !important;
+	border: 1px solid var(--chrome-border) !important;
 	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
-	color: #f1f5f9 !important;
+	color: var(--chrome-text) !important;
 }
 
-.bpmn-dark-chrome .djs-popup .entry:hover {
-	background: #334155 !important;
+[data-chrome] .djs-popup .entry:hover {
+	background: var(--chrome-hover) !important;
 }
 
-.bpmn-dark-chrome .djs-popup .entry {
-	color: #f1f5f9 !important;
+[data-chrome] .djs-popup .entry {
+	color: var(--chrome-text) !important;
 }
 
-.bpmn-dark-chrome .djs-popup .entry::before {
-	color: #f1f5f9 !important;
+[data-chrome] .djs-popup .entry::before {
+	color: var(--chrome-text) !important;
 }
 
-.bpmn-dark-chrome .djs-popup .entry .djs-popup-label {
-	color: #f1f5f9 !important;
+[data-chrome] .djs-popup .entry .djs-popup-label {
+	color: var(--chrome-text) !important;
 }
 
 /* ═══════════════════════════════════════════
@@ -281,9 +282,9 @@
    ═══════════════════════════════════════════ */
 
 .djs-minimap {
-	border: 1px solid #334155 !important;
+	border: 1px solid var(--chrome-border, var(--palette-stone-700)) !important;
 	border-radius: 6px !important;
-	background: #f8fafc !important;
+	background: var(--canvas-surface, var(--palette-warm-surface)) !important;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
 }
 
@@ -292,7 +293,7 @@
 }
 
 .djs-minimap .viewport-dom {
-	border: 2px solid #2563eb !important;
+	border: 2px solid var(--palette-action) !important;
 	background: rgba(37, 99, 235, 0.05) !important;
 }
 
@@ -306,14 +307,14 @@
 	padding: 4px;
 	background: white;
 	border-radius: 6px;
-	border: 1px solid #e2e8f0;
+	border: 1px solid var(--palette-stone-200);
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .bpmn-action-btn {
 	padding: 2px 8px;
 	font-size: 11px;
-	font-family: 'Geist', -apple-system, sans-serif;
+	font-family: var(--font-sans, 'Geist Sans', system-ui, sans-serif);
 	font-weight: 500;
 	border: none;
 	border-radius: 4px;
@@ -326,12 +327,12 @@
 }
 
 .bpmn-action-confirm {
-	background: #16a34a;
+	background: var(--palette-success);
 	color: white;
 }
 
 .bpmn-action-reject {
-	background: #dc2626;
+	background: var(--palette-destructive);
 	color: white;
 }
 
@@ -343,7 +344,7 @@
 .diff-added .djs-visual polygon,
 .diff-added .djs-visual circle,
 .diff-added .djs-visual ellipse {
-	stroke: #16a34a !important;
+	stroke: var(--palette-success) !important;
 	stroke-width: 3px !important;
 	fill: #f0fdf4 !important;
 	filter: drop-shadow(0 0 4px rgba(22, 163, 74, 0.3));
@@ -353,7 +354,7 @@
 .diff-changed .djs-visual polygon,
 .diff-changed .djs-visual circle,
 .diff-changed .djs-visual ellipse {
-	stroke: #eab308 !important;
+	stroke: var(--palette-warning) !important;
 	stroke-width: 3px !important;
 	fill: #fef9c3 !important;
 	filter: drop-shadow(0 0 4px rgba(234, 179, 8, 0.3));
@@ -364,13 +365,13 @@
    ═══════════════════════════════════════════ */
 
 .djs-direct-editing-parent {
-	font-family: 'Geist', -apple-system, sans-serif !important;
+	font-family: var(--font-sans, 'Geist Sans', system-ui, sans-serif) !important;
 }
 
 .djs-direct-editing-content {
 	font-size: 12px !important;
 	padding: 4px 8px !important;
-	border: 2px solid #2563eb !important;
+	border: 2px solid var(--palette-action) !important;
 	border-radius: 4px !important;
 	background: white !important;
 }

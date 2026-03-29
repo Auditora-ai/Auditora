@@ -11,6 +11,9 @@ import { deleteSessionActivity, runPostSessionPipelines } from "../../../webhook
 import { buildBpmnXml, layoutBpmnXml } from "@meeting/lib/bpmn-builder";
 import type { DiagramNode } from "@meeting/types";
 import { requireSessionAuth, isAuthError } from "@/lib/auth-helpers";
+import { EXTERNAL_COST_RATES } from "@repo/ai";
+
+type EndMode = "full" | "save_only" | "discard";
 
 export async function POST(
 	request: NextRequest,
@@ -21,6 +24,21 @@ export async function POST(
 
 		const authResult = await requireSessionAuth(sessionId);
 		if (isAuthError(authResult)) return authResult;
+
+		// Parse body — endMode defaults to "full" for backwards compatibility
+		let endMode: EndMode = "full";
+		let newProcessName: string | undefined;
+		try {
+			const body = await request.json();
+			if (body.endMode && ["full", "save_only", "discard"].includes(body.endMode)) {
+				endMode = body.endMode;
+			}
+			if (body.newProcessName && typeof body.newProcessName === "string") {
+				newProcessName = body.newProcessName.trim();
+			}
+		} catch {
+			// No body or invalid JSON — use defaults (backwards compatible)
+		}
 
 		const session = await db.meetingSession.findUnique({
 			where: { id: sessionId },
@@ -33,13 +51,7 @@ export async function POST(
 			return NextResponse.json({ error: "Session not found" }, { status: 404 });
 		}
 
-		// Auto-confirm all forming nodes
-		await db.diagramNode.updateMany({
-			where: { sessionId, state: "FORMING" },
-			data: { state: "CONFIRMED", confirmedAt: new Date() },
-		});
-
-		// Leave the call if bot is active
+		// Leave the call if bot is active (always, regardless of mode)
 		if (session.recallBotId) {
 			try {
 				const callBot = createCallBotProvider();
@@ -49,129 +61,91 @@ export async function POST(
 			}
 		}
 
-		// Mark session as ended
+		// Clean up activity state (Redis-backed) — always
+		await deleteSessionActivity(sessionId);
+
+		// --- DISCARD MODE: cancel session, don't save anything ---
+		if (endMode === "discard") {
+			await db.meetingSession.update({
+				where: { id: sessionId },
+				data: { status: "CANCELLED", endedAt: new Date() },
+			});
+			return NextResponse.json({ ok: true, sessionId, endMode });
+		}
+
+		// --- FULL & SAVE_ONLY: auto-confirm forming nodes with sufficient quality ---
+		await db.diagramNode.updateMany({
+			where: {
+				sessionId,
+				state: "FORMING",
+				confidence: { gte: 0.4 },
+				label: { not: "" },
+			},
+			data: { state: "CONFIRMED", confirmedAt: new Date() },
+		});
+		// Reject low-quality leftover forming nodes to prevent contamination in next session
+		await db.diagramNode.updateMany({
+			where: { sessionId, state: "FORMING" },
+			data: { state: "REJECTED", rejectedAt: new Date() },
+		});
+
 		await db.meetingSession.update({
 			where: { id: sessionId },
 			data: { status: "ENDED", endedAt: new Date() },
 		});
 
-		// Clean up activity state (Redis-backed)
-		await deleteSessionActivity(sessionId);
-
-		// Auto-version process and architecture (non-blocking)
-		autoVersionOnSessionEnd(sessionId, session).catch((err) =>
-			console.error("[EndSession] Auto-versioning failed:", err),
+		// Log external service costs (Deepgram STT + Recall.ai) — fire-and-forget
+		logExternalCosts(session).catch((err) =>
+			console.error("[EndSession] External cost logging failed:", err),
 		);
 
-		// Generate session summary async (non-blocking)
-		generateSummaryInBackground(sessionId, session.type, session.organizationId).catch((err) =>
-			console.error("[EndSession] Summary generation failed:", err),
-		);
+		// Auto-version process and architecture (blocking — critical for session continuity)
+		try {
+			await autoVersionOnSessionEnd(sessionId, session, newProcessName);
+		} catch (err) {
+			console.error("[EndSession] Auto-versioning failed:", err);
+		}
 
-		// Trigger Process Intelligence audit (non-blocking)
-		if (session.processDefinitionId) {
-			triggerIntelligenceAudit(session.processDefinitionId, sessionId).catch(
-				(err) =>
-					console.error("[EndSession] Intelligence audit failed:", err),
+		// --- FULL MODE ONLY: generate deliverables ---
+		if (endMode === "full") {
+			// Generate session summary async (non-blocking)
+			generateSummaryInBackground(sessionId, session.type, session.organizationId).catch((err) =>
+				console.error("[EndSession] Summary generation failed:", err),
+			);
+
+			// Trigger Process Intelligence audit (non-blocking)
+			if (session.processDefinitionId) {
+				triggerIntelligenceAudit(session.processDefinitionId, sessionId).catch(
+					(err) =>
+						console.error("[EndSession] Intelligence audit failed:", err),
+				);
+			}
+
+			// Generate session deliverables (summary, process audit, RACI, risk audit) — non-blocking
+			runPostSessionPipelines(sessionId, session.diagramNodes).catch((err) =>
+				console.error("[EndSession] Post-session pipelines failed:", err),
 			);
 		}
 
-		// Generate session deliverables (summary, process audit, RACI, risk audit) — non-blocking
-		runPostSessionPipelines(sessionId, session.diagramNodes).catch((err) =>
-			console.error("[EndSession] Post-session pipelines failed:", err),
-		);
-
-		return NextResponse.json({ ok: true, sessionId });
+		return NextResponse.json({ ok: true, sessionId, endMode });
 	} catch (error) {
-		console.error("[EndSession] Error:", error);
-		return NextResponse.json({ error: "Internal error" }, { status: 500 });
+		const message = error instanceof Error ? error.message : String(error);
+		console.error("[EndSession] Error:", message, error);
+		return NextResponse.json({ error: "Internal error", detail: message }, { status: 500 });
 	}
 }
 
 async function autoVersionOnSessionEnd(
 	sessionId: string,
 	session: any,
+	newProcessName?: string,
 ) {
 	// If targeting a specific process, create a ProcessVersion
 	if (session.processDefinitionId) {
-		const processDef = await db.processDefinition.findUnique({
-			where: { id: session.processDefinitionId },
-		});
-		if (processDef) {
-			// Generate BPMN XML from the session's confirmed nodes
-			const confirmedNodes = await db.diagramNode.findMany({
-				where: { sessionId, state: "CONFIRMED" },
-			});
-
-			// Priority: 1) Session's rendered XML (from Reorganizar), 2) Generated from nodes, 3) Existing process XML
-			const sessionData = await db.meetingSession.findUnique({
-				where: { id: sessionId },
-				select: { bpmnXml: true },
-			});
-
-			let finalBpmnXml: string | null = null;
-
-			// Best: use the session's saved XML (rendered by bpmn-js with proper layout)
-			if (sessionData?.bpmnXml) {
-				finalBpmnXml = sessionData.bpmnXml;
-				console.log(`[EndSession] Using session's saved BPMN XML (from modeler)`);
-			}
-			// Fallback: generate from confirmed nodes
-			else if (confirmedNodes.length > 0) {
-				try {
-					const diagramNodes: DiagramNode[] = confirmedNodes.map((n) => ({
-						id: n.id,
-						type: n.nodeType.toLowerCase(),
-						label: n.label,
-						state: "confirmed" as const,
-						lane: n.lane || undefined,
-						connections: n.connections || [],
-						confidence: n.confidence,
-					}));
-					finalBpmnXml = await buildBpmnXml(diagramNodes);
-					console.log(`[EndSession] Generated BPMN XML from ${confirmedNodes.length} nodes`);
-				} catch (err) {
-					console.error("[EndSession] Failed to build BPMN XML:", err);
-				}
-			}
-			// Last resort: keep existing process XML
-			if (!finalBpmnXml) {
-				finalBpmnXml = processDef.bpmnXml;
-			}
-
-			// Save BPMN XML to ProcessDefinition (this is the critical missing step)
-			await db.processDefinition.update({
-				where: { id: processDef.id },
-				data: {
-					bpmnXml: finalBpmnXml,
-					processStatus: "MAPPED",
-				},
-			});
-
-			// Get next version number
-			const lastVersion = await db.processVersion.findFirst({
-				where: { processDefinitionId: processDef.id },
-				orderBy: { version: "desc" },
-			});
-			const nextVersion = (lastVersion?.version ?? 0) + 1;
-
-			await db.processVersion.create({
-				data: {
-					processDefinitionId: processDef.id,
-					version: nextVersion,
-					name: processDef.name,
-					description: processDef.description,
-					bpmnXml: finalBpmnXml,
-					goals: processDef.goals,
-					triggers: processDef.triggers,
-					outputs: processDef.outputs,
-					changeNote: `Auto-saved after session ${sessionId}`,
-					createdBy: session.userId,
-				},
-			});
-
-			console.log(`[EndSession] Saved BPMN XML (${confirmedNodes.length} nodes) to process "${processDef.name}" v${nextVersion}`);
-		}
+		await versionExistingProcess(sessionId, session);
+	} else {
+		// No process linked — create a new ProcessDefinition from session data
+		await createProcessFromSession(sessionId, session, newProcessName);
 	}
 
 	// For DISCOVERY sessions: create an ArchitectureVersion snapshot
@@ -201,6 +175,156 @@ async function autoVersionOnSessionEnd(
 			console.log(`[EndSession] Created ArchitectureVersion v${nextVersion}`);
 		}
 	}
+}
+
+async function versionExistingProcess(sessionId: string, session: any) {
+	const processDef = await db.processDefinition.findUnique({
+		where: { id: session.processDefinitionId },
+	});
+	if (!processDef) return;
+
+	const confirmedNodes = await db.diagramNode.findMany({
+		where: { sessionId, state: "CONFIRMED" },
+	});
+
+	const finalBpmnXml = await resolveBpmnXml(sessionId, confirmedNodes, processDef.bpmnXml);
+
+	// Save BPMN XML to ProcessDefinition
+	await db.processDefinition.update({
+		where: { id: processDef.id },
+		data: {
+			bpmnXml: finalBpmnXml,
+			processStatus: "MAPPED",
+		},
+	});
+
+	// Get next version number
+	const lastVersion = await db.processVersion.findFirst({
+		where: { processDefinitionId: processDef.id },
+		orderBy: { version: "desc" },
+	});
+	const nextVersion = (lastVersion?.version ?? 0) + 1;
+
+	await db.processVersion.create({
+		data: {
+			processDefinitionId: processDef.id,
+			version: nextVersion,
+			name: processDef.name,
+			description: processDef.description,
+			bpmnXml: finalBpmnXml,
+			goals: processDef.goals,
+			triggers: processDef.triggers,
+			outputs: processDef.outputs,
+			changeNote: `Auto-saved after session ${sessionId}`,
+			createdBy: session.userId,
+		},
+	});
+
+	console.log(`[EndSession] Saved BPMN XML (${confirmedNodes.length} nodes) to process "${processDef.name}" v${nextVersion}`);
+}
+
+async function createProcessFromSession(
+	sessionId: string,
+	session: any,
+	newProcessName?: string,
+) {
+	const confirmedNodes = await db.diagramNode.findMany({
+		where: { sessionId, state: "CONFIRMED" },
+	});
+
+	// Need at least some nodes to create a process
+	if (confirmedNodes.length === 0) {
+		console.log(`[EndSession] No confirmed nodes for session ${sessionId}, skipping process creation`);
+		return;
+	}
+
+	const finalBpmnXml = await resolveBpmnXml(sessionId, confirmedNodes, null);
+
+	// Get or create ProcessArchitecture for the organization
+	let architecture = await db.processArchitecture.findUnique({
+		where: { organizationId: session.organizationId },
+	});
+
+	if (!architecture) {
+		architecture = await db.processArchitecture.create({
+			data: { organizationId: session.organizationId },
+		});
+	}
+
+	const processName = newProcessName || session.title || "Proceso sin nombre";
+
+	// Create the ProcessDefinition
+	const newProcess = await db.processDefinition.create({
+		data: {
+			architectureId: architecture.id,
+			name: processName,
+			processStatus: "MAPPED",
+			bpmnXml: finalBpmnXml,
+			category: "core",
+			level: "PROCESS",
+		},
+	});
+
+	// Create first ProcessVersion
+	await db.processVersion.create({
+		data: {
+			processDefinitionId: newProcess.id,
+			version: 1,
+			name: processName,
+			bpmnXml: finalBpmnXml,
+			changeNote: `Created from session ${sessionId}`,
+			createdBy: session.userId,
+		},
+	});
+
+	// Link session to the new process
+	await db.meetingSession.update({
+		where: { id: sessionId },
+		data: { processDefinitionId: newProcess.id },
+	});
+
+	console.log(`[EndSession] Created new process "${processName}" from session ${sessionId}`);
+}
+
+/** Resolve the best BPMN XML: session's saved XML > generated from nodes > fallback */
+async function resolveBpmnXml(
+	sessionId: string,
+	confirmedNodes: any[],
+	fallbackXml: string | null,
+): Promise<string | null> {
+	// Priority 1: Session's rendered XML (from bpmn-js modeler)
+	const sessionData = await db.meetingSession.findUnique({
+		where: { id: sessionId },
+		select: { bpmnXml: true },
+	});
+
+	if (sessionData?.bpmnXml) {
+		console.log(`[EndSession] Using session's saved BPMN XML (from modeler)`);
+		return sessionData.bpmnXml;
+	}
+
+	// Priority 2: Generate from confirmed nodes
+	if (confirmedNodes.length > 0) {
+		try {
+			const diagramNodes: DiagramNode[] = confirmedNodes.map((n) => ({
+				id: n.id,
+				type: n.nodeType.toLowerCase(),
+				label: n.label,
+				state: "confirmed" as const,
+				lane: n.lane || undefined,
+				connections: n.connections || [],
+				confidence: n.confidence,
+			}));
+			const xml = await buildBpmnXml(diagramNodes);
+			console.log(`[EndSession] Generated BPMN XML from ${confirmedNodes.length} nodes`);
+			return xml;
+		} catch (err) {
+			console.error("[EndSession] Failed to build BPMN XML:", err);
+		}
+	}
+
+	// Priority 3: fallback
+	return fallbackXml;
 }
 
 async function generateSummaryInBackground(
@@ -434,5 +558,55 @@ async function triggerIntelligenceAudit(
 
 	console.log(
 		`[Intelligence] Audit complete for process "${processDef.name}": ${result.completenessScore}% complete, ${result.newGaps.length} new gaps, ${result.resolvedGapIds.length} resolved`,
+	);
+}
+
+async function logExternalCosts(session: {
+	id: string;
+	organizationId: string;
+	startedAt: Date | null;
+	endedAt: Date | null;
+	recallBotId: string | null;
+}) {
+	const startedAt = session.startedAt ?? session.endedAt;
+	const endedAt = session.endedAt ?? new Date();
+	if (!startedAt) return;
+
+	const durationMinutes = (endedAt.getTime() - startedAt.getTime()) / 60_000;
+	if (durationMinutes <= 0) return;
+
+	const costs = [
+		{
+			service: "deepgram-stt",
+			unitType: "audio_minutes",
+			units: durationMinutes,
+			estimatedCostUsd: durationMinutes * EXTERNAL_COST_RATES["deepgram-stt"],
+		},
+		...(session.recallBotId
+			? [
+					{
+						service: "recall-bot",
+						unitType: "bot_minutes",
+						units: durationMinutes,
+						estimatedCostUsd:
+							durationMinutes * EXTERNAL_COST_RATES["recall-bot"],
+					},
+				]
+			: []),
+	];
+
+	await db.externalCostLog.createMany({
+		data: costs.map((c) => ({
+			organizationId: session.organizationId,
+			service: c.service,
+			unitType: c.unitType,
+			units: c.units,
+			estimatedCostUsd: c.estimatedCostUsd,
+			metadata: { sessionId: session.id },
+		})),
+	});
+
+	console.log(
+		`[EndSession] Logged external costs: ${costs.map((c) => `${c.service}=${c.units.toFixed(1)}min/$${c.estimatedCostUsd.toFixed(3)}`).join(", ")}`,
 	);
 }

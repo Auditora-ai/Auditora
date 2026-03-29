@@ -101,17 +101,17 @@ export default function PreparePage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white">
-        <div className="animate-pulse text-gray-400">Cargando...</div>
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="animate-pulse text-muted-foreground">Cargando...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white">
+      <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="max-w-md text-center">
-          <p className="text-lg text-gray-600">{error}</p>
+          <p className="text-lg text-muted-foreground">{error}</p>
         </div>
       </div>
     );
@@ -119,13 +119,13 @@ export default function PreparePage() {
 
   if (submitted) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white">
+      <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="max-w-md text-center">
           <div className="mb-4 text-5xl">&#10003;</div>
-          <h2 className="mb-2 text-xl font-semibold text-gray-800">
+          <h2 className="mb-2 text-xl font-semibold text-foreground">
             Respuestas enviadas
           </h2>
-          <p className="text-gray-500">
+          <p className="text-muted-foreground">
             Gracias por tu ayuda. Tus respuestas han sido registradas y seran
             revisadas por el consultor.
           </p>
@@ -139,9 +139,9 @@ export default function PreparePage() {
   const answeredCount = Object.values(answers).filter((v) => v.trim()).length;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-gray-100 px-6 py-6">
+      <header className="border-b border-border px-6 py-6">
         <div className="mx-auto max-w-2xl">
           {data.organizationLogo && (
             <img
@@ -151,17 +151,17 @@ export default function PreparePage() {
             />
           )}
           {data.organizationName && (
-            <p className="text-sm text-gray-400">{data.organizationName}</p>
+            <p className="text-sm text-muted-foreground">{data.organizationName}</p>
           )}
-          <h1 className="mt-1 text-2xl font-semibold text-gray-800">
+          <h1 className="mt-1 text-2xl font-semibold text-foreground">
             {data.processName}
           </h1>
           {data.processDescription && (
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-muted-foreground">
               {data.processDescription}
             </p>
           )}
-          <p className="mt-4 text-sm text-gray-500">
+          <p className="mt-4 text-sm text-muted-foreground">
             Necesitamos tu ayuda para completar la documentacion de este proceso.
             Responde las preguntas que puedas — no es necesario responder todas.
           </p>
@@ -170,7 +170,7 @@ export default function PreparePage() {
 
       {/* Name input */}
       <div className="mx-auto max-w-2xl px-6 py-4">
-        <label className="block text-sm font-medium text-gray-600">
+        <label className="block text-sm font-medium text-muted-foreground">
           Tu nombre (opcional)
         </label>
         <input
@@ -178,7 +178,7 @@ export default function PreparePage() {
           value={respondentName}
           onChange={(e) => setRespondentName(e.target.value)}
           placeholder="Ej: Juan Perez"
-          className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+          className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
         />
       </div>
 
@@ -186,20 +186,20 @@ export default function PreparePage() {
       <main className="mx-auto max-w-2xl px-6 pb-32">
         <div className="space-y-6">
           {data.questions.map((q, index) => (
-            <div key={q.id} className="rounded-xl border border-gray-100 p-5">
+            <div key={q.id} className="rounded-xl border border-border p-5">
               <div className="mb-1 flex items-center gap-2">
-                <span className="text-xs font-medium text-gray-400">
+                <span className="text-xs font-medium text-muted-foreground">
                   {index + 1} / {data.questions.length}
                 </span>
-                <span className="rounded-full bg-gray-50 px-2 py-0.5 text-xs text-gray-500">
+                <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
                   {CATEGORY_LABELS[q.category] || q.category}
                 </span>
               </div>
-              <p className="mb-3 text-base font-medium text-gray-800">
+              <p className="mb-3 text-base font-medium text-foreground">
                 {q.question}
               </p>
               {q.context && (
-                <p className="mb-3 text-xs text-gray-400">{q.context}</p>
+                <p className="mb-3 text-xs text-muted-foreground">{q.context}</p>
               )}
               <textarea
                 value={answers[q.id] || ""}
@@ -208,7 +208,7 @@ export default function PreparePage() {
                 }
                 placeholder="Escribe tu respuesta aqui..."
                 rows={3}
-                className="w-full resize-none rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                className="w-full resize-none rounded-lg border border-border px-3 py-2 text-sm focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
               />
             </div>
           ))}
@@ -216,15 +216,15 @@ export default function PreparePage() {
       </main>
 
       {/* Fixed bottom bar */}
-      <div className="fixed bottom-0 left-0 right-0 border-t border-gray-100 bg-white px-6 py-4">
+      <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-background px-6 py-4">
         <div className="mx-auto flex max-w-2xl items-center justify-between">
-          <span className="text-sm text-gray-400">
+          <span className="text-sm text-muted-foreground">
             {answeredCount} de {data.questions.length} respondidas
           </span>
           <button
             onClick={handleSubmit}
             disabled={submitting || answeredCount === 0}
-            className="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-300"
+            className="rounded-lg bg-blue-600 px-6 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-border"
           >
             {submitting ? "Enviando..." : "Enviar respuestas"}
           </button>

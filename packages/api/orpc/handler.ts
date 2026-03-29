@@ -36,7 +36,7 @@ export const openApiHandler = new OpenAPIHandler(router, {
 				return {
 					...(authSchema as any),
 					info: {
-						title: "aiprocess.me API",
+						title: "Auditora.ai API",
 						version: "1.0.0",
 					},
 					servers: [

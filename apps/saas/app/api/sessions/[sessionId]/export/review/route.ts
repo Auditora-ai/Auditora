@@ -173,7 +173,7 @@ function generateReportHtml(data: ReportInput): string {
 
 <!-- Cover -->
 <div class="cover">
-	<div class="cover-badge">aiprocess.me</div>
+	<div class="cover-badge">Auditora.ai</div>
 	<h1>${esc(data.processName)}</h1>
 	<p class="org">${esc(data.orgName)}</p>
 	<div class="cover-stats">
@@ -184,7 +184,7 @@ function generateReportHtml(data: ReportInput): string {
 	</div>
 	<div class="cover-footer">
 		<p>${esc(data.date)} · Duración: ${esc(data.duration)}</p>
-		<p style="margin-top:4px;">Generado por aiprocess.me</p>
+		<p style="margin-top:4px;">Generado por Auditora.ai</p>
 	</div>
 </div>
 
@@ -289,7 +289,7 @@ ${data.transcript.length > 0 ? `
 </div>` : ""}
 
 <div style="text-align:center;padding:32px 0;color:#CBD5E1;font-size:11px;">
-	Generado por aiprocess.me · ${esc(data.date)}
+	Generado por Auditora.ai · ${esc(data.date)}
 </div>
 
 </body>

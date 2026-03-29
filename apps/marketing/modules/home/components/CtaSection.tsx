@@ -103,31 +103,31 @@ export function CtaSection() {
 	return (
 		<section
 			ref={sectionRef}
-			className="py-24 lg:py-32 bg-[#0F172A] text-white"
+			className="py-24 lg:py-32 bg-[#1C1917] text-white"
 			style={{ clipPath: "inset(0 0 0 0)" }}
 		>
 			<div className="container max-w-3xl text-center">
-				<h2 className="font-display text-4xl md:text-5xl lg:text-6xl text-[#F1F5F9] text-balance" style={{ perspective: "600px" }}>
+				<h2 className="font-display text-4xl md:text-5xl lg:text-6xl text-[#FAFAF9] text-balance" style={{ perspective: "600px" }}>
 					<SplitWords innerClassName="cta-word-inner">
 						{t("cta.title")}
 					</SplitWords>
 				</h2>
 
-				<p className="cta-subtitle mt-6 text-[#94A3B8] text-lg text-balance">
+				<p className="cta-subtitle mt-6 text-[#A8A29E] text-lg text-balance">
 					{t("cta.subtitle")}
 				</p>
 
 				<div className="cta-button mt-10 relative inline-block">
 					<div className="cta-glow absolute inset-0 rounded-full bg-primary/30 blur-xl opacity-30 scale-100" />
 					<Button size="lg" variant="primary" asChild>
-						<a href={config.saasUrl} className="relative">
+						<a href={`${config.saasUrl}/scan`} className="relative">
 							{t("cta.button")}
 							<ArrowRightIcon className="ml-2 size-4" />
 						</a>
 					</Button>
 				</div>
 
-				<p className="cta-note mt-4 text-[#64748B] text-sm">
+				<p className="cta-note mt-4 text-[#78716C] text-sm">
 					{t("cta.note")}
 				</p>
 			</div>

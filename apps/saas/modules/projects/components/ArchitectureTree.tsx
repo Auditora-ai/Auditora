@@ -135,17 +135,17 @@ function TreeNode({
 				<div className="flex items-center gap-1">
 					<Button variant="ghost" size="icon" className="h-7 w-7" asChild>
 						<Link href={processDetailPath}>
-							<PlayIcon className="h-3 w-3" />
+							<PlayIcon className="h-3.5 w-3.5" />
 						</Link>
 					</Button>
 					<Button variant="ghost" size="icon" className="h-7 w-7" asChild>
 						<Link href={`${processDetailPath}?tab=details`}>
-							<PencilIcon className="h-3 w-3" />
+							<PencilIcon className="h-3.5 w-3.5" />
 						</Link>
 					</Button>
 					<Button variant="ghost" size="icon" className="h-7 w-7" asChild>
 						<Link href={`${processDetailPath}?tab=children`}>
-							<PlusIcon className="h-3 w-3" />
+							<PlusIcon className="h-3.5 w-3.5" />
 						</Link>
 					</Button>
 				</div>

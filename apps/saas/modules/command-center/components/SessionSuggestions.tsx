@@ -27,24 +27,24 @@ export function SessionSuggestions({
 	if (suggestions.length === 0) return null;
 
 	return (
-		<div className="rounded-xl border border-[#E2E8F0] bg-white p-5">
+		<div className="rounded-xl border border-border bg-background p-5">
 			<div className="mb-3 flex items-center gap-2">
-				<LightbulbIcon className="h-4 w-4 text-[#D97706]" />
-				<h3 className="text-sm font-semibold text-[#0F172A]">Sugerencias</h3>
+				<LightbulbIcon className="h-4 w-4 text-orientation" />
+				<h3 className="text-sm font-semibold text-foreground">Sugerencias</h3>
 			</div>
 
 			<div className="space-y-2">
 				{suggestions.slice(0, 4).map((s) => (
-					<div key={`${s.type}-${s.processId}`} className="flex items-start gap-2.5 rounded-lg px-2 py-2 transition-colors hover:bg-[#F8FAFC]">
+					<div key={`${s.type}-${s.processId}`} className="flex items-start gap-2.5 rounded-lg px-2 py-2 transition-colors hover:bg-secondary">
 						<span className="mt-0.5 text-sm">{typeIcons[s.type] ?? "💡"}</span>
 						<div className="min-w-0 flex-1">
-							<div className="text-xs font-medium text-[#334155]">{s.processName}</div>
-							<div className="text-[11px] text-[#94A3B8]">{s.message}</div>
+							<div className="text-xs font-medium text-foreground">{s.processName}</div>
+							<div className="text-[11px] text-chrome-text-secondary">{s.message}</div>
 						</div>
 						<button
 							type="button"
 							onClick={onSchedule}
-							className="shrink-0 rounded px-2 py-1 text-[10px] font-medium text-[#2563EB] transition-colors hover:bg-[#EFF6FF]"
+							className="shrink-0 rounded px-2 py-1 text-[10px] font-medium text-primary transition-colors hover:bg-accent"
 						>
 							Agendar
 						</button>

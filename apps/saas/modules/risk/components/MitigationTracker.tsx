@@ -35,7 +35,7 @@ const STATUS_CONFIG: Record<
 > = {
   PLANNED: {
     label: "Planeado",
-    className: "bg-slate-700 text-slate-300",
+    className: "bg-chrome-hover text-muted-foreground",
   },
   IN_PROGRESS: {
     label: "En Progreso",
@@ -124,21 +124,21 @@ export function MitigationTracker({
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <h5 className="text-xs font-medium text-slate-300">Mitigaciones</h5>
+        <h5 className="text-xs font-medium text-muted-foreground">Mitigaciones</h5>
         <Button
           variant="ghost"
           size="sm"
-          className="h-6 text-xs text-slate-400 hover:text-slate-200"
+          className="h-6 text-xs text-muted-foreground hover:text-chrome-text-secondary"
           onClick={() => setShowForm(!showForm)}
         >
-          <PlusIcon className="mr-1 h-3 w-3" />
+          <PlusIcon className="mr-1 h-3.5 w-3.5" />
           Agregar
         </Button>
       </div>
 
       {/* Existing mitigations */}
       {mitigations.length === 0 && !showForm && (
-        <p className="text-xs text-slate-500">Sin mitigaciones definidas.</p>
+        <p className="text-xs text-muted-foreground">Sin mitigaciones definidas.</p>
       )}
 
       {mitigations.map((m) => {
@@ -146,11 +146,11 @@ export function MitigationTracker({
         return (
           <div
             key={m.id}
-            className="flex items-center gap-2 rounded bg-slate-900/50 px-3 py-2"
+            className="flex items-center gap-2 rounded bg-chrome-base/50 px-3 py-2"
           >
             <div className="min-w-0 flex-1">
-              <p className="text-xs text-slate-200">{m.action}</p>
-              <div className="mt-0.5 flex items-center gap-2 text-xs text-slate-500">
+              <p className="text-xs text-chrome-text-secondary">{m.action}</p>
+              <div className="mt-0.5 flex items-center gap-2 text-xs text-muted-foreground">
                 {m.owner && <span>{m.owner}</span>}
                 {m.deadline && (
                   <span>
@@ -180,7 +180,7 @@ export function MitigationTracker({
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="h-5 px-1 text-xs text-slate-400"
+                  className="h-5 px-1 text-xs text-muted-foreground"
                   onClick={() => setConfirmDeleteId(null)}
                 >
                   No
@@ -190,7 +190,7 @@ export function MitigationTracker({
               <button
                 type="button"
                 onClick={() => setConfirmDeleteId(m.id)}
-                className="shrink-0 text-slate-600 transition-colors hover:text-red-400"
+                className="shrink-0 text-muted-foreground transition-colors hover:text-red-400"
               >
                 <XIcon className="h-3.5 w-3.5" />
               </button>
@@ -201,25 +201,25 @@ export function MitigationTracker({
 
       {/* Add form */}
       {showForm && (
-        <div className="space-y-2 rounded border border-slate-700 bg-slate-900/50 p-3">
+        <div className="space-y-2 rounded border border-chrome-border bg-chrome-base/50 p-3">
           <Input
             value={newAction}
             onChange={(e) => setNewAction(e.target.value)}
             placeholder="Acción de mitigación..."
-            className="border-slate-700 bg-slate-800 text-sm text-slate-100"
+            className="border-chrome-border bg-chrome-raised text-sm text-chrome-text"
           />
           <div className="flex gap-2">
             <Input
               value={newOwner}
               onChange={(e) => setNewOwner(e.target.value)}
               placeholder="Responsable"
-              className="border-slate-700 bg-slate-800 text-sm text-slate-100"
+              className="border-chrome-border bg-chrome-raised text-sm text-chrome-text"
             />
             <Input
               type="date"
               value={newDeadline}
               onChange={(e) => setNewDeadline(e.target.value)}
-              className="border-slate-700 bg-slate-800 text-sm text-slate-100"
+              className="border-chrome-border bg-chrome-raised text-sm text-chrome-text"
             />
           </div>
           <div className="flex justify-end gap-2">
@@ -241,7 +241,7 @@ export function MitigationTracker({
               disabled={!newAction.trim() || saving}
             >
               {saving ? (
-                <RefreshCwIcon className="mr-1 h-3 w-3 animate-spin" />
+                <RefreshCwIcon className="mr-1 h-3.5 w-3.5 animate-spin" />
               ) : null}
               Guardar
             </Button>
