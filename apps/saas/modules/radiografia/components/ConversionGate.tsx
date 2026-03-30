@@ -60,7 +60,7 @@ export function ConversionGate({ processName, risksCount }: ConversionGateProps)
 	}
 
 	return (
-		<div className="flex min-h-screen items-center justify-center bg-background px-4">
+		<div className="flex min-h-screen items-center justify-center bg-background px-4 pb-[env(safe-area-inset-bottom)]">
 			<div className="w-full max-w-md">
 				<div className="mb-8 text-center">
 					<h1 className="mb-2 text-3xl font-display text-foreground">

@@ -71,7 +71,14 @@
 			"inputPlaceholder": "https://tu-empresa.com",
 			"cta": "Probar con mi sitio web",
 			"ctaSecondary": "O describe tu negocio manualmente",
-			"subtext": "Pega cualquier URL. La IA analiza tu contexto público y genera un diagnóstico inicial gratuito con mapa de procesos y riesgos."
+			"subtext": "Pega cualquier URL. La IA analiza tu contexto público y genera un diagnóstico inicial gratuito con mapa de procesos y riesgos.",
+			"alt": {
+				"badge": "La herramienta que le faltaba a tu práctica",
+				"title": "Cada proceso no documentado es un riesgo que estás firmando",
+				"subtitle": "Tus clientes tienen procesos críticos que nadie ha mapeado. Auditora.ai los descubre por ti: elicitación guiada por IA, diagramas BPMN automáticos y análisis de riesgos con puntuación de severidad. En una fracción del tiempo que te tomaría a ti solo.",
+				"cta": "Ver diagnóstico gratuito de mi negocio",
+				"subtext": "Ingresa tu URL corporativa. Recibe un mapa de procesos y análisis de riesgos en minutos — sin registro, sin compromisos."
+			}
 		},
 		"problem": {
 			"badge": "El problema",

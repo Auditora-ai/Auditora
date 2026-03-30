@@ -107,12 +107,12 @@ function formatDate(date: Date | null): string {
 function SectionSkeleton({ title }: { title: string }) {
 	return (
 		<section className="rounded-lg border border-stone-200 bg-white overflow-hidden">
-			<div className="border-b border-stone-100 px-6 py-4">
+			<div className="border-b border-stone-100 px-4 py-4 md:px-6">
 				<h2 className="text-lg text-stone-900" style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}>
 					{title}
 				</h2>
 			</div>
-			<div className="px-6 py-5 space-y-3">
+			<div className="px-4 py-4 space-y-3 md:px-6 md:py-5">
 				<div className="h-4 w-full animate-pulse rounded bg-stone-100" />
 				<div className="h-4 w-5/6 animate-pulse rounded bg-stone-100" />
 				<div className="h-4 w-4/6 animate-pulse rounded bg-stone-100" />
@@ -124,12 +124,12 @@ function SectionSkeleton({ title }: { title: string }) {
 function FailedSection({ title, error, sessionId, type }: { title: string; error: string | null; sessionId: string; type: string }) {
 	return (
 		<section className="rounded-lg border border-stone-200 bg-white overflow-hidden">
-			<div className="border-b border-stone-100 px-6 py-4">
+			<div className="border-b border-stone-100 px-4 py-4 md:px-6">
 				<h2 className="text-lg text-stone-900" style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}>
 					{title}
 				</h2>
 			</div>
-			<div className="px-6 py-5 flex items-center justify-between">
+			<div className="px-4 py-4 flex items-center justify-between md:px-6 md:py-5">
 				<p className="text-sm text-red-600">Error al generar.{error ? ` ${error}` : ""}</p>
 				<RetryButton sessionId={sessionId} type={type} />
 			</div>
@@ -198,7 +198,7 @@ function RaciSection({ data, actions }: { data: RaciData | null; actions?: React
 							))}
 						</tbody>
 					</table>
-					<div className="mt-4 flex items-center gap-4 text-xs text-stone-500">
+					<div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-stone-500 md:gap-4">
 						<span><span className="inline-flex h-5 w-5 items-center justify-center rounded bg-blue-100 text-xs font-semibold text-blue-800">R</span> Responsable</span>
 						<span><span className="inline-flex h-5 w-5 items-center justify-center rounded bg-purple-100 text-xs font-semibold text-purple-800">A</span> Accountable</span>
 						<span><span className="inline-flex h-5 w-5 items-center justify-center rounded bg-stone-100 text-xs text-stone-500">C</span> Consultado</span>
@@ -368,18 +368,18 @@ export default async function SessionReviewPage({
 
 			{/* Action bar */}
 			<div className="bg-stone-900 border-b border-stone-800">
-				<div className="mx-auto max-w-5xl px-6 py-3 flex items-center justify-between">
+				<div className="mx-auto max-w-5xl px-4 py-3 flex flex-col gap-2 md:flex-row md:items-center md:justify-between md:px-6">
 					<a
 						href={`/${organizationSlug}/session/${sessionId}/live`}
 						className="text-xs text-stone-400 hover:text-stone-200 transition-colors"
 					>
 						← Volver a la sesion
 					</a>
-					<div className="flex items-center gap-2">
+					<div className="flex items-center gap-2 overflow-x-auto">
 						{hasBpmnXml && (
 							<a
 								href={`/api/sessions/${session.id}/export/bpmn`}
-								className="inline-flex h-9 items-center gap-1.5 rounded-md border border-stone-700 bg-stone-800 px-3 text-sm font-medium text-stone-200 transition-colors hover:bg-stone-700"
+								className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-md border border-stone-700 bg-stone-800 px-3 text-sm font-medium text-stone-200 transition-colors hover:bg-stone-700"
 							>
 								BPMN XML
 							</a>
@@ -391,7 +391,7 @@ export default async function SessionReviewPage({
 			</div>
 
 			{/* Report body — Risk-First order */}
-			<main className="mx-auto max-w-5xl space-y-6 px-6 py-8">
+			<main className="mx-auto max-w-5xl space-y-6 px-4 py-6 pb-24 md:px-6 md:py-8 md:pb-8">
 
 				{/* 2. Risk Heat Map + Opportunities (HERO) */}
 				{riskDel?.status === "completed" && riskData ? (
@@ -507,8 +507,8 @@ export default async function SessionReviewPage({
 
 			{/* Footer */}
 			<footer className="border-t border-stone-200 bg-white">
-				<div className="mx-auto max-w-5xl px-6 py-4">
-					<div className="flex items-center justify-between text-xs text-stone-400">
+				<div className="mx-auto max-w-5xl px-4 py-4 md:px-6">
+					<div className="flex flex-col gap-2 text-xs text-stone-400 sm:flex-row sm:items-center sm:justify-between">
 						<span>Generado por Auditora.ai</span>
 						<a
 							href={`/${organizationSlug}/session/${sessionId}/live`}

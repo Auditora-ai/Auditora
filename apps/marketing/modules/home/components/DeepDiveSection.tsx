@@ -73,24 +73,24 @@ export function DeepDiveSection() {
 	);
 
 	return (
-		<section ref={sectionRef} className="py-20 lg:py-28">
+		<section ref={sectionRef} className="py-12 sm:py-16 lg:py-28">
 			<div className="container max-w-5xl">
-				<div className="dd-header mb-16 max-w-3xl mx-auto text-center">
+				<div className="dd-header mb-10 sm:mb-16 max-w-3xl mx-auto text-center">
 					<small className="font-medium text-xs uppercase tracking-wider text-primary mb-4 block">
 						{t("home.deepDive.badge")}
 					</small>
-					<h2 className="font-display text-3xl lg:text-4xl xl:text-5xl text-foreground">
+					<h2 className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-foreground">
 						{t("home.deepDive.title")}
 					</h2>
-					<p className="mt-4 text-base lg:text-lg text-muted-foreground text-balance">
+					<p className="mt-4 text-sm sm:text-base lg:text-lg text-muted-foreground text-balance">
 						{t("home.deepDive.subtitle")}
 					</p>
 				</div>
 
-				<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-12">
 					{/* Left column — Methodology */}
 					<div className="dd-left">
-						<h3 className="text-xl font-semibold text-foreground mb-4">
+						<h3 className="text-lg sm:text-xl font-semibold text-foreground mb-4">
 							{t("home.deepDive.methodTitle")}
 						</h3>
 						<p className="text-muted-foreground text-sm leading-relaxed mb-6">
@@ -101,7 +101,7 @@ export function DeepDiveSection() {
 							{(["question1", "question2", "question3"] as const).map((q) => (
 								<div
 									key={q}
-									className="dd-question flex gap-3 rounded-xl border border-border bg-card p-4"
+									className="dd-question flex gap-3 rounded-xl border border-border bg-card p-3 sm:p-4"
 								>
 									<MessageSquareQuoteIcon
 										className="size-5 text-primary shrink-0 mt-0.5"
@@ -121,18 +121,18 @@ export function DeepDiveSection() {
 
 					{/* Right column — Output comparison */}
 					<div className="dd-right">
-						<h3 className="text-xl font-semibold text-foreground mb-6">
+						<h3 className="text-lg sm:text-xl font-semibold text-foreground mb-4 sm:mb-6">
 							{t("home.deepDive.outputTitle")}
 						</h3>
 
-						<div className="overflow-hidden rounded-2xl border border-border">
+						<div className="overflow-x-auto rounded-2xl border border-border">
 							{/* Table header */}
-							<div className="grid grid-cols-2 text-xs font-semibold uppercase tracking-wider">
-								<div className="p-4 bg-muted/30 text-muted-foreground">
+							<div className="grid grid-cols-2 text-[11px] sm:text-xs font-semibold uppercase tracking-wider">
+								<div className="p-3 sm:p-4 bg-muted/30 text-muted-foreground">
 									{t("home.deepDive.instant.label")}
 								</div>
 								<div
-									className="p-4 text-white"
+									className="p-3 sm:p-4 text-white"
 									style={{ backgroundColor: "#D97706" }}
 								>
 									{t("home.deepDive.guided.label")}
@@ -143,12 +143,12 @@ export function DeepDiveSection() {
 							{COMPARISON_ROWS.map((row, i) => (
 								<div
 									key={row}
-									className="grid grid-cols-2 text-sm border-t border-border"
+									className="grid grid-cols-2 text-xs sm:text-sm border-t border-border"
 								>
-									<div className="p-4 text-muted-foreground bg-card">
+									<div className="p-3 sm:p-4 text-muted-foreground bg-card">
 										{t(`home.deepDive.instant.${row}`)}
 									</div>
-									<div className="p-4 text-foreground font-medium bg-card">
+									<div className="p-3 sm:p-4 text-foreground font-medium bg-card">
 										{t(`home.deepDive.guided.${row}`)}
 									</div>
 								</div>

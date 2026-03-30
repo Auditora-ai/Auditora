@@ -40,31 +40,31 @@ export function TryItSection() {
 	);
 
 	return (
-		<section ref={sectionRef} id="how-it-works" className="py-20 lg:py-28" style={{ backgroundColor: "#1C1917" }}>
+		<section ref={sectionRef} id="how-it-works" className="py-12 sm:py-16 lg:py-28" style={{ backgroundColor: "#1C1917" }}>
 			<div className="container max-w-5xl">
-				<div className="text-center mb-16">
+				<div className="text-center mb-10 sm:mb-16">
 					<small className="hiw-reveal font-medium text-xs uppercase tracking-wider mb-4 block" style={{ color: "#D97706" }}>
 						{t("home.howItWorks.badge")}
 					</small>
-					<h2 className="hiw-reveal font-display text-3xl lg:text-4xl xl:text-5xl" style={{ color: "#FAFAF9" }}>
+					<h2 className="hiw-reveal font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl" style={{ color: "#FAFAF9" }}>
 						{t("home.howItWorks.title")}
 					</h2>
-					<p className="hiw-reveal mt-4 text-sm lg:text-base max-w-2xl mx-auto text-balance" style={{ color: "#A8A29E" }}>
+					<p className="hiw-reveal mt-4 text-sm lg:text-base max-w-sm sm:max-w-2xl mx-auto text-balance" style={{ color: "#A8A29E" }}>
 						{t("home.howItWorks.subtitle")}
 					</p>
 				</div>
 
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
 					{steps.map((step, i) => {
 						const Icon = step.icon;
 						return (
 							<div key={step.key} className="hiw-reveal text-center">
-								<div className="relative mx-auto mb-6">
+								<div className="relative mx-auto mb-4 sm:mb-6">
 									<div
-										className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto"
+										className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mx-auto"
 										style={{ backgroundColor: "#292524" }}
 									>
-										<Icon className="size-7" style={{ color: "#D97706" }} />
+										<Icon className="size-5 sm:size-7" style={{ color: "#D97706" }} />
 									</div>
 									<span
 										className="absolute -top-2 -right-2 w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold"

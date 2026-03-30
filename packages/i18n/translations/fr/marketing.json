@@ -29,206 +29,189 @@
 		"description": "Tout ce que vous devez savoir sur Auditora.ai.",
 		"title": "Questions fréquentes",
 		"items": {
-			"joinCall": {
-				"question": "Comment Auditora.ai rejoint-il mon appel ?",
-				"answer": "Auditora.ai utilise Recall.ai pour rejoindre en tant que participant bot dans Zoom, Google Meet ou Microsoft Teams. Partagez simplement un lien de réunion ou invitez Auditora.ai directement — il rejoint silencieusement et commence la transcription en temps réel."
+			"urlLimitations": {
+				"question": "S'il ne lit que mon site web public, comment peut-il identifier de vrais risques ?",
+				"answer": "Il ne peut pas — et nous ne prétendons pas le contraire. Le diagnostic instantané identifie des risques structurels et logiques basés sur les modèles de l'industrie et la structure du processus déduit. Considérez-les comme des hypothèses intelligentes, pas des constats opérationnels. C'est comme la première question qu'un bon consultant poserait après avoir vu votre site : « Étant donné ce que vous faites, voici les risques les plus probables. » La vraie précision vient quand vous utilisez la conversation guidée ou la plateforme complète avec un vrai contexte opérationnel."
+			},
+			"vsChatgpt": {
+				"question": "En quoi est-ce différent d'utiliser ChatGPT pour générer des processus ?",
+				"answer": "Trois différences fondamentales. Premièrement, la méthodologie : chaque session suit le framework SIPOC avec détection automatique des lacunes — ChatGPT ne sait pas ce qu'il ne vous a pas demandé. Deuxièmement, les livrables : les diagrammes sont du vrai BPMN 2.0, exportables en XML, pas des esquisses approximatives. Troisièmement, la persistance : les processus, risques et actions correctives sont sauvegardés, suivis et évoluent — ce ne sont pas des chats qui se perdent."
+			},
+			"dataAccess": {
+				"question": "À quelles données de mon site web accédez-vous exactement ?",
+				"answer": "Nous lisons le contenu textuel de jusqu'à 5 pages publiques : accueil, à propos, services et similaires. Le même contenu que n'importe quel visiteur voit dans un navigateur. Nous n'accédons pas aux systèmes internes, APIs, bases de données ou zones protégées."
+			},
+			"bpmKnowledge": {
+				"question": "Ai-je besoin de connaissances en BPM ou BPMN pour utiliser l'outil ?",
+				"answer": "Non. Auditora.ai est conçu pour que quiconque connaît son activité puisse l'utiliser. L'IA pose les bonnes questions en langage simple, et la notation technique est générée automatiquement. Si vous êtes consultant BPM, l'outil accélère votre travail. Sinon, l'outil fait le travail technique pour vous."
+			},
+			"deepening": {
+				"question": "Puis-je approfondir au-delà du rapport instantané ?",
+				"answer": "Oui. Après le diagnostic, vous pouvez démarrer une conversation guidée avec l'IA. Elle pose des questions spécifiques sur vos opérations — fournisseurs, entrées, activités, sorties, clients — et construit une analyse beaucoup plus détaillée. À la fin, vous recevez une AMDEC complète avec modes de défaillance et Indice de Priorité du Risque (IPR) par activité."
 			},
 			"dataSecurity": {
-				"question": "Les données de conversation de mes clients sont-elles sécurisées ?",
-				"answer": "Toute la transcription est traitée en temps réel et chiffrée en transit et au repos. Nous n'utilisons jamais les données de vos clients pour entraîner des modèles d'IA. Vos données vous appartiennent entièrement."
+				"question": "Mes données sont-elles sécurisées ?",
+				"answer": "Oui. Chiffrées en transit (TLS) et au repos. Les sessions anonymes expirent après 24 heures. Nous n'utilisons jamais vos informations pour entraîner des modèles d'IA. À la création de compte, vos données sont stockées dans l'espace privé de votre organisation avec un isolement complet."
 			},
-			"bpmnStandard": {
-				"question": "Quel standard BPMN supportez-vous ?",
-				"answer": "Auditora.ai génère des diagrammes conformes à BPMN 2.0. Vous pouvez les exporter et les ouvrir dans n'importe quel outil conforme comme Camunda, Signavio ou Visio."
+			"accountMigration": {
+				"question": "Que se passe-t-il avec mon analyse si je crée un compte ?",
+				"answer": "Tout migre automatiquement. Votre carte de processus, analyse de risques, conversation guidée et livrables générés sont transférés intacts vers votre compte. Vous ne perdez rien."
 			},
-			"liveEditing": {
-				"question": "Puis-je modifier le diagramme pendant la réunion ?",
-				"answer": "Oui. Le canevas BPMN est entièrement interactif. Vous pouvez déplacer les nœuds, ajouter des annotations, confirmer ou rejeter les suggestions de l'IA, et affiner le diagramme tout en restant en appel avec votre client."
-			},
-			"aiAccuracy": {
-				"question": "Que se passe-t-il si l'IA se trompe sur une étape du processus ?",
-				"answer": "Les nœuds apparaissent d'abord à l'état « en formation » avec une bordure en pointillés. Vous confirmez, modifiez ou rejetez chaque étape avant qu'elle ne devienne permanente. Vous gardez toujours le contrôle du livrable final."
+			"vsProcessMining": {
+				"question": "Est-ce du process mining ?",
+				"answer": "Non. Le process mining analyse les logs systèmes (ERP, CRM) pour découvrir comment les processus s'exécutent réellement. Auditora.ai est un outil de découverte de processus basé sur l'élicitation — il guide les conversations pour documenter les processus et analyser les risques. Ce sont des approches complémentaires : le process mining a besoin de données système, Auditora.ai a besoin de connaissances humaines."
 			}
 		}
 	},
 	"home": {
 		"hero": {
-			"badge": "Élicitation de processus par IA",
-			"title": "Transformez chaque réunion client en une carte de processus finalisée",
-			"subtitle": "Auditora.ai rejoint votre visioconférence, guide vos questions avec un téléprompteur IA, et crée automatiquement des diagrammes de processus métier en temps réel. Sortez de chaque réunion avec un livrable BPMN prêt pour le client.",
-			"cta": "Essai gratuit",
-			"ctaSecondary": "Voir comment ça marche"
+			"badge": "Plateforme de découverte de processus par IA",
+			"title": "Documentez vos processus en minutes, pas en semaines",
+			"subtitle": "Auditora.ai guide les conversations d'élicitation avec l'intelligence artificielle, génère des diagrammes BPMN en temps réel et exécute des analyses de risques automatiques. Pour les consultants et auditeurs qui valorisent leur temps.",
+			"inputPlaceholder": "https://votre-entreprise.fr",
+			"cta": "Tester avec mon site web",
+			"ctaSecondary": "Ou décrivez votre entreprise manuellement",
+			"subtext": "Collez une URL. L'IA analyse votre contexte public et génère un diagnostic initial gratuit avec carte de processus et risques.",
+			"alt": {
+				"badge": "L'outil manquant à votre pratique",
+				"title": "Chaque processus non documenté est un risque que vous signez",
+				"subtitle": "Vos clients ont des processus critiques que personne n'a cartographiés. Auditora.ai les découvre pour vous : élicitation guidée par IA, diagrammes BPMN automatiques et analyse de risques avec évaluation de la gravité. En une fraction du temps qu'il vous faudrait seul.",
+				"cta": "Voir le diagnostic gratuit de mon entreprise",
+				"subtext": "Entrez votre URL d'entreprise. Recevez une carte de processus et une analyse de risques en minutes — sans inscription, sans engagement."
+			}
 		},
 		"problem": {
-			"title": "Les consultants en processus sont noyés dans la documentation",
-			"stat1": {
-				"number": "60",
-				"unit": "%",
-				"label": "du temps de conseil consacré à la documentation post-réunion"
+			"badge": "Le problème",
+			"title": "La découverte de processus est cassée",
+			"card1": {
+				"title": "Des semaines d'entretiens, des diagrammes que personne ne lit",
+				"description": "Planifier des réunions. Prendre des notes à la main. Passer des heures dans Visio ou Lucidchart à traduire ce que vous avez entendu en BPMN. Envoyer le brouillon. Attendre les corrections. Recommencer. Un seul processus peut prendre 2 à 4 semaines. Votre client a déjà perdu patience."
 			},
-			"stat2": {
-				"number": "3",
-				"unit": "h",
-				"label": "temps moyen pour reconstruire une carte de processus à partir de notes"
+			"card2": {
+				"title": "Des outils à 50 000 $ qui nécessitent des données que vous n'avez pas",
+				"description": "Celonis, Minit, UiPath Process Mining — tous promettent de découvrir les processus automatiquement. Mais ils ont besoin de logs système, d'accès ERP, d'intégration technique. Votre client n'a même pas un CRM correctement implémenté. Le process mining n'est pas pour 95% des entreprises."
 			},
-			"stat3": {
-				"number": "40",
-				"unit": "%",
-				"label": "des étapes de processus oubliées ou mal mémorisées"
+			"card3": {
+				"title": "Copier-coller dans ChatGPT n'est pas une méthodologie",
+				"description": "Oui, vous pouvez demander à ChatGPT de générer un BPMN. Le résultat est générique, n'a pas de vrai contexte métier, ne suit pas de méthodologie d'élicitation et ne vous donne rien que vous puissiez défendre devant un comité. C'est un pansement, pas un outil professionnel."
+			}
+		},
+		"solution": {
+			"badge": "La solution",
+			"title": "Un copilote IA qui maîtrise l'élicitation de processus",
+			"description": "Auditora.ai n'est ni un chatbot générique ni un outil de process mining. C'est une plateforme de découverte de processus qui combine la méthodologie SIPOC avec l'intelligence artificielle pour guider l'élicitation, documenter en BPMN 2.0 en temps réel et générer des analyses de risques avec évaluation de la gravité — le tout pendant la conversation, pas après.",
+			"diff1": {
+				"title": "Une vraie méthodologie, pas des prompts génériques",
+				"description": "Chaque conversation suit le framework SIPOC (Fournisseurs, Entrées, Processus, Sorties, Clients). L'IA détecte les lacunes de couverture et génère des questions contextuelles pour les combler. Elle n'improvise pas — elle investigue."
 			},
-			"description": "Vous prenez des notes pendant l'appel. Vous demandez au client de répéter. Vous passez des heures ensuite dans Visio ou Lucidchart à reconstruire ce qui a été dit. Des étapes sont oubliées. Des détails sont perdus. Votre client reçoit le livrable des jours plus tard au lieu de minutes."
+			"diff2": {
+				"title": "Des diagrammes BPMN 2.0 pendant que vous parlez",
+				"description": "Ne transcrivez pas, ne redessinez pas. Le diagramme se construit pendant la session. Exportable en XML, compatible avec Camunda, Signavio et tout outil BPMN."
+			},
+			"diff3": {
+				"title": "Analyse de risques structurelle automatique",
+				"description": "Chaque activité du processus est évaluée contre les modes de défaillance potentiels. Vous recevez une matrice AMDEC avec Indice de Priorité du Risque (IPR), pas une liste générique de « risques possibles »."
+			}
 		},
 		"howItWorks": {
-			"title": "Trois étapes. Zéro documentation post-réunion.",
-			"stepLabel": "Étape {number}",
+			"badge": "Diagnostic instantané gratuit",
+			"title": "Voyez ce que l'IA découvre avec vos seules informations publiques",
+			"subtitle": "Ce diagnostic utilise uniquement vos pages web publiques. C'est un point de départ — pas un audit final. Si cela vous surprend, imaginez le résultat quand vous lui donnerez un vrai contexte.",
 			"step1": {
-				"title": "Auditora.ai rejoint votre appel",
-				"description": "Invitez Auditora.ai à n'importe quelle session Zoom, Teams ou Meet. Il rejoint en tant que participant silencieux et commence la transcription en temps réel avec identification des intervenants."
+				"title": "Entrez votre URL",
+				"description": "L'IA lit jusqu'à 5 pages publiques de votre site — accueil, à propos, services. Le même contenu que voit n'importe quel visiteur."
 			},
 			"step2": {
-				"title": "L'IA guide vos questions",
-				"description": "Un téléprompteur privé vous indique exactement quoi demander ensuite, en fonction de ce qui a été discuté. Ne manquez plus jamais une étape critique du processus."
+				"title": "Inférence de contexte",
+				"description": "Identifie votre industrie, services principaux et sélectionne le processus le plus critique. Génère une carte SIPOC initiale et un diagramme de processus."
 			},
 			"step3": {
-				"title": "Le diagramme se construit tout seul",
-				"description": "Regardez les tâches BPMN, passerelles et flux apparaître sur le canevas en temps réel. Révisez et affinez avec votre client pendant que vous êtes encore en appel."
+				"title": "Diagnostic de risques",
+				"description": "Évalue les risques structurels du processus identifié : lacunes logiques dans le flux, dépendances fragiles, points non contrôlés. Note par gravité et probabilité."
+			},
+			"step4": {
+				"title": "Approfondissez avec une conversation guidée",
+				"description": "Optionnellement, entrez dans une session de questions-réponses avec l'IA. Plus vous fournissez de contexte, plus l'analyse sera spécifique et actionnable. À la fin, vous recevrez une AMDEC complète."
+			},
+			"disclaimer": "Les risques identifiés dans le diagnostic instantané sont des inférences logiques basées sur la structure du processus, pas des détections de problèmes opérationnels réels. Pour des constats spécifiques, utilisez la conversation guidée ou la plateforme complète."
+		},
+		"deepDive": {
+			"badge": "Là où la vraie magie opère",
+			"title": "Une conversation guidée qui construit votre analyse",
+			"subtitle": "Le diagnostic instantané est l'apéritif. La conversation guidée est ce qui différencie Auditora.ai de tout autre outil.",
+			"methodTitle": "Dialogue socratique + SIPOC",
+			"methodDescription": "L'IA ne vous demande pas de « décrire votre processus ». Elle pose des questions ciblées basées sur les lacunes qu'elle détecte dans votre carte SIPOC :",
+			"question1": "« Vous avez mentionné 3 fournisseurs mais seulement 1 entrée. Qui d'autre fournit des matériaux ou informations pour cette étape ? »",
+			"question2": "« Votre processus a 5 activités mais aucune bifurcation. Y a-t-il un point où le flux change selon une condition ? »",
+			"question3": "« Vous avez identifié le client final mais pas le client interne. Qui reçoit le résultat de cette étape avant qu'il n'atteigne le client ? »",
+			"methodNote": "Chaque question comble une lacune spécifique. Pas de questions génériques.",
+			"outputTitle": "Ce que vous obtenez à la fin",
+			"instant": {
+				"label": "Diagnostic instantané",
+				"processes": "1 processus cartographié",
+				"risks": "3-5 risques généraux",
+				"analysis": "Notation de base",
+				"diagram": "SIPOC basique"
+			},
+			"guided": {
+				"label": "Après conversation guidée",
+				"processes": "Processus enrichi avec 2-3x plus d'activités",
+				"risks": "10-15+ risques spécifiques avec modes de défaillance",
+				"analysis": "AMDEC complète avec IPR par activité",
+				"diagram": "BPMN 2.0 exportable"
 			}
 		},
-		"features": {
-			"badge": "Fonctionnalités clés",
-			"title": "Tout ce dont vous avez besoin pour éliciter les processus, pas les documenter",
-			"description": "Auditora.ai gère la documentation pour que vous puissiez vous concentrer sur ce que vous faites le mieux — comprendre le métier de votre client.",
+		"platform": {
+			"badge": "La plateforme complète",
+			"title": "D'un diagnostic gratuit à votre système de gestion des processus",
+			"subtitle": "Le scan gratuit montre ce que l'IA peut faire. La plateforme est là où vous faites le vrai travail avec vos clients.",
 			"feature1": {
-				"title": "Transcription en temps réel",
-				"subtitle": "Chaque mot capturé, chaque intervenant identifié.",
-				"description": "Propulsé par Deepgram, Auditora.ai capture chaque mot avec diarisation des intervenants. Il sait exactement qui a dit quoi, pour que votre carte de processus reflète les bons rôles et responsabilités.",
-				"benefit1": {
-					"title": "Diarisation des intervenants",
-					"description": "Identifie automatiquement qui parle, en associant les voix aux rôles dans votre diagramme de processus."
-				},
-				"benefit2": {
-					"title": "Support multilingue",
-					"description": "Transcrivez des réunions dans plusieurs langues avec une haute précision et une faible latence."
-				},
-				"benefit3": {
-					"title": "Historique consultable",
-					"description": "Chaque transcription est sauvegardée et consultable. Revisitez n'importe quel moment de n'importe quelle session passée."
-				}
+				"title": "Bibliothèque de processus",
+				"description": "Tous les processus cartographiés en un seul endroit. Cherchez, filtrez et naviguez l'inventaire de processus de chaque client."
 			},
 			"feature2": {
-				"title": "Téléprompteur IA",
-				"subtitle": "Votre copilote expert pour chaque réunion.",
-				"description": "Claude analyse la conversation en temps réel et suggère la prochaine question que vous devriez poser. Couvre les cas particuliers, les flux d'exception et les transferts que les consultants manquent habituellement.",
-				"benefit1": {
-					"title": "Questions contextuelles",
-					"description": "Les questions s'adaptent en fonction de ce qui a été discuté. Pas de scripts génériques — chaque suggestion est adaptée à la conversation."
-				},
-				"benefit2": {
-					"title": "Détection des lacunes",
-					"description": "Identifie les informations manquantes — chemins d'exception, chaînes d'approbation, points de transfert — avant la fin de la réunion."
-				},
-				"benefit3": {
-					"title": "Privé pour vous",
-					"description": "Le téléprompteur est votre vue privée. Votre client ne voit rien — juste un consultant qui pose des questions brillantes."
-				}
+				"title": "Sessions de découverte guidées",
+				"description": "Lancez des sessions d'élicitation avec l'IA comme copilote. Questions contextuelles basées sur la couverture SIPOC en temps réel."
 			},
 			"feature3": {
-				"title": "Diagramme BPMN en direct",
-				"subtitle": "Des cartes de processus qui se dessinent toutes seules.",
-				"description": "Tâches, passerelles, événements et couloirs apparaissent au fur et à mesure de la conversation. Conforme BPMN 2.0 et prêt à l'export dès la fin de votre réunion.",
-				"benefit1": {
-					"title": "Standard BPMN 2.0",
-					"description": "Notation standard de l'industrie compatible avec Camunda, Signavio, Visio et tout outil conforme."
-				},
-				"benefit2": {
-					"title": "Collaboration en temps réel",
-					"description": "Partagez le canevas du diagramme avec votre client pendant l'appel. Construisez le processus ensemble."
-				},
-				"benefit3": {
-					"title": "Confirmer et rejeter",
-					"description": "Chaque nœud généré par l'IA commence comme suggestion. Vous décidez ce qui reste et ce qui part."
-				}
+				"title": "Diagrammes BPMN automatiques",
+				"description": "Les diagrammes sont générés et mis à jour pendant la session. Exportez XML, PNG ou PDF. Compatible avec Camunda, Signavio, Bizagi."
+			},
+			"feature4": {
+				"title": "Gestion des risques et atténuation",
+				"description": "Chaque risque identifié devient un élément traçable. Assignez des responsables, définissez des plans d'atténuation, suivez l'avancement."
+			},
+			"feature5": {
+				"title": "Collaboration d'équipe",
+				"description": "Invitez votre équipe. Partagez des processus, assignez des sessions, révisez les livrables. Rôles et permissions granulaires."
+			},
+			"feature6": {
+				"title": "Livrables professionnels",
+				"description": "Exportez des rapports prêts pour le client : cartes de processus, matrices RACI, analyses de risques, fiches de processus."
+			},
+			"cta": "Créer un compte gratuit — votre diagnostic est conservé",
+			"ctaSubtext": "Tout ce que vous avez généré dans le scan gratuit migre automatiquement vers votre compte."
+		},
+		"credibility": {
+			"badge": "Pourquoi faire confiance à Auditora.ai",
+			"title": "Construit sur la méthodologie, pas sur le battage",
+			"pillar1": {
+				"title": "Frameworks reconnus par l'industrie",
+				"description": "SIPOC (Six Sigma), BPMN 2.0 (OMG), AMDEC (ISO/SAE). Nous n'avons rien inventé. Nous automatisons les mêmes outils que les meilleurs consultants utilisent déjà."
+			},
+			"pillar2": {
+				"title": "Transparence totale",
+				"description": "Nous vous disons exactement ce que l'IA peut et ne peut pas faire. Le diagnostic instantané identifie des risques logiques, pas opérationnels. La précision s'améliore avec chaque minute de contexte que vous fournissez. Pas de promesses exagérées."
+			},
+			"pillar3": {
+				"title": "Vos données vous appartiennent",
+				"description": "Chiffrées en transit et au repos. Les sessions anonymes expirent après 24 heures. Nous n'utilisons jamais vos informations pour entraîner des modèles. Conforme au RGPD."
 			}
 		},
-		"demo": {
-			"windowTitle": "Auditora.ai — Session en direct",
-			"rec": "REC",
-			"teleprompterLabel": "Téléprompteur",
-			"askNow": "Demander maintenant",
-			"transcriptLabel": "Transcription en direct",
-			"consultantLabel": "Consultant",
-			"clientLabel": "Client",
-			"q1": "Qu'est-ce qui déclenche ce processus ?",
-			"q2": "Qui est responsable de l'approbation ?",
-			"q3": "Que se passe-t-il en cas de rejet ?",
-			"q4": "Y a-t-il des chemins d'exception ?",
-			"q5": "Combien de temps dure chaque étape ?",
-			"t1": "Expliquez-moi ce qui se passe après la soumission d'un bon de commande.",
-			"t2": "Il va d'abord au responsable de département pour approbation.",
-			"t3": "Au-dessus de 5 000 $, il faut aussi la signature du VP.",
-			"t4": "Que se passe-t-il si le VP refuse ?",
-			"t5": "Il retourne au demandeur avec des notes pour révision.",
-			"nodeSubmit": "Bon de cmd",
-			"nodeGateway": "5k$ ?",
-			"nodeMgr": "Appro. Resp.",
-			"nodeVp": "Appro. VP",
-			"labelLt": "< 5k$",
-			"labelGte": "≥ 5k$",
-			"t6": "Et une fois la révision soumise, le cycle d'approbation recommence ?",
-			"t7": "Exactement. Ça repasse par le même processus.",
-			"q6": "Quels sont les seuils de montant ?",
-			"q7": "Qui est notifié à chaque étape ?",
-			"nodeRevise": "Réviser et Resoumettre",
-			"labelRejected": "Rejeté",
-			"labelApproved": "Approuvé",
-			"caption": {
-				"listening": "Écoute…",
-				"understanding": "Compréhension…",
-				"aiGuides": "L'IA guide la conversation",
-				"loopCloses": "La boucle se ferme",
-				"ready": "Livrable prêt"
-			},
-			"stats": {
-				"duration": "45 min",
-				"steps": "8 étapes",
-				"confidence": "94%",
-				"durationLabel": "Réunion",
-				"stepsLabel": "Capturées",
-				"confidenceLabel": "Confiance",
-				"export": "Prêt à exporter"
-			},
-			"scene1": {
-				"title": "Auditora.ai rejoint votre appel",
-				"joining": "Auditora.ai rejoint la réunion…",
-				"participant1": "Ana López",
-				"participant2": "Marco Díaz",
-				"participant3": "Sarah Chen",
-				"you": "Vous (Consultant)",
-				"prozea": "Auditora.ai AI"
-			},
-			"scene2": {
-				"title": "Chaque mot, capturé",
-				"waveformLabel": "Transcription en temps réel"
-			},
-			"scene3": {
-				"title": "L'IA guide vos questions",
-				"aiSuggestion": "Basé sur la réponse du client"
-			},
-			"scene4": {
-				"title": "Le diagramme se construit tout seul"
-			},
-			"scene5": {
-				"title": "Repartez avec un livrable",
-				"before": "Avant : 3 heures à reconstruire depuis vos notes",
-				"after": "Maintenant : Terminé avant la fin de la réunion",
-				"cta": "Essai gratuit"
-			}
-		},
-		"integrations": {
-			"worksWithTitle": "Fonctionne avec vos outils",
-			"zoom": "Zoom",
-			"teams": "Microsoft Teams",
-			"meet": "Google Meet"
+		"tools": {
+			"title": "Outils IA gratuits pour les professionnels des processus",
+			"subtitle": "La même IA qui analyse votre entreprise, maintenant en outils autonomes. Sans inscription.",
+			"viewAll": "Voir tous les outils"
 		}
 	},
 	"newsletter": {
@@ -247,10 +230,10 @@
 		"title": "Accès anticipé"
 	},
 	"cta": {
-		"title": "Arrêtez de documenter. Commencez à conseiller.",
-		"subtitle": "Rejoignez les consultants qui sortent de chaque réunion avec une carte de processus finalisée.",
-		"button": "Commencer l'essai gratuit",
-		"note": "Aucune carte de crédit requise"
+		"title": "Chaque processus non documenté est une décision sans preuve",
+		"subtitle": "Commencez par un diagnostic gratuit. Voyez ce que l'IA déduit de vos informations publiques. Décidez ensuite si vous voulez approfondir.",
+		"button": "Obtenir un diagnostic gratuit",
+		"note": "Sans carte de crédit. Sans inscription. Votre première carte de processus en minutes."
 	},
 	"notFound": {
 		"code": "404",
@@ -265,6 +248,7 @@
 			"pricing": "Tarifs",
 			"privacyPolicy": "Politique de confidentialité",
 			"termsAndConditions": "Conditions générales",
+			"tools": "Outils gratuits",
 			"builtWith": "Auditora.ai"
 		},
 		"menu": {
@@ -277,6 +261,7 @@
 			"howItWorks": "Comment ça marche",
 			"login": "Se connecter",
 			"pricing": "Tarifs",
+			"tools": "Analyser votre entreprise",
 			"trial": "Essai gratuit"
 		},
 		"aria": {

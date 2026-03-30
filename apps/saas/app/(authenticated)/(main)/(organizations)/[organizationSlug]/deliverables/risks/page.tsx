@@ -54,7 +54,7 @@ export default async function RiskRegisterPage({
   };
 
   return (
-    <div className="mx-auto max-w-7xl space-y-6 p-6">
+    <div className="mx-auto max-w-7xl space-y-6 p-4 pb-24 md:p-6 md:pb-6">
       <div>
         <Link
           href={`/${organizationSlug}/deliverables`}
@@ -99,8 +99,33 @@ export default async function RiskRegisterPage({
             </div>
           </div>
 
-          {/* Heat map */}
-          <div className="rounded-lg border border-border bg-background p-6">
+          {/* Heat map — mobile: simplified severity bars, desktop: full matrix */}
+          {/* Mobile: severity distribution bars */}
+          <div className="rounded-lg border border-border bg-background p-4 md:hidden">
+            <h2 className="text-sm font-semibold text-foreground mb-3">Distribución por Severidad</h2>
+            <div className="space-y-2">
+              {[
+                { label: "Critico", count: risks.filter((r) => r.riskScore >= 16).length, cls: "bg-red-500" },
+                { label: "Alto", count: risks.filter((r) => r.riskScore >= 12 && r.riskScore < 16).length, cls: "bg-amber-500" },
+                { label: "Medio", count: risks.filter((r) => r.riskScore >= 6 && r.riskScore < 12).length, cls: "bg-yellow-400" },
+                { label: "Bajo", count: risks.filter((r) => r.riskScore < 6).length, cls: "bg-green-400" },
+              ].map((band) => (
+                <div key={band.label} className="flex items-center gap-3">
+                  <span className="w-16 text-xs text-muted-foreground">{band.label}</span>
+                  <div className="flex-1 h-6 rounded-full bg-muted overflow-hidden">
+                    <div
+                      className={`h-full rounded-full ${band.cls} transition-all duration-500`}
+                      style={{ width: risks.length > 0 ? `${(band.count / risks.length) * 100}%` : "0%" }}
+                    />
+                  </div>
+                  <span className="w-6 text-right text-xs font-medium tabular-nums text-foreground">{band.count}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop: full heat map */}
+          <div className="hidden md:block rounded-lg border border-border bg-background p-6">
             <h2 className="text-sm font-semibold text-foreground mb-4">Mapa de Calor — Severidad × Probabilidad</h2>
             <div className="flex items-end gap-2">
               <div className="flex flex-col items-end gap-1 text-xs text-muted-foreground pr-2">
@@ -132,8 +157,52 @@ export default async function RiskRegisterPage({
             <p className="text-xs text-muted-foreground mt-2 -rotate-0">↑ Severidad</p>
           </div>
 
-          {/* Risk table */}
-          <div className="rounded-lg border border-border bg-background overflow-x-auto">
+          {/* Risk list — mobile: cards, desktop: table */}
+
+          {/* Mobile: card view */}
+          <div className="space-y-3 md:hidden">
+            {risks.map((risk) => {
+              const sev = sevLabel(risk.severity);
+              return (
+                <div
+                  key={risk.id}
+                  className={`rounded-lg border bg-background p-4 border-l-4 ${
+                    risk.riskScore >= 16 ? "border-l-red-500"
+                    : risk.riskScore >= 12 ? "border-l-amber-500"
+                    : risk.riskScore >= 8 ? "border-l-yellow-400"
+                    : "border-l-green-400"
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0 flex-1">
+                      <p className="font-medium text-foreground text-sm">{risk.title}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{risk.processDefinition.name}</p>
+                    </div>
+                    <span className={`inline-flex h-7 min-w-[28px] shrink-0 items-center justify-center rounded text-xs font-semibold ${
+                      risk.riskScore >= 16 ? "bg-red-100 text-red-800"
+                      : risk.riskScore >= 12 ? "bg-amber-100 text-amber-800"
+                      : risk.riskScore >= 8 ? "bg-yellow-100 text-yellow-800"
+                      : "bg-green-100 text-green-800"
+                    }`}>
+                      {risk.riskScore}
+                    </span>
+                  </div>
+                  {risk.description && (
+                    <p className="text-xs text-muted-foreground mt-1.5 line-clamp-2">{risk.description}</p>
+                  )}
+                  <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                    <span className={`inline-flex items-center rounded px-1.5 py-0.5 ${sev.cls}`}>{sev.text}</span>
+                    <span>Sev: {risk.severity} · Prob: {risk.probability}</span>
+                    {risk.controls.length > 0 && <span>· {risk.controls.length} controles</span>}
+                    {risk.mitigations.length > 0 && <span>· {risk.mitigations.length} mitigaciones</span>}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Desktop: table view */}
+          <div className="hidden md:block rounded-lg border border-border bg-background overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border bg-muted">

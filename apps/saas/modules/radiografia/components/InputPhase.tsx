@@ -36,10 +36,10 @@ export function InputPhase({ onSubmit, loading }: InputPhaseProps) {
 	return (
 		<div className="flex min-h-screen items-center justify-center px-4 bg-background">
 			<div className="w-full max-w-xl text-center">
-				<h1 className="mb-3 text-5xl tracking-tight font-display text-foreground">
+				<h1 className="mb-3 text-3xl md:text-5xl tracking-tight font-display text-foreground">
 					{t("title")}
 				</h1>
-				<p className="mb-10 text-lg font-sans text-muted-foreground">
+				<p className="mb-8 md:mb-10 text-base md:text-lg font-sans text-muted-foreground">
 					{t("subtitle")}
 				</p>
 

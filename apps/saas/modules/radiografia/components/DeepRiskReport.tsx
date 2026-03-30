@@ -43,7 +43,7 @@ export function DeepRiskReport({
 					<span className="mb-2 inline-block rounded-full border border-[#D97706] bg-[#FEF3C7] px-3 py-1 text-xs font-medium text-[#D97706]">
 						{industry}
 					</span>
-					<h1 className="text-5xl tracking-tight font-display text-foreground">
+					<h1 className="text-3xl md:text-5xl tracking-tight font-display text-foreground">
 						{t("completeScan")}
 					</h1>
 					<p className="mt-1 text-lg text-muted-foreground">{processName}</p>
@@ -62,20 +62,20 @@ export function DeepRiskReport({
 				)}
 
 				{/* Summary bar */}
-				<div className="mb-8 flex items-center gap-6 rounded-lg border border-border bg-secondary p-5">
+				<div className="mb-8 grid grid-cols-2 gap-3 rounded-lg border border-border bg-secondary p-5 md:flex md:items-center md:gap-6">
 					<div className="text-center">
-						<p className="text-4xl font-bold text-destructive">{risks.riskSummary.totalRiskScore}</p>
+						<p className="text-3xl md:text-4xl font-bold text-destructive">{risks.riskSummary.totalRiskScore}</p>
 						<p className="text-xs text-muted-foreground">{t("totalScore")}</p>
 					</div>
 					<div className="text-center">
-						<p className="text-4xl font-bold text-destructive">{risks.riskSummary.criticalCount}</p>
+						<p className="text-3xl md:text-4xl font-bold text-destructive">{risks.riskSummary.criticalCount}</p>
 						<p className="text-xs text-muted-foreground">{t("critical")}</p>
 					</div>
 					<div className="text-center">
-						<p className="text-4xl font-bold text-[#D97706]">{risks.riskSummary.highCount}</p>
+						<p className="text-3xl md:text-4xl font-bold text-[#D97706]">{risks.riskSummary.highCount}</p>
 						<p className="text-xs text-muted-foreground">{t("high")}</p>
 					</div>
-					<div className="flex-1 text-right">
+					<div className="text-center md:flex-1 md:text-right">
 						<p className="text-sm font-medium text-foreground">{t("highestRiskArea")}</p>
 						<p className="text-sm text-muted-foreground">{risks.riskSummary.topRiskArea}</p>
 					</div>
@@ -84,9 +84,9 @@ export function DeepRiskReport({
 				{/* SIPOC table */}
 				<div className="mb-8">
 					<h2 className="mb-4 text-2xl font-display text-foreground">{t("sipocDetailed")}</h2>
-					<div className="grid grid-cols-5 gap-px overflow-hidden rounded-lg border border-border">
+					<div className="space-y-3 md:space-y-0 md:grid md:grid-cols-5 md:gap-px md:overflow-hidden md:rounded-lg md:border md:border-border">
 						{SIPOC_COLS.map((col) => (
-							<div key={col}>
+							<div key={col} className="overflow-hidden rounded-lg border border-border md:rounded-none md:border-0">
 								<div className="border-b border-border bg-secondary px-3 py-2 text-center text-xs font-semibold uppercase tracking-wide text-foreground">
 									{t(SIPOC_KEYS[col]!)}
 								</div>

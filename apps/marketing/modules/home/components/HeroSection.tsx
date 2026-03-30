@@ -92,14 +92,14 @@ export function HeroSection() {
 
 	return (
 		<section ref={sectionRef} className="relative overflow-hidden">
-			<div className="container relative z-10 pt-20 pb-10 md:pt-28 md:pb-12 lg:pt-36 lg:pb-14 text-center">
+			<div className="container relative z-10 pt-12 pb-8 sm:pt-20 sm:pb-10 md:pt-28 md:pb-12 lg:pt-36 lg:pb-14 text-center">
 				<div className="hero-badge mb-6 flex justify-center" style={{ clipPath: "inset(0 0% 0 0)" }}>
 					<div className="inline-flex items-center rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
 						{t("home.hero.badge")}
 					</div>
 				</div>
 
-				<h1 className="font-display text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[1.1] text-foreground mx-auto max-w-4xl text-balance" style={{ perspective: "600px" }}>
+				<h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-[1.1] text-foreground mx-auto max-w-3xl sm:max-w-4xl text-balance" style={{ perspective: "600px" }}>
 					<SplitWords innerClassName="hero-word-inner">
 						{t("home.hero.title")}
 					</SplitWords>
@@ -109,7 +109,7 @@ export function HeroSection() {
 					{t("home.hero.subtitle")}
 				</p>
 
-				<div className="hero-input-group mt-10 mx-auto max-w-xl">
+				<div className="hero-input-group mt-8 sm:mt-10 mx-auto max-w-xl">
 					<div className="flex items-center gap-2 rounded-lg border border-border bg-card p-2 shadow-lg">
 						<SearchIcon className="ml-2 size-5 text-muted-foreground shrink-0" />
 						<input
@@ -134,6 +134,13 @@ export function HeroSection() {
 					<p className="hero-subtext mt-3 text-muted-foreground text-sm">
 						{t("home.hero.subtext")}
 					</p>
+					<a
+						href={`${config.saasUrl}/scan?ref=hero-manual`}
+						className="hero-subtext mt-2 inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80 transition-colors"
+					>
+						{t("home.hero.ctaSecondary")}
+						<ArrowRightIcon className="size-3.5" />
+					</a>
 				</div>
 			</div>
 

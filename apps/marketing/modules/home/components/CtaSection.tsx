@@ -103,21 +103,21 @@ export function CtaSection() {
 	return (
 		<section
 			ref={sectionRef}
-			className="py-24 lg:py-32 bg-[#1C1917] text-white"
+			className="py-16 sm:py-24 lg:py-32 bg-[#1C1917] text-white"
 			style={{ clipPath: "inset(0 0 0 0)" }}
 		>
 			<div className="container max-w-3xl text-center">
-				<h2 className="font-display text-4xl md:text-5xl lg:text-6xl text-[#FAFAF9] text-balance" style={{ perspective: "600px" }}>
+				<h2 className="font-display text-2xl sm:text-3xl md:text-5xl lg:text-6xl text-[#FAFAF9] text-balance" style={{ perspective: "600px" }}>
 					<SplitWords innerClassName="cta-word-inner">
 						{t("cta.title")}
 					</SplitWords>
 				</h2>
 
-				<p className="cta-subtitle mt-6 text-[#A8A29E] text-lg text-balance">
+				<p className="cta-subtitle mt-4 sm:mt-6 text-[#A8A29E] text-base sm:text-lg text-balance">
 					{t("cta.subtitle")}
 				</p>
 
-				<div className="cta-button mt-10 relative inline-block">
+				<div className="cta-button mt-8 sm:mt-10 relative inline-block">
 					<div className="cta-glow absolute inset-0 rounded-full bg-primary/30 blur-xl opacity-30 scale-100" />
 					<Button size="lg" variant="primary" asChild>
 						<a href={`${config.saasUrl}/scan`} className="relative">

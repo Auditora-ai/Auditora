@@ -135,10 +135,10 @@ export default async function DeliverablesDashboardPage({
       <PageHeader
         title="Entregables"
         subtitle={`${activeOrganization.name} — Riesgos, procesos y documentacion generados por IA desde sesiones reales.`}
-        className="mb-0 border-b border-border px-6 py-4"
+        className="mb-0 border-b border-border px-4 py-4 md:px-6"
       />
 
-      <div className="flex-1 overflow-auto p-6 space-y-6">
+      <div className="flex-1 overflow-auto p-4 space-y-6 md:p-6">
 
       {/* Stats overview */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -170,7 +170,7 @@ export default async function DeliverablesDashboardPage({
           />
         </div>
         {/* Category breakdown */}
-        <div className="mt-3 flex gap-4 text-xs text-muted-foreground">
+        <div className="mt-3 flex flex-wrap gap-3 text-xs text-muted-foreground md:gap-4">
           <span className="flex items-center gap-1.5">
             <span className="h-2 w-2 rounded-full bg-violet-600" />
             {strategicCount} estrategicos
@@ -267,8 +267,8 @@ export default async function DeliverablesDashboardPage({
       {processes.length > 0 && (
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-4">Procesos Registrados</h2>
-          <div className="rounded-xl border border-border bg-background overflow-hidden">
-            <table className="w-full text-sm">
+          <div className="rounded-xl border border-border bg-background overflow-x-auto">
+            <table className="w-full min-w-[640px] text-sm">
               <thead>
                 <tr className="border-b border-muted bg-secondary">
                   <th className="px-4 py-2.5 text-left font-medium text-muted-foreground">Proceso</th>

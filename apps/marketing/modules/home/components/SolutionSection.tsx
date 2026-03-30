@@ -55,31 +55,31 @@ export function SolutionSection() {
 	);
 
 	return (
-		<section ref={sectionRef} className="py-20 lg:py-28">
+		<section ref={sectionRef} className="py-12 sm:py-16 lg:py-28">
 			<div className="container max-w-4xl">
-				<div className="solution-header mb-16 max-w-3xl mx-auto text-center">
+				<div className="solution-header mb-10 sm:mb-16 max-w-3xl mx-auto text-center">
 					<small className="font-medium text-xs uppercase tracking-wider text-primary mb-4 block">
 						{t("home.solution.badge")}
 					</small>
-					<h2 className="font-display text-3xl lg:text-4xl xl:text-5xl text-foreground">
+					<h2 className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-foreground">
 						{t("home.solution.title")}
 					</h2>
-					<p className="mt-6 text-base lg:text-lg text-muted-foreground text-balance leading-relaxed">
+					<p className="mt-4 sm:mt-6 text-sm sm:text-base lg:text-lg text-muted-foreground text-balance leading-relaxed">
 						{t("home.solution.description")}
 					</p>
 				</div>
 
-				<div className="grid grid-cols-1 gap-5">
+				<div className="grid grid-cols-1 gap-4 sm:gap-5">
 					{differentiators.map((diff) => {
 						const Icon = diff.icon;
 						return (
 							<div
 								key={diff.id}
-								className="solution-card flex gap-5 rounded-2xl border border-border bg-card p-6 lg:p-8"
+								className="solution-card flex gap-4 sm:gap-5 rounded-2xl border border-border bg-card p-4 sm:p-6 lg:p-8"
 								style={{ borderLeftWidth: "3px", borderLeftColor: "#D97706" }}
 							>
-								<div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 text-primary shrink-0 mt-0.5">
-									<Icon className="size-5" strokeWidth={1.5} />
+								<div className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-primary/10 text-primary shrink-0 mt-0.5">
+									<Icon className="size-4 sm:size-5" strokeWidth={1.5} />
 								</div>
 								<div>
 									<h3 className="text-lg font-semibold text-foreground mb-2">

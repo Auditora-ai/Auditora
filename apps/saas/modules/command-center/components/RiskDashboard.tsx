@@ -76,7 +76,7 @@ export function RiskDashboard({
 	return (
 		<div className="flex h-full flex-col overflow-auto">
 			{/* Header */}
-			<div className="flex items-center justify-between border-b border-border px-6 py-4">
+			<div className="flex flex-col gap-3 border-b border-border px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6">
 				<div>
 					<h1 className="font-display text-2xl font-semibold text-foreground">
 						Panorama
@@ -95,7 +95,7 @@ export function RiskDashboard({
 					<button
 						type="button"
 						onClick={() => setShowWizard(true)}
-						className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+						className="inline-flex min-h-[44px] w-full items-center justify-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 md:w-auto md:min-h-0"
 					>
 						<PlusIcon className="size-4" />
 						Nueva Sesión
@@ -103,7 +103,7 @@ export function RiskDashboard({
 				</div>
 			</div>
 
-			<div className="flex-1 overflow-auto p-6 space-y-6">
+			<div className="flex-1 overflow-auto p-4 pb-24 space-y-6 md:p-6 md:pb-6">
 				{/* Empty state */}
 				{isEmpty ? (
 					<div className="flex flex-col items-center justify-center py-16 text-center">
@@ -115,17 +115,17 @@ export function RiskDashboard({
 							Haz tu primera radiografía para descubrir los riesgos de tu
 							negocio, o agenda una sesión con tu consultor.
 						</p>
-						<div className="mt-6 flex items-center gap-3">
+						<div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
 							<Link
 								href="/scan"
-								className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+								className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
 							>
 								Hacer Radiografía
 							</Link>
 							<button
 								type="button"
 								onClick={() => setShowWizard(true)}
-								className="inline-flex items-center gap-1.5 rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+								className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
 							>
 								Nueva Sesión
 							</button>
@@ -177,32 +177,32 @@ export function RiskDashboard({
 									</div>
 								</div>
 
-								{/* Quick Actions */}
-								<div className="space-y-2">
+								{/* Quick Actions — horizontal scroll on mobile, vertical on desktop */}
+								<div className="flex gap-2 overflow-x-auto pb-2 md:flex-col md:space-y-2 md:gap-0 md:overflow-visible md:pb-0">
 									<Link
 										href={`${basePath}/deliverables/risks`}
-										className="flex items-center gap-3 rounded-lg border border-border bg-background p-3 text-sm transition-colors hover:bg-accent/50"
+										className="flex shrink-0 items-center gap-3 rounded-lg border border-border bg-background p-3 text-sm transition-colors hover:bg-accent/50"
 									>
 										<ShieldAlertIcon className="size-4 text-amber-500" />
-										<span className="text-foreground">
+										<span className="whitespace-nowrap text-foreground">
 											Ver todos los riesgos
 										</span>
 									</Link>
 									<Link
 										href={`${basePath}/procesos`}
-										className="flex items-center gap-3 rounded-lg border border-border bg-background p-3 text-sm transition-colors hover:bg-accent/50"
+										className="flex shrink-0 items-center gap-3 rounded-lg border border-border bg-background p-3 text-sm transition-colors hover:bg-accent/50"
 									>
 										<WorkflowIcon className="size-4 text-blue-500" />
-										<span className="text-foreground">
+										<span className="whitespace-nowrap text-foreground">
 											Ver procesos
 										</span>
 									</Link>
 									<Link
 										href={`${basePath}/deliverables`}
-										className="flex items-center gap-3 rounded-lg border border-border bg-background p-3 text-sm transition-colors hover:bg-accent/50"
+										className="flex shrink-0 items-center gap-3 rounded-lg border border-border bg-background p-3 text-sm transition-colors hover:bg-accent/50"
 									>
 										<TrendingUpIcon className="size-4 text-green-500" />
-										<span className="text-foreground">
+										<span className="whitespace-nowrap text-foreground">
 											Ver entregables
 										</span>
 									</Link>

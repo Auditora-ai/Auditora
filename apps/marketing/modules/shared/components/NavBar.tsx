@@ -174,7 +174,7 @@ export function NavBar() {
 											href={menuItem.href}
 											onClick={handleMobileMenuClose}
 											className={cn(
-												"block shrink-0 px-3 py-2 font-medium text-base text-foreground/80",
+												"block shrink-0 px-3 py-3 font-medium text-base text-foreground/80",
 												isMenuItemActive(menuItem.href)
 													? "font-bold text-foreground"
 													: "",
@@ -188,7 +188,7 @@ export function NavBar() {
 									{config.saasUrl && (
 										<NextLink
 											href={config.saasUrl}
-											className="block px-3 py-2 text-base"
+											className="block px-3 py-3 text-base"
 											onClick={handleMobileMenuClose}
 											prefetch
 										>

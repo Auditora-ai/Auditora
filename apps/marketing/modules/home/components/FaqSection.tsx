@@ -87,13 +87,13 @@ export function FaqSection({ className }: { className?: string }) {
 	return (
 		<section
 			ref={sectionRef}
-			className={cn("scroll-mt-20 py-12 lg:py-16", className)}
+			className={cn("scroll-mt-20 py-8 sm:py-12 lg:py-16", className)}
 			id="faq"
 		>
 			<div className="container">
 				<div className="grid grid-cols-1 gap-6 md:gap-8 lg:gap-12 max-w-2xl mx-auto">
 					<div className="text-center">
-						<h2 className="font-display text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-tight text-foreground" style={{ perspective: "600px" }}>
+						<h2 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-tight text-foreground" style={{ perspective: "600px" }}>
 							<SplitWords innerClassName="faq-word-inner">
 								{t("faq.title")}
 							</SplitWords>
@@ -111,9 +111,9 @@ export function FaqSection({ className }: { className?: string }) {
 							<AccordionItem
 								key={`faq-item-${i}`}
 								value={`item-${i}`}
-								className="faq-item rounded-lg bg-card shadow-none border px-4 lg:px-6"
+								className="faq-item rounded-lg bg-card shadow-none border px-3 sm:px-4 lg:px-6"
 							>
-								<AccordionTrigger className="text-left font-medium text-base hover:no-underline">
+								<AccordionTrigger className="text-left font-medium text-sm sm:text-base hover:no-underline">
 									{item.question}
 								</AccordionTrigger>
 								<AccordionContent className="text-foreground/60">

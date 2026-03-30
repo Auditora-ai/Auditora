@@ -214,7 +214,7 @@ export function InvestigationBoard({
 	}
 
 	return (
-		<div className="mx-auto max-w-3xl space-y-6">
+		<div className="mx-auto space-y-6 px-4 md:px-0 md:max-w-3xl">
 			{/* Header */}
 			<div className="text-center">
 				<div className="inline-flex items-center gap-2 rounded-full bg-stone-100 px-4 py-1.5 text-sm text-stone-600">
@@ -239,7 +239,7 @@ export function InvestigationBoard({
 				</div>
 				<div className="h-1.5 w-full overflow-hidden rounded-full bg-stone-200">
 					<div
-						className="h-full rounded-full bg-amber-500 transition-all duration-700 ease-out"
+						className="h-full rounded-full bg-amber-500 transition-all duration-500 ease-out"
 						style={{ width: `${progress}%` }}
 					/>
 				</div>
@@ -306,10 +306,10 @@ export function InvestigationBoard({
 														animationDelay: `${fi * 200}ms`,
 													}}
 												>
-													<p className="font-medium text-stone-800 leading-snug">
+													<p className="font-medium text-stone-800 leading-snug break-words">
 														{finding.title}
 													</p>
-													<p className="mt-0.5 text-stone-500 leading-relaxed">
+													<p className="mt-0.5 text-stone-500 leading-relaxed break-words">
 														{finding.summary}
 													</p>
 													{finding.sourceUrl && (
@@ -319,7 +319,7 @@ export function InvestigationBoard({
 															}
 															target="_blank"
 															rel="noopener noreferrer"
-															className="mt-1 inline-flex items-center gap-1 text-blue-600 hover:text-blue-700"
+															className="mt-1 inline-flex min-h-[44px] items-center gap-1 text-blue-600 hover:text-blue-700 md:min-h-0"
 														>
 															<ExternalLinkIcon className="size-3" />
 															Fuente
@@ -349,7 +349,7 @@ export function InvestigationBoard({
 								key={i}
 								className="flex gap-3 text-sm leading-relaxed text-stone-200"
 								style={{
-									animation: "fadeIn 0.8s ease-out both",
+									animation: "fadeIn 0.5s cubic-bezier(0,0,0.2,1) both",
 									animationDelay: `${i * 300}ms`,
 								}}
 							>

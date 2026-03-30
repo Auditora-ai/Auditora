@@ -106,7 +106,7 @@ export default function PublicRiskSharePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-4xl mx-auto px-6 py-12">
+      <div className="max-w-4xl mx-auto px-4 py-8 md:px-6 md:py-12">
         {/* Header */}
         <div className="mb-8">
           {data.orgLogo && (
@@ -125,7 +125,7 @@ export default function PublicRiskSharePage() {
         </div>
 
         {/* Summary */}
-        <div className="grid grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4 mb-8">
           {[
             { label: "Criticos", count: summary.critical, color: "text-red-600" },
             { label: "Altos", count: summary.high, color: "text-amber-600" },

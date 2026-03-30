@@ -72,7 +72,7 @@ export default async function SharedReportPage({
 	return (
 		<div className="min-h-screen bg-stone-50">
 			{/* Branding banner */}
-			<div className="bg-stone-900 border-b border-stone-800 px-6 py-2">
+			<div className="bg-stone-900 border-b border-stone-800 px-4 py-2 md:px-6">
 				<div className="mx-auto max-w-5xl flex items-center justify-between">
 					<span className="text-xs text-stone-400">
 						Powered by <span className="font-semibold text-stone-200">Auditora.ai</span>
@@ -103,7 +103,7 @@ export default async function SharedReportPage({
 			/>
 
 			{/* Body */}
-			<main className="mx-auto max-w-5xl space-y-6 px-6 py-8">
+			<main className="mx-auto max-w-5xl space-y-6 px-4 py-6 md:px-6 md:py-8">
 				<ProcessMap
 					nodes={session.diagramNodes.map((n) => ({
 						id: n.id,
@@ -124,12 +124,12 @@ export default async function SharedReportPage({
 
 				{summaryData && (
 					<section className="rounded-lg border border-stone-200 bg-white overflow-hidden">
-						<div className="border-b border-stone-100 px-6 py-4">
+						<div className="border-b border-stone-100 px-4 py-4 md:px-6">
 							<h2 className="text-lg text-stone-900" style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}>
 								Resumen Ejecutivo
 							</h2>
 						</div>
-						<div className="px-6 py-5 space-y-4">
+						<div className="px-4 py-4 space-y-4 md:px-6 md:py-5">
 							<p className="text-sm leading-relaxed text-stone-600 whitespace-pre-wrap">{summaryData.summary}</p>
 							{summaryData.actionItems?.length > 0 && (
 								<div>
@@ -180,7 +180,7 @@ export default async function SharedReportPage({
 
 			{/* Footer */}
 			<footer className="border-t border-stone-200 bg-white">
-				<div className="mx-auto max-w-5xl px-6 py-4">
+				<div className="mx-auto max-w-5xl px-4 py-4 md:px-6">
 					<p className="text-xs text-stone-400 text-center">
 						Generado por Auditora.ai · Reporte de Inteligencia de Proceso
 					</p>

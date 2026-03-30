@@ -55,23 +55,23 @@ export function CredibilitySection() {
 	);
 
 	return (
-		<section ref={sectionRef} className="py-16 lg:py-20 border-y border-border">
+		<section ref={sectionRef} className="py-10 sm:py-16 lg:py-20 border-y border-border">
 			<div className="container max-w-5xl">
-				<div className="cred-header mb-12 max-w-3xl mx-auto text-center">
+				<div className="cred-header mb-8 sm:mb-12 max-w-3xl mx-auto text-center">
 					<small className="font-medium text-xs uppercase tracking-wider text-primary mb-4 block">
 						{t("home.credibility.badge")}
 					</small>
-					<h2 className="font-display text-3xl lg:text-4xl text-foreground">
+					<h2 className="font-display text-2xl sm:text-3xl lg:text-4xl text-foreground">
 						{t("home.credibility.title")}
 					</h2>
 				</div>
 
-				<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
 					{pillars.map((pillar) => {
 						const Icon = pillar.icon;
 						return (
 							<div key={pillar.id} className="cred-card text-center">
-								<div className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mx-auto mb-4">
+								<div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-primary/10 text-primary mx-auto mb-4">
 									<Icon className="size-6" strokeWidth={1.5} />
 								</div>
 								<h3 className="text-base font-semibold text-foreground mb-2">

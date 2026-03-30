@@ -28,10 +28,10 @@ export default async function SessionsPage({
 	}
 
 	return (
-		<div>
-			<div className="flex items-center justify-between">
+		<div className="pb-24 md:pb-0">
+			<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 				<PageHeader title={t("title")} subtitle={t("subtitle")} />
-				<Button asChild>
+				<Button asChild className="w-full sm:w-auto min-h-[44px] md:min-h-0">
 					<Link href={`/${organizationSlug}/sessions/new`}>
 						<PlusIcon className="mr-2 h-4 w-4" />
 						{t("newSession")}

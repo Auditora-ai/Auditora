@@ -162,14 +162,14 @@ export function ToolsShowcaseSection() {
 	);
 
 	return (
-		<section ref={sectionRef} className="bg-[#1C1917] py-16 lg:py-20">
+		<section ref={sectionRef} className="bg-[#1C1917] py-12 sm:py-16 lg:py-20">
 			<div className="container">
 				<div ref={headerRef} className="mb-10 text-center">
 					<div className="mb-3 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
 						<SparklesIcon className="h-4 w-4" />
 						{t("common.footer.tools") || "Free Tools"}
 					</div>
-					<h2 className="font-display text-3xl font-bold text-[#FAFAF9] lg:text-4xl">
+					<h2 className="font-display text-2xl sm:text-3xl font-bold text-[#FAFAF9] lg:text-4xl">
 						{t("home.tools.title") || "Free AI Tools for BPM Professionals"}
 					</h2>
 					<p className="mx-auto mt-3 max-w-xl text-sm text-[#A8A29E]">

@@ -57,11 +57,11 @@ export function ProblemSection() {
 	return (
 		<section
 			ref={sectionRef}
-			className="py-20 lg:py-28"
+			className="py-12 sm:py-16 lg:py-28"
 			style={{ backgroundColor: "#1C1917" }}
 		>
 			<div className="container max-w-5xl">
-				<div className="problem-header mb-16 text-center">
+				<div className="problem-header mb-10 sm:mb-16 text-center">
 					<small
 						className="font-medium text-xs uppercase tracking-wider mb-4 block"
 						style={{ color: "#D97706" }}
@@ -69,27 +69,27 @@ export function ProblemSection() {
 						{t("home.problem.badge")}
 					</small>
 					<h2
-						className="font-display text-3xl lg:text-4xl xl:text-5xl"
+						className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl"
 						style={{ color: "#FAFAF9" }}
 					>
 						{t("home.problem.title")}
 					</h2>
 				</div>
 
-				<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+				<div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
 					{cards.map((card) => {
 						const Icon = card.icon;
 						return (
 							<div
 								key={card.id}
-								className="problem-card rounded-2xl p-6 lg:p-8 border"
+								className="problem-card rounded-2xl p-4 sm:p-6 lg:p-8 border"
 								style={{
 									backgroundColor: "#292524",
 									borderColor: "#44403C",
 								}}
 							>
 								<div
-									className="w-10 h-10 rounded-xl flex items-center justify-center mb-5"
+									className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center mb-4 sm:mb-5"
 									style={{ backgroundColor: "#44403C" }}
 								>
 									<Icon

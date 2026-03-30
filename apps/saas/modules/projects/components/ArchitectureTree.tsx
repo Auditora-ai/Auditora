@@ -12,6 +12,7 @@ import {
 	PlayIcon,
 	PencilIcon,
 	PlusIcon,
+	ShieldAlertIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -25,6 +26,8 @@ type ProcessDefinition = {
 	parentId: string | null;
 	processStatus: string;
 	priority: number;
+	riskCount?: number;
+	criticalRiskCount?: number;
 };
 
 const LEVEL_ICONS: Record<string, typeof PackageIcon> = {
@@ -131,6 +134,17 @@ function TreeNode({
 				>
 					{statusLabel}
 				</Badge>
+
+				{(node.riskCount ?? 0) > 0 && (
+					<span className={`inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-xs tabular-nums ${
+						(node.criticalRiskCount ?? 0) > 0
+							? "bg-[#DC2626]/10 text-[#DC2626]"
+							: "bg-[#D97706]/10 text-[#D97706]"
+					}`}>
+						<ShieldAlertIcon className="size-3" />
+						{node.riskCount}
+					</span>
+				)}
 
 				<div className="flex items-center gap-1">
 					<Button variant="ghost" size="icon" className="h-7 w-7" asChild>

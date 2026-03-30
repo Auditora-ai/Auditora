@@ -2,13 +2,14 @@
 	"pricing": {
 		"choosePlan": "Choisir un plan",
 		"contactSales": "Contacter les ventes",
-		"description": "Choisissez le plan adapté à votre pratique. Commencez avec 14 jours d'essai gratuit.",
+		"description": "Chaque plan inclut le moteur IA, la création automatique de diagrammes BPMN et l'analyse de risques. Choisissez selon la taille de votre équipe.",
 		"getStarted": "Commencer",
+		"startTrial": "Essai gratuit",
 		"month": "{count, plural, one {mois} other {{count} mois}}",
 		"monthly": "Mensuel",
 		"products": {
 			"enterprise": {
-				"description": "Déploiement personnalisé pour votre cabinet",
+				"description": "Pour les grands cabinets ou déploiements d'entreprise",
 				"features": {
 					"everythingInTeam": "Tout de Team",
 					"unlimitedMembers": "Membres d'équipe illimités",
@@ -21,20 +22,20 @@
 				"title": "Enterprise"
 			},
 			"pro": {
-				"description": "Tout ce qu'il faut pour mieux conseiller",
+				"description": "Pour le consultant indépendant qui veut livrer plus vite",
 				"features": {
 					"freeTrial": "14 jours d'essai gratuit",
-					"unlimitedSessions": "Sessions de réunion illimitées",
-					"aiTeleprompter": "Téléprompteur IA en temps réel",
-					"liveBpmn": "Génération de diagrammes BPMN en direct",
-					"speakerTranscripts": "Transcriptions identifiées par intervenant",
+					"unlimitedSessions": "Sessions de découverte illimitées",
+					"aiTeleprompter": "Copilote IA avec questions contextuelles",
+					"liveBpmn": "Diagrammes BPMN générés automatiquement",
+					"speakerTranscripts": "Transcriptions de session avec identification des intervenants",
 					"fullBpmnExport": "Export BPMN/XML complet",
 					"fiveMembers": "Jusqu'à 5 membres d'équipe"
 				},
 				"title": "Professional"
 			},
 			"team": {
-				"description": "Pour les cabinets de conseil en croissance",
+				"description": "Pour les cabinets de conseil qui se développent",
 				"features": {
 					"everythingInPro": "Tout de Professional",
 					"tenMembers": "Jusqu'à 10 membres d'équipe",
@@ -49,7 +50,7 @@
 		"purchase": "Acheter",
 		"recommended": "Recommandé",
 		"subscribe": "S'abonner",
-		"title": "De la conversation au diagramme BPMN",
+		"title": "Investissez dans votre pratique, pas dans plus d'heures de travail manuel",
 		"trialPeriod": "{days} {days, plural, one {jour} other {jours}} d'essai gratuit",
 		"year": "{count, plural, one {an} other {{count} ans}}",
 		"yearly": "Annuel",

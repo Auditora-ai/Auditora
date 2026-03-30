@@ -71,7 +71,14 @@
 			"inputPlaceholder": "https://your-company.com",
 			"cta": "Try with my website",
 			"ctaSecondary": "Or describe your business manually",
-			"subtext": "Paste any URL. The AI analyzes your public context and generates a free initial diagnostic with process map and risks."
+			"subtext": "Paste any URL. The AI analyzes your public context and generates a free initial diagnostic with process map and risks.",
+			"alt": {
+				"badge": "The missing tool for your practice",
+				"title": "Every undocumented process is a risk you're signing off on",
+				"subtitle": "Your clients have critical processes nobody has mapped. Auditora.ai discovers them for you: AI-guided elicitation, automatic BPMN diagrams, and risk analysis with severity scoring. In a fraction of the time it would take you alone.",
+				"cta": "See free diagnostic of my business",
+				"subtext": "Enter your corporate URL. Receive a process map and risk analysis in minutes — no signup, no commitments."
+			}
 		},
 		"problem": {
 			"badge": "The problem",

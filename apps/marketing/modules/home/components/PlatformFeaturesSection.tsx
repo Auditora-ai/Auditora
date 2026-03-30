@@ -80,29 +80,29 @@ export function PlatformFeaturesSection() {
 	);
 
 	return (
-		<section ref={sectionRef} className="py-20 lg:py-28">
+		<section ref={sectionRef} className="py-12 sm:py-16 lg:py-28">
 			<div className="container max-w-5xl">
-				<div className="pf-header mb-16 max-w-3xl mx-auto text-center">
+				<div className="pf-header mb-10 sm:mb-16 max-w-3xl mx-auto text-center">
 					<small className="font-medium text-xs uppercase tracking-wider text-primary mb-4 block">
 						{t("home.platform.badge")}
 					</small>
-					<h2 className="font-display text-3xl lg:text-4xl xl:text-5xl text-foreground">
+					<h2 className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-foreground">
 						{t("home.platform.title")}
 					</h2>
-					<p className="mt-4 text-base lg:text-lg text-muted-foreground text-balance">
+					<p className="mt-4 text-sm sm:text-base lg:text-lg text-muted-foreground text-balance">
 						{t("home.platform.subtitle")}
 					</p>
 				</div>
 
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
 					{features.map((feature) => {
 						const Icon = feature.icon;
 						return (
 							<div
 								key={feature.id}
-								className="pf-card rounded-2xl border border-border bg-card p-6"
+								className="pf-card rounded-2xl border border-border bg-card p-4 sm:p-6"
 							>
-								<div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 text-primary mb-4">
+								<div className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-primary/10 text-primary mb-4">
 									<Icon className="size-5" strokeWidth={1.5} />
 								</div>
 								<h3 className="text-base font-semibold text-foreground mb-2">
@@ -116,7 +116,7 @@ export function PlatformFeaturesSection() {
 					})}
 				</div>
 
-				<div className="pf-cta mt-12 text-center">
+				<div className="pf-cta mt-8 sm:mt-12 text-center">
 					<Button size="lg" variant="primary" asChild>
 						<a href={`${config.saasUrl}/sign-up`}>
 							{t("home.platform.cta")}
