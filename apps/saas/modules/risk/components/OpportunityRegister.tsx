@@ -11,6 +11,8 @@ import {
   SparklesIcon,
 } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
+import { EmptyState } from "@shared/components/EmptyState";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -61,6 +63,7 @@ export function OpportunityRegister({
   onRiskUpdate,
   processId,
 }: OpportunityRegisterProps) {
+  const t = useTranslations("emptyStates.risks");
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const opportunities = useMemo(() => {
@@ -71,12 +74,11 @@ export function OpportunityRegister({
 
   if (opportunities.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 text-center">
-        <SparklesIcon className="mb-4 h-10 w-10 text-muted-foreground" />
-        <p className="text-sm text-muted-foreground">
-          No se han identificado oportunidades en este proceso.
-        </p>
-      </div>
+      <EmptyState
+        icon={SparklesIcon}
+        title={t("noOpportunities")}
+        description={t("noOpportunitiesDesc")}
+      />
     );
   }
 

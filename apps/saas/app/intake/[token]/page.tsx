@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 interface IntakeQuestion {
 	questionKey: string;
@@ -80,7 +81,15 @@ export default function IntakePage() {
 	if (loading) {
 		return (
 			<div className="flex min-h-screen items-center justify-center bg-muted">
-				<div className="text-muted-foreground">Cargando...</div>
+				<div className="w-full max-w-2xl space-y-4 px-6">
+					<Skeleton className="h-8 w-48" />
+					<Skeleton className="h-4 w-72" />
+					<div className="mt-6 space-y-3">
+						<Skeleton className="h-20 w-full" />
+						<Skeleton className="h-20 w-full" />
+						<Skeleton className="h-20 w-full" />
+					</div>
+				</div>
 			</div>
 		);
 	}

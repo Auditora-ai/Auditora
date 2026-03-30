@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
+import { Spinner } from "@repo/ui";
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
@@ -124,7 +125,7 @@ export function InputPhase({ onSubmit, loading, initialMode = "url" }: InputPhas
 				>
 					{loading ? (
 						<span className="flex items-center justify-center gap-2">
-							<span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+							<Spinner className="size-4 text-primary-foreground" />
 							{t("generating")}
 						</span>
 					) : (

@@ -14,9 +14,12 @@ import {
 import { UserMenu } from "@shared/components/UserMenu";
 import { useNavData } from "@shared/hooks/use-nav-data";
 import {
+	BarChart3Icon,
 	BotIcon,
+	ClipboardListIcon,
 	FileTextIcon,
 	FolderOpenIcon,
+	GraduationCapIcon,
 	LayoutDashboardIcon,
 	MicIcon,
 	PanelLeftCloseIcon,
@@ -29,7 +32,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import type { ElementType } from "react";
 import { OrganzationSelect } from "../../organizations/components/OrganizationSelect";
 import { UpgradeBanner } from "../../payments/components/UpgradeBanner";
@@ -54,34 +57,34 @@ interface NavItem {
 		label: string;
 		href: string;
 	};
-	section?: "main" | "tools" | "bottom";
+	section?: "flow" | "main" | "tools" | "bottom";
+	flowStep?: number;
+	flowCompleted?: boolean;
 }
 
-function getGreeting(): string {
+function getGreetingKey(): "morning" | "afternoon" | "evening" {
 	const hour = new Date().getHours();
-	if (hour < 12) return "Buenos días";
-	if (hour < 18) return "Buenas tardes";
-	return "Buenas noches";
+	if (hour < 12) return "morning";
+	if (hour < 18) return "afternoon";
+	return "evening";
 }
 
-function formatNextSession(date: Date): string {
+function formatNextSession(date: Date, locale: string, todayLabel: string, tomorrowLabel: string): string {
 	const now = new Date();
 	const diff = date.getTime() - now.getTime();
 	const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+	const time = date.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" });
 
-	if (days === 0) {
-		return `Hoy ${date.toLocaleTimeString("es", { hour: "2-digit", minute: "2-digit" })}`;
-	}
-	if (days === 1) {
-		return `Mañana ${date.toLocaleTimeString("es", { hour: "2-digit", minute: "2-digit" })}`;
-	}
+	if (days === 0) return `${todayLabel} ${time}`;
+	if (days === 1) return `${tomorrowLabel} ${time}`;
 
-	const dayNames = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
-	return `${dayNames[date.getDay()]} ${date.toLocaleTimeString("es", { hour: "2-digit", minute: "2-digit" })}`;
+	const day = date.toLocaleDateString(locale, { weekday: "short" });
+	return `${day} ${time}`;
 }
 
 export function NavBar() {
 	const t = useTranslations();
+	const locale = useLocale();
 	const pathname = usePathname();
 	const { user } = useSession();
 	const { activeOrganization, loaded } = useActiveOrganization();
@@ -100,7 +103,7 @@ export function NavBar() {
 		? {
 				text:
 					navData.criticalRiskCount > 0
-						? `${navData.criticalRiskCount} críticos`
+						? t("app.badges.critical", { count: navData.criticalRiskCount })
 						: undefined,
 				dotColor:
 					navData.criticalRiskCount > 0
@@ -114,9 +117,9 @@ export function NavBar() {
 	const sessionBadge = navData
 		? {
 				text: navData.hasActiveSession
-					? "🔴 EN VIVO"
+					? `🔴 ${t("app.badges.live")}`
 					: navData.nextSession
-						? formatNextSession(new Date(navData.nextSession.date))
+						? formatNextSession(new Date(navData.nextSession.date), locale, t("app.status.today"), t("app.status.tomorrow"))
 						: undefined,
 				dotColor: navData.hasActiveSession
 					? ("red" as const)
@@ -148,7 +151,7 @@ export function NavBar() {
 		? {
 				text:
 					navData.pendingDeliverables > 0
-						? `${navData.pendingDeliverables} pendientes`
+						? t("app.badges.pending", { count: navData.pendingDeliverables })
 						: undefined,
 				dotColor:
 					navData.pendingDeliverables > 0
@@ -157,30 +160,90 @@ export function NavBar() {
 			}
 		: undefined;
 
+	// Derive flow completion from navData
+	const hasArchitecture = !!navData && navData.maturityScore > 0;
+	const hasProcesses = !!navData && navData.processStats.total > 0;
+	const hasRisks = !!navData && navData.criticalRiskCount >= 0 && hasProcesses && navData.maturityScore > 15;
+	const hasEvaluation = !!navData && navData.maturityScore >= 40;
+
 	const menuItems: NavItem[] = [
-		// ─── MAIN ───
+		// ─── FLOW (consulting workflow) ───
+		{
+			id: "scan",
+			label: t("app.menu.scan"),
+			href: `${basePath}/scan`,
+			icon: ScanSearchIcon,
+			isActive: pathname.startsWith(`${basePath}/scan`),
+			hidden: !hasOrg,
+			section: "flow",
+			flowStep: 1,
+			flowCompleted: hasArchitecture,
+		},
+		{
+			id: "processes",
+			label: t("app.menu.processes"),
+			href: `${basePath}/processes`,
+			icon: WorkflowIcon,
+			isActive: pathname.startsWith(`${basePath}/processes`),
+			hidden: !hasOrg,
+			section: "flow",
+			badge: processBadge,
+			quickAction: {
+				label: t("app.actions.newProcess"),
+				href: `${basePath}/processes`,
+			},
+			flowStep: 2,
+			flowCompleted: hasProcesses,
+		},
+		{
+			id: "risks",
+			label: t("app.menu.risks"),
+			href: `${basePath}/risks`,
+			icon: ShieldAlertIcon,
+			isActive: pathname.startsWith(`${basePath}/risks`),
+			hidden: !hasOrg,
+			section: "flow",
+			badge: riskBadge,
+			quickAction: {
+				label: t("app.actions.registerRisk"),
+				href: `${basePath}/risks`,
+			},
+			flowStep: 3,
+			flowCompleted: hasRisks,
+		},
+		{
+			id: "procedures",
+			label: t("app.menu.procedures"),
+			href: `${basePath}/procedures`,
+			icon: ClipboardListIcon,
+			isActive: pathname.startsWith(`${basePath}/procedures`),
+			hidden: !hasOrg,
+			section: "flow",
+			flowStep: 4,
+			flowCompleted: false,
+		},
+		{
+			id: "simulations",
+			label: t("app.menu.simulations"),
+			href: `${basePath}/simulations`,
+			icon: GraduationCapIcon,
+			isActive: pathname.startsWith(`${basePath}/simulations`),
+			hidden: !hasOrg,
+			section: "flow",
+			flowStep: 5,
+			flowCompleted: false,
+		},
 		{
 			id: "panorama",
 			label: t("app.menu.dashboard"),
 			href: basePath,
 			icon: LayoutDashboardIcon,
 			isActive: pathname === "/" || pathname === basePath,
-			section: "main",
+			section: "flow",
+			flowStep: 6,
+			flowCompleted: hasEvaluation,
 		},
-		{
-			id: "risks",
-			label: t("app.menu.risks"),
-			href: `${basePath}/deliverables/risks`,
-			icon: ShieldAlertIcon,
-			isActive: pathname.startsWith(`${basePath}/deliverables/risks`),
-			hidden: !hasOrg,
-			section: "main",
-			badge: riskBadge,
-			quickAction: {
-				label: "Registrar Riesgo",
-				href: `${basePath}/deliverables/risks`,
-			},
-		},
+		// ─── MAIN (cross-cutting workspace) ───
 		{
 			id: "sessions",
 			label: t("app.menu.sessions"),
@@ -191,24 +254,20 @@ export function NavBar() {
 			section: "main",
 			badge: sessionBadge,
 			quickAction: {
-				label: "Nueva Sesión",
+				label: t("app.actions.newSession"),
 				href: `${basePath}/sessions/new`,
 			},
 		},
 		{
-			id: "processes",
-			label: t("app.menu.processes"),
-			href: `${basePath}/procesos`,
-			icon: WorkflowIcon,
-			isActive: pathname.startsWith(`${basePath}/procesos`),
+			id: "evaluation",
+			label: t("app.menu.evaluation"),
+			href: `${basePath}/evaluation`,
+			icon: BarChart3Icon,
+			isActive: pathname.startsWith(`${basePath}/evaluation`),
 			hidden: !hasOrg,
 			section: "main",
-			badge: processBadge,
-			quickAction: {
-				label: "Nuevo Proceso",
-				href: `${basePath}/procesos`,
-			},
 		},
+		// ─── TOOLS ───
 		{
 			id: "deliverables",
 			label: t("app.menu.deliverables"),
@@ -218,25 +277,15 @@ export function NavBar() {
 				pathname.startsWith(`${basePath}/deliverables`) &&
 				!pathname.startsWith(`${basePath}/deliverables/risks`),
 			hidden: !hasOrg,
-			section: "main",
+			section: "tools",
 			badge: deliverableBadge,
 		},
-		// ─── TOOLS ───
 		{
 			id: "documents",
 			label: t("app.menu.documents"),
 			href: `${basePath}/documents`,
 			icon: FolderOpenIcon,
 			isActive: pathname.startsWith(`${basePath}/documents`),
-			hidden: !hasOrg,
-			section: "tools",
-		},
-		{
-			id: "scan",
-			label: t("app.menu.scan"),
-			href: `${basePath}/scan`,
-			icon: ScanSearchIcon,
-			isActive: pathname.startsWith(`${basePath}/scan`),
 			hidden: !hasOrg,
 			section: "tools",
 		},
@@ -261,6 +310,9 @@ export function NavBar() {
 		},
 	];
 
+	const flowItems = menuItems.filter(
+		(i) => i.section === "flow" && !i.hidden,
+	);
 	const mainItems = menuItems.filter(
 		(i) => i.section === "main" && !i.hidden,
 	);
@@ -274,8 +326,8 @@ export function NavBar() {
 	// Greeting subtitle
 	const greetingSubtitle = navData
 		? navData.maturityScore > 0
-			? `Risk score: ${navData.maturityScore} · ${navData.criticalRiskCount > 0 ? `${navData.criticalRiskCount} requieren atención` : "Todo bajo control"}`
-			: "Comienza configurando tu primer cliente"
+			? `${t("app.status.riskScore", { score: navData.maturityScore })} · ${navData.criticalRiskCount > 0 ? t("app.status.attentionNeeded", { count: navData.criticalRiskCount }) : t("app.status.underControl")}`
+			: t("app.status.setupFirst")
 		: "";
 
 	const renderNavItem = (item: NavItem) => {
@@ -283,11 +335,11 @@ export function NavBar() {
 			<Link
 				href={item.href}
 				className={cn(
-					"relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
+					"relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-150",
 					"group/navitem",
 					item.isActive
-						? "bg-slate-800 text-slate-50 font-medium border-l-2 border-blue-600"
-						: "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 border-l-2 border-transparent",
+						? "bg-slate-800 text-slate-50 font-medium"
+						: "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200",
 					isCollapsedEffective &&
 						useSidebarLayout &&
 						"justify-center px-2",
@@ -370,6 +422,149 @@ export function NavBar() {
 		return <li key={item.id}>{withQuickAction}</li>;
 	};
 
+	const renderFlowItem = (item: NavItem, index: number, items: NavItem[]) => {
+		const isLast = index === items.length - 1;
+		const step = item.flowStep ?? index + 1;
+		const completed = item.flowCompleted ?? false;
+
+		const flowLink = (
+			<Link
+				href={item.href}
+				className={cn(
+					"relative flex items-center gap-3 rounded-lg py-2 text-sm transition-all duration-150",
+					"group/flowitem",
+					isCollapsedEffective && useSidebarLayout
+						? "justify-center px-2"
+						: "px-3",
+					item.isActive
+						? "bg-[#00E5C0]/[0.08] text-slate-50 font-medium"
+						: completed
+							? "text-slate-300 hover:bg-slate-800/50 hover:text-slate-100"
+							: "text-slate-500 hover:bg-slate-800/50 hover:text-slate-300",
+				)}
+			>
+				{/* Step circle */}
+				<span
+					className={cn(
+						"relative z-10 flex size-5 items-center justify-center rounded-full text-[10px] font-bold shrink-0 transition-colors duration-150",
+						item.isActive
+							? "bg-[#00E5C0] text-slate-900"
+							: completed
+								? "bg-[#00E5C0]/20 text-[#00E5C0] ring-1 ring-[#00E5C0]/30"
+								: "bg-slate-800 text-slate-500 ring-1 ring-slate-700",
+					)}
+				>
+					{step}
+				</span>
+
+				{(!isCollapsedEffective || !useSidebarLayout) && (
+					<>
+						<span className="flex-1 truncate">{item.label}</span>
+						{item.badge && (
+							<NavBadge
+								text={item.badge.text}
+								dotColor={item.badge.dotColor}
+								pulse={item.badge.pulse}
+							/>
+						)}
+					</>
+				)}
+				{isCollapsedEffective &&
+					useSidebarLayout &&
+					item.badge && (
+						<NavBadge
+							dotColor={item.badge.dotColor}
+							pulse={item.badge.pulse}
+							collapsed
+						/>
+					)}
+			</Link>
+		);
+
+		// Quick action on hover (expanded only)
+		const withQuickAction =
+			item.quickAction && !isCollapsedEffective && useSidebarLayout ? (
+				<div className="group/qa relative">
+					{flowLink}
+					<Link
+						href={item.quickAction.href}
+						className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover/qa:opacity-100 transition-opacity"
+					>
+						<span className="flex size-5 items-center justify-center rounded bg-slate-700 hover:bg-slate-600 text-slate-300">
+							<PlusIcon className="size-3" />
+						</span>
+					</Link>
+				</div>
+			) : (
+				flowLink
+			);
+
+		const content = (
+			<li key={item.id} className="relative">
+				{/* Connector line to next step */}
+				{!isLast && !isCollapsedEffective && (
+					<div
+						className={cn(
+							"absolute left-[21px] top-[32px] w-px h-[calc(100%-20px)] pointer-events-none transition-colors duration-150",
+							completed ? "bg-[#00E5C0]/30" : "bg-slate-700/60",
+						)}
+					/>
+				)}
+				{!isLast && isCollapsedEffective && useSidebarLayout && (
+					<div
+						className={cn(
+							"absolute left-1/2 -translate-x-px top-[32px] w-px h-[calc(100%-20px)] pointer-events-none transition-colors duration-150",
+							completed ? "bg-[#00E5C0]/30" : "bg-slate-700/60",
+						)}
+					/>
+				)}
+				{withQuickAction}
+			</li>
+		);
+
+		if (isCollapsedEffective && useSidebarLayout) {
+			return (
+				<li key={item.id} className="relative">
+					{!isLast && (
+						<div
+							className={cn(
+								"absolute left-1/2 -translate-x-px top-[32px] w-px h-[calc(100%-20px)] pointer-events-none transition-colors duration-150",
+								completed ? "bg-[#00E5C0]/30" : "bg-slate-700/60",
+							)}
+						/>
+					)}
+					<Tooltip>
+						<TooltipTrigger asChild>
+							{withQuickAction}
+						</TooltipTrigger>
+						<TooltipContent side="right" className="flex flex-col gap-0.5">
+							<span className="flex items-center gap-1.5">
+								<span className={cn(
+									"flex size-4 items-center justify-center rounded-full text-[9px] font-bold",
+									item.isActive
+										? "bg-[#00E5C0] text-slate-900"
+										: completed
+											? "bg-[#00E5C0]/20 text-[#00E5C0]"
+											: "bg-slate-700 text-slate-400",
+								)}>
+									{step}
+								</span>
+								{item.label}
+							</span>
+							{item.badge?.text && (
+								<span className="text-xs opacity-70">
+									{item.badge.text}
+								</span>
+							)}
+						</TooltipContent>
+					</Tooltip>
+				</li>
+			);
+		}
+
+		return content;
+	};
+
 	return (
 		<nav
 			className={cn(
@@ -392,7 +587,7 @@ export function NavBar() {
 					{!isCollapsedEffective && user && (
 						<div className="mt-3 px-1">
 							<p className="text-sm font-medium text-slate-200">
-								{getGreeting()},{" "}
+								{t(`app.greeting.${getGreetingKey()}`)},{" "}
 								{user.name?.split(" ")[0] ?? ""}
 							</p>
 							{greetingSubtitle && (
@@ -437,11 +632,41 @@ export function NavBar() {
 					</div>
 				)}
 
-				{/* Main nav items */}
+				{/* Flow section — consulting workflow */}
 				<TooltipProvider delayDuration={0}>
-					<ul className="flex flex-col gap-0.5">
-						{mainItems.map(renderNavItem)}
-					</ul>
+					{flowItems.length > 0 && (
+						<>
+							{!isCollapsedEffective && (
+								<div className="mx-3 mb-2">
+									<span className="text-[10px] font-medium uppercase tracking-wider text-slate-600">
+										{t("app.menu.workflow")}
+									</span>
+								</div>
+							)}
+							<ul className="flex flex-col gap-0.5">
+								{flowItems.map((item, i, arr) => renderFlowItem(item, i, arr))}
+							</ul>
+						</>
+					)}
+
+					{/* Workspace section — cross-cutting */}
+					{mainItems.length > 0 && (
+						<>
+							{!isCollapsedEffective && (
+								<div className="mx-3 mt-5 mb-2">
+									<span className="text-[10px] font-medium uppercase tracking-wider text-slate-600">
+										{t("app.menu.workspace")}
+									</span>
+								</div>
+							)}
+							{isCollapsedEffective && (
+								<div className="mx-auto my-3 h-px w-6 bg-slate-700" />
+							)}
+							<ul className="flex flex-col gap-0.5">
+								{mainItems.map(renderNavItem)}
+							</ul>
+						</>
+					)}
 
 					{/* Tools section */}
 					{toolItems.length > 0 && (

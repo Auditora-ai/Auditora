@@ -9,6 +9,7 @@
  */
 
 import { z } from "zod";
+import { anthropic } from "@ai-sdk/anthropic";
 import { instrumentedGenerateText } from "@repo/ai";
 import { parseLlmJson } from "@repo/ai";
 
@@ -68,7 +69,7 @@ export async function inferIndustry(
 	const result = await instrumentedGenerateText({
 		organizationId: "public",
 		pipeline: "industry-inference",
-		model: "claude-sonnet-4-6",
+		model: anthropic("claude-opus-4-6"),
 		system: SYSTEM_PROMPT,
 		prompt: userPrompt,
 		maxOutputTokens: 1024,

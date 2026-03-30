@@ -30,6 +30,8 @@ import {
 	XIcon,
 	MoreHorizontalIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { EmptyState } from "@shared/components/EmptyState";
 import { ExtractProcessesButton } from "./ExtractProcessesButton";
 
 type Document = {
@@ -74,6 +76,8 @@ export function DocumentList({
 	showExtract?: boolean;
 	onExtracted?: () => void;
 }) {
+	const t = useTranslations("emptyStates.documents");
+	const tc = useTranslations("common");
 	const [editingId, setEditingId] = useState<string | null>(null);
 	const [editName, setEditName] = useState("");
 
@@ -96,14 +100,11 @@ export function DocumentList({
 	if (documents.length === 0) {
 		return (
 			<Card>
-				<div className="flex flex-col items-center justify-center p-12 text-center">
-					<div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-accent">
-						<FileTextIcon className="h-6 w-6 text-primary" />
-					</div>
-					<p className="text-sm text-chrome-text-secondary">
-						No documents uploaded yet.
-					</p>
-				</div>
+				<EmptyState
+					icon={FileTextIcon}
+					title={t("noDocuments")}
+					description={t("noDocumentsDesc")}
+				/>
 			</Card>
 		);
 	}
@@ -115,11 +116,11 @@ export function DocumentList({
 			<Table>
 				<TableHeader>
 					<TableRow>
-						<TableHead>Name</TableHead>
-						<TableHead>Type</TableHead>
-						<TableHead>Size</TableHead>
-						<TableHead>Date</TableHead>
-						<TableHead className="text-right">Actions</TableHead>
+						<TableHead>{tc("name")}</TableHead>
+						<TableHead>{tc("type")}</TableHead>
+						<TableHead>{tc("size")}</TableHead>
+						<TableHead>{tc("date")}</TableHead>
+						<TableHead className="text-right">{tc("actions")}</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
@@ -197,7 +198,7 @@ export function DocumentList({
 													{onEdit && (
 														<DropdownMenuItem onClick={() => startEdit(doc)}>
 															<PencilIcon className="mr-2 h-4 w-4" />
-															Renombrar
+															{tc("edit")}
 														</DropdownMenuItem>
 													)}
 													{onDelete && (
@@ -208,7 +209,7 @@ export function DocumentList({
 																onClick={() => onDelete(doc.id)}
 															>
 																<TrashIcon className="mr-2 h-4 w-4" />
-																Eliminar
+																{tc("delete")}
 															</DropdownMenuItem>
 														</>
 													)}

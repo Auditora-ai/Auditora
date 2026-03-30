@@ -2,6 +2,7 @@ import { getActiveOrganization } from "@auth/lib/server";
 import { db } from "@repo/database";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
 export const metadata = {
   title: "Fichas de Proceso — Auditora.ai",
@@ -13,6 +14,7 @@ export default async function ProcessCardsPage({
   params: Promise<{ organizationSlug: string }>;
 }) {
   const { organizationSlug } = await params;
+  const t = await getTranslations("emptyStates.deliverables");
   const activeOrganization = await getActiveOrganization(organizationSlug);
   if (!activeOrganization) notFound();
 
@@ -58,8 +60,12 @@ export default async function ProcessCardsPage({
       </div>
 
       {processes.length === 0 ? (
-        <div className="rounded-lg border border-border bg-background p-8 text-center">
-          <p className="text-sm text-muted-foreground">No hay procesos registrados. Inicia una sesion para documentar procesos.</p>
+        <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-14 px-6 text-center">
+          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-muted/50">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground/60"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+          </div>
+          <h3 className="font-medium text-foreground">{t("noProcessCards")}</h3>
+          <p className="mt-1.5 max-w-sm text-sm text-muted-foreground">{t("noProcessCardsDesc")}</p>
         </div>
       ) : (
         <div className="space-y-6">
@@ -218,7 +224,7 @@ export default async function ProcessCardsPage({
                   )}
                   <div className="flex-1" />
                   <Link
-                    href={`/${organizationSlug}/procesos/${process.id}`}
+                    href={`/${organizationSlug}/processes/${process.id}`}
                     className="text-xs text-blue-600 hover:text-blue-800 font-medium"
                   >
                     Ver proceso completo →

@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CheckCircle2Icon, AlertTriangleIcon, XCircleIcon, Loader2Icon } from "lucide-react";
+import { CheckCircle2Icon, AlertTriangleIcon, XCircleIcon } from "lucide-react";
+import { Skeleton } from "@repo/ui/components/skeleton";
 
 interface PreparationItem {
 	key: string;
@@ -62,9 +63,11 @@ export function PreparationPanel({
 	if (loading) {
 		return (
 			<div className="rounded-xl border border-border bg-background p-5">
-				<h3 className="mb-4 text-sm font-semibold text-foreground">Preparación: {processName}</h3>
-				<div className="flex items-center justify-center py-6">
-					<Loader2Icon className="h-5 w-5 animate-spin text-chrome-text-secondary" />
+				<Skeleton className="mb-4 h-4 w-48" />
+				<div className="space-y-3">
+					<Skeleton className="h-8 w-full" />
+					<Skeleton className="h-8 w-full" />
+					<Skeleton className="h-8 w-3/4" />
 				</div>
 			</div>
 		);

@@ -18,6 +18,7 @@ export async function GET(
       include: {
         mitigations: { orderBy: { createdAt: "desc" } },
         controls: { orderBy: { createdAt: "desc" } },
+        affectedNode: { select: { id: true, label: true, nodeType: true } },
       },
     });
 
@@ -60,6 +61,12 @@ export async function PATCH(
     if (body.riskType !== undefined) data.riskType = body.riskType;
     if (body.status !== undefined) data.status = body.status;
     if (body.affectedStep !== undefined) data.affectedStep = body.affectedStep;
+    if (body.affectedNodeId !== undefined) data.affectedNodeId = body.affectedNodeId || null;
+    if (body.linkedProcedureId !== undefined) data.linkedProcedureId = body.linkedProcedureId || null;
+    if (body.affectedNodeId && body.affectedStep === undefined) {
+      const node = await db.diagramNode.findUnique({ where: { id: body.affectedNodeId }, select: { label: true } });
+      if (node) data.affectedStep = node.label;
+    }
     if (body.affectedRole !== undefined) data.affectedRole = body.affectedRole;
     if (body.isOpportunity !== undefined) data.isOpportunity = body.isOpportunity;
     if (body.opportunityValue !== undefined) data.opportunityValue = body.opportunityValue;
@@ -107,6 +114,7 @@ export async function PATCH(
       include: {
         mitigations: { orderBy: { createdAt: "desc" } },
         controls: true,
+        affectedNode: { select: { id: true, label: true, nodeType: true } },
       },
     });
 

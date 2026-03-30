@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@repo/ui/components/button";
 import { Badge } from "@repo/ui/components/badge";
 import { PlayIcon, EyeIcon, ClockIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { ProcessSession } from "../../types";
 import { SESSION_STATUS_VARIANT } from "../../types";
 
@@ -14,12 +15,14 @@ interface SessionesTabProps {
 }
 
 export function SessionesTab({ sessions, organizationSlug, processId }: SessionesTabProps) {
+	const t = useTranslations("processLibrary.sidebar");
+
 	if (!sessions || sessions.length === 0) {
 		return (
 			<div className="flex flex-col items-center justify-center py-8 text-center">
 				<ClockIcon className="mb-2 h-6 w-6 text-muted-foreground/40" />
 				<p className="text-xs text-muted-foreground mb-3">
-					Sin sesiones. Inicia un Deep Dive para mapear este proceso.
+					{t("noSessions")}
 				</p>
 				<Button size="sm" asChild>
 					<Link href={`/${organizationSlug}/sessions/new?processId=${processId}&type=DEEP_DIVE`}>

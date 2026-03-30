@@ -17,6 +17,7 @@ import { DeepConversation } from "./DeepConversation";
 import { DiagramReveal } from "./DiagramReveal";
 import { DeepRiskReport } from "./DeepRiskReport";
 import { ConversionGate } from "./ConversionGate";
+import { RevealLoader } from "./RevealLoader";
 
 type Phase = "input" | "crawling" | "researching" | "streaming" | "instant" | "deepen" | "sipoc" | "reveal" | "risks" | "convert";
 
@@ -240,8 +241,9 @@ export function RadiografiaPage() {
 			}
 		} catch (error) {
 			console.error("SSE error:", error);
-			setStatusMessage("Error de conexion. Intenta de nuevo.");
-			setPhase("input");
+			setStatusMessage(t("connectionError"));
+			// Stay on instant phase with error status instead of losing all progress
+			setPhase("instant");
 			setLoading(false);
 		}
 	}, [t]);
@@ -331,10 +333,16 @@ export function RadiografiaPage() {
 		</div>
 	) : null;
 
+	// Phase-to-progress mapping for journey indicator
+	const PHASE_PROGRESS: Record<Phase, number> = {
+		input: 0, crawling: 10, researching: 25, streaming: 45,
+		instant: 60, deepen: 65, sipoc: 70, reveal: 85, risks: 95, convert: 100,
+	};
+
 	// Wrapper with header for all phases
 	const withHeader = (content: React.ReactNode) => (
 		<>
-			<ScanHeader />
+			<ScanHeader progress={PHASE_PROGRESS[phase]} />
 			<div className="pt-12">{content}</div>
 		</>
 	);
@@ -363,13 +371,25 @@ export function RadiografiaPage() {
 					style={{ backgroundColor: "#0A1428" }}
 				/>
 				{withHeader(
-					<div className="min-h-screen bg-[#F8FAFC] px-4 py-12">
-						<InvestigationBoard
-							companyName={crawledCompanyName || "tu empresa"}
-							industry={industry?.industry || "Analizando..."}
-							sessionToken=""
-							onComplete={() => handleResearchComplete()}
+					<div className="relative min-h-screen bg-background px-4 py-12">
+						{/* Gradient bridge: dark→transparent dissolve from top */}
+						<div
+							className="pointer-events-none absolute inset-x-0 top-0 h-[200px]"
+							style={{ background: "linear-gradient(to bottom, #0A1428, transparent)" }}
 						/>
+						{/* Ambient teal glow for depth */}
+						<div
+							className="pointer-events-none absolute inset-0"
+							style={{ background: "radial-gradient(ellipse at top right, rgba(0,229,192,0.04), transparent 60%)" }}
+						/>
+						<div className="relative">
+							<InvestigationBoard
+								companyName={crawledCompanyName || "tu empresa"}
+								industry={industry?.industry || "Analizando..."}
+								sessionToken=""
+								onComplete={() => handleResearchComplete()}
+							/>
+						</div>
 					</div>,
 				)}
 			</>
@@ -402,14 +422,7 @@ export function RadiografiaPage() {
 
 	if (phase === "reveal") {
 		if (loading || !bpmnXml) {
-			return withHeader(
-				<div className="flex min-h-screen items-center justify-center bg-background">
-					<div className="text-center">
-						<div className="mb-4 mx-auto h-8 w-8 animate-spin rounded-full border-2 border-[#D97706] border-t-transparent" />
-						<p className="text-sm text-muted-foreground">{t("generatingDeepScan")}</p>
-					</div>
-				</div>,
-			);
+			return <RevealLoader />;
 		}
 
 		return withHeader(

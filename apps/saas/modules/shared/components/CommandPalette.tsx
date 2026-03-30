@@ -82,7 +82,7 @@ export function CommandPalette() {
 					label: t("sections.processes"),
 					section: t("sections.navigation"),
 					icon: WorkflowIcon,
-					action: () => router.push(`${basePath}/procesos`),
+					action: () => router.push(`${basePath}/processes`),
 				},
 				{
 					id: "go-deliverables",

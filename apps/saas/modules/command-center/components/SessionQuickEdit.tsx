@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { XIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { SessionData } from "./CommandCenter";
 
 export function SessionQuickEdit({
@@ -13,6 +14,8 @@ export function SessionQuickEdit({
 	onSave: (data: Record<string, unknown>) => void;
 	onClose: () => void;
 }) {
+	const t = useTranslations("commandCenter");
+	const tw = useTranslations("commandCenter.wizard");
 	const [scheduledFor, setScheduledFor] = useState(
 		session.scheduledFor ? new Date(session.scheduledFor).toISOString().slice(0, 16) : "",
 	);
@@ -34,7 +37,7 @@ export function SessionQuickEdit({
 			<div className="mx-4 w-full max-w-sm rounded-xl bg-background p-5 shadow-xl" onClick={(e) => e.stopPropagation()}>
 				<div className="mb-4 flex items-center justify-between">
 					<h3 className="text-sm font-semibold text-foreground">
-						Editar: {session.processDefinition?.name ?? "Sesión"}
+						Editar: {session.processDefinition?.name ?? t("defaultProcess")}
 					</h3>
 					<button type="button" onClick={onClose} className="text-chrome-text-secondary hover:text-foreground">
 						<XIcon className="h-4 w-4" />
@@ -71,7 +74,7 @@ export function SessionQuickEdit({
 							value={sessionGoals}
 							onChange={(e) => setSessionGoals(e.target.value)}
 							rows={2}
-							placeholder="Qué cubrir en esta sesión..."
+							placeholder={tw("coverPlaceholder")}
 							className="w-full resize-none rounded-md border border-border px-3 py-2 text-sm"
 						/>
 					</div>

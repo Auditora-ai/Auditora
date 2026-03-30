@@ -61,6 +61,7 @@ export function DeepConversation({ processName, industry, onRevealReady }: DeepC
 
 			if (data.error) {
 				setMessages((prev) => [...prev, { role: "assistant", content: data.error }]);
+				if (data.limitReached || data.readyForReveal) setReadyForReveal(true);
 			} else {
 				setMessages((prev) => [...prev, { role: "assistant", content: data.question }]);
 				setCompletenessScore(data.completenessScore);
@@ -153,13 +154,21 @@ export function DeepConversation({ processName, industry, onRevealReady }: DeepC
 
 				<ConfidenceMeter score={completenessScore} coverage={sipocCoverage} threshold={70} />
 
-				{readyForReveal && (
+				{readyForReveal ? (
 					<button
 						type="button"
 						onClick={onRevealReady}
 						className="mt-6 min-h-[44px] w-full rounded-lg bg-primary px-4 py-3 text-sm font-medium text-primary-foreground transition-all hover:opacity-90"
 					>
 						{t("viewDiagram")}
+					</button>
+				) : (
+					<button
+						type="button"
+						onClick={onRevealReady}
+						className="mt-6 min-h-[44px] w-full text-sm text-muted-foreground transition-colors hover:text-foreground hover:underline"
+					>
+						{t("skipToResults")}
 					</button>
 				)}
 			</div>

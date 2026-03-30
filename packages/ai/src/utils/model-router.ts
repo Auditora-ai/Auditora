@@ -9,8 +9,10 @@
  *
  * Tier mapping:
  *   "budget"   → DeepSeek Chat (via OpenAI-compatible API)
- *   "standard" → Claude Sonnet 4.6  (default)
+ *   "standard" → Claude Opus 4.6  (default)
  *   "premium"  → Claude Opus 4.6
+ *
+ * Fallback: If Anthropic fails, instrumentedGenerateText retries with DeepSeek.
  */
 
 import { createAnthropic } from "@ai-sdk/anthropic";
@@ -27,7 +29,7 @@ const TIER_MODEL_MAP: Record<AiTier, () => LanguageModel> = {
 			baseURL: "https://api.deepseek.com",
 			apiKey: process.env.DEEPSEEK_API_KEY,
 		});
-		return deepseek("deepseek-chat");
+		return deepseek.chat("deepseek-chat");
 	},
 	standard: () => anthropic("claude-opus-4-6"),
 	premium: () => anthropic("claude-opus-4-6"),

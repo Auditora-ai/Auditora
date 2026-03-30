@@ -56,9 +56,12 @@ import {
 	ShieldAlertIcon,
 	TrashIcon,
 	MoreHorizontalIcon,
+	GitBranchIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toastSuccess, toastError } from "@repo/ui/components/toast";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
+import { EmptyState } from "@shared/components/EmptyState";
 import { RaciTab } from "./RaciTab";
 import { ConsolidationView } from "./ConsolidationView";
 import { IntelligenceTab } from "@projects/components/IntelligenceTab";
@@ -272,8 +275,10 @@ export function ProcessDetailView({
 	const [editOwner, setEditOwner] = useState(process.owner || "");
 	const router = useRouter();
 	const { confirm } = useConfirmationAlert();
+	const t = useTranslations("processDetail");
+	const tc = useTranslations("common");
 
-	const processesPath = `${basePath}/procesos`;
+	const processesPath = `${basePath}/processes`;
 
 	// Calculate health score for the header ring
 	const scores = calculatePhaseCompleteness({
@@ -306,14 +311,14 @@ export function ProcessDetailView({
 	const handleShare = async () => {
 		const url = `${window.location.origin}/share/${process.id}`;
 		await navigator.clipboard.writeText(url);
-		toastSuccess("Link copiado");
+		toastSuccess(t("linkCopied"));
 	};
 
 	const handleDeleteProcess = () => {
 		confirm({
-			title: "Eliminar proceso",
-			message: `Se eliminará "${process.name}" y todos sus sub-procesos, sesiones, RACI, riesgos y versiones asociados. Esta acción no se puede deshacer.`,
-			confirmLabel: "Eliminar",
+			title: t("deleteConfirm"),
+			message: t("deleteMessage"),
+			confirmLabel: tc("delete"),
 			destructive: true,
 			onConfirm: async () => {
 				const { orpcClient } = await import("@shared/lib/orpc-client");
@@ -327,7 +332,7 @@ export function ProcessDetailView({
 		// Validate: name cannot be empty
 		if (field === "name" && !value.trim()) {
 			setEditName(process.name);
-			toastError("El nombre es requerido");
+			toastError(t("nameRequired"));
 			setEditingField(null);
 			return;
 		}
@@ -344,13 +349,13 @@ export function ProcessDetailView({
 				if (field === "name") setEditName(process.name);
 				if (field === "description") setEditDescription(process.description || "");
 				if (field === "owner") setEditOwner(process.owner || "");
-				toastError("Error al guardar");
+				toastError(tc("errorSaving"));
 			}
 		} catch {
 			if (field === "name") setEditName(process.name);
 			if (field === "description") setEditDescription(process.description || "");
 			if (field === "owner") setEditOwner(process.owner || "");
-			toastError("Error al guardar");
+			toastError(tc("errorSaving"));
 		}
 		setEditingField(null);
 	};
@@ -360,7 +365,7 @@ export function ProcessDetailView({
 			{/* Breadcrumb */}
 			<nav className="flex items-center gap-1.5 text-sm text-muted-foreground">
 				<Link href={processesPath} className="hover:text-foreground">
-					Procesos
+					{tc("process")}
 				</Link>
 				{process.parent && (
 					<>
@@ -529,11 +534,10 @@ export function ProcessDetailView({
 			{/* Onboarding banner for new processes */}
 			{healthScore === 0 && !expandedPhase && (
 				<div className="rounded-lg border border-blue-200 bg-accent p-4">
-					<p className="text-sm font-medium">¿Primera vez con este proceso?</p>
+					<p className="text-sm font-medium">{t("onboardingTitle")}</p>
 					<p className="mt-1 text-sm text-muted-foreground">
-						Empieza por <strong>Contexto</strong>: sube documentos y define los
-						objetivos del proceso. Luego inicia tu primera sesión de{" "}
-						<strong>Captura</strong>.
+						{t("onboardingDesc1")}{" "}
+						{t("onboardingDesc2")}
 					</p>
 				</div>
 			)}
@@ -622,6 +626,8 @@ function ContextoTab({
 	onUpdate: (data: Partial<ProcessData>) => void;
 	onChildAdded: (child: ProcessChild) => void;
 }) {
+	const t = useTranslations("processDetail");
+	const tc = useTranslations("common");
 	return (
 		<div className="space-y-3">
 			{/* AI Context Chat — describe the process, AI extracts structured data */}
@@ -631,12 +637,12 @@ function ContextoTab({
 			/>
 
 			<CollapsibleSection
-				title="Sub-procesos"
+				title={t("subprocesses")}
 				icon={ListIcon}
 				badge={
 					(process.children?.length ?? 0) > 0
 						? { type: "count", count: process.children!.length }
-						: { type: "status", status: "empty", label: "Sin sub-procesos" }
+						: { type: "status", status: "empty", label: t("noSubprocesses") }
 				}
 				defaultOpen={(process.children?.length ?? 0) > 0}
 			>
@@ -649,15 +655,15 @@ function ContextoTab({
 			</CollapsibleSection>
 
 			<CollapsibleSection
-				title="Documentos"
+				title={t("documents")}
 				icon={FileUpIcon}
-				badge={{ type: "status", status: "empty", label: "Subir SOPs o manuales" }}
+				badge={{ type: "status", status: "empty", label: t("uploadDocs") }}
 			>
 				<DocumentsTab organizationSlug={organizationSlug} />
 			</CollapsibleSection>
 
 			<CollapsibleSection
-				title="Detalles del proceso"
+				title={t("processDetails")}
 				icon={FileText}
 				defaultOpen={false}
 			>
@@ -689,7 +695,7 @@ function ContextoTab({
 									<div className="flex items-center gap-3">
 										<Badge status="info">v{v.version}</Badge>
 										<span className="text-muted-foreground">
-											{v.changeNote || "Sin nota"}
+											{v.changeNote || tc("noNote")}
 										</span>
 									</div>
 									<span className="text-xs text-muted-foreground">
@@ -718,15 +724,16 @@ function AnalisisIATab({
 	raciCount: number;
 	conflictsCount: number;
 }) {
+	const t = useTranslations("processDetail");
 	return (
 		<div className="space-y-3">
 			<CollapsibleSection
-				title="Matriz RACI"
+				title={t("raciMatrix")}
 				icon={Table2}
 				badge={
 					raciCount > 0
 						? { type: "count", count: raciCount }
-						: { type: "status", status: "empty", label: "No generado" }
+						: { type: "status", status: "empty", label: t("notGenerated") }
 				}
 				defaultOpen={raciCount > 0}
 			>
@@ -734,18 +741,18 @@ function AnalisisIATab({
 			</CollapsibleSection>
 
 			<CollapsibleSection
-				title="Inteligencia"
+				title={t("intelligence")}
 				icon={BrainIcon}
-				badge={{ type: "status", status: "empty", label: "Analizar proceso" }}
+				badge={{ type: "status", status: "empty", label: t("analyzeProcess") }}
 				defaultOpen={false}
 			>
 				<IntelligenceTab processId={processId} />
 			</CollapsibleSection>
 
 			<CollapsibleSection
-				title="Riesgos y Calidad"
+				title={t("risksQuality")}
 				icon={ShieldAlertIcon}
-				badge={{ type: "status", status: "empty", label: "Analizar riesgos" }}
+				badge={{ type: "status", status: "empty", label: t("analyzeRisks") }}
 				defaultOpen={false}
 			>
 				<RiskTab processId={processId} />
@@ -753,12 +760,12 @@ function AnalisisIATab({
 
 			{sessionsCount >= 2 && (
 				<CollapsibleSection
-					title="Consolidacion"
+					title={t("consolidation")}
 					icon={GitMerge}
 					badge={
 						conflictsCount > 0
-							? { type: "status", status: "warning", label: `${conflictsCount} conflictos` }
-							: { type: "status", status: "empty", label: "Consolidar perspectivas" }
+							? { type: "status", status: "warning", label: t("conflicts", { count: conflictsCount }) }
+							: { type: "status", status: "empty", label: t("consolidate") }
 					}
 					defaultOpen={conflictsCount > 0}
 				>
@@ -794,6 +801,8 @@ function DiagramTab({
 	bpmnXml: string | null;
 	versions?: ProcessVersionEntry[];
 }) {
+	const t = useTranslations("processDetail");
+	const tc = useTranslations("common");
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [showEditor, setShowEditor] = useState(!!bpmnXml);
 	const [saving, setSaving] = useState(false);
@@ -944,11 +953,11 @@ function DiagramTab({
 				<CardContent className="flex flex-col items-center justify-center py-12 text-center">
 					<GitBranch className="mb-3 h-8 w-8 text-muted-foreground/40" />
 					<p className="mb-4 text-sm text-muted-foreground">
-						Sin diagrama. Crea uno o ejecuta una sesión para generarlo.
+						{t("noDiagram")}
 					</p>
 					<Button onClick={() => setShowEditor(true)}>
 						<PlusIcon className="mr-2 h-4 w-4" />
-						Crear Diagrama
+						{t("createDiagram")}
 					</Button>
 				</CardContent>
 			</Card>
@@ -996,7 +1005,7 @@ function DiagramTab({
 			<div className="flex items-center gap-1">
 				<Button onClick={handleSave} disabled={saving} size="sm">
 					<SaveIcon className="mr-1.5 h-3.5 w-3.5" />
-					{saving ? "Guardando..." : "Guardar"}
+					{saving ? tc("saving") : tc("save")}
 				</Button>
 				<Button variant="ghost" size="sm" onClick={() => setFullscreen(!fullscreen)}>
 					{fullscreen ? (
@@ -1031,7 +1040,7 @@ function DiagramTab({
 			{(renderError || repairing) && (
 				<div className="absolute left-1/2 top-2 z-10 -translate-x-1/2 rounded-md border border-orientation bg-amber-100 px-4 py-2 text-xs text-amber-800 shadow-sm" style={{ marginTop: fullscreen ? "-calc(100vh - 49px)" : "-600px", position: "relative" }}>
 					<div className="flex items-center gap-3">
-						<span>{repairing ? "Reparando diagrama..." : renderError}</span>
+						<span>{repairing ? t("repairingDiagram") : renderError}</span>
 						{!repairing && (
 							<div className="flex gap-2">
 								<button
@@ -1039,14 +1048,14 @@ function DiagramTab({
 									onClick={handleRebuildFromNodes}
 									className="rounded bg-yellow-200 px-2 py-0.5 text-[10px] font-medium text-amber-900 hover:bg-amber-300 transition-colors"
 								>
-									Regenerar
+									{t("regenerate")}
 								</button>
 								<button
 									type="button"
 									onClick={handleRepairWithAi}
 									className="rounded bg-primary px-2 py-0.5 text-[10px] font-medium text-white hover:bg-blue-600 transition-colors"
 								>
-									Arreglar con IA
+									{t("fixWithAi")}
 								</button>
 							</div>
 						)}
@@ -1094,6 +1103,8 @@ function DetailsContent({
 	process: ProcessData;
 	onUpdate: (data: Partial<ProcessData>) => void;
 }) {
+	const t = useTranslations("processDetail");
+	const tc = useTranslations("common");
 	const [description, setDescription] = useState(process.description || "");
 	const [owner, setOwner] = useState(process.owner || "");
 	const [goals, setGoals] = useState<string[]>(process.goals);
@@ -1111,12 +1122,12 @@ function DetailsContent({
 			});
 			if (res.ok) {
 				onUpdate({ description, owner, goals, triggers, outputs });
-				toastSuccess("Detalles guardados");
+				toastSuccess(t("detailsSaved"));
 			} else {
-				toastError("Error al guardar detalles");
+				toastError(t("errorSavingDetails"));
 			}
 		} catch {
-			toastError("Error al guardar detalles");
+			toastError(t("errorSavingDetails"));
 		} finally {
 			setSaving(false);
 		}
@@ -1125,7 +1136,7 @@ function DetailsContent({
 	return (
 		<div className="space-y-4">
 			<div className="space-y-2">
-				<Label>Descripcion</Label>
+				<Label>{t("descriptionLabel")}</Label>
 				<Textarea
 					value={description}
 					onChange={(e) => setDescription(e.target.value)}
@@ -1139,18 +1150,18 @@ function DetailsContent({
 					<Input
 						value={owner}
 						onChange={(e) => setOwner(e.target.value)}
-						placeholder="Departamento o persona responsable..."
+						placeholder={t("ownerPlaceholder")}
 					/>
 				</div>
 			</div>
-			<TagField label="Objetivos" items={goals} onChange={setGoals} placeholder="Agregar objetivo..." />
-			<TagField label="Triggers" items={triggers} onChange={setTriggers} placeholder="Agregar trigger..." />
-			<TagField label="Outputs" items={outputs} onChange={setOutputs} placeholder="Agregar output..." />
+			<TagField label={t("goals")} items={goals} onChange={setGoals} placeholder={t("addGoalPlaceholder")} />
+			<TagField label={t("triggers")} items={triggers} onChange={setTriggers} placeholder={t("addTriggerPlaceholder")} />
+			<TagField label={t("outputs")} items={outputs} onChange={setOutputs} placeholder={t("addOutputPlaceholder")} />
 
 			<div className="flex justify-end pt-2">
 				<Button onClick={saveDetails} disabled={saving} size="sm">
 					<SaveIcon className="mr-1.5 h-3.5 w-3.5" />
-					{saving ? "Guardando..." : "Guardar"}
+					{saving ? tc("saving") : tc("save")}
 				</Button>
 			</div>
 		</div>
@@ -1235,6 +1246,9 @@ function ChildrenTab({
 	processesPath: string;
 	onChildAdded: (child: ProcessChild) => void;
 }) {
+	const tp = useTranslations("emptyStates.processes");
+	const t = useTranslations("processDetail");
+	const tc = useTranslations("common");
 	const [showForm, setShowForm] = useState(false);
 	const [childName, setChildName] = useState("");
 	const [childLevel, setChildLevel] = useState("SUBPROCESS");
@@ -1271,7 +1285,7 @@ function ChildrenTab({
 			<div className="mb-3 flex justify-end">
 				<Button variant="secondary" size="sm" onClick={() => setShowForm(!showForm)}>
 					<PlusIcon className="mr-1.5 h-3.5 w-3.5" />
-					Agregar
+					{tc("add")}
 				</Button>
 			</div>
 
@@ -1279,7 +1293,7 @@ function ChildrenTab({
 				<Card className="mb-4">
 					<CardContent className="flex items-end gap-3 p-4">
 						<div className="flex-1 space-y-1.5">
-							<Label>Nombre</Label>
+							<Label>{tc("name")}</Label>
 							<Input
 								value={childName}
 								onChange={(e) => setChildName(e.target.value)}
@@ -1290,15 +1304,15 @@ function ChildrenTab({
 							/>
 						</div>
 						<div className="w-[160px] space-y-1.5">
-							<Label>Nivel</Label>
+							<Label>{t("level")}</Label>
 							<Select value={childLevel} onValueChange={setChildLevel}>
 								<SelectTrigger>
 									<SelectValue />
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value="SUBPROCESS">Sub-proceso</SelectItem>
-									<SelectItem value="TASK">Tarea</SelectItem>
-									<SelectItem value="PROCEDURE">Procedimiento</SelectItem>
+									<SelectItem value="SUBPROCESS">{t("subprocess")}</SelectItem>
+									<SelectItem value="TASK">{t("task")}</SelectItem>
+									<SelectItem value="PROCEDURE">{t("procedure")}</SelectItem>
 								</SelectContent>
 							</Select>
 						</div>
@@ -1311,11 +1325,12 @@ function ChildrenTab({
 
 			{children.length === 0 ? (
 				<Card>
-					<CardContent className="flex flex-col items-center justify-center py-12 text-center">
-						<p className="text-sm text-muted-foreground">
-							Sin sub-procesos. Agrega uno para descomponer este proceso.
-						</p>
-					</CardContent>
+					<EmptyState
+						icon={GitBranchIcon}
+						title={tp("noSubprocesses")}
+						description={tp("noSubprocessesDesc")}
+						compact
+					/>
 				</Card>
 			) : (
 				<div className="space-y-2">
@@ -1356,6 +1371,9 @@ function SessionsTab({
 	organizationSlug: string;
 	processId: string;
 }) {
+	const tp = useTranslations("emptyStates.processes");
+	const t = useTranslations("processDetail");
+	const tc = useTranslations("common");
 	const lastSession = sessions[0];
 
 	return (
@@ -1368,7 +1386,7 @@ function SessionsTab({
 								href={`/${organizationSlug}/sessions/new?processId=${processId}&type=DEEP_DIVE&continuationOf=${lastSession.id}`}
 							>
 								<PlayIcon className="mr-1.5 h-3.5 w-3.5" />
-								Continuar ultima
+								{t("continueLastSession")}
 							</Link>
 						</Button>
 					)}
@@ -1385,12 +1403,12 @@ function SessionsTab({
 
 			{sessions.length === 0 ? (
 				<Card>
-					<CardContent className="flex flex-col items-center justify-center py-12 text-center">
-						<ClockIcon className="mb-3 h-8 w-8 text-muted-foreground/40" />
-						<p className="text-sm text-muted-foreground">
-							Sin sesiones. Inicia un Deep Dive para mapear este proceso.
-						</p>
-					</CardContent>
+					<EmptyState
+						icon={ClockIcon}
+						title={tp("noSessions")}
+						description={tp("noSessionsDesc")}
+						compact
+					/>
 				</Card>
 			) : (
 				<div className="space-y-3">
@@ -1406,7 +1424,7 @@ function SessionsTab({
 											{session.type === "DISCOVERY" ? "Discovery" : "Deep Dive"}
 										</p>
 										<div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted-foreground">
-											<span>{session._count.diagramNodes} nodos</span>
+											<span>{t("nodes", { count: session._count.diagramNodes })}</span>
 											{session.deliverables?.map((d) => {
 												if (d.type === "process_audit" && d.data) {
 													const audit = d.data as { completenessScore?: number; newGaps?: unknown[] };
@@ -1426,7 +1444,7 @@ function SessionsTab({
 													if ((risks.newRisks?.length ?? 0) > 0) {
 														return (
 															<span key={d.type} className="text-red-600">
-																{risks.newRisks!.length} riesgos
+																{t("risks", { count: risks.newRisks!.length })}
 															</span>
 														);
 													}
@@ -1447,14 +1465,14 @@ function SessionsTab({
 										<Button size="sm" asChild>
 											<Link href={`/${organizationSlug}/session/${session.id}/live`}>
 												<PlayIcon className="mr-1 h-3.5 w-3.5" />
-												Unirse
+												{t("join")}
 											</Link>
 										</Button>
 									) : (
 										<Button size="sm" variant="secondary" asChild>
 											<Link href={`/${organizationSlug}/session/${session.id}`}>
 												<EyeIcon className="mr-1 h-3.5 w-3.5" />
-												Ver
+												{tc("view")}
 											</Link>
 										</Button>
 									)}

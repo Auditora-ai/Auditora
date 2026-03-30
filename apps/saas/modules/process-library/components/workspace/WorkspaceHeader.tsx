@@ -24,6 +24,7 @@ import {
 	PanelRightOpenIcon,
 } from "lucide-react";
 import { toastSuccess, toastError } from "@repo/ui/components/toast";
+import { useTranslations } from "next-intl";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { useRouter } from "next/navigation";
 import { ProcessHealthRing } from "../ProcessHealthRing";
@@ -49,6 +50,8 @@ export function WorkspaceHeader({
 	onUpdate,
 }: WorkspaceHeaderProps) {
 	const router = useRouter();
+	const tc = useTranslations("common");
+	const tpd = useTranslations("processDetail");
 	const { confirm } = useConfirmationAlert();
 	const { sidebarCollapsed, toggleSidebar } = useProcessWorkspace();
 	const [exporting, setExporting] = useState(false);
@@ -93,7 +96,7 @@ export function WorkspaceHeader({
 		confirm({
 			title: "Eliminar proceso",
 			message: `Se eliminará "${process.name}" y todos sus sub-procesos, sesiones, RACI, riesgos y versiones asociados. Esta acción no se puede deshacer.`,
-			confirmLabel: "Eliminar",
+			confirmLabel: tc("delete"),
 			destructive: true,
 			onConfirm: async () => {
 				const { orpcClient } = await import("@shared/lib/orpc-client");
@@ -121,12 +124,12 @@ export function WorkspaceHeader({
 			} else {
 				if (field === "name") setEditName(process.name);
 				if (field === "description") setEditDescription(process.description || "");
-				toastError("Error al guardar");
+				toastError(tc("errorSaving"));
 			}
 		} catch {
 			if (field === "name") setEditName(process.name);
 			if (field === "description") setEditDescription(process.description || "");
-			toastError("Error al guardar");
+			toastError(tc("errorSaving"));
 		}
 		setEditingField(null);
 	};
@@ -141,10 +144,10 @@ export function WorkspaceHeader({
 			if (res.ok) {
 				onUpdate({ processStatus: newStatus });
 			} else {
-				toastError("Error al cambiar estado");
+				toastError(tpd("errorStatusChange"));
 			}
 		} catch {
-			toastError("Error al cambiar estado");
+			toastError(tpd("errorStatusChange"));
 		}
 	};
 

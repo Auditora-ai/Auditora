@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import {
 	CalendarIcon,
 	SparklesIcon,
@@ -24,7 +26,7 @@ const GanttChart = dynamic(
 		// Also need to import the CSS
 		return { default: mod.Gantt };
 	}),
-	{ ssr: false, loading: () => <div className="flex h-96 items-center justify-center text-sm text-chrome-text-secondary">Cargando Gantt...</div> },
+	{ ssr: false, loading: () => <div className="space-y-3 p-6"><Skeleton className="h-6 w-48" /><Skeleton className="h-80 w-full" /></div> },
 );
 
 interface ProjectGanttProps {
@@ -44,6 +46,7 @@ export function ProjectGantt({
 	initialPlan,
 	architectureId,
 }: ProjectGanttProps) {
+	const tc = useTranslations("common");
 	const [plan, setPlan] = useState<ProjectPlan | null>(initialPlan);
 	const [viewMode, setViewMode] = useState<ViewModeType>("Week");
 	const [saving, setSaving] = useState(false);
@@ -68,7 +71,7 @@ export function ProjectGantt({
 				});
 				if (!res.ok) throw new Error(`HTTP ${res.status}`);
 			} catch {
-				toast.error("Error al guardar el plan");
+				toast.error(tc("errorSaving"));
 			} finally {
 				setSaving(false);
 			}

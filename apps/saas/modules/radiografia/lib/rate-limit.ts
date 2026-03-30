@@ -24,8 +24,9 @@ export function getClientIp(request: NextRequest): string {
 export async function checkRateLimit(
 	ip: string,
 	maxPerHour: number,
+	endpoint = "default",
 ): Promise<boolean> {
-	return checkLimit(`ratelimit:scan:${ip}`, maxPerHour, 3600);
+	return checkLimit(`ratelimit:scan:${endpoint}:${ip}`, maxPerHour, 3600);
 }
 
 export async function checkDailyCost(): Promise<boolean> {

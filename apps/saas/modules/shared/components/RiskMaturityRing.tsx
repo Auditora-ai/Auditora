@@ -1,6 +1,13 @@
 "use client";
 
 import { cn } from "@repo/ui";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@repo/ui/components/tooltip";
+import { useTranslations } from "next-intl";
 
 interface RiskMaturityRingProps {
 	score: number;
@@ -13,6 +20,7 @@ export function RiskMaturityRing({
 	size = "md",
 	className,
 }: RiskMaturityRingProps) {
+	const t = useTranslations("maturityRing");
 	const isSmall = size === "sm";
 	const radius = isSmall ? 16 : 28;
 	const strokeWidth = isSmall ? 3 : 4;
@@ -32,7 +40,10 @@ export function RiskMaturityRing({
 	const isEmpty = score === 0;
 
 	return (
-		<div className={cn("flex items-center gap-3", className)}>
+		<TooltipProvider>
+		<Tooltip>
+		<TooltipTrigger asChild>
+		<div className={cn("flex cursor-help items-center gap-3", className)}>
 			<svg
 				width={svgSize}
 				height={svgSize}
@@ -71,7 +82,7 @@ export function RiskMaturityRing({
 						<>
 							<span className="text-xs text-slate-500">—</span>
 							<span className="text-[10px] text-slate-600">
-								Sin datos
+								{t("noData")}
 							</span>
 						</>
 					) : (
@@ -83,7 +94,7 @@ export function RiskMaturityRing({
 								{score}
 							</span>
 							<span className="text-[10px] text-slate-500">
-								Madurez de Riesgo
+								{t("label")}
 							</span>
 						</>
 					)}
@@ -98,5 +109,11 @@ export function RiskMaturityRing({
 				</span>
 			)}
 		</div>
+		</TooltipTrigger>
+		<TooltipContent side="bottom" className="max-w-xs text-xs">
+			{t("tooltip")}
+		</TooltipContent>
+		</Tooltip>
+		</TooltipProvider>
 	);
 }

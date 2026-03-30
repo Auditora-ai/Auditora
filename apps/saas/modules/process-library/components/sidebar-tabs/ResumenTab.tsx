@@ -12,6 +12,7 @@ import {
 	GitBranchIcon,
 	VideoIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import {
 	calculatePhaseCompleteness,
 	calculateOverallHealth,
@@ -23,6 +24,7 @@ interface ResumenTabProps {
 }
 
 export function ResumenTab({ process }: ResumenTabProps) {
+	const t = useTranslations("processLibrary.sidebar");
 	const scores = useMemo(
 		() =>
 			calculatePhaseCompleteness({
@@ -36,12 +38,12 @@ export function ResumenTab({ process }: ResumenTabProps) {
 
 	const gaps = useMemo(() => {
 		const items: { label: string; severity: "error" | "warning" }[] = [];
-		if (!process.bpmnXml) items.push({ label: "Sin diagrama BPMN", severity: "error" });
-		if (!process.description) items.push({ label: "Sin descripción", severity: "warning" });
-		if (process.raciCount === 0) items.push({ label: "Sin matriz RACI", severity: "warning" });
-		if (process.risksCount === 0) items.push({ label: "Sin análisis de riesgos", severity: "warning" });
-		if (process.sessionsCount === 0) items.push({ label: "Sin sesiones de captura", severity: "warning" });
-		if ((process.goals?.length ?? 0) === 0) items.push({ label: "Sin objetivos definidos", severity: "warning" });
+		if (!process.bpmnXml) items.push({ label: t("noDiagram"), severity: "error" });
+		if (!process.description) items.push({ label: t("noDescription"), severity: "warning" });
+		if (process.raciCount === 0) items.push({ label: t("noRaci"), severity: "warning" });
+		if (process.risksCount === 0) items.push({ label: t("noRiskAnalysis"), severity: "warning" });
+		if (process.sessionsCount === 0) items.push({ label: t("noCaptureSessions"), severity: "warning" });
+		if ((process.goals?.length ?? 0) === 0) items.push({ label: t("noGoals"), severity: "warning" });
 		return items;
 	}, [process]);
 

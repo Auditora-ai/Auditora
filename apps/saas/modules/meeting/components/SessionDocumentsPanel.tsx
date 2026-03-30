@@ -8,6 +8,7 @@ import {
 	Loader2Icon,
 	TrashIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Button } from "@repo/ui/components/button";
 
 interface DocumentItem {
@@ -42,6 +43,7 @@ export function SessionDocumentsPanel({
 	processId,
 	onDocumentReady,
 }: SessionDocumentsPanelProps) {
+	const t = useTranslations("meetingModule");
 	const [documents, setDocuments] = useState<DocumentItem[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [uploading, setUploading] = useState(false);
@@ -175,7 +177,7 @@ export function SessionDocumentsPanel({
 				{documents.length === 0 ? (
 					<div className="flex flex-col items-center justify-center gap-1 py-4 text-center text-sm text-muted-foreground">
 						<FileTextIcon className="h-8 w-8 opacity-30" />
-						<p className="text-xs">Sin documentos</p>
+						<p className="text-xs">{t("noDocuments")}</p>
 						<p className="max-w-[180px] text-[10px] text-muted-foreground/60">
 							Sube manuales, diagramas o cualquier referencia para esta sesion
 						</p>

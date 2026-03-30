@@ -8,6 +8,7 @@ import {
   RefreshCwIcon,
 } from "lucide-react";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -58,6 +59,7 @@ export function MitigationTracker({
   mitigations,
   onUpdate,
 }: MitigationTrackerProps) {
+  const t = useTranslations("riskTab");
   const [showForm, setShowForm] = useState(false);
   const [newAction, setNewAction] = useState("");
   const [newOwner, setNewOwner] = useState("");
@@ -138,7 +140,7 @@ export function MitigationTracker({
 
       {/* Existing mitigations */}
       {mitigations.length === 0 && !showForm && (
-        <p className="text-xs text-muted-foreground">Sin mitigaciones definidas.</p>
+        <p className="text-xs text-muted-foreground">{t("noMitigations")}</p>
       )}
 
       {mitigations.map((m) => {
@@ -205,7 +207,7 @@ export function MitigationTracker({
           <Input
             value={newAction}
             onChange={(e) => setNewAction(e.target.value)}
-            placeholder="Acción de mitigación..."
+            placeholder={t("mitigationPlaceholder")}
             className="border-chrome-border bg-chrome-raised text-sm text-chrome-text"
           />
           <div className="flex gap-2">

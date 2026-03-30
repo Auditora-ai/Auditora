@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { LinkIcon, CopyIcon, CheckIcon, Loader2Icon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export function ClientIntakeCard({
 	intakeToken,
@@ -14,6 +15,7 @@ export function ClientIntakeCard({
 	intakeResponseCount: number;
 	onGenerate: () => void;
 }) {
+	const t = useTranslations("commandCenter");
 	const [copied, setCopied] = useState(false);
 	const [generating, setGenerating] = useState(false);
 	const [intakeStatus, setIntakeStatus] = useState(initialStatus);
@@ -99,7 +101,7 @@ export function ClientIntakeCard({
 	}
 
 	const statusConfig: Record<string, { icon: string; label: string; color: string }> = {
-		pending: { icon: "⏳", label: "Sin respuestas aún", color: "text-chrome-text-secondary" },
+		pending: { icon: "⏳", label: t("noResponses"), color: "text-chrome-text-secondary" },
 		partial: { icon: "⏳", label: `${progress.answered}/${progress.total} respondidas`, color: "text-orientation" },
 		complete: { icon: "✅", label: "Todas respondidas", color: "text-success" },
 	};

@@ -12,6 +12,7 @@ import {
 	GitBranchIcon,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import type { WizardData } from "../SessionWizard";
 
 export function StepContext({
@@ -21,6 +22,7 @@ export function StepContext({
 	data: WizardData;
 	onChange: (patch: Partial<WizardData>) => void;
 }) {
+	const t = useTranslations("commandCenter.wizard");
 	const [dragging, setDragging] = useState(false);
 	const [generating, setGenerating] = useState(false);
 	const [hasGenerated, setHasGenerated] = useState(false);
@@ -164,7 +166,7 @@ export function StepContext({
 					<textarea
 						value={data.contextText}
 						onChange={(e) => onChange({ contextText: e.target.value })}
-						placeholder="Describe el contexto del proceso, objetivos de la sesión, información relevante del cliente..."
+						placeholder={t("contextPlaceholder")}
 						rows={8}
 						disabled={generating}
 						className="w-full resize-none rounded-lg border border-chrome-border bg-chrome-raised px-4 py-3 text-sm leading-relaxed text-chrome-text placeholder:text-chrome-text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-60"

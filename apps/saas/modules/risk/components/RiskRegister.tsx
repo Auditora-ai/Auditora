@@ -17,9 +17,12 @@ import {
   ChevronDownIcon,
   ArrowUpDownIcon,
   CircleDotIcon,
+  FilterIcon,
 } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { MitigationTracker } from "./MitigationTracker";
+import { EmptyState } from "@shared/components/EmptyState";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -32,10 +35,13 @@ interface Risk {
   probability: number;
   riskScore: number;
   affectedStep: string | null;
+  affectedNode?: { id: string; label: string; nodeType: string } | null;
   status: string;
   isOpportunity: boolean;
   mitigations?: any[];
   controls?: any[];
+  /** Process name, available when rendered at org level */
+  processName?: string;
 }
 
 interface RiskRegisterProps {
@@ -44,6 +50,10 @@ interface RiskRegisterProps {
   processId: string;
   filterSeverity?: number;
   filterProbability?: number;
+  /** When set to "show", displays processName from risk data on each card (org-level view) */
+  processName?: string;
+  /** Callback when a risk card is clicked for detail view */
+  onRiskClick?: (riskId: string) => void;
 }
 
 // ─── Constants ──────────────────────────────────────────────────────────────
@@ -88,7 +98,10 @@ export function RiskRegister({
   processId,
   filterSeverity,
   filterProbability,
+  processName: showProcessName,
+  onRiskClick,
 }: RiskRegisterProps) {
+  const t = useTranslations("emptyStates.risks");
   const [sortBy, setSortBy] = useState<SortKey>("riskScore");
   const [filterType, setFilterType] = useState<string>("all");
   const [filterStatus, setFilterStatus] = useState<string>("all");
@@ -180,9 +193,12 @@ export function RiskRegister({
 
       {/* Risk cards */}
       {filteredRisks.length === 0 ? (
-        <p className="py-8 text-center text-sm text-muted-foreground">
-          No hay riesgos que coincidan con los filtros.
-        </p>
+        <EmptyState
+          icon={FilterIcon}
+          title={t("noFilter")}
+          description={t("noFilterDesc")}
+          compact
+        />
       ) : (
         filteredRisks.map((risk) => {
           const isExpanded = expandedId === risk.id;
@@ -194,7 +210,13 @@ export function RiskRegister({
               <CardContent className="p-4">
                 <div
                   className="flex cursor-pointer items-start justify-between gap-3"
-                  onClick={() => setExpandedId(isExpanded ? null : risk.id)}
+                  onClick={() => {
+                    if (onRiskClick) {
+                      onRiskClick(risk.id);
+                    } else {
+                      setExpandedId(isExpanded ? null : risk.id);
+                    }
+                  }}
                 >
                   <div className="min-w-0 flex-1">
                     <div className="mb-1 flex items-center gap-2">
@@ -216,9 +238,21 @@ export function RiskRegister({
                       <span className="inline-flex items-center rounded-full bg-chrome-hover px-2 py-0.5 text-xs text-muted-foreground">
                         {TYPE_LABELS[risk.riskType] || risk.riskType}
                       </span>
-                      {risk.affectedStep && (
-                        <span className="text-xs text-muted-foreground">
-                          Paso: {risk.affectedStep}
+                      {showProcessName && risk.processName && (
+                        <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs text-primary">
+                          {risk.processName}
+                        </span>
+                      )}
+                      {(risk.affectedNode || risk.affectedStep) && (
+                        <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                          {risk.affectedNode ? (
+                            <span className="inline-flex items-center gap-1 rounded bg-blue-500/10 px-1.5 py-0.5 border border-blue-500/20">
+                              <CircleDotIcon className="h-3 w-3 text-blue-400" />
+                              <span className="text-blue-300">{risk.affectedNode.label}</span>
+                            </span>
+                          ) : (
+                            <span>Paso: {risk.affectedStep}</span>
+                          )}
                         </span>
                       )}
                       <span className="flex items-center gap-1 text-xs text-muted-foreground">

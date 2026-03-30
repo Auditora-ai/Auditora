@@ -24,7 +24,7 @@ export function SmartCTA({
 	if (totalProcesses === 0) {
 		return (
 			<Button asChild size="lg" className="gap-2">
-				<Link href={`${basePath}/procesos`}>
+				<Link href={`${basePath}/processes`}>
 					<SparklesIcon className="size-4" />
 					{t("cta.firstDiscovery")}
 				</Link>
@@ -36,13 +36,13 @@ export function SmartCTA({
 		return (
 			<div className="flex items-center gap-2">
 				<Button asChild size="lg" className="gap-2">
-					<Link href={`${basePath}/procesos/${latestProcessId}`}>
+					<Link href={`${basePath}/processes/${latestProcessId}`}>
 						<PlayIcon className="size-4" />
 						{t("cta.deepDive", { name: latestProcessName })}
 					</Link>
 				</Button>
 				<Button asChild variant="outline" size="lg" className="gap-2">
-					<Link href={`${basePath}/procesos`}>
+					<Link href={`${basePath}/processes`}>
 						<PlusIcon className="size-4" />
 						{t("cta.newDiscovery")}
 					</Link>
@@ -53,7 +53,7 @@ export function SmartCTA({
 
 	return (
 		<Button asChild size="lg" className="gap-2">
-			<Link href={`${basePath}/procesos`}>
+			<Link href={`${basePath}/processes`}>
 				<PlusIcon className="size-4" />
 				{t("cta.newDiscovery")}
 			</Link>

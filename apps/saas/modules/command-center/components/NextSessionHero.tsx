@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { CalendarIcon, PlayIcon, LinkIcon, PlusIcon, ArrowRightIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { SessionData } from "./CommandCenter";
 
 const sessionTypeLabels: Record<string, string> = {
@@ -22,12 +23,13 @@ export function NextSessionHero({
 	onSchedule: () => void;
 }) {
 	const router = useRouter();
+	const t = useTranslations("commandCenter");
 
 	// Empty state
 	if (!session) {
 		return (
 			<div className="rounded-xl border border-dashed border-border bg-secondary px-6 py-10 text-center">
-				<p className="mb-1 text-sm font-medium text-foreground">Sin sesiones programadas</p>
+				<p className="mb-1 text-sm font-medium text-foreground">{t("noSessionsScheduled")}</p>
 				<p className="mb-5 text-xs text-chrome-text-secondary">Programa tu primera sesión para comenzar</p>
 				<button
 					type="button"

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { XIcon, SearchIcon, PlusIcon, Loader2Icon } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 interface ProcessOption {
 	id: string;
@@ -33,6 +34,8 @@ export function ScheduleSessionDialog({
 	onClose: () => void;
 	onCreated: () => void;
 }) {
+	const tw = useTranslations("commandCenter.wizard");
+	const tc = useTranslations("common");
 	const [processes, setProcesses] = useState<ProcessOption[]>([]);
 	const [loadingProcesses, setLoadingProcesses] = useState(false);
 	const [submitting, setSubmitting] = useState(false);
@@ -184,7 +187,7 @@ export function ScheduleSessionDialog({
 			onCreated();
 			onClose();
 		} catch (err) {
-			toast.error(err instanceof Error ? err.message : "Error al programar");
+			toast.error(err instanceof Error ? err.message : tc("errorSaving"));
 		} finally {
 			setSubmitting(false);
 		}
@@ -231,7 +234,7 @@ export function ScheduleSessionDialog({
 									setShowProcessDropdown(true);
 								}}
 								onFocus={() => setShowProcessDropdown(true)}
-								placeholder={loadingProcesses ? "Cargando procesos..." : "Buscar o crear proceso..."}
+								placeholder={loadingProcesses ? tw("loadingProcesses") : tw("searchProcess")}
 								className="w-full rounded-lg border border-border py-2.5 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 							/>
 						</div>
@@ -362,7 +365,7 @@ export function ScheduleSessionDialog({
 						<textarea
 							value={sessionGoals}
 							onChange={(e) => setSessionGoals(e.target.value)}
-							placeholder="Qué cubrir, contexto previo..."
+							placeholder={tw("coverPlaceholder")}
 							rows={2}
 							className="w-full resize-none rounded-lg border border-border px-3 py-2 text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 						/>

@@ -9,6 +9,7 @@ import {
 	ChevronUpIcon,
 } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
+import { useTranslations } from "next-intl";
 import { PhaseCard, type PhaseConfig } from "./PhaseCard";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -108,8 +109,8 @@ function detectCurrentPhase(scores: PhaseScores): string {
 
 // ─── Preview & CTA Logic ────────────────────────────────────────────────────
 
-function getCapturaPreview(process: DashboardProcessData): string {
-	if (process.sessionsCount === 0) return "Sin sesiones de captura";
+function getCapturaPreview(process: DashboardProcessData, t: (key: string) => string): string {
+	if (process.sessionsCount === 0) return t("noCaptureSessions");
 	const ended =
 		process.sessions?.filter((s) => s.status === "ENDED").length ?? 0;
 	const active =
@@ -138,21 +139,21 @@ function getCapturaPreview(process: DashboardProcessData): string {
 	return parts.join(" · ");
 }
 
-function getModeloPreview(process: DashboardProcessData): string {
-	if (!process.bpmnXml) return "Sin diagrama BPMN";
+function getModeloPreview(process: DashboardProcessData, t: (key: string) => string): string {
+	if (!process.bpmnXml) return t("noDiagram");
 	const parts = ["Diagrama ✓"];
 	if (process.versionsCount > 0)
 		parts.push(`${process.versionsCount} version${process.versionsCount !== 1 ? "es" : ""}`);
 	return parts.join(" · ");
 }
 
-function getAnalisisPreview(process: DashboardProcessData): string {
+function getAnalisisPreview(process: DashboardProcessData, tpd: (key: string) => string): string {
 	if (
 		process.raciCount === 0 &&
 		!process.hasIntelligence &&
 		process.risksCount === 0
 	)
-		return "Sin análisis generado";
+		return tpd("notGenerated");
 	const parts: string[] = [];
 	parts.push(process.raciCount > 0 ? "RACI ✓" : "RACI ✗");
 	parts.push(process.hasIntelligence ? "Intel ✓" : "Intel ✗");
@@ -160,7 +161,7 @@ function getAnalisisPreview(process: DashboardProcessData): string {
 	return parts.join(" | ");
 }
 
-function getContextoPreview(process: DashboardProcessData): string {
+function getContextoPreview(process: DashboardProcessData, t: (key: string) => string): string {
 	const parts: string[] = [];
 	if (process.description) parts.push("Desc ✓");
 	const childCount = process.children?.length ?? 0;
@@ -171,7 +172,7 @@ function getContextoPreview(process: DashboardProcessData): string {
 		(process.triggers?.length ?? 0) +
 		(process.outputs?.length ?? 0);
 	if (goalsCount > 0) parts.push(`${goalsCount} objetivo${goalsCount !== 1 ? "s" : ""}/triggers`);
-	if (parts.length === 0) return "Sin contexto definido";
+	if (parts.length === 0) return t("noDescription");
 	return parts.join(" · ");
 }
 
@@ -183,6 +184,8 @@ export function ProcessPhaseDashboard({
 	onExpandPhase,
 	expandedPhase,
 }: ProcessPhaseDashboardProps) {
+	const t = useTranslations("processLibrary.sidebar");
+	const tpd = useTranslations("processDetail");
 	const scores = useMemo(
 		() => calculatePhaseCompleteness(process),
 		[process],
@@ -201,7 +204,7 @@ export function ProcessPhaseDashboard({
 				label: "Contexto",
 				icon: ClipboardListIcon,
 				completeness: scores.contexto,
-				preview: getContextoPreview(process),
+				preview: getContextoPreview(process, t),
 				isCurrentPhase: currentPhase === "contexto",
 				cta: scores.contexto === 0
 					? {
@@ -223,7 +226,7 @@ export function ProcessPhaseDashboard({
 				label: "Captura",
 				icon: VideoIcon,
 				completeness: scores.captura,
-				preview: getCapturaPreview(process),
+				preview: getCapturaPreview(process, t),
 				isCurrentPhase: currentPhase === "captura",
 				cta:
 					process.sessionsCount === 0
@@ -254,7 +257,7 @@ export function ProcessPhaseDashboard({
 				label: "Modelo",
 				icon: BarChart3Icon,
 				completeness: scores.modelo,
-				preview: getModeloPreview(process),
+				preview: getModeloPreview(process, t),
 				isCurrentPhase: currentPhase === "modelo",
 				cta: process.bpmnXml
 					? {
@@ -276,7 +279,7 @@ export function ProcessPhaseDashboard({
 				label: "Análisis",
 				icon: SearchIcon,
 				completeness: scores.analisis,
-				preview: getAnalisisPreview(process),
+				preview: getAnalisisPreview(process, tpd),
 				isCurrentPhase: currentPhase === "analisis",
 				cta:
 					process.raciCount === 0
@@ -300,7 +303,7 @@ export function ProcessPhaseDashboard({
 									},
 			},
 		],
-		[scores, currentPhase, process, organizationSlug, lastSession, hasActiveSession, onExpandPhase],
+		[scores, currentPhase, process, organizationSlug, lastSession, hasActiveSession, onExpandPhase, t, tpd],
 	);
 
 	return (

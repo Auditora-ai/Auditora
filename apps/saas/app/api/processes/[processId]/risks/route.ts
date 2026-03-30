@@ -35,6 +35,7 @@ export async function GET(
         include: {
           mitigations: { orderBy: { createdAt: "desc" } },
           controls: true,
+          affectedNode: { select: { id: true, label: true, nodeType: true } },
         },
         orderBy: { riskScore: "desc" },
         skip: (page - 1) * limit,
@@ -105,6 +106,15 @@ async function handleCreateRisk(
 ) {
   const severity = Math.min(5, Math.max(1, Number(body.severity) || 3));
   const probability = Math.min(5, Math.max(1, Number(body.probability) || 3));
+  const affectedNodeId = body.affectedNodeId ? String(body.affectedNodeId) : null;
+  const linkedProcedureId = body.linkedProcedureId ? String(body.linkedProcedureId) : null;
+
+  // Auto-resolve affectedStep from node label if node is linked
+  let resolvedAffectedStep = body.affectedStep ? String(body.affectedStep) : null;
+  if (affectedNodeId && !resolvedAffectedStep) {
+    const node = await db.diagramNode.findUnique({ where: { id: affectedNodeId }, select: { label: true } });
+    if (node) resolvedAffectedStep = node.label;
+  }
 
   const risk = await db.processRisk.create({
     data: {
@@ -118,7 +128,9 @@ async function handleCreateRisk(
       riskScore: severity * probability,
       isOpportunity: Boolean(body.isOpportunity),
       opportunityValue: body.opportunityValue ? String(body.opportunityValue) : null,
-      affectedStep: body.affectedStep ? String(body.affectedStep) : null,
+      affectedStep: resolvedAffectedStep,
+      affectedNodeId,
+      linkedProcedureId,
       affectedRole: body.affectedRole ? String(body.affectedRole) : null,
       createdBy: userId,
     },
@@ -229,6 +241,23 @@ async function handleAuditRisks(
 
   const result = await auditRisks(input);
 
+  // Fetch BPMN nodes for fuzzy matching
+  const processNodes = await db.diagramNode.findMany({
+    where: { session: { processDefinitionId: processId } },
+    select: { id: true, label: true },
+  });
+
+  function matchNodeId(stepName: string | null | undefined): string | null {
+    if (!stepName || processNodes.length === 0) return null;
+    const normalized = stepName.toLowerCase().trim();
+    const exact = processNodes.find((n) => n.label.toLowerCase().trim() === normalized);
+    if (exact) return exact.id;
+    const partial = processNodes.find(
+      (n) => n.label.toLowerCase().includes(normalized) || normalized.includes(n.label.toLowerCase()),
+    );
+    return partial?.id ?? null;
+  }
+
   // Create new risk records
   let newRisksCount = 0;
   for (const newRisk of result.newRisks) {
@@ -251,6 +280,7 @@ async function handleAuditRisks(
         probability,
         riskScore,
         affectedStep: newRisk.affectedStep || null,
+        affectedNodeId: matchNodeId(newRisk.affectedStep),
         affectedRole: newRisk.affectedRole || null,
         relatedItemId: newRisk.relatedItemId,
         isOpportunity: newRisk.isOpportunity,

@@ -58,6 +58,7 @@ export function ProcessCard({
 	onDelete?: (processId: string) => void;
 }) {
 	const t = useTranslations("processLibrary");
+	const tc = useTranslations("common");
 
 	return (
 		<Card className="transition-colors hover:bg-accent/30">
@@ -65,7 +66,7 @@ export function ProcessCard({
 				<div className="flex items-start justify-between">
 					<div className="min-w-0 flex-1">
 						<a
-							href={`${basePath}/procesos/${process.id}`}
+							href={`${basePath}/processes/${process.id}`}
 							className="truncate font-semibold text-sm hover:underline"
 						>
 							{process.name}
@@ -83,7 +84,7 @@ export function ProcessCard({
 							</DropdownMenuTrigger>
 							<DropdownMenuContent align="end">
 								<DropdownMenuItem asChild>
-									<a href={`${basePath}/procesos/${process.id}`}>
+									<a href={`${basePath}/processes/${process.id}`}>
 										<EyeIcon className="mr-2 size-4" />
 										{t("view")}
 									</a>
@@ -102,7 +103,7 @@ export function ProcessCard({
 											onClick={() => onDelete(process.id)}
 										>
 											<TrashIcon className="mr-2 size-4" />
-											Eliminar
+											{tc("delete")}
 										</DropdownMenuItem>
 									</>
 								)}

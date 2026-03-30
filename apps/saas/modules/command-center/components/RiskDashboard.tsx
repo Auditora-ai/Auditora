@@ -11,7 +11,9 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { EmptyState } from "@shared/components/EmptyState";
 import { SessionWizard } from "./SessionWizard";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -68,6 +70,8 @@ export function RiskDashboard({
 	hasActiveSession,
 }: RiskDashboardProps) {
 	const router = useRouter();
+	const t = useTranslations("dashboard.riskDashboard");
+	const tc = useTranslations("common");
 	const [showWizard, setShowWizard] = useState(false);
 	const basePath = `/${organizationSlug}`;
 
@@ -79,7 +83,7 @@ export function RiskDashboard({
 			<div className="flex flex-col gap-3 border-b border-border px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6">
 				<div>
 					<h1 className="font-display text-2xl font-semibold text-foreground">
-						Panorama
+						{t("title")}
 					</h1>
 					<p className="mt-0.5 text-sm text-muted-foreground">
 						{organizationName}
@@ -89,7 +93,7 @@ export function RiskDashboard({
 					{hasActiveSession && (
 						<span className="flex items-center gap-1.5 rounded-full bg-red-500/10 px-3 py-1 text-xs font-medium text-red-500">
 							<span className="h-2 w-2 animate-pulse rounded-full bg-red-500" />
-							EN VIVO
+							{t("live")}
 						</span>
 					)}
 					<button
@@ -98,7 +102,7 @@ export function RiskDashboard({
 						className="inline-flex min-h-[44px] w-full items-center justify-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 md:w-auto md:min-h-0"
 					>
 						<PlusIcon className="size-4" />
-						Nueva Sesión
+						{t("newSession")}
 					</button>
 				</div>
 			</div>
@@ -106,37 +110,28 @@ export function RiskDashboard({
 			<div className="flex-1 overflow-auto p-4 pb-24 space-y-6 md:p-6 md:pb-6">
 				{/* Empty state */}
 				{isEmpty ? (
-					<div className="flex flex-col items-center justify-center py-16 text-center">
-						<ShieldAlertIcon className="size-12 text-muted-foreground/30 mb-4" />
-						<h2 className="font-display text-xl font-semibold text-foreground">
-							Bienvenido a Auditora.ai
-						</h2>
-						<p className="mt-2 max-w-md text-sm text-muted-foreground">
-							Haz tu primera radiografía para descubrir los riesgos de tu
-							negocio, o agenda una sesión con tu consultor.
-						</p>
-						<div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-							<Link
-								href="/scan"
-								className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
-							>
-								Hacer Radiografía
-							</Link>
-							<button
-								type="button"
-								onClick={() => setShowWizard(true)}
-								className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
-							>
-								Nueva Sesión
-							</button>
-						</div>
-					</div>
+					<EmptyState
+						icon={ShieldAlertIcon}
+						title={t("emptyTitle")}
+						description={t("emptyDesc")}
+						actions={[
+							{
+								label: t("scanCta"),
+								href: "/scan",
+							},
+							{
+								label: t("newSession"),
+								onClick: () => setShowWizard(true),
+								variant: "outline",
+							},
+						]}
+					/>
 				) : (
 					<>
 						{/* Two-column layout: Maturity + Top Risks */}
 						<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
 							{/* Left: Maturity Score + Quick Actions */}
-							<div className="space-y-4">
+							<div className="animate-in fade-in slide-in-from-bottom-2 duration-500 space-y-4">
 								<div className="rounded-xl border border-border bg-background p-6">
 									<RiskMaturityRing
 										score={maturityScore}
@@ -148,7 +143,7 @@ export function RiskDashboard({
 												{riskCount}
 											</p>
 											<p className="text-[10px] text-muted-foreground">
-												Riesgos
+												{t("risks")}
 											</p>
 										</div>
 										<div>
@@ -156,7 +151,7 @@ export function RiskDashboard({
 												{processCount}
 											</p>
 											<p className="text-[10px] text-muted-foreground">
-												Procesos
+												{t("processes")}
 											</p>
 										</div>
 										<div>
@@ -171,7 +166,7 @@ export function RiskDashboard({
 												%
 											</p>
 											<p className="text-[10px] text-muted-foreground">
-												Cobertura
+												{t("coverage")}
 											</p>
 										</div>
 									</div>
@@ -185,16 +180,16 @@ export function RiskDashboard({
 									>
 										<ShieldAlertIcon className="size-4 text-amber-500" />
 										<span className="whitespace-nowrap text-foreground">
-											Ver todos los riesgos
+											{t("viewAllRisks")}
 										</span>
 									</Link>
 									<Link
-										href={`${basePath}/procesos`}
+										href={`${basePath}/processes`}
 										className="flex shrink-0 items-center gap-3 rounded-lg border border-border bg-background p-3 text-sm transition-colors hover:bg-accent/50"
 									>
 										<WorkflowIcon className="size-4 text-blue-500" />
 										<span className="whitespace-nowrap text-foreground">
-											Ver procesos
+											{t("viewProcesses")}
 										</span>
 									</Link>
 									<Link
@@ -203,22 +198,21 @@ export function RiskDashboard({
 									>
 										<TrendingUpIcon className="size-4 text-green-500" />
 										<span className="whitespace-nowrap text-foreground">
-											Ver entregables
+											{t("viewDeliverables")}
 										</span>
 									</Link>
 								</div>
 							</div>
 
 							{/* Right: Top Risks (2/3 width) */}
-							<div className="lg:col-span-2">
+							<div className="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-100 lg:col-span-2">
 								<h2 className="mb-3 text-sm font-semibold text-foreground">
-									Top Riesgos Críticos
+									{t("topRisks")}
 								</h2>
 								{topRisks.length === 0 ? (
 									<div className="rounded-xl border border-border bg-background p-8 text-center">
 										<p className="text-sm text-muted-foreground">
-											No hay riesgos críticos. Agenda una
-											sesión para identificar riesgos.
+											{t("noRisksDesc")}
 										</p>
 									</div>
 								) : (
@@ -264,9 +258,9 @@ export function RiskDashboard({
 														)}
 														<p className="mt-1.5 text-[11px] text-muted-foreground">
 															{risk.processName}{" "}
-															· Sev:{" "}
+															· {tc("severity")}:{" "}
 															{risk.severity} ·
-															Prob:{" "}
+															{tc("probability")}:{" "}
 															{risk.probability}
 														</p>
 													</div>
@@ -280,22 +274,22 @@ export function RiskDashboard({
 
 						{/* Next Session */}
 						{nextSession && (
-							<div className="rounded-xl border border-border bg-background p-4">
+							<div className="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-200 rounded-xl border border-border bg-background p-4">
 								<div className="flex items-center gap-3">
 									<div className="flex size-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
 										<MicIcon className="size-5" />
 									</div>
 									<div className="flex-1">
 										<p className="text-sm font-medium text-foreground">
-											Próxima sesión
+											{t("nextSessionLabel")}
 										</p>
 										<p className="text-xs text-muted-foreground">
 											{nextSession.processName ??
-												"Sin proceso asignado"}{" "}
+												t("noProcess")}{" "}
 											·{" "}
 											{new Date(
 												nextSession.scheduledFor,
-											).toLocaleDateString("es", {
+											).toLocaleDateString(undefined, {
 												weekday: "long",
 												day: "numeric",
 												month: "short",
@@ -308,7 +302,7 @@ export function RiskDashboard({
 										href={`${basePath}/session/${nextSession.id}`}
 										className="rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-accent"
 									>
-										Ver detalles
+										{t("viewDetails")}
 									</Link>
 								</div>
 							</div>
@@ -316,9 +310,9 @@ export function RiskDashboard({
 
 						{/* Recent Activity */}
 						{recentActivity.length > 0 && (
-							<div>
+							<div className="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-300">
 								<h2 className="mb-3 text-sm font-semibold text-foreground">
-									Actividad Reciente
+									{t("recentActivity")}
 								</h2>
 								<div className="space-y-2">
 									{recentActivity.map((item, i) => (

@@ -32,6 +32,8 @@ export function ProcessLibrary({
 	organizationId: string;
 }) {
 	const t = useTranslations("processLibrary");
+	const tc = useTranslations("common");
+	const td = useTranslations("processDetail");
 	const router = useRouter();
 	const { confirm } = useConfirmationAlert();
 	const [filters, setFilters] = useState<FilterState>({
@@ -84,9 +86,9 @@ export function ProcessLibrary({
 		(processId: string) => {
 			const process = processes.find((p) => p.id === processId);
 			confirm({
-				title: "Eliminar proceso",
-				message: `Se eliminará "${process?.name ?? "este proceso"}" y todos sus sub-procesos, sesiones, RACI, riesgos y versiones asociados. Esta acción no se puede deshacer.`,
-				confirmLabel: "Eliminar",
+				title: td("deleteConfirm"),
+				message: td("deleteMessage"),
+				confirmLabel: tc("delete"),
 				destructive: true,
 				onConfirm: async () => {
 					const { orpcClient } = await import(
@@ -173,12 +175,12 @@ export function ProcessLibrary({
 					<h3 className="text-lg font-semibold">
 						{processes.length === 0
 							? t("empty.title")
-							: "No hay procesos en esta categoría"}
+							: td("noCategoryFilter")}
 					</h3>
 					<p className="mt-2 max-w-sm text-sm text-muted-foreground">
 						{processes.length === 0
 							? t("empty.description")
-							: "Agrega procesos manualmente o usa Discovery con IA"}
+							: td("noCategoryFilterDesc")}
 					</p>
 					<div className="mt-6 flex gap-2">
 						<Button

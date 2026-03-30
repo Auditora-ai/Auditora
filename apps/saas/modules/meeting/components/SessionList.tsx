@@ -48,6 +48,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 const STATUS_VARIANT: Record<string, "success" | "info" | "warning" | "error"> = {
 	ACTIVE: "info",
@@ -81,6 +82,8 @@ type ProcessOption = {
 export function SessionList({ organizationSlug }: { organizationSlug: string }) {
 	const router = useRouter();
 	const { confirm } = useConfirmationAlert();
+	const t = useTranslations("meetingModule");
+	const tc = useTranslations("common");
 	const [sessions, setSessions] = useState<Session[]>([]);
 	const [loading, setLoading] = useState(true);
 
@@ -111,7 +114,7 @@ export function SessionList({ organizationSlug }: { organizationSlug: string }) 
 		confirm({
 			title: "Eliminar sesión",
 			message: `Se eliminará la sesión y todos sus datos asociados (nodos, transcripción, resúmenes). Esta acción no se puede deshacer.`,
-			confirmLabel: "Eliminar",
+			confirmLabel: tc("delete"),
 			destructive: true,
 			onConfirm: async () => {
 				const res = await fetch(`/api/sessions/${session.id}`, {
@@ -204,7 +207,7 @@ export function SessionList({ organizationSlug }: { organizationSlug: string }) 
 						<WorkflowIcon className="h-6 w-6 text-primary" />
 					</div>
 					<h3 className="text-lg font-semibold text-foreground">
-						No hay sesiones
+						{t("noSessions")}
 					</h3>
 					<p className="mt-2 max-w-sm text-sm text-muted-foreground">
 						Crea tu primera sesión para comenzar a mapear procesos.
@@ -338,13 +341,13 @@ export function SessionList({ organizationSlug }: { organizationSlug: string }) 
 						</div>
 
 						<div className="space-y-2">
-							<label className="text-sm font-medium">Proceso</label>
+							<label className="text-sm font-medium">{tc("process")}</label>
 							<Select value={editProcessId} onValueChange={setEditProcessId}>
 								<SelectTrigger>
-									<SelectValue placeholder="Sin proceso" />
+									<SelectValue placeholder={t("noProcess")} />
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value="none">Sin proceso</SelectItem>
+									<SelectItem value="none">{t("noProcess")}</SelectItem>
 									{processes.map((p) => (
 										<SelectItem key={p.id} value={p.id}>
 											{p.name}

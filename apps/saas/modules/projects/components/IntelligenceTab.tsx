@@ -29,6 +29,7 @@ import {
   TrendingUpIcon,
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -115,6 +116,7 @@ function getScoreBg(score: number) {
 // ─── Component ──────────────────────────────────────────────────────────────
 
 export function IntelligenceTab({ processId }: { processId: string }) {
+  const t = useTranslations("intelligenceTab");
   const [data, setData] = useState<IntelligenceData | null>(null);
   const [trend, setTrend] = useState<TrendPoint[]>([]);
   const [loading, setLoading] = useState(true);
@@ -389,8 +391,8 @@ export function IntelligenceTab({ processId }: { processId: string }) {
           {openItems.length === 0 ? (
             <p className="py-8 text-center text-sm text-muted-foreground">
               {filter === "all"
-                ? "No hay preguntas abiertas. El proceso esta completo o necesita una auditoria."
-                : "No hay preguntas en esta categoria."}
+                ? t("noOpenQuestions")
+                : t("noQuestionsCategory")}
             </p>
           ) : (
             <div className="space-y-3">

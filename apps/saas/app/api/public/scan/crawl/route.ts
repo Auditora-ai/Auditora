@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
 	}
 
 	const ip = getClientIp(request);
-	if (!(await checkRateLimit(ip, 3))) {
+	if (!(await checkRateLimit(ip, 3, "crawl"))) {
 		return NextResponse.json(
 			{
 				error:

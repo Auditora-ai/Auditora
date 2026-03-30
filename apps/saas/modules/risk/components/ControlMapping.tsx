@@ -16,6 +16,7 @@ import {
   ZapIcon,
 } from "lucide-react";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -97,6 +98,7 @@ export function ControlMapping({
   controls,
   onUpdate,
 }: ControlMappingProps) {
+  const t = useTranslations("riskTab");
   const [showForm, setShowForm] = useState(false);
   const [newName, setNewName] = useState("");
   const [newType, setNewType] = useState<string>("PREVENTIVE");
@@ -176,14 +178,13 @@ export function ControlMapping({
           onClick={() => setShowForm(!showForm)}
         >
           <PlusIcon className="mr-1 h-3.5 w-3.5" />
-          Agregar
+          {t("addControl")}
         </Button>
       </div>
 
       {controls.length === 0 && !showForm && (
         <p className="text-xs text-muted-foreground">
-          Sin controles definidos. Agrega controles para reducir el riesgo
-          residual.
+          {t("noControls")}
         </p>
       )}
 

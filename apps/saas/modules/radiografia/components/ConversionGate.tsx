@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { ShieldAlertIcon, CheckIcon, ArrowRightIcon } from "lucide-react";
+import { Spinner } from "@repo/ui";
 
 interface ConversionGateProps {
 	processName: string;
@@ -60,94 +62,134 @@ export function ConversionGate({ processName, risksCount }: ConversionGateProps)
 	}
 
 	return (
-		<div className="flex min-h-screen items-center justify-center bg-background px-4 pb-[env(safe-area-inset-bottom)]">
-			<div className="w-full max-w-md">
-				<div className="mb-8 text-center">
-					<h1 className="mb-2 text-3xl font-display text-foreground">
-						{t("saveScan")}
-					</h1>
-					<p className="text-sm text-muted-foreground">
-						{t("saveDescription", { count: risksCount, process: processName })}
+		<div className="flex min-h-screen flex-col bg-background pb-[env(safe-area-inset-bottom)] lg:flex-row">
+			{/* Left: Value proposition — dark chrome */}
+			<div className="flex flex-col items-center justify-center bg-chrome-base px-8 py-12 lg:flex-1 lg:px-16">
+				<div className="max-w-sm text-center">
+					<ShieldAlertIcon className="mx-auto mb-6 size-12 text-destructive/80" />
+					<p className="font-display text-6xl md:text-7xl font-bold text-destructive">
+						{risksCount}
 					</p>
+					<p className="mt-2 text-lg font-medium text-chrome-text">
+						{t("risksIdentified").toLowerCase()}
+					</p>
+					<p className="mt-1 font-display text-2xl text-chrome-text">
+						{processName}
+					</p>
+
+					{/* Value bullets */}
+					<div className="mt-8 space-y-3 text-left">
+						{[
+							t("convertBullet1"),
+							t("convertBullet2"),
+							t("convertBullet3"),
+						].map((bullet, i) => (
+							<div key={i} className="flex items-start gap-3">
+								<span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/20">
+									<CheckIcon className="size-3 text-primary" />
+								</span>
+								<p className="text-sm leading-relaxed text-chrome-text-secondary">
+									{bullet}
+								</p>
+							</div>
+						))}
+					</div>
 				</div>
+			</div>
 
-				<div className="space-y-4">
-					<div>
-						<label className="mb-1 block text-sm font-medium text-foreground">
-							{t("name")}
-						</label>
-						<input
-							type="text"
-							value={name}
-							onChange={(e) => setName(e.target.value)}
-							placeholder={t("namePlaceholder")}
-							disabled={loading}
-							className="min-h-[44px] w-full rounded-lg border border-input bg-secondary px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-primary focus:bg-accent"
-						/>
+			{/* Right: Signup form — light canvas */}
+			<div className="flex flex-col items-center justify-center px-8 py-12 lg:flex-1 lg:px-16">
+				<div className="w-full max-w-sm">
+					<div className="mb-8">
+						<h1 className="text-2xl font-display text-foreground">
+							{t("saveScan")}
+						</h1>
+						<p className="mt-1 text-sm text-muted-foreground">
+							{t("saveDescription", { count: risksCount, process: processName })}
+						</p>
 					</div>
 
-					<div>
-						<label className="mb-1 block text-sm font-medium text-foreground">
-							{t("email")}
-						</label>
-						<input
-							type="email"
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-							placeholder="tu@empresa.com"
-							disabled={loading}
-							className="min-h-[44px] w-full rounded-lg border border-input bg-secondary px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-primary focus:bg-accent"
-						/>
-					</div>
-
-					<div>
-						<label className="mb-1 block text-sm font-medium text-foreground">
-							{t("companyName")} <span className="text-muted-foreground">{t("optional")}</span>
-						</label>
-						<input
-							type="text"
-							value={orgName}
-							onChange={(e) => setOrgName(e.target.value)}
-							placeholder={t("companyNamePlaceholder")}
-							disabled={loading}
-							className="min-h-[44px] w-full rounded-lg border border-input bg-secondary px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-primary focus:bg-accent"
-						/>
-					</div>
-
-					{error && (
-						<div className={`rounded-lg border px-4 py-3 text-sm ${
-							existingUser
-								? "border-primary bg-accent text-foreground"
-								: "border-destructive bg-destructive/10 text-destructive"
-						}`}>
-							{error}
-							{existingUser && (
-								<a href="/login" className="mt-2 block font-medium text-primary underline">
-									{t("goToLogin")}
-								</a>
-							)}
+					<div className="space-y-4">
+						<div>
+							<label className="mb-1 block text-sm font-medium text-foreground">
+								{t("name")}
+							</label>
+							<input
+								type="text"
+								value={name}
+								onChange={(e) => setName(e.target.value)}
+								placeholder={t("namePlaceholder")}
+								disabled={loading}
+								className="min-h-[44px] w-full rounded-lg border border-input bg-secondary px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-primary focus:bg-accent"
+							/>
 						</div>
-					)}
 
-					<button
-						type="button"
-						onClick={handleSubmit}
-						disabled={!canSubmit || loading}
-						className="min-h-[44px] w-full rounded-lg bg-primary px-6 py-3 text-base font-medium text-primary-foreground transition-colors disabled:opacity-50"
-					>
-						{loading ? (
-							<span className="flex items-center justify-center gap-2">
-								<span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-								{t("creatingAccount")}
-							</span>
-						) : (
-							t("createAccount")
+						<div>
+							<label className="mb-1 block text-sm font-medium text-foreground">
+								{t("email")}
+							</label>
+							<input
+								type="email"
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
+								placeholder="tu@empresa.com"
+								disabled={loading}
+								className="min-h-[44px] w-full rounded-lg border border-input bg-secondary px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-primary focus:bg-accent"
+							/>
+						</div>
+
+						<div>
+							<label className="mb-1 block text-sm font-medium text-foreground">
+								{t("companyName")} <span className="text-muted-foreground">{t("optional")}</span>
+							</label>
+							<input
+								type="text"
+								value={orgName}
+								onChange={(e) => setOrgName(e.target.value)}
+								placeholder={t("companyNamePlaceholder")}
+								disabled={loading}
+								className="min-h-[44px] w-full rounded-lg border border-input bg-secondary px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-primary focus:bg-accent"
+							/>
+						</div>
+
+						{error && (
+							<div className={`rounded-lg border px-4 py-3 text-sm ${
+								existingUser
+									? "border-primary bg-accent text-foreground"
+									: "border-destructive bg-destructive/10 text-destructive"
+							}`}>
+								{error}
+								{existingUser && (
+									<a href="/login" className="mt-2 block font-medium text-primary underline">
+										{t("goToLogin")}
+									</a>
+								)}
+							</div>
 						)}
-					</button>
 
-					<p className="text-center text-xs text-muted-foreground">
-						{t("termsNotice")}
-					</p>
+						<button
+							type="button"
+							onClick={handleSubmit}
+							disabled={!canSubmit || loading}
+							className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 text-base font-medium text-primary-foreground transition-colors disabled:opacity-50"
+						>
+							{loading ? (
+								<>
+									<Spinner className="size-4 text-primary-foreground" />
+									{t("creatingAccount")}
+								</>
+							) : (
+								<>
+									{t("createAccount")}
+									<ArrowRightIcon className="size-4" />
+								</>
+							)}
+						</button>
+
+						<p className="text-center text-xs text-muted-foreground">
+							{t("termsNotice")}
+						</p>
+					</div>
 				</div>
 			</div>
 		</div>

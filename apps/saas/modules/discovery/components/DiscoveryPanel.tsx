@@ -11,6 +11,7 @@ import {
 	LinkIcon,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import {
 	ExtractionCard,
 	type ExtractedProcessData,
@@ -41,6 +42,7 @@ export function DiscoveryPanel({
 	onClose,
 	onProcessAccepted,
 }: DiscoveryPanelProps) {
+	const t = useTranslations("discovery");
 	const [messages, setMessages] = useState<Message[]>([]);
 	const [input, setInput] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
@@ -157,8 +159,7 @@ export function DiscoveryPanel({
 					{
 						id: `error-${now}`,
 						role: "assistant",
-						content:
-							"Error al procesar el mensaje. Intenta de nuevo.",
+						content: t("errorProcessing"),
 					},
 				]);
 			} finally {
@@ -228,7 +229,7 @@ export function DiscoveryPanel({
 				{
 					id: `error-${Date.now()}`,
 					role: "assistant",
-					content: `Error al transcribir: ${error instanceof Error ? error.message : "Error desconocido"}`,
+					content: `${t("errorTranscribing")}: ${error instanceof Error ? error.message : "Error"}`,
 				},
 			]);
 		} finally {

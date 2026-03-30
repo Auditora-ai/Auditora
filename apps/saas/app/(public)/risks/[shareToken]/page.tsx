@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import { useParams } from "next/navigation";
 
 type SharedRisk = {
@@ -73,7 +74,18 @@ export default function PublicRiskSharePage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-pulse text-muted-foreground">Cargando...</div>
+        <div className="w-full max-w-4xl space-y-4 px-6">
+          <Skeleton className="h-10 w-64" />
+          <Skeleton className="h-4 w-48" />
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            <Skeleton className="h-20 w-full" />
+            <Skeleton className="h-20 w-full" />
+            <Skeleton className="h-20 w-full" />
+            <Skeleton className="h-20 w-full" />
+          </div>
+          <Skeleton className="h-24 w-full" />
+          <Skeleton className="h-24 w-full" />
+        </div>
       </div>
     );
   }

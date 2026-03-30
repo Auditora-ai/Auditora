@@ -18,6 +18,8 @@ import {
   ClipboardListIcon,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
+import { EmptyState } from "@shared/components/EmptyState";
 import { ControlMapping } from "./ControlMapping";
 import { FmeaView } from "./FmeaView";
 import { OpportunityRegister } from "./OpportunityRegister";
@@ -36,6 +38,7 @@ interface Risk {
   probability: number;
   riskScore: number;
   affectedStep: string | null;
+  affectedNode?: { id: string; label: string; nodeType: string } | null;
   status: string;
   isOpportunity: boolean;
   failureMode: string | null;
@@ -68,6 +71,9 @@ function getScoreBadge(score: number) {
 // ─── Component ──────────────────────────────────────────────────────────────
 
 export function RiskTab({ processId }: RiskTabProps) {
+  const te = useTranslations("emptyStates.risks");
+  const t = useTranslations("riskTab");
+  const tc = useTranslations("common");
   const [risks, setRisks] = useState<Risk[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -190,11 +196,11 @@ export function RiskTab({ processId }: RiskTabProps) {
         <CardContent className="flex flex-col items-center justify-center py-12 text-center">
           <AlertTriangleIcon className="mb-4 h-10 w-10 text-red-400" />
           <p className="mb-4 text-sm text-muted-foreground">
-            Error al analizar. Intenta de nuevo.
+            {t("errorAnalyzing")}
           </p>
           <Button onClick={fetchRisks} variant="outline">
             <RefreshCwIcon className="mr-2 h-4 w-4" />
-            Reintentar
+            {tc("retry")}
           </Button>
         </CardContent>
       </Card>
@@ -209,22 +215,21 @@ export function RiskTab({ processId }: RiskTabProps) {
         <CardContent className="flex flex-col items-center justify-center py-12 text-center">
           <ShieldAlertIcon className="mb-4 h-12 w-12 text-muted-foreground" />
           <h3 className="mb-2 text-lg font-semibold text-chrome-text">
-            Sin riesgos analizados
+            {t("noRisks")}
           </h3>
           <p className="mb-6 max-w-md text-sm text-muted-foreground">
-            Sin riesgos analizados. Ejecuta el análisis para identificar
-            riesgos.
+            {t("noRisksDesc")}
           </p>
           <Button onClick={handleAudit} disabled={auditing}>
             {auditing ? (
               <>
                 <RefreshCwIcon className="mr-2 h-4 w-4 animate-spin" />
-                Analizando...
+                {t("analyzing")}
               </>
             ) : (
               <>
                 <ShieldAlertIcon className="mr-2 h-4 w-4" />
-                Analizar
+                {t("analyze")}
               </>
             )}
           </Button>
@@ -236,10 +241,10 @@ export function RiskTab({ processId }: RiskTabProps) {
   // ─── Data State ───────────────────────────────────────────────────────
 
   const SUB_TABS: { key: SubTab; label: string }[] = [
-    { key: "registro", label: "Registro" },
-    { key: "oportunidades", label: "Oportunidades" },
-    { key: "controles", label: "Controles" },
-    { key: "fmea", label: "FMEA" },
+    { key: "registro", label: t("tabs.register") },
+    { key: "oportunidades", label: t("tabs.opportunities") },
+    { key: "controles", label: t("tabs.controls") },
+    { key: "fmea", label: t("tabs.fmea") },
   ];
 
   return (
@@ -250,7 +255,7 @@ export function RiskTab({ processId }: RiskTabProps) {
           <div className="flex flex-wrap items-center gap-4">
             {/* Average score */}
             <div className="flex items-center gap-2">
-              <span className="text-xs text-muted-foreground">Riesgo promedio:</span>
+              <span className="text-xs text-muted-foreground">{t("avgRisk")}</span>
               <span
                 className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-bold ${getScoreBadge(stats.avgScore)}`}
               >
@@ -262,18 +267,17 @@ export function RiskTab({ processId }: RiskTabProps) {
             <div className="flex items-center gap-2">
               {stats.critical > 0 && (
                 <span className="inline-flex items-center rounded-full bg-red-600/20 px-2 py-0.5 text-xs font-medium text-red-400">
-                  {stats.critical} Crítico{stats.critical !== 1 ? "s" : ""}
+                  {stats.critical} {t("critical")}
                 </span>
               )}
               {stats.high > 0 && (
                 <span className="inline-flex items-center rounded-full bg-amber-600/20 px-2 py-0.5 text-xs font-medium text-amber-400">
-                  {stats.high} Alto{stats.high !== 1 ? "s" : ""}
+                  {stats.high} {t("high")}
                 </span>
               )}
               {stats.opportunities > 0 && (
                 <span className="inline-flex items-center rounded-full bg-green-600/20 px-2 py-0.5 text-xs font-medium text-green-400">
-                  {stats.opportunities} Oportunidad
-                  {stats.opportunities !== 1 ? "es" : ""}
+                  {stats.opportunities} {t("opportunity")}
                 </span>
               )}
             </div>
@@ -290,12 +294,12 @@ export function RiskTab({ processId }: RiskTabProps) {
                 {auditing ? (
                   <>
                     <RefreshCwIcon className="mr-1 h-3.5 w-3.5 animate-spin" />
-                    Analizando...
+                    {t("analyzing")}
                   </>
                 ) : (
                   <>
                     <ShieldAlertIcon className="mr-1 h-3.5 w-3.5" />
-                    Analizar Riesgos
+                    {t("analyze")}
                   </>
                 )}
               </Button>
@@ -318,7 +322,7 @@ export function RiskTab({ processId }: RiskTabProps) {
       <Card className="border-chrome-border bg-chrome-raised">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm text-chrome-text-secondary">
-            Matriz de Riesgo
+            {t("riskMatrix")}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -335,8 +339,7 @@ export function RiskTab({ processId }: RiskTabProps) {
           {activeCell && (
             <div className="mt-2 flex items-center justify-between">
               <span className="text-xs text-muted-foreground">
-                Filtro: Severidad {activeCell.severity}, Probabilidad{" "}
-                {activeCell.probability}
+                {t("filterSeverity", { sev: activeCell.severity, prob: activeCell.probability })}
               </span>
               <Button
                 variant="ghost"
@@ -344,7 +347,7 @@ export function RiskTab({ processId }: RiskTabProps) {
                 className="h-6 text-xs text-muted-foreground"
                 onClick={() => setActiveCell(null)}
               >
-                Limpiar filtro
+                {t("clearFilter")}
               </Button>
             </div>
           )}
@@ -420,9 +423,12 @@ export function RiskTab({ processId }: RiskTabProps) {
                 </Card>
               ))}
             {risks.filter((r) => !r.isOpportunity).length === 0 && (
-              <p className="py-8 text-center text-sm text-muted-foreground">
-                No hay riesgos para mapear controles.
-              </p>
+              <EmptyState
+                icon={ShieldAlertIcon}
+                title={te("noControls")}
+                description={te("noControlsDesc")}
+                compact
+              />
             )}
           </div>
         )}
@@ -439,7 +445,7 @@ export function RiskTab({ processId }: RiskTabProps) {
         >
           <span className="flex items-center gap-2">
             <TrendingUpIcon className="h-3.5 w-3.5" />
-            Tendencia de Riesgo
+            {t("riskTrend")}
           </span>
           <ChevronDownIcon
             className={`h-3.5 w-3.5 transition-transform ${showTrend ? "rotate-180" : ""}`}

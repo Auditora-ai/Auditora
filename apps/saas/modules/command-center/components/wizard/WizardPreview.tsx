@@ -7,6 +7,7 @@ import {
 	CalendarIcon,
 	InfoIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { WizardData } from "../SessionWizard";
 
 const SESSION_TYPE_LABELS: Record<string, string> = {
@@ -16,6 +17,7 @@ const SESSION_TYPE_LABELS: Record<string, string> = {
 };
 
 export function WizardPreview({ data }: { data: WizardData }) {
+	const t = useTranslations("commandCenter.wizard");
 	const hasProcess = data.processName.trim().length > 0;
 	const hasParticipants = data.participants.length > 0;
 	const hasContext = data.contextText.trim().length > 0 || data.contextFiles.length > 0;
@@ -43,7 +45,7 @@ export function WizardPreview({ data }: { data: WizardData }) {
 								)}
 							</>
 						) : (
-							<p className="text-sm text-chrome-text-muted">Sin seleccionar</p>
+							<p className="text-sm text-chrome-text-muted">{t("noSelection")}</p>
 						)}
 					</div>
 				</div>
@@ -67,7 +69,7 @@ export function WizardPreview({ data }: { data: WizardData }) {
 								</p>
 							</>
 						) : (
-							<p className="text-sm text-chrome-text-muted">Sin agregar</p>
+							<p className="text-sm text-chrome-text-muted">{t("noParticipants")}</p>
 						)}
 					</div>
 				</div>
@@ -92,7 +94,7 @@ export function WizardPreview({ data }: { data: WizardData }) {
 								)}
 							</>
 						) : (
-							<p className="text-sm text-chrome-text-muted">Sin contexto</p>
+							<p className="text-sm text-chrome-text-muted">{t("noContext")}</p>
 						)}
 					</div>
 				</div>
@@ -118,12 +120,12 @@ export function WizardPreview({ data }: { data: WizardData }) {
 								)}
 								{data.isNoCall && (
 									<span className="mt-1 inline-block rounded-full bg-chrome-raised px-2 py-0.5 text-[11px] font-medium text-orientation">
-										Sin llamada
+										{t("noCall")}
 									</span>
 								)}
 							</>
 						) : (
-							<p className="text-sm text-chrome-text-muted">Sin agendar</p>
+							<p className="text-sm text-chrome-text-muted">{t("notScheduled")}</p>
 						)}
 					</div>
 				</div>

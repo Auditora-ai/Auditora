@@ -101,34 +101,54 @@ export function generateReportHtml(data: PdfProjectData): string {
 <title>${escHtml(data.projectName)} - Process Report</title>
 <style>
   @page { margin: 2cm; size: A4; }
-  body { font-family: 'Geist', system-ui, sans-serif; color: #1a1a1a; line-height: 1.6; }
-  .cover { text-align: center; padding-top: 200px; page-break-after: always; }
-  .cover h1 { font-family: 'Instrument Serif', Georgia, serif; font-size: 36px; margin-bottom: 8px; }
-  .cover .client { font-size: 24px; color: #666; margin-bottom: 40px; }
-  .cover .org { font-size: 14px; color: #999; }
-  .cover .date { font-size: 14px; color: #999; margin-top: 60px; }
-  h2 { font-family: 'Instrument Serif', Georgia, serif; font-size: 24px; border-bottom: 2px solid #00E5C0; padding-bottom: 8px; }
-  h4 { color: #00E5C0; margin-bottom: 4px; }
-  .diagram { margin: 20px 0; max-width: 100%; overflow: hidden; }
+  @page :first { margin-top: 0; }
+  body { font-family: 'Geist', system-ui, -apple-system, sans-serif; color: #1a1a1a; line-height: 1.6; font-size: 14px; }
+
+  /* Cover page */
+  .cover { text-align: center; padding-top: 160px; page-break-after: always; background: linear-gradient(180deg, #0A1428 0%, #111827 100%); margin: -2cm; padding-left: 2cm; padding-right: 2cm; padding-bottom: 2cm; min-height: 100vh; box-sizing: border-box; }
+  .cover .brand-mark { display: inline-block; width: 48px; height: 48px; border-radius: 12px; background: #00E5C0; margin-bottom: 32px; }
+  .cover h1 { font-family: 'Instrument Serif', Georgia, serif; font-size: 40px; margin-bottom: 8px; color: #F1F5F9; letter-spacing: -0.02em; }
+  .cover .client { font-size: 22px; color: #94A3B8; margin-bottom: 48px; font-weight: 300; }
+  .cover .org { font-size: 14px; color: #64748B; }
+  .cover .date { font-size: 13px; color: #64748B; margin-top: 48px; }
+  .cover .powered-by { color: #475569; font-size: 11px; margin-top: 80px; }
+  .cover .accent-line { width: 60px; height: 3px; background: #00E5C0; margin: 24px auto; border-radius: 2px; }
+
+  /* Typography */
+  h2 { font-family: 'Instrument Serif', Georgia, serif; font-size: 24px; border-bottom: 2px solid #00E5C0; padding-bottom: 8px; color: #0F172A; letter-spacing: -0.01em; }
+  h4 { color: #0A1428; margin-bottom: 4px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* Diagrams */
+  .diagram { margin: 20px 0; max-width: 100%; overflow: hidden; border: 1px solid #E2E8F0; border-radius: 8px; padding: 16px; background: #F8FAFC; }
   .diagram svg { max-width: 100%; height: auto; }
-  .no-diagram { color: #999; font-style: italic; }
+  .no-diagram { color: #94A3B8; font-style: italic; }
+
+  /* Process details */
   .process-details { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 16px 0; }
-  .detail-section ul { margin: 4px 0; padding-left: 20px; }
-  .comments { background: #f8f9fa; padding: 12px; border-radius: 8px; margin-top: 12px; }
+  .detail-section { background: #F8FAFC; padding: 12px; border-radius: 6px; border: 1px solid #E2E8F0; }
+  .detail-section ul { margin: 4px 0; padding-left: 20px; font-size: 13px; }
+
+  /* Comments */
+  .comments { background: #F1F5F9; padding: 12px 16px; border-radius: 8px; margin-top: 12px; border-left: 3px solid #00E5C0; }
   .comment { font-size: 13px; margin: 4px 0; }
-  table { width: 100%; border-collapse: collapse; margin: 12px 0; }
-  th, td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 13px; }
-  th { background: #00E5C0; color: #0A1428; }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+  th, td { border: 1px solid #E2E8F0; padding: 8px 12px; text-align: left; }
+  th { background: #0A1428; color: #F1F5F9; font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: 0.03em; }
+  tr:nth-child(even) td { background: #F8FAFC; }
+
+  /* TOC */
   .toc { page-break-after: always; }
   .toc ul { list-style: none; padding: 0; }
-  .toc li { padding: 4px 0; border-bottom: 1px dotted #ccc; }
-  .description { color: #555; }
+  .toc li { padding: 8px 0; border-bottom: 1px dotted #CBD5E1; font-size: 15px; }
+
+  .description { color: #64748B; }
   .raci-R { background: #dcfce7; font-weight: bold; }
   .raci-A { background: #dbeafe; font-weight: bold; }
   .raci-C { background: #fef9c3; }
   .raci-I { background: #f3e8ff; }
   .action-items li { margin: 8px 0; }
-  .powered-by { text-align: center; color: #999; font-size: 11px; margin-top: 40px; }
   .legal-disclaimer { margin-top: 48px; padding: 16px; border-top: 1px solid #E2E8F0; background: #F1F5F9; border-radius: 6px; font-size: 10px; color: #64748B; line-height: 1.6; }
   .legal-disclaimer strong { color: #0F172A; }
 </style>
@@ -136,7 +156,9 @@ export function generateReportHtml(data: PdfProjectData): string {
 <body>
 
 <div class="cover">
+  <div class="brand-mark"></div>
   <h1>${escHtml(data.projectName)}</h1>
+  <div class="accent-line"></div>
   <p class="client">${escHtml(data.clientName)}</p>
   <p class="org">${escHtml(data.organizationName)}</p>
   <p class="date">${escHtml(data.date)}</p>

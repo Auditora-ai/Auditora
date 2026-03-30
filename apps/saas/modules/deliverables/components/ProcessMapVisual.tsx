@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 
 interface ProcessNode {
@@ -48,6 +49,7 @@ const bandConfig = [
 ] as const;
 
 export function ProcessMapVisual({ processes, links, organizationSlug }: Props) {
+  const t = useTranslations("deliverables");
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -223,7 +225,7 @@ export function ProcessMapVisual({ processes, links, organizationSlug }: Props) 
                   className="text-[10px]"
                   fill="#94a3b8"
                 >
-                  {proc.owner ?? "Sin owner"} · {proc.sessions}s · {proc.risks}r
+                  {proc.owner ?? t("noOwner")} · {proc.sessions}s · {proc.risks}r
                 </text>
               </g>
             );
@@ -249,7 +251,7 @@ export function ProcessMapVisual({ processes, links, organizationSlug }: Props) 
             </div>
             <div className="flex items-center gap-2">
               <Link
-                href={`/${organizationSlug}/procesos/${selectedProcess.id}`}
+                href={`/${organizationSlug}/processes/${selectedProcess.id}`}
                 className="text-xs text-blue-600 hover:text-blue-800 font-medium"
               >
                 Ver proceso →

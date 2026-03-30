@@ -1,7 +1,9 @@
 "use client";
 
-import { ArrowUpDownIcon } from "lucide-react";
+import { ArrowUpDownIcon, AlertTriangleIcon } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
+import { EmptyState } from "@shared/components/EmptyState";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -42,6 +44,7 @@ function getRpnLabel(rpn: number) {
 // ─── Component ──────────────────────────────────────────────────────────────
 
 export function FmeaView({ risks }: FmeaViewProps) {
+  const t = useTranslations("emptyStates.risks");
   const [sortBy, setSortBy] = useState<SortKey>("rpn");
   const [sortAsc, setSortAsc] = useState(false);
 
@@ -66,12 +69,11 @@ export function FmeaView({ risks }: FmeaViewProps) {
 
   if (fmeaRisks.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 text-center">
-        <p className="text-sm text-muted-foreground">
-          No hay datos FMEA disponibles. El análisis FMEA identifica modos de
-          fallo en cada actividad.
-        </p>
-      </div>
+      <EmptyState
+        icon={AlertTriangleIcon}
+        title={t("noFmea")}
+        description={t("noFmeaDesc")}
+      />
     );
   }
 

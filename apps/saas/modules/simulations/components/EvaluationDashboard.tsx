@@ -1,0 +1,195 @@
+"use client";
+
+import { EmptyState } from "@shared/components/EmptyState";
+import { BarChart3Icon } from "lucide-react";
+import { cn } from "@repo/ui";
+
+interface ProfileItem {
+  id: string;
+  userId: string;
+  overallScore: number | null;
+  totalSimulations: number;
+  strengthAreas: string[] | null;
+  riskAreas: string[] | null;
+  lastUpdatedAt: Date;
+  user: {
+    name: string | null;
+    email: string;
+    image: string | null;
+  };
+}
+
+interface EvaluationDashboardProps {
+  profiles: ProfileItem[];
+  orgAvgScore: number;
+  organizationSlug: string;
+}
+
+function scoreColor(score: number | null): string {
+  if (score === null) return "text-slate-500";
+  if (score >= 80) return "text-emerald-400";
+  if (score >= 60) return "text-amber-400";
+  return "text-red-400";
+}
+
+function scoreBg(score: number | null): string {
+  if (score === null) return "bg-slate-800";
+  if (score >= 80) return "bg-emerald-950/50";
+  if (score >= 60) return "bg-amber-950/50";
+  return "bg-red-950/50";
+}
+
+export function EvaluationDashboard({
+  profiles,
+  orgAvgScore,
+  organizationSlug,
+}: EvaluationDashboardProps) {
+  if (profiles.length === 0) {
+    return (
+      <EmptyState
+        icon={BarChart3Icon}
+        title="Sin evaluaciones aún"
+        description="Las evaluaciones aparecerán aquí cuando los miembros del equipo completen simulaciones."
+      />
+    );
+  }
+
+  const totalEvaluations = profiles.reduce(
+    (sum, p) => sum + p.totalSimulations,
+    0,
+  );
+  const membersEvaluated = profiles.length;
+
+  return (
+    <div className="flex flex-col gap-6">
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="rounded-lg border border-slate-800 bg-slate-900 p-5">
+          <p className="text-xs font-medium uppercase tracking-wider text-slate-500">
+            Total evaluaciones
+          </p>
+          <p className="mt-2 text-3xl font-semibold text-foreground">
+            {totalEvaluations}
+          </p>
+        </div>
+        <div className="rounded-lg border border-slate-800 bg-slate-900 p-5">
+          <p className="text-xs font-medium uppercase tracking-wider text-slate-500">
+            Puntaje promedio
+          </p>
+          <p className={cn("mt-2 text-3xl font-semibold", scoreColor(orgAvgScore))}>
+            {orgAvgScore}
+            <span className="text-lg text-slate-500">/100</span>
+          </p>
+        </div>
+        <div className="rounded-lg border border-slate-800 bg-slate-900 p-5">
+          <p className="text-xs font-medium uppercase tracking-wider text-slate-500">
+            Miembros evaluados
+          </p>
+          <p className="mt-2 text-3xl font-semibold text-foreground">
+            {membersEvaluated}
+          </p>
+        </div>
+      </div>
+
+      {/* Team Table */}
+      <div className="overflow-hidden rounded-lg border border-slate-800 bg-slate-900">
+        <table className="w-full">
+          <thead>
+            <tr className="border-b border-slate-800 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
+              <th className="px-5 py-3">Miembro</th>
+              <th className="px-5 py-3">Puntaje</th>
+              <th className="px-5 py-3">Simulaciones</th>
+              <th className="hidden px-5 py-3 md:table-cell">Fortalezas</th>
+              <th className="hidden px-5 py-3 md:table-cell">Áreas de riesgo</th>
+              <th className="px-5 py-3">Actualizado</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-800">
+            {profiles.map((profile) => (
+              <tr
+                key={profile.id}
+                className="transition-colors hover:bg-slate-800/50"
+              >
+                <td className="px-5 py-4">
+                  <div className="flex items-center gap-3">
+                    {profile.user.image ? (
+                      <img
+                        src={profile.user.image}
+                        alt=""
+                        className="h-8 w-8 rounded-full"
+                      />
+                    ) : (
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-700 text-xs font-medium text-slate-300">
+                        {(profile.user.name || profile.user.email)
+                          .charAt(0)
+                          .toUpperCase()}
+                      </div>
+                    )}
+                    <div>
+                      <p className="text-sm font-medium text-foreground">
+                        {profile.user.name || profile.user.email}
+                      </p>
+                      {profile.user.name && (
+                        <p className="text-xs text-slate-500">
+                          {profile.user.email}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </td>
+                <td className="px-5 py-4">
+                  <span
+                    className={cn(
+                      "inline-flex items-center rounded-md px-2.5 py-1 text-sm font-semibold",
+                      scoreBg(profile.overallScore),
+                      scoreColor(profile.overallScore),
+                    )}
+                  >
+                    {profile.overallScore ?? "—"}
+                  </span>
+                </td>
+                <td className="px-5 py-4 text-sm text-slate-400">
+                  {profile.totalSimulations}
+                </td>
+                <td className="hidden px-5 py-4 md:table-cell">
+                  <div className="flex flex-wrap gap-1">
+                    {(profile.strengthAreas as string[] || [])
+                      .slice(0, 2)
+                      .map((area) => (
+                        <span
+                          key={area}
+                          className="inline-block rounded bg-emerald-950/40 px-2 py-0.5 text-xs text-emerald-400"
+                        >
+                          {area}
+                        </span>
+                      ))}
+                  </div>
+                </td>
+                <td className="hidden px-5 py-4 md:table-cell">
+                  <div className="flex flex-wrap gap-1">
+                    {(profile.riskAreas as string[] || [])
+                      .slice(0, 2)
+                      .map((area) => (
+                        <span
+                          key={area}
+                          className="inline-block rounded bg-red-950/40 px-2 py-0.5 text-xs text-red-400"
+                        >
+                          {area}
+                        </span>
+                      ))}
+                  </div>
+                </td>
+                <td className="px-5 py-4 text-xs text-slate-500">
+                  {new Date(profile.lastUpdatedAt).toLocaleDateString("es", {
+                    day: "numeric",
+                    month: "short",
+                  })}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}

@@ -9,6 +9,7 @@ import {
 	Loader2Icon,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import type { WizardData } from "../SessionWizard";
 
 const ROLES = [
@@ -38,6 +39,7 @@ export function StepParticipants({
 	data: WizardData;
 	onChange: (patch: Partial<WizardData>) => void;
 }) {
+	const t = useTranslations("commandCenter.wizard");
 	const [loadingRaci, setLoadingRaci] = useState(false);
 
 	const participants = data.participants;
@@ -68,7 +70,7 @@ export function StepParticipants({
 		setLoadingRaci(true);
 		try {
 			const res = await fetch(`/api/processes/${data.processId}/raci`);
-			if (!res.ok) throw new Error("Error al obtener RACI");
+			if (!res.ok) throw new Error(t("errorRaci"));
 
 			const raciData = await res.json();
 
@@ -163,7 +165,7 @@ export function StepParticipants({
 				{participants.length === 0 ? (
 					<div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-chrome-border py-12 text-center">
 						<UsersIcon className="mb-3 h-8 w-8 text-foreground" />
-						<p className="text-sm font-medium text-chrome-text-muted">Sin participantes</p>
+						<p className="text-sm font-medium text-chrome-text-muted">{t("noParticipantsEmpty")}</p>
 						<p className="mt-1 text-xs text-chrome-text-muted">
 							Agrega al menos un participante para la sesion
 						</p>

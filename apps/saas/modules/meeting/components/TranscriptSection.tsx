@@ -15,6 +15,7 @@ import {
 import { toast } from "sonner";
 import type { TranscriptEntry } from "../types";
 import { getSpeakerColor } from "../lib/speaker-colors";
+import { useTranslations } from "next-intl";
 import { useLiveSessionContext } from "../context/LiveSessionContext";
 
 interface TranscriptSectionProps {
@@ -23,6 +24,7 @@ interface TranscriptSectionProps {
 
 export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 	const { sessionId } = useLiveSessionContext();
+	const t = useTranslations("meetingModule");
 	const scrollRef = useRef<HTMLDivElement>(null);
 	const prevCountRef = useRef(0);
 	const [message, setMessage] = useState("");
@@ -61,7 +63,7 @@ export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 			// Keep processingText visible for a few seconds to show AI is working
 			setTimeout(() => setProcessingText(null), 8000);
 		} catch {
-			toast.error("Error al enviar mensaje");
+			toast.error(t("errorSendMessage"));
 			setProcessingText(null);
 		} finally {
 			setSending(false);
@@ -230,6 +232,8 @@ export function TranscriptSection({ transcript }: TranscriptSectionProps) {
 }
 
 function TranscriptLine({ entry, sessionId }: { entry: TranscriptEntry; sessionId: string }) {
+	const t = useTranslations("meetingModule");
+	const tc = useTranslations("common");
 	const color = getSpeakerColor(entry.speaker);
 	const time = formatTimestamp(entry.timestamp);
 	const isManual = entry.source === "manual";
@@ -257,7 +261,7 @@ function TranscriptLine({ entry, sessionId }: { entry: TranscriptEntry; sessionI
 			setEditing(false);
 			toast.success("Texto corregido");
 		} catch {
-			toast.error("Error al editar");
+			toast.error(t("errorEdit"));
 		} finally {
 			setSaving(false);
 		}
@@ -275,7 +279,7 @@ function TranscriptLine({ entry, sessionId }: { entry: TranscriptEntry; sessionI
 			setHidden(true);
 			toast.success("Entrada eliminada");
 		} catch {
-			toast.error("Error al eliminar");
+			toast.error(t("errorDelete"));
 		} finally {
 			setSaving(false);
 		}
@@ -298,7 +302,7 @@ function TranscriptLine({ entry, sessionId }: { entry: TranscriptEntry; sessionI
 			});
 			toast.success("Re-procesando...");
 		} catch {
-			toast.error("Error al reintentar");
+			toast.error(t("errorRetry"));
 		} finally {
 			setSaving(false);
 		}
@@ -340,13 +344,13 @@ function TranscriptLine({ entry, sessionId }: { entry: TranscriptEntry; sessionI
 
 				{/* Action buttons — visible on hover */}
 				<div className="ml-auto flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
-					<button type="button" onClick={() => { setEditing(true); setEditText(displayText); }} className="rounded p-0.5 text-chrome-text-muted hover:text-white" title="Editar">
+					<button type="button" onClick={() => { setEditing(true); setEditText(displayText); }} className="rounded p-0.5 text-chrome-text-muted hover:text-white" title={tc("edit")}>
 						<PencilIcon className="h-3.5 w-3.5" />
 					</button>
 					<button type="button" onClick={handleIgnore} disabled={saving} className="rounded p-0.5 text-chrome-text-muted hover:text-amber-400" title="Ignorar">
 						<EyeOffIcon className="h-3.5 w-3.5" />
 					</button>
-					<button type="button" onClick={handleDelete} disabled={saving} className="rounded p-0.5 text-chrome-text-muted hover:text-red-400" title="Eliminar">
+					<button type="button" onClick={handleDelete} disabled={saving} className="rounded p-0.5 text-chrome-text-muted hover:text-red-400" title={tc("delete")}>
 						<TrashIcon className="h-3.5 w-3.5" />
 					</button>
 				</div>

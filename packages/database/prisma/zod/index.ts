@@ -174,7 +174,7 @@ export type IntelligenceAuditLogScalarFieldEnum = z.infer<typeof IntelligenceAud
 
 // File: ProcessRiskScalarFieldEnum.schema.ts
 
-export const ProcessRiskScalarFieldEnumSchema = z.enum(['id', 'processDefinitionId', 'title', 'description', 'riskType', 'status', 'source', 'severity', 'probability', 'riskScore', 'residualSeverity', 'residualProbability', 'residualScore', 'affectedStep', 'affectedRole', 'relatedItemId', 'isOpportunity', 'opportunityValue', 'failureMode', 'failureEffect', 'detectionDifficulty', 'rpn', 'shareVisible', 'createdBy', 'createdAt', 'updatedAt'])
+export const ProcessRiskScalarFieldEnumSchema = z.enum(['id', 'processDefinitionId', 'title', 'description', 'riskType', 'status', 'source', 'severity', 'probability', 'riskScore', 'residualSeverity', 'residualProbability', 'residualScore', 'affectedStep', 'affectedNodeId', 'affectedRole', 'relatedItemId', 'linkedProcedureId', 'isOpportunity', 'opportunityValue', 'failureMode', 'failureEffect', 'detectionDifficulty', 'rpn', 'shareVisible', 'createdBy', 'createdAt', 'updatedAt'])
 
 export type ProcessRiskScalarFieldEnum = z.infer<typeof ProcessRiskScalarFieldEnumSchema>;
 
@@ -309,6 +309,54 @@ export type ExternalCostLogScalarFieldEnum = z.infer<typeof ExternalCostLogScala
 export const AnonymousSessionScalarFieldEnumSchema = z.enum(['id', 'fingerprint', 'phase', 'sourceUrl', 'businessContext', 'businessDescription', 'industry', 'processName', 'sipocData', 'knowledgeData', 'diagramNodes', 'riskResults', 'deepRiskResults', 'researchData', 'conversationLog', 'completenessScore', 'convertedToUserId', 'convertedAt', 'expiresAt', 'createdAt', 'updatedAt'])
 
 export type AnonymousSessionScalarFieldEnum = z.infer<typeof AnonymousSessionScalarFieldEnumSchema>;
+
+// File: SimulationTemplateScalarFieldEnum.schema.ts
+
+export const SimulationTemplateScalarFieldEnumSchema = z.enum(['id', 'organizationId', 'processDefinitionId', 'processVersionId', 'title', 'narrative', 'targetRole', 'customRoleName', 'status', 'version', 'riskIds', 'generationPrompt', 'createdBy', 'createdAt', 'updatedAt'])
+
+export type SimulationTemplateScalarFieldEnum = z.infer<typeof SimulationTemplateScalarFieldEnumSchema>;
+
+// File: SimulationScenarioScalarFieldEnum.schema.ts
+
+export const SimulationScenarioScalarFieldEnumSchema = z.enum(['id', 'templateId', 'context', 'createdAt'])
+
+export type SimulationScenarioScalarFieldEnum = z.infer<typeof SimulationScenarioScalarFieldEnumSchema>;
+
+// File: DecisionScalarFieldEnum.schema.ts
+
+export const DecisionScalarFieldEnumSchema = z.enum(['id', 'scenarioId', 'order', 'prompt', 'options', 'consequences', 'proceduralReference', 'riskLevelByOption'])
+
+export type DecisionScalarFieldEnum = z.infer<typeof DecisionScalarFieldEnumSchema>;
+
+// File: DecisionResponseScalarFieldEnum.schema.ts
+
+export const DecisionResponseScalarFieldEnumSchema = z.enum(['id', 'runId', 'decisionId', 'chosenOption', 'timeToDecide', 'createdAt'])
+
+export type DecisionResponseScalarFieldEnum = z.infer<typeof DecisionResponseScalarFieldEnumSchema>;
+
+// File: SimulationRunScalarFieldEnum.schema.ts
+
+export const SimulationRunScalarFieldEnumSchema = z.enum(['id', 'scenarioId', 'userId', 'status', 'alignment', 'riskLevel', 'criterio', 'overallScore', 'errorPatterns', 'aiFeedback', 'duration', 'completedAt', 'createdAt', 'updatedAt'])
+
+export type SimulationRunScalarFieldEnum = z.infer<typeof SimulationRunScalarFieldEnumSchema>;
+
+// File: HumanRiskProfileScalarFieldEnum.schema.ts
+
+export const HumanRiskProfileScalarFieldEnumSchema = z.enum(['id', 'userId', 'organizationId', 'overallScore', 'totalSimulations', 'patternsByProcess', 'strengthAreas', 'riskAreas', 'recommendedTraining', 'lastUpdatedAt', 'createdAt'])
+
+export type HumanRiskProfileScalarFieldEnum = z.infer<typeof HumanRiskProfileScalarFieldEnumSchema>;
+
+// File: ProcedureScalarFieldEnum.schema.ts
+
+export const ProcedureScalarFieldEnumSchema = z.enum(['id', 'processDefinitionId', 'organizationId', 'nodeId', 'title', 'version', 'status', 'objective', 'scope', 'responsible', 'frequency', 'prerequisites', 'steps', 'indicators', 'richContent', 'controlPointsSummary', 'linkedRiskIds', 'createdBy', 'approvedBy', 'approvedAt', 'createdAt', 'updatedAt'])
+
+export type ProcedureScalarFieldEnum = z.infer<typeof ProcedureScalarFieldEnumSchema>;
+
+// File: ProcedureVersionScalarFieldEnum.schema.ts
+
+export const ProcedureVersionScalarFieldEnumSchema = z.enum(['id', 'procedureId', 'version', 'status', 'content', 'changeNote', 'changedBy', 'changedAt'])
+
+export type ProcedureVersionScalarFieldEnum = z.infer<typeof ProcedureVersionScalarFieldEnumSchema>;
 
 // File: SortOrder.schema.ts
 
@@ -453,6 +501,36 @@ export type EnrichmentSourceType = z.infer<typeof EnrichmentSourceTypeSchema>;
 export const PurchaseTypeSchema = z.enum(['SUBSCRIPTION', 'ONE_TIME'])
 
 export type PurchaseType = z.infer<typeof PurchaseTypeSchema>;
+
+// File: SimulationTargetRole.schema.ts
+
+export const SimulationTargetRoleSchema = z.enum(['DIRECTOR_OPERACIONES', 'DIRECTOR_COMPRAS', 'DIRECTOR_CALIDAD', 'DIRECTOR_FINANZAS', 'DIRECTOR_LOGISTICA', 'GERENTE_PLANTA', 'CONTROLLER', 'CEO', 'CUSTOM'])
+
+export type SimulationTargetRole = z.infer<typeof SimulationTargetRoleSchema>;
+
+// File: SimulationTemplateStatus.schema.ts
+
+export const SimulationTemplateStatusSchema = z.enum(['GENERATING', 'GENERATION_FAILED', 'DRAFT', 'PUBLISHED', 'ARCHIVED'])
+
+export type SimulationTemplateStatus = z.infer<typeof SimulationTemplateStatusSchema>;
+
+// File: SimulationRunStatus.schema.ts
+
+export const SimulationRunStatusSchema = z.enum(['IN_PROGRESS', 'COMPLETED', 'ABANDONED'])
+
+export type SimulationRunStatus = z.infer<typeof SimulationRunStatusSchema>;
+
+// File: ProcedureStatus.schema.ts
+
+export const ProcedureStatusSchema = z.enum(['DRAFT', 'IN_REVIEW', 'APPROVED', 'PUBLISHED', 'ARCHIVED'])
+
+export type ProcedureStatus = z.infer<typeof ProcedureStatusSchema>;
+
+// File: DecisionRiskLevel.schema.ts
+
+export const DecisionRiskLevelSchema = z.enum(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'])
+
+export type DecisionRiskLevel = z.infer<typeof DecisionRiskLevelSchema>;
 
 // File: User.schema.ts
 
@@ -978,8 +1056,10 @@ export const ProcessRiskSchema = z.object({
   residualProbability: z.number().int().nullish(),
   residualScore: z.number().int().nullish(),
   affectedStep: z.string().nullish(),
+  affectedNodeId: z.string().nullish(),
   affectedRole: z.string().nullish(),
   relatedItemId: z.string().nullish(),
+  linkedProcedureId: z.string().nullish(),
   isOpportunity: z.boolean(),
   opportunityValue: z.string().nullish(),
   failureMode: z.string().nullish(),
@@ -1386,4 +1466,156 @@ export const AnonymousSessionSchema = z.object({
 });
 
 export type AnonymousSessionType = z.infer<typeof AnonymousSessionSchema>;
+
+
+// File: SimulationTemplate.schema.ts
+
+export const SimulationTemplateSchema = z.object({
+  id: z.string(),
+  organizationId: z.string(),
+  processDefinitionId: z.string(),
+  processVersionId: z.string().nullish(),
+  title: z.string(),
+  narrative: z.string(),
+  targetRole: SimulationTargetRoleSchema.default("CUSTOM"),
+  customRoleName: z.string().nullish(),
+  status: SimulationTemplateStatusSchema.default("GENERATING"),
+  version: z.number().int().default(1),
+  riskIds: z.array(z.string()),
+  generationPrompt: z.string().nullish(),
+  createdBy: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type SimulationTemplateType = z.infer<typeof SimulationTemplateSchema>;
+
+
+// File: SimulationScenario.schema.ts
+
+export const SimulationScenarioSchema = z.object({
+  id: z.string(),
+  templateId: z.string(),
+  context: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10"),
+  createdAt: z.date(),
+});
+
+export type SimulationScenarioType = z.infer<typeof SimulationScenarioSchema>;
+
+
+// File: Decision.schema.ts
+
+export const DecisionSchema = z.object({
+  id: z.string(),
+  scenarioId: z.string(),
+  order: z.number().int(),
+  prompt: z.string(),
+  options: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10"),
+  consequences: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10"),
+  proceduralReference: z.string().nullish(),
+  riskLevelByOption: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10"),
+});
+
+export type DecisionType = z.infer<typeof DecisionSchema>;
+
+
+// File: DecisionResponse.schema.ts
+
+export const DecisionResponseSchema = z.object({
+  id: z.string(),
+  runId: z.string(),
+  decisionId: z.string(),
+  chosenOption: z.number().int(),
+  timeToDecide: z.number().int().nullish(),
+  createdAt: z.date(),
+});
+
+export type DecisionResponseType = z.infer<typeof DecisionResponseSchema>;
+
+
+// File: SimulationRun.schema.ts
+
+export const SimulationRunSchema = z.object({
+  id: z.string(),
+  scenarioId: z.string(),
+  userId: z.string(),
+  status: SimulationRunStatusSchema.default("IN_PROGRESS"),
+  alignment: z.number().int().nullish(),
+  riskLevel: z.number().int().nullish(),
+  criterio: z.number().int().nullish(),
+  overallScore: z.number().int().nullish(),
+  errorPatterns: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  aiFeedback: z.string().nullish(),
+  duration: z.number().int().nullish(),
+  completedAt: z.date().nullish(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type SimulationRunType = z.infer<typeof SimulationRunSchema>;
+
+
+// File: HumanRiskProfile.schema.ts
+
+export const HumanRiskProfileSchema = z.object({
+  id: z.string(),
+  userId: z.string(),
+  organizationId: z.string(),
+  overallScore: z.number().int().nullish(),
+  totalSimulations: z.number().int(),
+  patternsByProcess: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  strengthAreas: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  riskAreas: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  recommendedTraining: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  lastUpdatedAt: z.date(),
+  createdAt: z.date(),
+});
+
+export type HumanRiskProfileType = z.infer<typeof HumanRiskProfileSchema>;
+
+
+// File: Procedure.schema.ts
+
+export const ProcedureSchema = z.object({
+  id: z.string(),
+  processDefinitionId: z.string(),
+  organizationId: z.string(),
+  nodeId: z.string().nullish(),
+  title: z.string(),
+  version: z.number().int().default(1),
+  status: ProcedureStatusSchema.default("DRAFT"),
+  objective: z.string().nullish(),
+  scope: z.string().nullish(),
+  responsible: z.string().nullish(),
+  frequency: z.string().nullish(),
+  prerequisites: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  steps: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  indicators: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  richContent: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  controlPointsSummary: z.string().nullish(),
+  linkedRiskIds: z.array(z.string()),
+  createdBy: z.string(),
+  approvedBy: z.string().nullish(),
+  approvedAt: z.date().nullish(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type ProcedureType = z.infer<typeof ProcedureSchema>;
+
+
+// File: ProcedureVersion.schema.ts
+
+export const ProcedureVersionSchema = z.object({
+  id: z.string(),
+  procedureId: z.string(),
+  version: z.number().int(),
+  status: ProcedureStatusSchema,
+  content: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10"),
+  changeNote: z.string().nullish(),
+  changedBy: z.string(),
+  changedAt: z.date(),
+});
+
+export type ProcedureVersionType = z.infer<typeof ProcedureVersionSchema>;
 

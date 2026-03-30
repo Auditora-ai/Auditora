@@ -14,6 +14,7 @@ import {
 	MailIcon,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import { StepProcess } from "./wizard/StepProcess";
 import { StepParticipants } from "./wizard/StepParticipants";
 import { StepContext } from "./wizard/StepContext";
@@ -58,13 +59,8 @@ export interface SessionCloneData {
 	participants?: Array<{ name: string; email: string; role: string }>;
 }
 
-const STEPS = [
-	{ number: 1, label: "Proceso", icon: GitBranchIcon },
-	{ number: 2, label: "Participantes", icon: UsersIcon },
-	{ number: 3, label: "Contexto", icon: FileTextIcon },
-	{ number: 4, label: "Agendar", icon: CalendarIcon },
-	{ number: 5, label: "Invitacion", icon: MailIcon },
-] as const;
+const STEP_KEYS = ["process", "participants", "context", "schedule", "invitation"] as const;
+const STEP_ICONS = [GitBranchIcon, UsersIcon, FileTextIcon, CalendarIcon, MailIcon] as const;
 
 function generateNonce(): string {
 	return Math.random().toString(36).slice(2) + Date.now().toString(36);
@@ -105,6 +101,13 @@ export function SessionWizard({
 	isOnboarding?: boolean;
 	organizationSlug: string;
 }) {
+	const t = useTranslations("commandCenter.wizard");
+	const tc = useTranslations("common");
+	const STEPS = STEP_KEYS.map((key, i) => ({
+		number: i + 1,
+		label: t(key),
+		icon: STEP_ICONS[i],
+	}));
 	const [currentStep, setCurrentStep] = useState(1);
 	const [data, setData] = useState<WizardData>(() => createInitialData(cloneFrom));
 	const [submitting, setSubmitting] = useState(false);
@@ -248,11 +251,11 @@ export function SessionWizard({
 				});
 			}
 
-			toast.success("Sesion creada exitosamente");
+			toast.success(tc("savedSuccess"));
 			// Don't call onCreated yet — stay in confirmation state.
 			// onCreated (which refreshes sessions) is called when user closes the wizard.
 		} catch (err) {
-			toast.error(err instanceof Error ? err.message : "Error al crear la sesion");
+			toast.error(err instanceof Error ? err.message : tc("errorSaving"));
 		} finally {
 			setSubmitting(false);
 		}

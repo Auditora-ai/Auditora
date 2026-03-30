@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
 import { SendIcon, SparklesIcon, Loader2Icon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface ChatMessage {
 	role: "user" | "assistant";
@@ -17,6 +18,7 @@ interface ContextChatProps {
 }
 
 export function ContextChat({ processId, onContextUpdated }: ContextChatProps) {
+	const td = useTranslations("discovery");
 	const [messages, setMessages] = useState<ChatMessage[]>([]);
 	const [input, setInput] = useState("");
 	const [loading, setLoading] = useState(false);
@@ -57,7 +59,7 @@ export function ContextChat({ processId, onContextUpdated }: ContextChatProps) {
 				...prev,
 				{
 					role: "assistant",
-					content: "Error al procesar tu mensaje. Intenta de nuevo.",
+					content: td("errorProcessing"),
 				},
 			]);
 		} finally {

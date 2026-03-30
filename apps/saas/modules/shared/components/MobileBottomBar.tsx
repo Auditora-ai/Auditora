@@ -12,9 +12,12 @@ import {
 } from "@repo/ui/components/sheet";
 import { useNavData } from "@shared/hooks/use-nav-data";
 import {
+	BarChart3Icon,
 	BotIcon,
+	ClipboardListIcon,
 	FileTextIcon,
 	FolderOpenIcon,
+	GraduationCapIcon,
 	LayoutDashboardIcon,
 	MicIcon,
 	MoreHorizontalIcon,
@@ -50,36 +53,54 @@ export function MobileBottomBar() {
 
 	const primaryTabs: MobileTab[] = [
 		{
-			label: "Panorama",
-			href: basePath,
-			icon: LayoutDashboardIcon,
-			isActive: pathname === basePath,
+			label: t("app.menu.scan"),
+			href: `${basePath}/scan`,
+			icon: ScanSearchIcon,
+			isActive: pathname.startsWith(`${basePath}/scan`),
 		},
 		{
-			label: "Riesgos",
-			href: `${basePath}/deliverables/risks`,
+			label: t("app.menu.processes"),
+			href: `${basePath}/processes`,
+			icon: WorkflowIcon,
+			isActive: pathname.startsWith(`${basePath}/processes`),
+		},
+		{
+			label: t("app.menu.risks"),
+			href: `${basePath}/risks`,
 			icon: ShieldAlertIcon,
-			isActive: pathname.startsWith(`${basePath}/deliverables/risks`),
+			isActive: pathname.startsWith(`${basePath}/risks`),
 			dotColor:
 				navData && navData.criticalRiskCount > 0 ? "red" : null,
 		},
 		{
-			label: "Sesiones",
-			href: `${basePath}/sessions`,
-			icon: MicIcon,
-			isActive: pathname.startsWith(`${basePath}/session`),
-			dotColor: navData?.hasActiveSession ? "red" : null,
-			pulse: navData?.hasActiveSession,
-		},
-		{
-			label: "Procesos",
-			href: `${basePath}/procesos`,
-			icon: WorkflowIcon,
-			isActive: pathname.startsWith(`${basePath}/procesos`),
+			label: t("app.menu.dashboard"),
+			href: basePath,
+			icon: LayoutDashboardIcon,
+			isActive: pathname === basePath,
 		},
 	];
 
 	const moreItems = [
+		{
+			label: t("app.menu.procedures"),
+			href: `${basePath}/procedures`,
+			icon: ClipboardListIcon,
+		},
+		{
+			label: t("app.menu.simulations"),
+			href: `${basePath}/simulations`,
+			icon: GraduationCapIcon,
+		},
+		{
+			label: t("app.menu.sessions"),
+			href: `${basePath}/sessions`,
+			icon: MicIcon,
+		},
+		{
+			label: t("app.menu.evaluation"),
+			href: `${basePath}/evaluation`,
+			icon: BarChart3Icon,
+		},
 		{
 			label: t("app.menu.deliverables"),
 			href: `${basePath}/deliverables`,
@@ -89,11 +110,6 @@ export function MobileBottomBar() {
 			label: t("app.menu.documents"),
 			href: `${basePath}/documents`,
 			icon: FolderOpenIcon,
-		},
-		{
-			label: t("app.menu.scan"),
-			href: `${basePath}/scan`,
-			icon: ScanSearchIcon,
 		},
 		{
 			label: t("app.menu.assistant"),
@@ -117,7 +133,7 @@ export function MobileBottomBar() {
 						className={cn(
 							"relative flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px]",
 							tab.isActive
-								? "text-blue-500 font-medium"
+								? "text-[#00E5C0] font-medium"
 								: "text-slate-500",
 						)}
 					>
@@ -148,7 +164,7 @@ export function MobileBottomBar() {
 							className="flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] text-slate-500"
 						>
 							<MoreHorizontalIcon className="size-5" />
-							<span>Más</span>
+							<span>{t("app.menu.tools")}</span>
 						</button>
 					</SheetTrigger>
 					<SheetContent
@@ -157,7 +173,7 @@ export function MobileBottomBar() {
 					>
 						<SheetHeader>
 							<SheetTitle className="text-slate-200">
-								Más opciones
+								{t("app.menu.tools")}
 							</SheetTitle>
 						</SheetHeader>
 						<div className="grid grid-cols-3 gap-4 py-6">

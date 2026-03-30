@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
 	}
 
 	const ip = getClientIp(request);
-	if (!(await checkRateLimit(ip, 60))) {
+	if (!(await checkRateLimit(ip, 60, "chat"))) {
 		return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
 	}
 
@@ -58,6 +58,7 @@ export async function POST(request: NextRequest) {
 		return NextResponse.json({
 			error: "Has alcanzado el limite de mensajes. Genera tu radiografia profunda.",
 			limitReached: true,
+			readyForReveal: true,
 		}, { status: 200 });
 	}
 
@@ -85,6 +86,9 @@ export async function POST(request: NextRequest) {
 		connections: n.connections || [],
 	}));
 
+	// Read user's locale from cookie (set by marketing site / next-intl)
+	const locale = request.cookies.get("NEXT_LOCALE")?.value || undefined;
+
 	// Generate next question using the teleprompter pipeline
 	const result = await generateNextQuestion(
 		"public",
@@ -94,6 +98,7 @@ export async function POST(request: NextRequest) {
 		session.processName || undefined,
 		undefined,
 		"explorar",
+		locale,
 	);
 	await recordCost(1);
 
@@ -121,6 +126,6 @@ export async function POST(request: NextRequest) {
 		gapType: result.gapType,
 		completenessScore: result.completenessScore,
 		sipocCoverage: result.sipocCoverage,
-		readyForReveal: result.completenessScore >= 70,
+		readyForReveal: result.completenessScore >= 50,
 	});
 }

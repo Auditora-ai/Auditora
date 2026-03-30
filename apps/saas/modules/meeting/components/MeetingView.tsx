@@ -44,6 +44,7 @@ export function MeetingView({
 }: MeetingViewProps & { shareToken?: string }) {
 	const router = useRouter();
 	const t = useTranslations("meeting");
+	const tm = useTranslations("meetingModule");
 
 	// Accessibility: restore font scale from localStorage
 	useEffect(() => {
@@ -101,7 +102,7 @@ export function MeetingView({
 				const targetId = parentId || "Process_1";
 				const modeler = modelerApi?.getModeler();
 				const el = modeler?.get("elementRegistry")?.get(targetId);
-				const label = el?.businessObject?.name || processName || "Proceso";
+				const label = el?.businessObject?.name || processName || tm("defaultProcessName");
 				openPropertyTab(targetId, label);
 			}
 		},
@@ -180,7 +181,7 @@ export function MeetingView({
 				router.push(`/${slug}/session/${sessionId}/review`);
 			} else if (mode === "save_only") {
 				toast.success(t("toast.sessionEndedSave"));
-				router.push(`/${slug}/procesos`);
+				router.push(`/${slug}/processes`);
 			} else {
 				toast.info(t("toast.sessionDiscarded"));
 				router.push(`/${slug}`);

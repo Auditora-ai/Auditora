@@ -1,6 +1,7 @@
 "use client";
 
-import { RefreshCwIcon, TrendingUpIcon } from "lucide-react";
+import { TrendingUpIcon } from "lucide-react";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import { useCallback, useEffect, useState } from "react";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -46,9 +47,9 @@ export function RiskTrendChart({ processId }: RiskTrendChartProps) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-4 text-muted-foreground">
-        <RefreshCwIcon className="mr-2 h-3.5 w-3.5 animate-spin" />
-        <span className="text-xs">Cargando tendencia...</span>
+      <div className="space-y-2 py-4">
+        <Skeleton className="h-4 w-32" />
+        <Skeleton className="h-24 w-full" />
       </div>
     );
   }

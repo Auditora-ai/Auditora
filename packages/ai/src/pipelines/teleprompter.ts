@@ -125,6 +125,7 @@ export async function generateNextQuestion(
   processName?: string,
   context?: SessionContext,
   questionMode?: string,
+  language?: string,
 ): Promise<TeleprompterResult> {
   const transcriptText = formatTranscriptWindow(recentTranscript);
   // Resolve process name from multiple sources
@@ -170,10 +171,21 @@ export async function generateNextQuestion(
     ? `\n${QUESTION_MODE_INSTRUCTION[questionMode]}`
     : "";
 
+  const LANGUAGE_NAMES: Record<string, string> = {
+    es: "Spanish (español)",
+    en: "English",
+    fr: "French (français)",
+    de: "German (Deutsch)",
+  };
+  const langName = language ? LANGUAGE_NAMES[language] || language : null;
+  const langInstruction = langName
+    ? `\n\nCRITICAL: You MUST respond ENTIRELY in ${langName}. The "nextQuestion" field and all user-facing text MUST be in ${langName}. Never switch languages.`
+    : "";
+
   const { text } = await instrumentedGenerateText({
     organizationId,
     pipeline: "teleprompter",
-    system: buildTeleprompterSystemPrompt(context),
+    system: buildTeleprompterSystemPrompt(context) + langInstruction,
     prompt: basePrompt + modeInstruction,
     maxOutputTokens: 1024,
     temperature: 0.3,

@@ -17,6 +17,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVerticalIcon, MoreVerticalIcon, PlayIcon, EyeIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { SessionQuickEdit } from "./SessionQuickEdit";
 import type { SessionData } from "./CommandCenter";
 
@@ -139,6 +140,7 @@ export function SessionAgenda({
 	onRefresh: () => void;
 	onClone?: (session: SessionData) => void;
 }) {
+	const t = useTranslations("commandCenter");
 	const [editingSession, setEditingSession] = useState<SessionData | null>(null);
 	const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }));
 
@@ -158,7 +160,7 @@ export function SessionAgenda({
 			<div className="rounded-xl border border-border bg-background p-5">
 				<h3 className="mb-2 text-sm font-semibold text-foreground">Agenda</h3>
 				<p className="text-xs text-chrome-text-secondary">
-					Sin sesiones programadas.
+					{t("noSessionsScheduled")}
 				</p>
 			</div>
 		);

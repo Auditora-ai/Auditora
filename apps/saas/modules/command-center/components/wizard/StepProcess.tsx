@@ -8,6 +8,7 @@ import {
 	ListIcon,
 	Loader2Icon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { ProcessDiscoveryChat } from "./ProcessDiscoveryChat";
 import type { WizardData } from "../SessionWizard";
 
@@ -33,6 +34,8 @@ export function StepProcess({
 	data: WizardData;
 	onChange: (patch: Partial<WizardData>) => void;
 }) {
+	const t = useTranslations("commandCenter.wizard");
+	const tc = useTranslations("common");
 	const [tab, setTab] = useState<Tab>("select");
 	const [processes, setProcesses] = useState<ProcessOption[]>([]);
 	const [loadingProcesses, setLoadingProcesses] = useState(false);
@@ -175,8 +178,8 @@ export function StepProcess({
 							onFocus={() => setShowDropdown(true)}
 							placeholder={
 								loadingProcesses
-									? "Cargando procesos..."
-									: "Buscar proceso o escribir nombre nuevo..."
+									? t("loadingProcesses")
+									: t("searchProcess")
 							}
 							className="w-full rounded-lg border border-chrome-border bg-chrome-raised py-3 pl-10 pr-4 text-sm text-chrome-text placeholder:text-chrome-text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
 						/>
@@ -190,7 +193,7 @@ export function StepProcess({
 								{loadingProcesses && (
 									<div className="flex items-center gap-2 px-4 py-3 text-sm text-chrome-text-muted">
 										<Loader2Icon className="h-4 w-4 animate-spin" />
-										Cargando...
+										{tc("loading")}
 									</div>
 								)}
 
@@ -218,13 +221,13 @@ export function StepProcess({
 											className="flex w-full items-center gap-2 border-t border-chrome-border px-4 py-2.5 text-left text-sm font-medium text-blue-400 transition-colors hover:bg-chrome-hover"
 										>
 											<PlusIcon className="h-3.5 w-3.5" />
-											Crear &ldquo;{search.trim()}&rdquo;
+											{t("createNew")} &ldquo;{search.trim()}&rdquo;
 										</button>
 									)}
 
 								{!loadingProcesses && filtered.length === 0 && !search.trim() && (
 									<div className="px-4 py-4 text-center text-xs text-chrome-text-muted">
-										Sin procesos. Escribe un nombre para crear uno nuevo.
+										{t("noProcesses")}
 									</div>
 								)}
 							</div>
@@ -235,14 +238,14 @@ export function StepProcess({
 					{data.isNewProcess && data.processName.trim() && (
 						<div className="mb-5 inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-blue-400">
 							<PlusIcon className="h-3.5 w-3.5" />
-							Nuevo proceso
+							{t("newProcess")}
 						</div>
 					)}
 
 					{/* Session type */}
 					<div>
 						<label className="mb-2 block text-xs font-medium text-chrome-text-secondary">
-							Tipo de sesión
+							{t("sessionType")}
 						</label>
 						<div className="grid grid-cols-3 gap-2">
 							{SESSION_TYPES.map((t) => (

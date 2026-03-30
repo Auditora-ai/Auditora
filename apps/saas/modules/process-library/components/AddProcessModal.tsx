@@ -11,6 +11,7 @@ import {
 } from "@repo/ui/components/select";
 import { Textarea } from "@repo/ui/components/textarea";
 import { XIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 interface AddProcessModalProps {
@@ -24,6 +25,7 @@ export function AddProcessModal({
 	onClose,
 	onCreated,
 }: AddProcessModalProps) {
+	const tc = useTranslations("common");
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
 	const [level, setLevel] = useState("PROCESS");
@@ -55,14 +57,14 @@ export function AddProcessModal({
 
 			if (!res.ok) {
 				const data = await res.json();
-				setError(data.message || "Error al crear el proceso");
+				setError(data.message || tc("errorSaving"));
 				return;
 			}
 
 			onCreated();
 			onClose();
 		} catch {
-			setError("Error al crear el proceso");
+			setError(tc("errorSaving"));
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -111,7 +113,7 @@ export function AddProcessModal({
 							id="process-desc"
 							value={description}
 							onChange={(e) => setDescription(e.target.value)}
-							placeholder="Breve descripción del proceso"
+							placeholder={tc("description")}
 							rows={2}
 						/>
 					</div>

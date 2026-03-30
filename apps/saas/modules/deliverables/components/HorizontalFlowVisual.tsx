@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 interface ProcessNode {
   id: string;
@@ -39,6 +40,7 @@ const linkTypeColors: Record<string, string> = {
 };
 
 export function HorizontalFlowVisual({ processes, links, organizationSlug }: Props) {
+  const t = useTranslations("deliverables");
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
 
   // Group processes into swimlanes by owner (department)
@@ -47,7 +49,7 @@ export function HorizontalFlowVisual({ processes, links, organizationSlug }: Pro
     // Only include processes that participate in at least one link
     const participates = links.some((l) => l.from === proc.id || l.to === proc.id);
     if (!participates) continue;
-    const lane = proc.owner ?? "Sin departamento";
+    const lane = proc.owner ?? t("noDepartment");
     if (!lanes.has(lane)) lanes.set(lane, []);
     lanes.get(lane)!.push(proc);
   }

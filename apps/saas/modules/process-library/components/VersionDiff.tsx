@@ -11,6 +11,7 @@ import {
 	SelectValue,
 } from "@repo/ui/components/select";
 import { GitCompareIcon, Loader2Icon, PlusIcon, MinusIcon, RefreshCwIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface VersionEntry {
 	id: string;
@@ -93,6 +94,8 @@ function computeDiff(xml1: string | null, xml2: string | null): DiffChange[] {
 }
 
 export function VersionDiff({ processId, versions }: VersionDiffProps) {
+	const t = useTranslations("processLibrary.sidebar");
+	const tc = useTranslations("common");
 	const [v1, setV1] = useState<string>("");
 	const [v2, setV2] = useState<string>("");
 	const [changes, setChanges] = useState<DiffChange[] | null>(null);
@@ -132,7 +135,7 @@ export function VersionDiff({ processId, versions }: VersionDiffProps) {
 						<SelectContent>
 							{versions.map((v) => (
 								<SelectItem key={v.id} value={v.id}>
-									v{v.version} — {v.changeNote || "Sin nota"}
+									v{v.version} — {v.changeNote || tc("noNote")}
 								</SelectItem>
 							))}
 						</SelectContent>
@@ -149,7 +152,7 @@ export function VersionDiff({ processId, versions }: VersionDiffProps) {
 						<SelectContent>
 							{versions.map((v) => (
 								<SelectItem key={v.id} value={v.id}>
-									v{v.version} — {v.changeNote || "Sin nota"}
+									v{v.version} — {v.changeNote || tc("noNote")}
 								</SelectItem>
 							))}
 						</SelectContent>
@@ -175,7 +178,7 @@ export function VersionDiff({ processId, versions }: VersionDiffProps) {
 				<div className="rounded-lg border bg-muted/30 p-3">
 					{changes.length === 0 ? (
 						<p className="text-center text-xs text-muted-foreground">
-							Sin cambios entre las versiones seleccionadas
+							{t("noChanges")}
 						</p>
 					) : (
 						<div className="space-y-1.5">

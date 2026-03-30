@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { Button } from "@repo/ui/components/button";
 import { Badge } from "@repo/ui/components/badge";
+import { useTranslations } from "next-intl";
 import {
 	XIcon,
 	CheckCircleIcon,
@@ -46,6 +47,7 @@ interface NodeContextPanelProps {
 }
 
 export function NodeContextPanel({ element, processId, raciEntries }: NodeContextPanelProps) {
+	const tpd = useTranslations("processDetail");
 	const { clearSelection } = useProcessWorkspace();
 
 	const typeLabel = TYPE_LABELS[element.type] || element.type.replace("bpmn:", "");
@@ -104,7 +106,7 @@ export function NodeContextPanel({ element, processId, raciEntries }: NodeContex
 							</div>
 						) : (
 							<p className="text-xs text-muted-foreground">
-								No hay asignación RACI para esta actividad. Genera la matriz RACI desde la pestaña de análisis.
+								{tpd("noRaciAssignment")}
 							</p>
 						)}
 					</div>

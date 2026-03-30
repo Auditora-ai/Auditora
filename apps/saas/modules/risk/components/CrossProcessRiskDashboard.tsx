@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/card";
 import { Badge } from "@repo/ui/components/badge";
 import { ShieldAlertIcon, AlertTriangleIcon, InfoIcon, CheckCircleIcon } from "lucide-react";
@@ -37,6 +38,8 @@ function scoreBorderColor(score: number): string {
 }
 
 export function CrossProcessRiskDashboard() {
+  const t = useTranslations("riskTab");
+  const tc = useTranslations("common");
   const [processes, setProcesses] = useState<ProcessRiskSummary[]>([]);
   const [orgSummary, setOrgSummary] = useState<OrgSummary | null>(null);
   const [loading, setLoading] = useState(true);
@@ -107,7 +110,7 @@ export function CrossProcessRiskDashboard() {
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground text-center py-8">
-            Sin analisis de riesgos. Analiza al menos un proceso para ver el dashboard.
+            {t("noRisks")}
           </p>
         </CardContent>
       </Card>
@@ -152,7 +155,7 @@ export function CrossProcessRiskDashboard() {
               },
               {
                 icon: CheckCircleIcon,
-                label: "Procesos Analizados",
+                label: tc("process"),
                 count: processesWithRisks.length,
                 color: "text-green-600",
               },

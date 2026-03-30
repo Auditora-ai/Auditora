@@ -1,6 +1,7 @@
 "use client";
 
 import { Badge } from "@repo/ui/components/badge";
+import { useTranslations } from "next-intl";
 import { VersionDiff } from "../VersionDiff";
 import type { ProcessVersionEntry } from "../../types";
 
@@ -10,11 +11,14 @@ interface VersionesTabProps {
 }
 
 export function VersionesTab({ processId, versions }: VersionesTabProps) {
+	const t = useTranslations("processLibrary.sidebar");
+	const tc = useTranslations("common");
+
 	if (!versions || versions.length === 0) {
 		return (
 			<div className="flex flex-col items-center justify-center py-8 text-center">
 				<p className="text-xs text-muted-foreground">
-					Sin versiones. Las versiones se crean al guardar el diagrama o terminar una sesión.
+					{t("noVersions")}
 				</p>
 			</div>
 		);
@@ -35,7 +39,7 @@ export function VersionesTab({ processId, versions }: VersionesTabProps) {
 						<div className="flex items-center gap-2">
 							<Badge status="info" className="text-[10px]">v{v.version}</Badge>
 							<span className="text-muted-foreground truncate max-w-[160px]">
-								{v.changeNote || "Sin nota"}
+								{v.changeNote || tc("noNote")}
 							</span>
 						</div>
 						<span className="text-[10px] text-muted-foreground shrink-0">

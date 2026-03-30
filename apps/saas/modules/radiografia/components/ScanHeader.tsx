@@ -6,9 +6,10 @@ import { ColorModeToggle } from "@shared/components/ColorModeToggle";
 
 interface ScanHeaderProps {
 	variant?: "default" | "dark";
+	progress?: number;
 }
 
-export function ScanHeader({ variant = "default" }: ScanHeaderProps) {
+export function ScanHeader({ variant = "default", progress }: ScanHeaderProps) {
 	const isDark = variant === "dark";
 
 	return (
@@ -34,6 +35,16 @@ export function ScanHeader({ variant = "default" }: ScanHeaderProps) {
 					<ColorModeToggle />
 				</div>
 			</div>
+
+			{/* Journey progress bar */}
+			{progress != null && progress > 0 && (
+				<div className="absolute bottom-0 left-0 right-0 h-0.5 bg-border/30">
+					<div
+						className="h-full rounded-r-full bg-primary transition-all duration-700 ease-out"
+						style={{ width: `${Math.min(progress, 100)}%` }}
+					/>
+				</div>
+			)}
 		</header>
 	);
 }

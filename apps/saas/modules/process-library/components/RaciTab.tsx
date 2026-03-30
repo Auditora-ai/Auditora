@@ -5,6 +5,7 @@ import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { RefreshCw, Table2, AlertCircle, TrashIcon, PlusIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 
 interface RaciEntry {
@@ -42,6 +43,7 @@ export function RaciTab({ processId }: RaciTabProps) {
 	const [error, setError] = useState<string | null>(null);
 	const [newActivity, setNewActivity] = useState("");
 	const [newRole, setNewRole] = useState("");
+	const tc = useTranslations("common");
 	const { confirm } = useConfirmationAlert();
 
 	const fetchRaci = async () => {
@@ -191,7 +193,7 @@ export function RaciTab({ processId }: RaciTabProps) {
 		confirm({
 			title: "Eliminar actividad",
 			message: `Se eliminará "${activityName}" y todas sus asignaciones RACI.`,
-			confirmLabel: "Eliminar",
+			confirmLabel: tc("delete"),
 			destructive: true,
 			onConfirm: async () => {
 				setEntries((prev) => prev.filter((e) => e.activityName !== activityName));

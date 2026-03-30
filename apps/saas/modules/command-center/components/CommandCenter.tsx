@@ -2,7 +2,9 @@
 
 import { useState, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { PlusIcon, PencilIcon } from "lucide-react";
+import { PlusIcon, PencilIcon, CalendarIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { EmptyState } from "@shared/components/EmptyState";
 import { PageHeader } from "@shared/components/PageHeader";
 import { toast } from "sonner";
 import { SessionWizard, type SessionCloneData } from "./SessionWizard";
@@ -63,6 +65,8 @@ export function CommandCenter({
 	suggestions,
 }: CommandCenterProps) {
 	const router = useRouter();
+	const te = useTranslations("emptyStates.commandCenter");
+	const t = useTranslations("commandCenter");
 	const [sessions, setSessions] = useState(initialSessions);
 	const isFirstRun = initialSessions.length === 0 && processes.length === 0;
 	const [showSchedule, setShowSchedule] = useState(isFirstRun);
@@ -151,9 +155,9 @@ export function CommandCenter({
 			if (!res.ok) throw new Error("Failed to reschedule");
 			await refreshSessions();
 		} catch {
-			toast.error("Error al reprogramar la sesión");
+			toast.error(t("errorReschedule"));
 		}
-	}, [refreshSessions]);
+	}, [refreshSessions, t]);
 
 	// Handle session quick-edit
 	const handleQuickEdit = useCallback(async (sessionId: string, data: Record<string, unknown>) => {
@@ -165,21 +169,21 @@ export function CommandCenter({
 			});
 			if (!res.ok) throw new Error("Failed to update");
 			await refreshSessions();
-			toast.success("Sesión actualizada");
+			toast.success(t("sessionUpdated"));
 		} catch {
-			toast.error("Error al actualizar la sesión");
+			toast.error(t("errorUpdate"));
 		}
-	}, [refreshSessions]);
+	}, [refreshSessions, t]);
 
 	// Handle intake generation
 	const handleGenerateIntake = useCallback(async (intakeToken: string) => {
 		try {
 			const res = await fetch(`/api/intake/${intakeToken}`, { method: "POST" });
 			if (!res.ok) throw new Error("Failed to generate intake");
-			toast.success("Link de intake generado");
+			toast.success(t("intakeLinkGenerated"));
 			await refreshSessions();
 		} catch {
-			toast.error("Error generando link de intake");
+			toast.error(t("errorUpdate"));
 		}
 	}, [refreshSessions]);
 
@@ -199,26 +203,25 @@ export function CommandCenter({
 			const data = await res.json();
 			router.push(`/${organizationSlug}/session/${data.sessionId}/live`);
 		} catch {
-			toast.error("Error al iniciar sesión de edición");
+			toast.error(t("errorEditSession"));
 		}
-	}, [organizationSlug, router]);
+	}, [organizationSlug, router, t]);
 
 	// Empty state — no sessions at all → auto-open wizard in onboarding mode
 	if (sessions.length === 0 && processes.length === 0) {
 		return (
-			<div className="flex h-full flex-col items-center justify-center px-4 text-center">
-				<div className="mb-6 text-6xl opacity-20">📋</div>
-				<h2 className="mb-2 font-display text-xl text-foreground">Centro de Comando</h2>
-				<p className="mb-6 max-w-md text-sm text-muted-foreground">
-					Programa tu primera sesión de levantamiento para comenzar a mapear procesos con IA.
-				</p>
-				<button
-					type="button"
-					onClick={() => setShowSchedule(true)}
-					className="rounded-lg bg-primary px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-action-hover"
-				>
-					Programar Primera Sesión
-				</button>
+			<div className="flex h-full flex-col items-center justify-center px-4">
+				<EmptyState
+					icon={CalendarIcon}
+					title={te("title")}
+					description={te("description")}
+					actions={[
+						{
+							label: te("cta"),
+							onClick: () => setShowSchedule(true),
+						},
+					]}
+				/>
 				<SessionWizard
 					open={showSchedule}
 					onClose={() => setShowSchedule(false)}
@@ -242,7 +245,7 @@ export function CommandCenter({
 
 			{/* Header + Actions */}
 			<PageHeader
-				title="Centro de Comando"
+				title={t("title")}
 				subtitle={organizationName}
 				className="mb-0 border-b border-border px-6 py-4"
 				actions={
@@ -253,7 +256,7 @@ export function CommandCenter({
 							className="flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-2 text-xs font-medium text-foreground transition-colors hover:bg-secondary"
 						>
 							<PencilIcon className="h-3.5 w-3.5" />
-							Editar en Vivo
+							{t("editLive")}
 						</button>
 						<button
 							type="button"
@@ -261,7 +264,7 @@ export function CommandCenter({
 							className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-medium text-white transition-colors hover:bg-action-hover"
 						>
 							<PlusIcon className="h-3.5 w-3.5" />
-							Nueva Sesión
+							{t("newSession")}
 						</button>
 					</>
 				}
@@ -301,7 +304,7 @@ export function CommandCenter({
 						{nextSession && (
 							<PreparationPanel
 								sessionId={nextSession.id}
-								processName={nextSession.processDefinition?.name ?? "Sesión general"}
+								processName={nextSession.processDefinition?.name ?? t("defaultProcess")}
 							/>
 						)}
 						{nextSession && (

@@ -86,7 +86,35 @@
 			"documents": "Dokumente",
 			"scan": "Röntgenbild",
 			"assistant": "KI-Assistent",
-			"tools": "Werkzeuge"
+			"tools": "Werkzeuge",
+			"procedures": "Verfahren",
+			"simulations": "Simulationen",
+			"evaluation": "Bewertung",
+			"workflow": "Workflow",
+			"workspace": "Arbeitsbereich"
+		},
+		"greeting": {
+			"morning": "Guten Morgen",
+			"afternoon": "Guten Tag",
+			"evening": "Guten Abend"
+		},
+		"badges": {
+			"critical": "{count} kritisch",
+			"live": "LIVE",
+			"pending": "{count} ausstehend"
+		},
+		"actions": {
+			"registerRisk": "Risiko erfassen",
+			"newSession": "Neue Sitzung",
+			"newProcess": "Neuer Prozess"
+		},
+		"status": {
+			"riskScore": "Risiko-Score: {score}",
+			"attentionNeeded": "{count} erfordern Maßnahmen",
+			"underControl": "Exposition kontrolliert",
+			"setupFirst": "Beginnen Sie mit der Einrichtung Ihres ersten Kunden",
+			"today": "Heute",
+			"tomorrow": "Morgen"
 		},
 		"userMenu": {
 			"accountSettings": "Kontoeinstellungen",
@@ -708,6 +736,32 @@
 			"fewCore": "Sie haben {count} Kernprozesse. Ähnliche Branchen haben typischerweise 5-7. Welche anderen Prozesse sind wesentlich?",
 			"noStrategic": "Sie haben {count} Prozesse kartiert, aber keinen strategischen. Welche treiben die Differenzierung?",
 			"continue": "{count} Prozesse kartiert. Fahren Sie mit Deep Dives fort, um die Diagramme zu verfeinern."
+		},
+		"riskDashboard": {
+			"title": "Überblick",
+			"live": "LIVE",
+			"newSession": "Neue Sitzung",
+			"emptyTitle": "Willkommen bei Auditora.ai",
+			"emptyDesc": "Führen Sie Ihren ersten Scan durch, um die Risiken Ihres Unternehmens zu entdecken, oder planen Sie eine Sitzung mit Ihrem Berater.",
+			"scanCta": "Scan starten",
+			"risks": "Risiken",
+			"processes": "Prozesse",
+			"sessions": "Sitzungen",
+			"topRisks": "Offene Top-Risiken",
+			"noRisks": "Keine Risiken identifiziert",
+			"nextSession": "Nächste Sitzung",
+			"noSessions": "Keine Sitzungen geplant",
+			"scheduleSession": "Sitzung planen",
+			"recentActivity": "Letzte Aktivität",
+			"noActivity": "Keine aktuelle Aktivität",
+			"viewAllRisks": "Alle Risiken anzeigen",
+			"viewProcesses": "Prozesse anzeigen",
+			"viewDeliverables": "Ergebnisse anzeigen",
+			"noRisksDesc": "Keine kritischen Risiken. Planen Sie eine Sitzung, um Ihre Prozesse zu analysieren.",
+			"nextSessionLabel": "Nächste Sitzung",
+			"noProcess": "Kein Prozess zugewiesen",
+			"viewDetails": "Details anzeigen",
+			"coverage": "Abdeckung"
 		}
 	},
 	"processLibrary": {
@@ -730,7 +784,19 @@
 		"share": "Teilen",
 		"versions": "{count} {count, plural, one {Version} other {Versionen}}",
 		"nodes": "{count} {count, plural, one {Knoten} other {Knoten}}",
-		"sessions": "{count} {count, plural, one {Sitzung} other {Sitzungen}}"
+		"sessions": "{count} {count, plural, one {Sitzung} other {Sitzungen}}",
+		"sidebar": {
+			"noSessions": "Keine Sitzungen. Starten Sie einen Deep Dive, um diesen Prozess abzubilden.",
+			"noVersions": "Keine Versionen. Versionen werden beim Speichern des Diagramms oder Beenden einer Sitzung erstellt.",
+			"noDiagram": "Kein BPMN-Diagramm",
+			"noDescription": "Keine Beschreibung",
+			"noRaci": "Keine RACI-Matrix",
+			"noRiskAnalysis": "Keine Risikoanalyse",
+			"noCaptureSessions": "Keine Erfassungssitzungen",
+			"noGoals": "Keine Ziele definiert",
+			"noChanges": "Keine Änderungen zwischen den ausgewählten Versionen",
+			"contexto": "Kontext"
+		}
 	},
 	"commandPalette": {
 		"placeholder": "Kunden, Prozesse, Sitzungen suchen...",
@@ -888,10 +954,7 @@
 			"cancel": "Abbrechen",
 			"confirm": "Bestätigen"
 		},
-		"actions": {
-			"continue": "Weiter",
-			"verify": "Überprüfen Sie"
-		},
+		"actions": "Aktionen",
 		"colorMode": {
 			"system": "System",
 			"light": "Hell",
@@ -902,7 +965,44 @@
 			"upperAndLowercase": "Groß- & Kleinbuchstaben",
 			"number": "Zahl",
 			"specialCharacter": "Sonderzeichen"
-		}
+		},
+		"save": "Speichern",
+		"saving": "Speichern...",
+		"cancel": "Abbrechen",
+		"delete": "Löschen",
+		"edit": "Bearbeiten",
+		"create": "Erstellen",
+		"add": "Hinzufügen",
+		"view": "Anzeigen",
+		"close": "Schließen",
+		"back": "Zurück",
+		"retry": "Erneut versuchen",
+		"search": "Suchen",
+		"loading": "Laden...",
+		"noResults": "Keine Ergebnisse",
+		"error": "Fehler",
+		"success": "Erfolg",
+		"errorGeneric": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+		"errorSaving": "Fehler beim Speichern",
+		"errorDeleting": "Fehler beim Löschen",
+		"errorLoading": "Fehler beim Laden",
+		"savedSuccess": "Erfolgreich gespeichert",
+		"deletedSuccess": "Erfolgreich gelöscht",
+		"copiedSuccess": "In die Zwischenablage kopiert",
+		"description": "Beschreibung",
+		"name": "Name",
+		"type": "Typ",
+		"status": "Status",
+		"date": "Datum",
+		"process": "Prozess",
+		"noDescription": "Keine Beschreibung",
+		"noNote": "Keine Notiz",
+		"exit": "Beenden",
+		"maximize": "Maximieren",
+		"coverage": "Abdeckung",
+		"severity": "Schweregrad",
+		"probability": "Wahrscheinlichkeit",
+		"size": "Größe"
 	},
 	"meeting": {
 		"topBar": {
@@ -1408,9 +1508,15 @@
 		"readyForDiagram": "Bereit zur Diagrammerstellung",
 		"keepAnswering": "Antworten Sie weiter zur Verbesserung",
 		"viewDiagram": "Mein Prozessdiagramm anzeigen",
+		"skipToResults": "Zum Diagramm springen",
 		"buildingDiagram": "Ihre Prozesskarte wird erstellt...",
 		"yourProcessMap": "Ihre Prozesskarte",
 		"generatingDeepScan": "Ihr vollständiger Scan wird erstellt...",
+		"revealTitle": "Tiefenanalyse läuft",
+		"revealCorrelating": "Forschungsergebnisse werden korreliert...",
+		"revealMapping": "Prozessabläufe werden kartiert...",
+		"revealAnalyzing": "Tiefe Risikoanalyse wird durchgeführt...",
+		"revealGenerating": "BPMN-Diagramm wird erstellt...",
 		"completeScan": "Vollständiger Scan",
 		"additionalRisks": "Das Gespräch hat {count} zusätzliche Risiken aufgedeckt, die der erste Scan nicht erkannt hat.",
 		"initialVsDeep": "Erster Scan: {initial} Risiken. Tiefer Scan: {deep} Risiken.",
@@ -1420,6 +1526,9 @@
 		"saveScan": "Ihren Scan speichern",
 		"saveDescription": "{count} Risiken in \"{process}\" gefunden. Erstellen Sie Ihr Konto, um diese Analyse zu speichern und weitere Prozesse zu kartieren.",
 		"createAccount": "Konto erstellen und speichern",
+		"convertBullet1": "Vollständiges Risikoregister mit Maßnahmen",
+		"convertBullet2": "BPMN-Prozessdiagramm zum Bearbeiten",
+		"convertBullet3": "Verbesserungen über die Zeit verfolgen",
 		"creatingAccount": "Konto wird erstellt...",
 		"termsNotice": "Mit der Kontoerstellung akzeptieren Sie unsere Nutzungsbedingungen.",
 		"existingUserError": "Sie haben bereits ein Konto.",
@@ -1447,5 +1556,178 @@
 			"HUMAN_RESOURCE": "Personal",
 			"REPUTATIONAL": "Reputation"
 		}
+	},
+	"maturityRing": {
+		"label": "Risikoreife",
+		"noData": "Keine Daten",
+		"tooltip": "Zusammengesetzter Score basierend auf Dokumentationsabdeckung (30 %), Risikoanalyseabdeckung (30 %), Prozessreife (20 %) und Kontrolleffektivität (20 %)."
+	},
+	"emptyStates": {
+		"risks": {
+			"noFilter": "Keine Ergebnisse",
+			"noFilterDesc": "Keine Risiken entsprechen den ausgewählten Filtern.",
+			"noControls": "Keine Risiken zum Zuordnen",
+			"noControlsDesc": "Führen Sie eine Risikoanalyse durch, um die mit jeder Aktivität verbundenen Kontrollen zu identifizieren.",
+			"noFmea": "Keine FMEA-Daten",
+			"noFmeaDesc": "Die FMEA-Analyse identifiziert Fehlermodi, ihre Auswirkungen und die Risikoprioritätszahl (RPN) für jede Prozessaktivität.",
+			"noOpportunities": "Keine Chancen identifiziert",
+			"noOpportunitiesDesc": "Verbesserungsmöglichkeiten werden automatisch während der Prozessrisikoanalyse erkannt."
+		},
+		"processes": {
+			"noSubprocesses": "Keine Unterprozesse",
+			"noSubprocessesDesc": "Fügen Sie einen Unterprozess hinzu, um diesen Prozess zu zerlegen und zu detaillieren.",
+			"noSessions": "Keine Sitzungen",
+			"noSessionsDesc": "Starten Sie einen Deep Dive, um diesen Prozess im Detail abzubilden."
+		},
+		"documents": {
+			"noDocuments": "Keine Dokumente",
+			"noDocumentsDesc": "Laden Sie Referenzdokumente hoch, damit die KI sie als Kontext in Ihren Sitzungen verwenden kann."
+		},
+		"deliverables": {
+			"noProcessCards": "Keine Prozesse registriert",
+			"noProcessCardsDesc": "Starten Sie eine Discovery-Sitzung, um Prozesse zu dokumentieren und Karten automatisch zu generieren."
+		},
+		"commandCenter": {
+			"title": "Kommandozentrale",
+			"description": "Planen Sie Ihre erste Erhebungssitzung, um mit der KI-gestützten Prozessabbildung zu beginnen.",
+			"cta": "Erste Sitzung planen"
+		}
+	},
+	"riskTab": {
+		"errorAnalyzing": "Analyse fehlgeschlagen. Bitte erneut versuchen.",
+		"noRisks": "Keine Risiken analysiert",
+		"noRisksDesc": "Führen Sie die Analyse durch, um Risiken, Chancen und Fehlermodi in diesem Prozess zu identifizieren.",
+		"analyzing": "Analyse läuft...",
+		"analyze": "Risiken analysieren",
+		"avgRisk": "Durchschnittliches Risiko:",
+		"critical": "Kritisch",
+		"high": "Hoch",
+		"opportunity": "Chance",
+		"tabs": {
+			"register": "Register",
+			"opportunities": "Chancen",
+			"controls": "Kontrollen",
+			"fmea": "FMEA"
+		},
+		"riskMatrix": "Risikomatrix",
+		"filterSeverity": "Filter: Schweregrad {sev}, Wahrscheinlichkeit {prob}",
+		"clearFilter": "Filter löschen",
+		"riskTrend": "Risikotrend",
+		"noControls": "Keine Kontrollen definiert. Fügen Sie Kontrollen hinzu, um das Risiko zu reduzieren.",
+		"addControl": "Kontrolle hinzufügen",
+		"noMitigations": "Keine Maßnahmen definiert.",
+		"mitigationPlaceholder": "Maßnahme zur Risikominderung..."
+	},
+	"commandCenter": {
+		"title": "Kommandozentrale",
+		"editLive": "Live bearbeiten",
+		"newSession": "Neue Sitzung",
+		"defaultProcess": "Allgemeine Sitzung",
+		"errorReschedule": "Fehler beim Umplanen",
+		"errorUpdate": "Fehler beim Aktualisieren",
+		"errorEditSession": "Fehler beim Starten der Bearbeitungssitzung",
+		"sessionUpdated": "Sitzung aktualisiert",
+		"intakeLinkGenerated": "Intake-Link generiert",
+		"noSessionsScheduled": "Keine Sitzungen geplant",
+		"noResponses": "Noch keine Antworten",
+		"scheduleSession": "Sitzung planen",
+		"wizard": {
+			"process": "Prozess",
+			"participants": "Teilnehmer",
+			"context": "Kontext",
+			"schedule": "Planen",
+			"invitation": "Einladung",
+			"searchProcess": "Prozess suchen oder neuen Namen eingeben...",
+			"loadingProcesses": "Prozesse laden...",
+			"noProcesses": "Keine Prozesse. Geben Sie einen Namen ein, um einen zu erstellen.",
+			"createNew": "Erstellen",
+			"newProcess": "Neuer Prozess",
+			"sessionType": "Sitzungstyp",
+			"noSelection": "Nicht ausgewählt",
+			"noParticipants": "Keine hinzugefügt",
+			"noContext": "Kein Kontext",
+			"noCall": "Kein Anruf",
+			"notScheduled": "Nicht geplant",
+			"contextPlaceholder": "Beschreiben Sie den Prozesskontext, Sitzungsziele, relevante Kundeninformationen...",
+			"coverPlaceholder": "Was in dieser Sitzung behandelt werden soll...",
+			"errorRaci": "Fehler beim Abrufen der RACI-Daten",
+			"noParticipantsEmpty": "Keine Teilnehmer"
+		}
+	},
+	"processDetail": {
+		"deleteConfirm": "Prozess löschen",
+		"deleteMessage": "Alle zugehörigen Daten werden dauerhaft gelöscht: Unterprozesse, Sitzungen, RACI, Risiken und Versionen.",
+		"linkCopied": "Link kopiert",
+		"nameRequired": "Name ist erforderlich",
+		"subprocesses": "Unterprozesse",
+		"noSubprocesses": "Keine Unterprozesse",
+		"documents": "Dokumente",
+		"uploadDocs": "SOPs oder Handbücher hochladen",
+		"processDetails": "Prozessdetails",
+		"raciMatrix": "RACI-Matrix",
+		"notGenerated": "Nicht generiert",
+		"intelligence": "Intelligenz",
+		"analyzeProcess": "Prozess analysieren",
+		"risksQuality": "Risiken & Qualität",
+		"analyzeRisks": "Risiken analysieren",
+		"consolidation": "Konsolidierung",
+		"conflicts": "{count} Konflikte",
+		"consolidate": "Perspektiven konsolidieren",
+		"noDiagram": "Kein Diagramm. Erstellen Sie eines oder führen Sie eine Sitzung durch.",
+		"createDiagram": "Diagramm erstellen",
+		"regenerate": "Neu generieren",
+		"fixWithAi": "Mit KI reparieren",
+		"repairingDiagram": "Diagramm wird repariert...",
+		"detailsSaved": "Details gespeichert",
+		"errorSavingDetails": "Fehler beim Speichern der Details",
+		"descriptionLabel": "Beschreibung",
+		"ownerPlaceholder": "Abteilung oder verantwortliche Person...",
+		"goals": "Ziele",
+		"triggers": "Auslöser",
+		"outputs": "Ergebnisse",
+		"addGoalPlaceholder": "Ziel hinzufügen...",
+		"addTriggerPlaceholder": "Auslöser hinzufügen...",
+		"addOutputPlaceholder": "Ergebnis hinzufügen...",
+		"subprocess": "Unterprozess",
+		"task": "Aufgabe",
+		"procedure": "Verfahren",
+		"level": "Ebene",
+		"continueLastSession": "Letzte fortsetzen",
+		"nodes": "{count} Knoten",
+		"risks": "{count} Risiken",
+		"join": "Beitreten",
+		"onboardingTitle": "Beginnen Sie mit der Dokumentation Ihres Prozesses",
+		"onboardingDesc1": "Dieser Arbeitsbereich ermöglicht es Ihnen, Ihre Prozessdokumentation iterativ aufzubauen.",
+		"onboardingDesc2": "Starten Sie eine Discovery-Sitzung oder fügen Sie Details manuell hinzu.",
+		"noCategoryFilter": "Keine Prozesse in dieser Kategorie",
+		"noCategoryFilterDesc": "Prozesse manuell hinzufügen oder KI-Discovery verwenden",
+		"errorStatusChange": "Fehler beim Statuswechsel",
+		"noRaciAssignment": "Keine RACI-Zuordnung für diese Aktivität. Generieren Sie die RACI-Matrix im Analyse-Tab."
+	},
+	"meetingModule": {
+		"noSessions": "Keine Sitzungen",
+		"noSessionsDesc": "Erstellen Sie Ihre erste Sitzung, um mit der Prozessabbildung zu beginnen.",
+		"newSession": "Neue Sitzung",
+		"noProcess": "Kein Prozess",
+		"errorSendMessage": "Fehler beim Senden der Nachricht",
+		"errorEdit": "Fehler beim Bearbeiten",
+		"errorDelete": "Fehler beim Löschen",
+		"errorRetry": "Fehler beim erneuten Versuch",
+		"errorApplyPattern": "Fehler beim Anwenden des Musters",
+		"noDocuments": "Keine Dokumente",
+		"defaultProcessName": "Prozess",
+		"noNodesData": "Keine Knotendaten zum Regenerieren des Diagramms."
+	},
+	"discovery": {
+		"errorProcessing": "Fehler bei der Verarbeitung der Nachricht. Bitte erneut versuchen.",
+		"errorTranscribing": "Fehler bei der Transkription"
+	},
+	"intelligenceTab": {
+		"noOpenQuestions": "Keine offenen Fragen. Der Prozess ist vollständig oder benötigt ein Audit.",
+		"noQuestionsCategory": "Keine Fragen in dieser Kategorie."
+	},
+	"deliverables": {
+		"noOwner": "Kein Eigentümer",
+		"noDepartment": "Keine Abteilung"
 	}
 }

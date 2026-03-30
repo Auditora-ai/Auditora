@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
 	}
 
 	const ip = getClientIp(request);
-	if (!(await checkRateLimit(ip, 5))) {
+	if (!(await checkRateLimit(ip, 5, "convert"))) {
 		return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
 	}
 

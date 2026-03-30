@@ -93,6 +93,10 @@ export type { ProcedureGenInput } from "./src/pipelines/procedure-gen";
 export { ProcedureResultSchema } from "./src/schemas/procedure-gen";
 export type { ProcedureResult, ProcedureStep } from "./src/schemas/procedure-gen";
 
+// Simulation Evaluation
+export { evaluateSimulationRun } from "./src/pipelines/evaluate-simulation";
+export type { EvaluationResult } from "./src/pipelines/evaluate-simulation";
+
 // Process Pattern Templates
 export { PROCESS_PATTERNS, getPatternById, getPatternSummariesForPrompt } from "./src/templates/process-patterns";
 export type { ProcessPattern, ProcessPatternNode } from "./src/templates/process-patterns";
@@ -111,6 +115,10 @@ export type { ProcessDiscoveryInput, ProcessDiscoveryResult, ProcessSuggestion }
 export { prepareSessionInvitation } from "./src/pipelines/session-preparation";
 export type { SessionPreparationResult } from "./src/pipelines/session-preparation";
 export type { SessionPrepInput } from "./src/prompts/session-preparation";
+
+// Simulation Engine
+export { generateSimulationTemplate } from "./src/pipelines/generate-simulation";
+export type { GenerateSimulationInput } from "./src/pipelines/generate-simulation";
 
 // Diagram Repair
 export { repairDiagram } from "./src/pipelines/diagram-repair";

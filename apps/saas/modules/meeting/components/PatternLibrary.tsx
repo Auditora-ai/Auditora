@@ -5,10 +5,12 @@ import { ChevronDownIcon, ChevronRightIcon, ZapIcon, PlusIcon, Loader2Icon } fro
 import { toast } from "sonner";
 import type { DiagramNode } from "../types";
 import { detectPatterns, type ProcessPattern } from "../lib/patterns";
+import { useTranslations } from "next-intl";
 import { useLiveSessionContext } from "../context/LiveSessionContext";
 
 export function PatternLibrary() {
 	const { nodes, sessionId } = useLiveSessionContext();
+	const t = useTranslations("meetingModule");
 	const [open, setOpen] = useState(true);
 	const [applying, setApplying] = useState<string | null>(null);
 
@@ -40,7 +42,7 @@ export function PatternLibrary() {
 			toast.success(`Patron "${pattern.name}" aplicado (${data.created} nodos)`);
 		} catch (err) {
 			console.error("[PatternLibrary] Apply failed:", err);
-			toast.error("Error al aplicar patron");
+			toast.error(t("errorApplyPattern"));
 		} finally {
 			setApplying(null);
 		}

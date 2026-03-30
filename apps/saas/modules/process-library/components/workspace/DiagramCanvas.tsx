@@ -17,6 +17,7 @@ import {
 	MaximizeIcon,
 } from "lucide-react";
 import { Card, CardContent } from "@repo/ui/components/card";
+import { useTranslations } from "next-intl";
 import { useBpmnModeler } from "@meeting/hooks/useBpmnModeler";
 import { useProcessWorkspace } from "../../context/ProcessWorkspaceContext";
 import { HealthBadgeOverlay } from "./HealthBadgeOverlay";
@@ -29,6 +30,8 @@ interface DiagramCanvasProps {
 }
 
 export function DiagramCanvas({ processId, bpmnXml, raciEntries }: DiagramCanvasProps) {
+	const tc = useTranslations("common");
+	const tpd = useTranslations("processDetail");
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [showEditor, setShowEditor] = useState(!!bpmnXml);
 	const [saving, setSaving] = useState(false);
@@ -178,7 +181,7 @@ export function DiagramCanvas({ processId, bpmnXml, raciEntries }: DiagramCanvas
 					<CardContent className="flex flex-col items-center justify-center py-12 px-16 text-center">
 						<GitBranch className="mb-3 h-8 w-8 text-muted-foreground/40" />
 						<p className="mb-4 text-sm text-muted-foreground">
-							Sin diagrama. Crea uno o ejecuta una sesión para generarlo.
+							{tpd("noDiagram")}
 						</p>
 						<Button onClick={() => setShowEditor(true)}>
 							<PlusIcon className="mr-2 h-4 w-4" />
@@ -222,7 +225,7 @@ export function DiagramCanvas({ processId, bpmnXml, raciEntries }: DiagramCanvas
 			<div className="flex items-center gap-0.5">
 				<Button onClick={handleSave} disabled={saving} size="sm" className="h-7 text-xs">
 					<SaveIcon className="mr-1 h-3.5 w-3.5" />
-					{saving ? "..." : "Guardar"}
+					{saving ? "..." : tc("save")}
 				</Button>
 				<Button variant="ghost" size="sm" onClick={() => setFullscreen(!fullscreen)} className="h-7 w-7 p-0">
 					{fullscreen ? <XIcon className="h-3.5 w-3.5" /> : <EyeIcon className="h-3.5 w-3.5" />}

@@ -41,6 +41,8 @@ model User {
   members                  Member[]
   twofactors               TwoFactor[]
   meetingSessions          MeetingSession[]
+  simulationRuns           SimulationRun[]
+  humanRiskProfiles        HumanRiskProfile[]
 
   @@unique([email])
   @@unique([username])
@@ -170,6 +172,9 @@ model Organization {
   orgDeliverables    OrgDeliverable[]
   aiUsageLogs        AiUsageLog[]
   externalCostLogs   ExternalCostLog[]
+  simulationTemplates SimulationTemplate[]
+  humanRiskProfiles   HumanRiskProfile[]
+  procedures          Procedure[]
 
   @@unique([slug])
   @@map("organization")
@@ -374,6 +379,8 @@ model ProcessDefinition {
   risks            ProcessRisk[]
   documents        Document[]
   discoveryThreads DiscoveryThread[]
+  simulationTemplates SimulationTemplate[]
+  procedures          Procedure[]
   createdAt        DateTime            @default(now())
 
   @@index([architectureId])
@@ -485,6 +492,7 @@ model DiagramNode {
   procedure   Json?
 
   comments    NodeComment[]
+  risks       ProcessRisk[]
 
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
@@ -779,10 +787,15 @@ model ProcessRisk {
   residualProbability Int?
   residualScore       Int?
 
-  // Context
-  affectedStep        String?
+  // Context — BPMN node linkage
+  affectedStep        String?           // Legacy: string label (kept for backward compat)
+  affectedNodeId      String?           // FK to DiagramNode (preferred)
+  affectedNode        DiagramNode?      @relation(fields: [affectedNodeId], references: [id], onDelete: SetNull)
   affectedRole        String?
   relatedItemId       String?
+  // Procedure linkage
+  linkedProcedureId   String?
+  linkedProcedure     Procedure?        @relation(fields: [linkedProcedureId], references: [id], onDelete: SetNull)
 
   // Opportunity (positive risk)
   isOpportunity       Boolean           @default(false)
@@ -806,6 +819,8 @@ model ProcessRisk {
   updatedAt           DateTime          @updatedAt
 
   @@index([processDefinitionId])
+  @@index([affectedNodeId])
+  @@index([linkedProcedureId])
   @@index([status])
   @@index([riskScore])
   @@map("process_risk")
@@ -1280,5 +1295,232 @@ model AnonymousSession {
   @@index([fingerprint])
   @@index([expiresAt])
   @@map("anonymous_session")
+}
+
+// ============================================
+// SIMULATION & EVALUATION MODELS
+// ============================================
+
+enum SimulationTemplateStatus {
+  GENERATING
+  GENERATION_FAILED
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum SimulationTargetRole {
+  DIRECTOR_OPERACIONES
+  DIRECTOR_COMPRAS
+  DIRECTOR_CALIDAD
+  DIRECTOR_FINANZAS
+  DIRECTOR_LOGISTICA
+  GERENTE_PLANTA
+  CONTROLLER
+  CEO
+  CUSTOM
+}
+
+enum DecisionRiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum SimulationRunStatus {
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
+
+model SimulationTemplate {
+  id                    String                   @id @default(cuid())
+  organizationId        String
+  organization          Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  processDefinitionId   String
+  processDefinition     ProcessDefinition        @relation(fields: [processDefinitionId], references: [id], onDelete: Cascade)
+  processVersionId      String?                  // Pinned to specific process version
+  title                 String
+  narrative             String                   @db.Text // Pre-generated scenario narrative
+  targetRole            SimulationTargetRole     @default(CUSTOM)
+  customRoleName        String?                  // When targetRole is CUSTOM
+  status                SimulationTemplateStatus @default(GENERATING)
+  version               Int                      @default(1)
+  riskIds               String[]                 // IDs of ProcessRisk entries this template evaluates
+  generationPrompt      String?                  @db.Text // Prompt used to generate (for debugging/regeneration)
+  scenarios             SimulationScenario[]
+  createdBy             String
+  createdAt             DateTime                 @default(now())
+  updatedAt             DateTime                 @updatedAt
+
+  @@index([organizationId])
+  @@index([processDefinitionId])
+  @@index([status])
+  @@map("simulation_template")
+}
+
+model SimulationScenario {
+  id         String             @id @default(cuid())
+  templateId String
+  template   SimulationTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  context    Json               // Parameterized variables: company name, amounts, names, etc.
+  decisions  Decision[]
+  runs       SimulationRun[]
+  createdAt  DateTime           @default(now())
+
+  @@index([templateId])
+  @@map("simulation_scenario")
+}
+
+model Decision {
+  id                  String             @id @default(cuid())
+  scenarioId          String
+  scenario            SimulationScenario @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
+  order               Int                // Sequential: 1, 2, 3...
+  prompt              String             @db.Text // The situation the user faces
+  options             Json               // Array<{ label: string, description: string }>
+  consequences        Json               // Array<string> — flavor text per option chosen, indexed by option
+  proceduralReference String?            @db.Text // What the procedure says for this decision (max ~200 tokens)
+  riskLevelByOption   Json               // Array<DecisionRiskLevel> — risk level per option (input for scoring, NOT correctness)
+  responses           DecisionResponse[]
+
+  @@unique([scenarioId, order])
+  @@index([scenarioId])
+  @@map("simulation_decision")
+}
+
+model DecisionResponse {
+  id           String        @id @default(cuid())
+  runId        String
+  run          SimulationRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+  decisionId   String
+  decision     Decision      @relation(fields: [decisionId], references: [id], onDelete: Cascade)
+  chosenOption Int           // Index of chosen option (0-based)
+  timeToDecide Int?          // Seconds spent on this decision
+  createdAt    DateTime      @default(now())
+
+  @@unique([runId, decisionId])
+  @@index([runId])
+  @@index([decisionId])
+  @@map("decision_response")
+}
+
+model SimulationRun {
+  id           String              @id @default(cuid())
+  scenarioId   String
+  scenario     SimulationScenario  @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
+  userId       String
+  user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status       SimulationRunStatus @default(IN_PROGRESS)
+  responses    DecisionResponse[]
+  // Scoring (populated after completion by AI evaluation)
+  alignment    Int?                // 0-100: alignment with procedure
+  riskLevel    Int?                // 0-100: risk introduced by decisions
+  criterio     Int?                // 0-100: quality of judgment (AI-evaluated)
+  overallScore Int?                // Weighted: 0.3*alignment + 0.3*(100-riskLevel) + 0.4*criterio
+  errorPatterns Json?              // Array<string> — detected error patterns
+  aiFeedback   String?             @db.Text // AI-generated feedback text
+  duration     Int?                // Total seconds
+  completedAt  DateTime?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+
+  @@index([scenarioId])
+  @@index([userId])
+  @@index([status])
+  @@map("simulation_run")
+}
+
+model HumanRiskProfile {
+  id                 String   @id @default(cuid())
+  userId             String
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId     String
+  organization       Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  overallScore       Int?     // Weighted aggregate across all simulations
+  totalSimulations   Int      @default(0)
+  patternsByProcess  Json?    // Array<{ processId, processName, avgAlignment, avgRiskLevel, dominantErrorPattern, simulationCount }>
+  strengthAreas      Json?    // Array<string>
+  riskAreas          Json?    // Array<string>
+  recommendedTraining Json?   // Array<string> — AI-generated labels, NOT curated content
+  lastUpdatedAt      DateTime @updatedAt
+  createdAt          DateTime @default(now())
+
+  @@unique([userId, organizationId])
+  @@index([organizationId])
+  @@map("human_risk_profile")
+}
+
+// ============================================
+// PROCEDURE MODEL (first-class entity)
+// ============================================
+
+enum ProcedureStatus {
+  DRAFT
+  IN_REVIEW
+  APPROVED
+  PUBLISHED
+  ARCHIVED
+}
+
+model Procedure {
+  id                    String          @id @default(cuid())
+  processDefinitionId   String
+  processDefinition     ProcessDefinition @relation(fields: [processDefinitionId], references: [id], onDelete: Cascade)
+  organizationId        String
+  organization          Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  nodeId                String?         // Optional: linked to a specific BPMN DiagramNode
+  title                 String
+  version               Int             @default(1)
+  status                ProcedureStatus @default(DRAFT)
+  // Structured content (from existing SOP generator)
+  objective             String?         @db.Text
+  scope                 String?         @db.Text
+  responsible           String?
+  frequency             String?         // daily, weekly, monthly, per_event
+  prerequisites         Json?           // Array<string>
+  steps                 Json?           // Array<{ action, description, responsibleRole, systems, inputs, outputs, controls, exceptions, estimatedDuration }>
+  indicators            Json?           // Array<string> — KPIs
+  // Rich text content (TipTap JSON for manual editing)
+  richContent           Json?           // TipTap document JSON
+  // Control points summary for simulation evaluation (max ~500 tokens)
+  controlPointsSummary  String?         @db.Text
+  // Linked risks
+  linkedRiskIds         String[]        // Legacy: IDs array (kept for backward compat)
+  linkedRisks           ProcessRisk[]   // Reverse relation from ProcessRisk.linkedProcedure
+  // Audit
+  createdBy             String
+  approvedBy            String?
+  approvedAt            DateTime?
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+  // Version history
+  versions              ProcedureVersion[]
+
+  @@index([processDefinitionId])
+  @@index([organizationId])
+  @@index([nodeId])
+  @@index([status])
+  @@map("procedure")
+}
+
+// ============================================
+// PROCEDURE VERSION (snapshots for history)
+// ============================================
+
+model ProcedureVersion {
+  id           String          @id @default(cuid())
+  procedureId  String
+  procedure    Procedure       @relation(fields: [procedureId], references: [id], onDelete: Cascade)
+  version      Int
+  status       ProcedureStatus
+  content      Json            // Full snapshot: { title, objective, scope, steps, indicators, richContent }
+  changeNote   String?         @db.Text
+  changedBy    String
+  changedAt    DateTime        @default(now())
+
+  @@index([procedureId])
+  @@map("procedure_version")
 }
 

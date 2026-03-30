@@ -8,6 +8,7 @@ import { Label } from "@repo/ui/components/label";
 import { Badge } from "@repo/ui/components/badge";
 import { SaveIcon, PlusIcon, XIcon } from "lucide-react";
 import { toastSuccess, toastError } from "@repo/ui/components/toast";
+import { useTranslations } from "next-intl";
 import { ContextChat } from "../ContextChat";
 import type { ProcessData, ProcessChild } from "../../types";
 
@@ -19,6 +20,7 @@ interface ContextoTabProps {
 }
 
 export function ContextoTab({ process, organizationSlug, processesPath, onUpdate }: ContextoTabProps) {
+	const tc = useTranslations("common");
 	const [description, setDescription] = useState(process.description || "");
 	const [owner, setOwner] = useState(process.owner || "");
 	const [goals, setGoals] = useState<string[]>(process.goals);
@@ -38,10 +40,10 @@ export function ContextoTab({ process, organizationSlug, processesPath, onUpdate
 				onUpdate({ description, owner, goals, triggers, outputs });
 				toastSuccess("Guardado");
 			} else {
-				toastError("Error al guardar");
+				toastError(tc("errorSaving"));
 			}
 		} catch {
-			toastError("Error al guardar");
+			toastError(tc("errorSaving"));
 		} finally {
 			setSaving(false);
 		}
