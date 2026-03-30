@@ -70,12 +70,12 @@ export default async function SharedReportPage({
 	const confirmedNodes = session.diagramNodes.filter((n) => n.state === "CONFIRMED");
 
 	return (
-		<div className="min-h-screen bg-stone-50">
+		<div className="min-h-screen bg-slate-50">
 			{/* Branding banner */}
-			<div className="bg-stone-900 border-b border-stone-800 px-4 py-2 md:px-6">
+			<div className="bg-slate-900 border-b border-slate-800 px-4 py-2 md:px-6">
 				<div className="mx-auto max-w-5xl flex items-center justify-between">
-					<span className="text-xs text-stone-400">
-						Powered by <span className="font-semibold text-stone-200">Auditora.ai</span>
+					<span className="text-xs text-slate-400">
+						Powered by <span className="font-semibold text-slate-200">Auditora.ai</span>
 					</span>
 					<a
 						href="https://auditora.ai"
@@ -123,21 +123,21 @@ export default async function SharedReportPage({
 				)}
 
 				{summaryData && (
-					<section className="rounded-lg border border-stone-200 bg-white overflow-hidden">
-						<div className="border-b border-stone-100 px-4 py-4 md:px-6">
-							<h2 className="text-lg text-stone-900" style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}>
+					<section className="rounded-lg border border-slate-200 bg-white overflow-hidden">
+						<div className="border-b border-slate-100 px-4 py-4 md:px-6">
+							<h2 className="text-lg text-slate-900" style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}>
 								Resumen Ejecutivo
 							</h2>
 						</div>
 						<div className="px-4 py-4 space-y-4 md:px-6 md:py-5">
-							<p className="text-sm leading-relaxed text-stone-600 whitespace-pre-wrap">{summaryData.summary}</p>
+							<p className="text-sm leading-relaxed text-slate-600 whitespace-pre-wrap">{summaryData.summary}</p>
 							{summaryData.actionItems?.length > 0 && (
 								<div>
-									<h3 className="mb-2 text-sm font-medium text-stone-700">Acciones Pendientes</h3>
+									<h3 className="mb-2 text-sm font-medium text-slate-700">Acciones Pendientes</h3>
 									<ul className="space-y-1.5">
 										{summaryData.actionItems.map((item: string, i: number) => (
-											<li key={i} className="flex items-start gap-2 text-sm text-stone-600">
-												<span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-stone-200 text-xs text-stone-400">
+											<li key={i} className="flex items-start gap-2 text-sm text-slate-600">
+												<span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-slate-200 text-xs text-slate-400">
 													{i + 1}
 												</span>
 												{item}
@@ -179,12 +179,12 @@ export default async function SharedReportPage({
 			</main>
 
 			{/* Footer */}
-			<footer className="border-t border-stone-200 bg-white">
+			<footer className="border-t border-slate-200 bg-white">
 				<div className="mx-auto max-w-5xl px-4 py-4 md:px-6 space-y-3">
-					<p className="text-[10px] text-stone-400 text-center leading-relaxed">
+					<p className="text-[10px] text-slate-400 text-center leading-relaxed">
 						Este reporte fue generado por inteligencia artificial. Los análisis y recomendaciones son puntos de partida analíticos y no constituyen asesoramiento profesional, legal ni financiero. Los resultados deben ser validados por profesionales calificados antes de tomar decisiones de negocio. Auditora.ai no asume responsabilidad por decisiones basadas en este reporte.
 					</p>
-					<p className="text-xs text-stone-400 text-center">
+					<p className="text-xs text-slate-400 text-center">
 						Generado por Auditora.ai · Reporte de Inteligencia de Proceso
 					</p>
 				</div>

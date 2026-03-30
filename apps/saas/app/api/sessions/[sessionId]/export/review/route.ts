@@ -288,8 +288,8 @@ ${data.transcript.length > 0 ? `
 	}).join("")}
 </div>` : ""}
 
-<div style="margin-top:48px;padding:16px;border-top:1px solid #E7E5E4;background:#FAF9F7;border-radius:6px;font-size:10px;color:#78716C;line-height:1.6;">
-	<strong style="color:#1C1917">Aviso sobre Contenido Generado por IA / AI-Generated Content Disclaimer</strong><br>
+<div style="margin-top:48px;padding:16px;border-top:1px solid #E2E8F0;background:#F1F5F9;border-radius:6px;font-size:10px;color:#64748B;line-height:1.6;">
+	<strong style="color:#0F172A">Aviso sobre Contenido Generado por IA / AI-Generated Content Disclaimer</strong><br>
 	Este reporte fue generado mediante inteligencia artificial por Auditora.ai. Los análisis, diagramas y recomendaciones aquí contenidos son puntos de partida analíticos y no constituyen asesoramiento profesional de consultoría, auditoría, legal ni financiero. Los resultados pueden contener errores, inexactitudes u omisiones inherentes a los sistemas de IA. Todo el contenido debe ser validado por profesionales calificados antes de tomar decisiones de negocio. Auditora.ai no asume responsabilidad por decisiones tomadas con base en el contenido de este reporte.<br><br>
 	This report was generated using artificial intelligence by Auditora.ai. The analyses, diagrams, and recommendations herein are analytical starting points and do not constitute professional consulting, auditing, legal, or financial advice. Results may contain errors, inaccuracies, or omissions inherent to AI systems. All content must be validated by qualified professionals before making business decisions. Auditora.ai assumes no liability for decisions made based on this report.
 </div>

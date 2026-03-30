@@ -232,7 +232,7 @@ export function NodePropertiesView({ tabId, elementId, label }: NodePropertiesVi
 												className="h-1 rounded-full transition-all"
 												style={{
 													width: `${progress.pct}%`,
-													backgroundColor: progress.pct === 0 ? "var(--palette-stone-200)" : progress.pct >= 70 ? "var(--palette-success)" : "var(--palette-warning)",
+													backgroundColor: progress.pct === 0 ? "var(--palette-slate-200)" : progress.pct >= 70 ? "var(--palette-success)" : "var(--palette-warning)",
 												}}
 											/>
 										</div>

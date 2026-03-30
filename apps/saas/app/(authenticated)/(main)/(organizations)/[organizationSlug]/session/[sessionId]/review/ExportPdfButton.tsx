@@ -15,7 +15,7 @@ export function ExportPdfButton({ sessionId }: { sessionId: string }) {
 		<button
 			type="button"
 			onClick={handleExport}
-			className="inline-flex h-9 items-center gap-1.5 rounded-md border border-stone-700 bg-stone-800 px-3 text-sm font-medium text-stone-200 transition-colors hover:bg-stone-700"
+			className="inline-flex h-9 items-center gap-1.5 rounded-md border border-slate-700 bg-slate-800 px-3 text-sm font-medium text-slate-200 transition-colors hover:bg-slate-700"
 		>
 			<svg
 				className="h-4 w-4"

@@ -66,7 +66,7 @@ export function ActivityCards({ nodes }: ActivityCardsProps) {
 	if (nodes.length === 0) {
 		return (
 			<ReportSection title="Detalle de Actividades">
-				<p className="text-sm text-stone-400">No hay actividades para mostrar.</p>
+				<p className="text-sm text-slate-400">No hay actividades para mostrar.</p>
 			</ReportSection>
 		);
 	}
@@ -81,7 +81,7 @@ export function ActivityCards({ nodes }: ActivityCardsProps) {
 
 	return (
 		<ReportSection title="Detalle de Actividades">
-			<p className="mb-4 text-sm text-stone-500">
+			<p className="mb-4 text-sm text-slate-500">
 				{nodes.length} actividades documentadas
 				{nodes.filter((n) => n.procedure).length > 0 && (
 					<> · {nodes.filter((n) => n.procedure).length} con SOP</>
@@ -90,10 +90,10 @@ export function ActivityCards({ nodes }: ActivityCardsProps) {
 			<div className="space-y-6">
 				{Array.from(laneMap.entries()).map(([lane, laneNodes]) => (
 					<div key={lane}>
-						<h3 className="text-sm font-semibold text-stone-700 mb-3 flex items-center gap-2">
+						<h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
 							<span className="w-2 h-2 rounded-full bg-blue-500" />
 							{lane}
-							<span className="text-xs font-normal text-stone-400">({laneNodes.length})</span>
+							<span className="text-xs font-normal text-slate-400">({laneNodes.length})</span>
 						</h3>
 						<div className="space-y-2">
 							{laneNodes.map((node) => (
@@ -116,22 +116,22 @@ function ActivityCard({ node }: { node: ActivityNode }) {
 	return (
 		<div
 			id={`node-${node.id}`}
-			className="rounded-lg border border-stone-200 bg-white overflow-hidden"
+			className="rounded-lg border border-slate-200 bg-white overflow-hidden"
 		>
 			{/* Card header */}
 			<button
 				type="button"
 				onClick={() => setExpanded(!expanded)}
-				className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-stone-50 transition-colors"
+				className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-slate-50 transition-colors"
 			>
 				<div className="flex items-center gap-3 min-w-0">
 					<NodeTypeBadge type={node.nodeType} />
 					<div className="min-w-0">
-						<span className="text-sm font-medium text-stone-800 block truncate">
+						<span className="text-sm font-medium text-slate-800 block truncate">
 							{node.label}
 						</span>
 						{props.description && !expanded && (
-							<span className="text-xs text-stone-400 block truncate mt-0.5">
+							<span className="text-xs text-slate-400 block truncate mt-0.5">
 								{props.description}
 							</span>
 						)}
@@ -152,7 +152,7 @@ function ActivityCard({ node }: { node: ActivityNode }) {
 						<ConfidenceBar value={node.confidence} />
 					)}
 					<svg
-						className={`w-4 h-4 text-stone-400 transition-transform ${expanded ? "rotate-180" : ""}`}
+						className={`w-4 h-4 text-slate-400 transition-transform ${expanded ? "rotate-180" : ""}`}
 						fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"
 					>
 						<path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
@@ -162,10 +162,10 @@ function ActivityCard({ node }: { node: ActivityNode }) {
 
 			{/* Expanded content */}
 			{expanded && (hasProps || hasSop) && (
-				<div className="border-t border-stone-100 px-4 py-4 space-y-4">
+				<div className="border-t border-slate-100 px-4 py-4 space-y-4">
 					{/* Description */}
 					{props.description && (
-						<p className="text-sm text-stone-600 leading-relaxed">{props.description}</p>
+						<p className="text-sm text-slate-600 leading-relaxed">{props.description}</p>
 					)}
 
 					{/* Property tags */}
@@ -190,7 +190,7 @@ function ActivityCard({ node }: { node: ActivityNode }) {
 					{/* Systems */}
 					{props.systems && props.systems.length > 0 && (
 						<div>
-							<span className="text-xs font-medium text-stone-500 uppercase tracking-wider">Sistemas</span>
+							<span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Sistemas</span>
 							<div className="flex flex-wrap gap-1.5 mt-1">
 								{props.systems.map((s, i) => (
 									<Tag key={i} color="blue">{s}</Tag>
@@ -203,7 +203,7 @@ function ActivityCard({ node }: { node: ActivityNode }) {
 					<div className="grid grid-cols-2 gap-4">
 						{props.inputs && props.inputs.length > 0 && (
 							<div>
-								<span className="text-xs font-medium text-stone-500 uppercase tracking-wider">Entradas</span>
+								<span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Entradas</span>
 								<div className="flex flex-wrap gap-1.5 mt-1">
 									{props.inputs.map((inp, i) => (
 										<Tag key={i} color="green">↓ {inp}</Tag>
@@ -213,7 +213,7 @@ function ActivityCard({ node }: { node: ActivityNode }) {
 						)}
 						{props.outputs && props.outputs.length > 0 && (
 							<div>
-								<span className="text-xs font-medium text-stone-500 uppercase tracking-wider">Salidas</span>
+								<span className="text-xs font-medium text-slate-500 uppercase tracking-wider">Salidas</span>
 								<div className="flex flex-wrap gap-1.5 mt-1">
 									{props.outputs.map((out, i) => (
 										<Tag key={i} color="green">↑ {out}</Tag>
@@ -262,29 +262,29 @@ function SopSection({ procedure }: { procedure: Procedure }) {
 			{showSop && (
 				<div className="px-4 py-4 space-y-3">
 					{/* Metadata */}
-					<div className="flex flex-wrap gap-4 text-xs text-stone-500">
+					<div className="flex flex-wrap gap-4 text-xs text-slate-500">
 						{procedure.procedureCode && <span>Codigo: {procedure.procedureCode}</span>}
 						{procedure.responsible && <span>Responsable: {procedure.responsible}</span>}
 						{procedure.frequency && <span>Frecuencia: {procedure.frequency}</span>}
 					</div>
 
 					{procedure.objective && (
-						<p className="text-sm text-stone-600">
-							<strong className="text-stone-700">Objetivo:</strong> {procedure.objective}
+						<p className="text-sm text-slate-600">
+							<strong className="text-slate-700">Objetivo:</strong> {procedure.objective}
 						</p>
 					)}
 
 					{procedure.scope && (
-						<p className="text-sm text-stone-600">
-							<strong className="text-stone-700">Alcance:</strong> {procedure.scope}
+						<p className="text-sm text-slate-600">
+							<strong className="text-slate-700">Alcance:</strong> {procedure.scope}
 						</p>
 					)}
 
 					{/* Prerequisites */}
 					{procedure.prerequisites && procedure.prerequisites.length > 0 && (
 						<div>
-							<span className="text-xs font-semibold text-stone-700">Prerrequisitos</span>
-							<ul className="mt-1 list-disc list-inside text-sm text-stone-600 space-y-0.5">
+							<span className="text-xs font-semibold text-slate-700">Prerrequisitos</span>
+							<ul className="mt-1 list-disc list-inside text-sm text-slate-600 space-y-0.5">
 								{procedure.prerequisites.map((p, i) => (
 									<li key={i}>{p}</li>
 								))}
@@ -295,7 +295,7 @@ function SopSection({ procedure }: { procedure: Procedure }) {
 					{/* Steps */}
 					{procedure.steps && procedure.steps.length > 0 && (
 						<div>
-							<span className="text-xs font-semibold text-stone-700">
+							<span className="text-xs font-semibold text-slate-700">
 								Pasos ({procedure.steps.length})
 							</span>
 							<div className="mt-2 space-y-2">
@@ -305,9 +305,9 @@ function SopSection({ procedure }: { procedure: Procedure }) {
 											{step.stepNumber}
 										</span>
 										<div className="flex-1 min-w-0">
-											<p className="text-sm font-medium text-stone-800">{step.action}</p>
+											<p className="text-sm font-medium text-slate-800">{step.action}</p>
 											{step.description && (
-												<p className="text-xs text-stone-500 mt-0.5">{step.description}</p>
+												<p className="text-xs text-slate-500 mt-0.5">{step.description}</p>
 											)}
 											{step.systems && step.systems.length > 0 && (
 												<div className="flex gap-1 mt-1">
@@ -361,7 +361,7 @@ function NodeTypeBadge({ type }: { type: string }) {
 		INCLUSIVE_GATEWAY: "bg-amber-100 text-amber-700",
 		SUB_PROCESS: "bg-indigo-100 text-indigo-700",
 	};
-	const c = colors[type] || colors[type.toUpperCase()] || "bg-stone-100 text-stone-600";
+	const c = colors[type] || colors[type.toUpperCase()] || "bg-slate-100 text-slate-600";
 	const label = type.replace(/_/g, " ").toLowerCase();
 	return (
 		<span className={`text-[10px] font-medium uppercase tracking-wider px-2 py-0.5 rounded-full shrink-0 ${c}`}>
@@ -375,10 +375,10 @@ function ConfidenceBar({ value }: { value: number }) {
 	const color = pct >= 75 ? "bg-green-400" : pct >= 50 ? "bg-amber-400" : "bg-red-400";
 	return (
 		<div className="flex items-center gap-1.5" title={`Confianza: ${pct}%`}>
-			<div className="w-10 h-1.5 rounded-full bg-stone-100 overflow-hidden">
+			<div className="w-10 h-1.5 rounded-full bg-slate-100 overflow-hidden">
 				<div className={`h-full rounded-full ${color}`} style={{ width: `${pct}%` }} />
 			</div>
-			<span className="text-[10px] text-stone-400">{pct}%</span>
+			<span className="text-[10px] text-slate-400">{pct}%</span>
 		</div>
 	);
 }
@@ -388,7 +388,7 @@ function Tag({ children, color }: { children: React.ReactNode; color: "blue" | "
 		blue: "bg-blue-50 text-blue-700 border-blue-100",
 		green: "bg-green-50 text-green-700 border-green-100",
 		amber: "bg-amber-50 text-amber-700 border-amber-100",
-		stone: "bg-stone-50 text-stone-600 border-stone-100",
+		stone: "bg-slate-50 text-slate-600 border-slate-100",
 	};
 	return (
 		<span className={`inline-flex items-center px-2 py-0.5 rounded text-xs border ${colors[color]}`}>

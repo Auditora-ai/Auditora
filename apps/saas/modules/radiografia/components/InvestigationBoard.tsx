@@ -95,6 +95,7 @@ export function InvestigationBoard({
 
 				if (!res.ok || !res.body) {
 					setError("No se pudo iniciar la investigación");
+					setTimeout(() => onComplete({}), 1500);
 					return;
 				}
 
@@ -122,6 +123,7 @@ export function InvestigationBoard({
 				}
 			} catch {
 				setError("Error de conexión durante la investigación");
+				setTimeout(() => onComplete({}), 1500);
 			}
 		}
 
@@ -217,27 +219,27 @@ export function InvestigationBoard({
 		<div className="mx-auto space-y-6 px-4 md:px-0 md:max-w-3xl">
 			{/* Header */}
 			<div className="text-center">
-				<div className="inline-flex items-center gap-2 rounded-full bg-stone-100 px-4 py-1.5 text-sm text-stone-600">
+				<div className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-4 py-1.5 text-sm text-slate-600">
 					<SearchIcon className="size-4" />
 					Investigando: {companyName}
 				</div>
-				<h2 className="mt-3 font-display text-xl font-semibold text-stone-900">
+				<h2 className="mt-3 font-display text-xl font-semibold text-slate-900">
 					Análisis de Inteligencia de Negocio
 				</h2>
-				<p className="mt-1 text-sm text-stone-500">
+				<p className="mt-1 text-sm text-slate-500">
 					{industry}
 				</p>
 			</div>
 
 			{/* Progress bar */}
 			<div className="space-y-1">
-				<div className="flex items-center justify-between text-xs text-stone-500">
+				<div className="flex items-center justify-between text-xs text-slate-500">
 					<span>
 						{completedCount} de {totalSources} fuentes
 					</span>
 					<span className="tabular-nums">{progress}%</span>
 				</div>
-				<div className="h-1.5 w-full overflow-hidden rounded-full bg-stone-200">
+				<div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
 					<div
 						className="h-full rounded-full bg-amber-500 transition-all duration-500 ease-out"
 						style={{ width: `${progress}%` }}
@@ -257,10 +259,10 @@ export function InvestigationBoard({
 							key={sourceId}
 							className={`overflow-hidden rounded-xl border transition-all duration-300 ${
 								source.status === "done"
-									? "border-green-200 bg-[#FFFBF5]"
+									? "border-green-200 bg-[#F8FAFC]"
 									: source.status === "loading"
 										? "border-amber-200 bg-amber-50/30"
-										: "border-stone-200 bg-stone-50"
+										: "border-slate-200 bg-slate-50"
 							}`}
 							style={{
 								animationDelay: `${index * 150}ms`,
@@ -272,11 +274,11 @@ export function InvestigationBoard({
 								<span className="text-lg">
 									{config.icon}
 								</span>
-								<span className="flex-1 text-sm font-medium text-stone-800">
+								<span className="flex-1 text-sm font-medium text-slate-800">
 									{config.label}
 								</span>
 								{source.status === "pending" && (
-									<ClockIcon className="size-4 text-stone-400" />
+									<ClockIcon className="size-4 text-slate-400" />
 								)}
 								{source.status === "loading" && (
 									<LoaderIcon className="size-4 animate-spin text-amber-500" />
@@ -288,17 +290,17 @@ export function InvestigationBoard({
 
 							{/* Findings */}
 							{source.findings.length > 0 && (
-								<div className="border-t border-stone-100 px-4 pb-3 pt-2">
+								<div className="border-t border-slate-100 px-4 pb-3 pt-2">
 									<div className="space-y-2">
 										{source.findings.map(
 											(finding, fi) => (
 												<div
 													key={fi}
-													className={`rounded-lg border-l-2 bg-[#FFFBF5] px-3 py-2 text-xs transition-opacity duration-500 ${
+													className={`rounded-lg border-l-2 bg-[#F8FAFC] px-3 py-2 text-xs transition-opacity duration-500 ${
 														finding.relevance ===
 														"high"
 															? "border-l-amber-400"
-															: "border-l-stone-200"
+															: "border-l-slate-200"
 													}`}
 													style={{
 														animation:
@@ -306,10 +308,10 @@ export function InvestigationBoard({
 														animationDelay: `${fi * 200}ms`,
 													}}
 												>
-													<p className="font-medium text-stone-800 leading-snug break-words">
+													<p className="font-medium text-slate-800 leading-snug break-words">
 														{finding.title}
 													</p>
-													<p className="mt-0.5 text-stone-500 leading-relaxed break-words">
+													<p className="mt-0.5 text-slate-500 leading-relaxed break-words">
 														{finding.summary}
 													</p>
 													{finding.sourceUrl && (
@@ -338,8 +340,8 @@ export function InvestigationBoard({
 
 			{/* AI Insights */}
 			{insights.length > 0 && (
-				<div className="rounded-xl bg-stone-900 p-5 text-stone-50">
-					<div className="mb-3 flex items-center gap-2 text-sm font-medium text-stone-300">
+				<div className="rounded-xl bg-slate-900 p-5 text-slate-50">
+					<div className="mb-3 flex items-center gap-2 text-sm font-medium text-slate-300">
 						<LightbulbIcon className="size-4 text-amber-400" />
 						Conclusiones en Tiempo Real
 					</div>
@@ -347,7 +349,7 @@ export function InvestigationBoard({
 						{insights.map((insight, i) => (
 							<div
 								key={i}
-								className="flex gap-3 text-sm leading-relaxed text-stone-200"
+								className="flex gap-3 text-sm leading-relaxed text-slate-200"
 								style={{
 									animation: "fadeIn 0.5s cubic-bezier(0,0,0.2,1) both",
 									animationDelay: `${i * 300}ms`,

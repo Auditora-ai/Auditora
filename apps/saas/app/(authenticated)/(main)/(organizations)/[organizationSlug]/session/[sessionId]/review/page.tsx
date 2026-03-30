@@ -106,16 +106,16 @@ function formatDate(date: Date | null): string {
 
 function SectionSkeleton({ title }: { title: string }) {
 	return (
-		<section className="rounded-lg border border-stone-200 bg-white overflow-hidden">
-			<div className="border-b border-stone-100 px-4 py-4 md:px-6">
-				<h2 className="text-lg text-stone-900" style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}>
+		<section className="rounded-lg border border-slate-200 bg-white overflow-hidden">
+			<div className="border-b border-slate-100 px-4 py-4 md:px-6">
+				<h2 className="text-lg text-slate-900" style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}>
 					{title}
 				</h2>
 			</div>
 			<div className="px-4 py-4 space-y-3 md:px-6 md:py-5">
-				<div className="h-4 w-full animate-pulse rounded bg-stone-100" />
-				<div className="h-4 w-5/6 animate-pulse rounded bg-stone-100" />
-				<div className="h-4 w-4/6 animate-pulse rounded bg-stone-100" />
+				<div className="h-4 w-full animate-pulse rounded bg-slate-100" />
+				<div className="h-4 w-5/6 animate-pulse rounded bg-slate-100" />
+				<div className="h-4 w-4/6 animate-pulse rounded bg-slate-100" />
 			</div>
 		</section>
 	);
@@ -123,9 +123,9 @@ function SectionSkeleton({ title }: { title: string }) {
 
 function FailedSection({ title, error, sessionId, type }: { title: string; error: string | null; sessionId: string; type: string }) {
 	return (
-		<section className="rounded-lg border border-stone-200 bg-white overflow-hidden">
-			<div className="border-b border-stone-100 px-4 py-4 md:px-6">
-				<h2 className="text-lg text-stone-900" style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}>
+		<section className="rounded-lg border border-slate-200 bg-white overflow-hidden">
+			<div className="border-b border-slate-100 px-4 py-4 md:px-6">
+				<h2 className="text-lg text-slate-900" style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}>
 					{title}
 				</h2>
 			</div>
@@ -156,8 +156,8 @@ function RaciSection({ data, actions }: { data: RaciData | null; actions?: React
 	const cellColor: Record<string, string> = {
 		R: "bg-blue-100 text-blue-800 font-semibold",
 		A: "bg-purple-100 text-purple-800 font-semibold",
-		C: "bg-stone-100 text-stone-500",
-		I: "bg-stone-50 text-stone-400",
+		C: "bg-slate-100 text-slate-500",
+		I: "bg-slate-50 text-slate-400",
 	};
 
 	if (!data || activities.length === 0) return null;
@@ -167,10 +167,10 @@ function RaciSection({ data, actions }: { data: RaciData | null; actions?: React
 				<div className="overflow-x-auto">
 					<table className="w-full text-sm">
 						<thead>
-							<tr className="border-b border-stone-200">
-								<th className="py-2 pr-4 text-left font-medium text-stone-500">Actividad</th>
+							<tr className="border-b border-slate-200">
+								<th className="py-2 pr-4 text-left font-medium text-slate-500">Actividad</th>
 								{roles.map((role) => (
-									<th key={role} className="px-3 py-2 text-center font-medium text-stone-500" style={{ fontVariantNumeric: "tabular-nums" }}>
+									<th key={role} className="px-3 py-2 text-center font-medium text-slate-500" style={{ fontVariantNumeric: "tabular-nums" }}>
 										{role}
 									</th>
 								))}
@@ -178,8 +178,8 @@ function RaciSection({ data, actions }: { data: RaciData | null; actions?: React
 						</thead>
 						<tbody>
 							{activities.map((activity) => (
-								<tr key={activity} className="border-b border-stone-50 last:border-0">
-									<td className="py-2.5 pr-4 text-stone-700">{activity}</td>
+								<tr key={activity} className="border-b border-slate-50 last:border-0">
+									<td className="py-2.5 pr-4 text-slate-700">{activity}</td>
 									{roles.map((role) => {
 										const val = matrix[activity]?.[role];
 										return (
@@ -189,7 +189,7 @@ function RaciSection({ data, actions }: { data: RaciData | null; actions?: React
 														{val}
 													</span>
 												) : (
-													<span className="text-stone-300">-</span>
+													<span className="text-slate-300">-</span>
 												)}
 											</td>
 										);
@@ -198,11 +198,11 @@ function RaciSection({ data, actions }: { data: RaciData | null; actions?: React
 							))}
 						</tbody>
 					</table>
-					<div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-stone-500 md:gap-4">
+					<div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-slate-500 md:gap-4">
 						<span><span className="inline-flex h-5 w-5 items-center justify-center rounded bg-blue-100 text-xs font-semibold text-blue-800">R</span> Responsable</span>
 						<span><span className="inline-flex h-5 w-5 items-center justify-center rounded bg-purple-100 text-xs font-semibold text-purple-800">A</span> Accountable</span>
-						<span><span className="inline-flex h-5 w-5 items-center justify-center rounded bg-stone-100 text-xs text-stone-500">C</span> Consultado</span>
-						<span><span className="inline-flex h-5 w-5 items-center justify-center rounded bg-stone-50 text-xs text-stone-400">I</span> Informado</span>
+						<span><span className="inline-flex h-5 w-5 items-center justify-center rounded bg-slate-100 text-xs text-slate-500">C</span> Consultado</span>
+						<span><span className="inline-flex h-5 w-5 items-center justify-center rounded bg-slate-50 text-xs text-slate-400">I</span> Informado</span>
 					</div>
 				</div>
 		</ReportSection>
@@ -214,7 +214,7 @@ function RaciSection({ data, actions }: { data: RaciData | null; actions?: React
 function priorityBadge(priority: number): { label: string; classes: string } {
 	if (priority >= 70) return { label: "P1", classes: "bg-red-100 text-red-700" };
 	if (priority >= 40) return { label: "P2", classes: "bg-amber-100 text-amber-700" };
-	return { label: "P3", classes: "bg-stone-100 text-stone-500" };
+	return { label: "P3", classes: "bg-slate-100 text-slate-500" };
 }
 
 function KnowledgeGapsSection({ gaps, actions }: { gaps: AuditGap[]; actions?: React.ReactNode }) {
@@ -248,24 +248,24 @@ function KnowledgeGapsSection({ gaps, actions }: { gaps: AuditGap[]; actions?: R
 			<div className="space-y-5">
 				{Array.from(grouped.entries()).map(([category, catGaps]) => (
 					<div key={category}>
-						<h3 className="text-sm font-semibold text-stone-700 mb-2 flex items-center gap-2">
+						<h3 className="text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2">
 							<span className="w-2 h-2 rounded-full bg-amber-500" />
 							{categoryLabels[category] || category.replace(/_/g, " ")}
-							<span className="text-xs font-normal text-stone-400">({catGaps.length})</span>
+							<span className="text-xs font-normal text-slate-400">({catGaps.length})</span>
 						</h3>
 						<div className="space-y-1.5">
 							{catGaps.map((gap, i) => {
 								const badge = priorityBadge(gap.priority ?? 0);
 								return (
-									<div key={i} className="rounded border border-stone-100 bg-stone-50 px-4 py-2.5">
+									<div key={i} className="rounded border border-slate-100 bg-slate-50 px-4 py-2.5">
 										<div className="flex items-center gap-2 mb-0.5">
 											<span className={`inline-flex rounded-full px-1.5 py-0.5 text-[10px] font-semibold ${badge.classes}`}>
 												{badge.label}
 											</span>
 										</div>
-										<p className="text-sm text-stone-700">{gap.question}</p>
+										<p className="text-sm text-slate-700">{gap.question}</p>
 										{gap.context && (
-											<p className="mt-1 text-xs text-stone-400">{gap.context}</p>
+											<p className="mt-1 text-xs text-slate-400">{gap.context}</p>
 										)}
 									</div>
 								);
@@ -349,7 +349,7 @@ export default async function SessionReviewPage({
 	const hasInProgress = allStatuses.some((s) => !s || !terminalStatuses.has(s));
 
 	return (
-		<div className="min-h-screen bg-stone-50">
+		<div className="min-h-screen bg-slate-50">
 			<ReviewPoller hasInProgress={hasInProgress} />
 
 			{/* 1. Hero — Process Maturity Score */}
@@ -367,11 +367,11 @@ export default async function SessionReviewPage({
 			/>
 
 			{/* Action bar */}
-			<div className="bg-stone-900 border-b border-stone-800">
+			<div className="bg-slate-900 border-b border-slate-800">
 				<div className="mx-auto max-w-5xl px-4 py-3 flex flex-col gap-2 md:flex-row md:items-center md:justify-between md:px-6">
 					<a
 						href={`/${organizationSlug}/session/${sessionId}/live`}
-						className="text-xs text-stone-400 hover:text-stone-200 transition-colors"
+						className="text-xs text-slate-400 hover:text-slate-200 transition-colors"
 					>
 						← Volver a la sesion
 					</a>
@@ -379,7 +379,7 @@ export default async function SessionReviewPage({
 						{hasBpmnXml && (
 							<a
 								href={`/api/sessions/${session.id}/export/bpmn`}
-								className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-md border border-stone-700 bg-stone-800 px-3 text-sm font-medium text-stone-200 transition-colors hover:bg-stone-700"
+								className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-md border border-slate-700 bg-slate-800 px-3 text-sm font-medium text-slate-200 transition-colors hover:bg-slate-700"
 							>
 								BPMN XML
 							</a>
@@ -410,19 +410,19 @@ export default async function SessionReviewPage({
 				{summaryDel?.status === "completed" && summaryData ? (
 					<ReportSection title="Resumen Ejecutivo" actions={<RegenerateButton sessionId={sessionId} type="summary" />}>
 						<div className="space-y-5">
-							<p className="text-sm leading-relaxed text-stone-600 whitespace-pre-wrap">
+							<p className="text-sm leading-relaxed text-slate-600 whitespace-pre-wrap">
 								{summaryData.summary}
 							</p>
 							{summaryData.actionItems.length > 0 && (
 								<div>
 									<div className="flex items-center justify-between mb-2">
-										<h3 className="text-sm font-medium text-stone-700">Acciones Pendientes</h3>
+										<h3 className="text-sm font-medium text-slate-700">Acciones Pendientes</h3>
 										<CopyActionsButton items={summaryData.actionItems} />
 									</div>
 									<ul className="space-y-1.5">
 										{summaryData.actionItems.map((item, i) => (
-											<li key={i} className="flex items-start gap-2 text-sm text-stone-600">
-												<span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-stone-200 text-xs text-stone-400">
+											<li key={i} className="flex items-start gap-2 text-sm text-slate-600">
+												<span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-slate-200 text-xs text-slate-400">
 													{i + 1}
 												</span>
 												{item}
@@ -506,12 +506,12 @@ export default async function SessionReviewPage({
 			</main>
 
 			{/* Footer */}
-			<footer className="border-t border-stone-200 bg-white">
+			<footer className="border-t border-slate-200 bg-white">
 				<div className="mx-auto max-w-5xl px-4 py-4 md:px-6 space-y-3">
-					<p className="text-[10px] text-stone-400 text-center leading-relaxed">
+					<p className="text-[10px] text-slate-400 text-center leading-relaxed">
 						Este reporte fue generado por inteligencia artificial. Los análisis y recomendaciones son puntos de partida analíticos y no constituyen asesoramiento profesional, legal ni financiero. Los resultados deben ser validados por profesionales calificados antes de tomar decisiones de negocio.
 					</p>
-					<div className="flex flex-col gap-2 text-xs text-stone-400 sm:flex-row sm:items-center sm:justify-between">
+					<div className="flex flex-col gap-2 text-xs text-slate-400 sm:flex-row sm:items-center sm:justify-between">
 						<span>Generado por Auditora.ai</span>
 						<a
 							href={`/${organizationSlug}/session/${sessionId}/live`}

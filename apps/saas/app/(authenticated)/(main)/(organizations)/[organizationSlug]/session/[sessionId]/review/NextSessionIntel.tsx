@@ -27,9 +27,9 @@ export function NextSessionIntel({ followUp, gapCount, complexityExplanation, co
 				{hasComplexity && (
 					<div className="space-y-2">
 						{complexityExplanation && (
-							<div className="rounded-lg border border-stone-200 bg-stone-50 px-4 py-3">
-								<p className="text-xs font-medium text-stone-500 uppercase tracking-wider mb-1">Analisis de Complejidad</p>
-								<p className="text-sm text-stone-700">{complexityExplanation}</p>
+							<div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
+								<p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Analisis de Complejidad</p>
+								<p className="text-sm text-slate-700">{complexityExplanation}</p>
 							</div>
 						)}
 						{complexityRecommendation && (
@@ -79,10 +79,10 @@ export function NextSessionIntel({ followUp, gapCount, complexityExplanation, co
 
 							{followUp.focusAreas.length > 0 && (
 								<div>
-									<h3 className="text-sm font-medium text-stone-700 mb-2">Temas a cubrir en proxima sesion</h3>
+									<h3 className="text-sm font-medium text-slate-700 mb-2">Temas a cubrir en proxima sesion</h3>
 									<ul className="space-y-1.5">
 										{followUp.focusAreas.map((area, i) => (
-											<li key={i} className="flex items-start gap-2 text-sm text-stone-600">
+											<li key={i} className="flex items-start gap-2 text-sm text-slate-600">
 												<span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-medium text-blue-700">
 													{i + 1}
 												</span>
@@ -94,7 +94,7 @@ export function NextSessionIntel({ followUp, gapCount, complexityExplanation, co
 							)}
 
 							{gapCount > 0 && (
-								<p className="text-xs text-stone-400">
+								<p className="text-xs text-slate-400">
 									Basado en {gapCount} brecha(s) de conocimiento identificadas.
 								</p>
 							)}
@@ -111,7 +111,7 @@ export function NextSessionIntel({ followUp, gapCount, complexityExplanation, co
 						</div>
 					)
 				) : !hasComplexity && !hasContradictions ? (
-					<p className="text-sm text-stone-400">Recomendaciones pendientes de generacion.</p>
+					<p className="text-sm text-slate-400">Recomendaciones pendientes de generacion.</p>
 				) : null}
 			</div>
 		</ReportSection>

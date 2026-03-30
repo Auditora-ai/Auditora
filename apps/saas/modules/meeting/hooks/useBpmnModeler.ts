@@ -1549,9 +1549,9 @@ function forceCanvasWhite(container: HTMLElement | null): void {
 	}
 
 	// Also set inline styles as belt-and-suspenders
-	djsContainer.style.setProperty("background", "var(--palette-warm-white, #FFFBF5)", "important");
+	djsContainer.style.setProperty("background", "var(--palette-warm-white, #F8FAFC)", "important");
 	const svg = djsContainer.querySelector(":scope > svg") as SVGElement | null;
 	if (svg) {
-		svg.style.setProperty("background", "var(--palette-warm-white, #FFFBF5)", "important");
+		svg.style.setProperty("background", "var(--palette-warm-white, #F8FAFC)", "important");
 	}
 }

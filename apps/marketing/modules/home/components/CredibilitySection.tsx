@@ -55,7 +55,7 @@ export function CredibilitySection() {
 	);
 
 	return (
-		<section ref={sectionRef} className="py-16 sm:py-20 lg:py-28 bg-[#0A1428]">
+		<section ref={sectionRef} id="methodology" className="py-16 sm:py-20 lg:py-28 bg-[#0A1428]">
 			<div className="container max-w-5xl">
 				<div className="cred-header mb-10 sm:mb-14 max-w-3xl mx-auto text-center">
 					<small className="font-medium text-xs uppercase tracking-widest text-[#00E5C0] mb-4 block">

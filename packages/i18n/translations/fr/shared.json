@@ -2,7 +2,7 @@
 	"pricing": {
 		"choosePlan": "Choisir un plan",
 		"contactSales": "Contacter les ventes",
-		"description": "Chaque plan inclut le moteur IA Claude Opus, la création automatique de diagrammes BPMN et l'analyse de risques. Choisissez selon votre volume de sessions.",
+		"description": "Chaque plan inclut le moteur IA, la création automatique de diagrammes BPMN et l'analyse de risques. Sélectionnez selon le volume de sessions de votre équipe.",
 		"getStarted": "Commencer",
 		"startTrial": "Essai gratuit",
 		"month": "{count, plural, one {mois} other {{count} mois}}",
@@ -68,7 +68,7 @@
 		"purchase": "Acheter",
 		"recommended": "Recommandé",
 		"subscribe": "S'abonner",
-		"title": "Investissez dans l'intelligence des risques, pas dans plus d'heures de travail manuel",
+		"title": "Plans selon le volume d'analyses",
 		"trialPeriod": "{days} {days, plural, one {jour} other {jours}} d'essai gratuit",
 		"year": "{count, plural, one {an} other {{count} ans}}",
 		"yearly": "Annuel",

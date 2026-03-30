@@ -37,7 +37,7 @@ export function RegenerateButton({
 			type="button"
 			onClick={handleRegenerate}
 			disabled={loading}
-			className="inline-flex items-center gap-1 text-xs text-stone-400 hover:text-stone-600 transition-colors disabled:opacity-50"
+			className="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-slate-600 transition-colors disabled:opacity-50"
 		>
 			{loading ? (
 				<svg className="h-3 w-3 animate-spin" viewBox="0 0 24 24" fill="none">

@@ -84,24 +84,20 @@ export function NavBar() {
 		href: string;
 	}[] = [
 		{
-			label: t("common.menu.tools"),
-			href: `${config.saasUrl}/scan`,
+			label: t("common.menu.solution"),
+			href: "/#solution",
 		},
 		{
-			label: t("common.menu.howItWorks"),
-			href: "/#how-it-works",
+			label: t("common.menu.methodology"),
+			href: "/#methodology",
+		},
+		{
+			label: t("common.menu.cases"),
+			href: "/#cases",
 		},
 		{
 			label: t("common.menu.pricing"),
 			href: "/#pricing",
-		},
-		{
-			label: t("common.menu.faq"),
-			href: "/#faq",
-		},
-		{
-			label: t("common.menu.contact"),
-			href: "/contact",
 		},
 	];
 

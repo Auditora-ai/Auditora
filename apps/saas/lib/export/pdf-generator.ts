@@ -129,8 +129,8 @@ export function generateReportHtml(data: PdfProjectData): string {
   .raci-I { background: #f3e8ff; }
   .action-items li { margin: 8px 0; }
   .powered-by { text-align: center; color: #999; font-size: 11px; margin-top: 40px; }
-  .legal-disclaimer { margin-top: 48px; padding: 16px; border-top: 1px solid #E7E5E4; background: #FAF9F7; border-radius: 6px; font-size: 10px; color: #78716C; line-height: 1.6; }
-  .legal-disclaimer strong { color: #1C1917; }
+  .legal-disclaimer { margin-top: 48px; padding: 16px; border-top: 1px solid #E2E8F0; background: #F1F5F9; border-radius: 6px; font-size: 10px; color: #64748B; line-height: 1.6; }
+  .legal-disclaimer strong { color: #0F172A; }
 </style>
 </head>
 <body>

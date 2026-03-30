@@ -47,7 +47,7 @@ export function RiskMaturityRing({
 					fill="none"
 					stroke="currentColor"
 					strokeWidth={strokeWidth}
-					className="text-stone-700"
+					className="text-slate-700"
 				/>
 				{/* Progress ring */}
 				{!isEmpty && (
@@ -69,8 +69,8 @@ export function RiskMaturityRing({
 				<div className="flex flex-col">
 					{isEmpty ? (
 						<>
-							<span className="text-xs text-stone-500">—</span>
-							<span className="text-[10px] text-stone-600">
+							<span className="text-xs text-slate-500">—</span>
+							<span className="text-[10px] text-slate-600">
 								Sin datos
 							</span>
 						</>
@@ -82,7 +82,7 @@ export function RiskMaturityRing({
 							>
 								{score}
 							</span>
-							<span className="text-[10px] text-stone-500">
+							<span className="text-[10px] text-slate-500">
 								Madurez de Riesgo
 							</span>
 						</>

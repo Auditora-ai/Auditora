@@ -74,9 +74,9 @@ export function InterviewChat({
 		: null;
 
 	return (
-		<div className="flex h-full flex-col" style={{ backgroundColor: "#FFFBF5" }}>
+		<div className="flex h-full flex-col" style={{ backgroundColor: "#F8FAFC" }}>
 			{/* Header */}
-			<div className="border-b px-6 py-4" style={{ borderColor: "#E7E5E4" }}>
+			<div className="border-b px-6 py-4" style={{ borderColor: "#E2E8F0" }}>
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-3">
 						<SparklesIcon className="size-5" style={{ color: "#D97706" }} />
@@ -122,7 +122,7 @@ export function InterviewChat({
 								>
 									{dim.label}
 								</span>
-								<div className="h-1 w-12 overflow-hidden rounded-full" style={{ backgroundColor: "#E7E5E4" }}>
+								<div className="h-1 w-12 overflow-hidden rounded-full" style={{ backgroundColor: "#E2E8F0" }}>
 									<div
 										className="h-full rounded-full transition-all"
 										style={{
@@ -151,7 +151,7 @@ export function InterviewChat({
 								style={
 									msg.role === "user"
 										? { backgroundColor: "#00E5C0", color: "#0A1428" }
-										: { backgroundColor: "#FAF9F7", border: "1px solid #E7E5E4", color: "#0A1428" }
+										: { backgroundColor: "#F1F5F9", border: "1px solid #E2E8F0", color: "#0A1428" }
 								}
 							>
 								{msg.content}
@@ -175,7 +175,7 @@ export function InterviewChat({
 						<div className="flex justify-start">
 							<div
 								className="flex items-center gap-1 rounded-lg px-4 py-3"
-								style={{ backgroundColor: "#FAF9F7", border: "1px solid #E7E5E4" }}
+								style={{ backgroundColor: "#F1F5F9", border: "1px solid #E2E8F0" }}
 							>
 								<span className="animate-bounce text-xs" style={{ color: "#94A3B8", animationDelay: "0ms" }}>●</span>
 								<span className="animate-bounce text-xs" style={{ color: "#94A3B8", animationDelay: "150ms" }}>●</span>
@@ -197,7 +197,7 @@ export function InterviewChat({
 			</div>
 
 			{/* Input */}
-			<div className="border-t px-6 py-4" style={{ borderColor: "#E7E5E4" }}>
+			<div className="border-t px-6 py-4" style={{ borderColor: "#E2E8F0" }}>
 				<div className="mx-auto flex max-w-2xl items-center gap-3">
 					<input
 						ref={inputRef}
@@ -209,8 +209,8 @@ export function InterviewChat({
 						disabled={sending}
 						className="flex-1 rounded-lg border px-4 py-3 text-sm outline-none transition-colors"
 						style={{
-							backgroundColor: "#FAF9F7",
-							borderColor: "#E7E5E4",
+							backgroundColor: "#F1F5F9",
+							borderColor: "#E2E8F0",
 							color: "#0A1428",
 							minHeight: "44px",
 						}}
@@ -219,8 +219,8 @@ export function InterviewChat({
 							e.currentTarget.style.backgroundColor = "#ECFDF5";
 						}}
 						onBlur={(e) => {
-							e.currentTarget.style.borderColor = "#E7E5E4";
-							e.currentTarget.style.backgroundColor = "#FAF9F7";
+							e.currentTarget.style.borderColor = "#E2E8F0";
+							e.currentTarget.style.backgroundColor = "#F1F5F9";
 						}}
 					/>
 					<button

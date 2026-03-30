@@ -7,12 +7,11 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
 	ArrowRightIcon,
-	FolderOpenIcon,
-	MessageCircleIcon,
 	WorkflowIcon,
-	ShieldCheckIcon,
-	UsersIcon,
+	ShieldAlertIcon,
+	TargetIcon,
 	FileOutputIcon,
+	HistoryIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRef } from "react";
@@ -20,12 +19,11 @@ import { useRef } from "react";
 gsap.registerPlugin(ScrollTrigger);
 
 const features = [
-	{ id: "feature1", icon: FolderOpenIcon },
-	{ id: "feature2", icon: MessageCircleIcon },
-	{ id: "feature3", icon: WorkflowIcon },
-	{ id: "feature4", icon: ShieldCheckIcon },
-	{ id: "feature5", icon: UsersIcon },
-	{ id: "feature6", icon: FileOutputIcon },
+	{ id: "feature1", icon: WorkflowIcon },
+	{ id: "feature2", icon: ShieldAlertIcon },
+	{ id: "feature3", icon: TargetIcon },
+	{ id: "feature4", icon: FileOutputIcon },
+	{ id: "feature5", icon: HistoryIcon },
 ] as const;
 
 export function PlatformFeaturesSection() {

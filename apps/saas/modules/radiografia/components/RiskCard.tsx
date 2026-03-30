@@ -62,7 +62,7 @@ export function RiskCard({ risk, index }: RiskCardProps) {
 				</div>
 			</div>
 
-			<p className="mb-3 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
+			<p className="mb-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
 				{risk.description}
 			</p>
 

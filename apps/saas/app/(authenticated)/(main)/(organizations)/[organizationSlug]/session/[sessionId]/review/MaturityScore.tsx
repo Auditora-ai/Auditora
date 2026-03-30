@@ -71,31 +71,31 @@ export function MaturityScore({
 	const strokeDashoffset = circumference - (score / 100) * circumference;
 
 	return (
-		<header className="bg-stone-900 border-b border-stone-800">
+		<header className="bg-slate-900 border-b border-slate-800">
 			<div className="mx-auto max-w-5xl px-6 py-12">
 				<div className="flex items-start justify-between gap-8">
 					{/* Left: process info */}
 					<div className="flex-1 min-w-0">
-						<p className="mb-2 text-xs font-medium uppercase tracking-wider text-stone-500">
+						<p className="mb-2 text-xs font-medium uppercase tracking-wider text-slate-500">
 							Process Intelligence Report
 						</p>
 						<h1
-							className="text-3xl font-semibold text-stone-50 truncate"
+							className="text-3xl font-semibold text-slate-50 truncate"
 							style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}
 						>
 							{processName}
 						</h1>
-						<p className="mt-1 text-sm text-stone-400">{orgName}</p>
+						<p className="mt-1 text-sm text-slate-400">{orgName}</p>
 
-						<div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-stone-400">
+						<div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-400">
 							<span>{date}</span>
-							<span className="text-stone-700">|</span>
+							<span className="text-slate-700">|</span>
 							<span>{duration}</span>
-							<span className="text-stone-700">|</span>
+							<span className="text-slate-700">|</span>
 							<span>{nodeCount} actividades</span>
-							<span className="text-stone-700">|</span>
+							<span className="text-slate-700">|</span>
 							<span>{confirmedCount} confirmadas</span>
-							<span className="text-stone-700">|</span>
+							<span className="text-slate-700">|</span>
 							<span>{transcriptCount} entradas de transcripcion</span>
 						</div>
 
@@ -152,10 +152,10 @@ export function MaturityScore({
 								>
 									{score}
 								</span>
-								<span className="text-xs text-stone-500">/ 100</span>
+								<span className="text-xs text-slate-500">/ 100</span>
 							</div>
 						</div>
-						<span className="text-xs text-stone-500 uppercase tracking-wider">
+						<span className="text-xs text-slate-500 uppercase tracking-wider">
 							Madurez{partial ? " (parcial)" : ""}
 						</span>
 					</div>
@@ -184,12 +184,12 @@ function SubScore({
 	return (
 		<div>
 			<div className="flex items-center justify-between mb-1">
-				<span className="text-xs text-stone-500">{label}</span>
-				<span className="text-xs font-medium text-stone-300">
+				<span className="text-xs text-slate-500">{label}</span>
+				<span className="text-xs font-medium text-slate-300">
 					{displayValue != null ? `${displayValue}${suffix}` : "—"}
 				</span>
 			</div>
-			<div className="h-1.5 w-full rounded-full bg-stone-800 overflow-hidden">
+			<div className="h-1.5 w-full rounded-full bg-slate-800 overflow-hidden">
 				<div
 					className={`h-full rounded-full transition-all ${barColor}`}
 					style={{ width: `${barValue}%` }}

@@ -209,7 +209,7 @@ export function transformToGanttTasks(
 			hideChildren: false,
 			isDisabled: isOutOfScope,
 			styles: isOutOfScope
-				? { backgroundColor: "#E7E5E4", progressColor: "#D6D3D1" }
+				? { backgroundColor: "#E2E8F0", progressColor: "#CBD5E1" }
 				: { backgroundColor: "#111827", progressColor: "#1E293B" },
 		});
 

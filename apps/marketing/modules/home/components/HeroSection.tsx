@@ -109,7 +109,7 @@ export function HeroSection() {
 	return (
 		<section
 			ref={sectionRef}
-			className="relative overflow-hidden bg-[#0A1428]"
+			className="relative overflow-hidden bg-gradient-to-b from-[#0A1428] to-[#1E2937]"
 		>
 			<div className="container relative z-10 pt-16 pb-12 sm:pt-24 sm:pb-16 md:pt-32 md:pb-20 lg:pt-40 lg:pb-24">
 				<div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">

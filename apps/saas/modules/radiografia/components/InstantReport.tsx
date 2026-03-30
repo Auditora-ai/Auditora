@@ -56,7 +56,7 @@ export function InstantReport({
 						<h1 className="text-3xl md:text-5xl tracking-tight font-display text-foreground">
 							{industry.selectedProcess.name}
 						</h1>
-						<p className="mt-2 text-base leading-relaxed text-stone-600 dark:text-stone-400">
+						<p className="mt-2 text-base leading-relaxed text-slate-600 dark:text-slate-400">
 							{industry.selectedProcess.description}
 						</p>
 					</div>
@@ -155,7 +155,7 @@ export function InstantReport({
 						<h3 className="mb-2 text-xl font-display text-foreground">
 							{t("firstScan")}
 						</h3>
-						<p className="mb-6 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
+						<p className="mb-6 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
 							{t("deepenCta")}
 						</p>
 						<button

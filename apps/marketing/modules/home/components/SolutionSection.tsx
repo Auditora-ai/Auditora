@@ -55,7 +55,7 @@ export function SolutionSection() {
 	);
 
 	return (
-		<section ref={sectionRef} className="py-16 sm:py-20 lg:py-28 bg-white">
+		<section ref={sectionRef} id="solution" className="py-16 sm:py-20 lg:py-28 bg-white">
 			<div className="container max-w-6xl">
 				<div className="solution-header mb-10 sm:mb-16 max-w-3xl mx-auto text-center">
 					<small className="font-medium text-xs uppercase tracking-widest text-[#00E5C0] mb-4 block">

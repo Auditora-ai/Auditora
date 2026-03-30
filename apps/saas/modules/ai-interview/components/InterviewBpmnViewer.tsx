@@ -64,7 +64,7 @@ export function InterviewBpmnViewer({ bpmnXml, className }: InterviewBpmnViewerP
 		return (
 			<div
 				className={`flex items-center justify-center rounded-lg border ${className || ""}`}
-				style={{ borderColor: "#E7E5E4", backgroundColor: "#FAF9F7" }}
+				style={{ borderColor: "#E2E8F0", backgroundColor: "#F1F5F9" }}
 			>
 				<span className="text-sm" style={{ color: "#DC2626" }}>{error}</span>
 			</div>
@@ -74,14 +74,14 @@ export function InterviewBpmnViewer({ bpmnXml, className }: InterviewBpmnViewerP
 	return (
 		<div className={`relative ${className || ""}`}>
 			{loading && (
-				<div className="absolute inset-0 z-10 flex items-center justify-center rounded-lg" style={{ backgroundColor: "#FAF9F7" }}>
+				<div className="absolute inset-0 z-10 flex items-center justify-center rounded-lg" style={{ backgroundColor: "#F1F5F9" }}>
 					<Loader2Icon className="size-6 animate-spin" style={{ color: "#D97706" }} />
 				</div>
 			)}
 			<div
 				ref={containerRef}
 				className="h-full w-full rounded-lg border"
-				style={{ borderColor: "#E7E5E4", backgroundColor: "#FFFBF5" }}
+				style={{ borderColor: "#E2E8F0", backgroundColor: "#F8FAFC" }}
 			/>
 		</div>
 	);

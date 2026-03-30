@@ -53,7 +53,7 @@ export function InterviewReveal({ sessionId, shareToken, onComplete }: Interview
 
 	if (status.status === "error") {
 		return (
-			<div className="flex min-h-[400px] flex-col items-center justify-center gap-4" style={{ backgroundColor: "#FFFBF5" }}>
+			<div className="flex min-h-[400px] flex-col items-center justify-center gap-4" style={{ backgroundColor: "#F8FAFC" }}>
 				<AlertTriangleIcon className="size-12" style={{ color: "#DC2626" }} />
 				<p className="text-center text-sm" style={{ color: "#0A1428" }}>
 					{status.error || "Error generando resultados"}
@@ -76,7 +76,7 @@ export function InterviewReveal({ sessionId, shareToken, onComplete }: Interview
 	}
 
 	return (
-		<div className="flex min-h-[400px] flex-col items-center justify-center gap-6" style={{ backgroundColor: "#FFFBF5" }}>
+		<div className="flex min-h-[400px] flex-col items-center justify-center gap-6" style={{ backgroundColor: "#F8FAFC" }}>
 			<Loader2Icon className="size-12 animate-spin" style={{ color: "#D97706" }} />
 
 			<div className="text-center">
@@ -86,14 +86,14 @@ export function InterviewReveal({ sessionId, shareToken, onComplete }: Interview
 				>
 					Generando tu radiografía de proceso
 				</p>
-				<p className="mt-1 text-sm" style={{ color: "#78716C" }}>
+				<p className="mt-1 text-sm" style={{ color: "#64748B" }}>
 					{STEP_LABELS[status.step || "knowledge"]}
 				</p>
 			</div>
 
 			{/* Progress bar */}
 			<div className="w-64">
-				<div className="h-2 overflow-hidden rounded-full" style={{ backgroundColor: "#E7E5E4" }}>
+				<div className="h-2 overflow-hidden rounded-full" style={{ backgroundColor: "#E2E8F0" }}>
 					<div
 						className="h-full rounded-full transition-all"
 						style={{

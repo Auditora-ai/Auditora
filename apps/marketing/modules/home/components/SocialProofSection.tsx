@@ -13,9 +13,8 @@ const TESTIMONIAL_KEYS = ["testimonial1", "testimonial2", "testimonial3"] as con
 
 const LOGO_PLACEHOLDERS = [
 	"Firmas Big4",
-	"Consultoras Latam",
-	"Fortune 500",
-	"Auditoria Interna",
+	"Consultoras líderes",
+	"Empresas Fortune 500",
 ];
 
 export function SocialProofSection() {
@@ -69,7 +68,7 @@ export function SocialProofSection() {
 	);
 
 	return (
-		<section ref={sectionRef} className="py-16 sm:py-20 lg:py-28 bg-white">
+		<section ref={sectionRef} id="cases" className="py-16 sm:py-20 lg:py-28 bg-white">
 			<div className="container max-w-5xl">
 				<div className="sp-header mb-10 sm:mb-14 max-w-3xl mx-auto text-center">
 					<small className="font-medium text-xs uppercase tracking-widest text-[#00E5C0] mb-4 block">

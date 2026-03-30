@@ -3,7 +3,7 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ClockIcon, DollarSignIcon, MessageCircleWarningIcon } from "lucide-react";
+import { ClockIcon, RefreshCwIcon, DatabaseIcon, BotIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRef } from "react";
 
@@ -11,8 +11,9 @@ gsap.registerPlugin(ScrollTrigger);
 
 const cards = [
 	{ id: "card1", icon: ClockIcon },
-	{ id: "card2", icon: DollarSignIcon },
-	{ id: "card3", icon: MessageCircleWarningIcon },
+	{ id: "card2", icon: RefreshCwIcon },
+	{ id: "card3", icon: DatabaseIcon },
+	{ id: "card4", icon: BotIcon },
 ] as const;
 
 export function ProblemSection() {
@@ -58,7 +59,7 @@ export function ProblemSection() {
 	return (
 		<section
 			ref={sectionRef}
-			className="py-16 sm:py-20 lg:py-28 bg-[#0A1428]"
+			className="py-16 sm:py-20 lg:py-28 bg-[#111827]"
 		>
 			<div className="container max-w-5xl">
 				<div className="problem-header mb-10 sm:mb-16 text-center">
@@ -70,7 +71,7 @@ export function ProblemSection() {
 					</h2>
 				</div>
 
-				<div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
 					{cards.map((card) => {
 						const Icon = card.icon;
 						return (

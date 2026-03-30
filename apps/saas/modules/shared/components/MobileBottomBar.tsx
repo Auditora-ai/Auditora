@@ -108,7 +108,7 @@ export function MobileBottomBar() {
 	];
 
 	return (
-		<div className="fixed bottom-0 left-0 right-0 z-50 border-t border-stone-800 bg-stone-900 md:hidden">
+		<div className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-800 bg-slate-900 md:hidden">
 			<div className="flex items-center justify-around px-2 py-1">
 				{primaryTabs.map((tab) => (
 					<Link
@@ -118,7 +118,7 @@ export function MobileBottomBar() {
 							"relative flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px]",
 							tab.isActive
 								? "text-blue-500 font-medium"
-								: "text-stone-500",
+								: "text-slate-500",
 						)}
 					>
 						<tab.icon className="size-5" />
@@ -145,7 +145,7 @@ export function MobileBottomBar() {
 					<SheetTrigger asChild>
 						<button
 							type="button"
-							className="flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] text-stone-500"
+							className="flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] text-slate-500"
 						>
 							<MoreHorizontalIcon className="size-5" />
 							<span>Más</span>
@@ -153,10 +153,10 @@ export function MobileBottomBar() {
 					</SheetTrigger>
 					<SheetContent
 						side="bottom"
-						className="bg-stone-900 border-stone-800"
+						className="bg-slate-900 border-slate-800"
 					>
 						<SheetHeader>
-							<SheetTitle className="text-stone-200">
+							<SheetTitle className="text-slate-200">
 								Más opciones
 							</SheetTitle>
 						</SheetHeader>
@@ -165,7 +165,7 @@ export function MobileBottomBar() {
 								<Link
 									key={item.href}
 									href={item.href}
-									className="flex flex-col items-center gap-2 rounded-lg p-3 text-stone-400 hover:bg-stone-800 hover:text-stone-200"
+									className="flex flex-col items-center gap-2 rounded-lg p-3 text-slate-400 hover:bg-slate-800 hover:text-slate-200"
 								>
 									<item.icon className="size-6" />
 									<span className="text-xs text-center">

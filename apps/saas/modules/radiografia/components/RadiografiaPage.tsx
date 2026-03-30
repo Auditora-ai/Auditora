@@ -142,7 +142,7 @@ export function RadiografiaPage() {
 				setStatusMessage("Investigando tu industria...");
 			});
 		},
-		[createSession],
+		[createSession, t],
 	);
 
 	useEffect(() => {
@@ -244,7 +244,7 @@ export function RadiografiaPage() {
 			setPhase("input");
 			setLoading(false);
 		}
-	}, []);
+	}, [t]);
 
 	const router = useRouter();
 
@@ -363,7 +363,7 @@ export function RadiografiaPage() {
 					style={{ backgroundColor: "#0A1428" }}
 				/>
 				{withHeader(
-					<div className="min-h-screen bg-[#FFFBF5] px-4 py-12">
+					<div className="min-h-screen bg-[#F8FAFC] px-4 py-12">
 						<InvestigationBoard
 							companyName={crawledCompanyName || "tu empresa"}
 							industry={industry?.industry || "Analizando..."}

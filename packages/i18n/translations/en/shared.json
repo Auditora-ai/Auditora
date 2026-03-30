@@ -2,7 +2,7 @@
 	"pricing": {
 		"choosePlan": "Choose plan",
 		"contactSales": "Contact sales",
-		"description": "Every plan includes the Claude Opus AI engine, automatic BPMN diagramming, and risk analysis. Choose based on your session volume.",
+		"description": "Every plan includes the AI engine, automatic BPMN diagramming, and risk analysis. Select based on your team's session volume.",
 		"getStarted": "Get started",
 		"startTrial": "Start free trial",
 		"month": "{count, plural, one {month} other {{count} months}}",
@@ -68,7 +68,7 @@
 		"purchase": "Purchase",
 		"recommended": "Recommended",
 		"subscribe": "Subscribe",
-		"title": "Invest in risk intelligence, not more hours of manual work",
+		"title": "Plans based on analysis volume",
 		"trialPeriod": "{days} {days, plural, one {day} other {days}} free trial",
 		"year": "{count, plural, one {year} other {{count} years}}",
 		"yearly": "Yearly",

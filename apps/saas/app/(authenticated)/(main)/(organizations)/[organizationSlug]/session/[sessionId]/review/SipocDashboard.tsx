@@ -74,15 +74,15 @@ export function SipocDashboard({ updatedScores, gaps, actions }: SipocDashboardP
 	if (!hasData) {
 		return (
 			<ReportSection title="Cobertura SIPOC" actions={actions}>
-				<p className="text-sm text-stone-400">Analisis de cobertura pendiente.</p>
+				<p className="text-sm text-slate-400">Analisis de cobertura pendiente.</p>
 			</ReportSection>
 		);
 	}
 
 	return (
 		<ReportSection title="Cobertura SIPOC" actions={actions}>
-			<p className="mb-5 text-sm text-stone-500">
-				Cobertura global: <span className="font-semibold text-stone-800">{overallCoverage}%</span>
+			<p className="mb-5 text-sm text-slate-500">
+				Cobertura global: <span className="font-semibold text-slate-800">{overallCoverage}%</span>
 			</p>
 			<div className="space-y-4">
 				{SIPOC_DIMENSIONS.map((dim) => {
@@ -92,21 +92,21 @@ export function SipocDashboard({ updatedScores, gaps, actions }: SipocDashboardP
 						<div key={dim.key}>
 							<div className="flex items-center justify-between mb-1.5">
 								<div className="flex items-center gap-2">
-									<span className="text-sm font-medium text-stone-700">
+									<span className="text-sm font-medium text-slate-700">
 										{dim.labelEs}
 									</span>
-									<span className="text-xs text-stone-400">
+									<span className="text-xs text-slate-400">
 										({dim.label})
 									</span>
-									<span className="text-xs text-stone-400">
+									<span className="text-xs text-slate-400">
 										{Math.round(dim.weight * 100)}%
 									</span>
 								</div>
-								<span className="text-sm font-semibold text-stone-800">
+								<span className="text-sm font-semibold text-slate-800">
 									{pct}%
 								</span>
 							</div>
-							<div className="h-2 w-full rounded-full bg-stone-100 overflow-hidden">
+							<div className="h-2 w-full rounded-full bg-slate-100 overflow-hidden">
 								<div
 									className={`h-full rounded-full transition-all ${barColor(pct)}`}
 									style={{ width: `${pct}%` }}
@@ -115,12 +115,12 @@ export function SipocDashboard({ updatedScores, gaps, actions }: SipocDashboardP
 							{dimGaps.length > 0 && (
 								<div className="mt-1.5 space-y-1">
 									{dimGaps.slice(0, 3).map((gap, i) => (
-										<p key={i} className="text-xs text-stone-500 pl-2 border-l-2 border-stone-200">
+										<p key={i} className="text-xs text-slate-500 pl-2 border-l-2 border-slate-200">
 											{gap.question}
 										</p>
 									))}
 									{dimGaps.length > 3 && (
-										<p className="text-xs text-stone-400 pl-2">
+										<p className="text-xs text-slate-400 pl-2">
 											+{dimGaps.length - 3} mas
 										</p>
 									)}

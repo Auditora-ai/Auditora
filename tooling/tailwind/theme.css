@@ -11,21 +11,21 @@
 
 /* ── Layer 1: Primitive Palette ── */
 :root {
-	/* Stone scale (warm) */
-	--palette-stone-900: #1C1917;
-	--palette-stone-800: #292524;
-	--palette-stone-700: #44403C;
-	--palette-stone-600: #57534E;
-	--palette-stone-500: #78716C;
-	--palette-stone-400: #A8A29E;
-	--palette-stone-300: #D6D3D1;
-	--palette-stone-200: #E7E5E4;
-	--palette-stone-100: #F5F5F4;
-	--palette-stone-50:  #FAFAF9;
+	/* Slate scale (cold navy) */
+	--palette-slate-900: #0F172A;
+	--palette-slate-800: #1E293B;
+	--palette-slate-700: #334155;
+	--palette-slate-600: #475569;
+	--palette-slate-500: #64748B;
+	--palette-slate-400: #94A3B8;
+	--palette-slate-300: #CBD5E1;
+	--palette-slate-200: #E2E8F0;
+	--palette-slate-100: #F1F5F9;
+	--palette-slate-50:  #F8FAFC;
 
-	/* Warm whites */
-	--palette-warm-white: #FFFBF5;
-	--palette-warm-surface: #FAF9F7;
+	/* Cool whites */
+	--palette-cool-white: #F8FAFC;
+	--palette-cool-surface: #F1F5F9;
 
 	/* Action accent (teal) */
 	--palette-action: #00E5C0;
@@ -48,26 +48,26 @@
 /* ── Layer 2: Semantic Tokens (pages, dashboard) ── */
 @layer base {
 	:root {
-		--background: var(--palette-warm-white);
-		--foreground: var(--palette-stone-900);
+		--background: var(--palette-cool-white);
+		--foreground: var(--palette-slate-900);
 		--card: #FFFFFF;
-		--card-foreground: var(--palette-stone-900);
+		--card-foreground: var(--palette-slate-900);
 		--popover: #FFFFFF;
-		--popover-foreground: var(--palette-stone-900);
+		--popover-foreground: var(--palette-slate-900);
 		--primary: var(--palette-action);
 		--primary-foreground: #0A1428;
-		--secondary: var(--palette-warm-surface);
-		--secondary-foreground: var(--palette-stone-900);
-		--muted: var(--palette-stone-100);
-		--muted-foreground: var(--palette-stone-500);
+		--secondary: var(--palette-cool-surface);
+		--secondary-foreground: var(--palette-slate-900);
+		--muted: var(--palette-slate-100);
+		--muted-foreground: var(--palette-slate-500);
 		--accent: var(--palette-action-subtle);
-		--accent-foreground: var(--palette-stone-900);
+		--accent-foreground: var(--palette-slate-900);
 		--success: var(--palette-success);
 		--success-foreground: #FFFFFF;
 		--destructive: var(--palette-destructive);
 		--destructive-foreground: #FFFFFF;
-		--border: var(--palette-stone-200);
-		--input: var(--palette-stone-200);
+		--border: var(--palette-slate-200);
+		--input: var(--palette-slate-200);
 		--ring: var(--palette-action);
 		--radius: 0.75rem;
 	}
@@ -117,12 +117,12 @@
 /* ── Layer 3: Canvas Tokens (light surfaces, diagram area) ── */
 /* Available globally so any component can use canvas-* classes. */
 :root {
-	--canvas-bg: var(--palette-warm-white);
-	--canvas-surface: var(--palette-warm-surface);
-	--canvas-text: var(--palette-stone-900);
-	--canvas-text-secondary: var(--palette-stone-500);
-	--canvas-text-muted: var(--palette-stone-400);
-	--canvas-border: var(--palette-stone-200);
+	--canvas-bg: var(--palette-cool-white);
+	--canvas-surface: var(--palette-cool-surface);
+	--canvas-text: var(--palette-slate-900);
+	--canvas-text-secondary: var(--palette-slate-500);
+	--canvas-text-muted: var(--palette-slate-400);
+	--canvas-border: var(--palette-slate-200);
 }
 
 /* ── Tailwind @theme: expose tokens as utility classes ── */

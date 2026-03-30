@@ -92,12 +92,17 @@ export async function POST(request: NextRequest) {
 	if (result.error) return result.error;
 	const session = result.session;
 
-	if (!session.industry || !session.businessContext) {
-		return new Response("Run crawl + instant first", { status: 400 });
+	if (!session.businessContext) {
+		return new Response("Run crawl first", { status: 400 });
 	}
 
-	const industry = session.industry;
 	const context = session.businessContext;
+
+	// Derive a rough industry hint from business context for search queries.
+	// The real industry inference happens later in /instant with full LLM power.
+	const industryHint = session.industry
+		|| context.split(/[.\n]/).filter(Boolean)[0]?.slice(0, 100)
+		|| "empresa";
 
 	// Extract location from context (heuristic)
 	const locationMatch = context.match(
@@ -115,27 +120,27 @@ export async function POST(request: NextRequest) {
 		{
 			id: "regulatory",
 			label: "Panorama Regulatorio",
-			query: `regulaciones ${industry} ${country} ${year} normas ISO compliance`,
+			query: `regulaciones ${industryHint} ${country} ${year} normas ISO compliance`,
 		},
 		{
 			id: "legal",
 			label: "Contexto Legal",
-			query: `${industry} multas sanciones ${country} ${year - 1} ${year}`,
+			query: `${industryHint} multas sanciones ${country} ${year - 1} ${year}`,
 		},
 		{
 			id: "competitors",
 			label: "Análisis Competitivo",
-			query: `${companyName} competidores ${industry} ${country}`,
+			query: `${companyName} competidores ${industryHint} ${country}`,
 		},
 		{
 			id: "incidents",
 			label: "Incidentes del Sector",
-			query: `${industry} fallas recalls demandas ${country} ${year}`,
+			query: `${industryHint} fallas recalls demandas ${country} ${year}`,
 		},
 		{
 			id: "sector_risks",
 			label: "Riesgos Sectoriales",
-			query: `${industry} riesgos tendencias supply chain ${year}`,
+			query: `${industryHint} riesgos tendencias supply chain ${year}`,
 		},
 		{
 			id: "macro",
@@ -145,7 +150,7 @@ export async function POST(request: NextRequest) {
 		{
 			id: "benchmarks",
 			label: "Benchmarks de Industria",
-			query: `${industry} mejores prácticas controles internos gestión riesgos`,
+			query: `${industryHint} mejores prácticas controles internos gestión riesgos`,
 		},
 	];
 
@@ -202,7 +207,7 @@ export async function POST(request: NextRequest) {
 								.join(" ");
 							if (insightContext.length > 100) {
 								send("insight", {
-									text: `Con ${Object.keys(allFindings).length} fuentes analizadas, se identifican patrones de riesgo en ${industry} para ${country}.`,
+									text: `Con ${Object.keys(allFindings).length} fuentes analizadas, se identifican patrones de riesgo en ${industryHint} para ${country}.`,
 									sources: Object.keys(allFindings),
 								}, "Conclusión preliminar");
 							}

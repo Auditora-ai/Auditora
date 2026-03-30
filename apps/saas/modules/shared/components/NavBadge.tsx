@@ -44,7 +44,7 @@ export function NavBadge({
 	return (
 		<span
 			className={cn(
-				"ml-auto shrink-0 text-[11px] tabular-nums text-stone-500",
+				"ml-auto shrink-0 text-[11px] tabular-nums text-slate-500",
 				dotColor === "red" && "text-red-400 font-medium",
 				dotColor === "amber" && "text-amber-400",
 				dotColor === "green" && "text-[#16A34A]",

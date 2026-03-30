@@ -2,7 +2,7 @@
 	"pricing": {
 		"choosePlan": "Plan wählen",
 		"contactSales": "Vertrieb kontaktieren",
-		"description": "Jeder Plan enthält die Claude Opus KI-Engine, automatische BPMN-Diagrammerstellung und Risikoanalyse. Wählen Sie nach Sitzungsvolumen.",
+		"description": "Jeder Plan enthält die KI-Engine, automatische BPMN-Diagrammerstellung und Risikoanalyse. Wählen Sie nach dem Sitzungsvolumen Ihres Teams.",
 		"getStarted": "Loslegen",
 		"startTrial": "Kostenlos testen",
 		"month": "{count, plural, one {Monat} other {{count} Monate}}",
@@ -68,7 +68,7 @@
 		"purchase": "Kaufen",
 		"recommended": "Empfohlen",
 		"subscribe": "Abonnieren",
-		"title": "Investieren Sie in Risikointelligenz, nicht in mehr Stunden manueller Arbeit",
+		"title": "Pläne nach Analysevolumen",
 		"trialPeriod": "{days} {days, plural, one {Tag} other {Tage}} kostenlos testen",
 		"year": "{count, plural, one {Jahr} other {{count} Jahre}}",
 		"yearly": "Jährlich",

@@ -7,11 +7,11 @@
 - **Project type:** Web app with real-time collaboration (3-panel meeting view)
 
 ## Aesthetic Direction
-- **Direction:** Warm Luxury — function-first with premium craft details. The tool feels like it was designed by someone who respects the consulting profession.
-- **Decoration level:** Intentional — subtle grain texture on warm dark surfaces, clean warm whites on light surfaces. No cold grays, no gradients-for-decoration.
-- **Mood:** Precision instrument in a warm study. Think walnut and leather, not steel and glass. The product feels authoritative and serious, but the warmth keeps it from feeling clinical. Linear's engineering precision meets the authority of a McKinsey deliverable, wrapped in a private club aesthetic.
-- **Key design insight:** Dual-temperature UI — warm dark chrome for the consultant's private view (teleprompter, transcript, controls), warm white canvas for the shared BPMN diagram. The diagram area must be pristine enough to screenshot and send to a Fortune 500 client. The warmth of both zones creates visual cohesion instead of a jarring cold contrast.
-- **Dual accent system:** Blue (`#2563EB`) = action (buttons, links, interactive states). Amber (`#D97706`) = orientation (panel edges, section markers, status indicators in chrome). Each color has one job — never cross roles.
+- **Direction:** Cold Premium — function-first with high-contrast, tech-forward craft. Unified look from marketing to product interior.
+- **Decoration level:** Intentional — deep navy surfaces, clean cool whites on light surfaces. No warm browns, no gradients-for-decoration.
+- **Mood:** Precision instrument in a command center. Think steel and glass, not walnut and leather. The product feels authoritative and cutting-edge. Linear's engineering precision meets the sophistication of a Bloomberg terminal, wrapped in a premium SaaS aesthetic.
+- **Key design insight:** Unified cold palette — the same deep navy (`#0A1428`) + teal (`#00E5C0`) palette flows from marketing landing page through login into the product interior. No jarring temperature shift when entering the app.
+- **Accent system:** Teal (`#00E5C0`) = primary action (buttons, links, interactive states, accents). Used consistently across marketing and product.
 
 ## Typography
 - **Display/Hero:** Instrument Serif — signals consulting authority. Serif in SaaS is a deliberate differentiator. Use for page titles, session names, panel headers, hero text. Italic variant for emphasis.
@@ -34,37 +34,36 @@
   - `2xs`: 10px / 0.625rem — badges, tags, node labels in diagram — Geist Sans
 
 ## Color
-- **Approach:** Dual accent + warm neutrals. The BPMN diagram's node colors ARE the color in the product. Chrome uses warm stone tones with amber orientation accents. Canvas is warm white so diagrams feel premium and screenshot-ready.
+- **Approach:** Unified cold palette. The marketing navy/teal palette is the source of truth for the entire product. Chrome uses deep navy tones with teal accents. Canvas is cool white for clean, professional diagrams.
 
-### Warm Chrome (consultant panels: teleprompter, transcript, sidebar, status bar, top bar)
-Warm stone palette with 4 surface levels for depth and hierarchy.
-- **Base:** `#1C1917` (stone-900) — panel backgrounds, deepest surface
-- **Raised:** `#292524` (stone-800) — cards, elevated surfaces, dropdown menus
-- **Hover:** `#44403C` (stone-700) — hover states, active surfaces, pressed states
-- **Subtle:** `#57534E` (stone-600) — muted backgrounds, secondary panels
-- **Border:** `#44403C` (stone-700) — dividers, panel edges
-- **Border subtle:** `#292524` (stone-800) — inner dividers, faint separator lines
-- **Text primary:** `#FAFAF9` (stone-50) — headings, body text on chrome
-- **Text secondary:** `#A8A29E` (stone-400) — labels, meta, secondary info
-- **Text muted:** `#78716C` (stone-500) — timestamps, disabled text
+### Cold Chrome (consultant panels: teleprompter, transcript, sidebar, status bar, top bar)
+Deep navy/slate palette with 4 surface levels for depth and hierarchy.
+- **Base:** `#0A1428` — panel backgrounds, deepest surface
+- **Raised:** `#111827` — cards, elevated surfaces, dropdown menus
+- **Hover:** `#1E293B` (slate-800) — hover states, active surfaces, pressed states
+- **Subtle:** `#334155` (slate-700) — muted backgrounds, secondary panels
+- **Border:** `#1E293B` (slate-800) — dividers, panel edges
+- **Border subtle:** `#111827` — inner dividers, faint separator lines
+- **Text primary:** `#F1F5F9` (slate-100) — headings, body text on chrome
+- **Text secondary:** `#94A3B8` (slate-400) — labels, meta, secondary info
+- **Text muted:** `#64748B` (slate-500) — timestamps, disabled text
 
-### Warm Canvas (diagram area, shared client view, dashboard light mode)
-Warm white palette — papel crema, not sterile white.
-- **Background:** `#FFFBF5` — diagram canvas, warm white
-- **Surface:** `#FAF9F7` — card backgrounds, input fields
-- **Border:** `#E7E5E4` (stone-200) — dividers, panel borders
-- **Text primary:** `#1C1917` (stone-900) — headings, body text
-- **Text secondary:** `#78716C` (stone-500) — labels, placeholders, meta
-- **Text muted:** `#A8A29E` (stone-400) — timestamps, disabled
+### Cool Canvas (diagram area, shared client view, dashboard light mode)
+Cool white palette — clean and professional.
+- **Background:** `#F8FAFC` (slate-50) — diagram canvas, cool white
+- **Surface:** `#F1F5F9` (slate-100) — card backgrounds, input fields
+- **Border:** `#E2E8F0` (slate-200) — dividers, panel borders
+- **Text primary:** `#0F172A` (slate-900) — headings, body text
+- **Text secondary:** `#64748B` (slate-500) — labels, placeholders, meta
+- **Text muted:** `#94A3B8` (slate-400) — timestamps, disabled
 
 ### Accent Colors
-Dual accent system — each color has one role.
-- **Action (blue):** `#2563EB` — buttons, links, active states, primary actions
-- **Action hover:** `#1D4ED8` — button/link hover
-- **Action subtle:** `#EFF6FF` — selected backgrounds, highlights on light surfaces
-- **Orientation (amber):** `#D97706` — panel edge accents, section icons, "LIVE" badge, dark chrome decorative highlights
-- **Orientation subtle:** `#FEF3C7` — warm highlights on light surfaces
-- **Orientation glow:** `rgba(217, 119, 6, 0.08)` — panel edge glow line (1px), subtle ambient warmth
+- **Action (teal):** `#00E5C0` — buttons, links, active states, primary actions (unified with marketing)
+- **Action hover:** `#00C4A3` — button/link hover
+- **Action subtle:** `#ECFDF5` — selected backgrounds, highlights on light surfaces
+- **Orientation (amber):** `#D97706` — panel edge accents, section icons, "LIVE" badge, chrome decorative highlights
+- **Orientation subtle:** `#FEF3C7` — highlights on light surfaces
+- **Orientation glow:** `rgba(217, 119, 6, 0.08)` — panel edge glow line (1px)
 
 ### Semantic Colors (consistent across both zones)
 - **Success:** `#16A34A` — confirmed nodes, connected status, positive indicators
@@ -82,7 +81,7 @@ Bizagi-inspired warm palette. Type-based coloring makes diagrams instantly reada
 - **Boundary Event:** `#A16207` border, `#FEF3C7` fill (warm brown)
 - **End Event:** `#DC2626` border, `#FEF2F2` fill (red circle)
 - **Sub-Process:** `#7C3AED` border, `#F5F3FF` fill (purple)
-- **Connection lines:** `#78716C` (stone-500, warmer than previous `#64748B`)
+- **Connection lines:** `#64748B` (slate-500)
 
 ### Node Colors — State Overrides (override type colors when active)
 State-based coloring takes priority over type-based colors via CSS markers.
@@ -92,24 +91,9 @@ State-based coloring takes priority over type-based colors via CSS markers.
 - **Node active (discussing now):** `#2563EB` border (3px solid) with `#DBEAFE` background — thicker border + darker fill than confirmed tasks for visual distinction
 
 ### Marketing Landing & Login Palette
-Separate from the product UI. Darker, bolder, premium feel that differentiates from generic BPM tools (no corporate blue). Applied via `[data-landing]` override on marketing and hardcoded in login showcase.
+Same palette as the product — unified cold navy + teal. Marketing uses `[data-landing]` CSS override for landing-specific variables but the colors are identical to chrome tokens.
 
-- **Deep background:** `#0A1428` — hero sections, dark panels, navbar scroll bg, login showcase
-- **Secondary background:** `#111827` — cards on dark surfaces, raised elements, feature pills
-- **Accent (teal):** `#00E5C0` — primary accent across all marketing + login. Buttons, badges, icons, borders, timeline
-- **Accent hover:** `#00C4A3` — button hover states
-- **Main text (on dark):** `#F1F5F9` — headings, body text on dark sections
-- **Secondary text:** `#94A3B8` — subtitles, descriptions on dark sections
-- **Muted text:** `#64748B` — meta text, fine print
-- **Heading text (on light):** `#0A1428` — headings on white/light sections
-- **Risk/alert:** `#EF4444` — risk icons, alert accents (login risk feature)
-- **Success:** `#10B981` — success indicators
-- **Borders (dark surfaces):** `#1E293B` — dividers, pill borders on dark bg
-- **Button text on teal:** `#0A1428` — dark text on `#00E5C0` buttons for contrast (not white)
-- **Radial glow (teal):** `rgba(0, 229, 192, 0.06–0.15)` — gradient overlays on dark sections
-- **Radial glow (risk):** `rgba(239, 68, 68, 0.04)` — subtle red glow on login showcase
-
-**Design rationale:** The teal `#00E5C0` is brighter and more saturated than typical SaaS accents. Combined with the deep `#0A1428` background, it creates a premium, high-contrast look that signals innovation and sophistication. The palette avoids blue entirely to stand apart from competitors.
+**Design rationale:** The teal `#00E5C0` is brighter and more saturated than typical SaaS accents. Combined with the deep `#0A1428` background, it creates a premium, high-contrast look that signals innovation and sophistication. The palette avoids blue entirely to stand apart from competitors. The user transitions seamlessly from marketing → login → product with zero visual jarring.
 
 ### Speaker Colors (transcript)
 - **Consultant:** `#2563EB` — matches action accent, "you" are the brand
@@ -118,15 +102,15 @@ Separate from the product UI. Darker, bolder, premium feel that differentiates f
 - **Client 3+:** `#D97706` — amber, additional speakers
 
 ## Panel Edge Transitions
-The boundary between warm chrome and warm canvas should feel like a gentle bridge, not a cliff.
+The boundary between cold chrome and cool canvas should feel like a gentle bridge, not a cliff.
 - **Edge line:** 1px border of `rgba(217, 119, 6, 0.08)` (amber glow) at left/right edges of center canvas where it meets dark panels
-- **Inner shadow:** 4px soft `box-shadow` inset from dark panels toward canvas using `rgba(28, 25, 23, 0.15)` — creates depth without a hard line
-- **Effect:** The warm amber glow at the boundary ties both temperature zones together. The transition feels intentional, not accidental.
+- **Inner shadow:** 4px soft `box-shadow` inset from dark panels toward canvas using `rgba(15, 23, 42, 0.15)` — creates depth without a hard line
+- **Effect:** The subtle amber glow at the boundary ties both zones together. The transition feels intentional, not accidental.
 
 ## Canvas Grid Pattern
-- **Background:** `#FFFBF5` (warm white)
-- **Grid dots:** `#D6D3D1` (stone-300) at 0.5px radius on 20px spacing
-- **Effect:** Warm, soft grid that provides spatial reference without competing with diagram nodes. Feels like quality paper, not a spreadsheet.
+- **Background:** `#F8FAFC` (slate-50, cool white)
+- **Grid dots:** `#CBD5E1` (slate-300) at 0.5px radius on 20px spacing
+- **Effect:** Clean, soft grid that provides spatial reference without competing with diagram nodes.
 
 ## Spacing
 - **Base unit:** 4px
@@ -178,19 +162,19 @@ The boundary between warm chrome and warm canvas should feel like a gentle bridg
 ## Component Patterns
 
 ### Buttons
-- **Primary:** `#2563EB` bg, white text, `sm` radius, medium weight (Geist Sans)
-- **Secondary:** transparent bg, `#2563EB` text, `#E7E5E4` border
-- **Ghost:** transparent bg, `#78716C` text, no border (hover: `#FAF9F7` bg on light, `#292524` bg on chrome)
+- **Primary:** `#00E5C0` bg, `#0A1428` text, `sm` radius, medium weight (Geist Sans)
+- **Secondary:** transparent bg, `#00E5C0` text, `#E2E8F0` border
+- **Ghost:** transparent bg, `#64748B` text, no border (hover: `#F1F5F9` bg on light, `#1E293B` bg on chrome)
 - **Danger:** `#DC2626` bg, white text (only for destructive actions)
 - **All buttons:** 44px min height (touch target), 16px horizontal padding
 
 ### Cards
-- Canvas/light: `#FFFBF5` bg, `#E7E5E4` border, `md` radius, `lg` padding
-- Chrome/dark: `#292524` bg, `#44403C` border, `md` radius, `lg` padding
+- Canvas/light: `#F8FAFC` bg, `#E2E8F0` border, `md` radius, `lg` padding
+- Chrome/dark: `#111827` bg, `#1E293B` border, `md` radius, `lg` padding
 
 ### Inputs
-- Light: `#FAF9F7` bg, `#E7E5E4` border, `sm` radius
-- Focus: `#2563EB` border (2px), `#EFF6FF` bg
+- Light: `#F1F5F9` bg, `#E2E8F0` border, `sm` radius
+- Focus: `#00E5C0` border (2px), `#ECFDF5` bg
 - Error: `#DC2626` border, `#FEF2F2` bg
 - 44px height (touch target)
 
@@ -200,16 +184,16 @@ The boundary between warm chrome and warm canvas should feel like a gentle bridg
 - Disconnected: `#DC2626` dot (static)
 - Recording: `#DC2626` dot (pulsing) + "REC" label
 
-## Warm Chrome / Warm Canvas Strategy
+## Cold Chrome / Cool Canvas Strategy
 - **Not a full dark/light toggle.** The meeting view uses BOTH simultaneously:
-  - Teleprompter panel: warm chrome (always)
-  - BPMN diagram canvas: warm canvas (always)
-  - Transcript panel: warm chrome (always)
-  - Top bar: warm chrome (always)
-  - Status bar: warm chrome (always)
-  - Shared client view: warm canvas (always)
-- **Dashboard/non-meeting pages:** follow system preference (prefers-color-scheme), using warm canvas tokens for light mode and warm chrome tokens for dark mode
-- **Chrome surfaces:** 4 levels of depth (`#1C1917` → `#292524` → `#44403C` → `#57534E`) for visual hierarchy without relying on borders alone
+  - Teleprompter panel: cold chrome (always)
+  - BPMN diagram canvas: cool canvas (always)
+  - Transcript panel: cold chrome (always)
+  - Top bar: cold chrome (always)
+  - Status bar: cold chrome (always)
+  - Shared client view: cool canvas (always)
+- **Dashboard/non-meeting pages:** follow system preference (prefers-color-scheme), using cool canvas tokens for light mode and cold chrome tokens for dark mode
+- **Chrome surfaces:** 4 levels of depth (`#0A1428` → `#111827` → `#1E293B` → `#334155`) for visual hierarchy without relying on borders alone
 
 ## Decisions Log
 | Date | Decision | Rationale |
@@ -225,3 +209,4 @@ The boundary between warm chrome and warm canvas should feel like a gentle bridg
 | 2026-03-22 | bpmn.io watermark styling | Cannot legally remove watermark. Styled to blend: 30% opacity + grayscale. License-compliant, visually unobtrusive. |
 | 2026-03-27 | Warm Luxury redesign | Cold slate (#0F172A) + Inter replaced with warm stone palette + Instrument Serif + Geist. Dual accent (blue=action, amber=orientation). Warm white canvas (#FFFBF5). Panel edge transitions with amber glow. The original typography decisions (Instrument Serif + Geist) are restored. |
 | 2026-03-29 | Marketing & Login premium palette | New palette: deep `#0A1428` + bright teal `#00E5C0` replaces navy+muted teal (marketing) and stone+blue (login). Goal: differentiate from generic BPM tools, feel more potent and premium. Teal buttons use dark text for contrast. Unified accent across marketing and login. |
+| 2026-03-29 | Unified cold palette across entire product | Eliminated warm stone/brown palette and warm whites from the SaaS app. Marketing's cold navy/slate + teal palette is now the single source of truth everywhere. No more jarring theme shift when entering the app. stone-* → slate-*, #FFFBF5 → #F8FAFC, #FAF9F7 → #F1F5F9. |

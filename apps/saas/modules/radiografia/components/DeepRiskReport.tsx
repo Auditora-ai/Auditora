@@ -123,7 +123,7 @@ export function DeepRiskReport({
 				{/* Conversion CTA */}
 				<div className="rounded-xl border-2 border-primary bg-accent p-8 text-center">
 					<h3 className="mb-2 text-xl font-display text-foreground">{t("saveScan")}</h3>
-					<p className="mb-6 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
+					<p className="mb-6 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
 						{t("saveDescription", { count: deepRisksCount, process: processName })}
 					</p>
 					<button

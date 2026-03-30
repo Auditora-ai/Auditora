@@ -42,17 +42,23 @@ export const startTrial = protectedProcedure
 				? await getPurchasesByOrganizationId(organizationId)
 				: await getPurchasesByUserId(user.id);
 
-			const hasActiveSubscription = existingPurchases.some(
-				(p) =>
-					p.status === "active" ||
-					(p.status === "trialing" &&
-						new Date(p.createdAt).getTime() + 14 * 24 * 60 * 60 * 1000 >
-							Date.now()),
+			const hasActivePaidSubscription = existingPurchases.some(
+				(p) => p.status === "active",
 			);
 
-			if (hasActiveSubscription) {
+			if (hasActivePaidSubscription) {
 				throw new ORPCError("CONFLICT", {
 					message: "A subscription or trial already exists",
+				});
+			}
+
+			// Clean up expired or stale trial records so a new trial can start
+			const staleTrials = existingPurchases.filter(
+				(p) => p.status === "trialing",
+			);
+			if (staleTrials.length > 0) {
+				await db.purchase.deleteMany({
+					where: { id: { in: staleTrials.map((p) => p.id) } },
 				});
 			}
 

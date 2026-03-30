@@ -35,7 +35,7 @@ function cellColor(severity: number, probability: number): string {
 	if (score >= 15) return "bg-red-600 text-white";
 	if (score >= 10) return "bg-orange-500 text-white";
 	if (score >= 5) return "bg-amber-500 text-white";
-	if (score >= 2) return "bg-yellow-400 text-stone-900";
+	if (score >= 2) return "bg-yellow-400 text-slate-900";
 	return "bg-green-200 text-green-900";
 }
 
@@ -93,7 +93,7 @@ export function RiskHeatMap({ risks, summary, actions }: RiskHeatMapProps) {
 					<div className="mb-6">
 						<div className="flex gap-2">
 							<div className="flex flex-col justify-center items-center w-6">
-								<span className="text-[10px] text-stone-400 -rotate-90 whitespace-nowrap">
+								<span className="text-[10px] text-slate-400 -rotate-90 whitespace-nowrap">
 									Severidad
 								</span>
 							</div>
@@ -109,7 +109,7 @@ export function RiskHeatMap({ risks, summary, actions }: RiskHeatMapProps) {
 													key={key}
 													type="button"
 													onClick={() => setSelectedCell(count > 0 ? (isSelected ? null : { s, p }) : null)}
-													className={`w-10 h-10 rounded text-xs font-medium flex items-center justify-center transition-all ${cellColor(s, p)} ${count > 0 ? "cursor-pointer ring-1 ring-inset ring-white/30" : "cursor-default opacity-50"} ${isSelected ? "ring-2 ring-stone-900 scale-110 z-10" : ""}`}
+													className={`w-10 h-10 rounded text-xs font-medium flex items-center justify-center transition-all ${cellColor(s, p)} ${count > 0 ? "cursor-pointer ring-1 ring-inset ring-white/30" : "cursor-default opacity-50"} ${isSelected ? "ring-2 ring-slate-900 scale-110 z-10" : ""}`}
 													title={`${SEVERITY_LABELS[s]} x ${PROBABILITY_LABELS[p]}: ${count} riesgo(s)`}
 												>
 													{count > 0 ? count : ""}
@@ -118,7 +118,7 @@ export function RiskHeatMap({ risks, summary, actions }: RiskHeatMapProps) {
 										}),
 									)}
 								</div>
-								<p className="text-[10px] text-stone-400 text-center mt-1">Probabilidad</p>
+								<p className="text-[10px] text-slate-400 text-center mt-1">Probabilidad</p>
 							</div>
 						</div>
 					</div>
@@ -128,7 +128,7 @@ export function RiskHeatMap({ risks, summary, actions }: RiskHeatMapProps) {
 				{filteredRisks.length > 0 ? (
 					<div className="space-y-2">
 						{selectedCell && (
-							<p className="text-xs text-stone-500 mb-2">
+							<p className="text-xs text-slate-500 mb-2">
 								Mostrando: {SEVERITY_LABELS[selectedCell.s]} x {PROBABILITY_LABELS[selectedCell.p]}
 								<button type="button" onClick={() => setSelectedCell(null)} className="ml-2 text-blue-600 hover:underline">
 									Ver todos
@@ -140,14 +140,14 @@ export function RiskHeatMap({ risks, summary, actions }: RiskHeatMapProps) {
 						))}
 					</div>
 				) : !dataInconsistent ? (
-					<p className="text-sm text-stone-400">No se identificaron riesgos en esta sesion.</p>
+					<p className="text-sm text-slate-400">No se identificaron riesgos en esta sesion.</p>
 				) : null}
 			</ReportSection>
 
 			{/* Opportunities Section */}
 			{opportunities.length > 0 && (
 				<ReportSection title="Oportunidades">
-					<p className="mb-4 text-sm text-stone-500">
+					<p className="mb-4 text-sm text-slate-500">
 						{opportunities.length} oportunidad(es) identificadas
 					</p>
 					<div className="space-y-2">
@@ -157,10 +157,10 @@ export function RiskHeatMap({ risks, summary, actions }: RiskHeatMapProps) {
 									<span className="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
 										Oportunidad
 									</span>
-									<span className="text-xs text-stone-500">{(opp.riskType ?? "").replace(/_/g, " ")}</span>
+									<span className="text-xs text-slate-500">{(opp.riskType ?? "").replace(/_/g, " ")}</span>
 								</div>
-								<p className="text-sm font-medium text-stone-800">{opp.title}</p>
-								<p className="mt-0.5 text-sm text-stone-600">{opp.description}</p>
+								<p className="text-sm font-medium text-slate-800">{opp.title}</p>
+								<p className="mt-0.5 text-sm text-slate-600">{opp.description}</p>
 								{(opp.suggestedMitigations?.length ?? 0) > 0 && (
 									<div className="mt-2">
 										<p className="text-xs font-medium text-green-700">Acciones sugeridas:</p>
@@ -183,29 +183,29 @@ export function RiskHeatMap({ risks, summary, actions }: RiskHeatMapProps) {
 function RiskCard({ risk }: { risk: RiskItem }) {
 	const sev = severityBadge(risk.severity);
 	return (
-		<div className="rounded-lg border border-stone-200 bg-stone-50 px-4 py-3">
+		<div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3">
 			<div className="mb-1.5 flex items-center gap-2">
 				<span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${sev.classes}`}>
 					{sev.text}
 				</span>
-				<span className="text-xs text-stone-500">{(risk.riskType ?? "").replace(/_/g, " ")}</span>
+				<span className="text-xs text-slate-500">{(risk.riskType ?? "").replace(/_/g, " ")}</span>
 			</div>
-			<p className="text-sm font-medium text-stone-800">{risk.title}</p>
-			<p className="mt-0.5 text-sm text-stone-500">{risk.description}</p>
+			<p className="text-sm font-medium text-slate-800">{risk.title}</p>
+			<p className="mt-0.5 text-sm text-slate-500">{risk.description}</p>
 			{risk.affectedStep && (
-				<p className="mt-1 text-xs text-stone-400">Paso afectado: {risk.affectedStep}</p>
+				<p className="mt-1 text-xs text-slate-400">Paso afectado: {risk.affectedStep}</p>
 			)}
 			{(risk.suggestedMitigations?.length ?? 0) > 0 && (
 				<div className="mt-2">
-					<p className="text-xs font-medium text-stone-500">Mitigaciones:</p>
-					<ul className="mt-1 list-disc list-inside text-xs text-stone-500">
+					<p className="text-xs font-medium text-slate-500">Mitigaciones:</p>
+					<ul className="mt-1 list-disc list-inside text-xs text-slate-500">
 						{(risk.suggestedMitigations ?? []).map((m, j) => (
 							<li key={j}>{m}</li>
 						))}
 					</ul>
 				</div>
 			)}
-			<div className="mt-2 flex gap-3 text-xs text-stone-400">
+			<div className="mt-2 flex gap-3 text-xs text-slate-400">
 				<span>Severidad: {risk.severity}/5</span>
 				<span>Probabilidad: {risk.probability}/5</span>
 				<span>RPN: {risk.severity * risk.probability}</span>
@@ -215,12 +215,12 @@ function RiskCard({ risk }: { risk: RiskItem }) {
 }
 
 function SummaryCard({ value, label, variant, isText }: { value: number | string; label: string; variant: "default" | "critical" | "high"; isText?: boolean }) {
-	const styles = { default: "border-stone-200 bg-stone-50", critical: "border-red-200 bg-red-50", high: "border-amber-200 bg-amber-50" };
-	const valueStyles = { default: "text-stone-800", critical: "text-red-700", high: "text-amber-700" };
+	const styles = { default: "border-slate-200 bg-slate-50", critical: "border-red-200 bg-red-50", high: "border-amber-200 bg-amber-50" };
+	const valueStyles = { default: "text-slate-800", critical: "text-red-700", high: "text-amber-700" };
 	return (
 		<div className={`rounded-lg border p-3 text-center ${styles[variant]}`}>
 			<p className={`${isText ? "text-sm" : "text-2xl"} font-semibold ${valueStyles[variant]}`}>{value}</p>
-			<p className="text-xs text-stone-500">{label}</p>
+			<p className="text-xs text-slate-500">{label}</p>
 		</div>
 	);
 }

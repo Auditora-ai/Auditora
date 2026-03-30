@@ -286,8 +286,8 @@ export function NavBar() {
 					"relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
 					"group/navitem",
 					item.isActive
-						? "bg-stone-800 text-stone-50 font-medium border-l-2 border-blue-600"
-						: "text-stone-400 hover:bg-stone-800/50 hover:text-stone-200 border-l-2 border-transparent",
+						? "bg-slate-800 text-slate-50 font-medium border-l-2 border-blue-600"
+						: "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 border-l-2 border-transparent",
 					isCollapsedEffective &&
 						useSidebarLayout &&
 						"justify-center px-2",
@@ -297,8 +297,8 @@ export function NavBar() {
 					className={cn(
 						"size-4 shrink-0",
 						item.isActive
-							? "text-stone-50"
-							: "text-stone-500",
+							? "text-slate-50"
+							: "text-slate-500",
 					)}
 				/>
 				{(!isCollapsedEffective || !useSidebarLayout) && (
@@ -338,7 +338,7 @@ export function NavBar() {
 						href={item.quickAction.href}
 						className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover/qa:opacity-100 transition-opacity"
 					>
-						<span className="flex size-5 items-center justify-center rounded bg-stone-700 hover:bg-stone-600 text-stone-300">
+						<span className="flex size-5 items-center justify-center rounded bg-slate-700 hover:bg-slate-600 text-slate-300">
 							<PlusIcon className="size-3" />
 						</span>
 					</Link>
@@ -373,7 +373,7 @@ export function NavBar() {
 	return (
 		<nav
 			className={cn(
-				"w-full bg-stone-900 text-stone-200",
+				"w-full bg-slate-900 text-slate-200",
 				"hidden md:block",
 				{
 					"md:fixed md:top-0 md:left-0 md:h-full md:w-[280px]":
@@ -391,12 +391,12 @@ export function NavBar() {
 					</Link>
 					{!isCollapsedEffective && user && (
 						<div className="mt-3 px-1">
-							<p className="text-sm font-medium text-stone-200">
+							<p className="text-sm font-medium text-slate-200">
 								{getGreeting()},{" "}
 								{user.name?.split(" ")[0] ?? ""}
 							</p>
 							{greetingSubtitle && (
-								<p className="mt-0.5 text-[11px] text-stone-500 leading-tight">
+								<p className="mt-0.5 text-[11px] text-slate-500 leading-tight">
 									{greetingSubtitle}
 								</p>
 							)}
@@ -426,7 +426,7 @@ export function NavBar() {
 				{hasOrg && !navLoading && navData && (
 					<div
 						className={cn(
-							"mb-4 rounded-lg bg-stone-800/50 p-3",
+							"mb-4 rounded-lg bg-slate-800/50 p-3",
 							isCollapsedEffective && "flex justify-center p-2",
 						)}
 					>
@@ -448,13 +448,13 @@ export function NavBar() {
 						<>
 							{!isCollapsedEffective && (
 								<div className="mx-3 mt-5 mb-2">
-									<span className="text-[10px] font-medium uppercase tracking-wider text-stone-600">
+									<span className="text-[10px] font-medium uppercase tracking-wider text-slate-600">
 										{t("app.menu.tools")}
 									</span>
 								</div>
 							)}
 							{isCollapsedEffective && (
-								<div className="mx-auto my-3 h-px w-6 bg-stone-700" />
+								<div className="mx-auto my-3 h-px w-6 bg-slate-700" />
 							)}
 							<ul className="flex flex-col gap-0.5">
 								{toolItems.map(renderNavItem)}
@@ -496,7 +496,7 @@ export function NavBar() {
 								variant="ghost"
 								size="icon"
 								onClick={toggleCollapsed}
-								className="text-stone-500 hover:text-stone-300 hover:bg-stone-800"
+								className="text-slate-500 hover:text-slate-300 hover:bg-slate-800"
 								aria-label={
 									isCollapsed
 										? "Expand sidebar"

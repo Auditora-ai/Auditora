@@ -74,10 +74,10 @@ export default function NewInterviewPage() {
 
 	if (creating) {
 		return (
-			<div className="flex h-screen items-center justify-center" style={{ backgroundColor: "#FFFBF5" }}>
+			<div className="flex h-screen items-center justify-center" style={{ backgroundColor: "#F8FAFC" }}>
 				<div className="flex flex-col items-center gap-3">
 					<Loader2Icon className="size-8 animate-spin" style={{ color: "#D97706" }} />
-					<span className="text-sm" style={{ color: "#78716C" }}>
+					<span className="text-sm" style={{ color: "#64748B" }}>
 						Iniciando entrevista...
 					</span>
 				</div>
@@ -87,7 +87,7 @@ export default function NewInterviewPage() {
 
 	if (error) {
 		return (
-			<div className="flex h-screen items-center justify-center" style={{ backgroundColor: "#FFFBF5" }}>
+			<div className="flex h-screen items-center justify-center" style={{ backgroundColor: "#F8FAFC" }}>
 				<div className="flex flex-col items-center gap-3">
 					<span className="text-sm" style={{ color: "#DC2626" }}>{error}</span>
 					<button
