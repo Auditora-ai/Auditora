@@ -295,7 +295,8 @@
 			"doNotSell": "Meine Daten nicht verkaufen",
 			"cookieSettings": "Cookie-Einstellungen",
 			"tools": "Kostenlose Tools",
-			"builtWith": "Auditora.ai"
+			"builtWith": "Auditora.ai",
+			"aiDisclaimer": "Auditora.ai verwendet künstliche Intelligenz. Die Ergebnisse dienen nur zur Information und ersetzen keine professionelle Beratung."
 		},
 		"menu": {
 			"blog": "Blog",

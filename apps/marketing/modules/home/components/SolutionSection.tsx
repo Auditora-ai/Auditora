@@ -31,34 +31,23 @@ export function SolutionSection() {
 				},
 			});
 
-			tl.from(".solution-header > *", {
-				opacity: 0,
-				y: 30,
-				stagger: 0.1,
-				duration: 0.7,
-				ease: "power3.out",
-			});
+			tl.fromTo(
+				".solution-header > *",
+				{ autoAlpha: 0, y: 30 },
+				{ autoAlpha: 1, y: 0, stagger: 0.1, duration: 0.7, ease: "power3.out" },
+			);
 
-			tl.from(
+			tl.fromTo(
 				".solution-card",
-				{
-					opacity: 0,
-					x: -40,
-					stagger: 0.15,
-					duration: 0.8,
-					ease: "power3.out",
-				},
+				{ autoAlpha: 0, x: -40 },
+				{ autoAlpha: 1, x: 0, stagger: 0.15, duration: 0.8, ease: "power3.out" },
 				"-=0.3",
 			);
 
-			tl.from(
+			tl.fromTo(
 				".solution-mockup",
-				{
-					opacity: 0,
-					x: 40,
-					duration: 0.8,
-					ease: "power3.out",
-				},
+				{ autoAlpha: 0, x: 40 },
+				{ autoAlpha: 1, x: 0, duration: 0.8, ease: "power3.out" },
 				"-=0.6",
 			);
 		},

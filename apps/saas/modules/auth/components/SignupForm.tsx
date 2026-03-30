@@ -52,10 +52,8 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 		email: z.email(),
 		name: z.string().min(1),
 		password: passwordSchema,
-		acceptTerms: z.literal(true, {
-			errorMap: () => ({
-				message: t("auth.signup.acceptRequired"),
-			}),
+		acceptTerms: z.boolean().refine((val) => val === true, {
+			message: t("auth.signup.acceptRequired"),
 		}),
 	});
 

@@ -18,9 +18,12 @@ export function HeroSection() {
 	function handleSubmit() {
 		if (!url.trim()) return;
 		let finalUrl = url.trim();
-		if (!/^https?:\/\//i.test(finalUrl)) {
-			finalUrl = `https://${finalUrl}`;
-		}
+		// Strip any existing protocol to avoid duplication (e.g. user types "https://https://...")
+		finalUrl = finalUrl.replace(/^(https?:\/\/)+/i, "");
+		// Remove trailing slashes and whitespace
+		finalUrl = finalUrl.replace(/\/+$/, "");
+		// Re-add protocol once
+		finalUrl = `https://${finalUrl}`;
 		const encoded = encodeURIComponent(finalUrl);
 		window.location.href = `${config.saasUrl}/scan?url=${encoded}&ref=hero`;
 	}
@@ -166,7 +169,7 @@ export function HeroSection() {
 								{t("home.hero.subtext")}
 							</p>
 							<a
-								href={`${config.saasUrl}/scan`}
+								href={`${config.saasUrl}/scan?mode=text`}
 								className="hero-subtext mt-2 inline-flex items-center gap-1 text-sm text-[#00E5C0] hover:text-[#00E5C0]/80 transition-colors"
 							>
 								{t("home.hero.ctaSecondary")}

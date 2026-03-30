@@ -76,6 +76,17 @@ export function ConsentProvider({
 			return;
 		}
 
+		// Check Global Privacy Control signal — must override even existing consent
+		if (typeof navigator !== "undefined" && (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl) {
+			if (!preferences || preferences.analytics || preferences.marketing) {
+				const gpcPrefs = createPrefs(false, false);
+				Cookies.set(CONSENT_COOKIE_NAME, encodeURIComponent(JSON.stringify(gpcPrefs)), COOKIE_OPTIONS);
+				setPreferences(gpcPrefs);
+				setShowBanner(false);
+				return;
+			}
+		}
+
 		if (!preferences || preferences.version < CONSENT_VERSION) {
 			setShowBanner(true);
 		}
@@ -102,7 +113,11 @@ export function ConsentProvider({
 		(analytics: boolean, marketing: boolean) => persist(createPrefs(analytics, marketing)),
 		[persist],
 	);
-	const resetConsent = useCallback(() => setShowBanner(true), []);
+	const resetConsent = useCallback(() => {
+		Cookies.remove(CONSENT_COOKIE_NAME, { path: "/" });
+		setPreferences(null);
+		setShowBanner(true);
+	}, []);
 
 	const value = useMemo<ConsentContextValue>(
 		() => ({

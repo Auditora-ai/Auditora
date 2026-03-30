@@ -1,17 +1,21 @@
 /**
  * Web Crawler for Radiografia
  *
- * Crawls a company website to extract business context.
+ * Crawls a company website to extract business context as Markdown.
  * Server-side only — used by the crawl API route.
  *
- * Strategy:
- * 1. If FIRECRAWL_API_KEY is set, use Firecrawl API (handles JS rendering, anti-bot)
- * 2. Otherwise, fall back to native fetch (static HTML only)
+ * Strategy (credit-conscious):
+ * 1. Always try native fetch first (free, fast, works for static sites)
+ * 2. If fetch returns too little content (<150 words), escalate to Firecrawl
+ * 3. Firecrawl only scrapes what's needed — homepage first, subpages only
+ *    if homepage alone is insufficient
  *
- * Both paths return the same CrawlResult interface.
+ * Both paths output Markdown — optimal for LLM consumption.
+ * Static sites = 0 credits. JS-heavy sites = 1-3 credits max.
  */
 
-import FirecrawlApp from "@mendable/firecrawl-js";
+import Firecrawl from "@mendable/firecrawl-js";
+import { NodeHtmlMarkdown } from "node-html-markdown";
 
 const PRIORITY_PATHS = [
 	"/about",
@@ -30,9 +34,53 @@ const PRIORITY_PATHS = [
 	"/soluciones",
 ];
 
+/** Paths that waste credits — never worth scraping */
+const SKIP_PATHS = [
+	"/privacy",
+	"/privacy-policy",
+	"/politica-de-privacidad",
+	"/terms",
+	"/terms-of-service",
+	"/terminos",
+	"/cookie",
+	"/cookies",
+	"/legal",
+	"/aviso-legal",
+	"/login",
+	"/signin",
+	"/sign-in",
+	"/register",
+	"/signup",
+	"/sign-up",
+	"/cart",
+	"/checkout",
+	"/blog",
+	"/sitemap",
+	"/feed",
+	"/rss",
+];
+
 const MAX_PAGES = 5;
-const FETCH_TIMEOUT_MS = 5000;
+const FETCH_TIMEOUT_MS = 8000;
 const MAX_WORDS = 3000;
+
+/**
+ * Minimum words to consider a page "useful".
+ * Below this, the page likely didn't render (SPA) or is a redirect.
+ */
+const MIN_USEFUL_WORDS = 50;
+
+/**
+ * Minimum words for the full crawl to skip Firecrawl escalation.
+ * If native fetch gets at least this much, we have enough context.
+ */
+const MIN_SUFFICIENT_WORDS = 150;
+
+/** Reusable converter — configured once for clean LLM-friendly output */
+const htmlToMd = new NodeHtmlMarkdown({
+	ignore: ["script", "style", "nav", "footer", "noscript", "svg", "iframe", "form"],
+	blockElements: ["div", "section", "article", "main", "aside", "header", "figure"],
+});
 
 export interface CrawlResult {
 	success: boolean;
@@ -54,110 +102,128 @@ export async function crawlWebsite(url: string): Promise<CrawlResult> {
 		};
 	}
 
-	if (process.env.FIRECRAWL_API_KEY) {
-		return crawlWithFirecrawl(baseUrl);
+	// Step 1: Always try native fetch first (free)
+	const fetchResult = await crawlWithFetch(baseUrl);
+
+	// Step 2: If fetch got enough content, use it — no credits spent
+	const wordCount = countWords(fetchResult.businessContext);
+	if (fetchResult.success && wordCount >= MIN_SUFFICIENT_WORDS) {
+		return fetchResult;
 	}
 
-	return crawlWithFetch(baseUrl);
+	// Step 3: Escalate to Firecrawl if available
+	if (process.env.FIRECRAWL_API_KEY) {
+		const firecrawlResult = await crawlWithFirecrawl(baseUrl);
+		if (firecrawlResult.success) {
+			return firecrawlResult;
+		}
+	}
+
+	// Step 4: Return whatever fetch got (even if sparse), or its error
+	return fetchResult;
 }
 
 // ---------------------------------------------------------------------------
-// Firecrawl API path (JS rendering, anti-bot)
+// Firecrawl API path (JS rendering, anti-bot) — credit-conscious
 // ---------------------------------------------------------------------------
 
 async function crawlWithFirecrawl(baseUrl: string): Promise<CrawlResult> {
-	const firecrawl = new FirecrawlApp({
-		apiKey: process.env.FIRECRAWL_API_KEY!,
-	});
+	const firecrawl = new Firecrawl();
 
 	try {
-		// Scrape homepage — get markdown + links
-		const homepage = await firecrawl.scrapeUrl(baseUrl, {
+		// Credit 1: scrape homepage with links discovery
+		const homepage = await firecrawl.scrape(baseUrl, {
 			formats: ["markdown", "links"],
 			onlyMainContent: true,
-			timeout: 10000,
+			timeout: 15000,
 		});
 
-		if (!homepage.success) {
+		const texts: string[] = [];
+		const homepageMarkdown = homepage.markdown || "";
+		texts.push(`## Pagina principal\n\n${homepageMarkdown}`);
+
+		const homepageWords = countWords(homepageMarkdown);
+
+		// Only spend more credits if homepage alone isn't enough
+		if (homepageWords < MIN_SUFFICIENT_WORDS) {
+			const baseOrigin = new URL(baseUrl).origin;
+			const discoveredLinks = (homepage.links || []).filter(
+				(link: string) => {
+					try {
+						return new URL(link).origin === baseOrigin;
+					} catch {
+						return false;
+					}
+				},
+			);
+
+			const prioritized = prioritizeLinks(discoveredLinks, baseUrl);
+			// Max 2 subpages to keep credits low (total: 3 credits max)
+			const pagesToFetch = prioritized.slice(0, 2);
+
+			const pageResults = await Promise.allSettled(
+				pagesToFetch.map(async (link) => {
+					try {
+						const result = await firecrawl.scrape(link, {
+							formats: ["markdown"],
+							onlyMainContent: true,
+							timeout: 10000,
+						});
+						return { url: link, markdown: result.markdown || "" };
+					} catch {
+						return null;
+					}
+				}),
+			);
+
+			for (const result of pageResults) {
+				if (result.status === "fulfilled" && result.value) {
+					const path = new URL(result.value.url).pathname;
+					texts.push(`## ${path}\n\n${result.value.markdown}`);
+				}
+			}
+		}
+
+		const fullText = texts.join("\n\n---\n\n");
+		const truncated = truncateToWords(fullText, MAX_WORDS);
+
+		if (countWords(truncated) < MIN_USEFUL_WORDS) {
 			return {
 				success: false,
 				url: baseUrl,
 				pagesFound: 0,
 				businessContext: "",
-				error: homepage.error || "No pudimos acceder al sitio web",
+				error: "El sitio web no tiene suficiente contenido accesible",
 			};
 		}
-
-		const texts: string[] = [];
-		texts.push(`[Pagina principal]\n${homepage.markdown || ""}`);
-
-		// Find priority internal pages from discovered links
-		const discoveredLinks = (homepage.links || []).filter(
-			(link) => {
-				try {
-					const parsed = new URL(link);
-					return parsed.origin === new URL(baseUrl).origin;
-				} catch {
-					return false;
-				}
-			},
-		);
-
-		const prioritized = prioritizeLinks(discoveredLinks, baseUrl);
-		const pagesToFetch = prioritized.slice(0, MAX_PAGES - 1);
-
-		// Scrape priority pages in parallel
-		const pageResults = await Promise.allSettled(
-			pagesToFetch.map(async (link) => {
-				const result = await firecrawl.scrapeUrl(link, {
-					formats: ["markdown"],
-					onlyMainContent: true,
-					timeout: 10000,
-				});
-				if (!result.success) return null;
-				return { url: link, markdown: result.markdown || "" };
-			}),
-		);
-
-		for (const result of pageResults) {
-			if (result.status === "fulfilled" && result.value) {
-				const path = new URL(result.value.url).pathname;
-				texts.push(`[${path}]\n${result.value.markdown}`);
-			}
-		}
-
-		const fullText = texts.join("\n\n");
-		const truncated = truncateToWords(fullText, MAX_WORDS);
 
 		return {
 			success: true,
 			url: baseUrl,
-			pagesFound: 1 + pageResults.filter(
-				(r) => r.status === "fulfilled" && r.value,
-			).length,
+			pagesFound: texts.length,
 			businessContext: truncated,
 		};
-	} catch (err) {
+	} catch {
 		return {
 			success: false,
 			url: baseUrl,
 			pagesFound: 0,
 			businessContext: "",
-			error: "Error al acceder al sitio web",
+			error: "No pudimos acceder al sitio web",
 		};
 	}
 }
 
 // ---------------------------------------------------------------------------
-// Native fetch fallback (static HTML only — no JS rendering)
+// Native fetch path — HTML → Markdown via node-html-markdown
 // ---------------------------------------------------------------------------
 
 async function crawlWithFetch(baseUrl: string): Promise<CrawlResult> {
 	const visited = new Set<string>();
 	const texts: string[] = [];
 
-	const homepageText = await fetchAndExtract(baseUrl);
-	if (!homepageText) {
+	const homepage = await fetchAndConvert(baseUrl);
+	if (!homepage) {
 		return {
 			success: false,
 			url: baseUrl,
@@ -168,29 +234,30 @@ async function crawlWithFetch(baseUrl: string): Promise<CrawlResult> {
 	}
 
 	visited.add(baseUrl);
-	texts.push(`[Pagina principal]\n${homepageText.text}`);
+	texts.push(`## Pagina principal\n\n${homepage.markdown}`);
 
+	// Extract and follow internal links
 	const internalLinks = extractInternalLinks(
-		homepageText.html,
+		homepage.html,
 		baseUrl,
 	).filter((link) => !visited.has(link));
 
 	const prioritized = prioritizeLinks(internalLinks, baseUrl);
 	const pagesToFetch = prioritized.slice(0, MAX_PAGES - 1);
 	const pageResults = await Promise.allSettled(
-		pagesToFetch.map((link) => fetchAndExtract(link)),
+		pagesToFetch.map((link) => fetchAndConvert(link)),
 	);
 
 	for (let i = 0; i < pageResults.length; i++) {
 		const result = pageResults[i];
 		if (result?.status === "fulfilled" && result.value) {
 			const pagePath = new URL(pagesToFetch[i]!).pathname;
-			texts.push(`[${pagePath}]\n${result.value.text}`);
+			texts.push(`## ${pagePath}\n\n${result.value.markdown}`);
 			visited.add(pagesToFetch[i]!);
 		}
 	}
 
-	const fullText = texts.join("\n\n");
+	const fullText = texts.join("\n\n---\n\n");
 	const truncated = truncateToWords(fullText, MAX_WORDS);
 
 	return {
@@ -213,7 +280,6 @@ export function normalizeUrl(input: string): string | null {
 		}
 		const parsed = new URL(url);
 
-		// Block private/local IPs
 		const hostname = parsed.hostname.toLowerCase();
 		if (
 			hostname === "localhost" ||
@@ -232,25 +298,38 @@ export function normalizeUrl(input: string): string | null {
 	}
 }
 
-function prioritizeLinks(links: string[], baseUrl: string): string[] {
-	const scored = links.map((link) => {
-		try {
-			const path = new URL(link).pathname.toLowerCase();
-			const priorityIndex = PRIORITY_PATHS.findIndex(
-				(p) => path === p || path === `${p}/`,
-			);
-			return {
-				link,
-				score: priorityIndex >= 0 ? 100 - priorityIndex : 0,
-			};
-		} catch {
-			return { link, score: 0 };
-		}
-	});
+function prioritizeLinks(links: string[], _baseUrl: string): string[] {
+	const scored = links
+		.filter((link) => {
+			try {
+				const path = new URL(link).pathname.toLowerCase();
+				return !SKIP_PATHS.some((skip) => path === skip || path === `${skip}/`);
+			} catch {
+				return false;
+			}
+		})
+		.map((link) => {
+			try {
+				const path = new URL(link).pathname.toLowerCase();
+				const priorityIndex = PRIORITY_PATHS.findIndex(
+					(p) => path === p || path === `${p}/`,
+				);
+				return {
+					link,
+					score: priorityIndex >= 0 ? 100 - priorityIndex : 0,
+				};
+			} catch {
+				return { link, score: 0 };
+			}
+		});
 
 	return scored
 		.sort((a, b) => b.score - a.score)
 		.map((s) => s.link);
+}
+
+function countWords(text: string): number {
+	return text.split(/\s+/).filter(Boolean).length;
 }
 
 function truncateToWords(text: string, maxWords: number): string {
@@ -260,25 +339,49 @@ function truncateToWords(text: string, maxWords: number): string {
 }
 
 // ---------------------------------------------------------------------------
-// Native fetch helpers (used only in fallback path)
+// Native fetch helpers
 // ---------------------------------------------------------------------------
 
-async function fetchAndExtract(
+const USER_AGENTS = [
+	"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+	"Mozilla/5.0 (compatible; AuditoraBot/1.0; +https://auditora.ai)",
+];
+
+/**
+ * Fetch a URL and convert its HTML to Markdown.
+ * Tries multiple User-Agents if the first one gets blocked or returns sparse content.
+ */
+async function fetchAndConvert(
 	url: string,
-): Promise<{ text: string; html: string } | null> {
+): Promise<{ markdown: string; html: string } | null> {
+	for (const ua of USER_AGENTS) {
+		const result = await fetchHtml(url, ua);
+		if (!result) continue;
+
+		const markdown = htmlToMarkdown(result.html);
+		if (countWords(markdown) >= 20) {
+			return { markdown, html: result.html };
+		}
+	}
+	return null;
+}
+
+async function fetchHtml(
+	url: string,
+	userAgent: string,
+): Promise<{ html: string } | null> {
 	try {
 		const controller = new AbortController();
-		const timeout = setTimeout(
-			() => controller.abort(),
-			FETCH_TIMEOUT_MS,
-		);
+		const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
 		const response = await fetch(url, {
 			signal: controller.signal,
 			headers: {
-				"User-Agent":
-					"Mozilla/5.0 (compatible; AuditoraBot/1.0; +https://auditora.ai)",
-				Accept: "text/html",
+				"User-Agent": userAgent,
+				Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+				"Accept-Language": "es,en;q=0.9",
+				"Accept-Encoding": "gzip, deflate, br",
+				"Cache-Control": "no-cache",
 			},
 			redirect: "follow",
 		});
@@ -288,55 +391,56 @@ async function fetchAndExtract(
 		if (!response.ok) return null;
 
 		const contentType = response.headers.get("content-type") || "";
-		if (!contentType.includes("text/html")) return null;
+		if (!contentType.includes("text/html") && !contentType.includes("application/xhtml")) {
+			return null;
+		}
 
 		const html = await response.text();
-		const text = extractTextFromHtml(html);
-
-		return text.length > 20 ? { text, html } : null;
+		return html.length > 100 ? { html } : null;
 	} catch {
 		return null;
 	}
 }
 
-function extractTextFromHtml(html: string): string {
-	let cleaned = html
-		.replace(/<script[\s\S]*?<\/script>/gi, "")
-		.replace(/<style[\s\S]*?<\/style>/gi, "")
-		.replace(/<nav[\s\S]*?<\/nav>/gi, "")
-		.replace(/<footer[\s\S]*?<\/footer>/gi, "")
-		.replace(/<header[\s\S]*?<\/header>/gi, "")
-		.replace(/<noscript[\s\S]*?<\/noscript>/gi, "")
-		.replace(/<!--[\s\S]*?-->/g, "");
+/**
+ * Convert raw HTML to clean Markdown using node-html-markdown.
+ * Strips junk elements, preserves structure (headings, lists, links, tables).
+ * Falls back to meta tags if the body is sparse (SPA with SSR meta).
+ */
+function htmlToMarkdown(html: string): string {
+	// Extract the main content area if it exists — avoids header/sidebar noise
+	const mainMatch = html.match(/<main[\s>][\s\S]*?<\/main>/i)
+		|| html.match(/<article[\s>][\s\S]*?<\/article>/i)
+		|| html.match(/<div[^>]+(?:role=["']main["']|id=["'](?:content|main|app)["']|class=["'][^"']*content[^"']*["'])[^>]*>[\s\S]*?<\/div>/i);
 
-	cleaned = cleaned.replace(
-		/<\/(p|div|h[1-6]|li|tr|br|section|article)>/gi,
-		"\n",
-	);
+	const contentHtml = mainMatch ? mainMatch[0] : html;
 
-	cleaned = cleaned.replace(/<[^>]+>/g, " ");
+	let markdown = htmlToMd.translate(contentHtml);
 
-	cleaned = cleaned
-		.replace(/&nbsp;/g, " ")
-		.replace(/&amp;/g, "&")
-		.replace(/&lt;/g, "<")
-		.replace(/&gt;/g, ">")
-		.replace(/&quot;/g, '"')
-		.replace(/&#39;/g, "'")
-		.replace(/&aacute;/g, "á")
-		.replace(/&eacute;/g, "é")
-		.replace(/&iacute;/g, "í")
-		.replace(/&oacute;/g, "ó")
-		.replace(/&uacute;/g, "ú")
-		.replace(/&ntilde;/g, "ñ");
+	// Clean up excessive blank lines
+	markdown = markdown.replace(/\n{3,}/g, "\n\n").trim();
 
-	cleaned = cleaned
-		.split("\n")
-		.map((line) => line.replace(/\s+/g, " ").trim())
-		.filter((line) => line.length > 0)
-		.join("\n");
+	// If body is sparse, prepend meta info (helps with SPAs that SSR meta tags)
+	if (countWords(markdown) < MIN_USEFUL_WORDS) {
+		const title = html.match(/<title[^>]*>([^<]+)<\/title>/i)?.[1]?.trim();
+		const metaDesc = html.match(
+			/<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)["']/i,
+		)?.[1]?.trim();
+		const ogDesc = html.match(
+			/<meta[^>]+property=["']og:description["'][^>]+content=["']([^"']+)["']/i,
+		)?.[1]?.trim();
 
-	return cleaned;
+		const metaParts: string[] = [];
+		if (title) metaParts.push(`# ${title}`);
+		if (metaDesc) metaParts.push(metaDesc);
+		if (ogDesc && ogDesc !== metaDesc) metaParts.push(ogDesc);
+
+		if (metaParts.length > 0) {
+			markdown = metaParts.join("\n\n") + "\n\n" + markdown;
+		}
+	}
+
+	return markdown;
 }
 
 function extractInternalLinks(html: string, baseUrl: string): string[] {
@@ -354,11 +458,11 @@ function extractInternalLinks(html: string, baseUrl: string): string[] {
 				resolved.origin === baseUrl &&
 				!resolved.hash &&
 				!resolved.pathname.match(
-					/\.(pdf|jpg|png|gif|svg|css|js|ico|woff|ttf)$/i,
+					/\.(pdf|jpg|jpeg|png|gif|svg|css|js|ico|woff|woff2|ttf|eot|mp4|mp3|zip|tar|gz)$/i,
 				)
 			) {
 				const normalized = `${resolved.origin}${resolved.pathname}`;
-				if (!links.includes(normalized)) {
+				if (!links.includes(normalized) && normalized !== baseUrl) {
 					links.push(normalized);
 				}
 			}

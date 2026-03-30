@@ -42,13 +42,14 @@ export function ConsentBanner() {
 		acceptAll,
 		rejectAll,
 		savePreferences,
+		preferences,
 	} = useCookieConsent();
 
 	const t = useTranslations("consent");
 	const [mounted, setMounted] = useState(false);
 	const [showCustomize, setShowCustomize] = useState(false);
-	const [analyticsEnabled, setAnalyticsEnabled] = useState(false);
-	const [marketingEnabled, setMarketingEnabled] = useState(false);
+	const [analyticsEnabled, setAnalyticsEnabled] = useState(preferences?.analytics ?? false);
+	const [marketingEnabled, setMarketingEnabled] = useState(preferences?.marketing ?? false);
 
 	useEffect(() => {
 		setMounted(true);

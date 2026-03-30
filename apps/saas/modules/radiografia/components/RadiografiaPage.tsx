@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import type { SipocResult } from "@repo/ai";
 import type { IndustryInferenceResult } from "@radiografia/lib/industry-inference";
 import type { DiagramNode } from "@radiografia/lib/sipoc-to-nodes";
@@ -18,6 +19,8 @@ import { DeepRiskReport } from "./DeepRiskReport";
 import { ConversionGate } from "./ConversionGate";
 
 type Phase = "input" | "crawling" | "researching" | "streaming" | "instant" | "deepen" | "sipoc" | "reveal" | "risks" | "convert";
+
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
 export function RadiografiaPage() {
 	const t = useTranslations("scan");
@@ -47,6 +50,7 @@ export function RadiografiaPage() {
 	const autoStarted = useRef(false);
 
 	const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+	const turnstileRef = useRef<TurnstileInstance | null>(null);
 
 	const createSession = useCallback(async (captchaToken?: string): Promise<boolean> => {
 		try {
@@ -143,18 +147,26 @@ export function RadiografiaPage() {
 
 	useEffect(() => {
 		const urlParam = searchParams.get("url");
-		if (urlParam && !autoStarted.current) {
-			autoStarted.current = true;
-			try {
-				const decoded = decodeURIComponent(urlParam);
-				if (decoded.length > 3) {
-					handleInput({ type: "url", url: decoded });
-				}
-			} catch {
-				// Malformed URL param — fall through to InputPhase
+		if (!urlParam || autoStarted.current) return;
+
+		// If Turnstile is configured but token isn't ready yet, wait
+		if (TURNSTILE_SITE_KEY && !turnstileToken) return;
+
+		autoStarted.current = true;
+		try {
+			const decoded = decodeURIComponent(urlParam);
+			// Normalize: strip duplicate protocols, ensure single https://
+			let normalized = decoded.trim().replace(/^(https?:\/\/)+/i, "");
+			normalized = normalized.replace(/^[.\s/]+|[.\s/]+$/g, "");
+			if (normalized.length > 3) {
+				const finalUrl = `https://${normalized}`;
+				const token = turnstileToken === "__skip__" ? undefined : turnstileToken || undefined;
+				handleInput({ type: "url", url: finalUrl }, token);
 			}
+		} catch {
+			// Malformed URL param — fall through to InputPhase
 		}
-	}, [searchParams, handleInput]);
+	}, [searchParams, handleInput, turnstileToken]);
 
 	function handleSSEEvent(event: { phase: string; data: unknown; message: string }) {
 		setStatusMessage(event.message);
@@ -298,6 +310,27 @@ export function RadiografiaPage() {
 		setPhase("convert");
 	}
 
+	// Hidden Turnstile widget for auto-start flow (hero → /scan?url=X)
+	// Renders when URL param exists so the token is ready before handleInput fires
+	const hiddenTurnstile = TURNSTILE_SITE_KEY && searchParams.get("url") && !turnstileToken ? (
+		<div className="fixed -left-[9999px]" aria-hidden>
+			<Turnstile
+				ref={turnstileRef}
+				siteKey={TURNSTILE_SITE_KEY}
+				onSuccess={(token) => setTurnstileToken(token)}
+				onError={() => {
+					// Turnstile failed (e.g. localhost) — proceed without token
+					setTurnstileToken("__skip__");
+				}}
+				onExpire={() => {
+					setTurnstileToken(null);
+					turnstileRef.current?.reset();
+				}}
+				options={{ size: "invisible", theme: "auto" }}
+			/>
+		</div>
+	) : null;
+
 	// Wrapper with header for all phases
 	const withHeader = (content: React.ReactNode) => (
 		<>
@@ -308,7 +341,13 @@ export function RadiografiaPage() {
 
 	// Render based on phase
 	if (phase === "input") {
-		return withHeader(<InputPhase onSubmit={handleInput} loading={false} />);
+		const initialMode = searchParams.get("mode") === "text" ? "text" : "url";
+		return (
+			<>
+				{hiddenTurnstile}
+				{withHeader(<InputPhase onSubmit={handleInput} loading={false} initialMode={initialMode} />)}
+			</>
+		);
 	}
 
 	if (phase === "crawling") {

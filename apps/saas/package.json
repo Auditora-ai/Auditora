@@ -59,6 +59,7 @@
 		"next": "catalog:",
 		"next-intl": "catalog:",
 		"next-themes": "catalog:",
+		"node-html-markdown": "^2.0.0",
 		"nprogress": "catalog:",
 		"nuqs": "catalog:",
 		"oslo": "catalog:",

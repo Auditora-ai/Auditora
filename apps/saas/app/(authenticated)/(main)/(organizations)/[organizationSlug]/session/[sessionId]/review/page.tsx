@@ -507,7 +507,10 @@ export default async function SessionReviewPage({
 
 			{/* Footer */}
 			<footer className="border-t border-stone-200 bg-white">
-				<div className="mx-auto max-w-5xl px-4 py-4 md:px-6">
+				<div className="mx-auto max-w-5xl px-4 py-4 md:px-6 space-y-3">
+					<p className="text-[10px] text-stone-400 text-center leading-relaxed">
+						Este reporte fue generado por inteligencia artificial. Los análisis y recomendaciones son puntos de partida analíticos y no constituyen asesoramiento profesional, legal ni financiero. Los resultados deben ser validados por profesionales calificados antes de tomar decisiones de negocio.
+					</p>
 					<div className="flex flex-col gap-2 text-xs text-stone-400 sm:flex-row sm:items-center sm:justify-between">
 						<span>Generado por Auditora.ai</span>
 						<a

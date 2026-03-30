@@ -137,6 +137,15 @@ export function InstantReport({
 					</div>
 				)}
 
+				{/* AI Disclaimer */}
+				{status === "complete" && (
+					<div className="rounded-lg border border-border bg-secondary/50 px-4 py-3 text-center">
+						<p className="text-xs text-muted-foreground">
+							{t("aiDisclaimer")}
+						</p>
+					</div>
+				)}
+
 				{/* CTA to deepen */}
 				{status === "complete" && (
 					<div

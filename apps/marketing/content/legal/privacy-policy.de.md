@@ -199,8 +199,15 @@ Wenn Sie in Mexiko ansässig sind, haben Sie die folgenden **ARCO-Rechte**:
 - **Rectificación (Berichtigung):** Recht auf Berichtigung unrichtiger oder unvollständiger Daten.
 - **Cancelación (Löschung):** Recht auf Löschung Ihrer personenbezogenen Daten, wenn die Verarbeitung nicht mehr erforderlich ist.
 - **Oposición (Widerspruch):** Recht auf Widerspruch gegen die Verarbeitung Ihrer Daten für bestimmte Zwecke.
+- **Revocación del consentimiento (Widerruf der Einwilligung):** Recht auf Widerruf der zuvor erteilten Einwilligung zur Datenverarbeitung. Der Widerruf wirkt nicht rückwirkend auf bereits erfolgte Verarbeitungen.
 
-Zur Ausübung Ihrer ARCO-Rechte senden Sie bitte eine Anfrage an [privacy@auditora.ai](mailto:privacy@auditora.ai). Wir werden innerhalb von 20 Werktagen antworten.
+Zur Ausübung Ihrer ARCO-Rechte oder zum Widerruf Ihrer Einwilligung senden Sie bitte eine Anfrage an [privacy@auditora.ai](mailto:privacy@auditora.ai) mit folgenden Angaben:
+
+1. Ihr vollständiger Name und Kontaktdaten.
+2. Eine klare Beschreibung der Daten und der Rechte, die Sie ausüben möchten.
+3. Eine Kopie eines amtlichen Ausweisdokuments.
+
+Wir werden innerhalb von 20 Werktagen nach Eingang Ihrer vollständigen Anfrage antworten. Bei Genehmigung werden die Änderungen innerhalb von 15 Werktagen umgesetzt.
 
 ---
 

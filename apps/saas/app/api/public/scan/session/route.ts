@@ -41,18 +41,19 @@ export async function POST(request: NextRequest) {
 		);
 	}
 
-	// Verify Turnstile captcha
+	// Verify Turnstile captcha (skip in development — Turnstile can't generate tokens on localhost)
 	const body = await request.json().catch(() => ({}));
 	const { turnstileToken } = body as { turnstileToken?: string };
+	const isDev = process.env.NODE_ENV === "development";
 
-	if (process.env.TURNSTILE_SECRET_KEY && !turnstileToken) {
+	if (process.env.TURNSTILE_SECRET_KEY && !turnstileToken && !isDev) {
 		return NextResponse.json(
 			{ error: "Captcha required" },
 			{ status: 403 },
 		);
 	}
 
-	if (turnstileToken) {
+	if (turnstileToken && !isDev) {
 		const verification = await verifyTurnstileToken(turnstileToken, ip);
 		if (!verification.success) {
 			return NextResponse.json(

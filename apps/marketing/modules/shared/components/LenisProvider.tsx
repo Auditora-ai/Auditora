@@ -12,6 +12,7 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
 
 	useEffect(() => {
 		const lenis = new Lenis({
+			autoRaf: false,
 			smoothWheel: true,
 			lerp: 0.08,
 			duration: 1.2,
@@ -22,13 +23,17 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
 		lenis.on("scroll", ScrollTrigger.update);
 
 		// Drive Lenis from GSAP's ticker for frame-perfect sync
-		gsap.ticker.add((time) => {
+		const tickerCallback = (time: number) => {
 			lenis.raf(time * 1000);
-		});
+		};
+		gsap.ticker.add(tickerCallback);
 		gsap.ticker.lagSmoothing(0);
 
+		// Refresh ScrollTrigger after Lenis is ready
+		ScrollTrigger.refresh();
+
 		return () => {
-			gsap.ticker.remove(lenis.raf);
+			gsap.ticker.remove(tickerCallback);
 			lenis.destroy();
 			lenisRef.current = null;
 		};

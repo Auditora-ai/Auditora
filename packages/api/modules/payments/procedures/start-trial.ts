@@ -42,7 +42,15 @@ export const startTrial = protectedProcedure
 				? await getPurchasesByOrganizationId(organizationId)
 				: await getPurchasesByUserId(user.id);
 
-			if (existingPurchases.length > 0) {
+			const hasActiveSubscription = existingPurchases.some(
+				(p) =>
+					p.status === "active" ||
+					(p.status === "trialing" &&
+						new Date(p.createdAt).getTime() + 14 * 24 * 60 * 60 * 1000 >
+							Date.now()),
+			);
+
+			if (hasActiveSubscription) {
 				throw new ORPCError("CONFLICT", {
 					message: "A subscription or trial already exists",
 				});

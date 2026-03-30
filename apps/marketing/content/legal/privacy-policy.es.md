@@ -134,8 +134,9 @@ Si usted se encuentra en Mexico, cuenta con los siguientes derechos ARCO conform
 - **Rectificacion**: Solicitar la correccion de datos inexactos o incompletos.
 - **Cancelacion**: Solicitar la eliminacion de sus datos personales cuando ya no sean necesarios para las finalidades para las cuales fueron recabados.
 - **Oposicion**: Oponerse al tratamiento de sus datos personales para finalidades especificas.
+- **Revocacion del consentimiento**: Revocar el consentimiento que haya otorgado previamente para el tratamiento de sus datos personales. La revocacion no tendra efectos retroactivos sobre el tratamiento realizado con anterioridad.
 
-Para ejercer sus derechos ARCO, envie una solicitud a **privacy@auditora.ai** incluyendo:
+Para ejercer sus derechos ARCO o revocar su consentimiento, envie una solicitud a **privacy@auditora.ai** incluyendo:
 
 1. Su nombre completo y datos de contacto.
 2. Una descripcion clara de los datos y derechos que desea ejercer.

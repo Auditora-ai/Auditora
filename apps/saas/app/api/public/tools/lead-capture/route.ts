@@ -29,7 +29,7 @@ const SUPPORTED_LOCALES = ["en", "es", "de", "fr"] as const;
 const bodySchema = z.object({
 	email: z.string().email("Valid email required."),
 	toolUsed: z.string().min(1, "Tool name required."),
-	outputData: z.union([z.string(), z.record(z.unknown())]).optional(),
+	outputData: z.union([z.string(), z.record(z.string(), z.unknown())]).optional(),
 	source: z.string().optional(),
 	turnstileToken: z.string().optional(),
 	locale: z.enum(SUPPORTED_LOCALES).optional(),

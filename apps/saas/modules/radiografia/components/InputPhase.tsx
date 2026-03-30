@@ -12,11 +12,23 @@ interface InputPhaseProps {
 		turnstileToken?: string,
 	) => void;
 	loading: boolean;
+	initialMode?: "url" | "text";
 }
 
-export function InputPhase({ onSubmit, loading }: InputPhaseProps) {
+function normalizeInputUrl(raw: string): string {
+	let url = raw.trim();
+	// Strip duplicate protocols (user pastes "https://https://example.com")
+	url = url.replace(/^(https?:\/\/)+/i, "");
+	// Remove leading/trailing dots, slashes, whitespace
+	url = url.replace(/^[.\s/]+|[.\s/]+$/g, "");
+	if (!url) return "";
+	// Add protocol
+	return `https://${url}`;
+}
+
+export function InputPhase({ onSubmit, loading, initialMode = "url" }: InputPhaseProps) {
 	const t = useTranslations("scan");
-	const [mode, setMode] = useState<"url" | "text">("url");
+	const [mode, setMode] = useState<"url" | "text">(initialMode);
 	const [url, setUrl] = useState("");
 	const [description, setDescription] = useState("");
 	const [captchaToken, setCaptchaToken] = useState<string | null>(null);
@@ -27,7 +39,9 @@ export function InputPhase({ onSubmit, loading }: InputPhaseProps) {
 	function handleSubmit() {
 		if (!canSubmit || loading) return;
 		if (mode === "url") {
-			onSubmit({ type: "url", url: url.trim() }, captchaToken || undefined);
+			const normalized = normalizeInputUrl(url);
+			if (!normalized) return;
+			onSubmit({ type: "url", url: normalized }, captchaToken || undefined);
 		} else {
 			onSubmit({ type: "text", description: description.trim() }, captchaToken || undefined);
 		}

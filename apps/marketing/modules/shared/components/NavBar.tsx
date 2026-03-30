@@ -133,7 +133,7 @@ export function NavBar() {
 							href="/"
 							className="block hover:no-underline active:no-underline"
 						>
-							<Logo />
+							<Logo className={isLanding ? "text-white [&_span]:text-white/60" : ""} />
 						</LocaleLink>
 					</div>
 

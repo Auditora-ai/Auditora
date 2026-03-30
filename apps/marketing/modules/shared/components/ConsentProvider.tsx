@@ -65,11 +65,10 @@ export function ConsentProvider({
 			return;
 		}
 
-		// Check Global Privacy Control signal
+		// Check Global Privacy Control signal — must override even existing consent
 		if (typeof navigator !== "undefined" && (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl) {
 			setGpcDetected(true);
-			if (!preferences) {
-				// Auto-opt-out per GPC
+			if (!preferences || preferences.analytics || preferences.marketing) {
 				const gpcPrefs = createConsentPreferences(false, false);
 				persistPreferences(gpcPrefs);
 				return;
@@ -119,6 +118,8 @@ export function ConsentProvider({
 	);
 
 	const resetConsent = useCallback(() => {
+		Cookies.remove(CONSENT_COOKIE_NAME, { path: "/" });
+		setPreferences(null);
 		setShowBanner(true);
 	}, []);
 

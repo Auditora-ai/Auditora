@@ -199,8 +199,15 @@ Si vous résidez au Mexique, vous disposez des **droits ARCO** suivants :
 - **Rectificación (Rectification) :** droit de faire rectifier des données inexactes ou incomplètes.
 - **Cancelación (Suppression) :** droit de demander la suppression de vos données personnelles lorsque le traitement n'est plus nécessaire.
 - **Oposición (Opposition) :** droit de vous opposer au traitement de vos données à certaines fins.
+- **Revocación del consentimiento (Révocation du consentement) :** droit de retirer le consentement que vous avez précédemment accordé pour le traitement de vos données personnelles. La révocation n'a pas d'effet rétroactif sur les traitements effectués antérieurement.
 
-Pour exercer vos droits ARCO, veuillez envoyer une demande à [privacy@auditora.ai](mailto:privacy@auditora.ai). Nous répondrons dans un délai de 20 jours ouvrables.
+Pour exercer vos droits ARCO ou révoquer votre consentement, veuillez envoyer une demande à [privacy@auditora.ai](mailto:privacy@auditora.ai) comprenant :
+
+1. Votre nom complet et vos coordonnées.
+2. Une description claire des données et des droits que vous souhaitez exercer.
+3. Une copie d'une pièce d'identité officielle.
+
+Nous répondrons dans un délai de 20 jours ouvrables suivant la réception de votre demande complète. En cas d'acceptation, les modifications seront mises en œuvre dans les 15 jours ouvrables suivants.
 
 ---
 

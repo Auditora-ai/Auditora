@@ -11,7 +11,6 @@ import { config as i18nConfig, type Locale } from "@repo/i18n";
 import { logger } from "@repo/logs";
 import { sendEmail } from "@repo/mail";
 import { cancelSubscription } from "@repo/payments";
-import { getRedis } from "@repo/rate-limit";
 import { getBaseUrl } from "@repo/utils";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
@@ -45,33 +44,6 @@ export const auth = betterAuth({
 	database: prismaAdapter(db, {
 		provider: "postgresql",
 	}),
-	rateLimit: {
-		enabled: true,
-		window: 60, // 60 seconds
-		max: 10, // 10 requests per window per IP
-		storage: "secondary-storage",
-	},
-	secondaryStorage: {
-		get: async (key) => {
-			const redis = getRedis();
-			if (!redis) return null;
-			return redis.get(key);
-		},
-		set: async (key, value, ttl) => {
-			const redis = getRedis();
-			if (!redis) return;
-			if (ttl) {
-				await redis.setex(key, ttl, value);
-			} else {
-				await redis.set(key, value);
-			}
-		},
-		delete: async (key) => {
-			const redis = getRedis();
-			if (!redis) return;
-			await redis.del(key);
-		},
-	},
 	advanced: {
 		database: {
 			generateId: false,

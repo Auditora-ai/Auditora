@@ -134,8 +134,9 @@ If you are located in Mexico, you have the following ARCO rights:
 - **Rectificacion** (Rectification): Request correction of inaccurate or incomplete data.
 - **Cancelacion** (Cancellation): Request deletion of your personal data when it is no longer necessary.
 - **Oposicion** (Opposition): Object to the processing of your personal data for specific purposes.
+- **Revocacion del consentimiento** (Revocation of consent): Withdraw the consent you previously granted for the processing of your personal data. Revocation does not have retroactive effect on processing carried out prior to the withdrawal.
 
-To exercise your ARCO rights, send a request to **privacy@auditora.ai** including:
+To exercise your ARCO rights or revoke your consent, send a request to **privacy@auditora.ai** including:
 
 1. Your full name and contact information.
 2. A clear description of the data and rights you wish to exercise.

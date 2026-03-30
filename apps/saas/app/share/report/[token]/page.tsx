@@ -180,7 +180,10 @@ export default async function SharedReportPage({
 
 			{/* Footer */}
 			<footer className="border-t border-stone-200 bg-white">
-				<div className="mx-auto max-w-5xl px-4 py-4 md:px-6">
+				<div className="mx-auto max-w-5xl px-4 py-4 md:px-6 space-y-3">
+					<p className="text-[10px] text-stone-400 text-center leading-relaxed">
+						Este reporte fue generado por inteligencia artificial. Los análisis y recomendaciones son puntos de partida analíticos y no constituyen asesoramiento profesional, legal ni financiero. Los resultados deben ser validados por profesionales calificados antes de tomar decisiones de negocio. Auditora.ai no asume responsabilidad por decisiones basadas en este reporte.
+					</p>
 					<p className="text-xs text-stone-400 text-center">
 						Generado por Auditora.ai · Reporte de Inteligencia de Proceso
 					</p>

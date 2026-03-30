@@ -44,35 +44,23 @@ export function PlatformFeaturesSection() {
 				},
 			});
 
-			tl.from(".pf-header > *", {
-				opacity: 0,
-				y: 30,
-				stagger: 0.1,
-				duration: 0.7,
-				ease: "power3.out",
-			});
+			tl.fromTo(
+				".pf-header > *",
+				{ autoAlpha: 0, y: 30 },
+				{ autoAlpha: 1, y: 0, stagger: 0.1, duration: 0.7, ease: "power3.out" },
+			);
 
-			tl.from(
+			tl.fromTo(
 				".pf-card",
-				{
-					opacity: 0,
-					y: 30,
-					scale: 0.95,
-					stagger: { from: "start", each: 0.08 },
-					duration: 0.6,
-					ease: "back.out(1.4)",
-				},
+				{ autoAlpha: 0, y: 30, scale: 0.95 },
+				{ autoAlpha: 1, y: 0, scale: 1, stagger: { from: "start", each: 0.08 }, duration: 0.6, ease: "back.out(1.4)" },
 				"-=0.3",
 			);
 
-			tl.from(
+			tl.fromTo(
 				".pf-cta",
-				{
-					opacity: 0,
-					y: 20,
-					duration: 0.5,
-					ease: "power3.out",
-				},
+				{ autoAlpha: 0, y: 20 },
+				{ autoAlpha: 1, y: 0, duration: 0.5, ease: "power3.out" },
 				"-=0.2",
 			);
 		},

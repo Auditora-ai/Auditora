@@ -681,7 +681,7 @@ function AttachmentsZone({
 			<button type="button" onClick={handleFileSelect}
 				className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-canvas-border px-4 py-3 text-xs font-medium text-chrome-text-muted transition-colors hover:border-primary hover:bg-secondary hover:text-primary">
 				<PaperclipIcon className="h-4 w-4" />
-				{t("nodeProperties.attachFile")}
+				Adjuntar archivo
 			</button>
 		</div>
 	);

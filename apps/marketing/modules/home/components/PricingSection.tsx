@@ -202,10 +202,10 @@ export function PricingSection() {
 							data-test="price-table-interval-tabs"
 						>
 							<TabsList className="border-[#E2E8F0]">
-								<TabsTrigger value="month">
+								<TabsTrigger className="dark:text-[#0A1428]/60 dark:hover:text-[#0A1428]/80 dark:data-[state=active]:text-[#0A1428]" value="month">
 									{t("pricing.monthly")}
 								</TabsTrigger>
-								<TabsTrigger value="year">
+								<TabsTrigger className="dark:text-[#0A1428]/60 dark:hover:text-[#0A1428]/80 dark:data-[state=active]:text-[#0A1428]" value="year">
 									{t("pricing.yearly")}
 								</TabsTrigger>
 							</TabsList>
@@ -406,7 +406,7 @@ export function PricingSection() {
 									<div>
 										{plan.isEnterprise ? (
 											<Button
-												className="mt-4 w-full border-[#E2E8F0] text-[#0A1428] hover:bg-[#F8FAFC]"
+												className="mt-4 w-full border-[#E2E8F0] text-[#0A1428] hover:bg-[#F8FAFC] dark:bg-white dark:text-[#0A1428] dark:hover:bg-[#F8FAFC]"
 												variant="secondary"
 												asChild
 											>
@@ -421,7 +421,7 @@ export function PricingSection() {
 													"mt-4 w-full",
 													plan.recommended
 														? "bg-[#00E5C0] hover:bg-[#00C4A3] text-[#0A1428]"
-														: "border-[#E2E8F0] text-[#0A1428] hover:bg-[#F8FAFC]",
+														: "border-[#E2E8F0] text-[#0A1428] hover:bg-[#F8FAFC] dark:bg-white dark:text-[#0A1428] dark:hover:bg-[#F8FAFC]",
 												)}
 												variant={
 													plan.recommended
@@ -441,7 +441,7 @@ export function PricingSection() {
 													"mt-4 w-full",
 													plan.recommended
 														? "bg-[#00E5C0] hover:bg-[#00C4A3] text-[#0A1428]"
-														: "border-[#E2E8F0] text-[#0A1428] hover:bg-[#F8FAFC]",
+														: "border-[#E2E8F0] text-[#0A1428] hover:bg-[#F8FAFC] dark:bg-white dark:text-[#0A1428] dark:hover:bg-[#F8FAFC]",
 												)}
 												variant={
 													plan.recommended
