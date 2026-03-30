@@ -2,17 +2,60 @@
 	"pricing": {
 		"choosePlan": "Plan wählen",
 		"contactSales": "Vertrieb kontaktieren",
-		"description": "Jeder Plan enthält die KI-Engine, automatische BPMN-Diagrammerstellung und Risikoanalyse. Wählen Sie nach Teamgröße.",
+		"description": "Jeder Plan enthält die Claude Opus KI-Engine, automatische BPMN-Diagrammerstellung und Risikoanalyse. Wählen Sie nach Sitzungsvolumen.",
 		"getStarted": "Loslegen",
 		"startTrial": "Kostenlos testen",
 		"month": "{count, plural, one {Monat} other {{count} Monate}}",
 		"monthly": "Monatlich",
 		"products": {
+			"starter": {
+				"description": "Für den unabhängigen Berater, der schneller liefern will",
+				"features": {
+					"freeTrial": "14 Tage kostenlos testen",
+					"sessions": "10 KI-Sitzungen pro Monat",
+					"aiEngine": "Claude Opus KI-Engine",
+					"liveBpmn": "Automatisch generierte BPMN-Diagramme",
+					"riskAnalysis": "Automatische Risikoanalyse",
+					"pdfExport": "PDF-Export",
+					"fiveProcesses": "Bis zu 5 Prozesse",
+					"oneUser": "1 Benutzer"
+				},
+				"title": "Starter"
+			},
+			"growth": {
+				"description": "Für Beratungsfirmen, die ihre Praxis skalieren",
+				"features": {
+					"freeTrial": "14 Tage kostenlos testen",
+					"sessions": "40 KI-Sitzungen pro Monat",
+					"everythingInStarter": "Alles aus Starter",
+					"unlimitedProcesses": "Unbegrenzte Prozesse",
+					"fullExport": "Vollständiger BPMN/XML/PDF-Export",
+					"adminDashboard": "Admin-Dashboard & Rollen",
+					"prioritySupport": "Prioritäts-Support",
+					"fiveUsers": "Bis zu 5 Benutzer"
+				},
+				"title": "Growth"
+			},
+			"scale": {
+				"description": "Für große Teams mit hohem Sitzungsvolumen",
+				"features": {
+					"freeTrial": "14 Tage kostenlos testen",
+					"sessions": "100 KI-Sitzungen pro Monat",
+					"everythingInGrowth": "Alles aus Growth",
+					"teamAnalytics": "Team-Analysen",
+					"sharedLibrary": "Gemeinsame Prozessbibliothek",
+					"apiAccess": "API-Zugang",
+					"byok": "Eigenen API-Schlüssel mitbringen (BYOK)",
+					"fifteenUsers": "Bis zu 15 Benutzer"
+				},
+				"title": "Scale"
+			},
 			"enterprise": {
 				"description": "Für große Firmen oder Unternehmensbereitstellungen",
 				"features": {
-					"everythingInTeam": "Alles aus Team",
-					"unlimitedMembers": "Unbegrenzte Teammitglieder",
+					"everythingInScale": "Alles aus Scale",
+					"unlimitedUsers": "Unbegrenzte Benutzer",
+					"byokIncluded": "BYOK inklusive (unbegrenzte Sitzungen mit eigenem API-Schlüssel)",
 					"ssoAuth": "SSO & SAML-Authentifizierung",
 					"slaGuarantees": "SLA-Garantien",
 					"customIntegrations": "Individuelle Integrationen",
@@ -20,43 +63,20 @@
 					"customDeployment": "Individuelle Bereitstellung"
 				},
 				"title": "Enterprise"
-			},
-			"pro": {
-				"description": "Für den unabhängigen Berater, der schneller liefern will",
-				"features": {
-					"freeTrial": "14 Tage kostenlos testen",
-					"unlimitedSessions": "Unbegrenzte Entdeckungssitzungen",
-					"aiTeleprompter": "KI-Copilot mit kontextbezogenen Fragen",
-					"liveBpmn": "Automatisch generierte BPMN-Diagramme",
-					"speakerTranscripts": "Sitzungstranskripte mit Sprecheridentifikation",
-					"fullBpmnExport": "Vollständiger BPMN/XML-Export",
-					"fiveMembers": "Bis zu 5 Teammitglieder"
-				},
-				"title": "Professional"
-			},
-			"team": {
-				"description": "Für Beratungsfirmen, die ihre Praxis skalieren",
-				"features": {
-					"everythingInPro": "Alles aus Professional",
-					"tenMembers": "Bis zu 10 Teammitglieder",
-					"adminDashboard": "Admin-Dashboard & Rollen",
-					"prioritySupport": "Prioritäts-Support",
-					"teamAnalytics": "Team-Analysen",
-					"sharedLibrary": "Gemeinsame Prozessbibliothek"
-				},
-				"title": "Team"
 			}
 		},
 		"purchase": "Kaufen",
 		"recommended": "Empfohlen",
 		"subscribe": "Abonnieren",
-		"title": "Investieren Sie in Ihre Praxis, nicht in mehr Stunden manueller Arbeit",
+		"title": "Investieren Sie in Risikointelligenz, nicht in mehr Stunden manueller Arbeit",
 		"trialPeriod": "{days} {days, plural, one {Tag} other {Tage}} kostenlos testen",
 		"year": "{count, plural, one {Jahr} other {{count} Jahre}}",
 		"yearly": "Jährlich",
 		"perSeat": "Platz",
 		"savePercent": "{percent}% sparen",
 		"billedAnnually": "Jährlich abgerechnet",
-		"perMonth": "/Mo."
+		"perMonth": "/Mo.",
+		"sessionsIncluded": "{count} KI-Sitzungen inklusive",
+		"extraSession": "+{price}$ pro zusätzliche Sitzung"
 	}
 }

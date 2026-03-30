@@ -1,5 +1,5 @@
 import { config } from "../config";
-import type { PaidPlan, PlanPrice } from "../types";
+import type { PaidPlan, PlanLimits, PlanPrice } from "../types";
 
 export type PlanId = keyof typeof config.plans;
 export type RecurringInterval = Extract<
@@ -15,6 +15,11 @@ export function getPaidPlan(planId: PlanId) {
 	}
 
 	return plan as PaidPlan;
+}
+
+export function getPlanLimits(planId: PlanId): PlanLimits | null {
+	const plan = getPaidPlan(planId);
+	return plan?.limits ?? null;
 }
 
 export function findPriceByPlanId(

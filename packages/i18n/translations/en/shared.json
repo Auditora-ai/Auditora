@@ -2,17 +2,60 @@
 	"pricing": {
 		"choosePlan": "Choose plan",
 		"contactSales": "Contact sales",
-		"description": "Every plan includes the AI engine, automatic BPMN diagramming, and risk analysis. Choose based on your team size.",
+		"description": "Every plan includes the Claude Opus AI engine, automatic BPMN diagramming, and risk analysis. Choose based on your session volume.",
 		"getStarted": "Get started",
 		"startTrial": "Start free trial",
 		"month": "{count, plural, one {month} other {{count} months}}",
 		"monthly": "Monthly",
 		"products": {
+			"starter": {
+				"description": "For the independent consultant who wants to deliver faster",
+				"features": {
+					"freeTrial": "14-day free trial",
+					"sessions": "10 AI sessions per month",
+					"aiEngine": "Claude Opus AI engine",
+					"liveBpmn": "Automatically generated BPMN diagrams",
+					"riskAnalysis": "Automatic risk analysis",
+					"pdfExport": "PDF export",
+					"fiveProcesses": "Up to 5 processes",
+					"oneUser": "1 user"
+				},
+				"title": "Starter"
+			},
+			"growth": {
+				"description": "For consulting firms scaling their practice",
+				"features": {
+					"freeTrial": "14-day free trial",
+					"sessions": "40 AI sessions per month",
+					"everythingInStarter": "Everything in Starter",
+					"unlimitedProcesses": "Unlimited processes",
+					"fullExport": "Full BPMN/XML/PDF export",
+					"adminDashboard": "Admin dashboard & roles",
+					"prioritySupport": "Priority support",
+					"fiveUsers": "Up to 5 users"
+				},
+				"title": "Growth"
+			},
+			"scale": {
+				"description": "For large teams with high session volume",
+				"features": {
+					"freeTrial": "14-day free trial",
+					"sessions": "100 AI sessions per month",
+					"everythingInGrowth": "Everything in Growth",
+					"teamAnalytics": "Team analytics",
+					"sharedLibrary": "Shared process library",
+					"apiAccess": "API access",
+					"byok": "Bring your own API key (BYOK)",
+					"fifteenUsers": "Up to 15 users"
+				},
+				"title": "Scale"
+			},
 			"enterprise": {
 				"description": "For large firms or corporate deployments",
 				"features": {
-					"everythingInTeam": "Everything in Team",
-					"unlimitedMembers": "Unlimited team members",
+					"everythingInScale": "Everything in Scale",
+					"unlimitedUsers": "Unlimited users",
+					"byokIncluded": "BYOK included (unlimited sessions with your API key)",
 					"ssoAuth": "SSO & SAML authentication",
 					"slaGuarantees": "SLA guarantees",
 					"customIntegrations": "Custom integrations",
@@ -20,43 +63,20 @@
 					"customDeployment": "Custom deployment"
 				},
 				"title": "Enterprise"
-			},
-			"pro": {
-				"description": "For the independent consultant who wants to deliver faster",
-				"features": {
-					"freeTrial": "14-day free trial",
-					"unlimitedSessions": "Unlimited discovery sessions",
-					"aiTeleprompter": "AI copilot with contextual questions",
-					"liveBpmn": "Automatically generated BPMN diagrams",
-					"speakerTranscripts": "Speaker-identified session transcripts",
-					"fullBpmnExport": "Full BPMN/XML export",
-					"fiveMembers": "Up to 5 team members"
-				},
-				"title": "Professional"
-			},
-			"team": {
-				"description": "For consulting firms scaling their practice",
-				"features": {
-					"everythingInPro": "Everything in Professional",
-					"tenMembers": "Up to 10 team members",
-					"adminDashboard": "Admin dashboard & roles",
-					"prioritySupport": "Priority support",
-					"teamAnalytics": "Team analytics",
-					"sharedLibrary": "Shared process library"
-				},
-				"title": "Team"
 			}
 		},
 		"purchase": "Purchase",
 		"recommended": "Recommended",
 		"subscribe": "Subscribe",
-		"title": "Invest in your practice, not more hours of manual work",
+		"title": "Invest in risk intelligence, not more hours of manual work",
 		"trialPeriod": "{days} {days, plural, one {day} other {days}} free trial",
 		"year": "{count, plural, one {year} other {{count} years}}",
 		"yearly": "Yearly",
 		"perSeat": "seat",
 		"savePercent": "Save {percent}%",
 		"billedAnnually": "Billed annually",
-		"perMonth": "/mo"
+		"perMonth": "/mo",
+		"sessionsIncluded": "{count} AI sessions included",
+		"extraSession": "+${price} per extra session"
 	}
 }

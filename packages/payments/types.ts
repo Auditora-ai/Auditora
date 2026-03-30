@@ -44,11 +44,38 @@ export type PlanPrice =
 	| (BasePrice & SubscriptionPrice)
 	| (BasePrice & OneTimePrice);
 
+export interface PlanLimits {
+	/**
+	 * AI session credits included per billing cycle.
+	 * null = unlimited (e.g. Enterprise with BYOK).
+	 */
+	sessions: number | null;
+	/**
+	 * Maximum team members allowed.
+	 * null = unlimited.
+	 */
+	users: number | null;
+	/**
+	 * Maximum processes allowed.
+	 * null = unlimited.
+	 */
+	processes: number | null;
+	/**
+	 * Cost per additional session credit beyond the included limit (USD).
+	 * null = no overage allowed (must upgrade).
+	 */
+	overagePerSession?: number | null;
+}
+
 export interface PaidPlan {
 	/**
 	 * Purchasable prices offered for the plan.
 	 */
 	prices: PlanPrice[];
+	/**
+	 * Usage and capacity limits for the plan.
+	 */
+	limits: PlanLimits;
 	/**
 	 * Highlights the plan in pricing tables and comparison views.
 	 */

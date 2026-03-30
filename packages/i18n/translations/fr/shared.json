@@ -2,17 +2,60 @@
 	"pricing": {
 		"choosePlan": "Choisir un plan",
 		"contactSales": "Contacter les ventes",
-		"description": "Chaque plan inclut le moteur IA, la création automatique de diagrammes BPMN et l'analyse de risques. Choisissez selon la taille de votre équipe.",
+		"description": "Chaque plan inclut le moteur IA Claude Opus, la création automatique de diagrammes BPMN et l'analyse de risques. Choisissez selon votre volume de sessions.",
 		"getStarted": "Commencer",
 		"startTrial": "Essai gratuit",
 		"month": "{count, plural, one {mois} other {{count} mois}}",
 		"monthly": "Mensuel",
 		"products": {
+			"starter": {
+				"description": "Pour le consultant indépendant qui veut livrer plus vite",
+				"features": {
+					"freeTrial": "14 jours d'essai gratuit",
+					"sessions": "10 sessions IA par mois",
+					"aiEngine": "Moteur IA Claude Opus",
+					"liveBpmn": "Diagrammes BPMN générés automatiquement",
+					"riskAnalysis": "Analyse de risques automatique",
+					"pdfExport": "Export PDF",
+					"fiveProcesses": "Jusqu'à 5 processus",
+					"oneUser": "1 utilisateur"
+				},
+				"title": "Starter"
+			},
+			"growth": {
+				"description": "Pour les cabinets de conseil qui se développent",
+				"features": {
+					"freeTrial": "14 jours d'essai gratuit",
+					"sessions": "40 sessions IA par mois",
+					"everythingInStarter": "Tout de Starter",
+					"unlimitedProcesses": "Processus illimités",
+					"fullExport": "Export complet BPMN/XML/PDF",
+					"adminDashboard": "Tableau de bord admin et rôles",
+					"prioritySupport": "Support prioritaire",
+					"fiveUsers": "Jusqu'à 5 utilisateurs"
+				},
+				"title": "Growth"
+			},
+			"scale": {
+				"description": "Pour les grandes équipes avec un volume élevé de sessions",
+				"features": {
+					"freeTrial": "14 jours d'essai gratuit",
+					"sessions": "100 sessions IA par mois",
+					"everythingInGrowth": "Tout de Growth",
+					"teamAnalytics": "Analytiques d'équipe",
+					"sharedLibrary": "Bibliothèque de processus partagée",
+					"apiAccess": "Accès API",
+					"byok": "Apportez votre propre clé API (BYOK)",
+					"fifteenUsers": "Jusqu'à 15 utilisateurs"
+				},
+				"title": "Scale"
+			},
 			"enterprise": {
 				"description": "Pour les grands cabinets ou déploiements d'entreprise",
 				"features": {
-					"everythingInTeam": "Tout de Team",
-					"unlimitedMembers": "Membres d'équipe illimités",
+					"everythingInScale": "Tout de Scale",
+					"unlimitedUsers": "Utilisateurs illimités",
+					"byokIncluded": "BYOK inclus (sessions illimitées avec votre clé API)",
 					"ssoAuth": "SSO et authentification SAML",
 					"slaGuarantees": "Garanties SLA",
 					"customIntegrations": "Intégrations personnalisées",
@@ -20,43 +63,20 @@
 					"customDeployment": "Déploiement personnalisé"
 				},
 				"title": "Enterprise"
-			},
-			"pro": {
-				"description": "Pour le consultant indépendant qui veut livrer plus vite",
-				"features": {
-					"freeTrial": "14 jours d'essai gratuit",
-					"unlimitedSessions": "Sessions de découverte illimitées",
-					"aiTeleprompter": "Copilote IA avec questions contextuelles",
-					"liveBpmn": "Diagrammes BPMN générés automatiquement",
-					"speakerTranscripts": "Transcriptions de session avec identification des intervenants",
-					"fullBpmnExport": "Export BPMN/XML complet",
-					"fiveMembers": "Jusqu'à 5 membres d'équipe"
-				},
-				"title": "Professional"
-			},
-			"team": {
-				"description": "Pour les cabinets de conseil qui se développent",
-				"features": {
-					"everythingInPro": "Tout de Professional",
-					"tenMembers": "Jusqu'à 10 membres d'équipe",
-					"adminDashboard": "Tableau de bord admin et rôles",
-					"prioritySupport": "Support prioritaire",
-					"teamAnalytics": "Analytiques d'équipe",
-					"sharedLibrary": "Bibliothèque de processus partagée"
-				},
-				"title": "Team"
 			}
 		},
 		"purchase": "Acheter",
 		"recommended": "Recommandé",
 		"subscribe": "S'abonner",
-		"title": "Investissez dans votre pratique, pas dans plus d'heures de travail manuel",
+		"title": "Investissez dans l'intelligence des risques, pas dans plus d'heures de travail manuel",
 		"trialPeriod": "{days} {days, plural, one {jour} other {jours}} d'essai gratuit",
 		"year": "{count, plural, one {an} other {{count} ans}}",
 		"yearly": "Annuel",
 		"perSeat": "place",
 		"savePercent": "Économisez {percent}%",
 		"billedAnnually": "Facturé annuellement",
-		"perMonth": "/mois"
+		"perMonth": "/mois",
+		"sessionsIncluded": "{count} sessions IA incluses",
+		"extraSession": "+{price}$ par session supplémentaire"
 	}
 }

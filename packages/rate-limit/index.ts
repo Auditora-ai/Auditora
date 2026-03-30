@@ -6,6 +6,12 @@
  */
 
 export { getRedis } from "./redis";
+export {
+	checkSessionCredits,
+	recordSessionCredit,
+	resetSessionCredits,
+	type CreditCheckResult,
+} from "./session-credits";
 
 import { getRedis } from "./redis";
 

@@ -4,48 +4,82 @@ export const config: PaymentsConfig = {
 	billingAttachedTo: "organization",
 	requireActiveSubscription: true,
 	plans: {
-		pro: {
+		starter: {
 			prices: [
 				{
 					type: "subscription",
-					priceId: process.env.PRICE_ID_PRO_MONTHLY as string,
+					priceId: process.env.PRICE_ID_STARTER_MONTHLY as string,
 					interval: "month",
-					amount: 29,
+					amount: 49,
 					currency: "USD",
-					seatBased: true,
 					trialPeriodDays: 14,
 				},
 				{
 					type: "subscription",
-					priceId: process.env.PRICE_ID_PRO_YEARLY as string,
+					priceId: process.env.PRICE_ID_STARTER_YEARLY as string,
 					interval: "year",
-					amount: 290,
+					amount: 470,
 					currency: "USD",
-					seatBased: true,
 					trialPeriodDays: 14,
 				},
 			],
+			limits: {
+				sessions: 10,
+				users: 1,
+				processes: 5,
+			},
 		},
-		team: {
+		growth: {
 			recommended: true,
 			prices: [
 				{
 					type: "subscription",
-					priceId: process.env.PRICE_ID_TEAM_MONTHLY as string,
+					priceId: process.env.PRICE_ID_GROWTH_MONTHLY as string,
 					interval: "month",
-					amount: 79,
+					amount: 149,
 					currency: "USD",
 					trialPeriodDays: 14,
 				},
 				{
 					type: "subscription",
-					priceId: process.env.PRICE_ID_TEAM_YEARLY as string,
+					priceId: process.env.PRICE_ID_GROWTH_YEARLY as string,
 					interval: "year",
-					amount: 790,
+					amount: 1430,
 					currency: "USD",
 					trialPeriodDays: 14,
 				},
 			],
+			limits: {
+				sessions: 40,
+				users: 5,
+				processes: null,
+			},
+		},
+		scale: {
+			prices: [
+				{
+					type: "subscription",
+					priceId: process.env.PRICE_ID_SCALE_MONTHLY as string,
+					interval: "month",
+					amount: 349,
+					currency: "USD",
+					trialPeriodDays: 14,
+				},
+				{
+					type: "subscription",
+					priceId: process.env.PRICE_ID_SCALE_YEARLY as string,
+					interval: "year",
+					amount: 3350,
+					currency: "USD",
+					trialPeriodDays: 14,
+				},
+			],
+			limits: {
+				sessions: 100,
+				users: 15,
+				processes: null,
+				overagePerSession: 5,
+			},
 		},
 		enterprise: {
 			isEnterprise: true,

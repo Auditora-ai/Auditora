@@ -151,6 +151,10 @@ model Organization {
   // AI tier configuration
   aiTier             String?      @default("standard") // "budget" | "standard" | "premium"
   aiTokenBudget      Int?         // monthly soft limit (null = unlimited)
+  // Session credit system
+  sessionCreditsUsed  Int          @default(0)  // credits consumed this billing cycle
+  sessionCreditsLimit Int?         // credits per cycle from plan (null = unlimited)
+  billingCycleAnchor  DateTime?    // day-of-month anchor for credit reset
   // BYOK: encrypted API keys (AES-256-GCM)
   aiAnthropicKey     String?      @db.Text
   aiDeepseekKey      String?      @db.Text

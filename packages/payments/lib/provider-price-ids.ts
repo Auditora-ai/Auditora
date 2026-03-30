@@ -53,7 +53,7 @@ export function getProviderPriceIdByPlanId(
 }
 
 export function getPlanIdByProviderPriceId(priceId: string) {
-	// Handle trial sentinel priceIds (e.g., "trial:pro:monthly" → "pro")
+	// Handle trial sentinel priceIds (e.g., "trial:starter:monthly" → "starter")
 	if (priceId.startsWith("trial:")) {
 		const planId = priceId.split(":")[1] as PlanId;
 		return planId in config.plans ? planId : null;
@@ -66,7 +66,7 @@ export function getPlanIdByProviderPriceId(priceId: string) {
 }
 
 export function getPlanPriceByProviderPriceId(priceId: string) {
-	// Handle trial sentinel priceIds (e.g., "trial:pro:monthly")
+	// Handle trial sentinel priceIds (e.g., "trial:starter:monthly")
 	if (priceId.startsWith("trial:")) {
 		const parts = priceId.split(":");
 		const planId = parts[1] as PlanId;
