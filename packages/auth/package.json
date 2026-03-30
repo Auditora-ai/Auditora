@@ -6,6 +6,7 @@
 		"@repo/logs": "workspace:*",
 		"@repo/mail": "workspace:*",
 		"@repo/payments": "workspace:*",
+		"@repo/rate-limit": "workspace:*",
 		"@repo/utils": "workspace:*",
 		"better-auth": "catalog:",
 		"cookie": "catalog:"

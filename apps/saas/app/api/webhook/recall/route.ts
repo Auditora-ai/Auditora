@@ -452,22 +452,25 @@ async function runExtraction(sessionId: string, organizationId?: string) {
 			for (const update of result.updatedNodes) {
 				const updateData: Record<string, any> = {};
 				if (update.label) updateData.label = update.label;
-				const u = update as any;
-				if (u.type) updateData.nodeType = u.type.toUpperCase();
-				if (u.lane) updateData.lane = u.lane;
-				if (u.properties) {
+				if (update.type) updateData.nodeType = update.type.toUpperCase();
+				if (update.lane) updateData.lane = update.lane;
+				if (update.properties) {
 					const existing = await db.diagramNode.findUnique({
 						where: { id: update.id },
 						select: { properties: true },
 					});
-					updateData.properties = { ...(existing?.properties as any || {}), ...u.properties };
+					updateData.properties = { ...(existing?.properties as any || {}), ...update.properties };
 				}
 				if (Object.keys(updateData).length > 0) {
-					await db.diagramNode.updateMany({
+					const res = await db.diagramNode.updateMany({
 						where: { id: update.id, sessionId },
 						data: updateData,
 					});
-					console.log(`[Extraction] ~Updated: "${update.id}" → ${JSON.stringify(updateData)}`);
+					if (res.count === 0) {
+						console.warn(`[Extraction] ~Update missed: node "${update.id}" not found in session ${sessionId}`);
+					} else {
+						console.log(`[Extraction] ~Updated: "${update.id}" → ${JSON.stringify(updateData)}`);
+					}
 				}
 			}
 		}

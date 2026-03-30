@@ -7,6 +7,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
+import { verifyAnonymousSession } from "@radiografia/lib/session-verify";
 import { auditRisks, extractSipoc } from "@repo/ai";
 import type { RiskAuditInput } from "@repo/ai";
 import {
@@ -34,26 +35,17 @@ export async function POST(request: NextRequest) {
 	}
 
 	const ip = getClientIp(request);
-	if (!checkRateLimit(ip, 5)) {
+	if (!(await checkRateLimit(ip, 5))) {
 		return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
 	}
 
-	if (!checkDailyCost()) {
+	if (!(await checkDailyCost())) {
 		return NextResponse.json({ error: "Service temporarily unavailable" }, { status: 503 });
 	}
 
-	const sessionToken = request.cookies.get("scan_session")?.value;
-	if (!sessionToken) {
-		return NextResponse.json({ error: "No session" }, { status: 401 });
-	}
-
-	const session = await db.anonymousSession.findUnique({
-		where: { id: sessionToken },
-	});
-
-	if (!session || session.expiresAt < new Date()) {
-		return NextResponse.json({ error: "Session expired" }, { status: 410 });
-	}
+	const result = await verifyAnonymousSession(request);
+	if (result.error) return result.error;
+	const session = result.session;
 
 	// Build enriched SIPOC from conversation
 	const conversationLog = (session.conversationLog as ChatMessage[] | null) || [];
@@ -65,7 +57,7 @@ export async function POST(request: NextRequest) {
 	const processDescription = `Proceso: ${session.processName || "Proceso principal"}. Industria: ${session.industry || "General"}.\n\nConversacion completa:\n${fullConversation}`;
 
 	const sipocResult = await extractSipoc(processDescription, "public");
-	recordCost(1);
+	await recordCost(1);
 
 	const enrichedSipoc = sipocResultToEnriched(sipocResult);
 	const knowledge = sipocToKnowledge(
@@ -102,11 +94,11 @@ export async function POST(request: NextRequest) {
 	};
 
 	const riskResult = await auditRisks(riskInput);
-	recordCost(1);
+	await recordCost(1);
 
 	// Update session with deep results
 	await db.anonymousSession.update({
-		where: { id: sessionToken },
+		where: { id: session.id },
 		data: {
 			phase: "risks",
 			sipocData: sipocResult as any,

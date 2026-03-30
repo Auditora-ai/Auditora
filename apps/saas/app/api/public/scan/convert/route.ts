@@ -8,6 +8,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
+import { verifyAnonymousSession } from "@radiografia/lib/session-verify";
 import {
 	getClientIp,
 	checkRateLimit,
@@ -26,22 +27,13 @@ export async function POST(request: NextRequest) {
 	}
 
 	const ip = getClientIp(request);
-	if (!checkRateLimit(ip, 5)) {
+	if (!(await checkRateLimit(ip, 5))) {
 		return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
 	}
 
-	const sessionToken = request.cookies.get("scan_session")?.value;
-	if (!sessionToken) {
-		return NextResponse.json({ error: "No session" }, { status: 401 });
-	}
-
-	const session = await db.anonymousSession.findUnique({
-		where: { id: sessionToken },
-	});
-
-	if (!session || session.expiresAt < new Date()) {
-		return NextResponse.json({ error: "Session expired" }, { status: 410 });
-	}
+	const sessionResult = await verifyAnonymousSession(request);
+	if (sessionResult.error) return sessionResult.error;
+	const session = sessionResult.session;
 
 	const body = (await request.json()) as ConvertBody;
 	const { email, name, organizationName } = body;

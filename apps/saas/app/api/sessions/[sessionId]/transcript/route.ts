@@ -279,17 +279,15 @@ async function runManualExtraction(sessionId: string, entryId?: string) {
 		for (const update of result.updatedNodes) {
 			const updateData: Record<string, any> = {};
 			if (update.label) updateData.label = update.label;
-			// updatedNodes may also include type/lane/properties from extended extraction
-			const u = update as any;
-			if (u.type) updateData.nodeType = u.type.toUpperCase();
-			if (u.lane) updateData.lane = u.lane;
-			if (u.properties) {
+			if (update.type) updateData.nodeType = update.type.toUpperCase();
+			if (update.lane) updateData.lane = update.lane;
+			if (update.properties) {
 				// Merge with existing properties (don't overwrite all)
 				const existing = await db.diagramNode.findUnique({
 					where: { id: update.id },
 					select: { properties: true },
 				});
-				updateData.properties = { ...(existing?.properties as any || {}), ...u.properties };
+				updateData.properties = { ...(existing?.properties as any || {}), ...update.properties };
 			}
 
 			if (Object.keys(updateData).length > 0) {

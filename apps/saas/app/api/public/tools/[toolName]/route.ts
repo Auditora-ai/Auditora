@@ -7,13 +7,17 @@ import {
   generateRaci,
 } from "@repo/ai";
 
-// ── Rate limiting ──────────────────────────────────────────────
-const ipRequests = new Map<string, { count: number; resetAt: number }>();
-const MAX_REQUESTS_PER_HOUR = 5;
+import {
+  checkRateLimit as checkLimit,
+  checkDailyCost as checkCost,
+  recordCost,
+  getClientIp,
+} from "@repo/rate-limit";
 
-let dailyCost = 0;
-let dailyCostResetAt = Date.now() + 86400000;
+// ── Rate limiting ──────────────────────────────────────────────
+const MAX_REQUESTS_PER_HOUR = 5;
 const DAILY_COST_CAP = 20;
+const COST_KEY = "cost:daily:tools";
 
 const TOOL_COSTS: Record<string, number> = {
   "bpmn-generator": 0.03,
@@ -28,33 +32,12 @@ const TOOL_COSTS: Record<string, number> = {
 const isDisabled = process.env.DISABLE_PUBLIC_TOOLS === "true";
 const ALLOWED_ORIGIN = process.env.NEXT_PUBLIC_MARKETING_URL || "*";
 
-function getClientIp(request: NextRequest): string {
-  return (
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    request.headers.get("x-real-ip") ||
-    "unknown"
-  );
+async function checkRateLimit(ip: string): Promise<boolean> {
+  return checkLimit(`ratelimit:tools:${ip}`, MAX_REQUESTS_PER_HOUR, 3600);
 }
 
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = ipRequests.get(ip);
-  if (!entry || now > entry.resetAt) {
-    ipRequests.set(ip, { count: 1, resetAt: now + 3600000 });
-    return true;
-  }
-  if (entry.count >= MAX_REQUESTS_PER_HOUR) return false;
-  entry.count++;
-  return true;
-}
-
-function checkDailyCost(): boolean {
-  const now = Date.now();
-  if (now > dailyCostResetAt) {
-    dailyCost = 0;
-    dailyCostResetAt = now + 86400000;
-  }
-  return dailyCost < DAILY_COST_CAP;
+async function checkDailyCost(): Promise<boolean> {
+  return checkCost(COST_KEY, DAILY_COST_CAP);
 }
 
 function sanitize(s: string): string {
@@ -280,7 +263,7 @@ export async function POST(
     );
   }
 
-  if (!checkDailyCost()) {
+  if (!(await checkDailyCost())) {
     return NextResponse.json(
       { error: "High demand — tools temporarily unavailable. Try again later." },
       { status: 503 },
@@ -288,7 +271,7 @@ export async function POST(
   }
 
   const ip = getClientIp(request);
-  if (!checkRateLimit(ip)) {
+  if (!(await checkRateLimit(ip))) {
     return NextResponse.json(
       {
         error: "You've reached the limit. Sign up for unlimited access.",
@@ -354,7 +337,7 @@ export async function POST(
         break;
     }
 
-    dailyCost += TOOL_COSTS[toolName] || 0.03;
+    await recordCost(COST_KEY, TOOL_COSTS[toolName] || 0.03);
 
     return NextResponse.json(result, {
       headers: { "Access-Control-Allow-Origin": ALLOWED_ORIGIN },

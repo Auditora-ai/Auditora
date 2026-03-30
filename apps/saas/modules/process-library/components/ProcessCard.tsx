@@ -19,6 +19,7 @@ import {
 	GitBranchIcon,
 	LayersIcon,
 	MoreHorizontalIcon,
+	ShieldAlertIcon,
 	TrashIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -34,6 +35,8 @@ export type ProcessCardData = {
 	versionsCount: number;
 	sessionsCount: number;
 	hasBpmn: boolean;
+	riskCount?: number;
+	criticalRiskCount?: number;
 };
 
 const statusBadge: Record<string, "info" | "success" | "warning"> = {
@@ -115,6 +118,14 @@ export function ProcessCard({
 				)}
 
 				<div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
+					{(process.riskCount ?? 0) > 0 && (
+						<span className={`flex items-center gap-1 ${
+							(process.criticalRiskCount ?? 0) > 0 ? "text-red-400 font-medium" : "text-amber-400"
+						}`}>
+							<ShieldAlertIcon className="size-3" />
+							{process.riskCount} {process.riskCount === 1 ? "riesgo" : "riesgos"}
+						</span>
+					)}
 					<span className="flex items-center gap-1">
 						<LayersIcon className="size-3" />
 						{t("nodes", { count: process.nodesCount })}

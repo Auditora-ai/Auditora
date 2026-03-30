@@ -2,6 +2,7 @@
 
 import { config } from "@config";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Turnstile } from "@marsidev/react-turnstile";
 import { Alert, AlertTitle } from "@repo/ui/components/alert";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -16,11 +17,15 @@ import { Input } from "@repo/ui/components/input";
 import { Textarea } from "@repo/ui/components/textarea";
 import { MailCheckIcon, MailIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
+
 export function ContactForm() {
 	const t = useTranslations();
+	const turnstileToken = useRef<string | null>(null);
 
 	const form = useForm({
 		resolver: zodResolver(
@@ -49,6 +54,7 @@ export function ContactForm() {
 						toolUsed: "contact-form",
 						outputData: { name: values.name, message: values.message },
 						source: "contact",
+						turnstileToken: turnstileToken.current,
 					}),
 				},
 			);
@@ -131,6 +137,16 @@ export function ContactForm() {
 								</FormItem>
 							)}
 						/>
+
+						{TURNSTILE_SITE_KEY && (
+							<Turnstile
+								siteKey={TURNSTILE_SITE_KEY}
+								onSuccess={(token) => {
+									turnstileToken.current = token;
+								}}
+								options={{ theme: "light", size: "flexible" }}
+							/>
+						)}
 
 						<Button
 							type="submit"

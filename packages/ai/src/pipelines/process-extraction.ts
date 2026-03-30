@@ -122,6 +122,8 @@ export interface ExtractionResult {
   updatedNodes: Array<{
     id: string;
     label?: string;
+    type?: string;
+    lane?: string;
     properties?: Record<string, any>;
   }>;
   outOfScope?: Array<{

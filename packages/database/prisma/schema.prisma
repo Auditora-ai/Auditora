@@ -1259,6 +1259,7 @@ model AnonymousSession {
   diagramNodes        Json?     // DiagramNode[]
   riskResults         Json?     // RiskAuditResult (instant mode)
   deepRiskResults     Json?     // RiskAuditResult (full mode with FMEA)
+  researchData        Json?     // Business intelligence research findings from web search
   conversationLog     Json?     // Array<{ role, content, timestamp }>
   completenessScore   Int       @default(0)
   convertedToUserId   String?

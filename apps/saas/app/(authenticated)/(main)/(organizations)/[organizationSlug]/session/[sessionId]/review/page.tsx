@@ -390,35 +390,23 @@ export default async function SessionReviewPage({
 				</div>
 			</div>
 
-			{/* Report body */}
+			{/* Report body — Risk-First order */}
 			<main className="mx-auto max-w-5xl space-y-6 px-6 py-8">
 
-				{/* 2. Process Map */}
-				<ProcessMap
-					nodes={session.diagramNodes.map((n) => ({
-						id: n.id,
-						label: n.label,
-						nodeType: n.nodeType,
-						lane: n.lane,
-						state: n.state,
-						confidence: n.confidence,
-					}))}
-				/>
-
-				{/* 3. SIPOC Dashboard */}
-				{auditDel?.status === "completed" && auditData?.updatedScores ? (
-					<SipocDashboard
-						updatedScores={auditData.updatedScores}
-						gaps={auditData.newGaps || []}
-						actions={<RegenerateButton sessionId={sessionId} type="process_audit" />}
+				{/* 2. Risk Heat Map + Opportunities (HERO) */}
+				{riskDel?.status === "completed" && riskData ? (
+					<RiskHeatMap
+						risks={riskData.newRisks || []}
+						summary={riskData.riskSummary || { totalRiskScore: 0, criticalCount: 0, highCount: 0, topRiskArea: "" }}
+						actions={<RegenerateButton sessionId={sessionId} type="risk_audit" />}
 					/>
-				) : auditDel?.status === "failed" ? (
-					<FailedSection title="Cobertura SIPOC" error={auditDel.error} sessionId={sessionId} type="process_audit" />
+				) : riskDel?.status === "failed" ? (
+					<FailedSection title="Mapa de Riesgos" error={riskDel.error} sessionId={sessionId} type="risk_audit" />
 				) : (
-					<SectionSkeleton title="Cobertura SIPOC" />
+					<SectionSkeleton title="Mapa de Riesgos" />
 				)}
 
-				{/* 4. Executive Summary */}
+				{/* 3. Executive Summary */}
 				{summaryDel?.status === "completed" && summaryData ? (
 					<ReportSection title="Resumen Ejecutivo" actions={<RegenerateButton sessionId={sessionId} type="summary" />}>
 						<div className="space-y-5">
@@ -451,7 +439,35 @@ export default async function SessionReviewPage({
 					<SectionSkeleton title="Resumen Ejecutivo" />
 				)}
 
-				{/* 5. Activity Detail Cards with SOPs */}
+				{/* 4. Knowledge Gaps */}
+				{auditData && <KnowledgeGapsSection gaps={auditData.newGaps || []} actions={<RegenerateButton sessionId={sessionId} type="process_audit" />} />}
+
+				{/* 5. Process Map */}
+				<ProcessMap
+					nodes={session.diagramNodes.map((n) => ({
+						id: n.id,
+						label: n.label,
+						nodeType: n.nodeType,
+						lane: n.lane,
+						state: n.state,
+						confidence: n.confidence,
+					}))}
+				/>
+
+				{/* 6. SIPOC Dashboard */}
+				{auditDel?.status === "completed" && auditData?.updatedScores ? (
+					<SipocDashboard
+						updatedScores={auditData.updatedScores}
+						gaps={auditData.newGaps || []}
+						actions={<RegenerateButton sessionId={sessionId} type="process_audit" />}
+					/>
+				) : auditDel?.status === "failed" ? (
+					<FailedSection title="Cobertura SIPOC" error={auditDel.error} sessionId={sessionId} type="process_audit" />
+				) : (
+					<SectionSkeleton title="Cobertura SIPOC" />
+				)}
+
+				{/* 7. Activity Detail Cards with SOPs */}
 				<ActivityCards
 					nodes={session.diagramNodes.map((n) => ({
 						id: n.id,
@@ -465,7 +481,7 @@ export default async function SessionReviewPage({
 					}))}
 				/>
 
-				{/* 6. RACI Matrix */}
+				{/* 8. RACI Matrix */}
 				{raciDel?.status === "completed" ? (
 					<RaciSection data={raciData} actions={<RegenerateButton sessionId={sessionId} type="raci" />} />
 				) : raciDel?.status === "failed" ? (
@@ -474,23 +490,6 @@ export default async function SessionReviewPage({
 					<SectionSkeleton title="Matriz RACI" />
 				)}
 
-				{/* 7. Risk Heat Map + Opportunities */}
-				{riskDel?.status === "completed" && riskData ? (
-					<RiskHeatMap
-						risks={riskData.newRisks || []}
-						summary={riskData.riskSummary || { totalRiskScore: 0, criticalCount: 0, highCount: 0, topRiskArea: "" }}
-						actions={<RegenerateButton sessionId={sessionId} type="risk_audit" />}
-					/>
-				) : riskDel?.status === "failed" ? (
-					<FailedSection title="Mapa de Riesgos" error={riskDel.error} sessionId={sessionId} type="risk_audit" />
-				) : (
-					<SectionSkeleton title="Mapa de Riesgos" />
-				)}
-
-				{/* 8. Knowledge Gaps */}
-				{auditData && <KnowledgeGapsSection gaps={auditData.newGaps || []} actions={<RegenerateButton sessionId={sessionId} type="process_audit" />} />}
-
-				{/* 9. Next Session Intelligence */}
 				{/* 9. Recommendations */}
 				{(auditDel?.status === "completed" || complexityData) ? (
 					<NextSessionIntel

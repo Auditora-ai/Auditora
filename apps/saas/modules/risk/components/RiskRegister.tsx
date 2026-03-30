@@ -65,17 +65,17 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 function getScoreColor(score: number) {
-  if (score >= 20) return "border-l-red-600";
-  if (score >= 12) return "border-l-amber-600";
-  if (score >= 6) return "border-l-sky-500";
-  return "border-l-green-600";
+  if (score >= 20) return "border-l-destructive";
+  if (score >= 12) return "border-l-orientation";
+  if (score >= 6) return "border-l-info";
+  return "border-l-success";
 }
 
 function getScoreBadgeClass(score: number) {
-  if (score >= 20) return "bg-red-600/20 text-red-400";
-  if (score >= 12) return "bg-amber-600/20 text-amber-400";
-  if (score >= 6) return "bg-sky-500/20 text-sky-400";
-  return "bg-green-600/20 text-green-400";
+  if (score >= 20) return "bg-destructive/15 text-red-400";
+  if (score >= 12) return "bg-orientation/15 text-amber-400";
+  if (score >= 6) return "bg-info/15 text-sky-400";
+  return "bg-success/15 text-green-400";
 }
 
 type SortKey = "riskScore" | "severity" | "probability" | "type";
@@ -243,7 +243,7 @@ export function RiskRegister({
                     </div>
                   </div>
                   <ChevronDownIcon
-                    className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform ${isExpanded ? "rotate-180" : ""}`}
+                    className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`}
                   />
                 </div>
 

@@ -1,47 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { extractFromChat } from "@repo/ai";
+import {
+  checkRateLimit as checkLimit,
+  checkDailyCost as checkCost,
+  recordCost,
+  getClientIp,
+} from "@repo/rate-limit";
 
-// In-memory rate limiting
-const ipRequests = new Map<string, { count: number; resetAt: number }>();
 const MAX_MESSAGES_PER_SESSION = 3;
 const MAX_REQUESTS_PER_HOUR = 10;
-
-// Daily cost tracking
-let dailyCost = 0;
-let dailyCostResetAt = Date.now() + 86400000;
 const DAILY_COST_CAP = 10;
 const COST_PER_CALL = 0.01;
+const COST_KEY = "cost:daily:try-extraction";
 
-// Kill switch
 const isDisabled = process.env.DISABLE_PUBLIC_EXTRACTION === "true";
 
-function getClientIp(request: NextRequest): string {
-  return (
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    request.headers.get("x-real-ip") ||
-    "unknown"
-  );
+async function checkRateLimit(ip: string): Promise<boolean> {
+  return checkLimit(`ratelimit:try-extraction:${ip}`, MAX_REQUESTS_PER_HOUR, 3600);
 }
 
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const entry = ipRequests.get(ip);
-  if (!entry || now > entry.resetAt) {
-    ipRequests.set(ip, { count: 1, resetAt: now + 3600000 });
-    return true;
-  }
-  if (entry.count >= MAX_REQUESTS_PER_HOUR) return false;
-  entry.count++;
-  return true;
-}
-
-function checkDailyCost(): boolean {
-  const now = Date.now();
-  if (now > dailyCostResetAt) {
-    dailyCost = 0;
-    dailyCostResetAt = now + 86400000;
-  }
-  return dailyCost < DAILY_COST_CAP;
+async function checkDailyCost(): Promise<boolean> {
+  return checkCost(COST_KEY, DAILY_COST_CAP);
 }
 
 function esc(s: string): string {
@@ -166,7 +145,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (!checkDailyCost()) {
+  if (!(await checkDailyCost())) {
     return NextResponse.json(
       { error: "Service temporarily unavailable. Try again tomorrow." },
       { status: 503 },
@@ -174,7 +153,7 @@ export async function POST(request: NextRequest) {
   }
 
   const ip = getClientIp(request);
-  if (!checkRateLimit(ip)) {
+  if (!(await checkRateLimit(ip))) {
     return NextResponse.json(
       { error: "Too many requests. Please wait." },
       { status: 429 },
@@ -223,7 +202,7 @@ export async function POST(request: NextRequest) {
     }));
 
     const result = await extractFromChat("public", sanitized, []);
-    dailyCost += COST_PER_CALL;
+    await recordCost(COST_KEY, COST_PER_CALL);
 
     const processes = result.extractedProcesses.map((p) => ({
       name: p.name,
@@ -243,7 +222,7 @@ export async function POST(request: NextRequest) {
         messagesRemaining: MAX_MESSAGES_PER_SESSION - messages.length,
       },
       {
-        headers: { "Access-Control-Allow-Origin": "*" },
+        headers: { "Access-Control-Allow-Origin": process.env.NEXT_PUBLIC_MARKETING_URL || "*" },
       },
     );
   } catch {
@@ -264,7 +243,7 @@ export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
     headers: {
-      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Origin": process.env.NEXT_PUBLIC_MARKETING_URL || "*",
       "Access-Control-Allow-Methods": "POST, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type",
     },

@@ -9,13 +9,14 @@ import type { DiagramNode } from "@radiografia/lib/sipoc-to-nodes";
 import type { RiskData } from "@radiografia/lib/types";
 import { ScanHeader } from "./ScanHeader";
 import { InputPhase } from "./InputPhase";
+import { InvestigationBoard } from "./InvestigationBoard";
 import { InstantReport } from "./InstantReport";
 import { DeepConversation } from "./DeepConversation";
 import { DiagramReveal } from "./DiagramReveal";
 import { DeepRiskReport } from "./DeepRiskReport";
 import { ConversionGate } from "./ConversionGate";
 
-type Phase = "input" | "crawling" | "streaming" | "instant" | "deepen" | "sipoc" | "reveal" | "risks" | "convert";
+type Phase = "input" | "crawling" | "researching" | "streaming" | "instant" | "deepen" | "sipoc" | "reveal" | "risks" | "convert";
 
 export function RadiografiaPage() {
 	const t = useTranslations("scan");
@@ -96,50 +97,12 @@ export function RadiografiaPage() {
 				return;
 			}
 
-			// Start the instant radiografia SSE pipeline
-			setPhase("streaming");
-			setStatusMessage(t("analyzingIndustry"));
-
-			try {
-				const res = await fetch("/api/public/scan/instant", {
-					method: "POST",
-				});
-
-				if (!res.ok || !res.body) {
-					setStatusMessage(t("errorGenerating"));
-					setPhase("input");
-					setLoading(false);
-					return;
-				}
-
-				const reader = res.body.getReader();
-				const decoder = new TextDecoder();
-				let buffer = "";
-
-				while (true) {
-					const { done, value } = await reader.read();
-					if (done) break;
-
-					buffer += decoder.decode(value, { stream: true });
-					const lines = buffer.split("\n\n");
-					buffer = lines.pop() || "";
-
-					for (const line of lines) {
-						if (!line.startsWith("data: ")) continue;
-						try {
-							const event = JSON.parse(line.slice(6));
-							handleSSEEvent(event);
-						} catch {
-							// Skip malformed events
-						}
-					}
-				}
-			} catch (error) {
-				console.error("SSE error:", error);
-				setStatusMessage("Error de conexion. Intenta de nuevo.");
-				setPhase("input");
-				setLoading(false);
-			}
+			// Start the research phase (enriched context)
+			// The InvestigationBoard component handles the research SSE stream.
+			// When research completes (or is skipped), it calls handleResearchComplete()
+			// which triggers the instant radiografia pipeline.
+			setPhase("researching");
+			setStatusMessage("Investigando tu industria...")
 		},
 		[createSession],
 	);
@@ -189,6 +152,53 @@ export function RadiografiaPage() {
 				break;
 		}
 	}
+
+	// Called when InvestigationBoard finishes (or is skipped/errors)
+	const handleResearchComplete = useCallback(async () => {
+		setPhase("streaming");
+		setStatusMessage(t("analyzingIndustry"));
+
+		try {
+			const res = await fetch("/api/public/scan/instant", {
+				method: "POST",
+			});
+
+			if (!res.ok || !res.body) {
+				setStatusMessage(t("errorGenerating"));
+				setPhase("input");
+				setLoading(false);
+				return;
+			}
+
+			const reader = res.body.getReader();
+			const decoder = new TextDecoder();
+			let buffer = "";
+
+			while (true) {
+				const { done, value } = await reader.read();
+				if (done) break;
+
+				buffer += decoder.decode(value, { stream: true });
+				const lines = buffer.split("\n\n");
+				buffer = lines.pop() || "";
+
+				for (const line of lines) {
+					if (!line.startsWith("data: ")) continue;
+					try {
+						const event = JSON.parse(line.slice(6));
+						handleSSEEvent(event);
+					} catch {
+						// Skip malformed events
+					}
+				}
+			}
+		} catch (error) {
+			console.error("SSE error:", error);
+			setStatusMessage("Error de conexion. Intenta de nuevo.");
+			setPhase("input");
+			setLoading(false);
+		}
+	}, []);
 
 	function handleDeepen() {
 		setPhase("sipoc");
@@ -259,6 +269,19 @@ export function RadiografiaPage() {
 					<div className="mb-4 mx-auto h-8 w-8 animate-spin rounded-full border-2 border-[#D97706] border-t-transparent" />
 					<p className="text-sm text-muted-foreground">{t("readingWebsite")}</p>
 				</div>
+			</div>,
+		);
+	}
+
+	if (phase === "researching") {
+		return withHeader(
+			<div className="min-h-screen bg-[#FFFBF5] px-4 py-12">
+				<InvestigationBoard
+					companyName={industry?.selectedProcess?.name || "tu empresa"}
+					industry={industry?.industry || ""}
+					sessionToken=""
+					onComplete={() => handleResearchComplete()}
+				/>
 			</div>,
 		);
 	}

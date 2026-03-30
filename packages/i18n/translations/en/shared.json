@@ -2,14 +2,14 @@
 	"pricing": {
 		"choosePlan": "Choose plan",
 		"contactSales": "Contact sales",
-		"description": "Pick the plan that fits your practice. Start with a 14-day free trial.",
+		"description": "Every plan includes the AI engine, automatic BPMN diagramming, and risk analysis. Choose based on your team size.",
 		"getStarted": "Get started",
 		"startTrial": "Start free trial",
 		"month": "{count, plural, one {month} other {{count} months}}",
 		"monthly": "Monthly",
 		"products": {
 			"enterprise": {
-				"description": "Custom deployment for your firm",
+				"description": "For large firms or corporate deployments",
 				"features": {
 					"everythingInTeam": "Everything in Team",
 					"unlimitedMembers": "Unlimited team members",
@@ -22,20 +22,20 @@
 				"title": "Enterprise"
 			},
 			"pro": {
-				"description": "Everything you need to consult smarter",
+				"description": "For the independent consultant who wants to deliver faster",
 				"features": {
 					"freeTrial": "14-day free trial",
-					"unlimitedSessions": "Unlimited meeting sessions",
-					"aiTeleprompter": "Real-time AI teleprompter",
-					"liveBpmn": "Live BPMN diagram generation",
-					"speakerTranscripts": "Speaker-identified transcripts",
+					"unlimitedSessions": "Unlimited discovery sessions",
+					"aiTeleprompter": "AI copilot with contextual questions",
+					"liveBpmn": "Automatically generated BPMN diagrams",
+					"speakerTranscripts": "Speaker-identified session transcripts",
 					"fullBpmnExport": "Full BPMN/XML export",
 					"fiveMembers": "Up to 5 team members"
 				},
 				"title": "Professional"
 			},
 			"team": {
-				"description": "For growing consulting firms",
+				"description": "For consulting firms scaling their practice",
 				"features": {
 					"everythingInPro": "Everything in Professional",
 					"tenMembers": "Up to 10 team members",
@@ -50,7 +50,7 @@
 		"purchase": "Purchase",
 		"recommended": "Recommended",
 		"subscribe": "Subscribe",
-		"title": "From conversation to BPMN diagram",
+		"title": "Invest in your practice, not more hours of manual work",
 		"trialPeriod": "{days} {days, plural, one {day} other {days}} free trial",
 		"year": "{count, plural, one {year} other {{count} years}}",
 		"yearly": "Yearly",

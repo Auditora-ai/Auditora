@@ -74,12 +74,16 @@ export async function POST(
 		}
 
 		// --- FULL & SAVE_ONLY: auto-confirm forming nodes with sufficient quality ---
+		// NULL confidence = human-placed node (trusted), confidence >= 0.4 = AI-generated with reasonable quality
 		await db.diagramNode.updateMany({
 			where: {
 				sessionId,
 				state: "FORMING",
-				confidence: { gte: 0.4 },
 				label: { not: "" },
+				OR: [
+					{ confidence: { gte: 0.4 } },
+					{ confidence: null },
+				],
 			},
 			data: { state: "CONFIRMED", confirmedAt: new Date() },
 		});

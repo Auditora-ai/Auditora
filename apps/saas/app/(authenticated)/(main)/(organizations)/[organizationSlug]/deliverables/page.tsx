@@ -5,7 +5,7 @@ import Link from "next/link";
 import { PageHeader } from "@shared/components/PageHeader";
 
 export const metadata = {
-  title: "Documentacion — Auditora.ai",
+  title: "Entregables — Auditora.ai",
 };
 
 export default async function DeliverablesDashboardPage({
@@ -81,6 +81,22 @@ export default async function DeliverablesDashboardPage({
 
   const deliverables = [
     {
+      href: `/${organizationSlug}/deliverables/risks`,
+      icon: "⚠️",
+      title: "Registro de Riesgos",
+      description: "Matriz consolidada de riesgos con heat map, controles y mitigaciones.",
+      stat: `${riskCount} riesgos`,
+      ready: riskCount > 0,
+    },
+    {
+      href: `/${organizationSlug}/deliverables/raci`,
+      icon: "👥",
+      title: "RACI Consolidado",
+      description: "Matriz de responsabilidades de toda la organizacion.",
+      stat: `${raciCount} asignaciones`,
+      ready: raciCount > 0,
+    },
+    {
       href: `/${organizationSlug}/deliverables/process-cards`,
       icon: "📋",
       title: "Fichas de Proceso",
@@ -97,22 +113,6 @@ export default async function DeliverablesDashboardPage({
       ready: processCount > 0,
     },
     {
-      href: `/${organizationSlug}/deliverables/raci`,
-      icon: "👥",
-      title: "RACI Consolidado",
-      description: "Matriz de responsabilidades de toda la organizacion.",
-      stat: `${raciCount} asignaciones`,
-      ready: raciCount > 0,
-    },
-    {
-      href: `/${organizationSlug}/deliverables/risks`,
-      icon: "⚠️",
-      title: "Registro de Riesgos",
-      description: "Matriz consolidada de riesgos con heat map y mitigaciones.",
-      stat: `${riskCount} riesgos`,
-      ready: riskCount > 0,
-    },
-    {
       href: `/${organizationSlug}/deliverables/horizontal-view`,
       icon: "↔️",
       title: "Vista Horizontal",
@@ -125,8 +125,8 @@ export default async function DeliverablesDashboardPage({
   return (
     <div className="flex h-full flex-col overflow-auto">
       <PageHeader
-        title="Documentacion de Procesos"
-        subtitle={`${activeOrganization.name} — Fuente de verdad. Todos los datos provienen de sesiones reales.`}
+        title="Entregables"
+        subtitle={`${activeOrganization.name} — Riesgos, procesos y documentacion generados por IA desde sesiones reales.`}
         className="mb-0 border-b border-border px-6 py-4"
       />
 
@@ -134,10 +134,10 @@ export default async function DeliverablesDashboardPage({
 
       {/* Stats overview */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        <StatCard label="Riesgos" value={riskCount} accent={riskCount > 0 ? "amber" : undefined} />
         <StatCard label="Procesos" value={processCount} />
         <StatCard label="Documentados" value={documentedCount} accent="green" />
         <StatCard label="Sesiones" value={sessionCount} />
-        <StatCard label="Riesgos" value={riskCount} accent={riskCount > 0 ? "amber" : undefined} />
         <StatCard label="Roles" value={brain?._count.globalRoles ?? 0} />
         <StatCard label="Sistemas" value={brain?._count.globalSystems ?? 0} />
       </div>

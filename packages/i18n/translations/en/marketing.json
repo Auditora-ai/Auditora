@@ -29,110 +29,177 @@
 		"description": "Everything you need to know about Auditora.ai.",
 		"title": "Frequently asked questions",
 		"items": {
-			"howItWorks": {
-				"question": "How does URL analysis work?",
-				"answer": "Paste your company website URL and our AI reads your public pages to understand your business context — industry, services, and operations. From that context, it identifies your most critical process, maps it in BPMN notation, and runs a risk analysis. No internal data access required."
+			"urlLimitations": {
+				"question": "If it only reads my public website, how can it identify real risks?",
+				"answer": "It can't — and we don't claim it does. The instant diagnostic identifies structural and logical risks based on industry patterns and the inferred process structure. Think of them as intelligent hypotheses, not operational findings. It's like the first question a good consultant would ask after seeing your website: \"given what you do, these are the most likely risks.\" Real precision comes when you use the guided conversation or the full platform with actual operational context."
+			},
+			"vsChatgpt": {
+				"question": "How is this different from using ChatGPT to generate processes?",
+				"answer": "Three fundamental differences. First, methodology: every session follows the SIPOC framework with automatic gap detection — ChatGPT doesn't know what it hasn't asked you. Second, deliverables: diagrams are real BPMN 2.0, exportable to XML, not rough sketches. Third, persistence: processes, risks, and mitigations are saved, tracked, and evolve over time — they're not chats that get lost."
 			},
 			"dataAccess": {
-				"question": "What data do you access from my website?",
-				"answer": "We only read publicly available pages on your website — the same content any visitor would see. We crawl up to 5 pages (homepage, about, services) and extract text content. No login credentials, no internal systems, no private data."
+				"question": "What data do you access from my website exactly?",
+				"answer": "We read text content from up to 5 public pages: homepage, about, services, and similar. The same content any visitor sees in a browser. We don't access internal systems, APIs, databases, or protected areas."
 			},
-			"accuracy": {
-				"question": "How accurate is the AI analysis?",
-				"answer": "The instant analysis identifies industry-level risks and common process patterns. For deeper, company-specific insights, use the optional AI conversation to answer guided questions about your operations. The more context you provide, the more precise the risk findings become."
+			"bpmKnowledge": {
+				"question": "Do I need BPM or BPMN knowledge to use the tool?",
+				"answer": "No. Auditora.ai is designed so anyone who knows their business can use it. The AI asks the right questions in plain language, and technical notation is generated automatically. If you're a BPM consultant, the tool accelerates your work. If you're not, the tool handles the technical work for you."
 			},
 			"deepening": {
-				"question": "Can I deepen the analysis beyond the instant report?",
-				"answer": "Yes. After the instant report, you can enter a guided AI conversation. The AI asks targeted questions about your operations — suppliers, inputs, outputs, customers — and builds a much richer process map with detailed risk analysis including failure modes for each activity."
-			},
-			"deliverables": {
-				"question": "What deliverables do I receive?",
-				"answer": "You receive a BPMN 2.0 process map and a detailed risk report with severity scoring, mitigation recommendations, and opportunity identification. After signing up, you can export diagrams, edit them, and track risk mitigation over time."
+				"question": "Can I go deeper than the instant report?",
+				"answer": "Yes. After the diagnostic, you can start a guided conversation with the AI. It asks specific questions about your operations — suppliers, inputs, activities, outputs, customers — and builds a much more detailed analysis. At the end, you receive a complete FMEA with failure modes and Risk Priority Number (RPN) per activity."
 			},
 			"dataSecurity": {
 				"question": "Is my data secure?",
-				"answer": "All data is encrypted in transit and at rest. Anonymous sessions expire after 24 hours if you don't create an account. We never use your data to train AI models. Once you sign up, your data is stored in your organization's private workspace."
+				"answer": "Yes. Encrypted in transit (TLS) and at rest. Anonymous sessions expire in 24 hours. We never use your information to train AI models. When you create an account, your data is stored in your organization's private workspace with complete isolation."
 			},
-			"bpmKnowledge": {
-				"question": "Do I need BPM or process mapping experience?",
-				"answer": "Not at all. Auditora.ai is designed for business owners and directors who have never mapped a process. The AI handles all the technical work — you just answer questions about how your business operates in plain language."
+			"accountMigration": {
+				"question": "What happens to my analysis if I create an account?",
+				"answer": "Everything migrates automatically. Your process map, risk analysis, guided conversation, and generated deliverables transfer intact to your account. You don't lose anything."
 			},
-			"afterSignup": {
-				"question": "What happens after I create an account?",
-				"answer": "Your process map and risk analysis are saved permanently. You can edit diagrams, map additional processes, run live AI-guided sessions with your team, track risk mitigation, and export professional deliverables."
+			"vsProcessMining": {
+				"question": "Is this process mining?",
+				"answer": "No. Process mining analyzes system logs (ERP, CRM) to discover how processes actually execute. Auditora.ai is an elicitation-based process discovery tool — it guides conversations to document processes and analyze risks. They're complementary approaches: process mining needs system data, Auditora.ai needs human knowledge."
 			}
 		}
 	},
 	"home": {
 		"hero": {
-			"badge": "Free AI Business Scanner",
-			"title": "Discover hidden risks in your business",
-			"subtitle": "Paste your website URL. Our AI analyzes your business and delivers a complete process map with risk analysis — in under 60 seconds.",
+			"badge": "AI-powered process discovery platform",
+			"title": "Document processes in minutes, not weeks",
+			"subtitle": "Auditora.ai guides elicitation conversations with artificial intelligence, generates BPMN diagrams in real time, and runs automatic risk analysis. For consultants and auditors who value their time.",
 			"inputPlaceholder": "https://your-company.com",
-			"cta": "Analyze Now",
+			"cta": "Try with my website",
 			"ctaSecondary": "Or describe your business manually",
-			"subtext": "Free. No signup required. Results in 60 seconds."
+			"subtext": "Paste any URL. The AI analyzes your public context and generates a free initial diagnostic with process map and risks."
+		},
+		"problem": {
+			"badge": "The problem",
+			"title": "Process discovery is broken",
+			"card1": {
+				"title": "Weeks of interviews, diagrams nobody reads",
+				"description": "Schedule meetings. Take notes by hand. Spend hours in Visio or Lucidchart translating what you heard into BPMN. Send draft. Wait for corrections. Repeat. A single process can take 2-4 weeks. Your client already lost patience."
+			},
+			"card2": {
+				"title": "$50,000 tools that need data you don't have",
+				"description": "Celonis, Minit, UiPath Process Mining — all promise to discover processes automatically. But they need system logs, ERP access, technical integration. Your client doesn't even have a properly implemented CRM. Process mining isn't for 95% of businesses."
+			},
+			"card3": {
+				"title": "Copy-pasting into ChatGPT isn't a methodology",
+				"description": "Yes, you can ask ChatGPT to generate a BPMN. The result is generic, has no real business context, doesn't follow an elicitation methodology, and gives you nothing you can defend before a committee. It's a band-aid, not a professional tool."
+			}
+		},
+		"solution": {
+			"badge": "The solution",
+			"title": "An AI copilot that knows how to elicit processes",
+			"description": "Auditora.ai isn't a generic chatbot or a process mining tool. It's a process discovery platform that combines the SIPOC methodology with artificial intelligence to guide elicitation, document in BPMN 2.0 in real time, and generate risk analysis with severity scoring — all during the conversation, not after.",
+			"diff1": {
+				"title": "Real methodology, not generic prompts",
+				"description": "Every conversation follows the SIPOC framework (Suppliers, Inputs, Process, Outputs, Customers). The AI detects coverage gaps and generates contextual questions to fill them. It doesn't improvise — it investigates."
+			},
+			"diff2": {
+				"title": "BPMN 2.0 diagrams as you talk",
+				"description": "Don't transcribe, don't redraw. The diagram builds during the session. Exportable to XML, compatible with Camunda, Signavio, and any BPMN tool."
+			},
+			"diff3": {
+				"title": "Automatic structural risk analysis",
+				"description": "Every process activity is evaluated against potential failure modes. You receive an FMEA matrix with Risk Priority Number (RPN), not a generic list of \"possible risks\"."
+			}
 		},
 		"howItWorks": {
-			"badge": "How it works",
-			"title": "From URL to actionable insights in three steps",
+			"badge": "Free instant diagnostic",
+			"title": "See what the AI discovers from your public information alone",
+			"subtitle": "This diagnostic uses only your public web pages. It's a starting point — not a final audit. If this surprises you, imagine the result when you give it real context.",
 			"step1": {
-				"title": "Paste your URL",
-				"description": "Enter your company website. Our AI reads your public pages to understand your business — industry, services, and operations."
+				"title": "Enter your URL",
+				"description": "The AI reads up to 5 public pages from your site — homepage, about, services. The same content any visitor sees."
 			},
 			"step2": {
-				"title": "AI maps your processes",
-				"description": "Automatic industry detection, critical process mapping in BPMN notation, and risk identification — all in under 60 seconds."
+				"title": "Context inference",
+				"description": "Identifies your industry, main services, and selects the most critical process. Generates an initial SIPOC map and process diagram."
 			},
 			"step3": {
-				"title": "Get your risk report",
-				"description": "Receive a visual process map and detailed risk analysis with severity scoring, bottlenecks, and improvement opportunities."
+				"title": "Risk diagnostic",
+				"description": "Evaluates structural risks in the identified process: logical gaps in the flow, fragile dependencies, uncontrolled points. Scores by severity and probability."
 			},
 			"step4": {
-				"title": "Deepen and act",
-				"description": "Optionally answer AI-guided questions for deeper analysis. Sign up to save, edit, and track risk mitigation over time."
+				"title": "Deepen with guided conversation",
+				"description": "Optionally, enter a Q&A session with the AI. The more context you provide, the more specific and actionable the analysis becomes. At the end, you'll receive a complete FMEA."
+			},
+			"disclaimer": "Risks identified in the instant diagnostic are logical inferences based on process structure, not detections of actual operational problems. For specific findings, use the guided conversation or the full platform."
+		},
+		"deepDive": {
+			"badge": "Where the real magic happens",
+			"title": "A guided conversation that builds your analysis",
+			"subtitle": "The instant diagnostic is the appetizer. The guided conversation is where Auditora.ai differentiates from every other tool.",
+			"methodTitle": "Socratic dialogue + SIPOC",
+			"methodDescription": "The AI doesn't ask you to \"describe your process\". It asks targeted questions based on gaps it detects in your SIPOC map:",
+			"question1": "\"You mentioned 3 suppliers but only 1 input. Who else provides materials or information to this step?\"",
+			"question2": "\"Your process has 5 activities but no branching. Is there a point where the flow changes based on a condition?\"",
+			"question3": "\"You identified the end customer but not the internal customer. Who receives this step's output before it reaches the customer?\"",
+			"methodNote": "Each question closes a specific gap. No generic questions.",
+			"outputTitle": "What you get at the end",
+			"instant": {
+				"label": "Instant diagnostic",
+				"processes": "1 process mapped",
+				"risks": "3-5 general risks",
+				"analysis": "Basic scoring",
+				"diagram": "Basic SIPOC"
+			},
+			"guided": {
+				"label": "After guided conversation",
+				"processes": "Enriched process with 2-3x more activities",
+				"risks": "10-15+ specific risks with failure modes",
+				"analysis": "Complete FMEA with RPN per activity",
+				"diagram": "Exportable BPMN 2.0"
 			}
 		},
-		"benefits": {
-			"badge": "Why Auditora.ai",
-			"title": "Process discovery that starts from your website",
-			"description": "No data uploads. No meetings. No system logs. Just your public URL and 60 seconds.",
-			"benefit1": {
-				"title": "Zero Friction Discovery",
-				"subtitle": "No internal data required.",
-				"description": "Traditional process mining requires system logs, interviews, and weeks of preparation. Auditora.ai starts from your public website — the AI infers your critical processes from what's already visible.",
-				"point1": "No data uploads or integrations",
-				"point2": "No meetings or interviews needed",
-				"point3": "Results in under 60 seconds"
+		"platform": {
+			"badge": "The full platform",
+			"title": "From a free diagnostic to your process management system",
+			"subtitle": "The free scan shows what the AI can do. The platform is where you do real work with your clients.",
+			"feature1": {
+				"title": "Process library",
+				"description": "All mapped processes in one place. Search, filter, and navigate the process inventory for each client."
 			},
-			"benefit2": {
-				"title": "Instant Risk Analysis",
-				"subtitle": "Spot what you're missing.",
-				"description": "Every business has hidden operational risks — bottlenecks, compliance gaps, single points of failure. Our AI identifies them automatically and scores them by severity and probability.",
-				"point1": "Bottlenecks and inefficiencies detected",
-				"point2": "Compliance and operational gaps flagged",
-				"point3": "Severity scoring with mitigation recommendations"
+			"feature2": {
+				"title": "Guided discovery sessions",
+				"description": "Start elicitation sessions with the AI as copilot. Contextual questions based on SIPOC coverage in real time."
 			},
-			"benefit3": {
-				"title": "Professional Process Maps",
-				"subtitle": "BPMN diagrams you can actually use.",
-				"description": "Get industry-standard BPMN 2.0 process diagrams — not generic flowcharts. Export them, share them with your team, or import them into Camunda, Signavio, or any BPMN-compatible tool.",
-				"point1": "BPMN 2.0 compliant diagrams",
-				"point2": "Export and share with your team",
-				"point3": "Compatible with industry tools"
+			"feature3": {
+				"title": "Automatic BPMN diagrams",
+				"description": "Diagrams are generated and updated during the session. Export XML, PNG, or PDF. Compatible with Camunda, Signavio, Bizagi."
 			},
-			"benefit4": {
-				"title": "AI-Guided Deep Analysis",
-				"subtitle": "Go deeper when you need to.",
-				"description": "The instant report is just the beginning. Answer guided questions and the AI builds a complete SIPOC analysis with failure modes for every activity — consulting-grade deliverables in minutes, not weeks.",
-				"point1": "Guided conversation, no jargon required",
-				"point2": "FMEA analysis for every process step",
-				"point3": "From 5 general risks to 15+ specific findings"
-			}
+			"feature4": {
+				"title": "Risk management & mitigation",
+				"description": "Every identified risk becomes a trackable item. Assign owners, define mitigation plans, monitor progress."
+			},
+			"feature5": {
+				"title": "Team collaboration",
+				"description": "Invite your team. Share processes, assign sessions, review deliverables. Granular roles and permissions."
+			},
+			"feature6": {
+				"title": "Professional deliverables",
+				"description": "Export client-ready reports: process maps, RACI matrices, risk analyses, process cards."
+			},
+			"cta": "Create free account — your diagnostic is preserved",
+			"ctaSubtext": "Everything you generated in the free scan migrates automatically to your account."
 		},
-		"socialProof": {
-			"title": "Join the companies discovering risks they didn't know existed",
-			"counter": "businesses analyzed"
+		"credibility": {
+			"badge": "Why trust Auditora.ai",
+			"title": "Built on methodology, not hype",
+			"pillar1": {
+				"title": "Industry-recognized frameworks",
+				"description": "SIPOC (Six Sigma), BPMN 2.0 (OMG), FMEA (ISO/SAE). We didn't invent anything. We automate the same tools the best consultants already use."
+			},
+			"pillar2": {
+				"title": "Full transparency",
+				"description": "We tell you exactly what the AI can and can't do. The instant diagnostic identifies logical risks, not operational ones. Precision improves with every minute of context you provide. No exaggerated promises."
+			},
+			"pillar3": {
+				"title": "Your data is yours",
+				"description": "Encrypted in transit and at rest. Anonymous sessions expire in 24 hours. We never use your information to train models. GDPR compliant."
+			}
 		},
 		"tools": {
 			"title": "Free AI Tools for Process Professionals",
@@ -156,10 +223,10 @@
 		"title": "Get early access"
 	},
 	"cta": {
-		"title": "Your business has hidden risks. Find them now.",
-		"subtitle": "Join the companies that discovered operational risks they didn't know existed.",
-		"button": "Scan My Business Free",
-		"note": "No credit card. No signup. Results in 60 seconds."
+		"title": "Every undocumented process is a decision without evidence",
+		"subtitle": "Start with a free diagnostic. See what the AI infers from your public information. Decide later if you want to go deeper.",
+		"button": "Get free diagnostic",
+		"note": "No credit card. No signup. Your first process map in minutes."
 	},
 	"notFound": {
 		"code": "404",

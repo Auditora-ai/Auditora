@@ -63,11 +63,10 @@ export default async function RiskRegisterPage({
           <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
           </svg>
-          Volver a Documentacion
+          Volver a Entregables
         </Link>
         <h1
-          className="text-2xl font-semibold text-foreground"
-          style={{ fontFamily: "'Geist Sans', system-ui, sans-serif" }}
+          className="text-2xl font-semibold text-foreground font-sans"
         >
           Registro de Riesgos
         </h1>
@@ -81,7 +80,7 @@ export default async function RiskRegisterPage({
       ) : (
         <>
           {/* Summary stats */}
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="rounded-lg border border-border bg-background p-4 text-center">
               <p className="text-2xl font-semibold text-foreground">{risks.length}</p>
               <p className="text-xs text-muted-foreground">Total Riesgos</p>

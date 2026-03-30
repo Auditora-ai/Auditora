@@ -51,8 +51,8 @@ export interface SessionContext {
 }
 
 // Cache to avoid refetching mid-session (with TTL so mid-session changes propagate)
-const contextCache = new Map<string, SessionContext>();
-const contextCacheTime = new Map<string, number>();
+interface CacheEntry { context: SessionContext; cachedAt: number }
+const contextCache = new Map<string, CacheEntry>();
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
 /**
@@ -63,9 +63,8 @@ const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 export async function buildSessionContext(
   sessionId: string,
 ): Promise<SessionContext> {
-  const cached = contextCache.get(sessionId);
-  const cachedAt = contextCacheTime.get(sessionId) ?? 0;
-  if (cached && Date.now() - cachedAt < CACHE_TTL) return cached;
+  const entry = contextCache.get(sessionId);
+  if (entry && Date.now() - entry.cachedAt < CACHE_TTL) return entry.context;
 
   const session = await db.meetingSession.findUnique({
     where: { id: sessionId },
@@ -191,8 +190,7 @@ export async function buildSessionContext(
     intelligence,
   };
 
-  contextCache.set(sessionId, context);
-  contextCacheTime.set(sessionId, Date.now());
+  contextCache.set(sessionId, { context, cachedAt: Date.now() });
   return context;
 }
 
@@ -202,5 +200,4 @@ export async function buildSessionContext(
  */
 export function clearSessionContextCache(sessionId: string) {
   contextCache.delete(sessionId);
-  contextCacheTime.delete(sessionId);
 }

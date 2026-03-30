@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
 	}
 
 	const ip = getClientIp(request);
-	if (!checkRateLimit(ip, 10)) {
+	if (!(await checkRateLimit(ip, 10))) {
 		return NextResponse.json(
 			{ error: "Too many requests" },
 			{ status: 429 },

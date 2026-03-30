@@ -29,7 +29,11 @@ export default async function ProcessHubPage({
 		},
 		include: {
 			_count: {
-				select: { sessions: true, versions: true },
+				select: { sessions: true, versions: true, risks: true },
+			},
+			risks: {
+				where: { severity: { gte: 4 }, probability: { gte: 4 }, status: { notIn: ["CLOSED", "ACCEPTED"] } },
+				select: { id: true },
 			},
 		},
 		orderBy: { createdAt: "desc" },
@@ -46,6 +50,8 @@ export default async function ProcessHubPage({
 		versionsCount: pd._count.versions,
 		sessionsCount: pd._count.sessions,
 		hasBpmn: !!pd.bpmnXml,
+		riskCount: pd._count.risks,
+		criticalRiskCount: pd.risks.length,
 	}));
 
 	return (

@@ -2,14 +2,14 @@
 	"pricing": {
 		"choosePlan": "Elegir plan",
 		"contactSales": "Contactar ventas",
-		"description": "Elige el plan que se adapte a tu práctica. Comienza con 14 días de prueba gratis.",
+		"description": "Cada plan incluye el motor de IA, diagramación BPMN automática y análisis de riesgos. Elige según el tamaño de tu equipo.",
 		"getStarted": "Comenzar",
 		"startTrial": "Iniciar prueba gratis",
 		"month": "{count, plural, one {mes} other {{count} meses}}",
 		"monthly": "Mensual",
 		"products": {
 			"enterprise": {
-				"description": "Despliegue personalizado para tu firma",
+				"description": "Para firmas grandes o despliegues corporativos",
 				"features": {
 					"everythingInTeam": "Todo lo de Team",
 					"unlimitedMembers": "Miembros de equipo ilimitados",
@@ -22,20 +22,20 @@
 				"title": "Enterprise"
 			},
 			"pro": {
-				"description": "Todo lo que necesitas para consultar mejor",
+				"description": "Para el consultor independiente que quiere entregar más rápido",
 				"features": {
 					"freeTrial": "14 días de prueba gratis",
-					"unlimitedSessions": "Sesiones de reunión ilimitadas",
-					"aiTeleprompter": "Teleprompter de IA en tiempo real",
-					"liveBpmn": "Generación de diagramas BPMN en vivo",
-					"speakerTranscripts": "Transcripciones identificadas por hablante",
+					"unlimitedSessions": "Sesiones de descubrimiento ilimitadas",
+					"aiTeleprompter": "Copiloto de IA con preguntas contextuales",
+					"liveBpmn": "Diagramas BPMN generados automáticamente",
+					"speakerTranscripts": "Transcripciones de sesión con identificación de hablante",
 					"fullBpmnExport": "Exportación completa BPMN/XML",
 					"fiveMembers": "Hasta 5 miembros del equipo"
 				},
 				"title": "Profesional"
 			},
 			"team": {
-				"description": "Para firmas de consultoría en crecimiento",
+				"description": "Para firmas de consultoría que escalan su operación",
 				"features": {
 					"everythingInPro": "Todo lo de Profesional",
 					"tenMembers": "Hasta 10 miembros del equipo",
@@ -50,7 +50,7 @@
 		"purchase": "Comprar",
 		"recommended": "Recomendado",
 		"subscribe": "Suscribirse",
-		"title": "De conversación a diagrama BPMN",
+		"title": "Invierte en tu práctica, no en más horas de trabajo manual",
 		"trialPeriod": "{days} {days, plural, one {día} other {días}} de prueba gratis",
 		"year": "{count, plural, one {año} other {{count} años}}",
 		"yearly": "Anual",

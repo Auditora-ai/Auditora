@@ -7,6 +7,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@repo/database";
+import { verifyAnonymousSession } from "@radiografia/lib/session-verify";
 import { generateNextQuestion } from "@repo/ai";
 import {
 	getClientIp,
@@ -28,26 +29,17 @@ export async function POST(request: NextRequest) {
 	}
 
 	const ip = getClientIp(request);
-	if (!checkRateLimit(ip, 60)) {
+	if (!(await checkRateLimit(ip, 60))) {
 		return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
 	}
 
-	if (!checkDailyCost()) {
+	if (!(await checkDailyCost())) {
 		return NextResponse.json({ error: "Service temporarily unavailable" }, { status: 503 });
 	}
 
-	const sessionToken = request.cookies.get("scan_session")?.value;
-	if (!sessionToken) {
-		return NextResponse.json({ error: "No session" }, { status: 401 });
-	}
-
-	const session = await db.anonymousSession.findUnique({
-		where: { id: sessionToken },
-	});
-
-	if (!session || session.expiresAt < new Date()) {
-		return NextResponse.json({ error: "Session expired" }, { status: 410 });
-	}
+	const sessionResult = await verifyAnonymousSession(request);
+	if (sessionResult.error) return sessionResult.error;
+	const session = sessionResult.session;
 
 	const body = await request.json();
 	const { message } = body as { message: string };
@@ -103,7 +95,7 @@ export async function POST(request: NextRequest) {
 		undefined,
 		"explorar",
 	);
-	recordCost(1);
+	await recordCost(1);
 
 	// Add AI response to conversation
 	const aiMessage: ChatMessage = {
@@ -115,7 +107,7 @@ export async function POST(request: NextRequest) {
 
 	// Update session
 	await db.anonymousSession.update({
-		where: { id: sessionToken },
+		where: { id: session.id },
 		data: {
 			phase: "sipoc",
 			conversationLog: conversationLog as any,

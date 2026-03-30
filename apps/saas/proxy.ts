@@ -1,8 +1,4 @@
-import { routing } from "@i18n/routing";
-import type { NextRequest } from "next/server";
-import createMiddleware from "next-intl/middleware";
-
-const intlMiddleware = createMiddleware(routing);
+import { type NextRequest, NextResponse } from "next/server";
 
 const securityHeaders: Record<string, string> = {
 	"X-Frame-Options": "DENY",
@@ -10,20 +6,22 @@ const securityHeaders: Record<string, string> = {
 	"Referrer-Policy": "strict-origin-when-cross-origin",
 	"Permissions-Policy": "camera=(), microphone=(), geolocation=()",
 	"Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+	// Start as report-only to avoid breaking inline scripts from Next.js/Turnstile/analytics.
+	// Once verified in production, switch to Content-Security-Policy.
 	"Content-Security-Policy-Report-Only": [
 		"default-src 'self'",
 		"script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com",
 		"style-src 'self' 'unsafe-inline'",
 		"img-src 'self' data: https:",
 		"font-src 'self'",
-		"connect-src 'self' https://challenges.cloudflare.com",
+		"connect-src 'self' https://challenges.cloudflare.com https://*.supabase.co",
 		"frame-src https://challenges.cloudflare.com",
 		"frame-ancestors 'none'",
 	].join("; "),
 };
 
-export default async function proxy(req: NextRequest) {
-	const response = intlMiddleware(req);
+export default function proxy(request: NextRequest) {
+	const response = NextResponse.next();
 
 	for (const [header, value] of Object.entries(securityHeaders)) {
 		response.headers.set(header, value);
@@ -34,6 +32,7 @@ export default async function proxy(req: NextRequest) {
 
 export const config = {
 	matcher: [
-		"/((?!images|fonts|_next/static|_next/image|favicon.ico|icon.png|sitemap.xml|robots.txt).*)",
+		// Match all paths except static files and Next.js internals
+		"/((?!_next/static|_next/image|favicon.ico).*)",
 	],
 };

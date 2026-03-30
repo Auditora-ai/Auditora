@@ -15,6 +15,7 @@
 
 import { NextRequest } from "next/server";
 import { db } from "@repo/database";
+import { verifyAnonymousSession } from "@radiografia/lib/session-verify";
 import { extractSipoc, auditRisks } from "@repo/ai";
 import type { RiskAuditInput } from "@repo/ai";
 import { inferIndustry } from "@radiografia/lib/industry-inference";
@@ -37,26 +38,17 @@ export async function POST(request: NextRequest) {
 	}
 
 	const ip = getClientIp(request);
-	if (!checkRateLimit(ip, 3)) {
+	if (!(await checkRateLimit(ip, 3))) {
 		return new Response("Rate limit exceeded", { status: 429 });
 	}
 
-	if (!checkDailyCost()) {
+	if (!(await checkDailyCost())) {
 		return new Response("Service temporarily unavailable", { status: 503 });
 	}
 
-	const sessionToken = request.cookies.get("scan_session")?.value;
-	if (!sessionToken) {
-		return new Response("No session", { status: 401 });
-	}
-
-	const session = await db.anonymousSession.findUnique({
-		where: { id: sessionToken },
-	});
-
-	if (!session || session.expiresAt < new Date()) {
-		return new Response("Session expired", { status: 410 });
-	}
+	const result = await verifyAnonymousSession(request);
+	if (result.error) return result.error;
+	const session = result.session;
 
 	const businessContext =
 		session.businessContext || session.businessDescription;
@@ -86,7 +78,7 @@ export async function POST(request: NextRequest) {
 				send("industry", null, "Analizando tu industria...");
 				const industryResult =
 					await inferIndustry(businessContext);
-				recordCost(1);
+				await recordCost(1);
 
 				if (!industryResult) {
 					send("error", { code: "INDUSTRY_FAILED" }, "No pudimos analizar tu industria. Intenta de nuevo.");
@@ -104,7 +96,7 @@ export async function POST(request: NextRequest) {
 					processDescription,
 					"public",
 				);
-				recordCost(1);
+				await recordCost(1);
 
 				send("sipoc", sipocResult, "SIPOC generado");
 
@@ -144,13 +136,13 @@ export async function POST(request: NextRequest) {
 				};
 
 				const riskResult = await auditRisks(riskInput);
-				recordCost(1);
+				await recordCost(1);
 
 				send("risks", riskResult, "Riesgos identificados");
 
 				// Update anonymous session with all results
 				await db.anonymousSession.update({
-					where: { id: sessionToken },
+					where: { id: session.id },
 					data: {
 						phase: "instant",
 						industry: industryResult.industry,

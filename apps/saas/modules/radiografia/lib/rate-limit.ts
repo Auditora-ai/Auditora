@@ -1,60 +1,39 @@
 /**
  * Rate Limiting for Radiografia Public API
  *
- * IP-based rate limiting + global daily cost cap.
- * Pattern adapted from try-extraction/route.ts.
+ * Redis-backed rate limiting + global daily cost cap.
+ * Falls back to in-memory if Redis is unavailable.
  */
 
 import type { NextRequest } from "next/server";
+import {
+	checkRateLimit as checkLimit,
+	checkDailyCost as checkCost,
+	recordCost as recordCostShared,
+	getClientIp as getIp,
+} from "@repo/rate-limit";
 
-// Per-IP tracking
-const ipRequests = new Map<
-	string,
-	{ count: number; resetAt: number }
->();
-
-// Global cost tracking
-let dailyCost = 0;
-let dailyCostResetAt = Date.now() + 86_400_000;
 const DAILY_COST_CAP = 50; // Higher than try-extraction since this is the onboarding funnel
 const COST_PER_LLM_CALL = 0.02;
+const COST_KEY = "cost:daily:scan";
 
 export function getClientIp(request: NextRequest): string {
-	return (
-		request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-		request.headers.get("x-real-ip") ||
-		"unknown"
-	);
+	return getIp(request);
 }
 
-export function checkRateLimit(
+export async function checkRateLimit(
 	ip: string,
 	maxPerHour: number,
-): boolean {
-	const now = Date.now();
-	const entry = ipRequests.get(ip);
-
-	if (!entry || now > entry.resetAt) {
-		ipRequests.set(ip, { count: 1, resetAt: now + 3_600_000 });
-		return true;
-	}
-
-	if (entry.count >= maxPerHour) return false;
-	entry.count++;
-	return true;
+): Promise<boolean> {
+	return checkLimit(`ratelimit:scan:${ip}`, maxPerHour, 3600);
 }
 
-export function checkDailyCost(): boolean {
-	const now = Date.now();
-	if (now > dailyCostResetAt) {
-		dailyCost = 0;
-		dailyCostResetAt = now + 86_400_000;
-	}
-	return dailyCost < DAILY_COST_CAP;
+export async function checkDailyCost(): Promise<boolean> {
+	return checkCost(COST_KEY, DAILY_COST_CAP);
 }
 
-export function recordCost(llmCalls: number = 1): void {
-	dailyCost += COST_PER_LLM_CALL * llmCalls;
+export async function recordCost(llmCalls = 1): Promise<void> {
+	await recordCostShared(COST_KEY, COST_PER_LLM_CALL * llmCalls);
 }
 
 export function isKillSwitchActive(): boolean {

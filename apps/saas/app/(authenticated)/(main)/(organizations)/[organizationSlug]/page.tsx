@@ -1,6 +1,5 @@
 import { getActiveOrganization } from "@auth/lib/server";
-import { CommandCenter, type SessionData, type ProcessData } from "@command-center/components/CommandCenter";
-import type { SessionSuggestion } from "@command-center/components/SessionSuggestions";
+import { RiskDashboard, type TopRisk, type ActivityItem } from "@command-center/components/RiskDashboard";
 import { db } from "@repo/database";
 import { notFound } from "next/navigation";
 
@@ -16,49 +15,6 @@ export async function generateMetadata({
 	return { title: activeOrganization?.name };
 }
 
-/**
- * Compute session suggestions from existing process data (zero extra queries).
- * Rules:
- * - Process with bpmnXml but 0 RACI entries → suggest DEEP_DIVE for RACI
- * - Process with RACI but 0 risks → suggest risk session
- * - Process with completeness < 50% → suggest CONTINUATION
- */
-function computeSuggestions(
-	processes: ProcessData[],
-	sessions: SessionData[],
-): SessionSuggestion[] {
-	const suggestions: SessionSuggestion[] = [];
-	const now = new Date();
-
-	for (const proc of processes) {
-		// Skip processes that already have a scheduled session
-		const hasScheduled = sessions.some(
-			(s) => s.processDefinition?.id === proc.id && s.status === "SCHEDULED",
-		);
-		if (hasScheduled) continue;
-
-		if (proc.bpmnXml && proc._count.raciEntries === 0) {
-			suggestions.push({
-				type: "raci_gap",
-				processId: proc.id,
-				processName: proc.name,
-				message: "RACI pendiente — agenda un Deep Dive para asignar responsables",
-				suggestedType: "DEEP_DIVE",
-			});
-		} else if (proc._count.raciEntries > 0 && proc._count.risks === 0) {
-			suggestions.push({
-				type: "no_risks",
-				processId: proc.id,
-				processName: proc.name,
-				message: "Sin riesgos documentados — agenda una sesión de análisis de riesgos",
-				suggestedType: "DEEP_DIVE",
-			});
-		}
-	}
-
-	return suggestions.slice(0, 6);
-}
-
 export default async function OrganizationPage({
 	params,
 }: {
@@ -70,78 +26,167 @@ export default async function OrganizationPage({
 
 	const orgId = activeOrganization.id;
 
-	// Fetch sessions + architecture with processes in parallel
-	const [sessions, architecture] = await Promise.all([
-		db.meetingSession.findMany({
-			where: {
-				organizationId: orgId,
-				status: { in: ["SCHEDULED", "CONNECTING", "ACTIVE"] },
-			},
-			include: {
-				processDefinition: { select: { id: true, name: true } },
-				participants: {
-					select: { name: true, email: true, role: true, participantType: true },
-				},
-				_count: {
-					select: { diagramNodes: true, transcriptEntries: true, intakeResponses: true },
-				},
-			},
-			orderBy: { createdAt: "desc" },
-			take: 50,
-		}),
-		db.processArchitecture.findUnique({
-			where: { organizationId: orgId },
-			select: {
-				id: true,
-				definitions: {
-					where: { level: "PROCESS" },
-					orderBy: { priority: "asc" },
-					select: {
-						id: true,
-						name: true,
-						bpmnXml: true,
-						intelligence: { select: { id: true } },
-						_count: {
-							select: {
-								sessions: true,
-								children: true,
-								raciEntries: true,
-								risks: true,
-							},
-						},
-					},
-				},
-			},
-		}),
-	]);
+	const architecture = await db.processArchitecture.findUnique({
+		where: { organizationId: orgId },
+		select: { id: true },
+	});
 
-	const processes: ProcessData[] = (architecture?.definitions ?? []).map((d) => ({
-		id: d.id,
-		name: d.name,
-		bpmnXml: d.bpmnXml,
-		intelligence: d.intelligence,
-		_count: d._count,
+	// Parallel queries for dashboard data
+	const [processes, topRisksRaw, nextSession, activeSession, recentSessions] =
+		await Promise.all([
+			// Process stats
+			architecture
+				? db.processDefinition.findMany({
+						where: {
+							architectureId: architecture.id,
+							level: "PROCESS",
+						},
+						select: {
+							id: true,
+							versions: { select: { id: true }, take: 1 },
+							risks: { select: { id: true }, take: 1 },
+						},
+					})
+				: Promise.resolve([]),
+
+			// Top risks by score
+			architecture
+				? db.processRisk.findMany({
+						where: {
+							processDefinition: { architectureId: architecture.id },
+							status: { notIn: ["CLOSED", "ACCEPTED"] },
+						},
+						orderBy: { riskScore: "desc" },
+						take: 5,
+						select: {
+							id: true,
+							title: true,
+							description: true,
+							severity: true,
+							probability: true,
+							riskScore: true,
+							processDefinition: { select: { name: true } },
+						},
+					})
+				: Promise.resolve([]),
+
+			// Next scheduled session
+			db.meetingSession.findFirst({
+				where: {
+					organizationId: orgId,
+					status: "SCHEDULED",
+					scheduledFor: { gte: new Date() },
+				},
+				orderBy: { scheduledFor: "asc" },
+				select: {
+					id: true,
+					scheduledFor: true,
+					processDefinition: { select: { name: true } },
+					status: true,
+				},
+			}),
+
+			// Active session check
+			db.meetingSession.findFirst({
+				where: {
+					organizationId: orgId,
+					status: { in: ["ACTIVE", "CONNECTING"] },
+				},
+				select: { id: true },
+			}),
+
+			// Recent ended sessions for activity feed
+			db.meetingSession.findMany({
+				where: { organizationId: orgId, status: "ENDED" },
+				orderBy: { updatedAt: "desc" },
+				take: 5,
+				select: {
+					id: true,
+					updatedAt: true,
+					processDefinition: { select: { name: true } },
+					_count: { select: { diagramNodes: true } },
+				},
+			}),
+		]);
+
+	const totalProcesses = processes.length;
+	const documentedProcesses = processes.filter(
+		(p) => p.versions.length > 0,
+	).length;
+	const riskCount = architecture
+		? await db.processRisk.count({
+				where: {
+					processDefinition: { architectureId: architecture.id },
+				},
+			})
+		: 0;
+
+	// Maturity score calculation (mirrors getNavSummary)
+	const processesWithRisks = processes.filter(
+		(p) => p.risks.length > 0,
+	).length;
+	const processDocumentation =
+		totalProcesses > 0 ? documentedProcesses / totalProcesses : 0;
+	const riskCoverage =
+		totalProcesses > 0 ? processesWithRisks / totalProcesses : 0;
+	const maturityScore = Math.round(
+		(processDocumentation * 0.3 + riskCoverage * 0.3) * 100,
+	);
+
+	const topRisks: TopRisk[] = topRisksRaw.map((r) => ({
+		id: r.id,
+		title: r.title,
+		description: r.description,
+		processName: r.processDefinition.name,
+		severity: r.severity,
+		probability: r.probability,
+		riskScore: r.riskScore,
 	}));
 
-	const processCount = processes.length;
-	const documentedCount = processes.filter((p) => p.bpmnXml).length;
-	const coveragePercent = processCount > 0 ? Math.round((documentedCount / processCount) * 100) : 0;
-
-	const typedSessions = sessions as unknown as SessionData[];
-	const suggestions = computeSuggestions(processes, typedSessions);
+	const recentActivity: ActivityItem[] = recentSessions.map((s) => ({
+		type: "session_ended" as const,
+		title: `Sesión "${s.processDefinition?.name ?? "Sin proceso"}" completada`,
+		subtitle: `${s._count.diagramNodes} nodos extraídos`,
+		date: formatRelativeDate(s.updatedAt),
+	}));
 
 	return (
 		<div className="h-[calc(100vh-64px)]">
-			<CommandCenter
-				sessions={typedSessions}
+			<RiskDashboard
 				organizationId={orgId}
 				organizationName={activeOrganization.name}
 				organizationSlug={organizationSlug}
-				processCount={processCount}
-				coveragePercent={coveragePercent}
-				processes={processes}
-				suggestions={suggestions}
+				maturityScore={maturityScore}
+				topRisks={topRisks}
+				nextSession={
+					nextSession
+						? {
+								id: nextSession.id,
+								scheduledFor:
+									nextSession.scheduledFor!.toISOString(),
+								processName:
+									nextSession.processDefinition?.name ?? null,
+								status: nextSession.status,
+							}
+						: null
+				}
+				recentActivity={recentActivity}
+				processCount={totalProcesses}
+				documentedCount={documentedProcesses}
+				riskCount={riskCount}
+				hasActiveSession={!!activeSession}
 			/>
 		</div>
 	);
+}
+
+function formatRelativeDate(date: Date): string {
+	const now = new Date();
+	const diffMs = now.getTime() - date.getTime();
+	const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+	if (diffDays === 0) return "Hoy";
+	if (diffDays === 1) return "Ayer";
+	if (diffDays < 7) return `Hace ${diffDays} días`;
+	return date.toLocaleDateString("es", { day: "numeric", month: "short" });
 }

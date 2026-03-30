@@ -26,10 +26,10 @@ interface FmeaViewProps {
 type SortKey = "rpn" | "severity" | "probability" | "detection";
 
 function getRpnBadge(rpn: number) {
-  if (rpn >= 200) return "bg-red-600/20 text-red-400";
-  if (rpn >= 120) return "bg-amber-600/20 text-amber-400";
-  if (rpn >= 60) return "bg-sky-500/20 text-sky-400";
-  return "bg-green-600/20 text-green-400";
+  if (rpn >= 200) return "bg-destructive/15 text-red-400";
+  if (rpn >= 120) return "bg-orientation/15 text-amber-400";
+  if (rpn >= 60) return "bg-info/15 text-sky-400";
+  return "bg-success/15 text-green-400";
 }
 
 function getRpnLabel(rpn: number) {

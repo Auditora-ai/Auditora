@@ -3,6 +3,7 @@
 		"@bprogress/next": "^3.2.12",
 		"@gsap/react": "^2.1.2",
 		"@hookform/resolvers": "catalog:",
+		"@marsidev/react-turnstile": "^1.5.0",
 		"@next/third-parties": "catalog:",
 		"@repo/i18n": "workspace:*",
 		"@repo/logs": "workspace:*",
