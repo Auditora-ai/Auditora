@@ -21,9 +21,10 @@ export function UpgradeInvitation({
 	upgradeUrl: string;
 	features?: string[];
 } & BaseMailProps) {
+	const msgs = translations ?? defaultTranslations;
 	const t = createTranslator({
 		locale,
-		messages: { ...translations.upgradeInvitation, common: translations.common },
+		messages: { ...msgs.upgradeInvitation, common: msgs.common },
 	});
 
 	return (

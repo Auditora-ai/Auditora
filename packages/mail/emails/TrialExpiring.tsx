@@ -19,9 +19,10 @@ export function TrialExpiring({
 	upgradeUrl: string;
 	planName?: string;
 } & BaseMailProps) {
+	const msgs = translations ?? defaultTranslations;
 	const t = createTranslator({
 		locale,
-		messages: { ...translations.trialExpiring, common: translations.common },
+		messages: { ...msgs.trialExpiring, common: msgs.common },
 	});
 
 	return (

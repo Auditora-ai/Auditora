@@ -13,6 +13,7 @@ import { ContactConfirmation } from "./ContactConfirmation";
 import { ToolResult } from "./ToolResult";
 import { TrialExpiring } from "./TrialExpiring";
 import { UpgradeInvitation } from "./UpgradeInvitation";
+import { InterviewSummary } from "./InterviewSummary";
 
 export const mailTemplates = {
 	// Auth
@@ -33,6 +34,9 @@ export const mailTemplates = {
 	// Session
 	sessionInvitation: SessionInvitation,
 	sessionRecap: SessionRecap,
+
+	// AI Interview
+	interviewSummary: InterviewSummary,
 
 	// Lifecycle
 	onboardingSteps: OnboardingSteps,

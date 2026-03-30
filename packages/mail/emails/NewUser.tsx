@@ -17,9 +17,10 @@ export function NewUser({
 	name: string;
 	otp: string;
 } & BaseMailProps) {
+	const msgs = translations ?? defaultTranslations;
 	const t = createTranslator({
 		locale,
-		messages: { ...translations.newUser, common: translations.common },
+		messages: { ...msgs.newUser, common: msgs.common },
 	});
 
 	return (

@@ -12,11 +12,12 @@ export function ContactConfirmation({
 }: {
 	name: string;
 } & BaseMailProps) {
+	const msgs = translations ?? defaultTranslations;
 	const t = createTranslator({
 		locale,
 		messages: {
-			...translations.contactConfirmation,
-			common: translations.common,
+			...msgs.contactConfirmation,
+			common: msgs.common,
 		},
 	});
 

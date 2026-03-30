@@ -15,11 +15,12 @@ export function OrganizationInvitation({
 	url: string;
 	organizationName: string;
 } & BaseMailProps) {
+	const msgs = translations ?? defaultTranslations;
 	const t = createTranslator({
 		locale,
 		messages: {
-			...translations.organizationInvitation,
-			common: translations.common,
+			...msgs.organizationInvitation,
+			common: msgs.common,
 		},
 	});
 

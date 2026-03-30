@@ -15,11 +15,12 @@ export function EmailVerification({
 	url: string;
 	name: string;
 } & BaseMailProps) {
+	const msgs = translations ?? defaultTranslations;
 	const t = createTranslator({
 		locale,
 		messages: {
-			...translations.emailVerification,
-			common: translations.common,
+			...msgs.emailVerification,
+			common: msgs.common,
 		},
 	});
 

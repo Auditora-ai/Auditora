@@ -96,6 +96,19 @@
 		"deliverable7": "Verbesserungsempfehlungen",
 		"ctaButton": "Lieferobjekte überprüfen"
 	},
+	"interviewSummary": {
+		"subject": "Interview-Ergebnisse: {processName} — Auditora.ai",
+		"preheader": "Wir haben {riskCount} Risiken in {processName} gefunden",
+		"heading": "Interview-Ergebnisse: {processName}",
+		"body": "Ihr Interview zu {processName} ist abgeschlossen mit einer SIPOC-Abdeckung von {completenessScore}%. Hier ist eine Zusammenfassung der Ergebnisse.",
+		"completeness": "Abdeckung",
+		"risksFound": "Risiken gefunden",
+		"topRisksHeading": "Wichtigste Risiken:",
+		"severity": "Schweregrad",
+		"probability": "Wahrscheinlichkeit",
+		"ctaButton": "Vollständige Ergebnisse ansehen",
+		"footer": "Sie können jedes Risiko vertiefen, das generierte Prozessdiagramm ansehen und die Ergebnisse mit Ihrem Team teilen."
+	},
 	"onboardingSteps": {
 		"subject": "Starte mit Auditora.ai in 3 Schritten",
 		"preheader": "Deine erste KI-gestützte Prozesssitzung wartet",

@@ -15,9 +15,10 @@ export function OnboardingSteps({
 	userName: string;
 	dashboardUrl: string;
 } & BaseMailProps) {
+	const msgs = translations ?? defaultTranslations;
 	const t = createTranslator({
 		locale,
-		messages: { ...translations.onboardingSteps, common: translations.common },
+		messages: { ...msgs.onboardingSteps, common: msgs.common },
 	});
 
 	return (

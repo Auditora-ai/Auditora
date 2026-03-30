@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { InterviewChat } from "./InterviewChat";
 import { InterviewReveal } from "./InterviewReveal";
+import { InterviewBpmnViewer } from "./InterviewBpmnViewer";
 import { useInterviewChat } from "@ai-interview/hooks/useInterviewChat";
 import type { InterviewCompletionStatus } from "@ai-interview/lib/interview-types";
 import { ArrowLeftIcon, ShareIcon } from "lucide-react";
@@ -114,15 +115,10 @@ export function AIInterviewPage({
 								Tu proceso: {processName}
 							</h2>
 							{completionData.bpmnXml ? (
-								<div
-									className="h-[400px] rounded-lg border"
-									style={{ borderColor: "#E7E5E4", backgroundColor: "#FAF9F7" }}
-								>
-									{/* BPMN viewer will be mounted here */}
-									<div className="flex h-full items-center justify-center text-sm" style={{ color: "#78716C" }}>
-										Diagrama BPMN generado. Abriendo visor...
-									</div>
-								</div>
+								<InterviewBpmnViewer
+									bpmnXml={completionData.bpmnXml}
+									className="h-[400px]"
+								/>
 							) : (
 								<div className="flex h-[200px] items-center justify-center rounded-lg border" style={{ borderColor: "#E7E5E4" }}>
 									<span className="text-sm" style={{ color: "#78716C" }}>No se pudo generar el diagrama</span>

@@ -39,6 +39,9 @@ export const senderMap: Record<string, string> = {
 	toolResult: "Auditora.ai <info@auditora.ai>",
 	sessionRecap: "Auditora.ai <info@auditora.ai>",
 
+	// AI Interview
+	interviewSummary: "Auditora.ai <info@auditora.ai>",
+
 	// Marketing nurture (replies welcome)
 	toolNurture1: "Auditora.ai <contact@auditora.ai>",
 	toolNurture2: "Auditora.ai <contact@auditora.ai>",

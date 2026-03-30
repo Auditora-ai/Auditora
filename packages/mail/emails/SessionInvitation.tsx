@@ -10,7 +10,7 @@ export function SessionInvitation({
 	participantName,
 	participantRole,
 	processName,
-	sessionType,
+	sessionType = "DISCOVERY",
 	scheduledFor,
 	duration,
 	meetingUrl,
@@ -39,11 +39,12 @@ export function SessionInvitation({
 	contextSummary?: string;
 	intakeUrl?: string;
 } & BaseMailProps) {
+	const msgs = translations ?? defaultTranslations;
 	const t = createTranslator({
 		locale,
 		messages: {
-			...translations.sessionInvitation,
-			common: translations.common,
+			...msgs.sessionInvitation,
+			common: msgs.common,
 		},
 	});
 

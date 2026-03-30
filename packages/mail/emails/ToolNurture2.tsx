@@ -15,9 +15,10 @@ export function ToolNurture2({
 	toolName: string;
 	unsubscribeUrl?: string;
 } & BaseMailProps) {
+	const msgs = translations ?? defaultTranslations;
 	const t = createTranslator({
 		locale,
-		messages: { ...translations.toolNurture2, common: translations.common },
+		messages: { ...msgs.toolNurture2, common: msgs.common },
 	});
 
 	const baseUrl = process.env.NEXT_PUBLIC_MARKETING_URL || "https://auditora.ai";

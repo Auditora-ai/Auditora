@@ -17,9 +17,10 @@ export function ReEngagement({
 	dashboardUrl: string;
 	unsubscribeUrl?: string;
 } & BaseMailProps) {
+	const msgs = translations ?? defaultTranslations;
 	const t = createTranslator({
 		locale,
-		messages: { ...translations.reEngagement, common: translations.common },
+		messages: { ...msgs.reEngagement, common: msgs.common },
 	});
 
 	return (

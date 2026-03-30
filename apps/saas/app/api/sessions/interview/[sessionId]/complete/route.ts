@@ -18,6 +18,7 @@ import {
 } from "@repo/ai";
 import type { KnowledgeSnapshot } from "@repo/ai";
 import { auth } from "@repo/auth";
+import { sendEmail } from "@repo/mail";
 import { headers } from "next/headers";
 import { buildBpmnXml } from "@meeting/lib/bpmn-builder";
 import type { DiagramNode } from "@meeting/types";
@@ -396,4 +397,43 @@ async function runBatchPipeline(
 			source: r.source,
 		})),
 	});
+
+	// Step 7: Send summary email (fire-and-forget)
+	try {
+		const user = await db.user.findUnique({
+			where: { id: userId },
+			select: { email: true },
+		});
+		const org = await db.organization.findUnique({
+			where: { id: session.organizationId },
+			select: { slug: true },
+		});
+
+		if (user?.email && org?.slug) {
+			const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://app.auditora.ai";
+			const resultUrl = `${baseUrl}/${org.slug}/sessions/interview/${sessionId}`;
+
+			const lastScore = conversationLog
+				.filter((m) => m.role === "assistant" && m.metadata?.completenessScore)
+				.pop()?.metadata?.completenessScore || 0;
+
+			await sendEmail({
+				to: user.email,
+				templateId: "interviewSummary",
+				context: {
+					processName,
+					completenessScore: lastScore,
+					riskCount: newRisks.length,
+					topRisks: newRisks.slice(0, 3).map((r) => ({
+						title: r.title,
+						severity: r.severity || 3,
+						probability: r.probability || 3,
+					})),
+					resultUrl,
+				},
+			});
+		}
+	} catch (err) {
+		console.warn("[AI Interview] Summary email failed (non-critical):", err);
+	}
 }

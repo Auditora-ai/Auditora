@@ -13,9 +13,10 @@ export function MagicLink({
 }: {
 	url: string;
 } & BaseMailProps) {
+	const msgs = translations ?? defaultTranslations;
 	const t = createTranslator({
 		locale,
-		messages: { ...translations.magicLink, common: translations.common },
+		messages: { ...msgs.magicLink, common: msgs.common },
 	});
 
 	return (

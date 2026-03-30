@@ -17,9 +17,10 @@ export function SessionRecap({
 	reviewUrl: string;
 	userName?: string;
 } & BaseMailProps) {
+	const msgs = translations ?? defaultTranslations;
 	const t = createTranslator({
 		locale,
-		messages: { ...translations.sessionRecap, common: translations.common },
+		messages: { ...msgs.sessionRecap, common: msgs.common },
 	});
 
 	return (

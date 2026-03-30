@@ -5,11 +5,13 @@
  * Server-side only — used by the crawl API route.
  *
  * Strategy:
- * 1. Fetch homepage, extract text + internal links
- * 2. Follow up to 4 high-value internal pages (/about, /services, etc.)
- * 3. Strip nav/footer/scripts, concatenate clean text
- * 4. Truncate to 3000 words max
+ * 1. If FIRECRAWL_API_KEY is set, use Firecrawl API (handles JS rendering, anti-bot)
+ * 2. Otherwise, fall back to native fetch (static HTML only)
+ *
+ * Both paths return the same CrawlResult interface.
  */
+
+import FirecrawlApp from "@mendable/firecrawl-js";
 
 const PRIORITY_PATHS = [
 	"/about",
@@ -52,10 +54,108 @@ export async function crawlWebsite(url: string): Promise<CrawlResult> {
 		};
 	}
 
+	if (process.env.FIRECRAWL_API_KEY) {
+		return crawlWithFirecrawl(baseUrl);
+	}
+
+	return crawlWithFetch(baseUrl);
+}
+
+// ---------------------------------------------------------------------------
+// Firecrawl API path (JS rendering, anti-bot)
+// ---------------------------------------------------------------------------
+
+async function crawlWithFirecrawl(baseUrl: string): Promise<CrawlResult> {
+	const firecrawl = new FirecrawlApp({
+		apiKey: process.env.FIRECRAWL_API_KEY!,
+	});
+
+	try {
+		// Scrape homepage — get markdown + links
+		const homepage = await firecrawl.scrapeUrl(baseUrl, {
+			formats: ["markdown", "links"],
+			onlyMainContent: true,
+			timeout: 10000,
+		});
+
+		if (!homepage.success) {
+			return {
+				success: false,
+				url: baseUrl,
+				pagesFound: 0,
+				businessContext: "",
+				error: homepage.error || "No pudimos acceder al sitio web",
+			};
+		}
+
+		const texts: string[] = [];
+		texts.push(`[Pagina principal]\n${homepage.markdown || ""}`);
+
+		// Find priority internal pages from discovered links
+		const discoveredLinks = (homepage.links || []).filter(
+			(link) => {
+				try {
+					const parsed = new URL(link);
+					return parsed.origin === new URL(baseUrl).origin;
+				} catch {
+					return false;
+				}
+			},
+		);
+
+		const prioritized = prioritizeLinks(discoveredLinks, baseUrl);
+		const pagesToFetch = prioritized.slice(0, MAX_PAGES - 1);
+
+		// Scrape priority pages in parallel
+		const pageResults = await Promise.allSettled(
+			pagesToFetch.map(async (link) => {
+				const result = await firecrawl.scrapeUrl(link, {
+					formats: ["markdown"],
+					onlyMainContent: true,
+					timeout: 10000,
+				});
+				if (!result.success) return null;
+				return { url: link, markdown: result.markdown || "" };
+			}),
+		);
+
+		for (const result of pageResults) {
+			if (result.status === "fulfilled" && result.value) {
+				const path = new URL(result.value.url).pathname;
+				texts.push(`[${path}]\n${result.value.markdown}`);
+			}
+		}
+
+		const fullText = texts.join("\n\n");
+		const truncated = truncateToWords(fullText, MAX_WORDS);
+
+		return {
+			success: true,
+			url: baseUrl,
+			pagesFound: 1 + pageResults.filter(
+				(r) => r.status === "fulfilled" && r.value,
+			).length,
+			businessContext: truncated,
+		};
+	} catch (err) {
+		return {
+			success: false,
+			url: baseUrl,
+			pagesFound: 0,
+			businessContext: "",
+			error: "Error al acceder al sitio web",
+		};
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Native fetch fallback (static HTML only — no JS rendering)
+// ---------------------------------------------------------------------------
+
+async function crawlWithFetch(baseUrl: string): Promise<CrawlResult> {
 	const visited = new Set<string>();
 	const texts: string[] = [];
 
-	// Fetch homepage first
 	const homepageText = await fetchAndExtract(baseUrl);
 	if (!homepageText) {
 		return {
@@ -70,16 +170,12 @@ export async function crawlWebsite(url: string): Promise<CrawlResult> {
 	visited.add(baseUrl);
 	texts.push(`[Pagina principal]\n${homepageText.text}`);
 
-	// Find high-value internal links
 	const internalLinks = extractInternalLinks(
 		homepageText.html,
 		baseUrl,
 	).filter((link) => !visited.has(link));
 
-	// Prioritize known high-value paths
 	const prioritized = prioritizeLinks(internalLinks, baseUrl);
-
-	// Fetch up to MAX_PAGES - 1 more pages
 	const pagesToFetch = prioritized.slice(0, MAX_PAGES - 1);
 	const pageResults = await Promise.allSettled(
 		pagesToFetch.map((link) => fetchAndExtract(link)),
@@ -105,7 +201,11 @@ export async function crawlWebsite(url: string): Promise<CrawlResult> {
 	};
 }
 
-function normalizeUrl(input: string): string | null {
+// ---------------------------------------------------------------------------
+// Shared utilities
+// ---------------------------------------------------------------------------
+
+export function normalizeUrl(input: string): string | null {
 	try {
 		let url = input.trim();
 		if (!url.startsWith("http://") && !url.startsWith("https://")) {
@@ -131,6 +231,37 @@ function normalizeUrl(input: string): string | null {
 		return null;
 	}
 }
+
+function prioritizeLinks(links: string[], baseUrl: string): string[] {
+	const scored = links.map((link) => {
+		try {
+			const path = new URL(link).pathname.toLowerCase();
+			const priorityIndex = PRIORITY_PATHS.findIndex(
+				(p) => path === p || path === `${p}/`,
+			);
+			return {
+				link,
+				score: priorityIndex >= 0 ? 100 - priorityIndex : 0,
+			};
+		} catch {
+			return { link, score: 0 };
+		}
+	});
+
+	return scored
+		.sort((a, b) => b.score - a.score)
+		.map((s) => s.link);
+}
+
+function truncateToWords(text: string, maxWords: number): string {
+	const words = text.split(/\s+/);
+	if (words.length <= maxWords) return text;
+	return words.slice(0, maxWords).join(" ") + "...";
+}
+
+// ---------------------------------------------------------------------------
+// Native fetch helpers (used only in fallback path)
+// ---------------------------------------------------------------------------
 
 async function fetchAndExtract(
 	url: string,
@@ -169,7 +300,6 @@ async function fetchAndExtract(
 }
 
 function extractTextFromHtml(html: string): string {
-	// Remove script, style, nav, footer, header elements
 	let cleaned = html
 		.replace(/<script[\s\S]*?<\/script>/gi, "")
 		.replace(/<style[\s\S]*?<\/style>/gi, "")
@@ -179,16 +309,13 @@ function extractTextFromHtml(html: string): string {
 		.replace(/<noscript[\s\S]*?<\/noscript>/gi, "")
 		.replace(/<!--[\s\S]*?-->/g, "");
 
-	// Replace block elements with newlines
 	cleaned = cleaned.replace(
 		/<\/(p|div|h[1-6]|li|tr|br|section|article)>/gi,
 		"\n",
 	);
 
-	// Remove all remaining HTML tags
 	cleaned = cleaned.replace(/<[^>]+>/g, " ");
 
-	// Decode common HTML entities
 	cleaned = cleaned
 		.replace(/&nbsp;/g, " ")
 		.replace(/&amp;/g, "&")
@@ -203,7 +330,6 @@ function extractTextFromHtml(html: string): string {
 		.replace(/&uacute;/g, "ú")
 		.replace(/&ntilde;/g, "ñ");
 
-	// Normalize whitespace
 	cleaned = cleaned
 		.split("\n")
 		.map((line) => line.replace(/\s+/g, " ").trim())
@@ -242,27 +368,4 @@ function extractInternalLinks(html: string, baseUrl: string): string[] {
 	}
 
 	return links;
-}
-
-function prioritizeLinks(links: string[], baseUrl: string): string[] {
-	const scored = links.map((link) => {
-		const path = new URL(link).pathname.toLowerCase();
-		const priorityIndex = PRIORITY_PATHS.findIndex(
-			(p) => path === p || path === `${p}/`,
-		);
-		return {
-			link,
-			score: priorityIndex >= 0 ? 100 - priorityIndex : 0,
-		};
-	});
-
-	return scored
-		.sort((a, b) => b.score - a.score)
-		.map((s) => s.link);
-}
-
-function truncateToWords(text: string, maxWords: number): string {
-	const words = text.split(/\s+/);
-	if (words.length <= maxWords) return text;
-	return words.slice(0, maxWords).join(" ") + "...";
 }

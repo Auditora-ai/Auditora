@@ -15,11 +15,12 @@ export function ForgotPassword({
 	url: string;
 	name: string;
 } & BaseMailProps) {
+	const msgs = translations ?? defaultTranslations;
 	const t = createTranslator({
 		locale,
 		messages: {
-			...translations.forgotPassword,
-			common: translations.common,
+			...msgs.forgotPassword,
+			common: msgs.common,
 		},
 	});
 

@@ -60,10 +60,15 @@ export function Footer() {
 
 					<CookieSettingsButton />
 
-					<LocaleLink href="/legal/privacy-policy#ccpa" className="block">
+					<LocaleLink href="/legal/privacy-policy#under-ccpa-california-usa" className="block">
 						{t("common.footer.doNotSell")}
 					</LocaleLink>
 				</div>
+			</div>
+			<div className="container mt-6 border-t border-foreground/10 pt-4">
+				<p className="text-xs opacity-50 leading-relaxed">
+					{t("common.footer.aiDisclaimer")}
+				</p>
 			</div>
 		</footer>
 	);

@@ -38,6 +38,18 @@ export default function EmailFooter({ unsubscribeUrl, reason }: EmailFooterProps
 			)}
 			<Text
 				style={{
+					color: "#A1A1AA",
+					fontSize: "11px",
+					lineHeight: "16px",
+					margin: "0 0 12px 0",
+					textAlign: "center" as const,
+					fontStyle: "italic",
+				}}
+			>
+				AI-generated analyses are informational only and should be reviewed by qualified professionals. / Los análisis generados por IA son solo informativos y deben ser revisados por profesionales calificados.
+			</Text>
+			<Text
+				style={{
 					color: "#94A3B8",
 					fontSize: "12px",
 					lineHeight: "18px",
@@ -53,6 +65,10 @@ export default function EmailFooter({ unsubscribeUrl, reason }: EmailFooterProps
 						{" · "}
 					</>
 				)}
+				<Link href={`${baseUrl}/en/legal/terms`} style={{ color: "#78716C" }}>
+					Terms of Service
+				</Link>
+				{" · "}
 				<Link href={`${baseUrl}/en/legal/privacy-policy`} style={{ color: "#78716C" }}>
 					Privacy Policy
 				</Link>

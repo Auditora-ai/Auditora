@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { SendIcon, SparklesIcon } from "lucide-react";
+import { TopicChips } from "./TopicChips";
 
 interface ChatMessage {
 	role: "user" | "assistant";
@@ -157,6 +158,18 @@ export function InterviewChat({
 							</div>
 						</div>
 					))}
+
+					{/* Topic chips — shown when no user messages yet */}
+					{messages.filter((m) => m.role === "user").length === 0 && !sending && (
+						<TopicChips
+							onSelect={(topic) => {
+								const msg = topic.type === "new"
+									? "Quiero explorar un proceso nuevo en mi empresa."
+									: `Quiero profundizar en el proceso de ${topic.label}.`;
+								onSendMessage(msg);
+							}}
+						/>
+					)}
 
 					{sending && (
 						<div className="flex justify-start">
