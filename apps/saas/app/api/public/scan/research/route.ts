@@ -219,10 +219,8 @@ export async function POST(request: NextRequest) {
 				await Promise.allSettled(searchPromises);
 
 				// Save research data to session
-				await db.anonymousSession.update({
-					where: { id: session.id },
-					data: { researchData: allFindings },
-				});
+				// Note: requires `prisma generate` after schema change adds researchData field
+				await db.$executeRaw`UPDATE anonymous_session SET research_data = ${JSON.stringify(allFindings)}::jsonb WHERE id = ${session.id}`;
 
 				// Final insight
 				const totalFindings = Object.values(allFindings)

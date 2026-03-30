@@ -130,7 +130,7 @@ export function MobileBottomBar() {
 									tab.dotColor === "red" &&
 										"bg-red-500",
 									tab.dotColor === "green" &&
-										"bg-emerald-500",
+										"bg-[#16A34A]",
 									tab.dotColor === "amber" &&
 										"bg-amber-500",
 									tab.pulse && "animate-pulse",

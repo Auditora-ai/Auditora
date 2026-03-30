@@ -162,17 +162,17 @@ export function ToolsShowcaseSection() {
 	);
 
 	return (
-		<section ref={sectionRef} className="bg-[#0F172A] py-16 lg:py-20">
+		<section ref={sectionRef} className="bg-[#1C1917] py-16 lg:py-20">
 			<div className="container">
 				<div ref={headerRef} className="mb-10 text-center">
 					<div className="mb-3 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
 						<SparklesIcon className="h-4 w-4" />
 						{t("common.footer.tools") || "Free Tools"}
 					</div>
-					<h2 className="font-display text-3xl font-bold text-[#F1F5F9] lg:text-4xl">
+					<h2 className="font-display text-3xl font-bold text-[#FAFAF9] lg:text-4xl">
 						{t("home.tools.title") || "Free AI Tools for BPM Professionals"}
 					</h2>
-					<p className="mx-auto mt-3 max-w-xl text-sm text-[#94A3B8]">
+					<p className="mx-auto mt-3 max-w-xl text-sm text-[#A8A29E]">
 						{t("home.tools.subtitle") ||
 							"The same AI that diagrams in meetings, now in your hands. No signup required."}
 					</p>
@@ -185,14 +185,14 @@ export function ToolsShowcaseSection() {
 							<LocaleLink
 								key={tool.slug}
 								href={`/tools/${tool.slug}`}
-								className="tool-card group flex items-start gap-3 rounded-xl border border-[#334155] bg-[#1E293B] p-4 transition-all duration-200 hover:border-primary/50 hover:bg-[#1E293B]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F172A]"
+								className="tool-card group flex items-start gap-3 rounded-xl border border-[#44403C] bg-[#292524] p-4 transition-all duration-200 hover:border-primary/50 hover:bg-[#292524]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#1C1917]"
 							>
 								<Icon className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" />
 								<div className="min-w-0">
-									<span className="block text-sm font-medium text-[#F1F5F9]">
+									<span className="block text-sm font-medium text-[#FAFAF9]">
 										{tool.nameKey}
 									</span>
-									<span className="block text-xs text-[#64748B]">
+									<span className="block text-xs text-[#78716C]">
 										{tool.tagline}
 									</span>
 								</div>

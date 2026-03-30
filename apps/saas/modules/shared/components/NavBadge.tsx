@@ -21,7 +21,7 @@ export function NavBadge({
 		dotColor === "red"
 			? "bg-red-500"
 			: dotColor === "green"
-				? "bg-emerald-500"
+				? "bg-[#16A34A]"
 				: dotColor === "amber"
 					? "bg-amber-500"
 					: "";
@@ -47,7 +47,7 @@ export function NavBadge({
 				"ml-auto shrink-0 text-[11px] tabular-nums text-stone-500",
 				dotColor === "red" && "text-red-400 font-medium",
 				dotColor === "amber" && "text-amber-400",
-				dotColor === "green" && "text-emerald-400",
+				dotColor === "green" && "text-[#16A34A]",
 			)}
 		>
 			{text}

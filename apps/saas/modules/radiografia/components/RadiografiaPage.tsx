@@ -25,6 +25,7 @@ export function RadiografiaPage() {
 	const [statusMessage, setStatusMessage] = useState("");
 
 	// Data accumulated during the pipeline
+	const [crawledCompanyName, setCrawledCompanyName] = useState<string>("");
 	const [industry, setIndustry] = useState<IndustryInferenceResult | null>(null);
 	const [sipoc, setSipoc] = useState<SipocResult | null>(null);
 	const [nodes, setNodes] = useState<DiagramNode[] | null>(null);
@@ -82,6 +83,16 @@ export function RadiografiaPage() {
 			});
 
 			const crawlData = await crawlRes.json();
+
+			// Extract company name from URL or crawl data
+			if (input.type === "url") {
+				try {
+					const hostname = new URL(input.url).hostname.replace("www.", "");
+					setCrawledCompanyName(hostname);
+				} catch { /* ignore */ }
+			} else {
+				setCrawledCompanyName(input.description.slice(0, 50));
+			}
 
 			if (!crawlData.success) {
 				// If URL crawl failed, suggest manual fallback
@@ -277,8 +288,8 @@ export function RadiografiaPage() {
 		return withHeader(
 			<div className="min-h-screen bg-[#FFFBF5] px-4 py-12">
 				<InvestigationBoard
-					companyName={industry?.selectedProcess?.name || "tu empresa"}
-					industry={industry?.industry || ""}
+					companyName={crawledCompanyName || "tu empresa"}
+					industry={industry?.industry || "Analizando..."}
 					sessionToken=""
 					onComplete={() => handleResearchComplete()}
 				/>

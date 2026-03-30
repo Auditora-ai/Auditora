@@ -78,7 +78,7 @@ export function RiskDashboard({
 			{/* Header */}
 			<div className="flex items-center justify-between border-b border-border px-6 py-4">
 				<div>
-					<h1 className="font-serif text-2xl font-semibold text-foreground">
+					<h1 className="font-display text-2xl font-semibold text-foreground">
 						Panorama
 					</h1>
 					<p className="mt-0.5 text-sm text-muted-foreground">
@@ -108,7 +108,7 @@ export function RiskDashboard({
 				{isEmpty ? (
 					<div className="flex flex-col items-center justify-center py-16 text-center">
 						<ShieldAlertIcon className="size-12 text-muted-foreground/30 mb-4" />
-						<h2 className="font-serif text-xl font-semibold text-foreground">
+						<h2 className="font-display text-xl font-semibold text-foreground">
 							Bienvenido a Auditora.ai
 						</h2>
 						<p className="mt-2 max-w-md text-sm text-muted-foreground">
@@ -227,7 +227,13 @@ export function RiskDashboard({
 											<Link
 												key={risk.id}
 												href={`${basePath}/deliverables/risks`}
-												className="block rounded-xl border border-border bg-background p-4 transition-all duration-300 hover:border-red-200 hover:shadow-sm"
+												className={`block rounded-xl border bg-background p-4 transition-all duration-300 hover:shadow-sm border-l-4 ${
+											risk.riskScore >= 16
+												? "border-l-[#DC2626] border-red-100"
+												: risk.riskScore >= 12
+													? "border-l-[#D97706] border-amber-100"
+													: "border-l-[#0EA5E9] border-border"
+										}`}
 											>
 												<div className="flex items-start justify-between">
 													<div className="min-w-0 flex-1">

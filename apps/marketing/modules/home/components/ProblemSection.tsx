@@ -1,67 +1,19 @@
 "use client";
 
 import { useGSAP } from "@gsap/react";
-import { SplitWords } from "@shared/components/SplitWords";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ClockIcon, DollarSignIcon, MessageCircleWarningIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRef } from "react";
-import { BeforeAfterSlider } from "./BeforeAfterSlider";
 
 gsap.registerPlugin(ScrollTrigger);
 
-function AnimatedStat({
-	number,
-	unit,
-	label,
-}: { number: string; unit: string; label: string }) {
-	const numRef = useRef<HTMLSpanElement>(null);
-
-	useGSAP(() => {
-		if (!numRef.current) return;
-
-		gsap.from(numRef.current, {
-			textContent: 0,
-			duration: 2,
-			ease: "power2.out",
-			snap: { textContent: 1 },
-			scrollTrigger: {
-				trigger: numRef.current,
-				start: "top 85%",
-				once: true,
-			},
-			onComplete: () => {
-				// Scale pulse on counter completion
-				if (numRef.current) {
-					gsap.fromTo(
-						numRef.current,
-						{ scale: 1.08 },
-						{ scale: 1, duration: 0.4, ease: "elastic.out(1, 0.5)" },
-					);
-				}
-			},
-		});
-	});
-
-	return (
-		<div className="stat-item flex flex-col items-center text-center">
-			<div className="flex items-baseline gap-1">
-				<span
-					ref={numRef}
-					className="font-display text-6xl md:text-7xl lg:text-8xl text-foreground tabular-nums"
-				>
-					{number}
-				</span>
-				<span className="font-display text-3xl md:text-4xl text-primary">
-					{unit}
-				</span>
-			</div>
-			<p className="mt-3 text-sm md:text-base text-muted-foreground max-w-[240px]">
-				{label}
-			</p>
-		</div>
-	);
-}
+const cards = [
+	{ id: "card1", icon: ClockIcon },
+	{ id: "card2", icon: DollarSignIcon },
+	{ id: "card3", icon: MessageCircleWarningIcon },
+] as const;
 
 export function ProblemSection() {
 	const t = useTranslations();
@@ -71,12 +23,7 @@ export function ProblemSection() {
 		() => {
 			if (!sectionRef.current) return;
 
-			// Title word-reveal
-			gsap.from(sectionRef.current.querySelectorAll(".problem-word-inner"), {
-				y: "100%",
-				stagger: 0.05,
-				duration: 0.8,
-				ease: "power4.out",
+			const tl = gsap.timeline({
 				scrollTrigger: {
 					trigger: sectionRef.current,
 					start: "top 80%",
@@ -84,69 +31,89 @@ export function ProblemSection() {
 				},
 			});
 
-			// Stats stagger from center
-			gsap.from(sectionRef.current.querySelectorAll(".stat-item"), {
+			tl.from(".problem-header > *", {
 				opacity: 0,
-				y: 40,
-				stagger: { from: "center", each: 0.15 },
+				y: 30,
+				stagger: 0.1,
 				duration: 0.7,
 				ease: "power3.out",
-				scrollTrigger: {
-					trigger: sectionRef.current.querySelector(".stats-grid"),
-					start: "top 85%",
-					once: true,
-				},
 			});
 
-			// Description fade
-			gsap.from(sectionRef.current.querySelector(".problem-description"), {
-				opacity: 0,
-				y: 20,
-				filter: "blur(4px)",
-				duration: 0.6,
-				ease: "power2.out",
-				scrollTrigger: {
-					trigger: sectionRef.current.querySelector(".problem-description"),
-					start: "top 90%",
-					once: true,
+			tl.from(
+				".problem-card",
+				{
+					opacity: 0,
+					y: 40,
+					stagger: 0.15,
+					duration: 0.7,
+					ease: "power3.out",
 				},
-			});
+				"-=0.3",
+			);
 		},
 		{ scope: sectionRef },
 	);
 
 	return (
-		<section ref={sectionRef} className="py-20 lg:py-28">
-			<div className="container">
-				<h2 className="font-display text-3xl md:text-4xl lg:text-5xl text-foreground text-center max-w-3xl mx-auto text-balance" style={{ perspective: "600px" }}>
-					<SplitWords innerClassName="problem-word-inner">
+		<section
+			ref={sectionRef}
+			className="py-20 lg:py-28"
+			style={{ backgroundColor: "#1C1917" }}
+		>
+			<div className="container max-w-5xl">
+				<div className="problem-header mb-16 text-center">
+					<small
+						className="font-medium text-xs uppercase tracking-wider mb-4 block"
+						style={{ color: "#D97706" }}
+					>
+						{t("home.problem.badge")}
+					</small>
+					<h2
+						className="font-display text-3xl lg:text-4xl xl:text-5xl"
+						style={{ color: "#FAFAF9" }}
+					>
 						{t("home.problem.title")}
-					</SplitWords>
-				</h2>
-
-				<div className="stats-grid mt-16 grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
-					<AnimatedStat
-						number={t("home.problem.stat1.number")}
-						unit={t("home.problem.stat1.unit")}
-						label={t("home.problem.stat1.label")}
-					/>
-					<AnimatedStat
-						number={t("home.problem.stat2.number")}
-						unit={t("home.problem.stat2.unit")}
-						label={t("home.problem.stat2.label")}
-					/>
-					<AnimatedStat
-						number={t("home.problem.stat3.number")}
-						unit={t("home.problem.stat3.unit")}
-						label={t("home.problem.stat3.label")}
-					/>
+					</h2>
 				</div>
 
-				<p className="problem-description mt-16 text-muted-foreground text-base md:text-lg max-w-2xl mx-auto text-center text-balance leading-relaxed">
-					{t("home.problem.description")}
-				</p>
-
-				<BeforeAfterSlider />
+				<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+					{cards.map((card) => {
+						const Icon = card.icon;
+						return (
+							<div
+								key={card.id}
+								className="problem-card rounded-2xl p-6 lg:p-8 border"
+								style={{
+									backgroundColor: "#292524",
+									borderColor: "#44403C",
+								}}
+							>
+								<div
+									className="w-10 h-10 rounded-xl flex items-center justify-center mb-5"
+									style={{ backgroundColor: "#44403C" }}
+								>
+									<Icon
+										className="size-5"
+										style={{ color: "#D97706" }}
+										strokeWidth={1.5}
+									/>
+								</div>
+								<h3
+									className="text-lg font-semibold mb-3"
+									style={{ color: "#FAFAF9", fontFamily: "var(--font-sans)" }}
+								>
+									{t(`home.problem.${card.id}.title`)}
+								</h3>
+								<p
+									className="text-sm leading-relaxed"
+									style={{ color: "#A8A29E" }}
+								>
+									{t(`home.problem.${card.id}.description`)}
+								</p>
+							</div>
+						);
+					})}
+				</div>
 			</div>
 		</section>
 	);

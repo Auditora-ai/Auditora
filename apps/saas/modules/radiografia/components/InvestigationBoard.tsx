@@ -221,7 +221,7 @@ export function InvestigationBoard({
 					<SearchIcon className="size-4" />
 					Investigando: {companyName}
 				</div>
-				<h2 className="mt-3 font-serif text-xl font-semibold text-stone-900">
+				<h2 className="mt-3 font-display text-xl font-semibold text-stone-900">
 					Análisis de Inteligencia de Negocio
 				</h2>
 				<p className="mt-1 text-sm text-stone-500">
@@ -257,14 +257,14 @@ export function InvestigationBoard({
 							key={sourceId}
 							className={`overflow-hidden rounded-xl border transition-all duration-300 ${
 								source.status === "done"
-									? "border-green-200 bg-white"
+									? "border-green-200 bg-[#FFFBF5]"
 									: source.status === "loading"
 										? "border-amber-200 bg-amber-50/30"
 										: "border-stone-200 bg-stone-50"
 							}`}
 							style={{
 								animationDelay: `${index * 150}ms`,
-								animation: "fadeSlideIn 0.4s ease-out both",
+								animation: "fadeSlideIn 0.3s cubic-bezier(0,0,0.2,1) both",
 							}}
 						>
 							{/* Source header */}
@@ -294,7 +294,7 @@ export function InvestigationBoard({
 											(finding, fi) => (
 												<div
 													key={fi}
-													className={`rounded-lg border-l-2 bg-white px-3 py-2 text-xs transition-opacity duration-500 ${
+													className={`rounded-lg border-l-2 bg-[#FFFBF5] px-3 py-2 text-xs transition-opacity duration-500 ${
 														finding.relevance ===
 														"high"
 															? "border-l-amber-400"
@@ -391,6 +391,7 @@ export function InvestigationBoard({
 					from { opacity: 0; }
 					to { opacity: 1; }
 				}
+				/* DESIGN.md motion: medium=300ms, long=500ms */
 			`}</style>
 		</div>
 	);

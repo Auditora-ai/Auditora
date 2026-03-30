@@ -89,6 +89,14 @@ export default async function DeliverablesDashboardPage({
       ready: riskCount > 0,
     },
     {
+      href: `/${organizationSlug}/deliverables/risks`,
+      icon: "📊",
+      title: "Informe Ejecutivo de Riesgos",
+      description: "Reporte para junta directiva con maturity score, top riesgos, y recomendaciones.",
+      stat: `${riskCount} riesgos analizados`,
+      ready: riskCount >= 3,
+    },
+    {
       href: `/${organizationSlug}/deliverables/raci`,
       icon: "👥",
       title: "RACI Consolidado",

@@ -3,7 +3,7 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { GlobeIcon, CpuIcon, FileBarChartIcon, PencilIcon } from "lucide-react";
+import { GlobeIcon, CpuIcon, ShieldAlertIcon, MessageSquareTextIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRef } from "react";
 
@@ -12,8 +12,8 @@ gsap.registerPlugin(ScrollTrigger);
 const steps = [
 	{ icon: GlobeIcon, key: "step1" },
 	{ icon: CpuIcon, key: "step2" },
-	{ icon: FileBarChartIcon, key: "step3" },
-	{ icon: PencilIcon, key: "step4" },
+	{ icon: ShieldAlertIcon, key: "step3" },
+	{ icon: MessageSquareTextIcon, key: "step4" },
 ] as const;
 
 export function TryItSection() {
@@ -49,6 +49,9 @@ export function TryItSection() {
 					<h2 className="hiw-reveal font-display text-3xl lg:text-4xl xl:text-5xl" style={{ color: "#FAFAF9" }}>
 						{t("home.howItWorks.title")}
 					</h2>
+					<p className="hiw-reveal mt-4 text-sm lg:text-base max-w-2xl mx-auto text-balance" style={{ color: "#A8A29E" }}>
+						{t("home.howItWorks.subtitle")}
+					</p>
 				</div>
 
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -80,6 +83,10 @@ export function TryItSection() {
 						);
 					})}
 				</div>
+
+				<p className="hiw-reveal mt-10 text-xs text-center leading-relaxed max-w-2xl mx-auto" style={{ color: "#78716C" }}>
+					{t("home.howItWorks.disclaimer")}
+				</p>
 			</div>
 		</section>
 	);
