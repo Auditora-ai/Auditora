@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import type { SipocResult } from "@repo/ai";
 import type { IndustryInferenceResult } from "@radiografia/lib/industry-inference";
@@ -9,6 +9,7 @@ import type { DiagramNode } from "@radiografia/lib/sipoc-to-nodes";
 import type { RiskData } from "@radiografia/lib/types";
 import { ScanHeader } from "./ScanHeader";
 import { InputPhase } from "./InputPhase";
+import { TheatricalCrawlingLoader } from "./TheatricalCrawlingLoader";
 import { InvestigationBoard } from "./InvestigationBoard";
 import { InstantReport } from "./InstantReport";
 import { DeepConversation } from "./DeepConversation";
@@ -37,6 +38,10 @@ export function RadiografiaPage() {
 	const [deepRisks, setDeepRisks] = useState<RiskData | null>(null);
 	const [bpmnXml, setBpmnXml] = useState<string | null>(null);
 
+	// Track user input URL for theatrical loader
+	const [inputUrl, setInputUrl] = useState<string>("");
+	const crawlStartTime = useRef<number>(0);
+
 	// Auto-start from URL parameter (hero → /scan?url=X handoff)
 	const searchParams = useSearchParams();
 	const autoStarted = useRef(false);
@@ -60,13 +65,29 @@ export function RadiografiaPage() {
 		async (input: { type: "url"; url: string } | { type: "text"; description: string }, captchaToken?: string) => {
 			setLoading(true);
 			setPhase("crawling");
+			crawlStartTime.current = Date.now();
+			if (input.type === "url") setInputUrl(input.url);
+
+			const MIN_LOADER_TIME = 3000;
+
+			// Helper: ensure theatrical loader shows for at least 3s before any phase transition
+			const delayedTransition = (callback: () => void) => {
+				const elapsed = Date.now() - crawlStartTime.current;
+				if (elapsed < MIN_LOADER_TIME) {
+					setTimeout(callback, MIN_LOADER_TIME - elapsed);
+				} else {
+					callback();
+				}
+			};
 
 			// Create anonymous session (with Turnstile token)
 			const sessionOk = await createSession(captchaToken);
 			if (!sessionOk) {
-				setStatusMessage(t("errorCreatingSession"));
-				setPhase("input");
-				setLoading(false);
+				delayedTransition(() => {
+					setStatusMessage(t("errorCreatingSession"));
+					setPhase("input");
+					setLoading(false);
+				});
 				return;
 			}
 
@@ -97,23 +118,25 @@ export function RadiografiaPage() {
 			if (!crawlData.success) {
 				// If URL crawl failed, suggest manual fallback
 				if (input.type === "url") {
-					setStatusMessage(t("couldNotReadWebsite"));
-					setPhase("input");
-					setLoading(false);
+					delayedTransition(() => {
+						setStatusMessage(t("couldNotReadWebsite"));
+						setPhase("input");
+						setLoading(false);
+					});
 					return;
 				}
-				setStatusMessage(t("errorProcessing"));
-				setPhase("input");
-				setLoading(false);
+				delayedTransition(() => {
+					setStatusMessage(t("errorProcessing"));
+					setPhase("input");
+					setLoading(false);
+				});
 				return;
 			}
 
-			// Start the research phase (enriched context)
-			// The InvestigationBoard component handles the research SSE stream.
-			// When research completes (or is skipped), it calls handleResearchComplete()
-			// which triggers the instant radiografia pipeline.
-			setPhase("researching");
-			setStatusMessage("Investigando tu industria...")
+			delayedTransition(() => {
+				setPhase("researching");
+				setStatusMessage("Investigando tu industria...");
+			});
 		},
 		[createSession],
 	);
@@ -211,7 +234,22 @@ export function RadiografiaPage() {
 		}
 	}, []);
 
-	function handleDeepen() {
+	const router = useRouter();
+
+	async function handleDeepen() {
+		// Gate: guided conversation requires authentication
+		try {
+			const res = await fetch("/api/auth/get-session");
+			const session = await res.json();
+			if (!session?.user) {
+				// Redirect to signup, preserving scan context via URL
+				const returnUrl = encodeURIComponent(`/scan?deepen=true`);
+				router.push(`/login?redirect=${returnUrl}`);
+				return;
+			}
+		} catch {
+			// If auth check fails, allow through (fail-open for UX)
+		}
 		setPhase("sipoc");
 	}
 
@@ -274,26 +312,28 @@ export function RadiografiaPage() {
 	}
 
 	if (phase === "crawling") {
-		return withHeader(
-			<div className="flex min-h-screen items-center justify-center bg-background">
-				<div className="text-center">
-					<div className="mb-4 mx-auto h-8 w-8 animate-spin rounded-full border-2 border-[#D97706] border-t-transparent" />
-					<p className="text-sm text-muted-foreground">{t("readingWebsite")}</p>
-				</div>
-			</div>,
-		);
+		return <TheatricalCrawlingLoader url={inputUrl || undefined} />;
 	}
 
 	if (phase === "researching") {
-		return withHeader(
-			<div className="min-h-screen bg-[#FFFBF5] px-4 py-12">
-				<InvestigationBoard
-					companyName={crawledCompanyName || "tu empresa"}
-					industry={industry?.industry || "Analizando..."}
-					sessionToken=""
-					onComplete={() => handleResearchComplete()}
+		return (
+			<>
+				{/* Fade-from-dark overlay for smooth transition from theatrical loader */}
+				<div
+					className="pointer-events-none fixed inset-0 z-50 animate-fade-from-dark"
+					style={{ backgroundColor: "#0A1428" }}
 				/>
-			</div>,
+				{withHeader(
+					<div className="min-h-screen bg-[#FFFBF5] px-4 py-12">
+						<InvestigationBoard
+							companyName={crawledCompanyName || "tu empresa"}
+							industry={industry?.industry || "Analizando..."}
+							sessionToken=""
+							onComplete={() => handleResearchComplete()}
+						/>
+					</div>,
+				)}
+			</>
 		);
 	}
 

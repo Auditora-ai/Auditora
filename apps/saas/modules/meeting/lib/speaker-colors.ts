@@ -4,7 +4,7 @@
  */
 
 const SPEAKER_COLORS = [
-	"#2563EB", // Consultant — primary blue
+	"#00E5C0", // Consultant — primary teal
 	"#7C3AED", // Client 1 — purple
 	"#059669", // Client 2 — teal
 	"#D97706", // Client 3+ — amber

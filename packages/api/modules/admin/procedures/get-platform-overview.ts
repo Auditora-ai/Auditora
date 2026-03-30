@@ -94,6 +94,8 @@ export const getPlatformOverview = adminProcedure
 					slug: org.slug,
 					aiTier: org.aiTier ?? "standard",
 					aiTokenBudget: org.aiTokenBudget,
+					sessionCreditsUsed: org.sessionCreditsUsed,
+					sessionCreditsLimit: org.sessionCreditsLimit,
 					membersCount: org._count.members,
 					sessionsCount: org._count.sessions,
 					tokens30d: usage?.totalTokens ?? 0,

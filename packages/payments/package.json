@@ -24,7 +24,8 @@
 		},
 		"./config": "./config.ts",
 		"./types": "./types.ts",
-		"./lib/helper": "./lib/helper.ts"
+		"./lib/helper": "./lib/helper.ts",
+		"./lib/plans": "./lib/plans.ts"
 	},
 	"name": "@repo/payments",
 	"scripts": {

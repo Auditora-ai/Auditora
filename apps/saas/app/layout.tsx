@@ -37,6 +37,11 @@ export const metadata: Metadata = {
 		default: config.appName,
 		template: `%s | ${config.appName}`,
 	},
+	description:
+		"Plataforma de elicitación de procesos con IA. Auditora.ai se une a tus videollamadas, guía la entrevista y diagrama procesos BPMN en tiempo real.",
+	icons: {
+		icon: "/icon.svg",
+	},
 };
 
 export default async function RootLayout({ children }: PropsWithChildren) {

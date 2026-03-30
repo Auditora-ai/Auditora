@@ -292,7 +292,7 @@ export function ProjectGantt({
 				<span className="text-[10px] text-chrome-text-secondary">Fases:</span>
 				{[
 					{ label: "Contexto", color: "#7C3AED" },
-					{ label: "Captura", color: "#2563EB" },
+					{ label: "Captura", color: "#00E5C0" },
 					{ label: "Modelo", color: "#0EA5E9" },
 					{ label: "Análisis", color: "#16A34A" },
 				].map((phase) => (

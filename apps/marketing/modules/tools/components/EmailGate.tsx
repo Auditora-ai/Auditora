@@ -38,6 +38,7 @@ export function EmailGate({ toolSlug, result, locale, onClose }: EmailGateProps)
               email: email.trim(),
               toolUsed: toolSlug,
               outputData: result,
+              locale,
             }),
           },
         );

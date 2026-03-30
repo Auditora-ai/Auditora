@@ -9,6 +9,7 @@ import type { BaseMailProps } from "../types";
 export function NewUser({
 	url,
 	otp,
+	name,
 	locale,
 	translations,
 }: {
@@ -22,7 +23,13 @@ export function NewUser({
 	});
 
 	return (
-		<Wrapper>
+		<Wrapper
+			locale={locale}
+			preheader={t("preheader", { otp })}
+			footerReason={t("common.footer.receivingBecauseAccount")}
+		>
+			{name && <Text>{t("common.greeting", { name })}</Text>}
+
 			<Text>{t("body")}</Text>
 
 			<Text>
@@ -33,11 +40,14 @@ export function NewUser({
 
 			<Text>{t("common.useLink")}</Text>
 
-			<PrimaryButton href={url}>{t("confirmEmail")} &rarr;</PrimaryButton>
+			<PrimaryButton href={url}>{t("confirmEmail")}</PrimaryButton>
 
-			<Text className="text-muted-foreground text-sm">
+			<Text className="text-muted-foreground text-sm mt-4">
 				{t("common.openLinkInBrowser")}
-				<Link href={url}>{url}</Link>
+				<br />
+				<Link href={url} className="break-all">
+					{url}
+				</Link>
 			</Text>
 		</Wrapper>
 	);
@@ -46,9 +56,9 @@ export function NewUser({
 NewUser.PreviewProps = {
 	locale: defaultLocale,
 	translations: defaultTranslations,
-	url: "#",
-	name: "John Doe",
-	otp: "123456",
+	url: "https://app.auditora.ai/verify?token=abc123",
+	name: "Oscar",
+	otp: "482901",
 };
 
 export default NewUser;

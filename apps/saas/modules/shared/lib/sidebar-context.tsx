@@ -35,7 +35,9 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
 	const handleSetIsCollapsed = (collapsed: boolean) => {
 		setIsCollapsed(collapsed);
 		Cookies.set(SIDEBAR_COLLAPSED_COOKIE, collapsed ? "true" : "false", {
-			expires: 365, // Persist for 1 year
+			expires: 365,
+			secure: true,
+			sameSite: "lax",
 		});
 	};
 
@@ -43,7 +45,9 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
 		const newValue = !isCollapsed;
 		setIsCollapsed(newValue);
 		Cookies.set(SIDEBAR_COLLAPSED_COOKIE, newValue ? "true" : "false", {
-			expires: 365, // Persist for 1 year
+			expires: 365,
+			secure: true,
+			sameSite: "lax",
 		});
 	};
 

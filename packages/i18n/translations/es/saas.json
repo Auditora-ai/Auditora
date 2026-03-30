@@ -159,10 +159,33 @@
 				"magicLink": "Enlace mágico",
 				"password": "Contraseña"
 			},
+			"rememberMe": "Recordarme",
+			"security": "Tus datos están encriptados y protegidos",
 			"submit": "Iniciar sesión",
-			"subtitle": "Por favor, introduce tus credenciales para iniciar sesión.",
+			"subtitle": "Introduce tus credenciales para continuar.",
 			"title": "Bienvenido de nuevo",
 			"sendMagicLink": "Enviar enlace mágico"
+		},
+		"showcase": {
+			"badge": "Plataforma de Inteligencia de Procesos",
+			"login": {
+				"title": "Tus procesos, analizados con precisión",
+				"subtitle": "Elicita, analiza y transforma procesos de negocio con IA en tiempo real"
+			},
+			"signup": {
+				"title": "Comienza a mapear con inteligencia",
+				"subtitle": "Únete a los consultores que transforman entrevistas en diagramas BPMN automáticos"
+			},
+			"feature": {
+				"ai": "Análisis con IA",
+				"bpmn": "Diagramas BPMN",
+				"risk": "Detección de Riesgos"
+			},
+			"metric": {
+				"processes": "Procesos mapeados",
+				"organizations": "Organizaciones",
+				"accuracy": "Precisión"
+			}
 		},
 		"resetPassword": {
 			"backToSignin": "Volver a iniciar sesión",
@@ -187,7 +210,9 @@
 			"password": "Contraseña",
 			"signIn": "Iniciar sesión",
 			"submit": "Crear cuenta",
-			"title": "Crear una cuenta"
+			"title": "Crear una cuenta",
+			"acceptTerms": "He leído y acepto los <termsLink>Términos de Servicio</termsLink> y la <privacyLink>Política de Privacidad</privacyLink>",
+			"acceptRequired": "Debes aceptar los Términos de Servicio y la Política de Privacidad para crear una cuenta."
 		},
 		"verify": {
 			"title": "Verifica tu cuenta",
@@ -1353,6 +1378,11 @@
 		"generating": "Generando escaneo...",
 		"disclaimer": "Menos de un minuto. Tu informacion no se comparte con terceros.",
 		"readingWebsite": "Leyendo tu sitio web...",
+		"loaderConnecting": "Conectando al sitio...",
+		"loaderReading": "Leyendo paginas...",
+		"loaderExtracting": "Extrayendo contexto de negocio...",
+		"loaderPreparing": "Preparando analisis...",
+		"loaderAnalyzing": "Analizando",
 		"analyzingIndustry": "Analizando tu industria...",
 		"mappingProcess": "Mapeando proceso clave...",
 		"generatingDiagram": "Generando diagrama...",
@@ -1393,7 +1423,7 @@
 		"saveDescription": "Encontramos {count} riesgos en \"{process}\". Crea tu cuenta para guardar este analisis y mapear mas procesos.",
 		"createAccount": "Crear cuenta y guardar",
 		"creatingAccount": "Creando cuenta...",
-		"termsNotice": "Al crear tu cuenta aceptas nuestros terminos de servicio.",
+		"termsNotice": "Al crear tu cuenta aceptas nuestros <termsLink>Términos de Servicio</termsLink> y <privacyLink>Política de Privacidad</privacyLink>.",
 		"existingUserError": "Ya tienes una cuenta.",
 		"goToLogin": "Ir a iniciar sesion",
 		"name": "Nombre",
@@ -1418,6 +1448,8 @@
 			"TECHNOLOGY": "Tecnologia",
 			"HUMAN_RESOURCE": "RRHH",
 			"REPUTATIONAL": "Reputacional"
-		}
+		},
+		"aiDisclaimer": "Este análisis fue generado por inteligencia artificial. Los resultados son solo informativos y no constituyen asesoramiento profesional, legal ni financiero. Valide con profesionales calificados antes de tomar decisiones de negocio.",
+		"reportBanner": "Reporte generado por IA — solo con fines informativos. No constituye asesoramiento profesional."
 	}
 }

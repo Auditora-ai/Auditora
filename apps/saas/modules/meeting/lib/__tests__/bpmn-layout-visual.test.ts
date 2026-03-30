@@ -53,9 +53,9 @@ function generateLayoutHtml(
 	const colors: Record<string, { fill: string; stroke: string }> = {
 		startEvent: { fill: "#F0FDF4", stroke: "#16A34A" },
 		endEvent: { fill: "#FEF2F2", stroke: "#DC2626" },
-		task: { fill: "#EFF6FF", stroke: "#3B82F6" },
-		userTask: { fill: "#EFF6FF", stroke: "#3B82F6" },
-		serviceTask: { fill: "#EFF6FF", stroke: "#3B82F6" },
+		task: { fill: "#ECFDF5", stroke: "#3B82F6" },
+		userTask: { fill: "#ECFDF5", stroke: "#3B82F6" },
+		serviceTask: { fill: "#ECFDF5", stroke: "#3B82F6" },
 		exclusiveGateway: { fill: "#FEF9C3", stroke: "#EAB308" },
 		parallelGateway: { fill: "#FEF9C3", stroke: "#EAB308" },
 	};

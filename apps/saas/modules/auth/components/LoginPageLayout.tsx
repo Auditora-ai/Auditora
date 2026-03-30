@@ -1,9 +1,11 @@
 "use client";
 
 import { useGSAP } from "@gsap/react";
+import { Logo } from "@repo/ui";
 import gsap from "gsap";
 import type { PropsWithChildren } from "react";
 import { useRef } from "react";
+import { useTranslations } from "next-intl";
 import { ColorModeToggle } from "@shared/components/ColorModeToggle";
 import { Footer } from "@shared/components/Footer";
 import { LocaleSwitch } from "@shared/components/LocaleSwitch";
@@ -17,7 +19,18 @@ export function LoginPageLayout({
 	children,
 	variant = "login",
 }: PropsWithChildren<LoginPageLayoutProps>) {
+	const t = useTranslations();
 	const formRef = useRef<HTMLDivElement>(null);
+
+	const mobileTitle =
+		variant === "signup"
+			? t("auth.showcase.signup.title")
+			: t("auth.showcase.login.title");
+
+	const mobileSubtitle =
+		variant === "signup"
+			? t("auth.showcase.signup.subtitle")
+			: t("auth.showcase.login.subtitle");
 
 	useGSAP(
 		() => {
@@ -31,8 +44,6 @@ export function LoginPageLayout({
 
 			const title = formRef.current.querySelector(".auth-title");
 			const subtitle = formRef.current.querySelector(".auth-subtitle");
-			const formFields =
-				formRef.current.querySelectorAll(".auth-form-field");
 			const formContent =
 				formRef.current.querySelector(".auth-form-content");
 
@@ -93,7 +104,7 @@ export function LoginPageLayout({
 	);
 
 	return (
-		<div className="flex min-h-screen">
+		<div className="flex min-h-screen flex-col lg:flex-row">
 			{/* Left: Dark chrome showcase panel (hidden on mobile) */}
 			<aside className="hidden w-[55%] lg:block xl:w-[60%]">
 				<div className="sticky top-0 h-screen">
@@ -101,72 +112,44 @@ export function LoginPageLayout({
 				</div>
 			</aside>
 
+			{/* Mobile brand header (visible only on mobile) */}
+			<div className="relative overflow-hidden lg:hidden" style={{ backgroundColor: "#0A1428" }}>
+				{/* Subtle gradient overlay */}
+				<div
+					className="pointer-events-none absolute inset-0"
+					style={{
+						background:
+							"radial-gradient(ellipse at top right, rgba(0,229,192,0.06), transparent 60%)",
+					}}
+				/>
+
+				<div className="relative z-10 px-6 pt-8 pb-6 text-center">
+					<Logo
+						withLabel
+						className="justify-center text-[#F1F5F9] [&_svg]:text-[#00E5C0] [&_.text-muted-foreground]:text-[#94A3B8] [&_span.hidden]:!block"
+					/>
+					<h2
+						className="mt-4 text-xl tracking-tight"
+						style={{
+							color: "#F1F5F9",
+							fontFamily: "'Instrument Serif', serif",
+						}}
+					>
+						{mobileTitle}
+					</h2>
+					<p className="mt-1 text-sm" style={{ color: "#94A3B8" }}>
+						{mobileSubtitle}
+					</p>
+				</div>
+			</div>
+
 			{/* Right: Warm canvas form panel */}
 			<main
 				ref={formRef}
-				className="flex min-h-screen flex-1 flex-col bg-background"
+				className="flex min-h-0 flex-1 flex-col bg-background lg:min-h-screen"
 			>
 				{/* Header with controls */}
-				<header className="flex items-center justify-between p-6 lg:justify-end">
-					{/* Logo visible only on mobile (showcase hidden) */}
-					<a href="/" className="block lg:hidden">
-						<span className="flex items-center font-semibold text-foreground leading-none">
-							<svg
-								className="size-8 text-primary"
-								viewBox="0 0 32 32"
-								fill="none"
-							>
-								<title>Auditora.ai</title>
-								<circle
-									cx="8"
-									cy="16"
-									r="3"
-									fill="currentColor"
-								/>
-								<circle
-									cx="24"
-									cy="8"
-									r="3"
-									fill="currentColor"
-								/>
-								<circle
-									cx="24"
-									cy="24"
-									r="3"
-									fill="currentColor"
-								/>
-								<path
-									d="M11 16L21 8"
-									stroke="currentColor"
-									strokeWidth="2"
-									strokeLinecap="round"
-								/>
-								<path
-									d="M11 16L21 24"
-									stroke="currentColor"
-									strokeWidth="2"
-									strokeLinecap="round"
-								/>
-								<rect
-									x="15"
-									y="14"
-									width="4"
-									height="4"
-									rx="1"
-									fill="currentColor"
-									opacity="0.4"
-									transform="rotate(45 17 16)"
-								/>
-							</svg>
-							<span className="ml-2 text-xl tracking-tight">
-								<span className="font-bold">Auditora</span>
-								<span className="font-light text-muted-foreground">
-									.ai
-								</span>
-							</span>
-						</span>
-					</a>
-
+				<header className="flex items-center justify-end p-6">
 					<div className="flex items-center gap-2">
 						<LocaleSwitch />
 						<ColorModeToggle />

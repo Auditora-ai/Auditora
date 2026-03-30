@@ -1,33 +1,171 @@
 {
 	"common": {
-		"openLinkInBrowser": "Si deseas abrir el enlace en un navegador diferente al predeterminado, copia y pega este enlace:",
-		"otp": "Contraseña de un solo uso",
-		"useLink": "o usa el siguiente enlace:"
+		"openLinkInBrowser": "Si prefieres abrir este enlace en otro navegador, copia y pega la siguiente URL:",
+		"otp": "Código de verificación",
+		"useLink": "O usa el siguiente enlace:",
+		"greeting": "Hola {name},",
+		"footer": {
+			"companyName": "Auditora.ai",
+			"tagline": "Auditoría de procesos e inteligencia de riesgos con IA.",
+			"receivingBecauseAccount": "Recibes este correo porque tienes una cuenta en Auditora.ai.",
+			"receivingBecauseTool": "Recibes este correo porque usaste una herramienta gratuita en Auditora.ai.",
+			"receivingBecauseInvite": "Recibes este correo porque alguien te invitó a Auditora.ai.",
+			"unsubscribe": "Cancelar suscripción",
+			"privacyPolicy": "Política de privacidad",
+			"termsOfService": "Términos de servicio",
+			"aiDisclaimer": "Los análisis generados por IA son solo informativos y deben ser revisados por profesionales calificados antes de tomar decisiones."
+		}
 	},
 	"emailVerification": {
-		"body": "Hola,\npor favor haz clic en el enlace de abajo para verificar esta nueva dirección de correo electrónico.",
-		"confirmEmail": "Verificar correo",
-		"subject": "Verifica tu correo electrónico"
+		"subject": "Verifica tu nuevo correo — Auditora.ai",
+		"preheader": "Confirma tu cambio de dirección de correo",
+		"body": "Solicitaste cambiar tu dirección de correo electrónico. Verifica esta nueva dirección haciendo clic en el botón a continuación.",
+		"confirmEmail": "Verificar correo"
 	},
 	"forgotPassword": {
-		"body": "Hola,\nsolicitaste un restablecimiento de contraseña.\n\nHaz clic en el botón de abajo para restablecer tu contraseña.",
-		"resetPassword": "Restablecer contraseña",
-		"subject": "Restablece tu contraseña"
+		"subject": "Restablece tu contraseña — Auditora.ai",
+		"preheader": "Sigue este enlace para crear una nueva contraseña",
+		"body": "Recibimos una solicitud para restablecer la contraseña de tu cuenta en Auditora.ai. Haz clic en el botón a continuación para crear una nueva contraseña.\n\nSi no realizaste esta solicitud, puedes ignorar este correo de forma segura.",
+		"resetPassword": "Restablecer contraseña"
 	},
 	"magicLink": {
-		"body": "Hola,\nsolicitaste un correo de inicio de sesión de Auditora.ai.\n\nHaz clic en el enlace de abajo para iniciar sesión.",
-		"login": "Iniciar sesión",
-		"subject": "Iniciar sesión en Auditora.ai"
+		"subject": "Inicia sesión en Auditora.ai",
+		"preheader": "Tu enlace de inicio de sesión seguro está listo",
+		"body": "Solicitaste un enlace de inicio de sesión para tu cuenta en Auditora.ai. Haz clic en el botón a continuación para ingresar de forma segura.",
+		"login": "Iniciar sesión"
 	},
 	"newUser": {
-		"body": "Hola,\ngracias por registrarte en Auditora.ai.\n\nPara comenzar a usar nuestra aplicación, por favor confirma tu dirección de correo electrónico haciendo clic en el enlace de abajo.",
-		"confirmEmail": "Confirmar correo",
-		"subject": "Confirma tu correo electrónico"
+		"subject": "Verifica tu cuenta de Auditora.ai",
+		"preheader": "Tu código de verificación: {otp}",
+		"body": "Bienvenido a Auditora.ai. Para completar tu registro, verifica tu dirección de correo electrónico usando el código a continuación o haciendo clic en el botón.",
+		"confirmEmail": "Verificar correo"
 	},
 	"organizationInvitation": {
-		"body": "Has sido invitado a unirte a la organización {organizationName}. Haz clic en el botón de abajo o copia y pega el enlace en tu navegador preferido para aceptar la invitación y unirte a la organización.",
-		"headline": "Únete a la organización {organizationName}",
-		"join": "Unirse a la organización",
-		"subject": "Has sido invitado a unirte a una organización"
+		"subject": "Únete a {organizationName} en Auditora.ai",
+		"preheader": "{organizationName} te invitó a colaborar",
+		"headline": "Únete a <strong>{organizationName}</strong> en Auditora.ai",
+		"body": "Has sido invitado a unirte a {organizationName} en Auditora.ai. Haz clic en el botón a continuación para aceptar la invitación y acceder al espacio de trabajo.",
+		"join": "Unirse al espacio de trabajo"
+	},
+	"toolResult": {
+		"subject": "Tu resultado de {toolName} está listo — Auditora.ai",
+		"preheader": "Tu análisis de {toolName} está listo para revisar",
+		"heading": "Tu resultado de {toolName} está listo",
+		"body": "Gracias por usar Auditora.ai. Tu análisis de {toolName} ha sido generado y está listo para revisar.",
+		"ctaButton": "Ver tu resultado",
+		"didYouKnow": "Auditora.ai puede generar diagramas BPMN, SIPOC, matrices RACI y auditorías de procesos en vivo durante tus videollamadas. La IA se une a tu reunión y construye todo automáticamente.",
+		"learnMore": "Conoce más sobre Auditora.ai"
+	},
+	"toolNurture1": {
+		"subject": "¿Y si {toolName} funcionara durante tus reuniones?",
+		"preheader": "Descubre cómo Auditora.ai automatiza la documentación de procesos",
+		"heading": "Ahora imagina esto durante tu reunión",
+		"intro": "Hace unos días usaste nuestro {toolName} gratuito. Describiste un proceso y obtuviste resultados en segundos.",
+		"hook": "¿Qué pasaría si eso ocurriera automáticamente durante tu entrevista con stakeholders?",
+		"description": "Con Auditora.ai, un asistente de IA se une a tu llamada de Zoom, Teams o Meet y:",
+		"feature1": "Guía tus preguntas con un teleprompter BPM (SIPOC + análisis de brechas)",
+		"feature2": "Transcribe la conversación en tiempo real con identificación de hablantes",
+		"feature3": "Extrae pasos del proceso, roles y decisiones automáticamente",
+		"feature4": "Construye el diagrama BPMN en vivo mientras hablas",
+		"feature5": "Genera un paquete completo de entregables cuando terminas",
+		"result": "1 hora de reunión = BPMN completo + RACI + ficha de proceso + resumen ejecutivo. Sin trabajo de documentación posterior.",
+		"ctaButton": "Inicia tu prueba gratuita"
+	},
+	"toolNurture2": {
+		"subject": "Ahorra más de 16 horas/mes en documentación de procesos",
+		"preheader": "Cómo los consultores BPM eliminan el trabajo post-sesión",
+		"heading": "Cómo un consultor BPM ahorra más de 3 horas por sesión",
+		"intro": "La semana pasada usaste nuestro {toolName}. Así se ve una sesión típica con Auditora.ai en la práctica:",
+		"before": "Sin Auditora.ai:",
+		"beforeDetail": "1 hora de reunión + 4-6 horas documentando (BPMN, RACI, ficha de proceso, resumen ejecutivo)",
+		"after": "Con Auditora.ai:",
+		"afterDetail": "1 hora de reunión + 15 minutos revisando entregables generados por IA",
+		"math": "La cuenta: 4 sesiones/mes x 4 horas ahorradas = 16 horas/mes que recuperas para análisis y trabajo con clientes en vez de documentación.",
+		"ctaButton": "Inicia tu prueba gratuita"
+	},
+	"sessionRecap": {
+		"subject": "Entregables listos: {processName} — Auditora.ai",
+		"preheader": "Los entregables de tu sesión de {processName} están listos para revisión",
+		"heading": "Tus entregables de sesión están listos",
+		"body": "Los entregables de tu sesión de {processName} han sido generados y están listos para revisión.",
+		"deliverablesHeading": "Lo que se generó:",
+		"deliverable1": "Reporte de inteligencia de proceso",
+		"deliverable2": "Resumen ejecutivo",
+		"deliverable3": "Mapa visual del proceso (BPMN)",
+		"deliverable4": "Diagrama SIPOC",
+		"deliverable5": "Matriz RACI",
+		"deliverable6": "Identificación de riesgos",
+		"deliverable7": "Recomendaciones de mejora",
+		"ctaButton": "Revisar entregables"
+	},
+	"onboardingSteps": {
+		"subject": "Comienza con Auditora.ai en 3 pasos",
+		"preheader": "Tu primera sesión de procesos con IA te espera",
+		"heading": "Comienza con Auditora.ai",
+		"body": "Tu cuenta está configurada. Así es como ejecutar tu primera sesión de elicitación de procesos con IA:",
+		"step1Title": "1. Crea una sesión",
+		"step1Body": "Abre tu dashboard y crea una nueva sesión. Define el alcance del proceso e invita a los participantes.",
+		"step2Title": "2. Invita a la IA a tu llamada",
+		"step2Body": "Cuando comience tu reunión, Auditora.ai se une a tu llamada de Zoom, Teams o Meet automáticamente. Escucha, guía y documenta.",
+		"step3Title": "3. Revisa tus entregables",
+		"step3Body": "Después de la reunión, tu diagrama BPMN, SIPOC, RACI, análisis de riesgos y resumen ejecutivo están listos para revisión.",
+		"valueProp": "Cada sesión ahorra de 3 a 5 horas de trabajo de documentación.",
+		"ctaButton": "Ir a mi dashboard"
+	},
+	"trialExpiring": {
+		"subject": "Tu prueba de Auditora.ai termina en {daysRemaining} días",
+		"preheader": "Actualiza ahora para mantener tus sesiones de procesos con IA",
+		"heading": "Tu prueba termina en {daysRemaining} días",
+		"body": "Tu prueba de {planName} en Auditora.ai está por expirar. Después de que termine, perderás acceso a la grabación de sesiones con IA, generación de BPMN en vivo y creación automatizada de entregables.",
+		"valueProp": "Los equipos que usan Auditora.ai ahorran un promedio de más de 16 horas al mes en documentación de procesos.",
+		"ctaButton": "Actualizar ahora",
+		"questionsNote": "¿Tienes preguntas? Responde a este correo y nuestro equipo te ayudará a encontrar el plan adecuado."
+	},
+	"reEngagement": {
+		"subject": "Tu próxima sesión de procesos te espera",
+		"preheader": "Retoma donde lo dejaste en Auditora.ai",
+		"heading": "Tu próxima sesión de procesos te espera",
+		"body": "Ha pasado un tiempo desde tu última sesión en Auditora.ai. La documentación de procesos y la identificación de riesgos de tu equipo son más efectivas con sesiones regulares asistidas por IA.",
+		"suggestion": "Inicia una nueva sesión hoy y deja que la IA se encargue de la documentación mientras tú te concentras en la conversación.",
+		"ctaButton": "Iniciar una sesión"
+	},
+	"contactConfirmation": {
+		"subject": "Recibimos tu mensaje — Auditora.ai",
+		"preheader": "Gracias por escribirnos, te responderemos pronto",
+		"heading": "Recibimos tu mensaje",
+		"body": "Hola {name}, gracias por contactarnos. Hemos recibido tu mensaje y nuestro equipo te responderá a la brevedad.",
+		"note": "Normalmente respondemos en un plazo de 24 horas en días hábiles."
+	},
+	"sessionInvitation": {
+		"subject": "Preparación para sesión: {processName} — Auditora.ai",
+		"preheader": "Estás invitado a una sesión de procesos sobre {processName}",
+		"detailsHeading": "Detalles de la sesión",
+		"processLabel": "Proceso",
+		"typeLabel": "Tipo de sesión",
+		"dateLabel": "Fecha",
+		"durationLabel": "Duración",
+		"yourRoleLabel": "Tu rol",
+		"facilitatorLabel": "Facilitador",
+		"minutes": "minutos",
+		"sessionType": {
+			"DISCOVERY": "Descubrimiento",
+			"DEEP_DIVE": "Profundización",
+			"CONTINUATION": "Continuación"
+		},
+		"yourPreparation": "Cómo prepararte según tu rol",
+		"questionsHeading": "Por favor reflexiona sobre estas preguntas antes de la sesión",
+		"intakeHeading": "Completa el formulario de preparación",
+		"intakeDescription": "Llena este breve formulario antes de la sesión para que podamos aprovechar mejor el tiempo juntos.",
+		"intakeButton": "Completar formulario de preparación",
+		"meetingLinkLabel": "Enlace de la reunión"
+	},
+	"upgradeInvitation": {
+		"subject": "Desbloquea más con Auditora.ai {suggestedPlan}",
+		"preheader": "Obtén más sesiones, usuarios y funciones con {suggestedPlan}",
+		"heading": "Desbloquea más con {suggestedPlan}",
+		"body": "Actualmente estás en el plan {currentPlan}. Actualiza a {suggestedPlan} para desbloquear:",
+		"ctaButton": "Ver opciones de actualización",
+		"currentPlanLabel": "Actual: {currentPlan}",
+		"suggestedPlanLabel": "Recomendado: {suggestedPlan}"
 	}
 }

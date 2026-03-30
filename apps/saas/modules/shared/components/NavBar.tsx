@@ -32,6 +32,7 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import type { ElementType } from "react";
 import { OrganzationSelect } from "../../organizations/components/OrganizationSelect";
+import { UpgradeBanner } from "../../payments/components/UpgradeBanner";
 import { useIsMobile } from "../hooks/use-media-query";
 import { useSidebar } from "../lib/sidebar-context";
 import { NavBadge } from "./NavBadge";
@@ -461,6 +462,14 @@ export function NavBar() {
 						</>
 					)}
 				</TooltipProvider>
+
+				{/* Upgrade banner (shown when session credits are low) */}
+				{hasOrg && !isCollapsedEffective && activeOrganization && (
+					<UpgradeBanner
+						organizationId={activeOrganization.id}
+						organizationSlug={activeOrganization.slug}
+					/>
+				)}
 
 				{/* Spacer */}
 				<div className="flex-1" />

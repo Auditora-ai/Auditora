@@ -39,7 +39,24 @@
 }
 
 @utility font-display {
-	font-family: var(--font-display), serif;
+	font-family: var(--font-display), system-ui, sans-serif;
+	font-weight: 700;
+	letter-spacing: -0.02em;
+}
+
+/* Landing page theme override — cold blue + teal palette */
+[data-landing] {
+	--landing-deep: #0A1428;
+	--landing-deep-light: #111827;
+	--landing-teal: #00E5C0;
+	--landing-electric: #00E5C0;
+
+	--primary: #00E5C0;
+	--primary-foreground: #0A1428;
+	--ring: #00E5C0;
+	--border: #E2E8F0;
+	--muted: #F1F5F9;
+	--muted-foreground: #64748B;
 }
 
 /* Waveform animation for product demo */
@@ -51,4 +68,10 @@
 @utility animate-waveform {
 	animation: waveform 0.8s ease-in-out infinite;
 	transform-origin: center;
+}
+
+/* Ripple effect for CTA buttons */
+@keyframes ripple {
+	0% { transform: scale(0); opacity: 0.4; }
+	100% { transform: scale(4); opacity: 0; }
 }

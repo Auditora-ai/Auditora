@@ -1,5 +1,5 @@
 import { logger } from "@repo/logs";
-import { config, type Locale } from "../config";
+import { config, senderMap, type Locale } from "../config";
 import type { mailTemplates } from "../emails";
 import { send } from "../provider";
 import type { TemplateId } from "./templates";
@@ -30,9 +30,16 @@ export async function sendEmail<T extends TemplateId>(
 	let html: string;
 	let text: string;
 	let subject: string;
+	let resolvedFrom = from;
 
 	if ("templateId" in params) {
 		const { templateId, context } = params;
+
+		// Auto-resolve sender from senderMap if not explicitly provided
+		if (!resolvedFrom) {
+			resolvedFrom = senderMap[templateId] ?? config.mailFrom;
+		}
+
 		const template = await getTemplate({
 			templateId,
 			context,
@@ -50,7 +57,7 @@ export async function sendEmail<T extends TemplateId>(
 	try {
 		await send({
 			to,
-			from,
+			from: resolvedFrom,
 			subject,
 			text,
 			html,

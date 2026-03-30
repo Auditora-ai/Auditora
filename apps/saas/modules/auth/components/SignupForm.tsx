@@ -20,9 +20,17 @@ import {
 import { Input } from "@repo/ui/components/input";
 import { passwordSchema } from "@repo/utils";
 import { PasswordInput } from "@shared/components/PasswordInput";
-import { AlertTriangleIcon, ArrowRightIcon, MailboxIcon } from "lucide-react";
+import {
+	AlertTriangleIcon,
+	ArrowRightIcon,
+	LockIcon,
+	MailIcon,
+	MailboxIcon,
+	ShieldCheckIcon,
+	UserIcon,
+} from "lucide-react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -34,18 +42,22 @@ import {
 } from "../constants/oauth-providers";
 import { SocialSigninButton } from "./SocialSigninButton";
 
-const formSchema = z.object({
-	email: z.email(),
-	name: z.string().min(1),
-	password: passwordSchema,
-});
-
 export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 	const t = useTranslations();
-	const router = useRouter();
 	const { user, loaded: sessionLoaded } = useSession();
 	const { getAuthErrorMessage } = useAuthErrorMessages();
 	const searchParams = useSearchParams();
+
+	const formSchema = z.object({
+		email: z.email(),
+		name: z.string().min(1),
+		password: passwordSchema,
+		acceptTerms: z.literal(true, {
+			errorMap: () => ({
+				message: t("auth.signup.acceptRequired"),
+			}),
+		}),
+	});
 
 	const invitationId = searchParams.get("invitationId");
 	const email = searchParams.get("email");
@@ -53,10 +65,11 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 
 	const form = useForm({
 		resolver: zodResolver(formSchema),
-		values: {
+		defaultValues: {
 			name: "",
 			email: prefillEmail ?? email ?? "",
 			password: "",
+			acceptTerms: false as boolean,
 		},
 	});
 
@@ -68,7 +81,7 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 
 	useEffect(() => {
 		if (sessionLoaded && user) {
-			router.replace(redirectPath);
+			window.location.href = redirectPath;
 		}
 	}, [user, sessionLoaded]);
 
@@ -101,7 +114,7 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 					throw error;
 				}
 
-				router.push(config.redirectAfterSignIn);
+				window.location.href = config.redirectAfterSignIn;
 			}
 		} catch (e) {
 			form.setError("root", {
@@ -116,10 +129,10 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 
 	return (
 		<div>
-			<h1 className="font-bold text-xl md:text-2xl">
+			<h1 className="auth-title font-display text-3xl tracking-tight md:text-4xl">
 				{t("auth.signup.title")}
 			</h1>
-			<p className="mt-1 mb-6 text-foreground/60">
+			<p className="auth-subtitle mt-2 mb-8 text-base text-foreground/60">
 				{t("auth.signup.message")}
 			</p>
 
@@ -160,7 +173,13 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 											{t("auth.signup.name")}
 										</FormLabel>
 										<FormControl>
-											<Input {...field} />
+											<div className="relative">
+												<UserIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+												<Input
+													{...field}
+													className="pl-10"
+												/>
+											</div>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -176,11 +195,15 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 											{t("auth.signup.email")}
 										</FormLabel>
 										<FormControl>
-											<Input
-												{...field}
-												autoComplete="email"
-												readOnly={!!prefillEmail}
-											/>
+											<div className="relative">
+												<MailIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+												<Input
+													{...field}
+													className="pl-10"
+													autoComplete="email"
+													readOnly={!!prefillEmail}
+												/>
+											</div>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
@@ -210,21 +233,81 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 								/>
 							)}
 
+							<FormField
+								control={form.control}
+								name="acceptTerms"
+								render={({ field }) => (
+									<FormItem className="flex flex-row items-start gap-3 space-y-0">
+										<FormControl>
+											<input
+												type="checkbox"
+												checked={field.value === true}
+												onChange={(e) =>
+													field.onChange(
+														e.target.checked,
+													)
+												}
+												className="mt-0.5 h-4 w-4 shrink-0 rounded border-border accent-primary"
+											/>
+										</FormControl>
+										<div className="space-y-1">
+											<FormLabel className="text-xs font-normal leading-relaxed text-foreground/60">
+												{t.rich(
+													"auth.signup.acceptTerms",
+													{
+														termsLink: (chunks) => (
+															<Link
+																href="/legal/terms"
+																target="_blank"
+																className="underline text-foreground/80 hover:text-foreground"
+															>
+																{chunks}
+															</Link>
+														),
+														privacyLink: (
+															chunks,
+														) => (
+															<Link
+																href="/legal/privacy-policy"
+																target="_blank"
+																className="underline text-foreground/80 hover:text-foreground"
+															>
+																{chunks}
+															</Link>
+														),
+													},
+												)}
+											</FormLabel>
+											<FormMessage />
+										</div>
+									</FormItem>
+								)}
+							/>
+
 							<Button
 								variant="primary"
+								size="lg"
+								className="w-full"
 								loading={form.formState.isSubmitting}
 							>
 								{t("auth.signup.submit")}
+								<ArrowRightIcon className="ml-2 size-4" />
 							</Button>
 						</form>
 					</Form>
+
+					{/* Security message */}
+					<p className="mt-4 flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+						<ShieldCheckIcon className="size-3.5" />
+						{t("auth.login.security")}
+					</p>
 
 					{authConfig.enableSignup &&
 						authConfig.enableSocialLogin && (
 							<>
 								<div className="relative my-6 h-4">
 									<hr className="relative top-2" />
-									<p className="-translate-x-1/2 absolute top-0 left-1/2 mx-auto inline-block h-4 bg-card px-2 text-center font-medium text-foreground/60 text-sm leading-tight">
+									<p className="-translate-x-1/2 absolute top-0 left-1/2 mx-auto inline-block h-4 bg-background px-2 text-center font-medium text-foreground/60 text-sm leading-tight">
 										{t("auth.login.continueWith")}
 									</p>
 								</div>

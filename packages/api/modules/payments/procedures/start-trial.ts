@@ -1,10 +1,12 @@
 import { ORPCError } from "@orpc/client";
 import {
 	createPurchase,
+	db,
 	getPurchasesByOrganizationId,
 	getPurchasesByUserId,
 } from "@repo/database";
 import { config } from "@repo/payments/config";
+import { getPlanLimits, type PlanId } from "@repo/payments/lib/plans";
 import { z } from "zod";
 import { protectedProcedure } from "../../../orpc/procedures";
 
@@ -55,6 +57,20 @@ export const startTrial = protectedProcedure
 					? { organizationId }
 					: { userId: user.id }),
 			});
+
+			// Set session credit limits from plan config
+			if (organizationId) {
+				const limits = getPlanLimits(planId as PlanId);
+				if (limits) {
+					await db.organization.update({
+						where: { id: organizationId },
+						data: {
+							sessionCreditsLimit: limits.sessions,
+							billingCycleAnchor: new Date(),
+						},
+					});
+				}
+			}
 
 			return { success: true };
 		},

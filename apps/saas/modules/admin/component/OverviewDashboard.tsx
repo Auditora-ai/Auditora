@@ -116,6 +116,7 @@ export function OverviewDashboard() {
 							<TableHead>Tier AI</TableHead>
 							<TableHead className="text-right">Miembros</TableHead>
 							<TableHead className="text-right">Sesiones</TableHead>
+							<TableHead className="text-right">Créditos</TableHead>
 							<TableHead className="text-right">Tokens (30d)</TableHead>
 							<TableHead className="text-right">Budget</TableHead>
 							<TableHead className="text-right">Llamadas AI</TableHead>
@@ -165,6 +166,13 @@ export function OverviewDashboard() {
 									</TableCell>
 									<TableCell className="text-right tabular-nums">
 										{org.sessionsCount}
+									</TableCell>
+									<TableCell className="text-right tabular-nums">
+										{org.sessionCreditsUsed !== undefined && org.sessionCreditsLimit
+											? `${org.sessionCreditsUsed}/${org.sessionCreditsLimit}`
+											: org.sessionCreditsUsed !== undefined
+												? `${org.sessionCreditsUsed}`
+												: "---"}
 									</TableCell>
 									<TableCell className="text-right tabular-nums">
 										{formatTokens(org.tokens30d)}

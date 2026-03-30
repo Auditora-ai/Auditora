@@ -216,6 +216,7 @@ enum SessionType {
   DISCOVERY
   DEEP_DIVE
   CONTINUATION
+  AI_INTERVIEW
 }
 
 enum ProcessLevel {
@@ -421,6 +422,10 @@ model MeetingSession {
 
   // Teleprompter mode (explore | deepen | validate)
   questionMode        String            @default("explore")
+
+  // AI Interview data
+  conversationLog     Json?             // Array<{role, content, timestamp, metadata}>
+  knowledgeSnapshot   Json?             // Accumulated KnowledgeSnapshot from AI interview
 
   // BPMN data
   bpmnXml             String?           @db.Text

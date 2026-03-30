@@ -14,6 +14,7 @@ import { recordEvent } from "@meeting/lib/session-timeline";
 import { randomBytes } from "crypto";
 import { buildBpmnXml } from "@meeting/lib/bpmn-builder";
 import type { DiagramNode } from "@meeting/types";
+import { checkAndConsumeCredit } from "@repo/rate-limit";
 
 async function getAuthContext() {
 	const session = await auth.api.getSession({
@@ -78,9 +79,10 @@ export async function POST(request: NextRequest) {
 		};
 
 		const isEditMode = body.editMode === true && !meetingUrl;
+		const isAiInterview = sessionType === "AI_INTERVIEW";
 		const isScheduled = !!scheduledFor && !meetingUrl && !isEditMode;
 
-		if (!isScheduled && !isEditMode && !meetingUrl) {
+		if (!isScheduled && !isEditMode && !isAiInterview && !meetingUrl) {
 			return NextResponse.json(
 				{ error: "meetingUrl is required (or provide scheduledFor for pre-scheduled sessions, or editMode for offline editing)" },
 				{ status: 400 },
@@ -107,6 +109,23 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
+		// Session credit check + atomic consume (edit-mode sessions are free)
+		if (!isEditMode) {
+			const creditAmount = sessionType === "AI_INTERVIEW" ? 0.5 : 1.0;
+			const creditCheck = await checkAndConsumeCredit(org.id, creditAmount, db);
+			if (!creditCheck.allowed) {
+				return NextResponse.json(
+					{
+						error: "Has alcanzado el límite de sesiones IA de tu plan este mes.",
+						code: "SESSION_CREDITS_EXHAUSTED",
+						used: creditCheck.used,
+						limit: creditCheck.limit,
+					},
+					{ status: 429 },
+				);
+			}
+		}
+
 		// For DISCOVERY: auto-create ProcessArchitecture if not exists
 		if (sessionType === "DISCOVERY") {
 			const existingArch = await db.processArchitecture.findUnique({
@@ -120,7 +139,7 @@ export async function POST(request: NextRequest) {
 		}
 
 		// Determine initial status
-		const initialStatus = isEditMode
+		const initialStatus = isEditMode || isAiInterview
 			? ("ACTIVE" as const)
 			: isScheduled
 				? ("SCHEDULED" as const)
@@ -129,7 +148,7 @@ export async function POST(request: NextRequest) {
 		// Create session in DB
 		const session = await db.meetingSession.create({
 			data: {
-				type: sessionType as "DISCOVERY" | "DEEP_DIVE" | "CONTINUATION",
+				type: sessionType as "DISCOVERY" | "DEEP_DIVE" | "CONTINUATION" | "AI_INTERVIEW",
 				status: initialStatus,
 				meetingUrl: meetingUrl || undefined,
 				organizationId: org.id,
@@ -246,6 +265,41 @@ export async function POST(request: NextRequest) {
 				shareToken: session.shareToken,
 				intakeToken: session.intakeToken,
 				status: "active",
+			});
+		}
+
+		// For AI Interview sessions: no bot, no meeting URL, start active immediately
+		if (isAiInterview) {
+			const resolvedProcessName = processDefinitionId
+				? (await db.processDefinition.findUnique({ where: { id: processDefinitionId }, select: { name: true } }))?.name || "tu proceso"
+				: "tu negocio";
+
+			const openingMessage = processDefinitionId
+				? `¡Hola! Vamos a profundizar en el proceso "${resolvedProcessName}". Para empezar, ¿podrías describirme quiénes son los clientes o destinatarios principales de este proceso?`
+				: "¡Hola! Soy tu asistente de análisis de procesos. Para empezar, ¿podrías contarme cuáles son las principales áreas de tu negocio y quiénes son tus clientes más importantes?";
+
+			const initialLog = [
+				{
+					role: "assistant",
+					content: openingMessage,
+					timestamp: new Date().toISOString(),
+				},
+			];
+
+			await db.meetingSession.update({
+				where: { id: session.id },
+				data: {
+					startedAt: new Date(),
+					conversationLog: initialLog,
+				},
+			});
+			recordEvent(session.id, "session_created", `type=AI_INTERVIEW mode=chat`);
+			return NextResponse.json({
+				sessionId: session.id,
+				shareToken: session.shareToken,
+				status: "active",
+				openingMessage,
+				processName: resolvedProcessName,
 			});
 		}
 

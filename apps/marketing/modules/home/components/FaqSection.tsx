@@ -48,7 +48,6 @@ export function FaqSection({ className }: { className?: string }) {
 				},
 			});
 
-			// Title word-reveal
 			tl.from(".faq-word-inner", {
 				y: "100%",
 				stagger: 0.05,
@@ -56,7 +55,6 @@ export function FaqSection({ className }: { className?: string }) {
 				ease: "power4.out",
 			});
 
-			// Description fade
 			tl.from(
 				".faq-description",
 				{
@@ -68,7 +66,6 @@ export function FaqSection({ className }: { className?: string }) {
 				"-=0.4",
 			);
 
-			// Accordion items stagger cascade
 			tl.from(
 				".faq-item",
 				{
@@ -87,18 +84,18 @@ export function FaqSection({ className }: { className?: string }) {
 	return (
 		<section
 			ref={sectionRef}
-			className={cn("scroll-mt-20 py-8 sm:py-12 lg:py-16", className)}
+			className={cn("scroll-mt-20 py-12 sm:py-16 lg:py-24 bg-white", className)}
 			id="faq"
 		>
 			<div className="container">
 				<div className="grid grid-cols-1 gap-6 md:gap-8 lg:gap-12 max-w-2xl mx-auto">
 					<div className="text-center">
-						<h2 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-tight text-foreground" style={{ perspective: "600px" }}>
+						<h2 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-tight text-[#0A1428]" style={{ perspective: "600px" }}>
 							<SplitWords innerClassName="faq-word-inner">
 								{t("faq.title")}
 							</SplitWords>
 						</h2>
-						<p className="faq-description text-foreground/60 text-sm sm:text-lg mt-2">
+						<p className="faq-description text-[#64748B] text-sm sm:text-lg mt-2">
 							{t("faq.description")}
 						</p>
 					</div>
@@ -111,12 +108,12 @@ export function FaqSection({ className }: { className?: string }) {
 							<AccordionItem
 								key={`faq-item-${i}`}
 								value={`item-${i}`}
-								className="faq-item rounded-lg bg-card shadow-none border px-3 sm:px-4 lg:px-6"
+								className="faq-item rounded-xl bg-[#F8FAFC] shadow-none border border-[#E2E8F0] px-3 sm:px-4 lg:px-6"
 							>
-								<AccordionTrigger className="text-left font-medium text-sm sm:text-base hover:no-underline">
+								<AccordionTrigger className="text-left font-medium text-sm sm:text-base hover:no-underline text-[#0A1428]">
 									{item.question}
 								</AccordionTrigger>
-								<AccordionContent className="text-foreground/60">
+								<AccordionContent className="text-[#64748B]">
 									{item.answer}
 								</AccordionContent>
 							</AccordionItem>

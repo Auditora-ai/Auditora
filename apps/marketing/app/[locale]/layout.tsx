@@ -1,15 +1,15 @@
-import { AnalyticsScript } from "@analytics";
 import { config } from "@config";
 import { config as i18nConfig } from "@i18n/config";
 import { cn } from "@repo/ui";
 import { ClientProviders } from "@shared/components/ClientProviders";
 import { ConsentBanner } from "@shared/components/ConsentBanner";
+import { ConsentGatedAnalytics } from "@shared/components/ConsentGatedAnalytics";
 import { ConsentProvider } from "@shared/components/ConsentProvider";
 import { Footer } from "@shared/components/Footer";
 import { LenisProvider } from "@shared/components/LenisProvider";
 import { NavBar } from "@shared/components/NavBar";
-import { Geist } from "next/font/google";
-import { Instrument_Serif } from "next/font/google";
+import { CONSENT_COOKIE_NAME, parseConsentCookie } from "@shared/lib/consent-types";
+import { Geist, Inter } from "next/font/google";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
@@ -23,11 +23,10 @@ const sansFont = Geist({
 	variable: "--font-sans",
 });
 
-const displayFont = Instrument_Serif({
-	weight: "400",
+const displayFont = Inter({
+	weight: ["600", "700", "800"],
 	subsets: ["latin"],
 	variable: "--font-display",
-	style: ["normal", "italic"],
 });
 
 const locales = Object.keys(i18nConfig.locales) as string[];
@@ -51,7 +50,8 @@ export default async function MarketingLayout({
 	const messages = await getMessages();
 
 	const cookieStore = await cookies();
-	const consentCookie = cookieStore.get("consent");
+	const consentCookie = cookieStore.get(CONSENT_COOKIE_NAME);
+	const initialConsent = parseConsentCookie(consentCookie?.value);
 
 	return (
 		<html
@@ -64,9 +64,7 @@ export default async function MarketingLayout({
 					"min-h-screen overflow-x-hidden bg-background text-foreground antialiased",
 				)}
 			>
-				<ConsentProvider
-					initialConsent={consentCookie?.value === "true"}
-				>
+				<ConsentProvider initialConsent={initialConsent}>
 					<NextIntlClientProvider locale={locale} messages={messages}>
 						<ClientProviders>
 							<ThemeProvider
@@ -85,7 +83,7 @@ export default async function MarketingLayout({
 								</LenisProvider>
 
 								<ConsentBanner />
-								<AnalyticsScript />
+								<ConsentGatedAnalytics />
 							</ThemeProvider>
 						</ClientProviders>
 					</NextIntlClientProvider>

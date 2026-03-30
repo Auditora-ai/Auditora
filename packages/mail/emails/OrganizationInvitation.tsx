@@ -24,20 +24,28 @@ export function OrganizationInvitation({
 	});
 
 	return (
-		<Wrapper>
+		<Wrapper
+			locale={locale}
+			preheader={t("preheader", { organizationName })}
+			footerReason={t("common.footer.receivingBecauseInvite")}
+		>
 			<Heading className="text-xl">
-				{t.markup("headline", {
+				{t.rich("headline", {
 					organizationName,
-					strong: (chunks) => `<strong>${chunks}</strong>`,
+					strong: (chunks) => <strong>{chunks}</strong>,
 				})}
 			</Heading>
+
 			<Text>{t("body", { organizationName })}</Text>
 
 			<PrimaryButton href={url}>{t("join")}</PrimaryButton>
 
 			<Text className="mt-4 text-muted-foreground text-sm">
 				{t("common.openLinkInBrowser")}
-				<Link href={url}>{url}</Link>
+				<br />
+				<Link href={url} className="break-all">
+					{url}
+				</Link>
 			</Text>
 		</Wrapper>
 	);
@@ -46,8 +54,8 @@ export function OrganizationInvitation({
 OrganizationInvitation.PreviewProps = {
 	locale: defaultLocale,
 	translations: defaultTranslations,
-	url: "#",
-	organizationName: "Acme",
+	url: "https://app.auditora.ai/invite?token=abc123",
+	organizationName: "Acme Consulting",
 };
 
 export default OrganizationInvitation;

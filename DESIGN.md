@@ -91,6 +91,26 @@ State-based coloring takes priority over type-based colors via CSS markers.
 - **Node rejected:** `#DC2626` border (solid, fading) with `#FEF2F2` background
 - **Node active (discussing now):** `#2563EB` border (3px solid) with `#DBEAFE` background — thicker border + darker fill than confirmed tasks for visual distinction
 
+### Marketing Landing & Login Palette
+Separate from the product UI. Darker, bolder, premium feel that differentiates from generic BPM tools (no corporate blue). Applied via `[data-landing]` override on marketing and hardcoded in login showcase.
+
+- **Deep background:** `#0A1428` — hero sections, dark panels, navbar scroll bg, login showcase
+- **Secondary background:** `#111827` — cards on dark surfaces, raised elements, feature pills
+- **Accent (teal):** `#00E5C0` — primary accent across all marketing + login. Buttons, badges, icons, borders, timeline
+- **Accent hover:** `#00C4A3` — button hover states
+- **Main text (on dark):** `#F1F5F9` — headings, body text on dark sections
+- **Secondary text:** `#94A3B8` — subtitles, descriptions on dark sections
+- **Muted text:** `#64748B` — meta text, fine print
+- **Heading text (on light):** `#0A1428` — headings on white/light sections
+- **Risk/alert:** `#EF4444` — risk icons, alert accents (login risk feature)
+- **Success:** `#10B981` — success indicators
+- **Borders (dark surfaces):** `#1E293B` — dividers, pill borders on dark bg
+- **Button text on teal:** `#0A1428` — dark text on `#00E5C0` buttons for contrast (not white)
+- **Radial glow (teal):** `rgba(0, 229, 192, 0.06–0.15)` — gradient overlays on dark sections
+- **Radial glow (risk):** `rgba(239, 68, 68, 0.04)` — subtle red glow on login showcase
+
+**Design rationale:** The teal `#00E5C0` is brighter and more saturated than typical SaaS accents. Combined with the deep `#0A1428` background, it creates a premium, high-contrast look that signals innovation and sophistication. The palette avoids blue entirely to stand apart from competitors.
+
 ### Speaker Colors (transcript)
 - **Consultant:** `#2563EB` — matches action accent, "you" are the brand
 - **Client 1:** `#7C3AED` — purple, distinct from blue
@@ -204,3 +224,4 @@ The boundary between warm chrome and warm canvas should feel like a gentle bridg
 | 2026-03-22 | Bizagi-inspired warm palette | Updated from cool blue/amber to warm palette: tasks=soft blue (#3B82F6), gateways=true yellow (#EAB308), intermediate events=warm brown (#A16207). More professional, screenshot-ready for client deliverables. |
 | 2026-03-22 | bpmn.io watermark styling | Cannot legally remove watermark. Styled to blend: 30% opacity + grayscale. License-compliant, visually unobtrusive. |
 | 2026-03-27 | Warm Luxury redesign | Cold slate (#0F172A) + Inter replaced with warm stone palette + Instrument Serif + Geist. Dual accent (blue=action, amber=orientation). Warm white canvas (#FFFBF5). Panel edge transitions with amber glow. The original typography decisions (Instrument Serif + Geist) are restored. |
+| 2026-03-29 | Marketing & Login premium palette | New palette: deep `#0A1428` + bright teal `#00E5C0` replaces navy+muted teal (marketing) and stone+blue (login). Goal: differentiate from generic BPM tools, feel more potent and premium. Teal buttons use dark text for contrast. Unified accent across marketing and login. |

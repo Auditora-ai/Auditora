@@ -812,7 +812,7 @@ export async function runPostSessionPipelines(sessionId: string, _diagramNodes: 
 	try {
 		const sessionWithUser = await db.meetingSession.findUnique({
 			where: { id: sessionId },
-			include: { user: { select: { email: true, name: true } }, organization: { select: { name: true, slug: true } } },
+			include: { user: { select: { email: true, name: true, locale: true } }, organization: { select: { name: true, slug: true } } },
 		});
 		if (sessionWithUser?.user?.email) {
 			const { sendEmail } = await import("@repo/mail");
@@ -820,18 +820,13 @@ export async function runPostSessionPipelines(sessionId: string, _diagramNodes: 
 			const processName = session.processDefinition?.name || "Proceso";
 			await sendEmail({
 				to: sessionWithUser.user.email,
-				subject: `Entregables listos: ${processName}`,
-				html: `
-					<div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 0 auto;">
-						<h2 style="color: #0F172A;">Sesion finalizada</h2>
-						<p style="color: #475569;">Los entregables de tu sesion de <strong>${processName}</strong> estan listos para revision.</p>
-						<p style="color: #475569;">Incluye: reporte de inteligencia de proceso, resumen ejecutivo, mapa visual, SIPOC, RACI, riesgos, y recomendaciones.</p>
-						<a href="${reviewUrl}" style="display: inline-block; background: #2563EB; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: 500; margin-top: 16px;">
-							Revisar entregables
-						</a>
-						<p style="color: #94A3B8; font-size: 12px; margin-top: 24px;">— Auditora.ai</p>
-					</div>
-				`,
+				templateId: "sessionRecap",
+				context: {
+					processName,
+					reviewUrl,
+					userName: sessionWithUser.user.name || undefined,
+				},
+				locale: (sessionWithUser.user.locale as any) || "es",
 			});
 			console.log(`[PostSession] Recap email sent to ${sessionWithUser.user.email} for ${sessionId.substring(0, 8)}`);
 		}

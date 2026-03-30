@@ -32,7 +32,6 @@ export function CtaSection() {
 				},
 			});
 
-			// Content timeline (delayed for after portal opens)
 			const tl = gsap.timeline({
 				scrollTrigger: {
 					trigger: sectionRef.current,
@@ -41,7 +40,6 @@ export function CtaSection() {
 				},
 			});
 
-			// Title word-reveal in white
 			tl.from(".cta-word-inner", {
 				y: "110%",
 				stagger: 0.05,
@@ -49,7 +47,6 @@ export function CtaSection() {
 				ease: "power4.out",
 			});
 
-			// Subtitle blur-fade
 			tl.from(
 				".cta-subtitle",
 				{
@@ -62,7 +59,6 @@ export function CtaSection() {
 				"-=0.3",
 			);
 
-			// Button pop-in
 			tl.from(
 				".cta-button",
 				{
@@ -74,7 +70,6 @@ export function CtaSection() {
 				"-=0.2",
 			);
 
-			// Note fade
 			tl.from(
 				".cta-note",
 				{
@@ -86,7 +81,7 @@ export function CtaSection() {
 				"-=0.2",
 			);
 
-			// Pulsing glow behind button (continuous after reveal)
+			// Pulsing teal glow behind button
 			gsap.to(".cta-glow", {
 				opacity: 0.6,
 				scale: 1.1,
@@ -103,31 +98,31 @@ export function CtaSection() {
 	return (
 		<section
 			ref={sectionRef}
-			className="py-16 sm:py-24 lg:py-32 bg-[#1C1917] text-white"
+			className="py-16 sm:py-24 lg:py-32 bg-[#0A1428] text-white"
 			style={{ clipPath: "inset(0 0 0 0)" }}
 		>
 			<div className="container max-w-3xl text-center">
-				<h2 className="font-display text-2xl sm:text-3xl md:text-5xl lg:text-6xl text-[#FAFAF9] text-balance" style={{ perspective: "600px" }}>
+				<h2 className="font-display text-2xl sm:text-3xl md:text-5xl lg:text-6xl text-white text-balance" style={{ perspective: "600px" }}>
 					<SplitWords innerClassName="cta-word-inner">
 						{t("cta.title")}
 					</SplitWords>
 				</h2>
 
-				<p className="cta-subtitle mt-4 sm:mt-6 text-[#A8A29E] text-base sm:text-lg text-balance">
+				<p className="cta-subtitle mt-4 sm:mt-6 text-[#94A3B8] text-base sm:text-lg text-balance">
 					{t("cta.subtitle")}
 				</p>
 
 				<div className="cta-button mt-8 sm:mt-10 relative inline-block">
-					<div className="cta-glow absolute inset-0 rounded-full bg-primary/30 blur-xl opacity-30 scale-100" />
-					<Button size="lg" variant="primary" asChild>
-						<a href={`${config.saasUrl}/scan`} className="relative">
+					<div className="cta-glow absolute inset-0 rounded-full bg-[#00E5C0]/30 blur-xl opacity-30 scale-100" />
+					<Button size="lg" variant="primary" asChild className="relative bg-[#00E5C0] hover:bg-[#00C4A3] text-[#0A1428]">
+						<a href={`${config.saasUrl}/scan`}>
 							{t("cta.button")}
 							<ArrowRightIcon className="ml-2 size-4" />
 						</a>
 					</Button>
 				</div>
 
-				<p className="cta-note mt-4 text-[#78716C] text-sm">
+				<p className="cta-note mt-4 text-[#64748B] text-sm">
 					{t("cta.note")}
 				</p>
 			</div>

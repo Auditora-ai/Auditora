@@ -90,14 +90,14 @@ export function BpmnViewerPanel({ bpmnXml }: BpmnViewerPanelProps) {
 			{/* Custom CSS for DESIGN.md colors */}
 			<style jsx global>{`
 				/* Task nodes: blue */
-				.djs-shape .djs-visual > rect { stroke: #2563EB !important; fill: #EFF6FF !important; }
+				.djs-shape .djs-visual > rect { stroke: #00E5C0 !important; fill: #ECFDF5 !important; }
 				/* Start event: green */
 				.djs-shape[data-element-id^="StartEvent"] .djs-visual > circle { stroke: #16A34A !important; fill: #F0FDF4 !important; }
 				/* End event: red */
 				.djs-shape[data-element-id^="EndEvent"] .djs-visual > circle { stroke: #DC2626 !important; fill: #FEF2F2 !important; }
 				/* Gateway: amber */
 				.djs-shape[data-element-id^="Gateway"] .djs-visual > polygon,
-				.djs-shape[data-element-id^="ExclusiveGateway"] .djs-visual > polygon { stroke: #D97706 !important; fill: #FFFBEB !important; }
+				.djs-shape[data-element-id^="ExclusiveGateway"] .djs-visual > polygon { stroke: #EF4444 !important; fill: #FEF2F2 !important; }
 				/* Connections */
 				.djs-connection .djs-visual > path { stroke: #64748B !important; }
 				/* Labels */

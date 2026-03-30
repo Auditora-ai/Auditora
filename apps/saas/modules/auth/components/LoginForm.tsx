@@ -1,7 +1,6 @@
 "use client";
 
 import { useAuthErrorMessages } from "@auth/hooks/errors-messages";
-import { sessionQueryKey } from "@auth/lib/api";
 import { config } from "@config";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { OrganizationInvitationAlert } from "@organizations/components/OrganizationInvitationAlert";
@@ -18,14 +17,16 @@ import {
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { useRouter } from "@shared/hooks/router";
-import { useQueryClient } from "@tanstack/react-query";
 import {
 	AlertTriangleIcon,
 	ArrowRightIcon,
 	EyeIcon,
 	EyeOffIcon,
 	KeyIcon,
+	LockIcon,
+	MailIcon,
 	MailboxIcon,
+	ShieldCheckIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -58,7 +59,6 @@ export function LoginForm() {
 	const t = useTranslations();
 	const { getAuthErrorMessage } = useAuthErrorMessages();
 	const router = useRouter();
-	const queryClient = useQueryClient();
 	const searchParams = useSearchParams();
 	const { user, loaded: sessionLoaded } = useSession();
 
@@ -82,7 +82,7 @@ export function LoginForm() {
 
 	useEffect(() => {
 		if (sessionLoaded && user) {
-			router.replace(redirectPath);
+			window.location.href = redirectPath;
 		}
 	}, [user, sessionLoaded]);
 
@@ -107,11 +107,7 @@ export function LoginForm() {
 					return;
 				}
 
-				queryClient.invalidateQueries({
-					queryKey: sessionQueryKey,
-				});
-
-				router.replace(redirectPath);
+				window.location.href = redirectPath;
 			} else {
 				const { error } = await authClient.signIn.magicLink({
 					...values,
@@ -137,7 +133,7 @@ export function LoginForm() {
 		try {
 			await authClient.signIn.passkey();
 
-			router.replace(redirectPath);
+			window.location.href = redirectPath;
 		} catch (e) {
 			form.setError("root", {
 				message: getAuthErrorMessage(
@@ -153,10 +149,10 @@ export function LoginForm() {
 
 	return (
 		<div>
-			<h1 className="font-bold text-xl md:text-2xl">
+			<h1 className="auth-title font-display text-3xl tracking-tight md:text-4xl">
 				{t("auth.login.title")}
 			</h1>
-			<p className="mt-1 mb-6 text-foreground/60">
+			<p className="auth-subtitle mt-2 mb-8 text-base text-foreground/60">
 				{t("auth.login.subtitle")}
 			</p>
 
@@ -178,7 +174,10 @@ export function LoginForm() {
 					)}
 
 					<Form {...form}>
-						<form className="space-y-4" onSubmit={onSubmit}>
+						<form
+							className="auth-form-content space-y-4"
+							onSubmit={onSubmit}
+						>
 							{authConfig.enableMagicLink &&
 								authConfig.enablePasswordLogin && (
 									<LoginModeSwitch
@@ -206,15 +205,19 @@ export function LoginForm() {
 								control={form.control}
 								name="email"
 								render={({ field }) => (
-									<FormItem>
+									<FormItem className="auth-form-field">
 										<FormLabel>
 											{t("auth.signup.email")}
 										</FormLabel>
 										<FormControl>
-											<Input
-												{...field}
-												autoComplete="email"
-											/>
+											<div className="relative">
+												<MailIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+												<Input
+													{...field}
+													className="pl-10"
+													autoComplete="email"
+												/>
+											</div>
 										</FormControl>
 									</FormItem>
 								)}
@@ -226,32 +229,20 @@ export function LoginForm() {
 										control={form.control}
 										name="password"
 										render={({ field }) => (
-											<FormItem>
-												<div className="flex justify-between gap-4">
-													<FormLabel>
-														{t(
-															"auth.signup.password",
-														)}
-													</FormLabel>
-
-													<Link
-														href="/forgot-password"
-														className="text-foreground/60 text-xs"
-													>
-														{t(
-															"auth.login.forgotPassword",
-														)}
-													</Link>
-												</div>
+											<FormItem className="auth-form-field">
+												<FormLabel>
+													{t("auth.signup.password")}
+												</FormLabel>
 												<FormControl>
 													<div className="relative">
+														<LockIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
 														<Input
 															type={
 																showPassword
 																	? "text"
 																	: "password"
 															}
-															className="pr-10"
+															className="pl-10 pr-10"
 															{...field}
 															autoComplete="current-password"
 														/>
@@ -262,7 +253,12 @@ export function LoginForm() {
 																	!showPassword,
 																)
 															}
-															className="absolute inset-y-0 right-0 flex items-center pr-4 text-primary text-xl"
+															className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground transition-colors hover:text-foreground"
+															aria-label={
+																showPassword
+																	? "Hide password"
+																	: "Show password"
+															}
 														>
 															{showPassword ? (
 																<EyeOffIcon className="size-4" />
@@ -277,18 +273,47 @@ export function LoginForm() {
 									/>
 								)}
 
+							{/* Remember me + Forgot password row */}
+							{authConfig.enablePasswordLogin &&
+								signinMode === "password" && (
+									<div className="flex items-center justify-between">
+										<label className="flex cursor-pointer items-center gap-2 text-sm text-foreground/60">
+											<input
+												type="checkbox"
+												className="size-4 rounded border-border accent-primary"
+											/>
+											{t("auth.login.rememberMe")}
+										</label>
+
+										<Link
+											href="/forgot-password"
+											className="text-sm text-primary hover:underline"
+										>
+											{t("auth.login.forgotPassword")}
+										</Link>
+									</div>
+								)}
+
 							<Button
 								className="w-full"
 								type="submit"
 								variant="primary"
+								size="lg"
 								loading={form.formState.isSubmitting}
 							>
 								{signinMode === "magic-link"
 									? t("auth.login.sendMagicLink")
 									: t("auth.login.submit")}
+								<ArrowRightIcon className="ml-2 size-4" />
 							</Button>
 						</form>
 					</Form>
+
+					{/* Security message */}
+					<p className="mt-4 flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+						<ShieldCheckIcon className="size-3.5" />
+						{t("auth.login.security")}
+					</p>
 
 					{(authConfig.enablePasskeys ||
 						(authConfig.enableSignup &&
@@ -296,7 +321,7 @@ export function LoginForm() {
 						<>
 							<div className="relative my-6 h-4">
 								<hr className="relative top-2" />
-								<p className="-translate-x-1/2 absolute top-0 left-1/2 mx-auto inline-block h-4 bg-card px-2 text-center font-medium text-foreground/60 text-sm leading-tight">
+								<p className="-translate-x-1/2 absolute top-0 left-1/2 mx-auto inline-block h-4 bg-background px-2 text-center font-medium text-foreground/60 text-sm leading-tight">
 									{t("auth.login.continueWith")}
 								</p>
 							</div>

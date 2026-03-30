@@ -27,11 +27,11 @@
 	--palette-warm-white: #FFFBF5;
 	--palette-warm-surface: #FAF9F7;
 
-	/* Action accent (blue) */
-	--palette-action: #2563EB;
-	--palette-action-hover: #1D4ED8;
-	--palette-action-subtle: #EFF6FF;
-	--palette-action-light: #DBEAFE;
+	/* Action accent (teal) */
+	--palette-action: #00E5C0;
+	--palette-action-hover: #00C4A3;
+	--palette-action-subtle: #ECFDF5;
+	--palette-action-light: #A7F3D0;
 
 	/* Orientation accent (amber) */
 	--palette-orientation: #D97706;
@@ -55,7 +55,7 @@
 		--popover: #FFFFFF;
 		--popover-foreground: var(--palette-stone-900);
 		--primary: var(--palette-action);
-		--primary-foreground: #FFFFFF;
+		--primary-foreground: #0A1428;
 		--secondary: var(--palette-warm-surface);
 		--secondary-foreground: var(--palette-stone-900);
 		--muted: var(--palette-stone-100);
@@ -73,26 +73,26 @@
 	}
 
 	.dark {
-		--background: var(--palette-stone-900);
-		--foreground: var(--palette-stone-50);
-		--card: var(--palette-stone-800);
-		--card-foreground: var(--palette-stone-50);
-		--popover: var(--palette-stone-800);
-		--popover-foreground: var(--palette-stone-50);
+		--background: #0A1428;
+		--foreground: #F1F5F9;
+		--card: #111827;
+		--card-foreground: #F1F5F9;
+		--popover: #111827;
+		--popover-foreground: #F1F5F9;
 		--primary: var(--palette-action);
-		--primary-foreground: #FFFFFF;
-		--secondary: var(--palette-stone-800);
-		--secondary-foreground: var(--palette-stone-50);
-		--muted: var(--palette-stone-800);
-		--muted-foreground: var(--palette-stone-400);
-		--accent: var(--palette-stone-800);
-		--accent-foreground: var(--palette-stone-50);
+		--primary-foreground: #0A1428;
+		--secondary: #111827;
+		--secondary-foreground: #F1F5F9;
+		--muted: #111827;
+		--muted-foreground: #64748B;
+		--accent: #111827;
+		--accent-foreground: #F1F5F9;
 		--success: var(--palette-success);
 		--success-foreground: #FFFFFF;
 		--destructive: var(--palette-destructive);
 		--destructive-foreground: #FFFFFF;
-		--border: var(--palette-stone-700);
-		--input: var(--palette-stone-700);
+		--border: #1E293B;
+		--input: #1E293B;
 		--ring: var(--palette-action);
 	}
 }
@@ -101,17 +101,17 @@
 /* Available globally so any component can use chrome-* classes.
    [data-chrome] can still be used for scoping overrides if needed. */
 :root {
-	--chrome-base: var(--palette-stone-900);
-	--chrome-raised: var(--palette-stone-800);
-	--chrome-hover: var(--palette-stone-700);
-	--chrome-subtle: var(--palette-stone-600);
-	--chrome-text: var(--palette-stone-50);
-	--chrome-text-secondary: var(--palette-stone-400);
-	--chrome-text-muted: var(--palette-stone-500);
-	--chrome-border: var(--palette-stone-700);
-	--chrome-border-subtle: var(--palette-stone-800);
-	--chrome-orientation: var(--palette-orientation);
-	--chrome-orientation-glow: var(--palette-orientation-glow);
+	--chrome-base: #0A1428;
+	--chrome-raised: #111827;
+	--chrome-hover: #1E293B;
+	--chrome-subtle: #334155;
+	--chrome-text: #F1F5F9;
+	--chrome-text-secondary: #94A3B8;
+	--chrome-text-muted: #64748B;
+	--chrome-border: #1E293B;
+	--chrome-border-subtle: #111827;
+	--chrome-orientation: #00E5C0;
+	--chrome-orientation-glow: rgba(0, 229, 192, 0.08);
 }
 
 /* ── Layer 3: Canvas Tokens (light surfaces, diagram area) ── */
@@ -196,4 +196,9 @@
 		from { height: var(--radix-accordion-content-height); }
 		to { height: 0; }
 	}
+	@keyframes fade-from-dark {
+		from { opacity: 1; }
+		to { opacity: 0; }
+	}
+	--animation-fade-from-dark: fade-from-dark 0.6s ease-out forwards;
 }

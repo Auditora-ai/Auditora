@@ -330,7 +330,7 @@ function TranscriptLine({ entry, sessionId }: { entry: TranscriptEntry; sessionI
 			<div className="flex items-baseline gap-2">
 				<span
 					className="text-[10px] font-medium"
-					style={{ color: isManual ? "#2563EB" : color }}
+					style={{ color: isManual ? "#00E5C0" : color }}
 				>
 					{isManual ? "Tu" : entry.speaker}
 				</span>

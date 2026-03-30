@@ -10,6 +10,7 @@ import {
 	PartyPopperIcon,
 	MailIcon,
 	MessageCircleIcon,
+	SendIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import type { WizardData } from "../SessionWizard";
@@ -32,6 +33,7 @@ export function StepInvitation({
 	onGoToCommandCenter,
 }: StepInvitationProps) {
 	const [generating, setGenerating] = useState(false);
+	const [sending, setSending] = useState(false);
 	const [copied, setCopied] = useState<string | null>(null);
 	const [includeIntakeLink, setIncludeIntakeLink] = useState(true);
 
@@ -124,10 +126,10 @@ export function StepInvitation({
 			.map((q) => `<li style="margin-bottom:4px;color:#334155">${q}</li>`)
 			.join("");
 		const intakeBlock = intakeUrl
-			? `<div style="margin-top:20px;padding:16px;background:#EFF6FF;border-radius:8px;border:1px solid #BFDBFE">
-<p style="margin:0 0 8px;font-weight:600;color:#1D4ED8;font-size:14px">📋 Formulario de preparación</p>
+			? `<div style="margin-top:20px;padding:16px;background:#ECFDF5;border-radius:8px;border:1px solid #6EE7C4">
+<p style="margin:0 0 8px;font-weight:600;color:#00C4A3;font-size:14px">📋 Formulario de preparación</p>
 <p style="margin:0 0 8px;color:#334155;font-size:13px">Completa este formulario antes de la sesión para que podamos aprovechar mejor el tiempo:</p>
-<a href="${intakeUrl}" style="display:inline-block;padding:10px 20px;background:#2563EB;color:white;text-decoration:none;border-radius:6px;font-weight:500;font-size:14px">Completar formulario</a>
+<a href="${intakeUrl}" style="display:inline-block;padding:10px 20px;background:#00E5C0;color:#0A1428;text-decoration:none;border-radius:6px;font-weight:500;font-size:14px">Completar formulario</a>
 </div>`
 			: "";
 		return `<div style="font-family:'Geist Sans',system-ui,sans-serif;max-width:600px">
@@ -166,6 +168,37 @@ ${invitation.suggestedDuration ? `<p style="margin-top:12px;color:#64748B;font-s
 			setTimeout(() => setCopied(null), 2000);
 		} catch {
 			toast.error("No se pudo copiar");
+		}
+	};
+
+	const participantsWithEmail = data.participants?.filter((p) => p.email) ?? [];
+
+	const handleSendEmails = async () => {
+		if (!invitation || !createdSessionId || participantsWithEmail.length === 0) return;
+		setSending(true);
+		try {
+			const res = await fetch("/api/sessions/send-invitation", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					sessionId: createdSessionId,
+					invitation,
+					includeIntakeLink,
+					locale: "es",
+				}),
+			});
+			if (!res.ok) throw new Error("Failed");
+			const result = await res.json();
+			if (result.sent > 0) {
+				toast.success(`Invitacion enviada a ${result.sent} participante${result.sent > 1 ? "s" : ""}`);
+			}
+			if (result.failed > 0) {
+				toast.error(`No se pudo enviar a ${result.failed} participante${result.failed > 1 ? "s" : ""}`);
+			}
+		} catch {
+			toast.error("Error enviando las invitaciones. Intenta de nuevo.");
+		} finally {
+			setSending(false);
 		}
 	};
 
@@ -383,6 +416,29 @@ ${invitation.suggestedDuration ? `<p style="margin-top:12px;color:#64748B;font-s
 								WhatsApp
 							</button>
 						</div>
+
+						{/* Send via Auditora.ai email */}
+						{createdSessionId && participantsWithEmail.length > 0 && (
+							<div className="mt-4 rounded-lg border border-primary/20 bg-primary/5 p-3">
+								<p className="mb-2 text-xs text-chrome-text-secondary">
+									Enviar invitacion profesional con branding de Auditora.ai directamente a{" "}
+									<strong>{participantsWithEmail.length}</strong> participante{participantsWithEmail.length > 1 ? "s" : ""} con email.
+								</p>
+								<button
+									type="button"
+									onClick={handleSendEmails}
+									disabled={sending}
+									className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-action-hover disabled:opacity-50"
+								>
+									{sending ? (
+										<Loader2Icon className="h-4 w-4 animate-spin" />
+									) : (
+										<SendIcon className="h-4 w-4" />
+									)}
+									{sending ? "Enviando..." : "Enviar por email desde Auditora.ai"}
+								</button>
+							</div>
+						)}
 					</div>
 				</div>
 			)}

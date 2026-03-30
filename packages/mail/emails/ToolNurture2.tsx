@@ -1,52 +1,74 @@
-import { Link, Text } from "@react-email/components";
+import { Text } from "@react-email/components";
 import React from "react";
+import { createTranslator } from "use-intl/core";
 import PrimaryButton from "../components/PrimaryButton";
 import Wrapper from "../components/Wrapper";
+import { defaultLocale, defaultTranslations } from "../lib/translations";
+import type { BaseMailProps } from "../types";
 
 export function ToolNurture2({
 	toolName,
+	unsubscribeUrl,
+	locale,
+	translations,
 }: {
 	toolName: string;
-}) {
+	unsubscribeUrl?: string;
+} & BaseMailProps) {
+	const t = createTranslator({
+		locale,
+		messages: { ...translations.toolNurture2, common: translations.common },
+	});
+
+	const baseUrl = process.env.NEXT_PUBLIC_MARKETING_URL || "https://auditora.ai";
+
 	return (
-		<Wrapper>
-			<Text style={{ fontSize: "18px", fontWeight: "bold" }}>
-				How a BPM consultant saves 3+ hours per session
+		<Wrapper
+			locale={locale}
+			preheader={t("preheader")}
+			unsubscribeUrl={unsubscribeUrl}
+			footerReason={t("common.footer.receivingBecauseTool")}
+		>
+			<Text style={{ fontSize: "18px", fontWeight: "bold", color: "#0A1428" }}>
+				{t("heading")}
 			</Text>
 
-			<Text>
-				Last week you used our {toolName}. Here's what a typical Auditora.ai
-				session looks like in practice:
+			<Text style={{ color: "#0A1428", lineHeight: "1.6" }}>
+				{t("intro", { toolName })}
 			</Text>
 
-			<Text style={{ backgroundColor: "#F8FAFC", padding: "16px", borderRadius: "8px", border: "1px solid #E2E8F0" }}>
-				<strong>Before Auditora.ai:</strong>{"\n"}
-				1 hour meeting + 4-6 hours documenting (BPMN, RACI, process sheet, executive summary){"\n\n"}
-				<strong>With Auditora.ai:</strong>{"\n"}
-				1 hour meeting + 15 minutes reviewing AI-generated deliverables
+			<Text
+				style={{
+					backgroundColor: "#FAF9F7",
+					padding: "16px",
+					borderRadius: "8px",
+					border: "1px solid #E7E5E4",
+					color: "#0A1428",
+					lineHeight: "1.8",
+				}}
+			>
+				<strong>{t("before")}</strong>{"\n"}
+				{t("beforeDetail")}{"\n\n"}
+				<strong>{t("after")}</strong>{"\n"}
+				{t("afterDetail")}
 			</Text>
 
-			<Text>
-				The math: 4 sessions/month × 4 hours saved = <strong>16 hours/month</strong> you
-				get back for analysis and client work instead of documentation.
+			<Text style={{ color: "#0A1428", lineHeight: "1.6" }}>
+				{t("math")}
 			</Text>
 
-			<PrimaryButton href="https://auditora.ai">
-				Start your free trial &rarr;
+			<PrimaryButton href={baseUrl}>
+				{t("ctaButton")}
 			</PrimaryButton>
-
-			<Text style={{ color: "#94A3B8", fontSize: "12px", marginTop: "32px" }}>
-				Auditora.ai — AI-powered process elicitation for BPM consultants.{" "}
-				<Link href="https://auditora.ai" style={{ color: "#64748B" }}>
-					Unsubscribe
-				</Link>
-			</Text>
 		</Wrapper>
 	);
 }
 
 ToolNurture2.PreviewProps = {
+	locale: defaultLocale,
+	translations: defaultTranslations,
 	toolName: "BPMN Generator",
+	unsubscribeUrl: "https://auditora.ai/unsubscribe?token=abc123",
 };
 
 export default ToolNurture2;

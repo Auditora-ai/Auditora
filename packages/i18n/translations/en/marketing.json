@@ -136,7 +136,7 @@
 			"disclaimer": "Risks identified in the instant diagnostic are logical inferences based on process structure, not detections of actual operational problems. For specific findings, use the guided conversation or the full platform."
 		},
 		"deepDive": {
-			"badge": "Where the real magic happens",
+			"badge": "Guided elicitation",
 			"title": "A guided conversation that builds your analysis",
 			"subtitle": "The instant diagnostic is the appetizer. The guided conversation is where Auditora.ai differentiates from every other tool.",
 			"methodTitle": "Socratic dialogue + SIPOC",
@@ -208,6 +208,29 @@
 				"description": "Encrypted in transit and at rest. Anonymous sessions expire in 24 hours. We never use your information to train models. GDPR compliant."
 			}
 		},
+		"socialProof": {
+			"badge": "Use cases",
+			"title": "Consultants and auditors trust Auditora.ai",
+			"testimonial1": {
+				"quote": "Reduced process documentation time from 3 weeks to 2 days. The automatic FMEA matrix is exactly what we present to committee.",
+				"name": "Maria Rodriguez",
+				"role": "Senior Process Consultant",
+				"company": "Top 10 Consulting Firm"
+			},
+			"testimonial2": {
+				"quote": "We used to need a dedicated analyst per process. Now a junior consultant produces senior-level deliverables in the first session.",
+				"name": "Carlos Mendez",
+				"role": "Continuous Improvement Manager",
+				"company": "Global Manufacturing Company"
+			},
+			"testimonial3": {
+				"quote": "The traceability of the SIPOC methodology gives us the evidence we need for internal audits. It's not a black box.",
+				"name": "Ana Torres",
+				"role": "Internal Auditor",
+				"company": "Latam Financial Institution"
+			},
+			"logosLabel": "Used by consulting and audit teams at"
+		},
 		"tools": {
 			"title": "Free AI Tools for Process Professionals",
 			"subtitle": "The same AI that analyzes your business, now as standalone tools. No signup required.",
@@ -241,6 +264,27 @@
 		"goToDashboard": "Go to dashboard",
 		"goToHomepage": "Go to homepage"
 	},
+	"consent": {
+		"title": "Cookie preferences",
+		"description": "We use cookies to improve your experience and analyze site usage. You can customize which cookies you allow.",
+		"acceptAll": "Accept all",
+		"rejectAll": "Reject all",
+		"customize": "Customize",
+		"savePreferences": "Save preferences",
+		"essential": {
+			"title": "Essential",
+			"description": "Required for the site to function. Cannot be disabled."
+		},
+		"analytics": {
+			"title": "Analytics",
+			"description": "Help us understand how you use the site so we can improve it."
+		},
+		"marketing": {
+			"title": "Marketing",
+			"description": "Used to show you relevant content and measure campaign effectiveness."
+		},
+		"gpcDetected": "We detected your Global Privacy Control preference. Analytics and marketing cookies are disabled."
+	},
 	"common": {
 		"footer": {
 			"blog": "Blog",
@@ -248,8 +292,11 @@
 			"pricing": "Pricing",
 			"privacyPolicy": "Privacy policy",
 			"termsAndConditions": "Terms and conditions",
+			"doNotSell": "Do Not Sell My Personal Information",
+			"cookieSettings": "Cookie settings",
 			"tools": "Free Tools",
-			"builtWith": "Auditora.ai"
+			"builtWith": "Auditora.ai",
+			"aiDisclaimer": "Auditora.ai uses artificial intelligence. Results are informational only and do not replace professional advice."
 		},
 		"menu": {
 			"blog": "Blog",

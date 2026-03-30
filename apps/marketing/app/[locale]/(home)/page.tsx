@@ -6,8 +6,8 @@ import { HeroSection } from "@home/components/HeroSection";
 import { PlatformFeaturesSection } from "@home/components/PlatformFeaturesSection";
 import { PricingSection } from "@home/components/PricingSection";
 import { ProblemSection } from "@home/components/ProblemSection";
+import { SocialProofSection } from "@home/components/SocialProofSection";
 import { SolutionSection } from "@home/components/SolutionSection";
-import { ToolsShowcaseSection } from "@home/components/ToolsShowcaseSection";
 import { TryItSection } from "@home/components/TryItSection";
 import { setRequestLocale } from "next-intl/server";
 
@@ -20,7 +20,7 @@ export default async function Home({
 	setRequestLocale(locale);
 
 	return (
-		<>
+		<div data-landing>
 			<HeroSection />
 			<ProblemSection />
 			<SolutionSection />
@@ -28,10 +28,10 @@ export default async function Home({
 			<DeepDiveSection />
 			<PlatformFeaturesSection />
 			<CredibilitySection />
+			<SocialProofSection />
 			<PricingSection />
 			<FaqSection />
-			<ToolsShowcaseSection />
 			<CtaSection />
-		</>
+		</div>
 	);
 }

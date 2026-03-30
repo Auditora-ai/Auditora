@@ -48,7 +48,7 @@ export type TwoFactorScalarFieldEnum = z.infer<typeof TwoFactorScalarFieldEnumSc
 
 // File: OrganizationScalarFieldEnum.schema.ts
 
-export const OrganizationScalarFieldEnumSchema = z.enum(['id', 'name', 'slug', 'logo', 'createdAt', 'metadata', 'paymentsCustomerId', 'industry', 'operationsProfile', 'businessModel', 'employeeCount', 'notes', 'aiTier', 'aiTokenBudget', 'aiAnthropicKey', 'aiDeepseekKey', 'aiKeysUpdatedAt'])
+export const OrganizationScalarFieldEnumSchema = z.enum(['id', 'name', 'slug', 'logo', 'createdAt', 'metadata', 'paymentsCustomerId', 'industry', 'operationsProfile', 'businessModel', 'employeeCount', 'notes', 'aiTier', 'aiTokenBudget', 'sessionCreditsUsed', 'sessionCreditsLimit', 'billingCycleAnchor', 'aiAnthropicKey', 'aiDeepseekKey', 'aiKeysUpdatedAt'])
 
 export type OrganizationScalarFieldEnum = z.infer<typeof OrganizationScalarFieldEnumSchema>;
 
@@ -78,7 +78,7 @@ export type ProcessDefinitionScalarFieldEnum = z.infer<typeof ProcessDefinitionS
 
 // File: MeetingSessionScalarFieldEnum.schema.ts
 
-export const MeetingSessionScalarFieldEnumSchema = z.enum(['id', 'type', 'status', 'meetingUrl', 'organizationId', 'processDefinitionId', 'userId', 'continuationOf', 'recallBotId', 'recallBotStatus', 'scheduledFor', 'scheduledEnd', 'sessionGoals', 'sessionContext', 'intakeToken', 'intakeStatus', 'startedAt', 'endedAt', 'questionMode', 'bpmnXml', 'videoUrl', 'audioUrl', 'shareToken', 'createdAt', 'updatedAt'])
+export const MeetingSessionScalarFieldEnumSchema = z.enum(['id', 'type', 'status', 'meetingUrl', 'organizationId', 'processDefinitionId', 'userId', 'continuationOf', 'recallBotId', 'recallBotStatus', 'scheduledFor', 'scheduledEnd', 'sessionGoals', 'sessionContext', 'intakeToken', 'intakeStatus', 'startedAt', 'endedAt', 'questionMode', 'conversationLog', 'knowledgeSnapshot', 'bpmnXml', 'videoUrl', 'audioUrl', 'shareToken', 'createdAt', 'updatedAt'])
 
 export type MeetingSessionScalarFieldEnum = z.infer<typeof MeetingSessionScalarFieldEnumSchema>;
 
@@ -354,7 +354,7 @@ export type ProcessLevel = z.infer<typeof ProcessLevelSchema>;
 
 // File: SessionType.schema.ts
 
-export const SessionTypeSchema = z.enum(['DISCOVERY', 'DEEP_DIVE', 'CONTINUATION'])
+export const SessionTypeSchema = z.enum(['DISCOVERY', 'DEEP_DIVE', 'CONTINUATION', 'AI_INTERVIEW'])
 
 export type SessionType = z.infer<typeof SessionTypeSchema>;
 
@@ -581,6 +581,9 @@ export const OrganizationSchema = z.object({
   notes: z.string().nullish(),
   aiTier: z.string().default("standard").nullish(),
   aiTokenBudget: z.number().int().nullish(),
+  sessionCreditsUsed: z.number().int(),
+  sessionCreditsLimit: z.number().int().nullish(),
+  billingCycleAnchor: z.date().nullish(),
   aiAnthropicKey: z.string().nullish(),
   aiDeepseekKey: z.string().nullish(),
   aiKeysUpdatedAt: z.date().nullish(),
@@ -676,6 +679,8 @@ export const MeetingSessionSchema = z.object({
   startedAt: z.date().nullish(),
   endedAt: z.date().nullish(),
   questionMode: z.string().default("explore"),
+  conversationLog: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  knowledgeSnapshot: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
   bpmnXml: z.string().nullish(),
   videoUrl: z.string().nullish(),
   audioUrl: z.string().nullish(),

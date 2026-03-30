@@ -1,57 +1,73 @@
 import {
+	Body,
 	Container,
 	Font,
 	Head,
 	Html,
+	Preview,
 	Section,
 	Tailwind,
 } from "@react-email/components";
-import { Logo } from "@repo/ui";
 import React, { type PropsWithChildren } from "react";
+import EmailFooter from "./EmailFooter";
+import EmailHeader from "./EmailHeader";
 
-export default function Wrapper({ children }: PropsWithChildren) {
+interface WrapperProps {
+	locale?: string;
+	preheader?: string;
+	unsubscribeUrl?: string;
+	footerReason?: string;
+}
+
+export default function Wrapper({
+	children,
+	locale,
+	preheader,
+	unsubscribeUrl,
+	footerReason,
+}: PropsWithChildren<WrapperProps>) {
 	return (
 		<Tailwind
 			config={{
 				theme: {
 					extend: {
 						colors: {
-							border: "#eaeaea",
-							input: "#dfdfdf",
-							ring: "#3875c8",
-							background: "#f8f8f8",
-							foreground: "#313539",
+							border: "#E7E5E4",
+							input: "#E7E5E4",
+							ring: "#00E5C0",
+							background: "#FFFBF5",
+							foreground: "#0A1428",
 							primary: {
-								DEFAULT: "#3875c8",
-								foreground: "#ffffff",
+								DEFAULT: "#00E5C0",
+								foreground: "#0A1428",
 							},
 							secondary: {
-								DEFAULT: "#e4e3e1",
-								foreground: "#1c1e1e",
+								DEFAULT: "#FAF9F7",
+								foreground: "#0A1428",
 							},
 							destructive: {
-								DEFAULT: "#ef4444",
+								DEFAULT: "#EF4444",
 								foreground: "#ffffff",
 							},
 							success: {
-								DEFAULT: "#39a561",
+								DEFAULT: "#10B981",
 								foreground: "#ffffff",
 							},
 							muted: {
-								DEFAULT: "#f0f0f0",
-								foreground: "#4d5155",
+								DEFAULT: "#FAF9F7",
+								foreground: "#64748B",
 							},
 							accent: {
-								DEFAULT: "#e2e6ec",
-								foreground: "#313539",
+								DEFAULT: "#00E5C0",
+								foreground: "#0A1428",
 							},
 							popover: {
 								DEFAULT: "#ffffff",
-								foreground: "#313539",
+								foreground: "#0A1428",
 							},
 							card: {
 								DEFAULT: "#ffffff",
-								foreground: "#313539",
+								foreground: "#0A1428",
 							},
 						},
 						borderRadius: {
@@ -64,21 +80,28 @@ export default function Wrapper({ children }: PropsWithChildren) {
 				},
 			}}
 		>
-			<Html lang="en">
+			<Html lang={locale || "en"}>
 				<Head>
 					<Font
-						fontFamily="Inter"
-						fallbackFontFamily="Arial"
+						fontFamily="Geist Sans"
+						fallbackFontFamily={["Helvetica", "Arial", "sans-serif"]}
 						fontWeight={400}
 						fontStyle="normal"
 					/>
 				</Head>
-				<Section className="bg-background p-4">
-					<Container className="rounded-lg bg-card p-6 text-card-foreground">
-						<Logo />
-						{children}
-					</Container>
-				</Section>
+				{preheader && <Preview>{preheader}</Preview>}
+				<Body className="bg-background">
+					<Section className="p-4">
+						<Container className="rounded-lg bg-card p-6 text-card-foreground">
+							<EmailHeader />
+							{children}
+							<EmailFooter
+								unsubscribeUrl={unsubscribeUrl}
+								reason={footerReason}
+							/>
+						</Container>
+					</Section>
+				</Body>
 			</Html>
 		</Tailwind>
 	);

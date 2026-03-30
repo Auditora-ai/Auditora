@@ -107,8 +107,8 @@ export function generateReportHtml(data: PdfProjectData): string {
   .cover .client { font-size: 24px; color: #666; margin-bottom: 40px; }
   .cover .org { font-size: 14px; color: #999; }
   .cover .date { font-size: 14px; color: #999; margin-top: 60px; }
-  h2 { font-family: 'Instrument Serif', Georgia, serif; font-size: 24px; border-bottom: 2px solid #2563EB; padding-bottom: 8px; }
-  h4 { color: #2563EB; margin-bottom: 4px; }
+  h2 { font-family: 'Instrument Serif', Georgia, serif; font-size: 24px; border-bottom: 2px solid #00E5C0; padding-bottom: 8px; }
+  h4 { color: #00E5C0; margin-bottom: 4px; }
   .diagram { margin: 20px 0; max-width: 100%; overflow: hidden; }
   .diagram svg { max-width: 100%; height: auto; }
   .no-diagram { color: #999; font-style: italic; }
@@ -118,7 +118,7 @@ export function generateReportHtml(data: PdfProjectData): string {
   .comment { font-size: 13px; margin: 4px 0; }
   table { width: 100%; border-collapse: collapse; margin: 12px 0; }
   th, td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 13px; }
-  th { background: #2563EB; color: white; }
+  th { background: #00E5C0; color: #0A1428; }
   .toc { page-break-after: always; }
   .toc ul { list-style: none; padding: 0; }
   .toc li { padding: 4px 0; border-bottom: 1px dotted #ccc; }
@@ -129,6 +129,8 @@ export function generateReportHtml(data: PdfProjectData): string {
   .raci-I { background: #f3e8ff; }
   .action-items li { margin: 8px 0; }
   .powered-by { text-align: center; color: #999; font-size: 11px; margin-top: 40px; }
+  .legal-disclaimer { margin-top: 48px; padding: 16px; border-top: 1px solid #E7E5E4; background: #FAF9F7; border-radius: 6px; font-size: 10px; color: #78716C; line-height: 1.6; }
+  .legal-disclaimer strong { color: #1C1917; }
 </style>
 </head>
 <body>
@@ -158,6 +160,12 @@ ${raciHtml}
 ${actionItemsHtml}
 
 ${sessionHistoryHtml}
+
+<div class="legal-disclaimer">
+  <strong>AI-Generated Content Disclaimer / Aviso sobre Contenido Generado por IA</strong><br>
+  This report was generated using artificial intelligence by Auditora.ai. The analyses, diagrams, and recommendations contained herein are intended as analytical starting points and do not constitute professional consulting, auditing, legal, or financial advice. Results may contain errors, inaccuracies, or omissions inherent to AI systems. All content must be validated by qualified professionals before making business decisions. Auditora.ai assumes no liability for decisions made based on the content of this report.<br><br>
+  Este reporte fue generado mediante inteligencia artificial por Auditora.ai. Los análisis, diagramas y recomendaciones aquí contenidos son puntos de partida analíticos y no constituyen asesoramiento profesional de consultoría, auditoría, legal ni financiero. Los resultados pueden contener errores, inexactitudes u omisiones inherentes a los sistemas de IA. Todo el contenido debe ser validado por profesionales calificados antes de tomar decisiones de negocio. Auditora.ai no asume responsabilidad por decisiones tomadas con base en el contenido de este reporte.
+</div>
 
 </body>
 </html>`;

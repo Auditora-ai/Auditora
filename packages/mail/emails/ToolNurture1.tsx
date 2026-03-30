@@ -1,62 +1,74 @@
-import { Link, Text } from "@react-email/components";
+import { Text } from "@react-email/components";
 import React from "react";
+import { createTranslator } from "use-intl/core";
 import PrimaryButton from "../components/PrimaryButton";
 import Wrapper from "../components/Wrapper";
+import { defaultLocale, defaultTranslations } from "../lib/translations";
+import type { BaseMailProps } from "../types";
 
 export function ToolNurture1({
 	toolName,
+	unsubscribeUrl,
+	locale,
+	translations,
 }: {
 	toolName: string;
-}) {
+	unsubscribeUrl?: string;
+} & BaseMailProps) {
+	const t = createTranslator({
+		locale,
+		messages: { ...translations.toolNurture1, common: translations.common },
+	});
+
+	const baseUrl = process.env.NEXT_PUBLIC_MARKETING_URL || "https://auditora.ai";
+
 	return (
-		<Wrapper>
-			<Text style={{ fontSize: "18px", fontWeight: "bold" }}>
-				Now imagine this DURING your meeting
+		<Wrapper
+			locale={locale}
+			preheader={t("preheader")}
+			unsubscribeUrl={unsubscribeUrl}
+			footerReason={t("common.footer.receivingBecauseTool")}
+		>
+			<Text style={{ fontSize: "18px", fontWeight: "bold", color: "#0A1428" }}>
+				{t("heading")}
 			</Text>
 
-			<Text>
-				A few days ago you used our free {toolName}. You typed a process
-				description and got results in seconds.
+			<Text style={{ color: "#0A1428", lineHeight: "1.6" }}>
+				{t("intro", { toolName })}
 			</Text>
 
-			<Text>
-				<strong>What if that happened automatically during your stakeholder
-				interview?</strong>
+			<Text style={{ color: "#0A1428", lineHeight: "1.6", fontWeight: "600" }}>
+				{t("hook")}
 			</Text>
 
-			<Text>
-				With Auditora.ai, an AI bot joins your Zoom/Teams/Meet call and:
+			<Text style={{ color: "#0A1428", lineHeight: "1.6" }}>
+				{t("description")}
 			</Text>
 
-			<Text>
-				1. Guides your questions with a BPM teleprompter (SIPOC + gap analysis){"\n"}
-				2. Transcribes the conversation in real-time{"\n"}
-				3. Extracts process steps, roles, and decisions automatically{"\n"}
-				4. Builds the BPMN diagram live while you talk{"\n"}
-				5. Generates a complete deliverable package when you're done
+			<Text style={{ color: "#0A1428", lineHeight: "1.8", paddingLeft: "8px" }}>
+				{"1. "}{t("feature1")}{"\n"}
+				{"2. "}{t("feature2")}{"\n"}
+				{"3. "}{t("feature3")}{"\n"}
+				{"4. "}{t("feature4")}{"\n"}
+				{"5. "}{t("feature5")}
 			</Text>
 
-			<Text>
-				<strong>Result:</strong> 1 hour meeting → complete BPMN + RACI + process
-				sheet + executive summary. No post-session work.
+			<Text style={{ color: "#0A1428", lineHeight: "1.6" }}>
+				<strong>{t("result")}</strong>
 			</Text>
 
-			<PrimaryButton href="https://auditora.ai">
-				Try Auditora.ai free &rarr;
+			<PrimaryButton href={baseUrl}>
+				{t("ctaButton")}
 			</PrimaryButton>
-
-			<Text style={{ color: "#64748B", fontSize: "14px", marginTop: "24px" }}>
-				You're receiving this because you used a free tool on Auditora.ai.{" "}
-				<Link href="https://auditora.ai" style={{ color: "#2563EB" }}>
-					Unsubscribe
-				</Link>
-			</Text>
 		</Wrapper>
 	);
 }
 
 ToolNurture1.PreviewProps = {
+	locale: defaultLocale,
+	translations: defaultTranslations,
 	toolName: "BPMN Generator",
+	unsubscribeUrl: "https://auditora.ai/unsubscribe?token=abc123",
 };
 
 export default ToolNurture1;

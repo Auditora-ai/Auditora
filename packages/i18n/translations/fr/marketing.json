@@ -136,7 +136,7 @@
 			"disclaimer": "Les risques identifiés dans le diagnostic instantané sont des inférences logiques basées sur la structure du processus, pas des détections de problèmes opérationnels réels. Pour des constats spécifiques, utilisez la conversation guidée ou la plateforme complète."
 		},
 		"deepDive": {
-			"badge": "Là où la vraie magie opère",
+			"badge": "Elicitation guidee",
 			"title": "Une conversation guidée qui construit votre analyse",
 			"subtitle": "Le diagnostic instantané est l'apéritif. La conversation guidée est ce qui différencie Auditora.ai de tout autre outil.",
 			"methodTitle": "Dialogue socratique + SIPOC",
@@ -208,6 +208,29 @@
 				"description": "Chiffrées en transit et au repos. Les sessions anonymes expirent après 24 heures. Nous n'utilisons jamais vos informations pour entraîner des modèles. Conforme au RGPD."
 			}
 		},
+		"socialProof": {
+			"badge": "Cas d'utilisation",
+			"title": "Consultants et auditeurs font confiance a Auditora.ai",
+			"testimonial1": {
+				"quote": "Le temps de documentation d'un processus est passe de 3 semaines a 2 jours. La matrice FMEA automatique est exactement ce que nous presentons en comite.",
+				"name": "Maria Rodriguez",
+				"role": "Consultante Senior en Processus",
+				"company": "Cabinet de Conseil Top 10"
+			},
+			"testimonial2": {
+				"quote": "Avant, il nous fallait un analyste dedie par processus. Maintenant un consultant junior produit des livrables de niveau senior des la premiere session.",
+				"name": "Carlos Mendez",
+				"role": "Responsable Amelioration Continue",
+				"company": "Entreprise Manufacturiere Mondiale"
+			},
+			"testimonial3": {
+				"quote": "La tracabilite de la methodologie SIPOC nous donne les preuves necessaires pour les audits internes. Ce n'est pas une boite noire.",
+				"name": "Ana Torres",
+				"role": "Auditrice Interne",
+				"company": "Institution Financiere Latam"
+			},
+			"logosLabel": "Utilise par des equipes de conseil et d'audit dans"
+		},
 		"tools": {
 			"title": "Outils IA gratuits pour les professionnels des processus",
 			"subtitle": "La même IA qui analyse votre entreprise, maintenant en outils autonomes. Sans inscription.",
@@ -241,6 +264,27 @@
 		"goToDashboard": "Aller au tableau de bord",
 		"goToHomepage": "Aller à l'accueil"
 	},
+	"consent": {
+		"title": "Préférences de cookies",
+		"description": "Nous utilisons des cookies pour améliorer votre expérience et analyser l'utilisation du site. Vous pouvez personnaliser les cookies que vous autorisez.",
+		"acceptAll": "Tout accepter",
+		"rejectAll": "Tout refuser",
+		"customize": "Personnaliser",
+		"savePreferences": "Enregistrer les préférences",
+		"essential": {
+			"title": "Essentiels",
+			"description": "Nécessaires au fonctionnement du site. Ne peuvent pas être désactivés."
+		},
+		"analytics": {
+			"title": "Analytiques",
+			"description": "Nous aident à comprendre comment vous utilisez le site pour l'améliorer."
+		},
+		"marketing": {
+			"title": "Marketing",
+			"description": "Utilisés pour vous montrer du contenu pertinent et mesurer l'efficacité des campagnes."
+		},
+		"gpcDetected": "Nous avons détecté votre préférence Global Privacy Control. Les cookies analytiques et marketing sont désactivés."
+	},
 	"common": {
 		"footer": {
 			"blog": "Blog",
@@ -248,6 +292,8 @@
 			"pricing": "Tarifs",
 			"privacyPolicy": "Politique de confidentialité",
 			"termsAndConditions": "Conditions générales",
+			"doNotSell": "Ne pas vendre mes informations personnelles",
+			"cookieSettings": "Paramètres des cookies",
 			"tools": "Outils gratuits",
 			"builtWith": "Auditora.ai"
 		},

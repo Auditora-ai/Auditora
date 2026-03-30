@@ -8,6 +8,7 @@ import type { BaseMailProps } from "../types";
 
 export function ForgotPassword({
 	url,
+	name,
 	locale,
 	translations,
 }: {
@@ -23,16 +24,23 @@ export function ForgotPassword({
 	});
 
 	return (
-		<Wrapper>
-			<Text>{t("body")}</Text>
+		<Wrapper
+			locale={locale}
+			preheader={t("preheader")}
+			footerReason={t("common.footer.receivingBecauseAccount")}
+		>
+			{name && <Text>{t("common.greeting", { name })}</Text>}
 
-			<PrimaryButton href={url}>
-				{t("resetPassword")} &rarr;
-			</PrimaryButton>
+			<Text style={{ whiteSpace: "pre-line" }}>{t("body")}</Text>
 
-			<Text className="text-muted-foreground text-sm">
+			<PrimaryButton href={url}>{t("resetPassword")}</PrimaryButton>
+
+			<Text className="text-muted-foreground text-sm mt-4">
 				{t("common.openLinkInBrowser")}
-				<Link href={url}>{url}</Link>
+				<br />
+				<Link href={url} className="break-all">
+					{url}
+				</Link>
 			</Text>
 		</Wrapper>
 	);
@@ -41,8 +49,8 @@ export function ForgotPassword({
 ForgotPassword.PreviewProps = {
 	locale: defaultLocale,
 	translations: defaultTranslations,
-	url: "#",
-	name: "John Doe",
+	url: "https://app.auditora.ai/reset-password?token=abc123",
+	name: "Oscar",
 };
 
 export default ForgotPassword;

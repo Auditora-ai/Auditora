@@ -159,10 +159,33 @@
 				"magicLink": "Lien magique",
 				"password": "Mot de passe"
 			},
+			"rememberMe": "Se souvenir de moi",
+			"security": "Vos données sont chiffrées et protégées",
 			"submit": "Se connecter",
-			"subtitle": "Veuillez entrer vos identifiants pour vous connecter.",
+			"subtitle": "Entrez vos identifiants pour continuer.",
 			"title": "Bon retour",
 			"sendMagicLink": "Envoyer le lien magique"
+		},
+		"showcase": {
+			"badge": "Plateforme d'Intelligence des Processus",
+			"login": {
+				"title": "Vos processus, analysés avec précision",
+				"subtitle": "Élicitez, analysez et transformez les processus métier avec l'IA en temps réel"
+			},
+			"signup": {
+				"title": "Commencez à cartographier intelligemment",
+				"subtitle": "Rejoignez les consultants qui transforment les entretiens en diagrammes BPMN automatiques"
+			},
+			"feature": {
+				"ai": "Analyse IA",
+				"bpmn": "Diagrammes BPMN",
+				"risk": "Détection des Risques"
+			},
+			"metric": {
+				"processes": "Processus cartographiés",
+				"organizations": "Organisations",
+				"accuracy": "Précision"
+			}
 		},
 		"resetPassword": {
 			"backToSignin": "Retour à la connexion",
@@ -1353,6 +1376,11 @@
 		"generating": "Génération du scan...",
 		"disclaimer": "Moins d'une minute. Vos informations ne sont pas partagées avec des tiers.",
 		"readingWebsite": "Lecture de votre site web...",
+		"loaderConnecting": "Connexion au site...",
+		"loaderReading": "Lecture des pages...",
+		"loaderExtracting": "Extraction du contexte commercial...",
+		"loaderPreparing": "Preparation de l'analyse...",
+		"loaderAnalyzing": "Analyse de",
 		"analyzingIndustry": "Analyse de votre secteur...",
 		"mappingProcess": "Cartographie du processus clé...",
 		"generatingDiagram": "Génération du diagramme...",

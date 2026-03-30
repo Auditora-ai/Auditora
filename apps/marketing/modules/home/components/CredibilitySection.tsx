@@ -55,13 +55,13 @@ export function CredibilitySection() {
 	);
 
 	return (
-		<section ref={sectionRef} className="py-10 sm:py-16 lg:py-20 border-y border-border">
+		<section ref={sectionRef} className="py-16 sm:py-20 lg:py-28 bg-[#0A1428]">
 			<div className="container max-w-5xl">
-				<div className="cred-header mb-8 sm:mb-12 max-w-3xl mx-auto text-center">
-					<small className="font-medium text-xs uppercase tracking-wider text-primary mb-4 block">
+				<div className="cred-header mb-10 sm:mb-14 max-w-3xl mx-auto text-center">
+					<small className="font-medium text-xs uppercase tracking-widest text-[#00E5C0] mb-4 block">
 						{t("home.credibility.badge")}
 					</small>
-					<h2 className="font-display text-2xl sm:text-3xl lg:text-4xl text-foreground">
+					<h2 className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-white">
 						{t("home.credibility.title")}
 					</h2>
 				</div>
@@ -71,13 +71,13 @@ export function CredibilitySection() {
 						const Icon = pillar.icon;
 						return (
 							<div key={pillar.id} className="cred-card text-center">
-								<div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-primary/10 text-primary mx-auto mb-4">
+								<div className="flex items-center justify-center w-12 h-12 rounded-xl bg-[#00E5C0]/15 text-[#00E5C0] mx-auto mb-5">
 									<Icon className="size-6" strokeWidth={1.5} />
 								</div>
-								<h3 className="text-base font-semibold text-foreground mb-2">
+								<h3 className="text-base font-semibold text-white mb-3">
 									{t(`home.credibility.${pillar.id}.title`)}
 								</h3>
-								<p className="text-sm text-muted-foreground leading-relaxed">
+								<p className="text-sm text-[#94A3B8] leading-relaxed">
 									{t(`home.credibility.${pillar.id}.description`)}
 								</p>
 							</div>

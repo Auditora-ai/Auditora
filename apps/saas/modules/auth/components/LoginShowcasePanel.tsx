@@ -3,10 +3,10 @@
 import { useGSAP } from "@gsap/react";
 import { Logo } from "@repo/ui";
 import gsap from "gsap";
+import { BrainCircuitIcon, GitBranchIcon, ShieldAlertIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRef } from "react";
 import { SplitWords } from "@shared/components/SplitWords";
-
-gsap.registerPlugin();
 
 interface LoginShowcasePanelProps {
 	variant?: "login" | "signup";
@@ -15,12 +15,36 @@ interface LoginShowcasePanelProps {
 export function LoginShowcasePanel({
 	variant = "login",
 }: LoginShowcasePanelProps) {
+	const t = useTranslations();
 	const panelRef = useRef<HTMLDivElement>(null);
 
-	const tagline =
+	const title =
 		variant === "signup"
-			? "Join 500+ teams mapping smarter processes."
-			: "Map your processes. Transform your business.";
+			? t("auth.showcase.signup.title")
+			: t("auth.showcase.login.title");
+
+	const subtitle =
+		variant === "signup"
+			? t("auth.showcase.signup.subtitle")
+			: t("auth.showcase.login.subtitle");
+
+	const features = [
+		{
+			icon: BrainCircuitIcon,
+			label: t("auth.showcase.feature.ai"),
+			color: "text-[#00E5C0]",
+		},
+		{
+			icon: GitBranchIcon,
+			label: t("auth.showcase.feature.bpmn"),
+			color: "text-[#00E5C0]",
+		},
+		{
+			icon: ShieldAlertIcon,
+			label: t("auth.showcase.feature.risk"),
+			color: "text-[#EF4444]",
+		},
+	];
 
 	useGSAP(
 		() => {
@@ -32,14 +56,14 @@ export function LoginShowcasePanel({
 
 			if (prefersReducedMotion) return;
 
-			const svg = panelRef.current.querySelector(".showcase-svg");
-			if (!svg) return;
-
-			const paths = svg.querySelectorAll(".bpmn-path");
-			const nodes = svg.querySelectorAll(".bpmn-node");
 			const logo = panelRef.current.querySelector(".showcase-logo");
+			const badge = panelRef.current.querySelector(".showcase-badge");
 			const taglineWords =
 				panelRef.current.querySelectorAll(".tagline-word");
+			const subtitleEl =
+				panelRef.current.querySelector(".showcase-subtitle");
+			const featurePills =
+				panelRef.current.querySelectorAll(".showcase-feature");
 			const metrics =
 				panelRef.current.querySelectorAll(".showcase-metric");
 
@@ -65,62 +89,20 @@ export function LoginShowcasePanel({
 				);
 			}
 
-			// Draw connection paths
-			paths.forEach((path) => {
-				const el = path as SVGPathElement | SVGLineElement;
-				if (
-					el instanceof SVGPathElement ||
-					el instanceof SVGLineElement
-				) {
-					const length =
-						el instanceof SVGPathElement
-							? el.getTotalLength()
-							: Math.hypot(
-									Number(el.getAttribute("x2")) -
-										Number(el.getAttribute("x1")),
-									Number(el.getAttribute("y2")) -
-										Number(el.getAttribute("y1")),
-								);
-					gsap.set(el, {
-						strokeDasharray: length,
-						strokeDashoffset: length,
-					});
-					tl.to(
-						el,
-						{ strokeDashoffset: 0, duration: 0.8, ease: "none" },
-						"<0.15",
-					);
-				}
-			});
-
-			// Nodes fade in with bounce + dashed→solid
-			nodes.forEach((node) => {
-				const border = node.querySelector(".node-border");
+			// Badge clip-path wipe
+			if (badge) {
 				tl.from(
-					node,
+					badge,
 					{
-						opacity: 0,
-						scale: 0.8,
-						duration: 0.4,
-						ease: "back.out(1.5)",
+						clipPath: "inset(0 100% 0 0)",
+						duration: 0.5,
+						ease: "power2.inOut",
 					},
-					">-0.2",
+					0.3,
 				);
-				if (border) {
-					gsap.set(border, { strokeDasharray: "4 4" });
-					tl.to(
-						border,
-						{
-							strokeDasharray: "0 0",
-							duration: 0.3,
-							ease: "power2.out",
-						},
-						">",
-					);
-				}
-			});
+			}
 
-			// Tagline word reveal
+			// Headline word reveal
 			if (taglineWords.length > 0) {
 				tl.from(
 					taglineWords,
@@ -130,11 +112,41 @@ export function LoginShowcasePanel({
 						stagger: 0.06,
 						ease: "power4.out",
 					},
-					"-=1.2",
+					0.5,
 				);
 			}
 
-			// Social proof blur-fade
+			// Subtitle blur-fade
+			if (subtitleEl) {
+				tl.from(
+					subtitleEl,
+					{
+						opacity: 0,
+						y: 15,
+						filter: "blur(4px)",
+						duration: 0.6,
+						ease: "power2.out",
+					},
+					0.8,
+				);
+			}
+
+			// Feature pills stagger
+			if (featurePills.length > 0) {
+				tl.from(
+					featurePills,
+					{
+						opacity: 0,
+						y: 10,
+						duration: 0.5,
+						stagger: 0.1,
+						ease: "power2.out",
+					},
+					1.0,
+				);
+			}
+
+			// Social proof blur-fade stagger
 			if (metrics.length > 0) {
 				tl.from(
 					metrics,
@@ -146,7 +158,7 @@ export function LoginShowcasePanel({
 						stagger: 0.1,
 						ease: "power2.out",
 					},
-					"-=0.6",
+					"-=0.4",
 				);
 			}
 		},
@@ -157,310 +169,127 @@ export function LoginShowcasePanel({
 		<div
 			ref={panelRef}
 			className="relative flex h-full flex-col justify-between overflow-hidden p-8 lg:p-12"
-			style={{ backgroundColor: "#1C1917" }}
+			style={{ backgroundColor: "#0A1428" }}
 		>
-			{/* Logo */}
-			<div className="showcase-logo">
-				<Logo
-					withLabel
-					className="text-[#FAFAF9] [&_svg]:text-[#2563EB] [&_.text-muted-foreground]:text-[#A8A29E]"
-				/>
-			</div>
+			{/* Subtle gradient overlays for depth */}
+			<div
+				className="pointer-events-none absolute inset-0"
+				style={{
+					background:
+						"radial-gradient(ellipse at top right, rgba(0,229,192,0.06), transparent 60%)",
+				}}
+			/>
+			<div
+				className="pointer-events-none absolute inset-0"
+				style={{
+					background:
+						"radial-gradient(ellipse at bottom left, rgba(239,68,68,0.04), transparent 60%)",
+				}}
+			/>
 
-			{/* Animated BPMN Diagram */}
-			<div className="flex flex-1 items-center justify-center py-8">
-				<svg
-					className="showcase-svg w-full max-w-lg"
-					viewBox="0 0 820 340"
-					fill="none"
-					xmlns="http://www.w3.org/2000/svg"
-					aria-hidden="true"
-				>
-					{/* Connection paths */}
-					{/* Start → Interview */}
-					<line
-						className="bpmn-path"
-						x1="45"
-						y1="170"
-						x2="100"
-						y2="170"
-						stroke="#78716C"
-						strokeWidth="2"
+			{/* Content */}
+			<div className="relative z-10 flex h-full flex-col justify-between">
+				{/* Logo */}
+				<div className="showcase-logo">
+					<Logo
+						withLabel
+						className="text-[#F1F5F9] [&_svg]:text-[#00E5C0] [&_.text-muted-foreground]:text-[#94A3B8]"
 					/>
-					{/* Interview → AI Analysis */}
-					<line
-						className="bpmn-path"
-						x1="260"
-						y1="170"
-						x2="320"
-						y2="170"
-						stroke="#78716C"
-						strokeWidth="2"
-					/>
-					{/* AI Analysis → Gateway */}
-					<line
-						className="bpmn-path"
-						x1="480"
-						y1="170"
-						x2="530"
-						y2="170"
-						stroke="#78716C"
-						strokeWidth="2"
-					/>
-					{/* Gateway → Process Map (upper) */}
-					<path
-						className="bpmn-path"
-						d="M570 170 L600 170 L600 90 L640 90"
-						stroke="#78716C"
-						strokeWidth="2"
-						fill="none"
-					/>
-					{/* Gateway → RACI Matrix (lower) */}
-					<path
-						className="bpmn-path"
-						d="M570 170 L600 170 L600 250 L640 250"
-						stroke="#78716C"
-						strokeWidth="2"
-						fill="none"
-					/>
-					{/* Process Map → End */}
-					<path
-						className="bpmn-path"
-						d="M780 90 L800 90 L800 170"
-						stroke="#78716C"
-						strokeWidth="2"
-						fill="none"
-					/>
-					{/* RACI → End */}
-					<path
-						className="bpmn-path"
-						d="M780 250 L800 250 L800 170"
-						stroke="#78716C"
-						strokeWidth="2"
-						fill="none"
-					/>
-
-					{/* Start Event (green circle) */}
-					<g className="bpmn-node" transform="translate(25, 170)">
-						<circle
-							className="node-border"
-							r="18"
-							stroke="#16A34A"
-							strokeWidth="2.5"
-							fill="rgba(22,163,74,0.12)"
-						/>
-					</g>
-
-					{/* Task: Interview Session */}
-					<g className="bpmn-node" transform="translate(180, 170)">
-						<rect
-							className="node-border"
-							x="-78"
-							y="-28"
-							width="156"
-							height="56"
-							rx="8"
-							stroke="#3B82F6"
-							strokeWidth="2"
-							fill="rgba(59,130,246,0.1)"
-						/>
-						<text
-							x="0"
-							y="1"
-							textAnchor="middle"
-							dominantBaseline="middle"
-							fill="#93C5FD"
-							fontSize="13"
-							fontFamily="system-ui, sans-serif"
-						>
-							Interview Session
-						</text>
-					</g>
-
-					{/* Task: AI Analysis */}
-					<g className="bpmn-node" transform="translate(400, 170)">
-						<rect
-							className="node-border"
-							x="-78"
-							y="-28"
-							width="156"
-							height="56"
-							rx="8"
-							stroke="#3B82F6"
-							strokeWidth="2"
-							fill="rgba(59,130,246,0.1)"
-						/>
-						<text
-							x="0"
-							y="1"
-							textAnchor="middle"
-							dominantBaseline="middle"
-							fill="#93C5FD"
-							fontSize="13"
-							fontFamily="system-ui, sans-serif"
-						>
-							AI Analysis
-						</text>
-					</g>
-
-					{/* Gateway: Output Type (amber diamond) */}
-					<g className="bpmn-node" transform="translate(550, 170)">
-						<rect
-							className="node-border"
-							x="-18"
-							y="-18"
-							width="36"
-							height="36"
-							rx="3"
-							transform="rotate(45)"
-							stroke="#EAB308"
-							strokeWidth="2"
-							fill="rgba(234,179,8,0.1)"
-						/>
-					</g>
-
-					{/* Task: Process Map (upper branch) */}
-					<g className="bpmn-node" transform="translate(710, 90)">
-						<rect
-							className="node-border"
-							x="-68"
-							y="-24"
-							width="136"
-							height="48"
-							rx="8"
-							stroke="#3B82F6"
-							strokeWidth="2"
-							fill="rgba(59,130,246,0.1)"
-						/>
-						<text
-							x="0"
-							y="1"
-							textAnchor="middle"
-							dominantBaseline="middle"
-							fill="#93C5FD"
-							fontSize="13"
-							fontFamily="system-ui, sans-serif"
-						>
-							Process Map
-						</text>
-					</g>
-
-					{/* Task: RACI Matrix (lower branch) */}
-					<g className="bpmn-node" transform="translate(710, 250)">
-						<rect
-							className="node-border"
-							x="-68"
-							y="-24"
-							width="136"
-							height="48"
-							rx="8"
-							stroke="#7C3AED"
-							strokeWidth="2"
-							fill="rgba(124,58,237,0.1)"
-						/>
-						<text
-							x="0"
-							y="1"
-							textAnchor="middle"
-							dominantBaseline="middle"
-							fill="#C4B5FD"
-							fontSize="13"
-							fontFamily="system-ui, sans-serif"
-						>
-							RACI Matrix
-						</text>
-					</g>
-
-					{/* End Event (red circle, where paths converge) */}
-					<g className="bpmn-node" transform="translate(800, 170)">
-						<circle
-							className="node-border"
-							r="18"
-							stroke="#DC2626"
-							strokeWidth="3"
-							fill="rgba(220,38,38,0.12)"
-						/>
-					</g>
-
-					{/* Gateway labels */}
-					<text
-						x="610"
-						y="75"
-						fill="#78716C"
-						fontSize="11"
-						fontFamily="system-ui, sans-serif"
-					>
-						Diagrams
-					</text>
-					<text
-						x="610"
-						y="240"
-						fill="#78716C"
-						fontSize="11"
-						fontFamily="system-ui, sans-serif"
-					>
-						Matrices
-					</text>
-				</svg>
-			</div>
-
-			{/* Tagline */}
-			<div className="mb-8">
-				<h2
-					className="font-display text-2xl leading-snug tracking-tight lg:text-3xl"
-					style={{
-						color: "#FAFAF9",
-						fontFamily: "'Instrument Serif', serif",
-					}}
-				>
-					<SplitWords innerClassName="tagline-word">
-						{tagline}
-					</SplitWords>
-				</h2>
-			</div>
-
-			{/* Social proof metrics */}
-			<div className="flex items-center gap-8">
-				<div className="showcase-metric">
-					<p
-						className="text-2xl font-bold"
-						style={{ color: "#FAFAF9" }}
-					>
-						2,000+
-					</p>
-					<p className="text-sm" style={{ color: "#A8A29E" }}>
-						Processes mapped
-					</p>
 				</div>
-				<div
-					className="h-8 w-px"
-					style={{ backgroundColor: "#44403C" }}
-				/>
-				<div className="showcase-metric">
-					<p
-						className="text-2xl font-bold"
-						style={{ color: "#FAFAF9" }}
+
+				{/* Value proposition */}
+				<div className="flex flex-1 flex-col justify-center py-12">
+					{/* Badge */}
+					<div
+						className="showcase-badge mb-6"
+						style={{ clipPath: "inset(0 0% 0 0)" }}
 					>
-						500+
+						<span className="inline-flex items-center rounded-full border border-[#00E5C0]/20 bg-[#00E5C0]/10 px-3 py-1 text-xs font-medium text-[#6EE7C4]">
+							{t("auth.showcase.badge")}
+						</span>
+					</div>
+
+					{/* Headline */}
+					<h2
+						className="font-display text-2xl leading-snug tracking-tight lg:text-3xl"
+						style={{
+							color: "#F1F5F9",
+							fontFamily: "'Instrument Serif', serif",
+						}}
+					>
+						<SplitWords innerClassName="tagline-word">
+							{title}
+						</SplitWords>
+					</h2>
+
+					{/* Subtitle */}
+					<p
+						className="showcase-subtitle mt-3 text-sm lg:text-base"
+						style={{ color: "#94A3B8" }}
+					>
+						{subtitle}
 					</p>
-					<p className="text-sm" style={{ color: "#A8A29E" }}>
-						Organizations
-					</p>
+
+					{/* Feature pills */}
+					<div className="mt-8 flex flex-wrap gap-3">
+						{features.map((feature) => (
+							<div
+								key={feature.label}
+								className="showcase-feature flex items-center gap-2 rounded-lg border border-[#1E293B] bg-[#111827] px-3 py-2 text-sm"
+								style={{ color: "#F1F5F9" }}
+							>
+								<feature.icon
+									className={`size-4 ${feature.color}`}
+								/>
+								{feature.label}
+							</div>
+						))}
+					</div>
 				</div>
-				<div
-					className="h-8 w-px"
-					style={{ backgroundColor: "#44403C" }}
-				/>
-				<div className="showcase-metric">
-					<p
-						className="text-2xl font-bold"
-						style={{ color: "#FAFAF9" }}
-					>
-						98%
-					</p>
-					<p className="text-sm" style={{ color: "#A8A29E" }}>
-						Accuracy rate
-					</p>
+
+				{/* Social proof metrics */}
+				<div className="flex items-center gap-8">
+					<div className="showcase-metric">
+						<p
+							className="text-2xl font-bold"
+							style={{ color: "#F1F5F9" }}
+						>
+							2,000+
+						</p>
+						<p className="text-sm" style={{ color: "#94A3B8" }}>
+							{t("auth.showcase.metric.processes")}
+						</p>
+					</div>
+					<div
+						className="h-8 w-px"
+						style={{ backgroundColor: "#1E293B" }}
+					/>
+					<div className="showcase-metric">
+						<p
+							className="text-2xl font-bold"
+							style={{ color: "#F1F5F9" }}
+						>
+							500+
+						</p>
+						<p className="text-sm" style={{ color: "#94A3B8" }}>
+							{t("auth.showcase.metric.organizations")}
+						</p>
+					</div>
+					<div
+						className="h-8 w-px"
+						style={{ backgroundColor: "#1E293B" }}
+					/>
+					<div className="showcase-metric">
+						<p
+							className="text-2xl font-bold"
+							style={{ color: "#F1F5F9" }}
+						>
+							98%
+						</p>
+						<p className="text-sm" style={{ color: "#94A3B8" }}>
+							{t("auth.showcase.metric.accuracy")}
+						</p>
+					</div>
 				</div>
 			</div>
 		</div>

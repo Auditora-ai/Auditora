@@ -128,7 +128,7 @@ export function MaturityScore({
 								<circle
 									cx="60" cy="60" r="54"
 									fill="none"
-									stroke="#292524"
+									stroke="#111827"
 									strokeWidth="8"
 								/>
 								{/* Score ring */}

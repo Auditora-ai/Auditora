@@ -44,8 +44,9 @@ export function ProblemSection() {
 				{
 					opacity: 0,
 					y: 40,
+					x: -30,
 					stagger: 0.15,
-					duration: 0.7,
+					duration: 0.8,
 					ease: "power3.out",
 				},
 				"-=0.3",
@@ -57,21 +58,14 @@ export function ProblemSection() {
 	return (
 		<section
 			ref={sectionRef}
-			className="py-12 sm:py-16 lg:py-28"
-			style={{ backgroundColor: "#1C1917" }}
+			className="py-16 sm:py-20 lg:py-28 bg-[#0A1428]"
 		>
 			<div className="container max-w-5xl">
 				<div className="problem-header mb-10 sm:mb-16 text-center">
-					<small
-						className="font-medium text-xs uppercase tracking-wider mb-4 block"
-						style={{ color: "#D97706" }}
-					>
+					<small className="font-medium text-xs uppercase tracking-widest mb-4 block text-[#00E5C0]">
 						{t("home.problem.badge")}
 					</small>
-					<h2
-						className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl"
-						style={{ color: "#FAFAF9" }}
-					>
+					<h2 className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-white">
 						{t("home.problem.title")}
 					</h2>
 				</div>
@@ -82,32 +76,18 @@ export function ProblemSection() {
 						return (
 							<div
 								key={card.id}
-								className="problem-card rounded-2xl p-4 sm:p-6 lg:p-8 border"
-								style={{
-									backgroundColor: "#292524",
-									borderColor: "#44403C",
-								}}
+								className="problem-card rounded-2xl p-5 sm:p-6 lg:p-8 border border-white/10 bg-white/5 backdrop-blur-sm"
 							>
-								<div
-									className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center mb-4 sm:mb-5"
-									style={{ backgroundColor: "#44403C" }}
-								>
+								<div className="w-10 h-10 rounded-xl flex items-center justify-center mb-5 bg-[#00E5C0]/15">
 									<Icon
-										className="size-5"
-										style={{ color: "#D97706" }}
+										className="size-5 text-[#00E5C0]"
 										strokeWidth={1.5}
 									/>
 								</div>
-								<h3
-									className="text-lg font-semibold mb-3"
-									style={{ color: "#FAFAF9", fontFamily: "var(--font-sans)" }}
-								>
+								<h3 className="text-lg font-semibold mb-3 text-white">
 									{t(`home.problem.${card.id}.title`)}
 								</h3>
-								<p
-									className="text-sm leading-relaxed"
-									style={{ color: "#A8A29E" }}
-								>
+								<p className="text-sm leading-relaxed text-[#94A3B8]">
 									{t(`home.problem.${card.id}.description`)}
 								</p>
 							</div>

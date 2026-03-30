@@ -24,12 +24,15 @@ const TOOL_DISPLAY_NAMES: Record<string, string> = {
 const MAX_REQUESTS_PER_HOUR = 20;
 const ALLOWED_ORIGIN = process.env.NEXT_PUBLIC_MARKETING_URL || "*";
 
+const SUPPORTED_LOCALES = ["en", "es", "de", "fr"] as const;
+
 const bodySchema = z.object({
 	email: z.string().email("Valid email required."),
 	toolUsed: z.string().min(1, "Tool name required."),
-	outputData: z.string().optional(),
+	outputData: z.union([z.string(), z.record(z.unknown())]).optional(),
 	source: z.string().optional(),
 	turnstileToken: z.string().optional(),
+	locale: z.enum(SUPPORTED_LOCALES).optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -54,7 +57,7 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		const { email: rawEmail, toolUsed, outputData, source, turnstileToken } = parsed.data;
+		const { email: rawEmail, toolUsed, outputData, source, turnstileToken, locale } = parsed.data;
 		const email = rawEmail.trim().toLowerCase();
 
 		// Turnstile verification (if token provided)
@@ -78,34 +81,48 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
+		const outputDataStr = typeof outputData === "object" ? JSON.stringify(outputData) : outputData;
+
 		const lead = await db.toolLead.create({
 			data: {
 				email,
 				toolUsed,
-				outputData: outputData || undefined,
+				outputData: outputDataStr || undefined,
 				ipAddress: ip,
 				source: source || "tool",
 			},
 		});
 
-		// Send immediate result email (fire-and-forget)
+		// Send confirmation/result email (fire-and-forget)
 		const displayName = TOOL_DISPLAY_NAMES[toolUsed] || toolUsed;
-		const toolUrl = `https://auditora.ai/tools/${toolUsed}`;
-		sendEmail({
-			to: email,
-			subject: `Your ${displayName} result is ready — Auditora.ai`,
-			html: `
-				<div style="font-family: 'Geist', system-ui, sans-serif; max-width: 560px; margin: 0 auto; padding: 32px 20px;">
-					<h2 style="color: #0F172A; font-size: 20px;">Your ${displayName} result is ready</h2>
-					<p style="color: #334155; line-height: 1.6;">Thanks for using Auditora.ai's free ${displayName}. Your result has been generated and is ready to view.</p>
-					<a href="${toolUrl}" style="display: inline-block; background: #2563EB; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 500; margin: 16px 0;">View your result &rarr;</a>
-					<hr style="border: none; border-top: 1px solid #E2E8F0; margin: 24px 0;" />
-					<p style="color: #64748B; font-size: 14px;"><strong>Did you know?</strong> Auditora.ai can generate BPMN diagrams, SIPOC, RACI matrices, and process audits <em>live during your meetings</em>. The AI joins your video call and does everything automatically.</p>
-					<a href="https://auditora.ai" style="color: #2563EB; font-size: 14px;">Learn more about Auditora.ai &rarr;</a>
-				</div>
-			`,
-			text: `Your ${displayName} result is ready. View it at: ${toolUrl}`,
-		}).catch(() => {});
+
+		if (source === "contact") {
+			const contactData = typeof outputData === "object" ? outputData : {};
+			const contactName = (contactData as Record<string, string>).name || "";
+			const contactMessage = (contactData as Record<string, string>).message || "";
+
+			sendEmail({
+				to: email,
+				templateId: "contactConfirmation",
+				context: { name: contactName },
+				locale: locale || "en",
+			}).catch(() => {});
+
+			// Notify the team about the new contact form submission
+			sendEmail({
+				to: "contact@auditora.ai",
+				subject: `Nuevo mensaje de contacto: ${contactName} (${email})`,
+				text: `Nombre: ${contactName}\nEmail: ${email}\nMensaje:\n${contactMessage}`,
+			}).catch(() => {});
+		} else {
+			const toolUrl = `https://auditora.ai/tools/${toolUsed}`;
+			sendEmail({
+				to: email,
+				templateId: "toolResult",
+				context: { toolName: displayName, resultUrl: toolUrl },
+				locale: locale || "en",
+			}).catch(() => {});
+		}
 
 		return NextResponse.json(
 			{ success: true, id: lead.id },

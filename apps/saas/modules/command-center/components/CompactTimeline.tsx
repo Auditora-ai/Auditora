@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import type { SessionData } from "./CommandCenter";
 
-const COLORS = ["#2563EB", "#7C3AED", "#16A34A", "#D97706", "#DC2626", "#0EA5E9"];
+const COLORS = ["#00E5C0", "#7C3AED", "#16A34A", "#D97706", "#DC2626", "#0EA5E9"];
 
 export function CompactTimeline({ sessions }: { sessions: SessionData[] }) {
 	const { weeks, processes, sessionsByWeekProcess } = useMemo(() => {

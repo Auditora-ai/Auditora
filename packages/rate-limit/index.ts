@@ -8,6 +8,7 @@
 export { getRedis } from "./redis";
 export {
 	checkSessionCredits,
+	checkAndConsumeCredit,
 	recordSessionCredit,
 	resetSessionCredits,
 	type CreditCheckResult,

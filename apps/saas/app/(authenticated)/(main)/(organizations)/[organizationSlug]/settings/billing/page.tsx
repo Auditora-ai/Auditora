@@ -1,6 +1,7 @@
 import { getActiveOrganization } from "@auth/lib/server";
 import { ActivePlan } from "@payments/components/ActivePlan";
 import { ChangePlan } from "@payments/components/ChangePlan";
+import { UsageDashboard } from "@payments/components/UsageDashboard";
 import { listPurchases } from "@payments/lib/server";
 import { createPurchasesHelper } from "@repo/payments/lib/helper";
 import { SettingsList } from "@shared/components/SettingsList";
@@ -47,6 +48,7 @@ export default async function BillingSettingsPage({
 	return (
 		<SettingsList>
 			{activePlan && <ActivePlan organizationId={organization.id} />}
+			<UsageDashboard organizationId={organization.id} />
 			<ChangePlan
 				organizationId={organization.id}
 				activePlanId={activePlan?.id}

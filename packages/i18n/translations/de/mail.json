@@ -1,33 +1,169 @@
 {
 	"common": {
-		"openLinkInBrowser": "Wenn du den Link in einem anderen Browser als deinem Standardbrowser öffnen möchtest, kopiere diesen und füge ihn in die Adresszeile deines Browsers ein:",
-		"otp": "Einmaliges Passwort",
-		"useLink": "oder nutze den folgenden Link:"
+		"openLinkInBrowser": "Wenn du den Link in einem anderen Browser öffnen möchtest, kopiere die folgende URL:",
+		"otp": "Verifizierungscode",
+		"useLink": "Oder nutze den folgenden Link:",
+		"greeting": "Hallo {name},",
+		"footer": {
+			"companyName": "Auditora.ai",
+			"tagline": "KI-gestützte Prozessauditierung und Risikointelligenz.",
+			"receivingBecauseAccount": "Du erhältst diese E-Mail, weil du ein Auditora.ai-Konto hast.",
+			"receivingBecauseTool": "Du erhältst diese E-Mail, weil du ein kostenloses Tool auf Auditora.ai genutzt hast.",
+			"receivingBecauseInvite": "Du erhältst diese E-Mail, weil dich jemand zu Auditora.ai eingeladen hat.",
+			"unsubscribe": "Abmelden",
+			"privacyPolicy": "Datenschutzrichtlinie"
+		}
 	},
 	"emailVerification": {
-		"body": "Hallo!\nbitte klicke auf den unten stehenden Link, um diese neue E-Mail-Adresse zu bestätigen.",
-		"confirmEmail": "E-Mail verifizieren",
-		"subject": "E-Mail bestätigen"
+		"subject": "Neue E-Mail bestätigen — Auditora.ai",
+		"preheader": "Bestätige deine E-Mail-Adressänderung",
+		"body": "Du hast eine Änderung deiner E-Mail-Adresse beantragt. Bitte bestätige diese neue Adresse, indem du auf den Button klickst.",
+		"confirmEmail": "E-Mail bestätigen"
 	},
 	"forgotPassword": {
-		"body": "Hallo,\n\ndu hast eine Passwortzurücksetzung beantragt.\n\n\nKlicke auf den unten stehenden Link, um dein Passwort zurückzusetzen.",
-		"resetPassword": "Passwort zurücksetzen",
-		"subject": "Passwort zurücksetzen"
+		"subject": "Passwort zurücksetzen — Auditora.ai",
+		"preheader": "Folge diesem Link, um ein neues Passwort festzulegen",
+		"body": "Wir haben eine Anfrage zum Zurücksetzen des Passworts für dein Auditora.ai-Konto erhalten. Klicke auf den Button, um ein neues Passwort festzulegen.\n\nWenn du diese Anfrage nicht gestellt hast, kannst du diese E-Mail ignorieren.",
+		"resetPassword": "Passwort zurücksetzen"
 	},
 	"magicLink": {
-		"body": "Hey,\ndu hast eine Anmelde-E-Mail von Auditora.ai angefordert.\n\nKlicke auf den unten stehenden Link, um dich anzumelden.",
-		"login": "Login",
-		"subject": "Login bei Auditora.ai"
+		"subject": "Bei Auditora.ai anmelden",
+		"preheader": "Dein sicherer Anmeldelink ist bereit",
+		"body": "Du hast einen Anmeldelink für dein Auditora.ai-Konto angefordert. Klicke auf den Button, um dich sicher anzumelden.",
+		"login": "Anmelden"
 	},
 	"newUser": {
-		"body": "Hallo,\n\nVielen Dank, dass du dich bei Auditora.ai angemeldet hast.\n\n\nUm mit der Nutzung unserer App zu beginnen, bestätige bitte deine E-Mail-Adresse, indem du auf den untenstehenden Link klickst.",
-		"confirmEmail": "E-Mail bestätigen",
-		"subject": "E-Mail bestätigen"
+		"subject": "Bestätige dein Auditora.ai-Konto",
+		"preheader": "Dein Verifizierungscode: {otp}",
+		"body": "Willkommen bei Auditora.ai. Um deine Registrierung abzuschließen, bestätige bitte deine E-Mail-Adresse mit dem folgenden Code oder klicke auf den Button.",
+		"confirmEmail": "E-Mail bestätigen"
 	},
 	"organizationInvitation": {
-		"body": "Du wurdest eingeladen, der Organisation {organizationName} beizutreten. Klicke auf den Button unten oder kopiere den Link und füge ihn in den Browser deiner Wahl ein, um die Einladung anzunehmen und der Organisation beizutreten.",
-		"headline": "Einladung zur Organisation {organizationName}",
-		"join": "Tritt der Organisation bei",
-		"subject": "Du wurdest eingeladen, einer Organisation beizutreten"
+		"subject": "Tritt {organizationName} auf Auditora.ai bei",
+		"preheader": "{organizationName} hat dich zur Zusammenarbeit eingeladen",
+		"headline": "Tritt <strong>{organizationName}</strong> auf Auditora.ai bei",
+		"body": "Du wurdest eingeladen, {organizationName} auf Auditora.ai beizutreten. Klicke auf den Button, um die Einladung anzunehmen und auf den Arbeitsbereich zuzugreifen.",
+		"join": "Arbeitsbereich beitreten"
+	},
+	"toolResult": {
+		"subject": "Dein {toolName}-Ergebnis ist bereit — Auditora.ai",
+		"preheader": "Deine {toolName}-Analyse ist bereit zur Überprüfung",
+		"heading": "Dein {toolName}-Ergebnis ist bereit",
+		"body": "Vielen Dank für die Nutzung von Auditora.ai. Deine {toolName}-Analyse wurde erstellt und ist bereit zur Überprüfung.",
+		"ctaButton": "Ergebnis ansehen",
+		"didYouKnow": "Auditora.ai kann BPMN-Diagramme, SIPOC, RACI-Matrizen und Prozessaudits live während deiner Videoanrufe erstellen. Die KI tritt deinem Meeting bei und erstellt alles automatisch.",
+		"learnMore": "Mehr über Auditora.ai erfahren"
+	},
+	"toolNurture1": {
+		"subject": "Was wäre, wenn {toolName} während deiner Meetings liefe?",
+		"preheader": "Erfahre, wie Auditora.ai die Prozessdokumentation automatisiert",
+		"heading": "Stell dir das während deines Meetings vor",
+		"intro": "Vor einigen Tagen hast du unser kostenloses {toolName} genutzt. Du hast einen Prozess beschrieben und in Sekunden Ergebnisse erhalten.",
+		"hook": "Was wäre, wenn das automatisch während deines Stakeholder-Interviews passieren würde?",
+		"description": "Mit Auditora.ai tritt ein KI-Assistent deinem Zoom-, Teams- oder Meet-Anruf bei und:",
+		"feature1": "Leitet deine Fragen mit einem BPM-Teleprompter (SIPOC + Gap-Analyse)",
+		"feature2": "Transkribiert das Gespräch in Echtzeit mit Sprechererkennung",
+		"feature3": "Extrahiert Prozessschritte, Rollen und Entscheidungen automatisch",
+		"feature4": "Erstellt das BPMN-Diagramm live während du sprichst",
+		"feature5": "Generiert ein vollständiges Lieferpaket nach dem Meeting",
+		"result": "1 Stunde Meeting = vollständiges BPMN + RACI + Prozessblatt + Executive Summary. Keine Nachbearbeitung nötig.",
+		"ctaButton": "Kostenlose Testversion starten"
+	},
+	"toolNurture2": {
+		"subject": "Spare über 16 Stunden/Monat bei der Prozessdokumentation",
+		"preheader": "Wie BPM-Berater die Nachbearbeitung eliminieren",
+		"heading": "Wie ein BPM-Berater über 3 Stunden pro Sitzung spart",
+		"intro": "Letzte Woche hast du unser {toolName} genutzt. So sieht eine typische Auditora.ai-Sitzung in der Praxis aus:",
+		"before": "Ohne Auditora.ai:",
+		"beforeDetail": "1 Stunde Meeting + 4-6 Stunden Dokumentation (BPMN, RACI, Prozessblatt, Executive Summary)",
+		"after": "Mit Auditora.ai:",
+		"afterDetail": "1 Stunde Meeting + 15 Minuten Überprüfung der KI-generierten Lieferobjekte",
+		"math": "Die Rechnung: 4 Sitzungen/Monat x 4 Stunden gespart = 16 Stunden/Monat, die du für Analyse und Kundenarbeit statt Dokumentation nutzen kannst.",
+		"ctaButton": "Kostenlose Testversion starten"
+	},
+	"sessionRecap": {
+		"subject": "Lieferobjekte bereit: {processName} — Auditora.ai",
+		"preheader": "Deine Sitzungslieferobjekte für {processName} sind bereit zur Überprüfung",
+		"heading": "Deine Sitzungslieferobjekte sind bereit",
+		"body": "Die Lieferobjekte deiner {processName}-Sitzung wurden erstellt und sind bereit zur Überprüfung.",
+		"deliverablesHeading": "Was erstellt wurde:",
+		"deliverable1": "Prozessintelligenz-Bericht",
+		"deliverable2": "Executive Summary",
+		"deliverable3": "Visuelle Prozesskarte (BPMN)",
+		"deliverable4": "SIPOC-Diagramm",
+		"deliverable5": "RACI-Matrix",
+		"deliverable6": "Risikoidentifikation",
+		"deliverable7": "Verbesserungsempfehlungen",
+		"ctaButton": "Lieferobjekte überprüfen"
+	},
+	"onboardingSteps": {
+		"subject": "Starte mit Auditora.ai in 3 Schritten",
+		"preheader": "Deine erste KI-gestützte Prozesssitzung wartet",
+		"heading": "Starte mit Auditora.ai",
+		"body": "Dein Konto ist eingerichtet. So führst du deine erste KI-gestützte Prozesselizitationssitzung durch:",
+		"step1Title": "1. Erstelle eine Sitzung",
+		"step1Body": "Öffne dein Dashboard und erstelle eine neue Sitzung. Definiere den Prozessumfang und lade Teilnehmer ein.",
+		"step2Title": "2. Lade die KI zu deinem Anruf ein",
+		"step2Body": "Wenn dein Meeting beginnt, tritt Auditora.ai automatisch deinem Zoom-, Teams- oder Meet-Anruf bei. Sie hört zu, leitet und dokumentiert.",
+		"step3Title": "3. Überprüfe deine Lieferobjekte",
+		"step3Body": "Nach dem Meeting sind dein BPMN-Diagramm, SIPOC, RACI, Risikoanalyse und Executive Summary bereit zur Überprüfung.",
+		"valueProp": "Jede Sitzung spart 3-5 Stunden Dokumentationsarbeit.",
+		"ctaButton": "Zum Dashboard"
+	},
+	"trialExpiring": {
+		"subject": "Deine Auditora.ai-Testversion endet in {daysRemaining} Tagen",
+		"preheader": "Jetzt upgraden, um deine KI-gestützten Prozesssitzungen zu behalten",
+		"heading": "Deine Testversion endet in {daysRemaining} Tagen",
+		"body": "Deine {planName}-Testversion bei Auditora.ai läuft bald ab. Nach Ablauf verlierst du den Zugang zu KI-gestützter Sitzungsaufzeichnung, Live-BPMN-Generierung und automatischer Lieferobjekterstellung.",
+		"valueProp": "Teams, die Auditora.ai nutzen, sparen durchschnittlich über 16 Stunden pro Monat bei der Prozessdokumentation.",
+		"ctaButton": "Jetzt upgraden",
+		"questionsNote": "Hast du Fragen? Antworte auf diese E-Mail und unser Team hilft dir, den richtigen Plan zu finden."
+	},
+	"reEngagement": {
+		"subject": "Deine nächste Prozesssitzung wartet",
+		"preheader": "Mach dort weiter, wo du bei Auditora.ai aufgehört hast",
+		"heading": "Deine nächste Prozesssitzung wartet",
+		"body": "Es ist eine Weile her seit deiner letzten Sitzung auf Auditora.ai. Die Prozessdokumentation und Risikoidentifikation deines Teams sind am effektivsten mit regelmäßigen KI-gestützten Sitzungen.",
+		"suggestion": "Starte heute eine neue Sitzung und lass die KI die Dokumentation übernehmen, während du dich auf das Gespräch konzentrierst.",
+		"ctaButton": "Sitzung starten"
+	},
+	"contactConfirmation": {
+		"subject": "Wir haben deine Nachricht erhalten — Auditora.ai",
+		"preheader": "Danke für deine Nachricht, wir melden uns bald bei dir",
+		"heading": "Wir haben deine Nachricht erhalten",
+		"body": "Hallo {name}, vielen Dank für deine Nachricht. Wir haben sie erhalten und unser Team wird sich in Kürze bei dir melden.",
+		"note": "Wir antworten in der Regel innerhalb von 24 Stunden an Werktagen."
+	},
+	"sessionInvitation": {
+		"subject": "Sitzungsvorbereitung: {processName} — Auditora.ai",
+		"preheader": "Du bist zu einer Prozesssitzung für {processName} eingeladen",
+		"detailsHeading": "Sitzungsdetails",
+		"processLabel": "Prozess",
+		"typeLabel": "Sitzungstyp",
+		"dateLabel": "Datum",
+		"durationLabel": "Dauer",
+		"yourRoleLabel": "Deine Rolle",
+		"facilitatorLabel": "Moderator",
+		"minutes": "Minuten",
+		"sessionType": {
+			"DISCOVERY": "Entdeckung",
+			"DEEP_DIVE": "Vertiefung",
+			"CONTINUATION": "Fortsetzung"
+		},
+		"yourPreparation": "So bereitest du dich auf deine Rolle vor",
+		"questionsHeading": "Bitte denke vor der Sitzung über diese Fragen nach",
+		"intakeHeading": "Fülle das Vorbereitungsformular aus",
+		"intakeDescription": "Bitte fülle dieses kurze Formular vor der Sitzung aus, damit wir die gemeinsame Zeit optimal nutzen können.",
+		"intakeButton": "Vorbereitungsformular ausfüllen",
+		"meetingLinkLabel": "Meeting-Link"
+	},
+	"upgradeInvitation": {
+		"subject": "Mehr freischalten mit Auditora.ai {suggestedPlan}",
+		"preheader": "Erhalte mehr Sitzungen, Benutzer und Funktionen mit {suggestedPlan}",
+		"heading": "Mehr freischalten mit {suggestedPlan}",
+		"body": "Du bist derzeit im {currentPlan}-Plan. Upgrade auf {suggestedPlan}, um freizuschalten:",
+		"ctaButton": "Upgrade-Optionen ansehen",
+		"currentPlanLabel": "Aktuell: {currentPlan}",
+		"suggestedPlanLabel": "Empfohlen: {suggestedPlan}"
 	}
 }

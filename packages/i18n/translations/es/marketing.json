@@ -1,65 +1,65 @@
 {
 	"blog": {
-		"description": "Artículos sobre consultoría de procesos, automatización BPM y elicitación con IA",
+		"description": "Articulos sobre consultoria de procesos, automatizacion BPM y elicitacion con IA",
 		"title": "Blog",
 		"back": "Volver al blog"
 	},
 	"changelog": {
-		"description": "Mantente al día con los últimos cambios en Auditora.ai.",
+		"description": "Mantente al dia con los ultimos cambios en Auditora.ai.",
 		"title": "Changelog"
 	},
 	"contact": {
-		"description": "¿Tienes preguntas sobre Auditora.ai? Nos encantaría saber de ti.",
+		"description": "Tienes preguntas sobre Auditora.ai? Nos encantaria saber de ti.",
 		"form": {
-			"email": "Correo electrónico",
+			"email": "Correo electronico",
 			"message": "Mensaje",
 			"name": "Nombre",
 			"notifications": {
-				"error": "No pudimos enviar tu mensaje. Inténtalo de nuevo más tarde.",
+				"error": "No pudimos enviar tu mensaje. Intentalo de nuevo mas tarde.",
 				"success": "Mensaje enviado. Te responderemos en menos de 24 horas."
 			},
 			"submit": "Enviar mensaje"
 		},
-		"title": "Contáctanos"
+		"title": "Contactanos"
 	},
 	"documentation": {
-		"title": "Documentación"
+		"title": "Documentacion"
 	},
 	"faq": {
 		"description": "Todo lo que necesitas saber sobre Auditora.ai.",
 		"title": "Preguntas frecuentes",
 		"items": {
 			"urlLimitations": {
-				"question": "Si solo lee mi sitio web público, ¿cómo puede identificar riesgos reales?",
-				"answer": "No puede — y no pretendemos que lo haga. El diagnóstico instantáneo identifica riesgos estructurales y lógicos basados en patrones de industria y la estructura del proceso inferido. Son hipótesis inteligentes, no hallazgos operativos. Piénsalo como la primera pregunta que un buen consultor haría al ver tu sitio: \"dado lo que haces, estos son los riesgos más probables.\" La precisión real viene cuando usas la conversación guiada o la plataforma completa con contexto operativo real."
+				"question": "Si solo lee mi sitio web publico, como puede identificar riesgos reales?",
+				"answer": "No puede — y no pretendemos que lo haga. El diagnostico instantaneo identifica riesgos estructurales y logicos basados en patrones de industria y la estructura del proceso inferido. Son hipotesis fundamentadas, no hallazgos operativos. La precision real viene cuando usas la conversacion guiada o la plataforma completa con contexto operativo real."
 			},
 			"vsChatgpt": {
-				"question": "¿En qué se diferencia esto de usar ChatGPT para generar procesos?",
-				"answer": "En tres cosas fundamentales. Primero, la metodología: cada sesión sigue el framework SIPOC con detección automática de brechas de cobertura — ChatGPT no sabe qué no te ha preguntado. Segundo, los entregables: los diagramas son BPMN 2.0 real, exportable a XML, no dibujos aproximados. Tercero, la persistencia: los procesos, riesgos y mitigaciones se guardan, rastrean y evolucionan — no son chats que se pierden."
+				"question": "En que se diferencia esto de usar ChatGPT para generar procesos?",
+				"answer": "En tres cosas fundamentales. Primero, la metodologia: cada sesion sigue el framework SIPOC con deteccion automatica de brechas de cobertura — ChatGPT no sabe que no te ha preguntado. Segundo, los entregables: los diagramas son BPMN 2.0 real, exportable a XML, no dibujos aproximados. Tercero, la persistencia: los procesos, riesgos y mitigaciones se guardan, rastrean y evolucionan — no son chats que se pierden."
 			},
 			"dataAccess": {
-				"question": "¿Qué datos del sitio web acceden exactamente?",
-				"answer": "Leemos el contenido de texto de hasta 5 páginas públicas: inicio, nosotros, servicios y similares. El mismo contenido que cualquier visitante ve en un navegador. No accedemos a sistemas internos, APIs, bases de datos ni áreas protegidas."
+				"question": "Que datos del sitio web acceden exactamente?",
+				"answer": "Leemos el contenido de texto de hasta 5 paginas publicas: inicio, nosotros, servicios y similares. El mismo contenido que cualquier visitante ve en un navegador. No accedemos a sistemas internos, APIs, bases de datos ni areas protegidas."
 			},
 			"bpmKnowledge": {
-				"question": "¿Necesito saber de BPM o BPMN para usar la herramienta?",
-				"answer": "No. Auditora.ai está diseñada para que cualquier persona que conozca su negocio pueda usarla. La IA hace las preguntas correctas en lenguaje simple, y la notación técnica se genera automáticamente. Si eres consultor BPM, la herramienta acelera tu trabajo. Si no lo eres, la herramienta hace el trabajo técnico por ti."
+				"question": "Necesito saber de BPM o BPMN para usar la herramienta?",
+				"answer": "No. Auditora.ai esta disenada para que cualquier persona que conozca su negocio pueda usarla. La IA hace las preguntas correctas en lenguaje simple, y la notacion tecnica se genera automaticamente. Si eres consultor BPM, la herramienta acelera tu trabajo. Si no lo eres, la herramienta hace el trabajo tecnico por ti."
 			},
 			"deepening": {
-				"question": "¿Puedo profundizar más allá del reporte instantáneo?",
-				"answer": "Sí. Después del diagnóstico, puedes iniciar una conversación guiada con la IA. La IA te hace preguntas específicas sobre tus operaciones — proveedores, entradas, actividades, salidas, clientes — y construye un análisis mucho más detallado. Al final recibes un FMEA completo con modos de falla y número de prioridad de riesgo (RPN) por actividad."
+				"question": "Puedo profundizar mas alla del reporte instantaneo?",
+				"answer": "Si. Despues del diagnostico, puedes iniciar una conversacion guiada con la IA. La IA te hace preguntas especificas sobre tus operaciones — proveedores, entradas, actividades, salidas, clientes — y construye un analisis mucho mas detallado. Al final recibes un FMEA completo con modos de falla y numero de prioridad de riesgo (RPN) por actividad."
 			},
 			"dataSecurity": {
-				"question": "¿Mis datos están seguros?",
-				"answer": "Sí. Cifrado en tránsito (TLS) y en reposo. Las sesiones anónimas expiran en 24 horas. Nunca usamos tu información para entrenar modelos de IA. Al crear cuenta, tus datos se almacenan en el espacio privado de tu organización con aislamiento completo."
+				"question": "Mis datos estan seguros?",
+				"answer": "Si. Cifrado en transito (TLS) y en reposo. Las sesiones anonimas expiran en 24 horas. Nunca usamos tu informacion para entrenar modelos de IA. Al crear cuenta, tus datos se almacenan en el espacio privado de tu organizacion con aislamiento completo."
 			},
 			"accountMigration": {
-				"question": "¿Qué pasa con mi análisis si creo una cuenta?",
-				"answer": "Todo migra automáticamente. Tu mapa de procesos, análisis de riesgos, conversación guiada y entregables generados se transfieren intactos a tu cuenta. No pierdes nada."
+				"question": "Que pasa con mi analisis si creo una cuenta?",
+				"answer": "Todo migra automaticamente. Tu mapa de procesos, analisis de riesgos, conversacion guiada y entregables generados se transfieren intactos a tu cuenta. No pierdes nada."
 			},
 			"vsProcessMining": {
-				"question": "¿Es esto process mining?",
-				"answer": "No. El process mining analiza logs de sistemas (ERP, CRM) para descubrir cómo se ejecutan los procesos en la realidad. Auditora.ai es una herramienta de descubrimiento de procesos basada en elicitación — guía conversaciones para documentar procesos y analizar riesgos. Son enfoques complementarios: el process mining necesita datos de sistema, Auditora.ai necesita conocimiento humano."
+				"question": "Es esto process mining?",
+				"answer": "No. El process mining analiza logs de sistemas (ERP, CRM) para descubrir como se ejecutan los procesos en la realidad. Auditora.ai es una herramienta de descubrimiento de procesos basada en elicitacion — guia conversaciones para documentar procesos y analizar riesgos. Son enfoques complementarios: el process mining necesita datos de sistema, Auditora.ai necesita conocimiento humano."
 			}
 		}
 	},
@@ -67,103 +67,103 @@
 		"hero": {
 			"badge": "Plataforma de descubrimiento de procesos con IA",
 			"title": "Documenta procesos en minutos, no en semanas",
-			"subtitle": "Auditora.ai guía conversaciones de elicitación con inteligencia artificial, genera diagramas BPMN en tiempo real y ejecuta análisis de riesgos automático. Para consultores y auditores que valoran su tiempo.",
+			"subtitle": "Combina metodologia SIPOC, diagramas BPMN 2.0 y analisis de riesgos FMEA en una sola plataforma. Elicitacion guiada por IA para consultores que necesitan resultados defendibles.",
 			"inputPlaceholder": "https://tu-empresa.com",
-			"cta": "Probar con mi sitio web",
+			"cta": "Analizar mi negocio gratis",
 			"ctaSecondary": "O describe tu negocio manualmente",
-			"subtext": "Pega cualquier URL. La IA analiza tu contexto público y genera un diagnóstico inicial gratuito con mapa de procesos y riesgos.",
+			"subtext": "Pega cualquier URL. La IA analiza tu contexto publico y genera un diagnostico inicial con mapa de procesos y analisis de riesgos — sin registro.",
 			"alt": {
-				"badge": "La herramienta que le faltaba a tu práctica",
-				"title": "Cada proceso no documentado es un riesgo que estás firmando",
-				"subtitle": "Tus clientes tienen procesos críticos que nadie ha mapeado. Auditora.ai los descubre por ti: elicitación guiada por IA, diagramas BPMN automáticos y análisis de riesgos con puntuación de severidad. En una fracción del tiempo que te tomaría a ti solo.",
-				"cta": "Ver diagnóstico gratuito de mi negocio",
-				"subtext": "Ingresa tu URL corporativa. Recibe un mapa de procesos y análisis de riesgos en minutos — sin registro, sin compromisos."
+				"badge": "La herramienta que le faltaba a tu practica",
+				"title": "Cada proceso sin documentar es un riesgo que estas firmando",
+				"subtitle": "Tus clientes tienen procesos criticos que nadie ha mapeado. Auditora.ai los descubre: elicitacion SIPOC guiada por IA, diagramas BPMN 2.0 automaticos y matriz FMEA con puntuacion de severidad. En una fraccion del tiempo.",
+				"cta": "Ver diagnostico de mi negocio",
+				"subtext": "Ingresa tu URL corporativa. Recibe un mapa de procesos y analisis de riesgos en minutos — sin registro, sin compromisos."
 			}
 		},
 		"problem": {
 			"badge": "El problema",
-			"title": "El descubrimiento de procesos está roto",
+			"title": "El descubrimiento de procesos tradicional no escala",
 			"card1": {
 				"title": "Semanas de entrevistas, diagramas que nadie lee",
-				"description": "Agendar reuniones. Tomar notas a mano. Pasar horas en Visio o Lucidchart traduciendo lo que escuchaste a BPMN. Enviar borrador. Esperar corrección. Repetir. Un solo proceso puede tomar 2-4 semanas. Tu cliente ya se impacientó."
+				"description": "Agendar reuniones. Tomar notas. Pasar horas en Visio traduciendo entrevistas a BPMN. Enviar borrador. Esperar correccion. Repetir. Un proceso toma 2-4 semanas. Tu cliente ya perdio interes."
 			},
 			"card2": {
-				"title": "Herramientas de $50,000 que necesitan datos que no tienes",
-				"description": "Celonis, Minit, UiPath Process Mining — todas prometen descubrir procesos automáticamente. Pero necesitan logs de sistema, acceso a ERP, integración técnica. Tu cliente ni siquiera tiene un CRM bien implementado. El process mining no es para el 95% de las empresas."
+				"title": "Herramientas de $50,000 que necesitan event logs",
+				"description": "Celonis, UiPath Process Mining — necesitan logs de sistema, acceso a ERP, integracion tecnica. El 95% de las empresas no tiene esos datos disponibles. Process mining no es la respuesta para la mayoria."
 			},
 			"card3": {
-				"title": "Copiar y pegar en ChatGPT no es una metodología",
-				"description": "Sí, puedes pedirle a ChatGPT que te genere un BPMN. El resultado es genérico, no tiene contexto real del negocio, no sigue una metodología de elicitación y no te da nada que puedas defender frente a un comité. Es un parche, no una herramienta profesional."
+				"title": "ChatGPT no es una metodologia de elicitacion",
+				"description": "Puedes pedirle a un LLM que genere un BPMN. El resultado es generico, sin contexto operativo real, sin framework de cobertura y sin nada que puedas defender frente a un comite directivo."
 			}
 		},
 		"solution": {
-			"badge": "La solución",
-			"title": "Un copiloto de IA que sabe hacer elicitación de procesos",
-			"description": "Auditora.ai no es un chatbot genérico ni una herramienta de process mining. Es una plataforma de descubrimiento de procesos que combina la metodología SIPOC con inteligencia artificial para guiar la elicitación, documentar en BPMN 2.0 en tiempo real y generar análisis de riesgos con calificación de severidad — todo durante la conversación, no después.",
+			"badge": "La solucion",
+			"title": "Un copiloto de IA con metodologia de elicitacion incorporada",
+			"description": "Auditora.ai no es un chatbot ni una herramienta de process mining. Combina el framework SIPOC con IA para guiar la elicitacion, documentar en BPMN 2.0 en tiempo real y generar analisis de riesgos FMEA — durante la conversacion, no despues.",
 			"diff1": {
-				"title": "Metodología real, no prompts genéricos",
-				"description": "Cada conversación sigue el framework SIPOC (Proveedores, Entradas, Proceso, Salidas, Clientes). La IA detecta brechas de cobertura y genera preguntas contextuales para llenarlas. No improvisa — investiga."
+				"title": "Metodologia SIPOC, no prompts genericos",
+				"description": "Cada sesion sigue el framework SIPOC (Proveedores, Entradas, Proceso, Salidas, Clientes). La IA detecta brechas de cobertura y genera preguntas contextuales para cerrarlas."
 			},
 			"diff2": {
-				"title": "Diagramas BPMN 2.0 mientras hablas",
-				"description": "No transcribas, no redibujes. El diagrama se construye durante la sesión. Exportable a XML, compatible con Camunda, Signavio y cualquier herramienta BPMN."
+				"title": "Diagramas BPMN 2.0 en tiempo real",
+				"description": "El diagrama se construye mientras hablas. Exportable a XML, compatible con Camunda, Signavio y cualquier herramienta BPMN 2.0."
 			},
 			"diff3": {
-				"title": "Análisis de riesgos estructural automático",
-				"description": "Cada actividad del proceso se evalúa contra modos de falla potenciales. Recibes una matriz FMEA con Número de Prioridad de Riesgo (RPN), no una lista genérica de \"riesgos posibles\"."
+				"title": "Matriz FMEA con RPN por actividad",
+				"description": "Cada actividad se evalua contra modos de falla potenciales. Recibes Severidad, Ocurrencia, Deteccion y Numero de Prioridad de Riesgo — no una lista generica."
 			}
 		},
 		"howItWorks": {
-			"badge": "Prueba gratuita instantánea",
-			"title": "Mira lo que la IA descubre con solo tu información pública",
-			"subtitle": "Este diagnóstico usa únicamente tus páginas web públicas. Es un punto de partida — no un audit final. Si esto te sorprende, imagina el resultado cuando le des contexto real.",
+			"badge": "Diagnostico instantaneo",
+			"title": "Mira lo que la IA descubre con solo tu informacion publica",
+			"subtitle": "Este diagnostico usa unicamente tus paginas web publicas. Es un punto de partida, no una auditoria final.",
 			"step1": {
 				"title": "Ingresa tu URL",
-				"description": "La IA lee hasta 5 páginas públicas de tu sitio — inicio, nosotros, servicios. El mismo contenido que ve cualquier visitante."
+				"description": "La IA lee hasta 5 paginas publicas: inicio, nosotros, servicios."
 			},
 			"step2": {
 				"title": "Inferencia de contexto",
-				"description": "Identifica tu industria, servicios principales y selecciona el proceso más crítico. Genera un mapa SIPOC inicial y un diagrama de proceso."
+				"description": "Identifica industria, servicios principales y selecciona el proceso mas critico. Genera mapa SIPOC inicial."
 			},
 			"step3": {
-				"title": "Diagnóstico de riesgos",
-				"description": "Evalúa riesgos estructurales del proceso identificado: brechas lógicas en el flujo, dependencias frágiles, puntos sin control. Califica por severidad y probabilidad."
+				"title": "Diagnostico de riesgos",
+				"description": "Evalua riesgos estructurales: brechas logicas, dependencias fragiles, puntos sin control. Califica por severidad y probabilidad."
 			},
 			"step4": {
-				"title": "Profundiza con conversación guiada",
-				"description": "Opcionalmente, entra en una sesión de preguntas y respuestas con la IA. Mientras más contexto aportes, más específico y accionable será el análisis. Al final, recibirás un FMEA completo."
+				"title": "Profundiza con conversacion guiada",
+				"description": "Entra en una sesion de preguntas con la IA. Mas contexto = analisis mas especifico. Al final, FMEA completo."
 			},
-			"disclaimer": "Los riesgos identificados en el diagnóstico instantáneo son inferencias lógicas basadas en la estructura del proceso, no detecciones de problemas operativos reales. Para hallazgos específicos, utiliza la conversación guiada o la plataforma completa."
+			"disclaimer": "Los riesgos identificados en el diagnostico instantaneo son inferencias logicas basadas en la estructura del proceso, no detecciones de problemas operativos reales. Para hallazgos especificos, utiliza la conversacion guiada o la plataforma completa."
 		},
 		"deepDive": {
-			"badge": "Donde la magia real sucede",
-			"title": "Una conversación guiada que construye tu análisis",
-			"subtitle": "El diagnóstico instantáneo es el aperitivo. La conversación guiada es donde Auditora.ai se diferencia de cualquier otra herramienta.",
-			"methodTitle": "Diálogo socrático + SIPOC",
+			"badge": "Elicitacion guiada",
+			"title": "Una conversacion estructurada que construye tu analisis",
+			"subtitle": "El diagnostico es el punto de partida. La conversacion guiada es donde Auditora.ai se diferencia.",
+			"methodTitle": "Dialogo socratico + SIPOC",
 			"methodDescription": "La IA no te pide que \"describas tu proceso\". Hace preguntas dirigidas basadas en las brechas que detecta en tu mapa SIPOC:",
-			"question1": "\"Mencionaste 3 proveedores pero solo 1 entrada. ¿Quién más aporta materiales o información a este paso?\"",
-			"question2": "\"Tu proceso tiene 5 actividades pero ninguna bifurcación. ¿Hay algún punto donde el flujo cambie según una condición?\"",
-			"question3": "\"Identificaste al cliente final pero no al cliente interno. ¿Quién recibe el output de este paso antes de que llegue al cliente?\"",
-			"methodNote": "Cada pregunta cierra una brecha específica. No hay preguntas genéricas.",
+			"question1": "\"Mencionaste 3 proveedores pero solo 1 entrada. Quien mas aporta materiales o informacion a este paso?\"",
+			"question2": "\"Tu proceso tiene 5 actividades pero ninguna bifurcacion. Hay algun punto donde el flujo cambie segun una condicion?\"",
+			"question3": "\"Identificaste al cliente final pero no al cliente interno. Quien recibe el output de este paso antes de que llegue al cliente?\"",
+			"methodNote": "Cada pregunta cierra una brecha especifica. No hay preguntas genericas.",
 			"outputTitle": "Lo que obtienes al final",
 			"instant": {
-				"label": "Diagnóstico instantáneo",
+				"label": "Diagnostico instantaneo",
 				"processes": "1 proceso mapeado",
 				"risks": "3-5 riesgos generales",
-				"analysis": "Puntuación básica",
-				"diagram": "SIPOC básico"
+				"analysis": "Puntuacion basica",
+				"diagram": "SIPOC basico"
 			},
 			"guided": {
-				"label": "Después de conversación guiada",
-				"processes": "Proceso enriquecido con 2-3x más actividades",
-				"risks": "10-15+ riesgos específicos con modos de falla",
+				"label": "Despues de conversacion guiada",
+				"processes": "Proceso enriquecido con 2-3x mas actividades",
+				"risks": "10-15+ riesgos especificos con modos de falla",
 				"analysis": "FMEA completo con RPN por actividad",
 				"diagram": "BPMN 2.0 exportable"
 			}
 		},
 		"platform": {
-			"badge": "La plataforma completa",
-			"title": "De un diagnóstico gratuito a tu sistema de gestión de procesos",
+			"badge": "La plataforma",
+			"title": "De un diagnostico gratuito a tu sistema de gestion de procesos",
 			"subtitle": "El scan gratuito demuestra lo que la IA puede hacer. La plataforma es donde haces el trabajo real con tus clientes.",
 			"feature1": {
 				"title": "Biblioteca de procesos",
@@ -171,42 +171,65 @@
 			},
 			"feature2": {
 				"title": "Sesiones de descubrimiento guiadas",
-				"description": "Inicia sesiones de elicitación con la IA como copiloto. Preguntas contextuales basadas en la cobertura SIPOC en tiempo real."
+				"description": "Inicia sesiones de elicitacion con la IA como copiloto. Preguntas contextuales basadas en la cobertura SIPOC en tiempo real."
 			},
 			"feature3": {
-				"title": "Diagramas BPMN automáticos",
-				"description": "Los diagramas se generan y actualizan durante la sesión. Exporta XML, PNG o PDF. Compatible con Camunda, Signavio, Bizagi."
+				"title": "Diagramas BPMN automaticos",
+				"description": "Los diagramas se generan y actualizan durante la sesion. Exporta XML, PNG o PDF. Compatible con Camunda, Signavio, Bizagi."
 			},
 			"feature4": {
-				"title": "Gestión de riesgos y mitigación",
-				"description": "Cada riesgo identificado se convierte en un ítem rastreable. Asigna responsables, define planes de mitigación, monitorea el progreso."
+				"title": "Gestion de riesgos y mitigacion",
+				"description": "Cada riesgo identificado se convierte en un item rastreable. Asigna responsables, define planes de mitigacion, monitorea el progreso."
 			},
 			"feature5": {
-				"title": "Colaboración de equipo",
+				"title": "Colaboracion de equipo",
 				"description": "Invita a tu equipo. Comparte procesos, asigna sesiones, revisa entregables. Roles y permisos granulares."
 			},
 			"feature6": {
 				"title": "Entregables profesionales",
-				"description": "Exporta reportes listos para entregar a tu cliente: mapas de proceso, matrices RACI, análisis de riesgos, tarjetas de proceso."
+				"description": "Exporta reportes listos para entregar a tu cliente: mapas de proceso, matrices RACI, analisis de riesgos, tarjetas de proceso."
 			},
-			"cta": "Crear cuenta gratuita — tu diagnóstico se conserva",
-			"ctaSubtext": "Todo lo que generaste en el scan gratuito migra automáticamente a tu cuenta."
+			"cta": "Crear cuenta gratuita — tu diagnostico se conserva",
+			"ctaSubtext": "Todo lo que generaste en el scan gratuito migra automaticamente a tu cuenta."
 		},
 		"credibility": {
-			"badge": "Por qué confiar en Auditora.ai",
-			"title": "Construido sobre metodología, no sobre hype",
+			"badge": "Confianza",
+			"title": "Construido sobre metodologia, no sobre promesas",
 			"pillar1": {
 				"title": "Frameworks reconocidos por la industria",
 				"description": "SIPOC (Six Sigma), BPMN 2.0 (OMG), FMEA (ISO/SAE). No inventamos nada. Automatizamos las mismas herramientas que los mejores consultores ya usan."
 			},
 			"pillar2": {
 				"title": "Transparencia total",
-				"description": "Te decimos exactamente qué puede y qué no puede hacer la IA. El diagnóstico instantáneo identifica riesgos lógicos, no operativos. La precisión mejora con cada minuto de contexto que aportas. Sin promesas exageradas."
+				"description": "Te decimos exactamente que puede y que no puede hacer la IA. El diagnostico instantaneo identifica riesgos logicos, no operativos. La precision mejora con cada minuto de contexto que aportas."
 			},
 			"pillar3": {
 				"title": "Tus datos son tuyos",
-				"description": "Cifrado en tránsito y en reposo. Las sesiones anónimas expiran en 24 horas. Nunca usamos tu información para entrenar modelos. Cumplimiento con GDPR."
+				"description": "Cifrado en transito y en reposo. Las sesiones anonimas expiran en 24 horas. Nunca usamos tu informacion para entrenar modelos. Cumplimiento con GDPR."
 			}
+		},
+		"socialProof": {
+			"badge": "Casos de uso",
+			"title": "Consultores y auditores confian en Auditora.ai",
+			"testimonial1": {
+				"quote": "Redujo el tiempo de documentacion de un proceso de 3 semanas a 2 dias. La matriz FMEA automatica es exactamente lo que presentamos a comite.",
+				"name": "Maria Rodriguez",
+				"role": "Consultora Senior de Procesos",
+				"company": "Firma de Consultoria Top 10"
+			},
+			"testimonial2": {
+				"quote": "Antes necesitabamos un analista dedicado por proceso. Ahora un consultor junior produce entregables de nivel senior en la primera sesion.",
+				"name": "Carlos Mendez",
+				"role": "Gerente de Mejora Continua",
+				"company": "Empresa Manufacturera Global"
+			},
+			"testimonial3": {
+				"quote": "La trazabilidad de la metodologia SIPOC nos da la evidencia que necesitamos para las auditorias internas. No es una caja negra.",
+				"name": "Ana Torres",
+				"role": "Auditora Interna",
+				"company": "Institucion Financiera Latam"
+			},
+			"logosLabel": "Utilizado por equipos de consultoria y auditoria en"
 		},
 		"tools": {
 			"title": "Herramientas IA Gratis para Profesionales de Procesos",
@@ -215,41 +238,65 @@
 		}
 	},
 	"newsletter": {
-		"email": "Correo electrónico",
+		"email": "Correo electronico",
 		"hints": {
 			"error": {
-				"message": "No se pudo suscribir. Inténtalo de nuevo más tarde."
+				"message": "No se pudo suscribir. Intentalo de nuevo mas tarde."
 			},
 			"success": {
-				"message": "Estás en la lista. Te notificaremos cuando Auditora.ai se lance.",
+				"message": "Estas en la lista. Te notificaremos cuando Auditora.ai se lance.",
 				"title": "Suscrito"
 			}
 		},
 		"submit": "Suscribirse",
-		"subtitle": "Sé de los primeros en acceder a Auditora.ai.",
+		"subtitle": "Se de los primeros en acceder a Auditora.ai.",
 		"title": "Acceso anticipado"
 	},
 	"cta": {
-		"title": "Cada proceso sin documentar es una decisión sin evidencia",
-		"subtitle": "Empieza con un diagnóstico gratuito. Mira lo que la IA infiere de tu información pública. Decide después si quieres profundizar.",
-		"button": "Obtener diagnóstico gratuito",
-		"note": "Sin tarjeta de crédito. Sin registro. Tu primer mapa de procesos en minutos."
+		"title": "Cada proceso sin documentar es una decision sin evidencia",
+		"subtitle": "Empieza con un diagnostico gratuito. Decide despues si quieres profundizar.",
+		"button": "Obtener diagnostico gratuito",
+		"note": "Sin tarjeta. Sin registro. Tu primer mapa de procesos en minutos."
 	},
 	"notFound": {
 		"code": "404",
-		"title": "Página no encontrada",
+		"title": "Pagina no encontrada",
 		"goToDashboard": "Ir al panel",
-		"goToHomepage": "Ir a la página principal"
+		"goToHomepage": "Ir a la pagina principal"
+	},
+	"consent": {
+		"title": "Preferencias de cookies",
+		"description": "Usamos cookies para mejorar tu experiencia y analizar el uso del sitio. Puedes personalizar cuales cookies permites.",
+		"acceptAll": "Aceptar todas",
+		"rejectAll": "Rechazar todas",
+		"customize": "Personalizar",
+		"savePreferences": "Guardar preferencias",
+		"essential": {
+			"title": "Esenciales",
+			"description": "Necesarias para el funcionamiento del sitio. No se pueden desactivar."
+		},
+		"analytics": {
+			"title": "Analiticas",
+			"description": "Nos ayudan a entender como usas el sitio para poder mejorarlo."
+		},
+		"marketing": {
+			"title": "Marketing",
+			"description": "Usadas para mostrarte contenido relevante y medir la efectividad de campanas."
+		},
+		"gpcDetected": "Detectamos tu preferencia de Global Privacy Control. Las cookies analiticas y de marketing estan desactivadas."
 	},
 	"common": {
 		"footer": {
 			"blog": "Blog",
 			"features": "Funciones",
 			"pricing": "Precios",
-			"privacyPolicy": "Política de privacidad",
-			"termsAndConditions": "Términos y condiciones",
+			"privacyPolicy": "Politica de privacidad",
+			"termsAndConditions": "Terminos y condiciones",
+			"doNotSell": "No vender mi informacion personal",
+			"cookieSettings": "Configuracion de cookies",
 			"tools": "Herramientas Gratis",
-			"builtWith": "Auditora.ai"
+			"builtWith": "Auditora.ai",
+			"aiDisclaimer": "Auditora.ai utiliza inteligencia artificial. Los resultados son solo informativos y no sustituyen asesoramiento profesional."
 		},
 		"menu": {
 			"blog": "Blog",
@@ -258,18 +305,18 @@
 			"dashboard": "Panel",
 			"docs": "Docs",
 			"faq": "FAQ",
-			"howItWorks": "Cómo funciona",
-			"login": "Iniciar sesión",
+			"howItWorks": "Como funciona",
+			"login": "Iniciar sesion",
 			"pricing": "Precios",
 			"tools": "Escanea Tu Negocio",
 			"trial": "Prueba gratis"
 		},
 		"aria": {
-			"menu": "Menú",
+			"menu": "Menu",
 			"language": "Idioma"
 		},
 		"tableOfContents": {
-			"title": "En esta página"
+			"title": "En esta pagina"
 		},
 		"colorMode": {
 			"system": "Sistema",

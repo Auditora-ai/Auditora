@@ -1356,8 +1356,8 @@ export function useBpmnModeler({
 // ─── Styling helpers ────────────────────────────────────────────────
 
 const TYPE_COLORS: Record<string, { stroke: string; fill: string }> = {
-	"bpmn:Task": { stroke: "#3B82F6", fill: "#EFF6FF" },
-	task: { stroke: "#3B82F6", fill: "#EFF6FF" },
+	"bpmn:Task": { stroke: "#3B82F6", fill: "#ECFDF5" },
+	task: { stroke: "#3B82F6", fill: "#ECFDF5" },
 	"bpmn:ExclusiveGateway": { stroke: "#EAB308", fill: "#FEF9C3" },
 	exclusiveGateway: { stroke: "#EAB308", fill: "#FEF9C3" },
 	"bpmn:ParallelGateway": { stroke: "#7C3AED", fill: "#F5F3FF" },
@@ -1379,7 +1379,7 @@ const STATE_COLORS: Record<
 > = {
 	forming: { stroke: "#EAB308", fill: "#FEF9C3", dash: "5,5" },
 	confirmed: { stroke: "", fill: "" }, // Use type colors
-	active: { stroke: "#2563EB", fill: "#DBEAFE" },
+	active: { stroke: "#00E5C0", fill: "#A7F3D0" },
 };
 
 function applyTypeColors(gfx: any, node: DiagramNode, element: any) {

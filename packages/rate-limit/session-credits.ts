@@ -146,13 +146,94 @@ export async function recordSessionCredit(
 	});
 
 	// Invalidate Redis cache so next check reads fresh data
+	invalidateCreditCache(orgId);
+}
+
+/**
+ * Atomically check credits AND consume in one step.
+ * Prevents race conditions where two concurrent sessions both pass the check.
+ *
+ * Uses Prisma's conditional update: only increments if within limit.
+ * Returns the check result and whether the credit was consumed.
+ */
+export async function checkAndConsumeCredit(
+	orgId: string,
+	amount: number,
+	db: {
+		organization: {
+			findUnique: (args: {
+				where: { id: string };
+				select: {
+					sessionCreditsUsed: true;
+					sessionCreditsLimit: true;
+					aiAnthropicKey: true;
+				};
+			}) => Promise<{
+				sessionCreditsUsed: number;
+				sessionCreditsLimit: number | null;
+				aiAnthropicKey: string | null;
+			} | null>;
+			updateMany: (args: {
+				where: { id: string; sessionCreditsUsed?: { lt: number } };
+				data: { sessionCreditsUsed: { increment: number } };
+			}) => Promise<{ count: number }>;
+		};
+	},
+): Promise<CreditCheckResult & { consumed: boolean }> {
+	const org = await db.organization.findUnique({
+		where: { id: orgId },
+		select: {
+			sessionCreditsUsed: true,
+			sessionCreditsLimit: true,
+			aiAnthropicKey: true,
+		},
+	});
+
+	if (!org) {
+		return { allowed: true, used: 0, limit: null, remaining: null, consumed: false };
+	}
+
+	const { sessionCreditsUsed: used, sessionCreditsLimit: limit, aiAnthropicKey } = org;
+
+	// BYOK orgs bypass credit checks
+	if (!!aiAnthropicKey) {
+		return { allowed: true, used, limit, remaining: null, consumed: false };
+	}
+
+	// null limit = unlimited
+	if (limit === null) {
+		return { allowed: true, used, limit, remaining: null, consumed: false };
+	}
+
+	// Atomic conditional update: only increment if within limit
+	const result = await db.organization.updateMany({
+		where: {
+			id: orgId,
+			sessionCreditsUsed: { lt: limit },
+		},
+		data: {
+			sessionCreditsUsed: { increment: amount },
+		},
+	});
+
+	const consumed = result.count > 0;
+	invalidateCreditCache(orgId);
+
+	if (consumed) {
+		const newUsed = used + amount;
+		const remaining = Math.max(0, limit - newUsed);
+		return { allowed: true, used: newUsed, limit, remaining, consumed: true };
+	}
+
+	// Failed to consume — at limit
+	const remaining = Math.max(0, limit - used);
+	return { allowed: false, used, limit, remaining, consumed: false };
+}
+
+function invalidateCreditCache(orgId: string) {
 	const redis = getRedis();
 	if (redis) {
-		try {
-			await redis.del(creditCacheKey(orgId));
-		} catch {
-			// Non-critical
-		}
+		redis.del(creditCacheKey(orgId)).catch(() => {});
 	}
 }
 

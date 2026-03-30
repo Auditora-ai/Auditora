@@ -344,7 +344,7 @@ export function TeleprompterSection({
 									general_exploration: "P",
 								};
 								const dimLabel = gapType ? (gapToSipoc[gapType] || "P") : "P";
-								const dimColor = SIPOC_DIMENSIONS.find((d) => d.label === dimLabel)?.color || "#2563EB";
+								const dimColor = SIPOC_DIMENSIONS.find((d) => d.label === dimLabel)?.color || "#00E5C0";
 								return (
 									<div key={`ai-${i}`}>
 										<button

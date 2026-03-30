@@ -268,7 +268,7 @@ export function ProcedureEditor({ content, onChange, sessionId }: ProcedureEdito
 				.procedure-editor-content ul, .procedure-editor-content ol { padding-left: 1.5em; margin: 0.25em 0; }
 				.procedure-editor-content li { margin: 0.1em 0; }
 				.procedure-editor-content img { max-width: 100%; border-radius: 4px; margin: 0.5em 0; }
-				.procedure-editor-content a { color: #2563EB; text-decoration: underline; }
+				.procedure-editor-content a { color: #00E5C0; text-decoration: underline; }
 				.procedure-editor-content blockquote { border-left: 3px solid #E2E8F0; padding-left: 0.75em; color: #64748B; }
 				.procedure-editor-content .is-empty::before {
 					content: attr(data-placeholder);

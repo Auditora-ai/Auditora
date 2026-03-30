@@ -19,16 +19,21 @@ export function MagicLink({
 	});
 
 	return (
-		<Wrapper>
+		<Wrapper
+			locale={locale}
+			preheader={t("preheader")}
+			footerReason={t("common.footer.receivingBecauseAccount")}
+		>
 			<Text>{t("body")}</Text>
 
-			<Text>{t("common.useLink")}</Text>
+			<PrimaryButton href={url}>{t("login")}</PrimaryButton>
 
-			<PrimaryButton href={url}>{t("login")} &rarr;</PrimaryButton>
-
-			<Text className="text-muted-foreground text-sm">
+			<Text className="text-muted-foreground text-sm mt-4">
 				{t("common.openLinkInBrowser")}
-				<Link href={url}>{url}</Link>
+				<br />
+				<Link href={url} className="break-all">
+					{url}
+				</Link>
 			</Text>
 		</Wrapper>
 	);
@@ -37,7 +42,7 @@ export function MagicLink({
 MagicLink.PreviewProps = {
 	locale: defaultLocale,
 	translations: defaultTranslations,
-	url: "#",
+	url: "https://app.auditora.ai/magic-link?token=abc123",
 };
 
 export default MagicLink;

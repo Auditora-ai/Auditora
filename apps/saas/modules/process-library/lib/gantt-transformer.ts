@@ -54,7 +54,7 @@ export interface ProcessForGantt {
 
 const PHASES = [
 	{ key: "contexto", label: "Contexto", color: "#7C3AED", progressColor: "#6D28D9" },
-	{ key: "captura", label: "Captura", color: "#2563EB", progressColor: "#1D4ED8" },
+	{ key: "captura", label: "Captura", color: "#00E5C0", progressColor: "#00C4A3" },
 	{ key: "modelo", label: "Modelo", color: "#0EA5E9", progressColor: "#0284C7" },
 	{ key: "analisis", label: "Análisis", color: "#16A34A", progressColor: "#15803D" },
 ] as const;
@@ -172,7 +172,7 @@ export function transformToGanttTasks(
 			end: new Date(startTask.endDate),
 			progress: startTask.progress,
 			displayOrder: order++,
-			styles: { backgroundColor: "#1C1917", progressColor: "#44403C" },
+			styles: { backgroundColor: "#0A1428", progressColor: "#1E293B" },
 		});
 	}
 
@@ -210,7 +210,7 @@ export function transformToGanttTasks(
 			isDisabled: isOutOfScope,
 			styles: isOutOfScope
 				? { backgroundColor: "#E7E5E4", progressColor: "#D6D3D1" }
-				: { backgroundColor: "#292524", progressColor: "#44403C" },
+				: { backgroundColor: "#111827", progressColor: "#1E293B" },
 		});
 
 		// Phase tasks
@@ -258,7 +258,7 @@ export function transformToGanttTasks(
 			end: new Date(closeTask.endDate),
 			progress: closeTask.progress,
 			displayOrder: order++,
-			styles: { backgroundColor: "#1C1917", progressColor: "#44403C" },
+			styles: { backgroundColor: "#0A1428", progressColor: "#1E293B" },
 		});
 	}
 

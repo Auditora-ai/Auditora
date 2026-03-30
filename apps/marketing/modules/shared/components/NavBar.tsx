@@ -30,6 +30,7 @@ export function NavBar() {
 
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 	const [isTop, setIsTop] = useState(true);
+	const [isLanding, setIsLanding] = useState(false);
 
 	// GSAP scroll morphing: backdrop blur + bg opacity over first 100px
 	useGSAP(() => {
@@ -61,6 +62,10 @@ export function NavBar() {
 			maxWait: 150,
 		},
 	);
+
+	useEffect(() => {
+		setIsLanding(!!document.querySelector("[data-landing]"));
+	}, []);
 
 	useEffect(() => {
 		window.addEventListener("scroll", debouncedScrollHandler);
@@ -106,8 +111,13 @@ export function NavBar() {
 		<nav
 			ref={navRef}
 			className={cn(
-				"sticky top-0 z-50 w-full transition-shadow duration-200 bg-background/80",
-				{ "border-b": !isTop },
+				"sticky top-0 z-50 w-full transition-all duration-200",
+				isLanding && isTop
+					? "bg-transparent"
+					: isLanding
+						? "bg-[#0A1428]/95 backdrop-blur-md border-b border-white/10"
+						: "bg-background/80",
+				{ "border-b": !isTop && !isLanding },
 			)}
 			data-test="navigation"
 		>
@@ -133,9 +143,14 @@ export function NavBar() {
 								key={menuItem.href}
 								href={menuItem.href}
 								className={cn(
-									"block shrink-0 px-3 py-2 font-medium text-foreground/80 text-sm",
+									"block shrink-0 px-3 py-2 font-medium text-sm",
+									isLanding
+										? "text-white/80 hover:text-white"
+										: "text-foreground/80",
 									isMenuItemActive(menuItem.href)
-										? "font-bold text-foreground"
+										? isLanding
+											? "font-bold text-white"
+											: "font-bold text-foreground"
 										: "",
 								)}
 								prefetch

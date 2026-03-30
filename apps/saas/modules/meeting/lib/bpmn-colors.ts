@@ -9,7 +9,7 @@
  *
  * Color palette:
  *   - Start Events: green (#16A34A border, #F0FDF4 fill)
- *   - Tasks: soft blue (#3B82F6 border, #EFF6FF fill)
+ *   - Tasks: soft blue (#3B82F6 border, #ECFDF5 fill)
  *   - Gateways: yellow (#EAB308 border, #FEF9C3 fill)
  *   - Intermediate Events: warm brown (#A16207 border, #FEF3C7 fill)
  *   - End Events: red (#DC2626 border, #FEF2F2 fill)
@@ -18,14 +18,14 @@
 
 export const ELEMENT_COLORS: Record<string, { stroke: string; fill: string }> = {
 	// Tasks — soft blue
-	"bpmn:Task": { stroke: "#3B82F6", fill: "#EFF6FF" },
-	"bpmn:UserTask": { stroke: "#3B82F6", fill: "#EFF6FF" },
-	"bpmn:ServiceTask": { stroke: "#3B82F6", fill: "#EFF6FF" },
-	"bpmn:SendTask": { stroke: "#3B82F6", fill: "#EFF6FF" },
-	"bpmn:ReceiveTask": { stroke: "#3B82F6", fill: "#EFF6FF" },
-	"bpmn:ManualTask": { stroke: "#3B82F6", fill: "#EFF6FF" },
-	"bpmn:BusinessRuleTask": { stroke: "#3B82F6", fill: "#EFF6FF" },
-	"bpmn:ScriptTask": { stroke: "#3B82F6", fill: "#EFF6FF" },
+	"bpmn:Task": { stroke: "#3B82F6", fill: "#ECFDF5" },
+	"bpmn:UserTask": { stroke: "#3B82F6", fill: "#ECFDF5" },
+	"bpmn:ServiceTask": { stroke: "#3B82F6", fill: "#ECFDF5" },
+	"bpmn:SendTask": { stroke: "#3B82F6", fill: "#ECFDF5" },
+	"bpmn:ReceiveTask": { stroke: "#3B82F6", fill: "#ECFDF5" },
+	"bpmn:ManualTask": { stroke: "#3B82F6", fill: "#ECFDF5" },
+	"bpmn:BusinessRuleTask": { stroke: "#3B82F6", fill: "#ECFDF5" },
+	"bpmn:ScriptTask": { stroke: "#3B82F6", fill: "#ECFDF5" },
 	// SubProcesses — purple
 	"bpmn:SubProcess": { stroke: "#7C3AED", fill: "#F5F3FF" },
 	// Gateways — yellow

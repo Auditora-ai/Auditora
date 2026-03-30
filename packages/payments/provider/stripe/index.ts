@@ -1,5 +1,6 @@
 import {
 	createPurchase,
+	db,
 	deletePurchaseBySubscriptionId,
 	getPurchaseBySubscriptionId,
 	updatePurchase,
@@ -8,6 +9,8 @@ import { logger } from "@repo/logs";
 import Stripe from "stripe";
 import { setCustomerIdToEntity } from "../../lib/customer";
 import { getPlanIdByProviderPriceId } from "../../lib/provider-price-ids";
+import { getPlanLimits } from "../../lib/plans";
+import type { PlanId } from "../../lib/plans";
 import type {
 	CancelSubscription,
 	CreateCheckoutLink,
@@ -218,6 +221,20 @@ export const webhookHandler: WebhookHandler = async (req) => {
 					userId: metadata?.user_id,
 				});
 
+				// Sync session credit limits from plan config
+				if (metadata?.organization_id) {
+					const limits = getPlanLimits(planId as PlanId);
+					if (limits) {
+						await db.organization.update({
+							where: { id: metadata.organization_id },
+							data: {
+								sessionCreditsLimit: limits.sessions,
+								billingCycleAnchor: new Date(),
+							},
+						});
+					}
+				}
+
 				break;
 			}
 			case "customer.subscription.updated": {
@@ -234,6 +251,25 @@ export const webhookHandler: WebhookHandler = async (req) => {
 						status: event.data.object.status,
 						...(priceId ? { priceId } : {}),
 					});
+
+					// Sync session credit limits on plan change
+					const planId = priceId
+						? getPlanIdByProviderPriceId(priceId)
+						: null;
+					const orgId =
+						existingPurchase.organizationId ??
+						event.data.object.metadata?.organization_id;
+					if (planId && orgId) {
+						const limits = getPlanLimits(planId as PlanId);
+						if (limits) {
+							await db.organization.update({
+								where: { id: orgId },
+								data: {
+									sessionCreditsLimit: limits.sessions,
+								},
+							});
+						}
+					}
 				}
 
 				break;

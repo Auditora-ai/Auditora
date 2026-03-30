@@ -25,7 +25,8 @@
 			"@discovery/*": ["./modules/discovery/*"],
 			"@risk/*": ["./modules/risk/*"],
 			"@deliverables/*": ["./modules/deliverables/*"],
-			"@radiografia/*": ["./modules/radiografia/*"]
+			"@radiografia/*": ["./modules/radiografia/*"],
+			"@ai-interview/*": ["./modules/ai-interview/*"]
 		}
 	},
 	"include": [

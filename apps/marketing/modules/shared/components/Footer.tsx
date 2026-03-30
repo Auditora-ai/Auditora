@@ -2,6 +2,7 @@ import { config } from "@config";
 import { LocaleLink } from "@i18n/routing";
 import { Logo } from "@repo/ui";
 import { useTranslations } from "next-intl";
+import { CookieSettingsButton } from "./CookieSettingsButton";
 
 export function Footer() {
 	const t = useTranslations();
@@ -55,6 +56,12 @@ export function Footer() {
 
 					<LocaleLink href="/legal/terms" className="block">
 						{t("common.footer.termsAndConditions")}
+					</LocaleLink>
+
+					<CookieSettingsButton />
+
+					<LocaleLink href="/legal/privacy-policy#ccpa" className="block">
+						{t("common.footer.doNotSell")}
 					</LocaleLink>
 				</div>
 			</div>

@@ -6,18 +6,14 @@ import { CookieIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function ConsentBanner() {
-	const { userHasConsented, allowCookies, declineCookies } =
-		useCookieConsent();
+	const { showBanner, acceptAll, rejectAll } = useCookieConsent();
 	const [mounted, setMounted] = useState(false);
+
 	useEffect(() => {
 		setMounted(true);
 	}, []);
 
-	if (!mounted) {
-		return null;
-	}
-
-	if (userHasConsented) {
+	if (!mounted || !showBanner) {
 		return null;
 	}
 
@@ -27,22 +23,22 @@ export function ConsentBanner() {
 				<CookieIcon className="block size-6 shrink-0 text-5xl text-primary/60 mt-1" />
 				<div>
 					<p className="text-sm leading-normal">
-						This site doesn't use cookies yet, but we added this
-						banner to demo it to you.
+						We use essential cookies for authentication and site
+						functionality.
 					</p>
 					<div className="mt-4 flex gap-2">
 						<Button
 							variant="secondary"
 							className="flex-1"
-							onClick={() => declineCookies()}
+							onClick={rejectAll}
 						>
 							Decline
 						</Button>
 						<Button
 							className="flex-1"
-							onClick={() => allowCookies()}
+							onClick={acceptAll}
 						>
-							Allow
+							Accept
 						</Button>
 					</div>
 				</div>

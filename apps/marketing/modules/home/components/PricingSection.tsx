@@ -82,7 +82,6 @@ export function PricingSection() {
 		p.prices?.some((price) => price.type === "subscription"),
 	);
 
-	// Calculate yearly savings percentage
 	const yearlySavingsPercent = useMemo(() => {
 		for (const plan of Object.values(paymentsConfig.plans)) {
 			if (!("prices" in plan)) continue;
@@ -105,7 +104,6 @@ export function PricingSection() {
 		() => {
 			if (!sectionRef.current) return;
 
-			// Header reveal
 			const header = sectionRef.current.querySelector(".pricing-header");
 			if (header) {
 				gsap.from(header.children, {
@@ -122,7 +120,6 @@ export function PricingSection() {
 				});
 			}
 
-			// Cards cascade with 3D tilt
 			const cards =
 				sectionRef.current.querySelectorAll(".pricing-card");
 			const recommendedBadge =
@@ -137,7 +134,6 @@ export function PricingSection() {
 					},
 				});
 
-				// Regular cards cascade
 				tl.from(cards, {
 					y: 60,
 					opacity: 0,
@@ -148,7 +144,6 @@ export function PricingSection() {
 					ease: "power3.out",
 				});
 
-				// Recommended badge clip-path wipe
 				if (recommendedBadge) {
 					tl.from(
 						recommendedBadge,
@@ -161,7 +156,6 @@ export function PricingSection() {
 					);
 				}
 
-				// Feature checkmarks micro-stagger
 				const checkmarks =
 					sectionRef.current.querySelectorAll(".pricing-feature");
 				if (checkmarks.length) {
@@ -186,14 +180,14 @@ export function PricingSection() {
 		<section
 			ref={sectionRef}
 			id="pricing"
-			className="scroll-mt-16 py-16 lg:py-24 border-y"
+			className="scroll-mt-16 py-16 sm:py-20 lg:py-28 bg-[#F8FAFC]"
 		>
 			<div className="container">
 				<div className="pricing-header mb-10 max-w-3xl mx-auto text-center">
-					<h2 className="font-display text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-tight text-foreground">
+					<h2 className="font-display text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-tight text-[#0A1428]">
 						{t("pricing.title")}
 					</h2>
-					<p className="mt-3 text-foreground/60 text-sm sm:text-lg">
+					<p className="mt-3 text-[#64748B] text-sm sm:text-lg">
 						{t("pricing.description")}
 					</p>
 				</div>
@@ -207,7 +201,7 @@ export function PricingSection() {
 							}
 							data-test="price-table-interval-tabs"
 						>
-							<TabsList className="border-foreground/10">
+							<TabsList className="border-[#E2E8F0]">
 								<TabsTrigger value="month">
 									{t("pricing.monthly")}
 								</TabsTrigger>
@@ -217,7 +211,7 @@ export function PricingSection() {
 							</TabsList>
 						</Tabs>
 						{yearlySavingsPercent > 0 && (
-							<span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700 dark:bg-green-900/30 dark:text-green-400">
+							<span className="rounded-full bg-[#00E5C0]/10 px-3 py-1 text-xs font-semibold text-[#00E5C0]">
 								{t("pricing.savePercent", {
 									percent: yearlySavingsPercent,
 								})}
@@ -228,7 +222,7 @@ export function PricingSection() {
 
 				<div
 					ref={cardsContainerRef}
-					className="grid grid-cols-1 gap-6 lg:grid-cols-3 max-w-5xl mx-auto items-start"
+					className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4 max-w-6xl mx-auto items-start"
 					style={{ perspective: "1000px" }}
 				>
 					{plans.map((plan) => {
@@ -244,7 +238,6 @@ export function PricingSection() {
 								? price.trialPeriodDays
 								: undefined;
 
-						// Calculate monthly equivalent for yearly pricing
 						const monthlyEquivalent =
 							price?.type === "subscription" &&
 							price.interval === "year"
@@ -255,16 +248,16 @@ export function PricingSection() {
 							<div
 								key={plan.id}
 								className={cn(
-									"pricing-card relative rounded-3xl bg-card border p-6 lg:p-8 transition-shadow",
+									"pricing-card relative rounded-2xl bg-white border p-6 lg:p-8 transition-shadow",
 									plan.recommended
-										? "border-primary ring-2 ring-primary/20 shadow-xl shadow-primary/10 lg:scale-105"
-										: "border-border",
+										? "border-[#00E5C0] ring-2 ring-[#00E5C0]/20 shadow-xl shadow-[#00E5C0]/10 lg:scale-105"
+										: "border-[#E2E8F0]",
 								)}
 								data-test="price-table-plan"
 							>
 								{plan.recommended && (
 									<div
-										className="pricing-recommended-badge flex items-center justify-center absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1.5 text-center font-semibold text-primary-foreground text-sm"
+										className="pricing-recommended-badge flex items-center justify-center absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-[#00E5C0] px-4 py-1.5 text-center font-semibold text-[#0A1428] text-sm"
 										style={{
 											clipPath: "inset(0 0% 0 0)",
 										}}
@@ -275,19 +268,18 @@ export function PricingSection() {
 								)}
 								<div className="flex h-full flex-col justify-between gap-6">
 									<div>
-										<h3 className="my-0 font-semibold text-2xl">
+										<h3 className="my-0 font-semibold text-2xl text-[#0A1428]">
 											{plan.title}
 										</h3>
 										{plan.description && (
-											<p className="mt-2 text-foreground/60 text-sm">
+											<p className="mt-2 text-[#64748B] text-sm">
 												{plan.description}
 											</p>
 										)}
 
-										{/* Price display */}
 										<div className="mt-6">
 											{plan.isEnterprise ? (
-												<div className="font-medium text-2xl lg:text-3xl">
+												<div className="font-medium text-2xl lg:text-3xl text-[#0A1428]">
 													Custom
 												</div>
 											) : price ? (
@@ -295,7 +287,7 @@ export function PricingSection() {
 													{monthlyEquivalent !==
 													undefined ? (
 														<>
-															<span className="font-medium text-2xl lg:text-3xl">
+															<span className="font-medium text-2xl lg:text-3xl text-[#0A1428]">
 																{format.number(
 																	monthlyEquivalent,
 																	{
@@ -306,7 +298,7 @@ export function PricingSection() {
 																	},
 																)}
 															</span>
-															<span className="font-normal text-sm opacity-60">
+															<span className="font-normal text-sm text-[#64748B]">
 																{t(
 																	"pricing.perMonth",
 																)}
@@ -314,7 +306,7 @@ export function PricingSection() {
 															{("seatBased" in
 																price &&
 																price.seatBased) && (
-																<span className="font-normal text-sm opacity-60">
+																<span className="font-normal text-sm text-[#64748B]">
 																	{" "}
 																	/{" "}
 																	{t(
@@ -322,7 +314,7 @@ export function PricingSection() {
 																	)}
 																</span>
 															)}
-															<p className="mt-1 text-xs text-foreground/50">
+															<p className="mt-1 text-xs text-[#94A3B8]">
 																{format.number(
 																	price.amount,
 																	{
@@ -339,7 +331,7 @@ export function PricingSection() {
 														</>
 													) : (
 														<>
-															<span className="font-medium text-2xl lg:text-3xl">
+															<span className="font-medium text-2xl lg:text-3xl text-[#0A1428]">
 																{format.number(
 																	price.amount,
 																	{
@@ -352,7 +344,7 @@ export function PricingSection() {
 															</span>
 															{price.type ===
 																"subscription" && (
-																<span className="font-normal text-sm opacity-60">
+																<span className="font-normal text-sm text-[#64748B]">
 																	/
 																	{t(
 																		"pricing.month",
@@ -365,7 +357,7 @@ export function PricingSection() {
 															{("seatBased" in
 																price &&
 																price.seatBased) && (
-																<span className="font-normal text-sm opacity-60">
+																<span className="font-normal text-sm text-[#64748B]">
 																	{" "}
 																	/{" "}
 																	{t(
@@ -381,7 +373,7 @@ export function PricingSection() {
 
 										{trialPeriodDays !== undefined &&
 											trialPeriodDays > 0 && (
-												<div className="mt-3 flex items-center justify-start font-medium text-primary text-sm">
+												<div className="mt-3 flex items-center justify-start font-medium text-[#00E5C0] text-sm">
 													<BadgePercentIcon className="mr-2 size-4" />
 													{t(
 														"pricing.trialPeriod",
@@ -400,8 +392,8 @@ export function PricingSection() {
 															key={key}
 															className="pricing-feature flex items-center justify-start"
 														>
-															<CheckIcon className="mr-2.5 size-4 shrink-0 text-primary" />
-															<span>
+															<CheckIcon className="mr-2.5 size-4 shrink-0 text-[#00E5C0]" />
+															<span className="text-[#0A1428]/80">
 																{feature}
 															</span>
 														</li>
@@ -414,7 +406,7 @@ export function PricingSection() {
 									<div>
 										{plan.isEnterprise ? (
 											<Button
-												className="mt-4 w-full"
+												className="mt-4 w-full border-[#E2E8F0] text-[#0A1428] hover:bg-[#F8FAFC]"
 												variant="secondary"
 												asChild
 											>
@@ -425,7 +417,12 @@ export function PricingSection() {
 											</Button>
 										) : plan.to.startsWith("/") ? (
 											<Button
-												className="mt-4 w-full"
+												className={cn(
+													"mt-4 w-full",
+													plan.recommended
+														? "bg-[#00E5C0] hover:bg-[#00C4A3] text-[#0A1428]"
+														: "border-[#E2E8F0] text-[#0A1428] hover:bg-[#F8FAFC]",
+												)}
 												variant={
 													plan.recommended
 														? "primary"
@@ -440,7 +437,12 @@ export function PricingSection() {
 											</Button>
 										) : (
 											<Button
-												className="mt-4 w-full"
+												className={cn(
+													"mt-4 w-full",
+													plan.recommended
+														? "bg-[#00E5C0] hover:bg-[#00C4A3] text-[#0A1428]"
+														: "border-[#E2E8F0] text-[#0A1428] hover:bg-[#F8FAFC]",
+												)}
 												variant={
 													plan.recommended
 														? "primary"

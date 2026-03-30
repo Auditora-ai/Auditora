@@ -136,7 +136,7 @@
 			"disclaimer": "Die in der Sofortdiagnose identifizierten Risiken sind logische Ableitungen basierend auf der Prozessstruktur, keine Erkennung tatsächlicher operativer Probleme. Für spezifische Erkenntnisse nutzen Sie das geführte Gespräch oder die vollständige Plattform."
 		},
 		"deepDive": {
-			"badge": "Wo die echte Magie passiert",
+			"badge": "Gefuhrte Erhebung",
 			"title": "Ein geführtes Gespräch, das Ihre Analyse aufbaut",
 			"subtitle": "Die Sofortdiagnose ist die Vorspeise. Das geführte Gespräch ist, wo Auditora.ai sich von jedem anderen Tool unterscheidet.",
 			"methodTitle": "Sokratischer Dialog + SIPOC",
@@ -208,6 +208,29 @@
 				"description": "Verschlüsselt bei Übertragung und im Ruhezustand. Anonyme Sitzungen verfallen nach 24 Stunden. Wir verwenden Ihre Informationen nie zum Training von Modellen. DSGVO-konform."
 			}
 		},
+		"socialProof": {
+			"badge": "Anwendungsfalle",
+			"title": "Berater und Auditoren vertrauen Auditora.ai",
+			"testimonial1": {
+				"quote": "Die Prozessdokumentation wurde von 3 Wochen auf 2 Tage reduziert. Die automatische FMEA-Matrix ist genau das, was wir dem Komitee prasentieren.",
+				"name": "Maria Rodriguez",
+				"role": "Senior Prozessberaterin",
+				"company": "Top 10 Beratungsunternehmen"
+			},
+			"testimonial2": {
+				"quote": "Fruher brauchten wir einen dedizierten Analysten pro Prozess. Jetzt produziert ein Junior-Berater Senior-Level-Ergebnisse in der ersten Sitzung.",
+				"name": "Carlos Mendez",
+				"role": "Manager Kontinuierliche Verbesserung",
+				"company": "Globales Fertigungsunternehmen"
+			},
+			"testimonial3": {
+				"quote": "Die Ruckverfolgbarkeit der SIPOC-Methodik gibt uns die Nachweise, die wir fur interne Audits brauchen. Es ist keine Black Box.",
+				"name": "Ana Torres",
+				"role": "Interne Auditorin",
+				"company": "Latam Finanzinstitut"
+			},
+			"logosLabel": "Verwendet von Beratungs- und Audit-Teams bei"
+		},
 		"tools": {
 			"title": "Kostenlose KI-Tools für Prozessfachleute",
 			"subtitle": "Dieselbe KI, die Ihr Unternehmen analysiert, jetzt als eigenständige Tools. Ohne Anmeldung.",
@@ -241,6 +264,27 @@
 		"goToDashboard": "Zum Dashboard",
 		"goToHomepage": "Zur Startseite"
 	},
+	"consent": {
+		"title": "Cookie-Einstellungen",
+		"description": "Wir verwenden Cookies, um Ihre Erfahrung zu verbessern und die Nutzung der Website zu analysieren. Sie können anpassen, welche Cookies Sie zulassen.",
+		"acceptAll": "Alle akzeptieren",
+		"rejectAll": "Alle ablehnen",
+		"customize": "Anpassen",
+		"savePreferences": "Einstellungen speichern",
+		"essential": {
+			"title": "Essenziell",
+			"description": "Für die Funktion der Website erforderlich. Kann nicht deaktiviert werden."
+		},
+		"analytics": {
+			"title": "Analyse",
+			"description": "Helfen uns zu verstehen, wie Sie die Website nutzen, damit wir sie verbessern können."
+		},
+		"marketing": {
+			"title": "Marketing",
+			"description": "Werden verwendet, um Ihnen relevante Inhalte zu zeigen und die Wirksamkeit von Kampagnen zu messen."
+		},
+		"gpcDetected": "Wir haben Ihre Global Privacy Control-Einstellung erkannt. Analyse- und Marketing-Cookies sind deaktiviert."
+	},
 	"common": {
 		"footer": {
 			"blog": "Blog",
@@ -248,6 +292,8 @@
 			"pricing": "Preise",
 			"privacyPolicy": "Datenschutz",
 			"termsAndConditions": "AGB",
+			"doNotSell": "Meine Daten nicht verkaufen",
+			"cookieSettings": "Cookie-Einstellungen",
 			"tools": "Kostenlose Tools",
 			"builtWith": "Auditora.ai"
 		},

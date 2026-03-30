@@ -159,10 +159,33 @@
 				"magicLink": "Magischer Link",
 				"password": "Passwort"
 			},
+			"rememberMe": "Angemeldet bleiben",
+			"security": "Deine Daten sind verschlüsselt und geschützt",
 			"submit": "Anmelden",
-			"subtitle": "Bitte gib deine Zugangsdaten ein, um dich anzumelden.",
+			"subtitle": "Gib deine Zugangsdaten ein, um fortzufahren.",
 			"title": "Willkommen zurück",
 			"sendMagicLink": "Anmelde-Link senden"
+		},
+		"showcase": {
+			"badge": "Prozess-Intelligenz-Plattform",
+			"login": {
+				"title": "Deine Prozesse, präzise analysiert",
+				"subtitle": "Erfasse, analysiere und transformiere Geschäftsprozesse mit KI in Echtzeit"
+			},
+			"signup": {
+				"title": "Beginne intelligent zu kartieren",
+				"subtitle": "Schließe dich den Beratern an, die Interviews in automatische BPMN-Diagramme verwandeln"
+			},
+			"feature": {
+				"ai": "KI-Analyse",
+				"bpmn": "BPMN-Diagramme",
+				"risk": "Risikoerkennung"
+			},
+			"metric": {
+				"processes": "Kartierte Prozesse",
+				"organizations": "Organisationen",
+				"accuracy": "Genauigkeit"
+			}
 		},
 		"resetPassword": {
 			"backToSignin": "Zurück zu Signin",
@@ -1353,6 +1376,11 @@
 		"generating": "Scan wird erstellt...",
 		"disclaimer": "Unter einer Minute. Ihre Daten werden nicht an Dritte weitergegeben.",
 		"readingWebsite": "Ihre Website wird gelesen...",
+		"loaderConnecting": "Verbindung zur Website...",
+		"loaderReading": "Seiten werden gelesen...",
+		"loaderExtracting": "Geschaftskontext wird extrahiert...",
+		"loaderPreparing": "Analyse wird vorbereitet...",
+		"loaderAnalyzing": "Analyse von",
 		"analyzingIndustry": "Ihre Branche wird analysiert...",
 		"mappingProcess": "Schlüsselprozess wird kartiert...",
 		"generatingDiagram": "Diagramm wird erstellt...",
