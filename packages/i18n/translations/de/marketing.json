@@ -231,6 +231,19 @@
 			},
 			"logosLabel": "Verwendet von Beratungs- und Audit-Teams bei"
 		},
+		"logos": {
+			"title": "Fachleute aus verschiedenen Branchen vertrauen uns",
+			"categories": {
+				"consulting": "Beratung",
+				"finance": "Finanzen & Banken",
+				"manufacturing": "Fertigung",
+				"healthcare": "Gesundheitswesen",
+				"audit": "Audit & Compliance",
+				"technology": "Technologie",
+				"retail": "Handel & E-Commerce",
+				"logistics": "Logistik & Transport"
+			}
+		},
 		"tools": {
 			"title": "Kostenlose KI-Tools für Prozessfachleute",
 			"subtitle": "Dieselbe KI, die Ihr Unternehmen analysiert, jetzt als eigenständige Tools. Ohne Anmeldung.",

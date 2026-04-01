@@ -1,8 +1,5 @@
 {
 	"$schema": "https://openapi.vercel.sh/vercel.json",
-	"buildCommand": "cd ../.. && pnpm --filter @repo/database generate && pnpm --filter saas build",
-	"outputDirectory": ".next",
-	"installCommand": "cd ../.. && pnpm install --frozen-lockfile",
 	"framework": "nextjs",
 	"regions": ["iad1"],
 	"headers": [

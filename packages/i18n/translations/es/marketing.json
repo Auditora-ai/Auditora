@@ -231,6 +231,19 @@
 			},
 			"logosLabel": "Utilizado por equipos de consultoria y auditoria en"
 		},
+		"logos": {
+			"title": "Profesionales de múltiples industrias confían en nosotros",
+			"categories": {
+				"consulting": "Consultoría",
+				"finance": "Finanzas y Banca",
+				"manufacturing": "Manufactura",
+				"healthcare": "Salud",
+				"audit": "Auditoría y Cumplimiento",
+				"technology": "Tecnología",
+				"retail": "Retail y E-commerce",
+				"logistics": "Logística y Transporte"
+			}
+		},
 		"tools": {
 			"title": "Herramientas IA Gratis para Profesionales de Procesos",
 			"subtitle": "La misma IA que analiza tu negocio, ahora como herramientas independientes. Sin registro.",

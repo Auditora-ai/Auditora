@@ -231,6 +231,35 @@
 			},
 			"logosLabel": "Used by consulting and audit teams at"
 		},
+		"metrics": {
+			"badge": "Results",
+			"title": "Measurable impact from day one",
+			"metric1": {
+				"label": "Faster than traditional methods"
+			},
+			"metric2": {
+				"label": "Process coverage"
+			},
+			"metric3": {
+				"label": "SIPOC elements identified"
+			},
+			"metric4": {
+				"label": "Integrated frameworks"
+			}
+		},
+		"logos": {
+			"title": "Trusted by professionals across industries",
+			"categories": {
+				"consulting": "Consulting",
+				"finance": "Finance & Banking",
+				"manufacturing": "Manufacturing",
+				"healthcare": "Healthcare",
+				"audit": "Audit & Compliance",
+				"technology": "Technology",
+				"retail": "Retail & E-commerce",
+				"logistics": "Logistics & Transport"
+			}
+		},
 		"tools": {
 			"title": "Free AI Tools for Process Professionals",
 			"subtitle": "The same AI that analyzes your business, now as standalone tools. No signup required.",
