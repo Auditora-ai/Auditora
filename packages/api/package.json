@@ -14,7 +14,7 @@
 		"@repo/payments": "workspace:*",
 		"@repo/storage": "workspace:*",
 		"@repo/utils": "workspace:*",
-		"@scalar/hono-api-reference": "^0.10.4",
+		"@scalar/hono-api-reference": "^0.10.5",
 		"@sindresorhus/slugify": "catalog:",
 		"cookie": "catalog:",
 		"hono": "catalog:",
