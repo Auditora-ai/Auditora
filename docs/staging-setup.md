@@ -1,158 +1,201 @@
-# Staging Environment Setup
-
-This guide explains how to set up and manage the Auditora staging environment.
+# Staging Environment Setup (Vercel + Supabase)
 
 ## Architecture
 
 ```
 ┌─────────────────────────────────────────────────┐
-│  Staging Server (Docker Compose)                │
+│  Vercel (staging)                               │
 │                                                 │
 │  ┌──────────┐  ┌──────────┐  ┌──────────┐      │
 │  │   SaaS   │  │Marketing │  │   Docs   │      │
-│  │ :3000    │  │ :3001    │  │ :3002    │      │
+│  │ staging  │  │ staging  │  │ staging  │      │
 │  └────┬─────┘  └──────────┘  └──────────┘      │
-│       │                                         │
-│  ┌────┴─────┐  ┌──────────┐  ┌──────────┐      │
-│  │PostgreSQL│  │  MinIO   │  │  Redis   │      │
-│  │ :5433    │  │ :9002/03 │  │ :6380    │      │
-│  └──────────┘  └──────────┘  └──────────┘      │
-└─────────────────────────────────────────────────┘
+│       │  SSL auto  CDN  DDoS protection         │
+└───────┼─────────────────────────────────────────┘
+        │
+        │  DATABASE_URL
+        ▼
+┌──────────────────┐
+│  Supabase        │
+│  (Postgres 500MB)│
+│  Free tier       │
+└──────────────────┘
 ```
 
-## Quick Start
+## Step-by-step Setup
 
-### 1. Create the staging environment file
+### Step 1: Create Supabase project
+
+1. Go to https://supabase.com and sign up / log in
+2. Create a new project:
+   - Name: `auditora-staging`
+   - Database password: (save this!)
+   - Region: closest to your users
+3. Wait for provisioning (~2 min)
+4. Go to **Settings > Database**
+5. Copy the **Connection string** (URI format)
+   - It looks like: `postgresql://postgres.XXXX:[YOUR-PASSWORD]@aws-0-region.pooler.supabase.com:6543/postgres`
+6. Also copy the **Direct connection** string (for migrations)
+
+### Step 2: Login to Vercel
 
 ```bash
-cp .env.example .env.staging
+# Install CLI if not installed
+npm i -g vercel
+
+# Login
+vercel login
 ```
 
-Edit `.env.staging` and set at minimum:
-- `BETTER_AUTH_SECRET` - random 64-char string
-- `ORG_KEY_ENCRYPTION_SECRET` - random 32-char string
-- `ANTHROPIC_API_KEY` or `OPENAI_API_KEY` - for AI features
-- `NEXT_PUBLIC_SAAS_URL` - your staging URL (e.g. `https://staging.auditora.ai`)
-- `NEXT_PUBLIC_MARKETING_URL` - marketing staging URL
-
-### 2. Deploy
+### Step 3: Run the setup script
 
 ```bash
-# Full deploy (build + start)
-./scripts/deploy-staging.sh
-
-# Push database schema
-./scripts/deploy-staging.sh --db-push
-
-# Seed database (optional)
-./scripts/deploy-staging.sh --seed
-```
-
-### 3. Verify
-
-```bash
-# Check status
-./scripts/deploy-staging.sh --status
-
-# Health check
-curl http://localhost:3000/api/health
-```
-
-## Available Commands
-
-| Command | Description |
-|---------|-------------|
-| `./scripts/deploy-staging.sh` | Build and start all services |
-| `./scripts/deploy-staging.sh --build` | Rebuild images (no cache) |
-| `./scripts/deploy-staging.sh --db-push` | Push Prisma schema to DB |
-| `./scripts/deploy-staging.sh --seed` | Seed the database |
-| `./scripts/deploy-staging.sh --logs` | Follow all logs |
-| `./scripts/deploy-staging.sh --status` | Show running containers |
-| `./scripts/deploy-staging.sh --restart` | Restart all services |
-| `./scripts/deploy-staging.sh --down` | Stop all services |
-| `./scripts/deploy-staging.sh --clean` | Delete all data and stop |
-
-## GitHub Actions Auto-Deploy
-
-When you push to the `staging` branch, GitHub Actions will:
-
-1. Run linting and type checks
-2. Build all 3 Next.js apps
-3. Build and push Docker images to GHCR
-4. SSH into the staging server and deploy
-
-### Required GitHub Secrets
-
-Set these in GitHub > Repository > Settings > Secrets:
-
-| Secret | Description |
-|--------|-------------|
-| `STAGING_SERVER_HOST` | IP or hostname of staging server |
-| `STAGING_SERVER_USER` | SSH username |
-| `STAGING_SSH_KEY` | Private SSH key for deployment |
-| `STAGING_PROJECT_PATH` | Path to project on server (default: `/opt/auditora-staging`) |
-| `STAGING_SAAS_URL` | Full URL of staging SaaS app |
-
-### First-time server setup
-
-```bash
-# On the staging server:
-git clone git@github-auditora:Auditora-ai/Auditora.git /opt/auditora-staging
-cd /opt/auditora-staging
+# From the repo root (on the staging branch)
 git checkout staging
-cp .env.example .env.staging
-# Edit .env.staging with production-like values
+./scripts/setup-vercel.sh
 ```
 
-## Ports (default, configurable via .env.staging)
+This script will:
+- Create 3 Vercel projects: `auditora-staging`, `auditora-marketing-staging`, `auditora-docs-staging`
+- Link each app directory to its project
+- Optionally deploy the first time
 
-| Service | Port | Env Variable |
-|---------|------|--------------|
-| SaaS App | 3000 | `STAGING_SAAS_PORT` |
-| Marketing | 3001 | `STAGING_MARKETING_PORT` |
-| Docs | 3002 | `STAGING_DOCS_PORT` |
-| PostgreSQL | 5433 | `STAGING_DB_PORT` |
-| MinIO API | 9002 | `STAGING_MINIO_API_PORT` |
-| MinIO Console | 9003 | `STAGING_MINIO_CONSOLE_PORT` |
-| Redis | 6380 | `STAGING_REDIS_PORT` |
+### Step 4: Configure environment variables
 
-## Database Management
+Go to each Vercel project dashboard and set these **Preview** environment variables:
+
+#### SaaS app (auditora-staging) - CRITICAL
+
+| Variable | Value |
+|----------|-------|
+| `DATABASE_URL` | Supabase pooler connection string |
+| `DIRECT_URL` | Supabase direct connection string |
+| `BETTER_AUTH_SECRET` | Random 64-char string (`openssl rand -hex 32`) |
+| `NEXT_PUBLIC_SAAS_URL` | Your Vercel SaaS preview URL |
+| `NEXT_PUBLIC_MARKETING_URL` | Your Vercel Marketing preview URL |
+| `NEXT_PUBLIC_DOCS_URL` | Your Vercel Docs preview URL |
+| `ORG_KEY_ENCRYPTION_SECRET` | Random 32-char string |
+| `ANTHROPIC_API_KEY` | Your Anthropic API key |
+
+#### SaaS app - Optional but recommended
+
+| Variable | Value |
+|----------|-------|
+| `S3_ENDPOINT` | Your S3/MinIO endpoint (or use Vercel Blob) |
+| `S3_ACCESS_KEY_ID` | Access key |
+| `S3_SECRET_ACCESS_KEY` | Secret key |
+| `NEXT_PUBLIC_AVATARS_BUCKET_NAME` | avatars |
+| `NEXT_PUBLIC_DOCUMENTS_BUCKET_NAME` | documents |
+| `RESEND_API_KEY` | For sending emails |
+| `MAIL_FROM` | Sender email |
+| `STRIPE_SECRET_KEY` | Stripe test key |
+| `STRIPE_WEBHOOK_SECRET` | Stripe webhook secret |
+| `CRON_SECRET` | Random string |
+
+#### Marketing app (auditora-marketing-staging)
+
+| Variable | Value |
+|----------|-------|
+| `NEXT_PUBLIC_SAAS_URL` | SaaS staging URL |
+| `NEXT_PUBLIC_MARKETING_URL` | Marketing staging URL |
+
+#### Docs app (auditora-docs-staging)
+
+| Variable | Value |
+|----------|-------|
+| `NEXT_PUBLIC_SAAS_URL` | SaaS staging URL |
+| `NEXT_PUBLIC_DOCS_URL` | Docs staging URL |
+
+### Step 5: Push Prisma schema to Supabase
 
 ```bash
-# Connect to staging database
-docker compose -f docker-compose.staging.yml exec postgres psql -U auditora auditora_staging
+# Set the Supabase connection string
+export DATABASE_URL="postgresql://postgres.XXXX:PASSWORD@aws-0-region.pooler.supabase.com:6543/postgres"
+export DIRECT_URL="postgresql://postgres.XXXX:PASSWORD@db.XXXX.supabase.co:5432/postgres"
 
-# Reset database (WARNING: deletes all data)
-docker compose -f docker-compose.staging.yml exec saas npx prisma migrate reset
+# Push schema
+cd packages/database
+pnpm push
 
-# Open Prisma Studio (database GUI)
-docker compose -f docker-compose.staging.yml exec saas npx prisma studio
+# Optional: seed
+pnpm migrate
 ```
 
-## Troubleshooting
+### Step 6: Push to staging branch
 
-### Build fails
 ```bash
-# Clean everything and rebuild
-./scripts/deploy-staging.sh --clean
-./scripts/deploy-staging.sh --build
-./scripts/deploy-staging.sh
+git push origin staging
 ```
 
-### Database connection issues
+GitHub Actions will automatically:
+1. Run linting and type checks
+2. Deploy all 3 apps to Vercel preview
+3. Output the preview URLs
+
+### Step 7: Configure custom domain (optional)
+
+In each Vercel project dashboard:
+1. Go to **Settings > Domains**
+2. Add your staging domain (e.g. `staging.auditora.ai`, `app.staging.auditora.ai`)
+3. Add the DNS records shown by Vercel to your domain provider
+
+## GitHub Secrets Required
+
+Set these in **GitHub > Repository > Settings > Secrets and variables > Actions**:
+
+| Secret | Where to find it |
+|--------|------------------|
+| `VERCEL_TOKEN` | Vercel Dashboard > Settings > Tokens > Create Token |
+| `VERCEL_ORG_ID` | `.vercel/project.json` in any linked app, or Vercel Dashboard > Settings > General |
+| `VERCEL_PROJECT_ID_SAAS` | `.vercel/project.json` in apps/saas |
+| `VERCEL_PROJECT_ID_MARKETING` | `.vercel/project.json` in apps/marketing |
+| `VERCEL_PROJECT_ID_DOCS` | `.vercel/project.json` in apps/docs |
+
+## Daily Workflow
+
 ```bash
-# Check if postgres is healthy
-docker compose -f docker-compose.staging.yml exec postgres pg_isready
+# Work on a feature branch
+git checkout -b feature/my-feature
+# ... make changes ...
 
-# Check connection string
-docker compose -f docker-compose.staging.yml exec saas env | grep DATABASE_URL
+# Merge to staging for testing
+git checkout staging
+git merge feature/my-feature
+git push origin staging
+# → Auto-deploys to Vercel staging URLs
+
+# When ready for production
+git checkout main
+git merge staging
+git push origin main
+# → Production deploy (separate pipeline)
 ```
 
-### View app logs
+## Local Development
+
+The original `docker-compose.yml` still works for local dev:
+
 ```bash
-# All services
-./scripts/deploy-staging.sh --logs
+# Start local Postgres + MinIO
+docker compose up -d
 
-# Specific service
-docker compose -f docker-compose.staging.yml logs -f saas
+# Start dev servers
+pnpm dev
 ```
+
+## Monitoring
+
+- **Vercel Dashboard** > Project > Deployments - see every deploy, logs, analytics
+- **Vercel Dashboard** > Project > Speed Insights - real performance data
+- **Supabase Dashboard** - database metrics, logs, SQL editor
+- **Health check**: `GET /api/health` on the SaaS URL
+
+## Costs (Staging)
+
+| Service | Cost |
+|---------|------|
+| Vercel (Hobby) | Free |
+| Supabase (Free tier) | Free (500MB DB, 1GB storage) |
+| **Total staging** | **$0/month** |
+
+Vercel Pro ($20/mo per team member) adds: more bandwidth, longer functions, password protection on previews.
