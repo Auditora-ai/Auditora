@@ -1,82 +1,89 @@
 {
 	"pricing": {
-		"choosePlan": "Choose plan",
-		"contactSales": "Contact sales",
-		"description": "Every plan includes the AI engine, automatic BPMN diagramming, and risk analysis. Select based on your team's session volume.",
-		"getStarted": "Get started",
-		"startTrial": "Start free trial",
-		"month": "{count, plural, one {month} other {{count} months}}",
+		"title": "Simple pricing. Evaluations that scale with your team.",
+		"subtitle": "Every plan starts with a 14-day free trial. No credit card required.",
 		"monthly": "Monthly",
+		"yearly": "Annual",
+		"perMonth": "/mo",
+		"savePercent": "Save {percent}%",
+		"billedAnnually": "billed annually",
+		"perSeat": "seat",
+		"recommended": "Most popular",
+		"contactSales": "Talk to sales",
+		"getStarted": "Start free trial",
+		"startTrial": "Start free trial",
+		"trialPeriod": "{days} {days, plural, one {day} other {days}} free trial",
+		"choosePlan": "Choose plan",
+		"purchase": "Purchase",
+		"subscribe": "Subscribe",
+		"month": "{count, plural, one {month} other {{count} months}}",
+		"year": "{count, plural, one {year} other {{count} years}}",
+		"sessionsIncluded": "{count} AI sessions included",
+		"extraSession": "+${price} per extra session",
 		"products": {
 			"starter": {
-				"description": "For the independent consultant who wants to deliver faster",
+				"title": "Starter",
+				"description": "For small teams getting started with process intelligence",
+				"price": "$49",
+				"unit": "/month",
 				"features": {
-					"freeTrial": "14-day free trial",
-					"sessions": "10 AI sessions per month",
-					"aiEngine": "Claude Opus AI engine",
-					"liveBpmn": "Automatically generated BPMN diagrams",
-					"riskAnalysis": "Automatic risk analysis",
-					"pdfExport": "PDF export",
-					"fiveProcesses": "Up to 5 processes",
-					"oneUser": "1 user"
-				},
-				"title": "Starter"
+					"processes": "3 processes",
+					"evaluations": "10 evaluations / month",
+					"evaluators": "5 evaluators",
+					"discovery": "AI process discovery",
+					"bpmn": "BPMN 2.0 diagrams",
+					"riskAssessment": "Risk assessment (FMEA)",
+					"trial": "14-day free trial"
+				}
 			},
 			"growth": {
-				"description": "For consulting firms scaling their practice",
+				"title": "Growth",
+				"description": "For growing companies scaling their process culture",
+				"price": "$199",
+				"unit": "/month",
 				"features": {
-					"freeTrial": "14-day free trial",
-					"sessions": "40 AI sessions per month",
-					"everythingInStarter": "Everything in Starter",
-					"unlimitedProcesses": "Unlimited processes",
-					"fullExport": "Full BPMN/XML/PDF export",
-					"adminDashboard": "Admin dashboard & roles",
-					"prioritySupport": "Priority support",
-					"fiveUsers": "Up to 5 users"
-				},
-				"title": "Growth"
+					"processes": "15 processes",
+					"evaluations": "50 evaluations / month",
+					"evaluators": "30 evaluators",
+					"everythingInStarter": "Everything in Starter, plus:",
+					"procedures": "Procedure generation (SOPs)",
+					"simulations": "Harvard-style simulations",
+					"teamDashboard": "Team dashboards",
+					"prioritySupport": "Priority support"
+				}
 			},
 			"scale": {
-				"description": "For large teams with high session volume",
+				"title": "Scale",
+				"description": "For enterprises measuring human risk at scale",
+				"price": "$499",
+				"unit": "/month",
 				"features": {
-					"freeTrial": "14-day free trial",
-					"sessions": "100 AI sessions per month",
-					"everythingInGrowth": "Everything in Growth",
-					"teamAnalytics": "Team analytics",
-					"sharedLibrary": "Shared process library",
+					"processes": "Unlimited processes",
+					"evaluations": "250 evaluations / month",
+					"evaluators": "150 evaluators",
+					"everythingInGrowth": "Everything in Growth, plus:",
+					"advancedAnalytics": "Advanced analytics & reporting",
 					"apiAccess": "API access",
-					"byok": "Bring your own API key (BYOK)",
-					"fifteenUsers": "Up to 15 users"
-				},
-				"title": "Scale"
+					"sharedLibrary": "Shared process library",
+					"byok": "BYOK (bring your own AI key)",
+					"sso": "SSO & SAML authentication"
+				}
 			},
 			"enterprise": {
-				"description": "For large firms or corporate deployments",
+				"title": "Enterprise",
+				"description": "For large organizations with custom requirements",
+				"price": "Custom",
+				"unit": "",
 				"features": {
-					"everythingInScale": "Everything in Scale",
-					"unlimitedUsers": "Unlimited users",
-					"byokIncluded": "BYOK included (unlimited sessions with your API key)",
-					"ssoAuth": "SSO & SAML authentication",
-					"slaGuarantees": "SLA guarantees",
-					"customIntegrations": "Custom integrations",
+					"unlimited": "Unlimited everything",
+					"everythingInScale": "Everything in Scale, plus:",
 					"dedicatedManager": "Dedicated account manager",
-					"customDeployment": "Custom deployment"
-				},
-				"title": "Enterprise"
+					"sla": "SLA guarantees",
+					"customIntegrations": "Custom integrations",
+					"customDeployment": "On-premise / private cloud deployment",
+					"auditTrail": "Full audit trail & compliance"
+				}
 			}
-		},
-		"purchase": "Purchase",
-		"recommended": "Recommended",
-		"subscribe": "Subscribe",
-		"title": "Plans based on analysis volume",
-		"trialPeriod": "{days} {days, plural, one {day} other {days}} free trial",
-		"year": "{count, plural, one {year} other {{count} years}}",
-		"yearly": "Yearly",
-		"perSeat": "seat",
-		"savePercent": "Save {percent}%",
-		"billedAnnually": "Billed annually",
-		"perMonth": "/mo",
-		"sessionsIncluded": "{count} AI sessions included",
-		"extraSession": "+${price} per extra session"
+		}
 	}
 }

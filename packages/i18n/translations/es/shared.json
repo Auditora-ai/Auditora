@@ -1,82 +1,89 @@
 {
 	"pricing": {
-		"choosePlan": "Elegir plan",
-		"contactSales": "Contactar ventas",
-		"description": "Cada plan incluye motor de IA, diagramacion BPMN automatica y analisis de riesgos. Selecciona segun el volumen de sesiones de tu equipo.",
-		"getStarted": "Comenzar",
-		"startTrial": "Iniciar prueba gratis",
-		"month": "{count, plural, one {mes} other {{count} meses}}",
+		"title": "Precios simples. Evaluaciones que escalan con tu equipo.",
+		"subtitle": "Todos los planes incluyen 14 días de prueba gratuita. Sin tarjeta de crédito.",
 		"monthly": "Mensual",
+		"yearly": "Anual",
+		"perMonth": "/mes",
+		"savePercent": "Ahorra {percent}%",
+		"billedAnnually": "facturación anual",
+		"perSeat": "usuario",
+		"recommended": "Más popular",
+		"contactSales": "Hablar con ventas",
+		"getStarted": "Prueba gratuita",
+		"startTrial": "Comenzar prueba",
+		"trialPeriod": "{days} {days, plural, one {día} other {días}} de prueba gratuita",
+		"choosePlan": "Elegir plan",
+		"purchase": "Comprar",
+		"subscribe": "Suscribirse",
+		"month": "{count, plural, one {mes} other {{count} meses}}",
+		"year": "{count, plural, one {año} other {{count} años}}",
+		"sessionsIncluded": "{count} sesiones de IA incluidas",
+		"extraSession": "+${price} por sesión extra",
 		"products": {
 			"starter": {
-				"description": "Para el consultor independiente que quiere entregar más rápido",
+				"title": "Starter",
+				"description": "Para equipos pequeños que inician con inteligencia de procesos",
+				"price": "$49",
+				"unit": "/mes",
 				"features": {
-					"freeTrial": "14 días de prueba gratis",
-					"sessions": "10 sesiones IA al mes",
-					"aiEngine": "Motor de IA Claude Opus",
-					"liveBpmn": "Diagramas BPMN generados automáticamente",
-					"riskAnalysis": "Análisis de riesgos automático",
-					"pdfExport": "Exportación PDF",
-					"fiveProcesses": "Hasta 5 procesos",
-					"oneUser": "1 usuario"
-				},
-				"title": "Starter"
+					"processes": "3 procesos",
+					"evaluations": "10 evaluaciones / mes",
+					"evaluators": "5 evaluadores",
+					"discovery": "Descubrimiento de procesos con IA",
+					"bpmn": "Diagramas BPMN 2.0",
+					"riskAssessment": "Evaluación de riesgos (FMEA)",
+					"trial": "14 días de prueba gratuita"
+				}
 			},
 			"growth": {
-				"description": "Para firmas de consultoría que escalan su operación",
+				"title": "Growth",
+				"description": "Para empresas en crecimiento que escalan su cultura de procesos",
+				"price": "$199",
+				"unit": "/mes",
 				"features": {
-					"freeTrial": "14 días de prueba gratis",
-					"sessions": "40 sesiones IA al mes",
-					"everythingInStarter": "Todo lo de Starter",
-					"unlimitedProcesses": "Procesos ilimitados",
-					"fullExport": "Exportación completa BPMN/XML/PDF",
-					"adminDashboard": "Panel de administración y roles",
-					"prioritySupport": "Soporte prioritario",
-					"fiveUsers": "Hasta 5 usuarios"
-				},
-				"title": "Growth"
+					"processes": "15 procesos",
+					"evaluations": "50 evaluaciones / mes",
+					"evaluators": "30 evaluadores",
+					"everythingInStarter": "Todo en Starter, más:",
+					"procedures": "Generación de procedimientos (POEs)",
+					"simulations": "Simulaciones estilo Harvard",
+					"teamDashboard": "Dashboards de equipo",
+					"prioritySupport": "Soporte prioritario"
+				}
 			},
 			"scale": {
-				"description": "Para equipos grandes con alto volumen de sesiones",
+				"title": "Scale",
+				"description": "Para empresas que miden el riesgo humano a escala",
+				"price": "$499",
+				"unit": "/mes",
 				"features": {
-					"freeTrial": "14 días de prueba gratis",
-					"sessions": "100 sesiones IA al mes",
-					"everythingInGrowth": "Todo lo de Growth",
-					"teamAnalytics": "Analíticas de equipo",
-					"sharedLibrary": "Biblioteca de procesos compartida",
-					"apiAccess": "Acceso API",
-					"byok": "Trae tu propia API key (BYOK)",
-					"fifteenUsers": "Hasta 15 usuarios"
-				},
-				"title": "Scale"
+					"processes": "Procesos ilimitados",
+					"evaluations": "250 evaluaciones / mes",
+					"evaluators": "150 evaluadores",
+					"everythingInGrowth": "Todo en Growth, más:",
+					"advancedAnalytics": "Analíticas avanzadas y reportes",
+					"apiAccess": "Acceso a API",
+					"sharedLibrary": "Biblioteca compartida de procesos",
+					"byok": "BYOK (tu propia clave de IA)",
+					"sso": "Autenticación SSO y SAML"
+				}
 			},
 			"enterprise": {
-				"description": "Para firmas grandes o despliegues corporativos",
+				"title": "Enterprise",
+				"description": "Para organizaciones grandes con requisitos personalizados",
+				"price": "Custom",
+				"unit": "",
 				"features": {
-					"everythingInScale": "Todo lo de Scale",
-					"unlimitedUsers": "Usuarios ilimitados",
-					"byokIncluded": "BYOK incluido (sesiones ilimitadas con tu API key)",
-					"ssoAuth": "SSO y autenticación SAML",
-					"slaGuarantees": "Garantías de SLA",
+					"unlimited": "Todo ilimitado",
+					"everythingInScale": "Todo en Scale, más:",
+					"dedicatedManager": "Account manager dedicado",
+					"sla": "Garantías SLA",
 					"customIntegrations": "Integraciones personalizadas",
-					"dedicatedManager": "Gerente de cuenta dedicado",
-					"customDeployment": "Despliegue personalizado"
-				},
-				"title": "Enterprise"
+					"customDeployment": "Despliegue on-premise / nube privada",
+					"auditTrail": "Audit trail completo y cumplimiento"
+				}
 			}
-		},
-		"purchase": "Comprar",
-		"recommended": "Recomendado",
-		"subscribe": "Suscribirse",
-		"title": "Planes según el volumen de análisis",
-		"trialPeriod": "{days} {days, plural, one {día} other {días}} de prueba gratis",
-		"year": "{count, plural, one {año} other {{count} años}}",
-		"yearly": "Anual",
-		"perSeat": "puesto",
-		"savePercent": "Ahorra {percent}%",
-		"billedAnnually": "Facturado anualmente",
-		"perMonth": "/mes",
-		"sessionsIncluded": "{count} sesiones IA incluidas",
-		"extraSession": "+${price} por sesión adicional"
+		}
 	}
 }
