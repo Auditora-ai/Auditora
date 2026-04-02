@@ -115,7 +115,7 @@ function QuoteCard({ profile, index }: { profile: Profile; index: number }) {
 	);
 }
 
-export function WhoItsForNew() {
+export function WhoItsFor() {
 	const t = useTranslations("home.whoItsFor");
 
 	return (
