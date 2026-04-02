@@ -33,9 +33,19 @@ RUN DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy?pgbouncer=true" 
     DIRECT_URL="postgresql://dummy:dummy@localhost:5432/dummy" \
     pnpm --filter @repo/database generate
 
-# Build target app (NEXT_PUBLIC vars are baked at build time via Railway env)
+# Build target app
+# BETTER_AUTH_SECRET is needed at build time because Next.js evaluates auth routes during build
+# NEXT_PUBLIC_* vars are baked at build time
+ARG BETTER_AUTH_SECRET="build-time-placeholder-secret-minimum-32-chars!!"
+ARG NEXT_PUBLIC_SAAS_URL="https://app.auditora.ai"
+ARG NEXT_PUBLIC_MARKETING_URL="https://auditora.ai"
+ARG NEXT_PUBLIC_DOCS_URL="https://docs.auditora.ai"
 RUN DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy?pgbouncer=true" \
     DIRECT_URL="postgresql://dummy:dummy@localhost:5432/dummy" \
+    BETTER_AUTH_SECRET="${BETTER_AUTH_SECRET}" \
+    NEXT_PUBLIC_SAAS_URL="${NEXT_PUBLIC_SAAS_URL}" \
+    NEXT_PUBLIC_MARKETING_URL="${NEXT_PUBLIC_MARKETING_URL}" \
+    NEXT_PUBLIC_DOCS_URL="${NEXT_PUBLIC_DOCS_URL}" \
     pnpm --filter ${APP_NAME} build
 
 # ---- Runner: production ----
