@@ -5,9 +5,12 @@ import { useRouter } from "@shared/hooks/router";
 import { clearCache } from "@shared/lib/cache";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { withQuery } from "ufo";
 import { OnboardingAccountStep } from "./OnboardingAccountStep";
+import { OnboardingCompanyStep } from "./OnboardingCompanyStep";
+import { OnboardingFirstValueStep } from "./OnboardingFirstValueStep";
+import { OnboardingSetupCompleteStep } from "./OnboardingSetupCompleteStep";
 
 export function OnboardingForm() {
 	const t = useTranslations();
@@ -20,7 +23,6 @@ export function OnboardingForm() {
 		? Number.parseInt(stepSearchParam, 10)
 		: 1;
 
-	// biome-ignore lint/correctness/noUnusedVariables: used for redirecting to the next step
 	const setStep = (step: number) => {
 		router.replace(
 			withQuery(window.location.search ?? "", {
@@ -29,26 +31,60 @@ export function OnboardingForm() {
 		);
 	};
 
-	const onCompleted = async () => {
+	const onCompleted = useCallback(async () => {
 		await authClient.updateUser({
 			onboardingComplete: true,
 		});
 
 		await clearCache();
 		router.replace(redirectTo ?? "/");
-	};
+	}, [router, redirectTo]);
+
+	const handleAccountComplete = useCallback(() => {
+		setStep(2);
+	}, []);
+
+	const handleCompanyComplete = useCallback(() => {
+		setStep(3);
+	}, []);
+
+	const handleFirstValueComplete = useCallback(() => {
+		setStep(4);
+	}, []);
 
 	const steps = useMemo(() => {
 		const allSteps: { component: React.ReactNode }[] = [
 			{
 				component: (
-					<OnboardingAccountStep onCompleted={() => onCompleted()} />
+					<OnboardingAccountStep onCompleted={handleAccountComplete} />
+				),
+			},
+			{
+				component: (
+					<OnboardingCompanyStep onCompleted={handleCompanyComplete} />
+				),
+			},
+			{
+				component: (
+					<OnboardingFirstValueStep
+						onCompleted={handleFirstValueComplete}
+					/>
+				),
+			},
+			{
+				component: (
+					<OnboardingSetupCompleteStep onCompleted={onCompleted} />
 				),
 			},
 		];
 
 		return allSteps;
-	}, []);
+	}, [
+		handleAccountComplete,
+		handleCompanyComplete,
+		handleFirstValueComplete,
+		onCompleted,
+	]);
 
 	return (
 		<div>
@@ -74,7 +110,7 @@ export function OnboardingForm() {
 				</div>
 			)}
 
-			{steps[onboardingStep - 1].component}
+			{steps[onboardingStep - 1]?.component}
 		</div>
 	);
 }

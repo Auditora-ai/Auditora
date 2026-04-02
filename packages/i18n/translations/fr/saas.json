@@ -283,14 +283,48 @@
 		"continue": "Continuer",
 		"message": "Quelques étapes rapides pour commencer.",
 		"notifications": {
-			"accountSetupFailed": "Nous sommes désolés, nous n'avons pas pu configurer votre compte. Veuillez réessayer plus tard."
+			"accountSetupFailed": "Nous sommes désolés, nous n'avons pas pu configurer votre compte. Veuillez réessayer plus tard.",
+			"companySetupFailed": "Nous sommes désolés, nous n'avons pas pu enregistrer les informations de votre entreprise. Veuillez réessayer plus tard."
 		},
 		"pricing": {
 			"planSelected": "Votre plan a été sélectionné avec succès.",
 			"skip": "Passer pour le moment"
 		},
 		"step": "Étape {step} / {total}",
-		"title": "Configurez votre compte"
+		"title": "Configurez votre compte",
+		"company": {
+			"title": "Parlez-nous de votre entreprise",
+			"subtitle": "Cela nous aide à personnaliser Auditora pour vous",
+			"companyName": "Nom de l'entreprise",
+			"companyNamePlaceholder": "Acme Corp",
+			"industry": "Industrie",
+			"industryPlaceholder": "Sélectionnez votre industrie",
+			"companySize": "Taille de l'entreprise",
+			"companySizePlaceholder": "Sélectionnez la taille",
+			"evaluationTarget": "Combien de personnes souhaitez-vous évaluer ?",
+			"evaluationTargetPlaceholder": "Sélectionnez la plage",
+			"concernProcess": "Quel processus vous préoccupe le plus ?",
+			"concernProcessPlaceholder": "Ex : Commandes, Contrôle qualité...",
+			"concernProcessOptional": "Facultatif — nous aide à suggérer par où commencer"
+		},
+		"firstValue": {
+			"title": "Commencez à tirer parti",
+			"subtitle": "Basé sur votre industrie, nous vous recommandons de commencer ici",
+			"recommendation": "Nous recommandons de documenter d'abord votre processus le plus critique. Les évaluations sont plus précieuses lorsqu'elles sont basées sur des procédures réelles.",
+			"chatInterview": "Démarrer l'entretien IA",
+			"chatInterviewDesc": "Laissez l'IA vous guider pour documenter un processus en quelques minutes",
+			"exploreDashboard": "Explorer le tableau de bord",
+			"exploreDashboardDesc": "Découvrez ce qu'Auditora peut faire pour votre équipe",
+			"documentProcess": "Documenter un processus",
+			"documentProcessDesc": "Commencez par votre processus le plus critique"
+		},
+		"setupComplete": {
+			"title": "Votre organisation est prête !",
+			"subtitle": "Vous êtes prêt à commencer à améliorer la conformité des processus.",
+			"inviteMembers": "Inviter des membres",
+			"inviteMembersDesc": "Ajoutez des collègues qui doivent participer aux évaluations",
+			"goToDashboard": "Aller au tableau de bord"
+		}
 	},
 	"organizations": {
 		"createForm": {

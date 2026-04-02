@@ -285,14 +285,48 @@
 		"continue": "Continuar",
 		"message": "Solo unos pasos rápidos para comenzar.",
 		"notifications": {
-			"accountSetupFailed": "Lo sentimos, no pudimos configurar tu cuenta. Por favor, inténtalo más tarde."
+			"accountSetupFailed": "Lo sentimos, no pudimos configurar tu cuenta. Por favor, inténtalo más tarde.",
+			"companySetupFailed": "Lo sentimos, no pudimos guardar la información de tu empresa. Por favor, inténtalo más tarde."
 		},
 		"pricing": {
 			"planSelected": "Tu plan ha sido seleccionado correctamente.",
 			"skip": "Omitir por ahora"
 		},
 		"step": "Paso {step} / {total}",
-		"title": "Configura tu cuenta"
+		"title": "Configura tu cuenta",
+		"company": {
+			"title": "Cuéntanos sobre tu empresa",
+			"subtitle": "Esto nos ayuda a personalizar Auditora para ti",
+			"companyName": "Nombre de la empresa",
+			"companyNamePlaceholder": "Acme Corp",
+			"industry": "Industria",
+			"industryPlaceholder": "Selecciona tu industria",
+			"companySize": "Tamaño de la empresa",
+			"companySizePlaceholder": "Selecciona rango",
+			"evaluationTarget": "¿Cuántas personas te gustaría evaluar?",
+			"evaluationTargetPlaceholder": "Selecciona rango",
+			"concernProcess": "¿Qué proceso te preocupa más?",
+			"concernProcessPlaceholder": "Ej: Órdenes de compra, Control de calidad...",
+			"concernProcessOptional": "Opcional — nos ayuda a sugerir por dónde empezar"
+		},
+		"firstValue": {
+			"title": "Empieza a obtener valor",
+			"subtitle": "Basado en tu industria, te recomendamos empezar aquí",
+			"recommendation": "Recomendamos documentar primero tu proceso más crítico. Las evaluaciones son más valiosas cuando se basan en procedimientos reales.",
+			"chatInterview": "Iniciar entrevista IA",
+			"chatInterviewDesc": "Deja que la IA te guíe para documentar un proceso en minutos",
+			"exploreDashboard": "Explorar dashboard",
+			"exploreDashboardDesc": "Descubre lo que Auditora puede hacer por tu equipo",
+			"documentProcess": "Documentar un proceso",
+			"documentProcessDesc": "Empieza con tu proceso más crítico"
+		},
+		"setupComplete": {
+			"title": "¡Tu organización está lista!",
+			"subtitle": "Estás listo para empezar a mejorar el cumplimiento de procesos.",
+			"inviteMembers": "Invitar miembros",
+			"inviteMembersDesc": "Agrega colegas que deban participar en evaluaciones",
+			"goToDashboard": "Ir al dashboard"
+		}
 	},
 	"organizations": {
 		"createForm": {
@@ -1816,5 +1850,21 @@
 	"deliverables": {
 		"noOwner": "Sin owner",
 		"noDepartment": "Sin departamento"
+	},
+	"usage": {
+		"title": "Uso del Plan",
+		"evaluations": "Evaluaciones",
+		"evaluators": "Evaluadores",
+		"processes": "Procesos",
+		"sessions": "Sesiones IA",
+		"reports": "Reportes",
+		"used": "{used} / {limit}",
+		"unlimited": "Ilimitado",
+		"remaining": "{count} restantes",
+		"exhausted": "Límite alcanzado",
+		"resets": "Reinicia {date}",
+		"categoryEvaluations": "Evaluaciones",
+		"categoryProcesses": "Procesos",
+		"categoryTools": "Herramientas"
 	}
 }

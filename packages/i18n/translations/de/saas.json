@@ -283,14 +283,48 @@
 		"continue": "Weiter",
 		"message": "Nur ein paar schnelle Schritte, um dir den Einstieg zu erleichtern.",
 		"notifications": {
-			"accountSetupFailed": "Es tut uns leid, aber wir konnten dein Konto nicht einrichten. \nBitte versuche es später noch einmal."
+			"accountSetupFailed": "Es tut uns leid, aber wir konnten dein Konto nicht einrichten. \nBitte versuche es später noch einmal.",
+			"companySetupFailed": "Es tut uns leid, aber wir konnten deine Unternehmensinformationen nicht speichern. Bitte versuche es später noch einmal."
 		},
 		"pricing": {
 			"planSelected": "Dein Plan wurde erfolgreich ausgewählt.",
 			"skip": "Vorerst überspringen"
 		},
 		"step": "Schritt {step} / {total}",
-		"title": "Richte dein Konto ein"
+		"title": "Richte dein Konto ein",
+		"company": {
+			"title": "Erzähl uns von deinem Unternehmen",
+			"subtitle": "Das hilft uns, Auditora auf deine Bedürfnisse anzupassen",
+			"companyName": "Unternehmensname",
+			"companyNamePlaceholder": "Acme Corp",
+			"industry": "Branche",
+			"industryPlaceholder": "Wähle deine Branche",
+			"companySize": "Unternehmensgröße",
+			"companySizePlaceholder": "Größenbereich wählen",
+			"evaluationTarget": "Wie viele Personen möchtest du bewerten?",
+			"evaluationTargetPlaceholder": "Bereich wählen",
+			"concernProcess": "Welcher Prozess bereitet dir die größten Sorgen?",
+			"concernProcessPlaceholder": "z.B. Bestellungen, Qualitätskontrolle...",
+			"concernProcessOptional": "Optional — hilft uns, den Einstieg zu empfehlen"
+		},
+		"firstValue": {
+			"title": "Starte mit ersten Ergebnissen",
+			"subtitle": "Basierend auf deiner Branche empfehlen wir, hier zu beginnen",
+			"recommendation": "Wir empfehlen, zuerst deinen kritischsten Prozess zu dokumentieren. Bewertungen sind wertvoller, wenn sie auf realen Verfahren basieren.",
+			"chatInterview": "KI-Interview starten",
+			"chatInterviewDesc": "Lass die KI dich durch die Dokumentation eines Prozesses in Minuten führen",
+			"exploreDashboard": "Dashboard erkunden",
+			"exploreDashboardDesc": "Entdecke, was Auditora für dein Team tun kann",
+			"documentProcess": "Einen Prozess dokumentieren",
+			"documentProcessDesc": "Starte mit deinem kritischsten Prozess"
+		},
+		"setupComplete": {
+			"title": "Deine Organisation ist bereit!",
+			"subtitle": "Du bist bereit, die Prozesskonformität zu verbessern.",
+			"inviteMembers": "Mitglieder einladen",
+			"inviteMembersDesc": "Füge Kollegen hinzu, die an Bewertungen teilnehmen sollten",
+			"goToDashboard": "Zum Dashboard"
+		}
 	},
 	"organizations": {
 		"createForm": {

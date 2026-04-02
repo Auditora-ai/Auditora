@@ -285,14 +285,48 @@
 		"continue": "Continue",
 		"message": "Just a few quick steps to get you started.",
 		"notifications": {
-			"accountSetupFailed": "We are sorry, but we were unable to set up your account. Please try again later."
+			"accountSetupFailed": "We are sorry, but we were unable to set up your account. Please try again later.",
+			"companySetupFailed": "We are sorry, but we were unable to save your company information. Please try again later."
 		},
 		"pricing": {
 			"planSelected": "Your plan has been selected successfully.",
 			"skip": "Skip for now"
 		},
 		"step": "Step {step} / {total}",
-		"title": "Set up your account"
+		"title": "Set up your account",
+		"company": {
+			"title": "Tell us about your company",
+			"subtitle": "This helps us tailor Auditora to your needs",
+			"companyName": "Company name",
+			"companyNamePlaceholder": "Acme Corp",
+			"industry": "Industry",
+			"industryPlaceholder": "Select your industry",
+			"companySize": "Company size",
+			"companySizePlaceholder": "Select size range",
+			"evaluationTarget": "How many people would you like to evaluate?",
+			"evaluationTargetPlaceholder": "Select range",
+			"concernProcess": "Which process worries you the most?",
+			"concernProcessPlaceholder": "e.g., Purchase orders, Quality control...",
+			"concernProcessOptional": "Optional — helps us suggest where to start"
+		},
+		"firstValue": {
+			"title": "Start getting value",
+			"subtitle": "Based on your industry, we recommend starting here",
+			"recommendation": "We recommend documenting your most critical process first. Evaluations are more valuable when based on real procedures.",
+			"chatInterview": "Start AI interview",
+			"chatInterviewDesc": "Let AI guide you through documenting a process in minutes",
+			"exploreDashboard": "Explore dashboard",
+			"exploreDashboardDesc": "See what Auditora can do for your team",
+			"documentProcess": "Document a process",
+			"documentProcessDesc": "Start with your most critical process"
+		},
+		"setupComplete": {
+			"title": "Your organization is ready!",
+			"subtitle": "You're all set to start improving process compliance.",
+			"inviteMembers": "Invite team members",
+			"inviteMembersDesc": "Add colleagues who should participate in evaluations",
+			"goToDashboard": "Go to dashboard"
+		}
 	},
 	"organizations": {
 		"createForm": {
@@ -1816,5 +1850,21 @@
 	"deliverables": {
 		"noOwner": "No owner",
 		"noDepartment": "No department"
+	},
+	"usage": {
+		"title": "Plan Usage",
+		"evaluations": "Evaluations",
+		"evaluators": "Evaluators",
+		"processes": "Processes",
+		"sessions": "AI Sessions",
+		"reports": "Reports",
+		"used": "{used} / {limit}",
+		"unlimited": "Unlimited",
+		"remaining": "{count} remaining",
+		"exhausted": "Limit reached",
+		"resets": "Resets {date}",
+		"categoryEvaluations": "Evaluations",
+		"categoryProcesses": "Processes",
+		"categoryTools": "Tools"
 	}
 }
