@@ -49,35 +49,47 @@ export async function POST(request: NextRequest) {
 	}
 
 	// 5. Parse scan results
-	const riskResults = scanSession.riskResults
-		? (JSON.parse(scanSession.riskResults as string) as {
-				newRisks: Array<{
-					title: string;
-					description: string;
-					riskType: string;
-					severity: number;
-					probability: number;
-					affectedStep?: string;
-					suggestedMitigations: string[];
-					isOpportunity: boolean;
-				}>;
-				riskSummary: {
-					totalRiskScore: number;
-					criticalCount: number;
-					highCount: number;
-					topRiskArea: string;
-				};
-			})
-		: null;
-
-	const industryData = scanSession.industry
-		? (typeof scanSession.industry === "string"
-				? JSON.parse(scanSession.industry)
-				: scanSession.industry) as {
-				industry?: string;
-				selectedProcess?: { name?: string; description?: string };
-			}
-		: null;
+	let riskResults: {
+		newRisks: Array<{
+			title: string;
+			description: string;
+			riskType: string;
+			severity: number;
+			probability: number;
+			affectedStep?: string;
+			suggestedMitigations: string[];
+			isOpportunity: boolean;
+		}>;
+		riskSummary: {
+			totalRiskScore: number;
+			criticalCount: number;
+			highCount: number;
+			topRiskArea: string;
+		};
+	} | null = null;
+	if (scanSession.riskResults) {
+		try {
+			riskResults = JSON.parse(scanSession.riskResults as string);
+		} catch {
+			console.error("[scan/save] Failed to parse riskResults JSON");
+			riskResults = null;
+		}
+	}
+	let industryData: {
+		industry?: string;
+		selectedProcess?: { name?: string; description?: string };
+	} | null = null;
+	if (scanSession.industry) {
+		try {
+			industryData =
+				typeof scanSession.industry === "string"
+					? JSON.parse(scanSession.industry)
+					: scanSession.industry;
+		} catch {
+			console.error("[scan/save] Failed to parse industry JSON");
+			industryData = null;
+		}
+	}
 
 	const processName = industryData?.selectedProcess?.name || scanSession.processName || "Proceso principal";
 	const processDescription = industryData?.selectedProcess?.description || "";
@@ -163,7 +175,9 @@ export async function POST(request: NextRequest) {
 			convertedToUserId: session.user.id,
 			convertedAt: new Date(),
 		},
-	}).catch(() => {});
+	}).catch((err) => {
+		console.error("[scan/save] Failed to mark anonymous session as converted:", err);
+	});
 
 	// Get org slug for redirect
 	const org = await db.organization.findUnique({

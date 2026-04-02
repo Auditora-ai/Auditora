@@ -88,7 +88,6 @@ export default async function EvaluacionesPage({
 					/>
 				}
 				dashboardData={dashboardData}
-				organizationSlug={organizationSlug}
 			/>
 		</div>
 	);

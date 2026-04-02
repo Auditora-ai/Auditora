@@ -1,4 +1,5 @@
 import { ForgotPasswordForm } from "@auth/components/ForgotPasswordForm";
+import { AuthWrapper } from "@shared/components/AuthWrapper";
 import { getTranslations } from "next-intl/server";
 
 export const dynamic = "force-dynamic";
@@ -13,5 +14,9 @@ export async function generateMetadata() {
 }
 
 export default function ForgotPasswordPage() {
-	return <ForgotPasswordForm />;
+	return (
+		<AuthWrapper>
+			<ForgotPasswordForm />
+		</AuthWrapper>
+	);
 }

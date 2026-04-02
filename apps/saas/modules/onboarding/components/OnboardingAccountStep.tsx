@@ -21,7 +21,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
-	name: z.string(),
+	name: z.string().min(1),
 });
 
 export function OnboardingAccountStep({

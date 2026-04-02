@@ -1,5 +1,6 @@
 "use client";
 
+import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
 import { Button } from "@repo/ui/components/button";
 import { CheckCircle2Icon, UsersIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -13,6 +14,7 @@ export function OnboardingSetupCompleteStep({
 	onCompleted,
 }: OnboardingSetupCompleteStepProps) {
 	const t = useTranslations();
+	const { activeOrganization } = useActiveOrganization();
 
 	const handleGoToDashboard = () => {
 		onCompleted();
@@ -44,7 +46,7 @@ export function OnboardingSetupCompleteStep({
 				</Button>
 
 				<Button variant="outline" className="w-full" asChild>
-					<Link href="/settings/members">
+					<Link href={`/${activeOrganization?.slug ?? ""}/settings/members`}>
 						<UsersIcon className="mr-2 size-4" />
 						{t("onboarding.setupComplete.inviteMembers")}
 					</Link>

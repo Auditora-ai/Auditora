@@ -12,10 +12,10 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 	const [loaded, setLoaded] = useState(!!session);
 
 	useEffect(() => {
-		if (session && !loaded) {
+		if (!loaded) {
 			setLoaded(true);
 		}
-	}, [session]);
+	}, [session, loaded]);
 
 	return (
 		<SessionContext.Provider
