@@ -9,7 +9,7 @@
 		"format": "biome format --write"
 	},
 	"dependencies": {
-		"@react-email/components": "^1.0.10",
+		"@react-email/components": "^1.0.11",
 		"@react-email/preview-server": "^5.2.10",
 		"@repo/mail": "workspace:*",
 		"react": "catalog:",
