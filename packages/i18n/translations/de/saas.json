@@ -1684,7 +1684,8 @@
 			"contextPlaceholder": "Beschreiben Sie den Prozesskontext, Sitzungsziele, relevante Kundeninformationen...",
 			"coverPlaceholder": "Was in dieser Sitzung behandelt werden soll...",
 			"errorRaci": "Fehler beim Abrufen der RACI-Daten",
-			"noParticipantsEmpty": "Keine Teilnehmer"
+			"noParticipantsEmpty": "Keine Teilnehmer",
+			"discoverWithAI": "Mit KI entdecken"
 		}
 	},
 	"processDetail": {

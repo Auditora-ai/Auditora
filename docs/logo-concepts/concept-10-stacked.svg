@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300" fill="none">
+  <!-- Concept 10: Stacked version for social/og images
+       Big "A" monogram on top
+       "auditora.ai" text below
+       Clean, centered, premium -->
+  
+  <rect width="400" height="300" rx="32" fill="#0A1428"/>
+  
+  <!-- Big A -->
+  <text x="200" y="165" text-anchor="middle"
+        font-family="'Geist', 'Inter', system-ui, -apple-system, sans-serif" 
+        font-size="160" font-weight="900" letter-spacing="-8" fill="#00E5C0">
+    A
+  </text>
+  
+  <!-- Wordmark below -->
+  <text x="200" y="240" text-anchor="middle"
+        font-family="'Geist', 'Inter', system-ui, -apple-system, sans-serif" 
+        font-size="32" letter-spacing="8" fill="rgba(255,255,255,0.5)">
+    <tspan font-weight="600" fill="rgba(255,255,255,0.7)">AUDITORA</tspan><tspan font-weight="300" fill="#00E5C0">.AI</tspan>
+  </text>
+</svg>

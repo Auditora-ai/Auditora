@@ -139,10 +139,6 @@ export function useLiveSession(
 
 				const api = modelerApiRef.current;
 				if (nodesChanged && api?.isReady && aiEnabledRef.current) {
-					console.group("[BPMN-DEBUG] Poll triggered mergeAiNodes");
-					console.log("node count:", newNodes.length);
-					console.log("sample IDs:", newNodes.slice(0, 5).map(n => `${n.id.slice(0,8)}:${n.label}`));
-					console.groupEnd();
 					api.mergeAiNodes(newNodes);
 					prevNodesRef.current = nodesKey;
 				}

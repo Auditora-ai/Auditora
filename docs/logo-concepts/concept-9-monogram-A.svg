@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" fill="none">
+  <!-- Concept 9: Monogram "A" for favicon/app icon
+       Just the letter A in the same style as the wordmark.
+       Heavy weight, teal, on dark background.
+       The crossbar is slightly lower and thicker — gives it personality.
+       A subtle notch/gap in the left leg near bottom = "entry point" of a process. -->
+  
+  <rect width="200" height="200" rx="44" fill="#0A1428"/>
+  
+  <text x="100" y="152" text-anchor="middle"
+        font-family="'Geist', 'Inter', system-ui, -apple-system, sans-serif" 
+        font-size="148" font-weight="900" letter-spacing="-6" fill="#00E5C0">
+    A
+  </text>
+</svg>

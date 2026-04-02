@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none">
+  <!-- Concept 2: Process Checkpoint
+       A horizontal flow of 3 nodes connected by lines.
+       The middle node is LARGER and has a checkmark inside = the evaluation.
+       Clean, minimal, says "process + quality gate".
+       The flow curves slightly upward = improvement trajectory. -->
+  
+  <rect width="512" height="512" rx="96" fill="#0A1428"/>
+  
+  <!-- Flow line (subtle curve upward) -->
+  <path d="M 96 300 C 160 300, 200 256, 256 240 C 312 224, 352 220, 416 200" 
+        stroke="#00E5C0" stroke-width="3" stroke-linecap="round" opacity="0.3"/>
+  
+  <!-- Node 1: Process input (small) -->
+  <circle cx="96" cy="300" r="20" stroke="#00E5C0" stroke-width="3" fill="none" opacity="0.5"/>
+  <circle cx="96" cy="300" r="6" fill="#00E5C0" opacity="0.5"/>
+  
+  <!-- Node 2: EVALUATION (large, prominent) — the checkpoint -->
+  <circle cx="256" cy="240" r="56" stroke="#00E5C0" stroke-width="4" fill="#00E5C0" fill-opacity="0.1"/>
+  
+  <!-- Checkmark inside the evaluation node -->
+  <path d="M 232 240 L 250 258 L 280 222" 
+        stroke="#00E5C0" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  
+  <!-- Node 3: Process output (small) -->
+  <circle cx="416" cy="200" r="20" stroke="#00E5C0" stroke-width="3" fill="none" opacity="0.5"/>
+  <circle cx="416" cy="200" r="6" fill="#00E5C0" opacity="0.5"/>
+  
+  <!-- Small branching paths from evaluation node (decision paths) -->
+  <path d="M 256 296 L 220 340" stroke="#00E5C0" stroke-width="2" opacity="0.2" stroke-linecap="round"/>
+  <path d="M 256 296 L 292 340" stroke="#00E5C0" stroke-width="2" opacity="0.2" stroke-linecap="round"/>
+  
+  <!-- Tiny decision dots -->
+  <circle cx="220" cy="340" r="6" fill="#00E5C0" opacity="0.15"/>
+  <circle cx="292" cy="340" r="6" fill="#00E5C0" opacity="0.15"/>
+</svg>

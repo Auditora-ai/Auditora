@@ -24,10 +24,18 @@ const elk = new ELK();
 // bpmnTag, dims, bpmnType are re-exported from layout-constants to avoid circular imports
 export { bpmnTag, dims, bpmnType } from "./layout-constants";
 
+/** Optional labels for BPMN start/end events. Defaults to empty (no label). */
+interface BpmnBuildOptions {
+	startLabel?: string;
+	endLabel?: string;
+}
+
 /**
  * Build BPMN 2.0 XML with ELK-powered professional layout.
  */
-export async function buildBpmnXml(inputNodes: DiagramNode[]): Promise<string> {
+export async function buildBpmnXml(inputNodes: DiagramNode[], options?: BpmnBuildOptions): Promise<string> {
+	const startLabel = options?.startLabel ?? "";
+	const endLabel = options?.endLabel ?? "";
 	// --- Filter nodes ---
 	let visible = inputNodes.filter((n) => n.state !== "rejected");
 	if (visible.length === 0) return emptyXml();
@@ -55,7 +63,7 @@ export async function buildBpmnXml(inputNodes: DiagramNode[]): Promise<string> {
 	// --- Build ordered node list ---
 	const ordered: DiagramNode[] = [];
 
-	ordered.push({ id: safeId("_start"), type: "start_event", label: "Start", state: "confirmed", lane: lanes[0], connections: [] });
+	ordered.push({ id: safeId("_start"), type: "start_event", label: startLabel, state: "confirmed", lane: lanes[0], connections: [] });
 
 	const skippedIds = new Set<string>();
 	for (const n of visible) {
@@ -78,7 +86,7 @@ export async function buildBpmnXml(inputNodes: DiagramNode[]): Promise<string> {
 		});
 	}
 
-	ordered.push({ id: safeId("_end"), type: "end_event", label: "End", state: "confirmed", lane: lanes[lanes.length - 1] || "General", connections: [] });
+	ordered.push({ id: safeId("_end"), type: "end_event", label: endLabel, state: "confirmed", lane: lanes[lanes.length - 1] || "General", connections: [] });
 
 	// --- Wire connections ---
 	const middleNodes = ordered.filter((n) => n.id !== "_start" && n.id !== "_end");

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none">
+  <!-- Concept 3: Gateway Shield
+       A BPMN gateway diamond (the decision point) 
+       combined with a subtle shield silhouette.
+       The diamond IS the A — rotated square = decision gate.
+       Inside: a pulse/signal line = "we measure this".
+       Meaning: your decision points, protected/evaluated. -->
+  
+  <rect width="512" height="512" rx="96" fill="#0A1428"/>
+  
+  <!-- Outer diamond (BPMN gateway shape = decision) -->
+  <rect x="256" y="96" width="226" height="226" rx="16"
+        transform="rotate(45 256 256)"
+        stroke="#00E5C0" stroke-width="6" fill="none"/>
+  
+  <!-- Inner diamond (smaller, creates depth) -->
+  <rect x="256" y="146" width="155" height="155" rx="10"
+        transform="rotate(45 256 256)"
+        stroke="#00E5C0" stroke-width="3" fill="#00E5C0" fill-opacity="0.08" opacity="0.6"/>
+  
+  <!-- Pulse line inside (the measurement / evaluation) -->
+  <path d="M 186 256 L 226 256 L 240 216 L 256 296 L 272 216 L 286 256 L 326 256" 
+        stroke="#00E5C0" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  
+  <!-- Small dot at the peak of the pulse -->
+  <circle cx="256" cy="296" r="4" fill="#00E5C0"/>
+</svg>

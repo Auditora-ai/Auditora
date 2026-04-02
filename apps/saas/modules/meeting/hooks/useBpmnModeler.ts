@@ -296,12 +296,6 @@ export function useBpmnModeler({
 
 			const visibleNodes = nodes.filter((n) => n.state !== "rejected");
 
-			console.group("[BPMN-DEBUG] mergeAiNodes called");
-			console.log("bootstrapped:", bootstrappedRef.current);
-			console.log("visible nodes:", visibleNodes.length, visibleNodes.map(n => `${n.id.slice(0,8)}:${n.label}`));
-			console.log("known nodes:", knownNodesRef.current.size, [...knownNodesRef.current.keys()].map(k => k.slice(0,8)));
-			console.groupEnd();
-
 			importingRef.current = true;
 			try {
 				if (!bootstrappedRef.current) {
@@ -418,11 +412,6 @@ export function useBpmnModeler({
 			}
 
 			try {
-				console.group("[BPMN-DEBUG] rebuildFromNodes FULL REBUILD");
-				console.log("node count:", rebuildNodes.length);
-				console.log("nodes:", rebuildNodes.map(n => `${n.id.slice(0,8)}:${n.label}:${n.lane}`));
-				console.groupEnd();
-
 				// Step 1: Preprocess graph + calculate positions with ELK
 				const ELK = (await import("elkjs/lib/elk.bundled.js")).default;
 				const elkInstance = new ELK();
@@ -688,14 +677,7 @@ export function useBpmnModeler({
 			}
 		}
 
-		console.group("[BPMN-DEBUG] incrementalUpdate diff");
-		console.log("new:", newNodes.length, newNodes.map(n => `${n.id.slice(0,8)}:${n.label}`));
-		console.log("updated:", updatedNodes.length, updatedNodes.map(n => `${n.id.slice(0,8)}:${n.label}`));
-		console.log("removed:", removedIds.length, removedIds.map(id => id.slice(0,8)));
-		if (newNodes.length > 3 || removedIds.length > 3) {
-			console.warn("⚠️ LARGE DIFF — possible ID mismatch between canvas and DB");
-		}
-		console.groupEnd();
+
 
 		// Track if topology changed (needs fit-viewport)
 		let topologyChanged = newNodes.length > 0 || removedIds.length > 0;

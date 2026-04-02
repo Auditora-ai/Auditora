@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200" width="800" height="200" fill="none">
+  <!-- Concept 7: Wordmark with accent dot
+       "Auditora" capitalized, clean weight.
+       The dot of the "i" is a teal square/diamond — the "checkpoint".
+       ".ai" in lighter weight, teal.
+       Minimal, premium. The ONE accent detail makes it memorable. -->
+  
+  <rect width="800" height="200" fill="#0A1428"/>
+  
+  <text x="40" y="132" 
+        font-family="'Geist', 'Inter', system-ui, -apple-system, sans-serif" 
+        font-size="82" font-weight="700" letter-spacing="-2" fill="white">
+    Aud<tspan fill="white">i</tspan>tora<tspan fill="#00E5C0" font-weight="300">.ai</tspan>
+  </text>
+  
+  <!-- Replace the dot on the "i" with a teal diamond (checkpoint symbol) -->
+  <!-- Position approximated for the "i" in "Auditora" -->
+  <rect x="217" y="48" width="10" height="10" rx="1.5" 
+        transform="rotate(45 222 53)" fill="#00E5C0"/>
+</svg>

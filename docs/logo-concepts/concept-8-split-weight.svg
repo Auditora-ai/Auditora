@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200" width="800" height="200" fill="none">
+  <!-- Concept 8: Split Weight Wordmark
+       "Audit" in heavy/black weight — the serious part (we audit)
+       "ora" in light weight — the elegant suffix  
+       ".ai" in teal, ultralight
+       The contrast in weights creates visual tension and memorability.
+       Inspired by how "MongoDB" uses weight contrast. -->
+  
+  <rect width="800" height="200" fill="#0A1428"/>
+  
+  <text x="40" y="134" 
+        font-family="'Geist', 'Inter', system-ui, -apple-system, sans-serif" 
+        font-size="86" letter-spacing="-2.5" fill="white">
+    <tspan font-weight="900">Audit</tspan><tspan font-weight="200" fill="rgba(255,255,255,0.7)">ora</tspan><tspan font-weight="200" fill="#00E5C0">.ai</tspan>
+  </text>
+</svg>

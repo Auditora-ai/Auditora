@@ -153,7 +153,7 @@ export function StepProcess({
 					}`}
 				>
 					<SparklesIcon className="h-4 w-4" />
-					Descubrir con IA
+					{t("discoverWithAI")}
 				</button>
 			</div>
 

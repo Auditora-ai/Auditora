@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none">
+  <!-- Concept 4: Abstract A with Flow
+       The letter A built from a continuous flowing line.
+       Starts at bottom-left, flows up through a node, 
+       crosses over, and ends at bottom-right.
+       One continuous stroke = one process flow.
+       The crossbar has a glowing node = checkpoint.
+       Most brandable version — works as favicon and full logo. -->
+  
+  <rect width="512" height="512" rx="96" fill="#0A1428"/>
+  
+  <!-- The A as a single continuous flowing stroke -->
+  <path d="M 136 400 
+           C 136 360, 156 320, 176 280 
+           L 256 104 
+           L 336 280 
+           C 356 320, 376 360, 376 400" 
+        stroke="#00E5C0" stroke-width="24" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  
+  <!-- Crossbar with slight curve (feels organic, not rigid) -->
+  <path d="M 188 304 C 220 292, 292 292, 324 304" 
+        stroke="#00E5C0" stroke-width="16" stroke-linecap="round" fill="none" opacity="0.7"/>
+  
+  <!-- Checkpoint node on the crossbar (the evaluation moment) -->
+  <circle cx="256" cy="296" r="16" fill="#00E5C0"/>
+  <circle cx="256" cy="296" r="6" fill="#0A1428"/>
+  
+  <!-- Subtle glow behind the apex -->
+  <circle cx="256" cy="104" r="40" fill="#00E5C0" opacity="0.08"/>
+</svg>

@@ -172,7 +172,6 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 			});
 
 			const data = await res.json().catch(() => ({}));
-			console.log("[CentralCanvas] Reorganize response:", { ok: res.ok, status: res.status, nodeCount: data.nodes?.length, error: data.error });
 
 			if (res.ok && data.nodes && data.nodes.length > 0) {
 				await modelerApi.rebuildFromNodes(data.nodes);
@@ -241,10 +240,6 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 
 			// Sync canvas elements to DB (upsert = no duplicates)
 			const canvasNodes = extractCanvasNodes();
-			console.group("[BPMN-DEBUG] handleSave");
-			console.log("canvas nodes:", canvasNodes.length);
-			console.log("IDs:", canvasNodes.map(n => `${n.id.slice(0,8)}:${n.label}:${n.lane}`));
-			console.groupEnd();
 			if (canvasNodes.length > 0) {
 				await fetch(`/api/sessions/${sessionId}/sync-canvas`, {
 					method: "POST",

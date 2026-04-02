@@ -1780,7 +1780,8 @@
       "contextPlaceholder": "Describe el contexto del proceso, objetivos de la sesión, información relevante del cliente...",
       "coverPlaceholder": "Qué cubrir en esta sesión...",
       "errorRaci": "Error al obtener RACI",
-      "noParticipantsEmpty": "Sin participantes"
+      "noParticipantsEmpty": "Sin participantes",
+      "discoverWithAI": "Descubrir con IA"
     }
   },
   "processDetail": {

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none">
+  <!-- Concept 1: Decision Path "A"
+       Two paths diverge from bottom, converge at top forming an A.
+       A glowing node at the apex = the evaluation point.
+       The crossbar of the A = the checkpoint/threshold.
+       Colors: #00E5C0 teal accent on dark. -->
+  
+  <!-- Background circle (optional, for favicon context) -->
+  <rect width="512" height="512" rx="96" fill="#0A1428"/>
+  
+  <!-- Left path of the A -->
+  <path d="M 160 400 L 256 112" 
+        stroke="#00E5C0" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Right path of the A -->
+  <path d="M 352 400 L 256 112" 
+        stroke="#00E5C0" stroke-width="28" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Crossbar (the evaluation threshold) -->
+  <path d="M 192 296 L 320 296" 
+        stroke="#00E5C0" stroke-width="20" stroke-linecap="round" opacity="0.6"/>
+  
+  <!-- Apex node (the convergence/evaluation point) -->
+  <circle cx="256" cy="112" r="22" fill="#00E5C0"/>
+  
+  <!-- Inner dot (precision) -->
+  <circle cx="256" cy="112" r="8" fill="#0A1428"/>
+  
+  <!-- Decision nodes at the base -->
+  <circle cx="160" cy="400" r="14" fill="#00E5C0" opacity="0.4"/>
+  <circle cx="352" cy="400" r="14" fill="#00E5C0" opacity="0.4"/>
+</svg>

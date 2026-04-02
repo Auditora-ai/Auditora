@@ -34,10 +34,6 @@ export function recordEvent(
 	events.push(event);
 	timelines.set(sessionId, events);
 
-	const offsetMs = events.length > 1 ? now - events[0].timestamp : 0;
-	console.log(
-		`[DIAG] ${sessionId.substring(0, 8)} | ${stage.padEnd(30)} | +${offsetMs}ms${detail ? ` | ${detail}` : ""}`,
-	);
 }
 
 export function getTimeline(sessionId: string) {

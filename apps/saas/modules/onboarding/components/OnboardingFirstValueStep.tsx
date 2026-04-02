@@ -10,6 +10,7 @@ import {
 import { BarChart3Icon, FileTextIcon, MessageSquareIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@shared/hooks/router";
+import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
 
 interface OnboardingFirstValueStepProps {
 	onCompleted: () => void;
@@ -19,21 +20,21 @@ const ACTION_CARDS = [
 	{
 		key: "chatInterview",
 		icon: MessageSquareIcon,
-		href: "/scan",
+		path: "/scan",
 		color: "text-blue-500",
 		bgColor: "bg-blue-500/10",
 	},
 	{
 		key: "exploreDashboard",
 		icon: BarChart3Icon,
-		href: "/",
+		path: "/",
 		color: "text-emerald-500",
 		bgColor: "bg-emerald-500/10",
 	},
 	{
 		key: "documentProcess",
 		icon: FileTextIcon,
-		href: "/processes",
+		path: "/processes",
 		color: "text-purple-500",
 		bgColor: "bg-purple-500/10",
 	},
@@ -44,10 +45,13 @@ export function OnboardingFirstValueStep({
 }: OnboardingFirstValueStepProps) {
 	const t = useTranslations();
 	const router = useRouter();
+	const { activeOrganization } = useActiveOrganization();
 
-	const handleCardClick = (href: string) => {
+	const orgSlug = activeOrganization?.slug ?? "";
+
+	const handleCardClick = (path: string) => {
 		onCompleted();
-		router.push(href);
+		router.push(`/${orgSlug}${path}`);
 	};
 
 	return (
@@ -59,11 +63,11 @@ export function OnboardingFirstValueStep({
 			</div>
 
 			<div className="grid w-full max-w-2xl gap-4 sm:grid-cols-3">
-				{ACTION_CARDS.map(({ key, icon: Icon, href, color, bgColor }) => (
+				{ACTION_CARDS.map(({ key, icon: Icon, path, color, bgColor }) => (
 					<Card
 						key={key}
 						className="cursor-pointer transition-all hover:shadow-md hover:-translate-y-0.5"
-						onClick={() => handleCardClick(href)}
+						onClick={() => handleCardClick(path)}
 					>
 						<CardHeader>
 							<div

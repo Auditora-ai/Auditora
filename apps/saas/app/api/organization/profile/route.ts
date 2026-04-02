@@ -24,6 +24,7 @@ async function getOrgId() {
 }
 
 const updateProfileSchema = z.object({
+	companyName: z.string().nullable().optional(),
 	industry: z.string().nullable().optional(),
 	businessModel: z.string().nullable().optional(),
 	operationsProfile: z.string().nullable().optional(),
@@ -58,11 +59,12 @@ export async function PUT(request: NextRequest) {
 	if (!parsed.success) {
 		return NextResponse.json({ error: "Invalid input", details: parsed.error.flatten() }, { status: 400 });
 	}
-	const { industry, businessModel, operationsProfile, employeeCount, notes } = parsed.data;
+	const { companyName, industry, businessModel, operationsProfile, employeeCount, notes } = parsed.data;
 
 	const updated = await db.organization.update({
 		where: { id: orgId },
 		data: {
+			...(companyName !== undefined ? { name: companyName } : {}),
 			industry: industry || null,
 			businessModel: businessModel || null,
 			operationsProfile: operationsProfile || null,
@@ -70,6 +72,7 @@ export async function PUT(request: NextRequest) {
 			notes: notes || null,
 		},
 		select: {
+			name: true,
 			industry: true,
 			businessModel: true,
 			operationsProfile: true,

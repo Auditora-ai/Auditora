@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200" width="800" height="200" fill="none">
+  <!-- Concept 6A: Pure Wordmark — "auditora" in custom letter-spaced Geist-style
+       Lowercase, tight tracking, heavy weight.
+       The dot on the "i" is replaced by the #00E5C0 accent.
+       ".ai" is teal, the rest is white.
+       NO icon. The typography IS the logo.
+       Think: stripe, linear, notion approach. -->
+  
+  <rect width="800" height="200" fill="#0A1428"/>
+  
+  <!-- "auditora" in white, ".ai" in teal -->
+  <text x="40" y="135" 
+        font-family="'Geist', 'Inter', system-ui, -apple-system, sans-serif" 
+        font-size="88" font-weight="800" letter-spacing="-3" fill="white">
+    auditora<tspan fill="#00E5C0" font-weight="400">.ai</tspan>
+  </text>
+</svg>
