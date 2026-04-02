@@ -48,7 +48,7 @@ export function HowItWorks() {
 					whileInView={{ opacity: 1, y: 0 }}
 					viewport={{ once: true, margin: "-40px" }}
 					transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
-					className="mb-14 max-w-2xl mx-auto"
+					className="mb-14 max-w-2xl mx-auto hidden md:block"
 					aria-hidden="true"
 				>
 					<ProcessDiscoveryFlow loopMs={7500} />

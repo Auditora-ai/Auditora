@@ -89,7 +89,7 @@ export function CredibilitySection() {
 						transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
 						className="flex flex-col items-center gap-4"
 					>
-						<RiskRadarChart />
+						<div className="hidden md:block"><RiskRadarChart /></div>
 						<p className="text-center text-xs text-white/30 max-w-[260px] leading-relaxed">
 							{t("home.credibility.radarCaption")}
 						</p>

@@ -120,12 +120,12 @@ export function FeaturesBento() {
 								</p>
 								{feature.id === "feature3" && (
 									<div className="mt-4 rounded-xl bg-white/[0.03] border border-white/[0.06] p-3 max-w-[280px]">
-										<FmeaHeatmap className="opacity-80" />
+										<div className="hidden sm:block"><FmeaHeatmap className="opacity-80" /></div>
 									</div>
 								)}
 								{feature.id === "feature6" && (
 									<div className="mt-5">
-										<SopGeneration loopMs={6000} />
+										<div className="hidden sm:block"><SopGeneration loopMs={6000} /></div>
 									</div>
 								)}
 							</motion.div>
