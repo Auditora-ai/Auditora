@@ -50,14 +50,14 @@
 | Issue | Depende de | Status | Fecha |
 |---|---|---|---|
 | #6 F1-04: Fusionar Procedures+Riesgos | #2 | **DONE** | 2026-04-02 | M ✓ 8 proc + 15 risk components → process-library. Old modules deleted. NavBar: scan(1)→proc(2)→eval(3)→pan(4). `tsc --noEmit` limpio. |
-| #8 F1-06: Onboarding wizard | #7 | PENDING | — |
-| #10 F1-08: Fusionar evaluation | #4 | PENDING | — |
-| #12 F1-10: UsageDashboard | #7 | PENDING | — |
+| #8 F1-06: Onboarding wizard | #7 | **DONE** | 2026-04-02 | L ✓ 4-step wizard: Account → Company (industry, size, eval target) → First Value (3 action cards) → Setup Complete. react-hook-form + zod. Translations: en, es, fr, de. `pnpm build` passes. |
+| #10 F1-08: Fusionar evaluation | #4 | **DONE** | 2026-04-02 | M ✓ Merged /evaluation dashboard into /evaluaciones with tab switcher (Catalog | Risk Dashboard). /evaluation redirects to /evaluaciones?tab=dashboard. `pnpm build` passes. |
+| #12 F1-10: UsageDashboard | #7 | **DONE** | 2026-04-02 | M ✓ UsageDashboard shows 5 metrics (evaluations, evaluators, processes, sessions, reports) grouped by category. New API /api/organizations/[orgId]/usage. Server helper packages/payments/lib/usage.ts. `pnpm build` passes. |
 
 ### Wave 3 (dependen de Wave 2)
 | Issue | Depende de | Status | Fecha |
 |---|---|---|---|
-| #11 F1-09: Absorber deliverables | #4, #6 | PENDING | — |
+| #11 F1-09: Absorber deliverables | #4, #6 | **DONE** | 2026-04-02 | S ✓ All /deliverables/* routes redirect to /processes. Sub-pages (risks, raci, process-cards, process-map, horizontal-view) redirected. API routes kept for backward compat. |
 | #9 F1-07: Refactorizar NavBar | #3, #4, #6 | PENDING | — |
 
 ### Wave 4 (último, sincroniza todo)
