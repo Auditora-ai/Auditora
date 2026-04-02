@@ -282,6 +282,49 @@
         "2": "Einarbeitungszeit"
       },
       "savings": "durchschnittliche jährliche Einsparungen durch reduzierte Betriebsfehler"
+    },
+    "pillars": {
+      "label": "So funktioniert's",
+      "title": "Drei Säulen, ein System",
+      "subtitle": "Erfassen Sie, was die Leute wirklich tun. Dokumentieren Sie es, damit alle folgen. Bewerten Sie, um zu beweisen, dass es funktioniert.",
+      "capture": {
+        "title": "Erfassen",
+        "hook": "Echte Prozesse aufzeichnen, nicht idealisierte",
+        "description": "KI hört zu, wie Ihr Team tatsächlich arbeitet — Meetings, Rundgänge, Interviews — und extrahiert den echten Prozess, nicht den aus dem Handbuch, das niemand liest."
+      },
+      "document": {
+        "title": "Dokumentieren",
+        "hook": "Lebendige Dokumente, die automatisch aktuell bleiben",
+        "description": "Verwandeln Sie erfasste Prozesse in strukturierte, versionierte Dokumentation. BPMN-Diagramme, Schritt-für-Schritt-Anleitungen und Rollenzuweisungen — alles generiert und synchronisiert."
+      },
+      "evaluate": {
+        "title": "Bewerten",
+        "hook": "Harvard-Fallstudien, keine Quiz",
+        "description": "Szenariobasierte Bewertungen, die testen, ob Ihr Team Prozesse wirklich versteht. Keine Multiple-Choice — Situationsbeurteilung, die Lücken aufdeckt."
+      }
+    },
+    "whoItsFor": {
+      "label": "Für wen",
+      "title": "Ihr Team kennt den Schmerz bereits",
+      "subtitle": "Vom CEO über HR bis zum Betrieb — alle spüren die Kosten defekter Prozesse.",
+      "ceo": {
+        "quote": "Ich weiß, dass wir Prozesse haben, aber ich kann nicht überprüfen, ob sie jemand befolgt.",
+        "role": "CEO / Geschäftsführer",
+        "company": "Fertigung, 200+ Mitarbeiter",
+        "pain": "Null Transparenz bei Compliance"
+      },
+      "ops": {
+        "quote": "Jeder neue Mitarbeiter braucht 3 Wochen, um produktiv zu werden, weil nichts richtig dokumentiert ist.",
+        "role": "Betriebsleiter",
+        "company": "Logistik, 150+ Mitarbeiter",
+        "pain": "Einarbeitung dauert ewig"
+      },
+      "hr": {
+        "quote": "Wir verbringen mehr Zeit mit der Erstellung von Schulungsmaterialien als mit der eigentlichen Schulung.",
+        "role": "HR-Manager",
+        "company": "Einzelhandelskette, 500+ Mitarbeiter",
+        "pain": "Schulung ist ein Fass ohne Boden"
+      }
     }
   },
   "newsletter": {

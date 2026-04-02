@@ -310,6 +310,49 @@
         "2": "tiempo de onboarding"
       },
       "savings": "ahorro anual promedio por reducción de errores operativos"
+    },
+    "pillars": {
+      "label": "Cómo funciona",
+      "title": "Tres pilares, un sistema",
+      "subtitle": "Captura lo que la gente realmente hace. Documéntalo para que todos lo sigan. Evalúa para demostrar que funciona.",
+      "capture": {
+        "title": "Capturar",
+        "hook": "Registra procesos reales, no idealizados",
+        "description": "La IA escucha cómo tu equipo realmente trabaja — reuniones, recorridos, entrevistas — y extrae el proceso real, no el del manual que nadie lee."
+      },
+      "document": {
+        "title": "Documentar",
+        "hook": "Documentos vivos que se actualizan automáticamente",
+        "description": "Transforma procesos capturados en documentación estructurada y versionada. Diagramas BPMN, guías paso a paso y asignación de roles — todo generado y sincronizado."
+      },
+      "evaluate": {
+        "title": "Evaluar",
+        "hook": "Evaluaciones tipo caso Harvard, no cuestionarios",
+        "description": "Evaluaciones basadas en escenarios reales que prueban si tu equipo realmente entiende los procesos. No opción múltiple — juicio situacional que revela brechas."
+      }
+    },
+    "whoItsFor": {
+      "label": "Para quién es",
+      "title": "Tu equipo ya tiene el dolor",
+      "subtitle": "Del CEO a RRHH a operaciones — todos sienten el costo de procesos rotos.",
+      "ceo": {
+        "quote": "Sé que tenemos procesos, pero no tengo forma de verificar si alguien realmente los sigue.",
+        "role": "CEO / Director General",
+        "company": "Manufactura, 200+ empleados",
+        "pain": "Cero visibilidad sobre cumplimiento"
+      },
+      "ops": {
+        "quote": "Cada nuevo empleado tarda 3 semanas en ser productivo porque nada está documentado correctamente.",
+        "role": "Director de Operaciones",
+        "company": "Logística, 150+ empleados",
+        "pain": "El onboarding toma una eternidad"
+      },
+      "hr": {
+        "quote": "Pasamos más tiempo creando materiales de capacitación que realmente capacitando personas.",
+        "role": "Gerente de RRHH",
+        "company": "Cadena retail, 500+ empleados",
+        "pain": "La capacitación es un agujero negro"
+      }
     }
   },
   "tools": {

@@ -310,6 +310,49 @@
         "2": "onboarding time"
       },
       "savings": "average annual savings from reduced operational errors"
+    },
+    "pillars": {
+      "label": "How it works",
+      "title": "Three pillars, one system",
+      "subtitle": "Capture what people actually do. Document it so everyone follows. Evaluate to prove it works.",
+      "capture": {
+        "title": "Capture",
+        "hook": "Record real processes, not idealized ones",
+        "description": "AI listens to how your team actually works — meetings, walkthroughs, interviews — and extracts the real process, not the one in the manual nobody reads."
+      },
+      "document": {
+        "title": "Document",
+        "hook": "Living docs that stay current automatically",
+        "description": "Transform captured processes into structured, versioned documentation. BPMN diagrams, step-by-step guides, and role assignments — all generated and kept in sync."
+      },
+      "evaluate": {
+        "title": "Evaluate",
+        "hook": "Harvard-style case evaluations, not quizzes",
+        "description": "Real scenario-based assessments that test whether your team truly understands processes. Not multiple choice — situational judgment that reveals gaps."
+      }
+    },
+    "whoItsFor": {
+      "label": "Who it's for",
+      "title": "Your team already has the pain",
+      "subtitle": "From the CEO to HR to operations — everyone feels the cost of broken processes.",
+      "ceo": {
+        "quote": "I know we have processes, but I have no way to verify if anyone actually follows them.",
+        "role": "CEO / General Manager",
+        "company": "Manufacturing, 200+ employees",
+        "pain": "Zero visibility into compliance"
+      },
+      "ops": {
+        "quote": "Every new hire takes 3 weeks to get productive because nothing is documented properly.",
+        "role": "Operations Director",
+        "company": "Logistics, 150+ employees",
+        "pain": "Onboarding takes forever"
+      },
+      "hr": {
+        "quote": "We spend more time creating training materials than actually training people.",
+        "role": "HR Manager",
+        "company": "Retail chain, 500+ employees",
+        "pain": "Training is a black hole"
+      }
     }
   },
   "tools": {

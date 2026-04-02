@@ -282,6 +282,49 @@
         "2": "temps d'intégration"
       },
       "savings": "économies annuelles moyennes grâce à la réduction des erreurs opérationnelles"
+    },
+    "pillars": {
+      "label": "Comment ça marche",
+      "title": "Trois piliers, un système",
+      "subtitle": "Capturez ce que les gens font vraiment. Documentez pour que tout le monde suive. Évaluez pour prouver que ça marche.",
+      "capture": {
+        "title": "Capturer",
+        "hook": "Enregistrez les vrais processus, pas les idéalisés",
+        "description": "L'IA écoute comment votre équipe travaille réellement — réunions, visites, entretiens — et extrait le vrai processus, pas celui du manuel que personne ne lit."
+      },
+      "document": {
+        "title": "Documenter",
+        "hook": "Des documents vivants, toujours à jour",
+        "description": "Transformez les processus capturés en documentation structurée et versionnée. Diagrammes BPMN, guides étape par étape et attribution de rôles — tout est généré et synchronisé."
+      },
+      "evaluate": {
+        "title": "Évaluer",
+        "hook": "Évaluations de type cas Harvard, pas des quiz",
+        "description": "Des évaluations basées sur des scénarios réels qui testent si votre équipe comprend vraiment les processus. Pas de QCM — un jugement situationnel qui révèle les lacunes."
+      }
+    },
+    "whoItsFor": {
+      "label": "Pour qui",
+      "title": "Votre équipe connaît déjà la douleur",
+      "subtitle": "Du PDG aux RH en passant par les opérations — tout le monde ressent le coût des processus défaillants.",
+      "ceo": {
+        "quote": "Je sais que nous avons des processus, mais je n'ai aucun moyen de vérifier si quelqu'un les suit vraiment.",
+        "role": "PDG / Directeur Général",
+        "company": "Industrie, 200+ employés",
+        "pain": "Zéro visibilité sur la conformité"
+      },
+      "ops": {
+        "quote": "Chaque nouvel employé met 3 semaines à devenir productif parce que rien n'est correctement documenté.",
+        "role": "Directeur des Opérations",
+        "company": "Logistique, 150+ employés",
+        "pain": "L'intégration prend une éternité"
+      },
+      "hr": {
+        "quote": "Nous passons plus de temps à créer des supports de formation qu'à réellement former les gens.",
+        "role": "Responsable RH",
+        "company": "Chaîne de distribution, 500+ employés",
+        "pain": "La formation est un gouffre"
+      }
     }
   },
   "newsletter": {
