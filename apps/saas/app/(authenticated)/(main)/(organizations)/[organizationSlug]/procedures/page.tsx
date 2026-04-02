@@ -2,7 +2,7 @@ import { getActiveOrganization } from "@auth/lib/server";
 import { db } from "@repo/database";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { ProcedureList } from "@procedures/components/ProcedureList";
+import { ProcedureList } from "@process-library/components/procedures/ProcedureList";
 
 export async function generateMetadata() {
 	return { title: "Procedimientos" };

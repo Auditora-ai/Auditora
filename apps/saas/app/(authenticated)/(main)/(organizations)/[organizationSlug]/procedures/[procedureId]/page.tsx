@@ -1,8 +1,8 @@
 import { getActiveOrganization } from "@auth/lib/server";
 import { db } from "@repo/database";
 import { notFound } from "next/navigation";
-import { ProcedureWorkspace } from "@procedures/components/ProcedureWorkspace";
-import type { ProcedureData } from "@procedures/components/ProcedureWorkspace";
+import { ProcedureWorkspace } from "@process-library/components/procedures/ProcedureWorkspace";
+import type { ProcedureData } from "@process-library/components/procedures/ProcedureWorkspace";
 
 export async function generateMetadata({
 	params,
