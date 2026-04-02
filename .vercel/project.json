@@ -6,9 +6,9 @@
     "createdAt": 1775085071721,
     "framework": "nextjs",
     "devCommand": null,
-    "installCommand": "pnpm install --frozen-lockfile",
-    "buildCommand": "pnpm --filter marketing build",
-    "outputDirectory": "apps/marketing/.next",
+    "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
+    "buildCommand": "cd ../.. && pnpm --filter marketing build",
+    "outputDirectory": ".next",
     "rootDirectory": ".",
     "directoryListing": false,
     "nodeVersion": "24.x"

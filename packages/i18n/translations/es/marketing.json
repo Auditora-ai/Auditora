@@ -244,6 +244,22 @@
 				"logistics": "Logística y Transporte"
 			}
 		},
+		"metrics": {
+			"badge": "Resultados",
+			"title": "Impacto medible desde el primer día",
+			"metric1": {
+				"label": "Más rápido que métodos tradicionales"
+			},
+			"metric2": {
+				"label": "Cobertura de procesos"
+			},
+			"metric3": {
+				"label": "Elementos SIPOC identificados"
+			},
+			"metric4": {
+				"label": "Frameworks integrados"
+			}
+		},
 		"tools": {
 			"title": "Herramientas IA Gratis para Profesionales de Procesos",
 			"subtitle": "La misma IA que analiza tu negocio, ahora como herramientas independientes. Sin registro.",

@@ -2,7 +2,13 @@ import { Resend } from "resend";
 import { config } from "../config";
 import type { SendEmailHandler } from "../types";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function createResendClient() {
+	const key = process.env.RESEND_API_KEY;
+	if (!key) {
+		return null;
+	}
+	return new Resend(key);
+}
 
 export const send: SendEmailHandler = async ({
 	to,
@@ -14,6 +20,11 @@ export const send: SendEmailHandler = async ({
 	html,
 	text,
 }) => {
+	const resend = createResendClient();
+	if (!resend) {
+		console.warn("RESEND_API_KEY is not set. Email sending is disabled.");
+		return;
+	}
 	await resend.emails.send({
 		from: from ?? config.mailFrom,
 		to: [to],

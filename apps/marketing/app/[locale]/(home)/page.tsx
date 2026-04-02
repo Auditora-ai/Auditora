@@ -3,6 +3,8 @@ import { CtaSection } from "@home/components/CtaSection";
 import { DeepDiveSection } from "@home/components/DeepDiveSection";
 import { FaqSection } from "@home/components/FaqSection";
 import { HeroSection } from "@home/components/HeroSection";
+import { LogoBar } from "@home/components/LogoBar";
+import { MetricsSection } from "@home/components/MetricsSection";
 import { PlatformFeaturesSection } from "@home/components/PlatformFeaturesSection";
 import { PricingSection } from "@home/components/PricingSection";
 import { ProblemSection } from "@home/components/ProblemSection";
@@ -22,6 +24,8 @@ export default async function Home({
 	return (
 		<div data-landing>
 			<HeroSection />
+			<LogoBar />
+			<MetricsSection />
 			<ProblemSection />
 			<SolutionSection />
 			<TryItSection />
