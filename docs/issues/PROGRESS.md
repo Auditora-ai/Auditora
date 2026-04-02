@@ -1,8 +1,8 @@
 # Auditora.ai — Progreso de Ejecución
 
-**Última actualización:** 2026-04-03 (PM Cycle — Phase 2 Progress Check)
+**Última actualización:** 2026-04-03 (PM Cycle — Phase 2 COMPLETE ✅)
 **PM:** Hermes Agent #03
-**Estado:** Fase 1 COMPLETE ✅ — Fase 2 IN PROGRESS (3/5 done, 2 pending)
+**Estado:** Fase 1 COMPLETE ✅ — Fase 2 COMPLETE ✅ (5/5 done) — Ready for Fase 3
 
 ---
 
@@ -145,8 +145,8 @@
 | #15 F2-02: Generación automática de escenarios | **DONE** ✅ | 2026-04-02 | GenerateEvaluationDialog (239 lines) wired into ProcessDetailView. Role selector (9 roles), risk picker (top 5 auto-selected), POSTs to /api/evaluaciones/generate. |
 | #14 F2-01: Scan free tier rebuild | **DONE** ✅ | 2026-04-02 | Theatrical progressive reveal (staggered 200ms-1800ms), shareable links (7-day tokens via /api/public/scan/share), CTA registration form for anonymous users, SharedScanResults page. Schema: shareToken + shareExpiresAt on AnonymousSession. |
 | #41 F2-03: Panorama dashboard evaluaciones | **DONE** ✅ | 2026-04-03 | 4 KPI cards (org score, evaluations completed, members evaluated, completion rate), dimension progress bars (alignment, control, criterio), score trend sparkline. Data fetched server-side in parallel. |
-| #17 F2-04: Before/after metrics | **PENDING** | — | ScoreTrendChart exists but no dedicated "Progress" comparison view (first vs latest scores). Needs: comparison cards, delta indicators, per-process improvement tracking. |
-| #18 F2-05: Reportes exportables | **PENDING** | — | human-risk-report-generator.ts exists (HTML report). Needs: branded PDF export for evaluation results with per-person breakdowns, suitable for board presentations. |
+| #17 F2-04: Before/after metrics | **DONE** ✅ | 2026-04-03 | ProgressDashboard (409 lines) with DeltaBadge, per-process & per-member improvement tracking, DimensionTrendChart. Wired into EvaluacionesTabs as "Progress" tab. First vs latest score comparison with delta indicators. |
+| #18 F2-05: Reportes exportables | **DONE** ✅ | 2026-04-03 | Enhanced human-risk-report-generator (834 lines) with executive insights, inline SVG score trend charts, progress/improvement section, training recommendations. API route `/api/evaluation/export-report` serves branded HTML report. Session review export (303 lines) at `/api/sessions/[id]/export/review`. |
 
 ## Fase 3 — Crecimiento (pendiente Fase 2)
 | Issue | Status |
