@@ -1,5 +1,6 @@
 {
   "pricing": {
+    "badge": "Precios",
     "title": "Precios simples. Evaluaciones que escalan con tu equipo.",
     "subtitle": "Todos los planes incluyen 14 días de prueba gratuita. Sin tarjeta de crédito.",
     "monthly": "Mensual",
@@ -25,6 +26,7 @@
     "evaluationsRemaining": "{count} evaluaciones restantes este mes.",
     "evaluationsAvailable": "{count} evaluaciones disponibles.",
     "resetDate": "Se reinicia el {date}",
+    "trialNote": "Todos los planes incluyen 14 días de prueba gratis. Sin tarjeta de crédito.",
     "metricProcesses": "procesos",
     "metricEvaluations": "eval/mes",
     "metricEvaluators": "evaluadores",

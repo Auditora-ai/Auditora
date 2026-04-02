@@ -21,6 +21,14 @@ const PLAN_METRICS = {
 	enterprise: { processes: "∞", evaluations: "∞", evaluators: "∞" },
 } as const;
 
+type MetricKey = "processes" | "evaluations" | "evaluators";
+
+const METRIC_TRANSLATION_KEYS: Record<MetricKey, string> = {
+	processes: "pricing.metricProcesses",
+	evaluations: "pricing.metricEvaluations",
+	evaluators: "pricing.metricEvaluators",
+} as const;
+
 const PLAN_STYLES = {
 	starter: {
 		card: "border-white/[0.08] bg-white/[0.03]",
@@ -87,7 +95,7 @@ export function PricingSection() {
 				>
 					<div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#00E5C0]/30 bg-[#00E5C0]/10 px-4 py-1.5">
 						<ZapIcon className="size-3.5 text-[#00E5C0]" strokeWidth={2} />
-						<span className="badge-pulse text-xs font-medium uppercase tracking-widest text-[#00E5C0]">Pricing</span>
+						<span className="badge-pulse text-xs font-medium uppercase tracking-widest text-[#00E5C0]">{t("pricing.badge")}</span>
 					</div>
 					<h2 className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-white max-w-3xl mx-auto text-center leading-tight">
 						{t("pricing.title")}
@@ -128,9 +136,26 @@ export function PricingSection() {
 									isRecommended && "lg:-mt-3 lg:mb-3",
 								)}
 							>
-								{/* Animated gradient border for growth */}
+								{/* Animated glow ring for recommended plan */}
 								{isRecommended && (
-									<div className="pointer-events-none absolute inset-0 rounded-2xl border-glow" />
+									<>
+										<div className="pointer-events-none absolute inset-0 rounded-2xl border-glow" />
+										<motion.div
+											animate={{
+												boxShadow: [
+													"0 0 15px 2px rgba(0, 229, 192, 0.15)",
+													"0 0 25px 6px rgba(0, 229, 192, 0.25)",
+													"0 0 15px 2px rgba(0, 229, 192, 0.15)",
+												],
+											}}
+											transition={{
+												duration: 3,
+												repeat: Infinity,
+												ease: "easeInOut",
+											}}
+											className="pointer-events-none absolute -inset-[1px] rounded-2xl"
+										/>
+									</>
 								)}
 
 								{isRecommended && (
@@ -166,16 +191,16 @@ export function PricingSection() {
 									</div>
 
 									<div className="mt-4 flex flex-wrap gap-2">
-										{Object.entries(metrics).map(([key, val]) => (
+										{(Object.entries(metrics) as [MetricKey, string][]).map(([key, val]) => (
 											<span key={key} className="inline-flex items-center rounded-md bg-white/[0.06] px-2.5 py-1 text-xs text-[#94A3B8]">
-												{val} {key === "processes" ? t("pricing.metricProcesses") : key === "evaluations" ? t("pricing.metricEvaluations") : t("pricing.metricEvaluators")}
+												{val} {t(METRIC_TRANSLATION_KEYS[key])}
 											</span>
 										))}
 									</div>
 
 									<ul className="mt-6 flex-1 space-y-2.5">
-										{featureList.map((feature, key) => (
-											<li key={key} className="flex items-start gap-2.5 text-sm">
+										{featureList.map((feature, idx) => (
+											<li key={idx} className="flex items-start gap-2.5 text-sm">
 												<CheckIcon className="mt-0.5 size-4 shrink-0 text-[#00E5C0]" />
 												<span className="text-white/70 leading-snug">{feature}</span>
 											</li>
@@ -208,6 +233,17 @@ export function PricingSection() {
 						);
 					})}
 				</motion.div>
+
+				{/* Trial note */}
+				<motion.p
+					initial={{ opacity: 0, y: 12 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					viewport={{ once: true, margin: "-20px" }}
+					transition={{ duration: 0.5, delay: 0.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+					className="mt-8 text-center text-sm text-[#64748B]"
+				>
+					{t("pricing.trialNote")}
+				</motion.p>
 			</div>
 		</section>
 	);
