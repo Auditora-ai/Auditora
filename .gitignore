@@ -45,3 +45,4 @@ dist/
 .prisma-zod-generator-manifest.json
 .gstack/
 supabase/.temp/
+.pm-config
