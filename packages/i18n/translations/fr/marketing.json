@@ -78,7 +78,9 @@
         "subtitle": "Vos clients ont des processus critiques que personne n'a cartographiés. Auditora.ai les découvre : élicitation SIPOC guidée par IA, diagrammes BPMN 2.0 automatiques et matrice AMDEC avec évaluation de la gravité. En une fraction du temps.",
         "cta": "Voir le diagnostic de mon entreprise",
         "subtext": "Entrez votre URL d'entreprise. Recevez une carte de processus et une analyse de risques en minutes — sans inscription, sans engagement."
-      }
+      },
+      "trust": "Pas de carte de crédit requise · Gratuit pour commencer · Résultats en minutes",
+      "standards": "ISO 9001 · SOC 2 · Conforme RGPD"
     },
     "problem": {
       "badge": "Le problème",

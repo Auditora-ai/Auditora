@@ -79,7 +79,9 @@
       "inputPlaceholder": "yourcompany.com",
       "cta": "Scan any company free",
       "ctaSecondary": "Describe the process manually",
-      "subtext": "No signup required. Enter a URL and get a SIPOC map + risk assessment in 2 minutes."
+      "subtext": "No signup required. Enter a URL and get a SIPOC map + risk assessment in 2 minutes.",
+      "trust": "No credit card required · Free to start · Results in minutes",
+      "standards": "ISO 9001 · SOC 2 · GDPR Compliant"
     },
     "trustBar": {
       "subtitle": "Built on recognized standards",

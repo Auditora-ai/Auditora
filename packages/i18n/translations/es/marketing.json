@@ -79,7 +79,9 @@
       "inputPlaceholder": "tuempresa.com",
       "cta": "Analizar cualquier empresa gratis",
       "ctaSecondary": "Describir el proceso manualmente",
-      "subtext": "Sin registro. Ingresa una URL y obtén un mapa SIPOC + evaluacion de riesgos en 2 minutos."
+      "subtext": "Sin registro. Ingresa una URL y obtén un mapa SIPOC + evaluacion de riesgos en 2 minutos.",
+      "trust": "Sin tarjeta de crédito · Gratis para empezar · Resultados en minutos",
+      "standards": "ISO 9001 · SOC 2 · Cumple GDPR"
     },
     "trustBar": {
       "subtitle": "Construido sobre estandares reconocidos",

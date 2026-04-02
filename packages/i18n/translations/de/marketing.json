@@ -78,7 +78,9 @@
         "subtitle": "Ihre Kunden haben kritische Prozesse, die niemand kartiert hat. Auditora.ai entdeckt sie: KI-geführte SIPOC-Erhebung, automatische BPMN 2.0-Diagramme und FMEA-Matrix mit Schweregradbeurteilung. In einem Bruchteil der Zeit.",
         "cta": "Diagnose meines Unternehmens ansehen",
         "subtext": "Geben Sie Ihre Unternehmens-URL ein. Erhalten Sie eine Prozesskarte und Risikoanalyse in Minuten — ohne Anmeldung, ohne Verpflichtung."
-      }
+      },
+      "trust": "Keine Kreditkarte erforderlich · Kostenlos starten · Ergebnisse in Minuten",
+      "standards": "ISO 9001 · SOC 2 · DSGVO-konform"
     },
     "problem": {
       "badge": "Das Problem",
