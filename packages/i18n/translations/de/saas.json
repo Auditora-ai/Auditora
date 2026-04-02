@@ -305,7 +305,10 @@
 			"evaluationTargetPlaceholder": "Bereich wählen",
 			"concernProcess": "Welcher Prozess bereitet dir die größten Sorgen?",
 			"concernProcessPlaceholder": "z.B. Bestellungen, Qualitätskontrolle...",
-			"concernProcessOptional": "Optional — hilft uns, den Einstieg zu empfehlen"
+			"concernProcessOptional": "Optional — hilft uns, den Einstieg zu empfehlen",
+			"industries": {"manufacturing": "Fertigung", "healthcare": "Gesundheitswesen", "finance": "Finanzen und Bankwesen", "technology": "Technologie", "retail": "Einzelhandel und E-Commerce", "logistics": "Logistik und Lieferkette", "construction": "Bauwesen", "education": "Bildung", "government": "Regierung", "food": "Lebensmittel und Getränke", "energy": "Energie und Versorgung", "other": "Sonstiges"},
+			"sizes": {"10-50": "10–50 Mitarbeiter", "51-200": "51–200 Mitarbeiter", "201-500": "201–500 Mitarbeiter", "501-1000": "501–1000 Mitarbeiter"},
+			"targets": {"5": "5 Personen", "10-30": "10–30 Personen", "31-100": "31–100 Personen", "100+": "100+ Personen"}
 		},
 		"firstValue": {
 			"title": "Starte mit ersten Ergebnissen",
@@ -1754,5 +1757,13 @@
 	"deliverables": {
 		"noOwner": "Kein Eigentümer",
 		"noDepartment": "Keine Abteilung"
+	},
+	"evaluaciones": {
+		"pageDescription": "Harvard-Fallbewertungen basierend auf Ihren realen Prozessen und Risiken.",
+		"tabs": {
+			"label": "Bewertungsnavigation",
+			"catalog": "Katalog",
+			"dashboard": "Risiko-Dashboard"
+		}
 	}
 }

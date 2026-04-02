@@ -46,13 +46,21 @@ export function EvaluacionesTabs({
 	return (
 		<div>
 			{/* Tab bar */}
-			<div className="flex items-center gap-1 rounded-lg border border-border/50 bg-muted/30 p-1">
+			<div
+				role="tablist"
+				aria-label={t("evaluaciones.tabs.label")}
+				className="flex items-center gap-1 rounded-lg border border-border/50 bg-muted/30 p-1"
+			>
 				{TABS.map((tab) => {
 					const isActive = activeTab === tab.id;
 					return (
 						<button
 							key={tab.id}
 							type="button"
+							role="tab"
+							aria-selected={isActive}
+							aria-controls={`tabpanel-${tab.id}`}
+							id={`tab-${tab.id}`}
 							onClick={() => handleTabChange(tab.id)}
 							className={cn(
 								"flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors",
@@ -69,7 +77,12 @@ export function EvaluacionesTabs({
 			</div>
 
 			{/* Tab content */}
-			<div className="mt-6">
+			<div
+				role="tabpanel"
+				id={`tabpanel-${activeTab}`}
+				aria-labelledby={`tab-${activeTab}`}
+				className="mt-6"
+			>
 				{activeTab === "catalog" && catalogContent}
 				{activeTab === "dashboard" && (
 					<HumanRiskDashboard

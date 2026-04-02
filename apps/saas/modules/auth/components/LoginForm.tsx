@@ -47,11 +47,13 @@ const formSchema = z.union([
 	z.object({
 		mode: z.literal("magic-link"),
 		email: z.email(),
+		rememberMe: z.boolean().optional(),
 	}),
 	z.object({
 		mode: z.literal("password"),
 		email: z.email(),
 		password: z.string().min(1),
+		rememberMe: z.boolean().optional(),
 	}),
 ]);
 
@@ -72,7 +74,8 @@ export function LoginForm() {
 		defaultValues: {
 			email: email ?? "",
 			password: "",
-			mode: authConfig.enablePasswordLogin ? "password" : "magic-link",
+			mode: authConfig.enablePasswordLogin ? "password": "***",
+			rememberMe: true,
 		},
 	});
 
@@ -90,7 +93,9 @@ export function LoginForm() {
 		try {
 			if (values.mode === "password") {
 				const { data, error } = await authClient.signIn.email({
-					...values,
+					email: values.email,
+					password: values.password,
+					rememberMe: values.rememberMe ?? true,
 				});
 
 				if (error) {
@@ -277,13 +282,17 @@ export function LoginForm() {
 							{authConfig.enablePasswordLogin &&
 								signinMode === "password" && (
 									<div className="flex items-center justify-between">
-										<label className="flex cursor-pointer items-center gap-2 text-sm text-foreground/60">
-											<input
-												type="checkbox"
-												className="size-4 rounded border-border accent-primary"
-											/>
-											{t("auth.login.rememberMe")}
-										</label>
+								<label className="flex cursor-pointer items-center gap-2 text-sm text-foreground/60">
+									<input
+										type="checkbox"
+										className="size-4 rounded border-border accent-primary"
+										checked={form.watch("rememberMe") ?? true}
+										onChange={(e) =>
+											form.setValue("rememberMe", e.target.checked)
+										}
+									/>
+									{t("auth.login.rememberMe")}
+								</label>
 
 										<Link
 											href="/forgot-password"

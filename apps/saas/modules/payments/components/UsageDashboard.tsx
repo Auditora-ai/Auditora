@@ -117,10 +117,20 @@ export function UsageDashboard({
 			try {
 				const res = await fetch(`/api/organizations/${organizationId}/usage`);
 				if (res.ok) {
-					setUsage(await res.json());
+					const data = await res.json();
+					// Basic shape validation before setting state
+					if (
+						data &&
+						typeof data === "object" &&
+						"evaluations" in data &&
+						"evaluators" in data &&
+						"processes" in data
+					) {
+						setUsage(data as UsageData);
+					}
 				}
-			} catch {
-				// Silently fail — usage will show as loading
+			} catch (err) {
+				console.error("[UsageDashboard] Failed to fetch usage:", err);
 			} finally {
 				setLoading(false);
 			}

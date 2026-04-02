@@ -307,7 +307,10 @@
       "evaluationTargetPlaceholder": "Select range",
       "concernProcess": "Which process worries you the most?",
       "concernProcessPlaceholder": "e.g., Purchase orders, Quality control...",
-      "concernProcessOptional": "Optional — helps us suggest where to start"
+      "concernProcessOptional": "Optional — helps us suggest where to start",
+      "industries": {"manufacturing": "Manufacturing", "healthcare": "Healthcare", "finance": "Finance & Banking", "technology": "Technology", "retail": "Retail & E-commerce", "logistics": "Logistics & Supply Chain", "construction": "Construction", "education": "Education", "government": "Government", "food": "Food & Beverage", "energy": "Energy & Utilities", "other": "Other"},
+      "sizes": {"10-50": "10–50 employees", "51-200": "51–200 employees", "201-500": "201–500 employees", "501-1000": "501–1000 employees"},
+      "targets": {"5": "5 people", "10-30": "10–30 people", "31-100": "31–100 people", "100+": "100+ people"}
     },
     "firstValue": {
       "title": "Start getting value",
@@ -1870,6 +1873,7 @@
   "evaluaciones": {
     "pageDescription": "Harvard-style case evaluations generated from your real processes and risks.",
     "tabs": {
+      "label": "Evaluations navigation",
       "catalog": "Catalog",
       "dashboard": "Risk Dashboard"
     }

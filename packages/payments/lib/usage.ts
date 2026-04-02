@@ -47,29 +47,25 @@ function getBillingCycleStart(billingCycleAnchor: Date | null): Date {
 async function getOrgPlanLimits(
 	organizationId: string,
 ): Promise<PlanLimits | null> {
-	const subscriptionPurchase = await db.purchase.findFirst({
-		where: {
-			organizationId,
-			type: "SUBSCRIPTION",
-		},
-		orderBy: { createdAt: "desc" },
-	});
+	// Fetch both purchase types in parallel
+	const [subscriptionPurchase, oneTimePurchase] = await Promise.all([
+		db.purchase.findFirst({
+			where: { organizationId, type: "SUBSCRIPTION" },
+			orderBy: { createdAt: "desc" },
+		}),
+		db.purchase.findFirst({
+			where: { organizationId, type: "ONE_TIME" },
+			orderBy: { createdAt: "desc" },
+		}),
+	]);
 
+	// Prefer subscription over one-time
 	if (subscriptionPurchase) {
 		const planId = getPlanIdByProviderPriceId(subscriptionPurchase.priceId);
 		if (planId && planId in config.plans) {
 			return getPlanLimits(planId);
 		}
 	}
-
-	// Check for one-time purchase
-	const oneTimePurchase = await db.purchase.findFirst({
-		where: {
-			organizationId,
-			type: "ONE_TIME",
-		},
-		orderBy: { createdAt: "desc" },
-	});
 
 	if (oneTimePurchase) {
 		const planId = getPlanIdByProviderPriceId(oneTimePurchase.priceId);
@@ -112,45 +108,45 @@ export async function getOrganizationUsage(
 		organization.billingCycleAnchor,
 	);
 
-	// Get plan limits
-	const limits = await getOrgPlanLimits(organizationId);
-
-	// Evaluations: count completed SimulationRuns within billing cycle
-	const evaluationsUsed = await db.simulationRun.count({
-		where: {
-			scenario: {
-				template: {
-					organizationId,
+	// Run independent queries in parallel
+	const [limits, evaluationsUsed, evaluatorRows, processesUsed] =
+		await Promise.all([
+			getOrgPlanLimits(organizationId),
+			// Evaluations: count completed SimulationRuns within billing cycle
+			db.simulationRun.count({
+				where: {
+					scenario: {
+						template: {
+							organizationId,
+						},
+					},
+					status: "COMPLETED",
+					createdAt: { gte: billingCycleStart },
 				},
-			},
-			status: "COMPLETED",
-			createdAt: { gte: billingCycleStart },
-		},
-	});
-
-	// Evaluators: count distinct users who ran simulations within billing cycle
-	const evaluatorRows = await db.simulationRun.findMany({
-		where: {
-			scenario: {
-				template: {
-					organizationId,
+			}),
+			// Evaluators: count distinct users who ran simulations within billing cycle
+			db.simulationRun.findMany({
+				where: {
+					scenario: {
+						template: {
+							organizationId,
+						},
+					},
+					createdAt: { gte: billingCycleStart },
 				},
-			},
-			createdAt: { gte: billingCycleStart },
-		},
-		select: { userId: true },
-		distinct: ["userId"],
-	});
-
-	// Processes: count top-level ProcessDefinitions (no parent)
-	const processesUsed = await db.processDefinition.count({
-		where: {
-			architecture: {
-				organizationId,
-			},
-			parentId: null,
-		},
-	});
+				select: { userId: true },
+				distinct: ["userId"],
+			}),
+			// Processes: count top-level ProcessDefinitions (no parent)
+			db.processDefinition.count({
+				where: {
+					architecture: {
+						organizationId,
+					},
+					parentId: null,
+				},
+			}),
+		]);
 
 	// Sessions: from organization's sessionCreditsUsed
 	const sessionsUsed = organization.sessionCreditsUsed;

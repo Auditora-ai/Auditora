@@ -25,39 +25,39 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const INDUSTRIES = [
-	{ value: "manufacturing", label: "Manufacturing" },
-	{ value: "healthcare", label: "Healthcare" },
-	{ value: "finance", label: "Finance & Banking" },
-	{ value: "technology", label: "Technology" },
-	{ value: "retail", label: "Retail & E-commerce" },
-	{ value: "logistics", label: "Logistics & Supply Chain" },
-	{ value: "construction", label: "Construction" },
-	{ value: "education", label: "Education" },
-	{ value: "government", label: "Government" },
-	{ value: "food", label: "Food & Beverage" },
-	{ value: "energy", label: "Energy & Utilities" },
-	{ value: "other", label: "Other" },
+	"manufacturing",
+	"healthcare",
+	"finance",
+	"technology",
+	"retail",
+	"logistics",
+	"construction",
+	"education",
+	"government",
+	"food",
+	"energy",
+	"other",
 ] as const;
 
 const COMPANY_SIZES = [
-	{ value: "10-50", label: "10-50 employees" },
-	{ value: "51-200", label: "51-200 employees" },
-	{ value: "201-500", label: "201-500 employees" },
-	{ value: "501-1000", label: "501-1000 employees" },
+	"10-50",
+	"51-200",
+	"201-500",
+	"501-1000",
 ] as const;
 
 const EVALUATION_TARGETS = [
-	{ value: "5", label: "5 people" },
-	{ value: "10-30", label: "10-30 people" },
-	{ value: "31-100", label: "31-100 people" },
-	{ value: "100+", label: "100+ people" },
+	"5",
+	"10-30",
+	"31-100",
+	"100+",
 ] as const;
 
 const formSchema = z.object({
-	companyName: z.string().min(1, "Company name is required"),
-	industry: z.string().min(1, "Industry is required"),
-	companySize: z.string().min(1, "Company size is required"),
-	evaluationTarget: z.string().min(1, "Evaluation target is required"),
+	companyName: z.string().min(1),
+	industry: z.string().min(1),
+	companySize: z.string().min(1),
+	evaluationTarget: z.string().min(1),
 	concernProcess: z.string().optional(),
 });
 
@@ -88,8 +88,9 @@ export function OnboardingCompanyStep({
 			const res = await fetch("/api/organization/profile", {
 				method: "PUT",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					industry: data.industry,
+			body: JSON.stringify({
+				companyName: data.companyName,
+				industry: data.industry,
 					employeeCount: data.companySize,
 					operationsProfile: data.evaluationTarget,
 					notes: data.concernProcess || null,
@@ -162,13 +163,13 @@ export function OnboardingCompanyStep({
 										</SelectTrigger>
 									</FormControl>
 									<SelectContent>
-										{INDUSTRIES.map((ind) => (
-											<SelectItem
-												key={ind.value}
-												value={ind.value}
-											>
-												{ind.label}
-											</SelectItem>
+					{INDUSTRIES.map((value) => (
+						<SelectItem
+							key={value}
+							value={value}
+						>
+							{t(`onboarding.company.industries.${value}`)}
+						</SelectItem>
 										))}
 									</SelectContent>
 								</Select>
@@ -199,13 +200,13 @@ export function OnboardingCompanyStep({
 										</SelectTrigger>
 									</FormControl>
 									<SelectContent>
-										{COMPANY_SIZES.map((size) => (
-											<SelectItem
-												key={size.value}
-												value={size.value}
-											>
-												{size.label}
-											</SelectItem>
+					{COMPANY_SIZES.map((value) => (
+						<SelectItem
+							key={value}
+							value={value}
+						>
+							{t(`onboarding.company.sizes.${value}`)}
+						</SelectItem>
 										))}
 									</SelectContent>
 								</Select>
@@ -236,13 +237,13 @@ export function OnboardingCompanyStep({
 										</SelectTrigger>
 									</FormControl>
 									<SelectContent>
-										{EVALUATION_TARGETS.map((target) => (
-											<SelectItem
-												key={target.value}
-												value={target.value}
-											>
-												{target.label}
-											</SelectItem>
+					{EVALUATION_TARGETS.map((value) => (
+						<SelectItem
+							key={value}
+							value={value}
+						>
+							{t(`onboarding.company.targets.${value}`)}
+						</SelectItem>
 										))}
 									</SelectContent>
 								</Select>

@@ -305,7 +305,10 @@
 			"evaluationTargetPlaceholder": "Sélectionnez la plage",
 			"concernProcess": "Quel processus vous préoccupe le plus ?",
 			"concernProcessPlaceholder": "Ex : Commandes, Contrôle qualité...",
-			"concernProcessOptional": "Facultatif — nous aide à suggérer par où commencer"
+			"concernProcessOptional": "Facultatif — nous aide à suggérer par où commencer",
+			"industries": {"manufacturing": "Industrie manufacturière", "healthcare": "Santé", "finance": "Finance et Banque", "technology": "Technologie", "retail": "Commerce de détail", "logistics": "Logistique et Chaîne d'approvisionnement", "construction": "Construction", "education": "Éducation", "government": "Gouvernement", "food": "Agroalimentaire", "energy": "Énergie et Services publics", "other": "Autre"},
+			"sizes": {"10-50": "10–50 employés", "51-200": "51–200 employés", "201-500": "201–500 employés", "501-1000": "501–1000 employés"},
+			"targets": {"5": "5 personnes", "10-30": "10–30 personnes", "31-100": "31–100 personnes", "100+": "100+ personnes"}
 		},
 		"firstValue": {
 			"title": "Commencez à tirer parti",
@@ -1754,5 +1757,13 @@
 	"deliverables": {
 		"noOwner": "Aucun propriétaire",
 		"noDepartment": "Aucun département"
+	},
+	"evaluaciones": {
+		"pageDescription": "Évaluations de cas de type Harvard générées à partir de vos processus et risques réels.",
+		"tabs": {
+			"label": "Navigation des évaluations",
+			"catalog": "Catalogue",
+			"dashboard": "Tableau de bord des risques"
+		}
 	}
 }

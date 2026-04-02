@@ -19,9 +19,13 @@ export function OnboardingForm() {
 
 	const stepSearchParam = searchParams.get("step");
 	const redirectTo = searchParams.get("redirectTo");
-	const onboardingStep = stepSearchParam
+	const parsedStep = stepSearchParam
 		? Number.parseInt(stepSearchParam, 10)
 		: 1;
+	// Clamp step to valid range (1–4)
+	const onboardingStep = Number.isNaN(parsedStep)
+		? 1
+		: Math.max(1, Math.min(4, parsedStep));
 
 	const setStep = (step: number) => {
 		router.replace(

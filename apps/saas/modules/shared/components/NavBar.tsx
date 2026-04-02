@@ -77,25 +77,25 @@ export function NavBar() {
 	const hasOrg =
 		authConfig.organizations.enable && !!activeOrganization;
 
-// Build badge data
-const processBadge = navData
-	? {
-			text:
-				navData.processStats.total > 0
-					? `${navData.processStats.documented}/${navData.processStats.total}`
-					: undefined,
-			dotColor:
-				navData.processStats.total > 0
-					? navData.processStats.documented /
-							navData.processStats.total >=
-						0.8
-						? ("green" as const)
-						: ("amber" as const)
-					: null,
-		}
-	: undefined;
+	// Build badge data
+	const processBadge = navData
+		? {
+				text:
+					navData.processStats.total > 0
+						? `${navData.processStats.documented}/${navData.processStats.total}`
+						: undefined,
+				dotColor:
+					navData.processStats.total > 0
+						? navData.processStats.documented /
+								navData.processStats.total >=
+							0.8
+							? ("green" as const)
+							: ("amber" as const)
+						: null,
+			}
+		: undefined;
 
-// Derive flow completion from navData
+	// Derive flow completion from navData
 	const hasArchitecture = !!navData && navData.maturityScore > 0;
 	const hasProcesses = !!navData && navData.processStats.total > 0;
 	const hasEvaluation = !!navData && navData.maturityScore >= 40;
