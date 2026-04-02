@@ -64,7 +64,7 @@ export async function PUT(request: NextRequest) {
 	const updated = await db.organization.update({
 		where: { id: orgId },
 		data: {
-			...(companyName !== undefined ? { name: companyName } : {}),
+			...(companyName !== undefined ? { name: companyName ?? undefined } : {}),
 			industry: industry || null,
 			businessModel: businessModel || null,
 			operationsProfile: operationsProfile || null,

@@ -74,7 +74,7 @@ export function LoginForm() {
 		defaultValues: {
 			email: email ?? "",
 			password: "",
-			mode: authConfig.enablePasswordLogin ? "password": "***",
+			mode: authConfig.enablePasswordLogin ? "password" : "magic-link",
 			rememberMe: true,
 		},
 	});
