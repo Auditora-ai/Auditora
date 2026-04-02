@@ -70,6 +70,7 @@ import { useBpmnModeler } from "@meeting/hooks/useBpmnModeler";
 // BpmnIntelligence and BpmnVersionDiff available but not rendered inside canvas
 // to avoid breaking modeler interaction. Activated via toolbar toggles.
 import { ContextChat } from "./ContextChat";
+import { GenerateEvaluationDialog } from "./GenerateEvaluationDialog";
 import { VersionDiff } from "./VersionDiff";
 import {
 	ProcessPhaseDashboard,
@@ -496,15 +497,22 @@ export function ProcessDetailView({
 							Deep Dive
 						</Link>
 					</Button>
-					<Button
-						variant="outline"
-						size="sm"
-						onClick={handleExportReport}
-						loading={exporting}
-					>
-						<FileText className="mr-1.5 h-3.5 w-3.5" />
-						Exportar
-					</Button>
+				{process.risksCount > 0 && (
+					<GenerateEvaluationDialog
+						processId={process.id}
+						processName={process.name}
+						organizationSlug={organizationSlug || ""}
+					/>
+				)}
+				<Button
+					variant="outline"
+					size="sm"
+					onClick={handleExportReport}
+					loading={exporting}
+				>
+					<FileText className="mr-1.5 h-3.5 w-3.5" />
+					Exportar
+				</Button>
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button variant="ghost" size="sm" className="h-8 w-8 p-0">
