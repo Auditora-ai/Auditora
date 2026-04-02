@@ -1,344 +1,378 @@
 {
-  "blog": {
-    "description": "Einblicke in Prozessberatung, BPM-Automatisierung und KI-gestützte Erhebung",
-    "title": "Blog",
-    "back": "Zurück zum Blog"
-  },
-  "changelog": {
-    "description": "Bleiben Sie über die neuesten Änderungen in Auditora.ai auf dem Laufenden.",
-    "title": "Changelog"
-  },
-  "contact": {
-    "description": "Haben Sie Fragen zu Auditora.ai? Wir freuen uns auf Ihre Nachricht.",
-    "form": {
-      "email": "E-Mail",
-      "message": "Nachricht",
-      "name": "Name",
-      "notifications": {
-        "error": "Ihre Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.",
-        "success": "Nachricht gesendet. Wir melden uns innerhalb von 24 Stunden bei Ihnen."
-      },
-      "submit": "Nachricht senden"
-    },
-    "title": "Kontakt"
-  },
-  "documentation": {
-    "title": "Dokumentation"
-  },
-  "faq": {
-    "description": "Antworten auf die häufigsten Fragen zu Auditora.ai.",
-    "title": "Häufig gestellte Fragen",
-    "items": {
-      "urlLimitations": {
-        "question": "Wenn es nur meine öffentliche Website liest, wie kann es echte Risiken identifizieren?",
-        "answer": "Die Erstdiagnose identifiziert strukturelle und logische Risiken basierend auf Branchenmustern und der abgeleiteten Prozessstruktur. Es handelt sich um fundierte Hypothesen, nicht um operative Befunde. Die Präzision der Analyse steigt signifikant bei Nutzung des geführten Gesprächs oder der vollständigen Plattform mit echtem operativem Kontext."
-      },
-      "vsChatgpt": {
-        "question": "Wie unterscheidet sich das von ChatGPT zur Prozessgenerierung?",
-        "answer": "Auditora.ai unterscheidet sich in drei wesentlichen Aspekten. Erstens, Methodik: Jede Sitzung folgt dem SIPOC-Framework mit automatischer Lückenerkennung. Zweitens, Ergebnisse: Die generierten Diagramme sind echtes BPMN 2.0, exportierbar als XML, keine approximativen Darstellungen. Drittens, Persistenz: Prozesse, Risiken und Maßnahmen werden strukturiert gespeichert, verfolgt und weiterentwickelt."
-      },
-      "dataAccess": {
-        "question": "Auf welche Daten meiner Website greifen Sie genau zu?",
-        "answer": "Der Textinhalt von bis zu 5 öffentlichen Seiten wird analysiert: Startseite, Über uns, Leistungen und ähnliche. Derselbe Inhalt, den jeder Besucher im Browser sieht. Kein Zugriff auf interne Systeme, APIs, Datenbanken oder geschützte Bereiche."
-      },
-      "bpmKnowledge": {
-        "question": "Brauche ich BPM- oder BPMN-Kenntnisse, um das Tool zu nutzen?",
-        "answer": "Nein. Auditora.ai ist so konzipiert, dass jeder mit Geschäftskenntnissen es nutzen kann. Die KI formuliert relevante Fragen in zugänglicher Sprache und die technische Notation wird automatisch generiert. Für erfahrene BPM-Berater beschleunigt das Tool den Dokumentationsprozess. Für Personen ohne technische Ausbildung verwaltet die Plattform die methodische Komplexität."
-      },
-      "deepening": {
-        "question": "Kann ich über den Sofortbericht hinaus vertiefen?",
-        "answer": "Ja. Nach der Erstdiagnose kann ein geführtes Gespräch mit der KI gestartet werden. Die Plattform stellt spezifische Fragen zu Abläufen — Lieferanten, Eingaben, Aktivitäten, Ausgaben, Kunden — und erstellt eine progressiv detailliertere Analyse. Das Ergebnis umfasst eine vollständige FMEA mit Fehlermodi und Risikoprioritätszahl (RPN) pro Aktivität."
-      },
-      "dataSecurity": {
-        "question": "Sind meine Daten sicher?",
-        "answer": "Ja. Alle Informationen werden mit TLS-Verschlüsselung übertragen und verschlüsselt im Ruhezustand gespeichert. Anonyme Sitzungen verfallen nach 24 Stunden. Bereitgestellte Informationen werden nicht zum Training von KI-Modellen verwendet. Bei Kontoerstellung werden Daten im privaten Bereich der Organisation mit vollständiger Isolation gespeichert."
-      },
-      "accountMigration": {
-        "question": "Was passiert mit meiner Analyse, wenn ich ein Konto erstelle?",
-        "answer": "Alle während der anonymen Sitzung generierten Informationen — Prozesskarte, Risikoanalyse, geführtes Gespräch und Ergebnisse — werden automatisch ohne Datenverlust auf das Konto übertragen."
-      },
-      "vsProcessMining": {
-        "question": "Ist das Process Mining?",
-        "answer": "Nein. Process Mining analysiert Systemlogs (ERP, CRM), um zu entdecken, wie Prozesse tatsächlich ablaufen. Auditora.ai ist ein erhebungsbasiertes Prozess-Discovery-Tool: Es führt strukturierte Gespräche zur Dokumentation von Prozessen und Analyse von Risiken. Es sind komplementäre Ansätze. Process Mining erfordert Systemdaten; Auditora.ai arbeitet mit menschlichem Wissen."
-      }
-    }
-  },
-  "home": {
-    "hero": {
-      "badge": "KI-gestützte Plattform zur Prozesserkennung",
-      "title": "Prozesserkennung und -analyse mit bewährter Methodik",
-      "subtitle": "Wir kombinieren künstliche Intelligenz mit Standard-Frameworks (SIPOC, BPMN 2.0 und FMEA), um Berater und Auditoren bei der strukturierten Kartierung von Prozessen und Risikobewertung zu unterstützen.",
-      "inputPlaceholder": "https://ihre-firma.de",
-      "cta": "Mein Unternehmen kostenlos analysieren",
-      "ctaSecondary": "Den Prozess manuell beschreiben",
-      "subtext": "Geben Sie eine URL ein. Die KI analysiert den öffentlichen Kontext und erstellt eine Erstdiagnose mit Prozesskarte und Risikoanalyse.",
-      "alt": {
-        "badge": "Das fehlende Werkzeug für Ihre Praxis",
-        "title": "Jeder undokumentierte Prozess ist ein Risiko, das Sie unterschreiben",
-        "subtitle": "Ihre Kunden haben kritische Prozesse, die niemand kartiert hat. Auditora.ai entdeckt sie: KI-geführte SIPOC-Erhebung, automatische BPMN 2.0-Diagramme und FMEA-Matrix mit Schweregradbeurteilung. In einem Bruchteil der Zeit.",
-        "cta": "Diagnose meines Unternehmens ansehen",
-        "subtext": "Geben Sie Ihre Unternehmens-URL ein. Erhalten Sie eine Prozesskarte und Risikoanalyse in Minuten — ohne Anmeldung, ohne Verpflichtung."
-      }
-    },
-    "problem": {
-      "badge": "Das Problem",
-      "title": "Die traditionelle Prozesserkennung hat erhebliche Einschränkungen",
-      "card1": {
-        "title": "Wochen an Interviews und mehrere Überarbeitungsrunden",
-        "description": "Erfordert Wochen an Interviews und mehrere Überarbeitungsrunden, um eine erste Prozesskarte zu erhalten."
-      },
-      "card2": {
-        "title": "Manuelle Diagramme werden schnell veraltet",
-        "description": "Manuelle Diagramme werden schnell veraltet und erfordern ständige Aktualisierung."
-      },
-      "card3": {
-        "title": "Process Mining erfordert Event Logs und technischen Zugang",
-        "description": "Process Mining-Tools erfordern Event Logs und technischen Zugang, die die meisten Organisationen nicht verfügbar haben."
-      },
-      "card4": {
-        "title": "Generische KI-Lösungen ohne methodische Struktur",
-        "description": "Generischen KI-Lösungen fehlt methodische Struktur und sie erzeugen Ergebnisse, die schwer zu verteidigen sind."
-      }
-    },
-    "solution": {
-      "badge": "Die Lösung",
-      "title": "Auditora.ai beschleunigt Prozesskartierung und -analyse",
-      "description": "Die Plattform kombiniert KI mit bewährten Methoden, um eine Erstdiagnose aus öffentlichen Informationen zu erstellen und diese durch ein strukturiertes geführtes Gespräch zu bereichern.",
-      "diff1": {
-        "title": "Integrierte SIPOC-Methodik",
-        "description": "Jede Sitzung folgt dem SIPOC-Framework (Lieferanten, Eingaben, Prozess, Ausgaben, Kunden). Die KI erkennt Abdeckungslücken und generiert kontextbezogene Fragen, um diese zu schließen."
-      },
-      "diff2": {
-        "title": "BPMN 2.0-Diagramme in Echtzeit",
-        "description": "Das Diagramm wird während der Sitzung erstellt. Als XML exportierbar, kompatibel mit Camunda, Signavio und jedem BPMN 2.0-Tool."
-      },
-      "diff3": {
-        "title": "FMEA-Matrix mit RPN pro Aktivität",
-        "description": "Jede Aktivität wird gegen potenzielle Fehlermodi bewertet. Schweregrad, Auftreten, Entdeckung und Risikoprioritätszahl werden berechnet."
-      }
-    },
-    "howItWorks": {
-      "badge": "Erstdiagnose",
-      "title": "Erstdiagnose aus öffentlichen Informationen",
-      "subtitle": "Ein strukturierter Ausgangspunkt basierend auf den öffentlichen Webseiten der Organisation.",
-      "step1": {
-        "title": "Geben Sie die URL der Organisation ein",
-        "description": "Geben Sie die Webadresse der Organisation an, die Sie analysieren möchten."
-      },
-      "step2": {
-        "title": "Die KI analysiert verfügbare öffentliche Seiten",
-        "description": "Das System verarbeitet öffentliche Inhalte, um Branche, Dienstleistungen und Betriebsstruktur zu identifizieren."
-      },
-      "step3": {
-        "title": "Erstellt eine SIPOC-Karte und Risikobewertung",
-        "description": "Eine erste SIPOC-Karte und eine vorläufige Bewertung struktureller Risiken werden erstellt."
-      },
-      "step4": {
-        "title": "Bereitet die Grundlage für tiefere Erhebung vor",
-        "description": "Die Diagnose dient als Ausgangspunkt für ein tiefergehendes geführtes Gespräch."
-      },
-      "disclaimer": "Diese Analyse ist ein Ausgangspunkt. Die Präzision steigt mit den Informationen, die Sie während des geführten Gesprächs bereitstellen."
-    },
-    "deepDive": {
-      "badge": "Geführte Erhebung",
-      "title": "Strukturierte Erhebung durch geführtes Gespräch",
-      "subtitle": "Die KI formuliert spezifische Fragen basierend auf erkannten Lücken, nach SIPOC- und FMEA-Prinzipien. Jede Antwort bereichert das Modell und ermöglicht eine vollständigere Analyse.",
-      "methodTitle": "Gezielte Fragen basierend auf Lücken",
-      "methodDescription": "Die KI fordert keine allgemeine Prozessbeschreibung an. Sie formuliert spezifische Fragen basierend auf erkannten Lücken in der SIPOC-Karte:",
-      "question1": "'Sie haben 3 Lieferanten erwähnt, aber nur 1 Eingabe. Wer liefert noch Materialien oder Informationen für diesen Schritt?'",
-      "question2": "'Ihr Prozess hat 5 Aktivitäten, aber keine Verzweigung. Gibt es einen Punkt, an dem sich der Ablauf je nach Bedingung ändert?'",
-      "question3": "'Sie haben den Endkunden identifiziert, aber nicht den internen Kunden. Wer erhält das Ergebnis dieses Schritts, bevor es den Kunden erreicht?'",
-      "methodNote": "Jede Frage schließt eine spezifische Lücke im Modell.",
-      "outputTitle": "Ergebnisvergleich",
-      "instant": {
-        "label": "Erstdiagnose",
-        "processes": "1 kartierter Prozess",
-        "risks": "3-5 allgemeine Risiken",
-        "analysis": "Grundlegende Bewertung",
-        "diagram": "Einfaches SIPOC"
-      },
-      "guided": {
-        "label": "Nach geführtem Gespräch",
-        "processes": "Angereicherter Prozess mit 2-3x mehr Aktivitäten",
-        "risks": "10-15+ spezifische Risiken mit Fehlermodi",
-        "analysis": "Vollständige FMEA mit RPN pro Aktivität",
-        "diagram": "Exportierbares BPMN 2.0"
-      }
-    },
-    "platform": {
-      "badge": "Die Plattform",
-      "title": "Professionelle Ergebnisse",
-      "subtitle": "Die Plattform erstellt Dokumentation, die für Stakeholder und Audit-Teams präsentationsfertig ist.",
-      "feature1": {
-        "title": "Exportierbare BPMN 2.0-Diagramme",
-        "description": "Automatisch während der Sitzung erstellte Diagramme. Export als XML, PNG oder PDF. Kompatibel mit Camunda, Signavio, Bizagi."
-      },
-      "feature2": {
-        "title": "Vollständige FMEA-Matrix mit RPN-Berechnung",
-        "description": "Jede Aktivität gegen potenzielle Fehlermodi bewertet mit Berechnung von Schweregrad, Auftreten, Entdeckung und RPN."
-      },
-      "feature3": {
-        "title": "Risikoidentifikation pro Aktivität",
-        "description": "Risiken direkt jeder Prozessaktivität zugeordnet, mit vollständiger Rückverfolgbarkeit."
-      },
-      "feature4": {
-        "title": "Stakeholder-fertige Berichte",
-        "description": "Exportieren Sie professionelle Berichte mit Prozesskarten, Risikomatrizen und strukturierten Empfehlungen."
-      },
-      "feature5": {
-        "title": "Analyseverlauf und Versionierung",
-        "description": "Jede Analyseitertion wird mit Änderungsverlauf gespeichert. Vergleichen Sie Versionen und verfolgen Sie die Prozessentwicklung."
-      },
-      "cta": "Kostenloses Konto erstellen",
-      "ctaSubtext": "Alles, was Sie in der kostenlosen Diagnose erstellt haben, migriert automatisch in Ihr Konto."
-    },
-    "credibility": {
-      "badge": "Methodik",
-      "title": "Aufgebaut auf anerkannten Frameworks",
-      "pillar1": {
-        "title": "SIPOC (Six Sigma)",
-        "description": "Standard-Framework für Prozesskartierung: Lieferanten, Eingaben, Prozess, Ausgaben, Kunden. Wir automatisieren die Struktur, die Senior-Berater bereits verwenden."
-      },
-      "pillar2": {
-        "title": "BPMN 2.0 (OMG)",
-        "description": "Branchenstandard-Notation für Geschäftsprozessmodellierung. Interoperable und exportierbare Diagramme."
-      },
-      "pillar3": {
-        "title": "FMEA (Fehlermöglichkeits-Analyse)",
-        "description": "Systematische Methodik zur Identifizierung und Priorisierung von Risiken. Wir automatisieren die Berechnung von Schweregrad, Auftreten, Entdeckung und RPN."
-      },
-      "radarCaption": "Risikoexposition vor und nach der Prozessimplementierung mit Auditora"
-    },
-    "socialProof": {
-      "badge": "Anwendungsfälle",
-      "title": "Was Fachleute sagen",
-      "testimonial1": {
-        "quote": "Hat die anfängliche Kartierungszeit erheblich reduziert. Die generierte FMEA-Matrix ist klar und nützlich für Vorstandspräsentationen.",
-        "name": "Maria Rodriguez",
-        "role": "Senior-Beraterin",
-        "company": "Beratungsunternehmen"
-      },
-      "testimonial2": {
-        "quote": "Ermöglicht Junior-Beratern, von den ersten Sitzungen an Analysen höherer Qualität zu liefern.",
-        "name": "Carlos Mendez",
-        "role": "Manager Kontinuierliche Verbesserung",
-        "company": "Fertigungsunternehmen"
-      },
-      "testimonial3": {
-        "quote": "Die Rückverfolgbarkeit der SIPOC-Methodik liefert die für interne Audits erforderlichen Nachweise. Der Prozess ist transparent und dokumentierbar.",
-        "name": "Ana Torres",
-        "role": "Interne Auditorin",
-        "company": "Finanzinstitut"
-      },
-      "logosLabel": "Verwendet von Beratungs- und Audit-Teams bei"
-    },
-    "logos": {
-      "title": "Fachleute aus verschiedenen Branchen vertrauen uns",
-      "categories": {
-        "consulting": "Beratung",
-        "finance": "Finanzen & Banken",
-        "manufacturing": "Fertigung",
-        "healthcare": "Gesundheitswesen",
-        "audit": "Audit & Compliance",
-        "technology": "Technologie",
-        "retail": "Handel & E-Commerce",
-        "logistics": "Logistik & Transport"
-      }
-    },
-    "tools": {
-      "title": "Kostenlose KI-Tools für Prozessfachleute",
-      "subtitle": "Dieselbe KI, die Ihr Unternehmen analysiert, jetzt als eigenständige Tools. Ohne Anmeldung.",
-      "viewAll": "Alle Tools anzeigen"
-    }
-  },
-  "newsletter": {
-    "email": "E-Mail",
-    "hints": {
-      "error": {
-        "message": "Anmeldung fehlgeschlagen. Bitte versuchen Sie es später erneut."
-      },
-      "success": {
-        "message": "Sie sind auf der Liste. Wir benachrichtigen Sie, wenn Auditora.ai startet.",
-        "title": "Angemeldet"
-      }
-    },
-    "submit": "Anmelden",
-    "subtitle": "Gehören Sie zu den Ersten, die Zugang zu Auditora.ai erhalten.",
-    "title": "Frühzugang sichern"
-  },
-  "cta": {
-    "title": "Beginnen Sie, Prozesse mit mehr Präzision und Geschwindigkeit zu kartieren",
-    "subtitle": "Kostenlose Erstdiagnose. Geführtes Gespräch für tiefere Analyse. Professionelle Ergebnisse.",
-    "button": "Auditora.ai kostenlos testen",
-    "note": "Keine Kreditkarte. Keine Anmeldung. Ihre erste Prozesskarte in Minuten."
-  },
-  "notFound": {
-    "code": "404",
-    "title": "Seite nicht gefunden",
-    "goToDashboard": "Zum Dashboard",
-    "goToHomepage": "Zur Startseite"
-  },
-  "consent": {
-    "title": "Cookie-Einstellungen",
-    "description": "Wir verwenden Cookies, um Ihre Erfahrung zu verbessern und die Nutzung der Website zu analysieren. Sie können anpassen, welche Cookies Sie zulassen.",
-    "acceptAll": "Alle akzeptieren",
-    "rejectAll": "Alle ablehnen",
-    "customize": "Anpassen",
-    "savePreferences": "Einstellungen speichern",
-    "essential": {
-      "title": "Essenziell",
-      "description": "Für die Funktion der Website erforderlich. Kann nicht deaktiviert werden."
-    },
-    "analytics": {
-      "title": "Analyse",
-      "description": "Helfen uns zu verstehen, wie Sie die Website nutzen, damit wir sie verbessern können."
-    },
-    "marketing": {
-      "title": "Marketing",
-      "description": "Werden verwendet, um Ihnen relevante Inhalte zu zeigen und die Wirksamkeit von Kampagnen zu messen."
-    },
-    "gpcDetected": "Wir haben Ihre Global Privacy Control-Einstellung erkannt. Analyse- und Marketing-Cookies sind deaktiviert."
-  },
-  "common": {
-    "footer": {
-      "blog": "Blog",
-      "features": "Funktionen",
-      "pricing": "Preise",
-      "privacyPolicy": "Datenschutz",
-      "termsAndConditions": "AGB",
-      "doNotSell": "Meine Daten nicht verkaufen",
-      "cookieSettings": "Cookie-Einstellungen",
-      "tools": "Kostenlose Tools",
-      "builtWith": "Auditora.ai",
-      "aiDisclaimer": "Auditora.ai verwendet künstliche Intelligenz. Die Ergebnisse dienen nur zur Information und ersetzen keine professionelle Beratung."
-    },
-    "menu": {
-      "blog": "Blog",
-      "changelog": "Changelog",
-      "contact": "Kontakt",
-      "dashboard": "Dashboard",
-      "docs": "Docs",
-      "faq": "FAQ",
-      "solution": "Lösung",
-      "methodology": "Methodik",
-      "cases": "Fälle",
-      "howItWorks": "So funktioniert es",
-      "login": "Anmelden",
-      "pricing": "Preise",
-      "tools": "Unternehmen scannen",
-      "trial": "Kostenlos testen"
-    },
-    "aria": {
-      "menu": "Menü",
-      "language": "Sprache"
-    },
-    "tableOfContents": {
-      "title": "Auf dieser Seite"
-    },
-    "colorMode": {
-      "system": "System",
-      "light": "Hell",
-      "dark": "Dunkel"
-    }
-  }
+	"blog": {
+		"description": "Einblicke in Prozessberatung, BPM-Automatisierung und KI-gestützte Erhebung",
+		"title": "Blog",
+		"back": "Zurück zum Blog"
+	},
+	"changelog": {
+		"description": "Bleiben Sie über die neuesten Änderungen in Auditora.ai auf dem Laufenden.",
+		"title": "Changelog"
+	},
+	"contact": {
+		"description": "Haben Sie Fragen zu Auditora.ai? Wir freuen uns auf Ihre Nachricht.",
+		"form": {
+			"email": "E-Mail",
+			"message": "Nachricht",
+			"name": "Name",
+			"notifications": {
+				"error": "Ihre Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.",
+				"success": "Nachricht gesendet. Wir melden uns innerhalb von 24 Stunden bei Ihnen."
+			},
+			"submit": "Nachricht senden"
+		},
+		"title": "Kontakt"
+	},
+	"documentation": {
+		"title": "Dokumentation"
+	},
+	"faq": {
+		"description": "Antworten auf die häufigsten Fragen zu Auditora.ai.",
+		"title": "Häufig gestellte Fragen",
+		"items": {
+			"urlLimitations": {
+				"question": "Wenn es nur meine öffentliche Website liest, wie kann es echte Risiken identifizieren?",
+				"answer": "Die Erstdiagnose identifiziert strukturelle und logische Risiken basierend auf Branchenmustern und der abgeleiteten Prozessstruktur. Es handelt sich um fundierte Hypothesen, nicht um operative Befunde. Die Präzision der Analyse steigt signifikant bei Nutzung des geführten Gesprächs oder der vollständigen Plattform mit echtem operativem Kontext."
+			},
+			"vsChatgpt": {
+				"question": "Wie unterscheidet sich das von ChatGPT zur Prozessgenerierung?",
+				"answer": "Auditora.ai unterscheidet sich in drei wesentlichen Aspekten. Erstens, Methodik: Jede Sitzung folgt dem SIPOC-Framework mit automatischer Lückenerkennung. Zweitens, Ergebnisse: Die generierten Diagramme sind echtes BPMN 2.0, exportierbar als XML, keine approximativen Darstellungen. Drittens, Persistenz: Prozesse, Risiken und Maßnahmen werden strukturiert gespeichert, verfolgt und weiterentwickelt."
+			},
+			"dataAccess": {
+				"question": "Auf welche Daten meiner Website greifen Sie genau zu?",
+				"answer": "Der Textinhalt von bis zu 5 öffentlichen Seiten wird analysiert: Startseite, Über uns, Leistungen und ähnliche. Derselbe Inhalt, den jeder Besucher im Browser sieht. Kein Zugriff auf interne Systeme, APIs, Datenbanken oder geschützte Bereiche."
+			},
+			"bpmKnowledge": {
+				"question": "Brauche ich BPM- oder BPMN-Kenntnisse, um das Tool zu nutzen?",
+				"answer": "Nein. Auditora.ai ist so konzipiert, dass jeder mit Geschäftskenntnissen es nutzen kann. Die KI formuliert relevante Fragen in zugänglicher Sprache und die technische Notation wird automatisch generiert. Für erfahrene BPM-Berater beschleunigt das Tool den Dokumentationsprozess. Für Personen ohne technische Ausbildung verwaltet die Plattform die methodische Komplexität."
+			},
+			"deepening": {
+				"question": "Kann ich über den Sofortbericht hinaus vertiefen?",
+				"answer": "Ja. Nach der Erstdiagnose kann ein geführtes Gespräch mit der KI gestartet werden. Die Plattform stellt spezifische Fragen zu Abläufen — Lieferanten, Eingaben, Aktivitäten, Ausgaben, Kunden — und erstellt eine progressiv detailliertere Analyse. Das Ergebnis umfasst eine vollständige FMEA mit Fehlermodi und Risikoprioritätszahl (RPN) pro Aktivität."
+			},
+			"dataSecurity": {
+				"question": "Sind meine Daten sicher?",
+				"answer": "Ja. Alle Informationen werden mit TLS-Verschlüsselung übertragen und verschlüsselt im Ruhezustand gespeichert. Anonyme Sitzungen verfallen nach 24 Stunden. Bereitgestellte Informationen werden nicht zum Training von KI-Modellen verwendet. Bei Kontoerstellung werden Daten im privaten Bereich der Organisation mit vollständiger Isolation gespeichert."
+			},
+			"accountMigration": {
+				"question": "Was passiert mit meiner Analyse, wenn ich ein Konto erstelle?",
+				"answer": "Alle während der anonymen Sitzung generierten Informationen — Prozesskarte, Risikoanalyse, geführtes Gespräch und Ergebnisse — werden automatisch ohne Datenverlust auf das Konto übertragen."
+			},
+			"vsProcessMining": {
+				"question": "Ist das Process Mining?",
+				"answer": "Nein. Process Mining analysiert Systemlogs (ERP, CRM), um zu entdecken, wie Prozesse tatsächlich ablaufen. Auditora.ai ist ein erhebungsbasiertes Prozess-Discovery-Tool: Es führt strukturierte Gespräche zur Dokumentation von Prozessen und Analyse von Risiken. Es sind komplementäre Ansätze. Process Mining erfordert Systemdaten; Auditora.ai arbeitet mit menschlichem Wissen."
+			}
+		}
+	},
+	"home": {
+		"hero": {
+			"badge": "KI-gestützte Plattform zur Prozesserkennung",
+			"title": "Prozesserkennung und -analyse mit bewährter Methodik",
+			"subtitle": "Wir kombinieren künstliche Intelligenz mit Standard-Frameworks (SIPOC, BPMN 2.0 und FMEA), um Berater und Auditoren bei der strukturierten Kartierung von Prozessen und Risikobewertung zu unterstützen.",
+			"inputPlaceholder": "https://ihre-firma.de",
+			"cta": "Mein Unternehmen kostenlos analysieren",
+			"ctaSecondary": "Den Prozess manuell beschreiben",
+			"subtext": "Geben Sie eine URL ein. Die KI analysiert den öffentlichen Kontext und erstellt eine Erstdiagnose mit Prozesskarte und Risikoanalyse.",
+			"alt": {
+				"badge": "Das fehlende Werkzeug für Ihre Praxis",
+				"title": "Jeder undokumentierte Prozess ist ein Risiko, das Sie unterschreiben",
+				"subtitle": "Ihre Kunden haben kritische Prozesse, die niemand kartiert hat. Auditora.ai entdeckt sie: KI-geführte SIPOC-Erhebung, automatische BPMN 2.0-Diagramme und FMEA-Matrix mit Schweregradbeurteilung. In einem Bruchteil der Zeit.",
+				"cta": "Diagnose meines Unternehmens ansehen",
+				"subtext": "Geben Sie Ihre Unternehmens-URL ein. Erhalten Sie eine Prozesskarte und Risikoanalyse in Minuten — ohne Anmeldung, ohne Verpflichtung."
+			}
+		},
+		"problem": {
+			"badge": "Das Problem",
+			"title": "Die traditionelle Prozesserkennung hat erhebliche Einschränkungen",
+			"card1": {
+				"title": "Wochen an Interviews und mehrere Überarbeitungsrunden",
+				"description": "Erfordert Wochen an Interviews und mehrere Überarbeitungsrunden, um eine erste Prozesskarte zu erhalten."
+			},
+			"card2": {
+				"title": "Manuelle Diagramme werden schnell veraltet",
+				"description": "Manuelle Diagramme werden schnell veraltet und erfordern ständige Aktualisierung."
+			},
+			"card3": {
+				"title": "Process Mining erfordert Event Logs und technischen Zugang",
+				"description": "Process Mining-Tools erfordern Event Logs und technischen Zugang, die die meisten Organisationen nicht verfügbar haben."
+			},
+			"card4": {
+				"title": "Generische KI-Lösungen ohne methodische Struktur",
+				"description": "Generischen KI-Lösungen fehlt methodische Struktur und sie erzeugen Ergebnisse, die schwer zu verteidigen sind."
+			}
+		},
+		"solution": {
+			"badge": "Die Lösung",
+			"title": "Auditora.ai beschleunigt Prozesskartierung und -analyse",
+			"description": "Die Plattform kombiniert KI mit bewährten Methoden, um eine Erstdiagnose aus öffentlichen Informationen zu erstellen und diese durch ein strukturiertes geführtes Gespräch zu bereichern.",
+			"diff1": {
+				"title": "Integrierte SIPOC-Methodik",
+				"description": "Jede Sitzung folgt dem SIPOC-Framework (Lieferanten, Eingaben, Prozess, Ausgaben, Kunden). Die KI erkennt Abdeckungslücken und generiert kontextbezogene Fragen, um diese zu schließen."
+			},
+			"diff2": {
+				"title": "BPMN 2.0-Diagramme in Echtzeit",
+				"description": "Das Diagramm wird während der Sitzung erstellt. Als XML exportierbar, kompatibel mit Camunda, Signavio und jedem BPMN 2.0-Tool."
+			},
+			"diff3": {
+				"title": "FMEA-Matrix mit RPN pro Aktivität",
+				"description": "Jede Aktivität wird gegen potenzielle Fehlermodi bewertet. Schweregrad, Auftreten, Entdeckung und Risikoprioritätszahl werden berechnet."
+			}
+		},
+		"howItWorks": {
+			"badge": "Erstdiagnose",
+			"title": "Erstdiagnose aus öffentlichen Informationen",
+			"subtitle": "Ein strukturierter Ausgangspunkt basierend auf den öffentlichen Webseiten der Organisation.",
+			"step1": {
+				"title": "Geben Sie die URL der Organisation ein",
+				"description": "Geben Sie die Webadresse der Organisation an, die Sie analysieren möchten."
+			},
+			"step2": {
+				"title": "Die KI analysiert verfügbare öffentliche Seiten",
+				"description": "Das System verarbeitet öffentliche Inhalte, um Branche, Dienstleistungen und Betriebsstruktur zu identifizieren."
+			},
+			"step3": {
+				"title": "Erstellt eine SIPOC-Karte und Risikobewertung",
+				"description": "Eine erste SIPOC-Karte und eine vorläufige Bewertung struktureller Risiken werden erstellt."
+			},
+			"step4": {
+				"title": "Bereitet die Grundlage für tiefere Erhebung vor",
+				"description": "Die Diagnose dient als Ausgangspunkt für ein tiefergehendes geführtes Gespräch."
+			},
+			"disclaimer": "Diese Analyse ist ein Ausgangspunkt. Die Präzision steigt mit den Informationen, die Sie während des geführten Gesprächs bereitstellen."
+		},
+		"deepDive": {
+			"badge": "Geführte Erhebung",
+			"title": "Strukturierte Erhebung durch geführtes Gespräch",
+			"subtitle": "Die KI formuliert spezifische Fragen basierend auf erkannten Lücken, nach SIPOC- und FMEA-Prinzipien. Jede Antwort bereichert das Modell und ermöglicht eine vollständigere Analyse.",
+			"methodTitle": "Gezielte Fragen basierend auf Lücken",
+			"methodDescription": "Die KI fordert keine allgemeine Prozessbeschreibung an. Sie formuliert spezifische Fragen basierend auf erkannten Lücken in der SIPOC-Karte:",
+			"question1": "'Sie haben 3 Lieferanten erwähnt, aber nur 1 Eingabe. Wer liefert noch Materialien oder Informationen für diesen Schritt?'",
+			"question2": "'Ihr Prozess hat 5 Aktivitäten, aber keine Verzweigung. Gibt es einen Punkt, an dem sich der Ablauf je nach Bedingung ändert?'",
+			"question3": "'Sie haben den Endkunden identifiziert, aber nicht den internen Kunden. Wer erhält das Ergebnis dieses Schritts, bevor es den Kunden erreicht?'",
+			"methodNote": "Jede Frage schließt eine spezifische Lücke im Modell.",
+			"outputTitle": "Ergebnisvergleich",
+			"instant": {
+				"label": "Erstdiagnose",
+				"processes": "1 kartierter Prozess",
+				"risks": "3-5 allgemeine Risiken",
+				"analysis": "Grundlegende Bewertung",
+				"diagram": "Einfaches SIPOC"
+			},
+			"guided": {
+				"label": "Nach geführtem Gespräch",
+				"processes": "Angereicherter Prozess mit 2-3x mehr Aktivitäten",
+				"risks": "10-15+ spezifische Risiken mit Fehlermodi",
+				"analysis": "Vollständige FMEA mit RPN pro Aktivität",
+				"diagram": "Exportierbares BPMN 2.0"
+			}
+		},
+		"platform": {
+			"badge": "Die Plattform",
+			"title": "Professionelle Ergebnisse",
+			"subtitle": "Die Plattform erstellt Dokumentation, die für Stakeholder und Audit-Teams präsentationsfertig ist.",
+			"feature1": {
+				"title": "Exportierbare BPMN 2.0-Diagramme",
+				"description": "Automatisch während der Sitzung erstellte Diagramme. Export als XML, PNG oder PDF. Kompatibel mit Camunda, Signavio, Bizagi."
+			},
+			"feature2": {
+				"title": "Vollständige FMEA-Matrix mit RPN-Berechnung",
+				"description": "Jede Aktivität gegen potenzielle Fehlermodi bewertet mit Berechnung von Schweregrad, Auftreten, Entdeckung und RPN."
+			},
+			"feature3": {
+				"title": "Risikoidentifikation pro Aktivität",
+				"description": "Risiken direkt jeder Prozessaktivität zugeordnet, mit vollständiger Rückverfolgbarkeit."
+			},
+			"feature4": {
+				"title": "Stakeholder-fertige Berichte",
+				"description": "Exportieren Sie professionelle Berichte mit Prozesskarten, Risikomatrizen und strukturierten Empfehlungen."
+			},
+			"feature5": {
+				"title": "Analyseverlauf und Versionierung",
+				"description": "Jede Analyseitertion wird mit Änderungsverlauf gespeichert. Vergleichen Sie Versionen und verfolgen Sie die Prozessentwicklung."
+			},
+			"cta": "Kostenloses Konto erstellen",
+			"ctaSubtext": "Alles, was Sie in der kostenlosen Diagnose erstellt haben, migriert automatisch in Ihr Konto."
+		},
+		"credibility": {
+			"badge": "Methodik",
+			"title": "Aufgebaut auf anerkannten Frameworks",
+			"pillar1": {
+				"title": "SIPOC (Six Sigma)",
+				"description": "Standard-Framework für Prozesskartierung: Lieferanten, Eingaben, Prozess, Ausgaben, Kunden. Wir automatisieren die Struktur, die Senior-Berater bereits verwenden."
+			},
+			"pillar2": {
+				"title": "BPMN 2.0 (OMG)",
+				"description": "Branchenstandard-Notation für Geschäftsprozessmodellierung. Interoperable und exportierbare Diagramme."
+			},
+			"pillar3": {
+				"title": "FMEA (Fehlermöglichkeits-Analyse)",
+				"description": "Systematische Methodik zur Identifizierung und Priorisierung von Risiken. Wir automatisieren die Berechnung von Schweregrad, Auftreten, Entdeckung und RPN."
+			},
+			"radarCaption": "Risikoexposition vor und nach der Prozessimplementierung mit Auditora"
+		},
+		"socialProof": {
+			"badge": "Anwendungsfälle",
+			"title": "Was Fachleute sagen",
+			"testimonial1": {
+				"quote": "Hat die anfängliche Kartierungszeit erheblich reduziert. Die generierte FMEA-Matrix ist klar und nützlich für Vorstandspräsentationen.",
+				"name": "Maria Rodriguez",
+				"role": "Senior-Beraterin",
+				"company": "Beratungsunternehmen"
+			},
+			"testimonial2": {
+				"quote": "Ermöglicht Junior-Beratern, von den ersten Sitzungen an Analysen höherer Qualität zu liefern.",
+				"name": "Carlos Mendez",
+				"role": "Manager Kontinuierliche Verbesserung",
+				"company": "Fertigungsunternehmen"
+			},
+			"testimonial3": {
+				"quote": "Die Rückverfolgbarkeit der SIPOC-Methodik liefert die für interne Audits erforderlichen Nachweise. Der Prozess ist transparent und dokumentierbar.",
+				"name": "Ana Torres",
+				"role": "Interne Auditorin",
+				"company": "Finanzinstitut"
+			},
+			"logosLabel": "Verwendet von Beratungs- und Audit-Teams bei"
+		},
+		"logos": {
+			"title": "Fachleute aus verschiedenen Branchen vertrauen uns",
+			"categories": {
+				"consulting": "Beratung",
+				"finance": "Finanzen & Banken",
+				"manufacturing": "Fertigung",
+				"healthcare": "Gesundheitswesen",
+				"audit": "Audit & Compliance",
+				"technology": "Technologie",
+				"retail": "Handel & E-Commerce",
+				"logistics": "Logistik & Transport"
+			}
+		},
+		"tools": {
+			"title": "Kostenlose KI-Tools für Prozessfachleute",
+			"subtitle": "Dieselbe KI, die Ihr Unternehmen analysiert, jetzt als eigenständige Tools. Ohne Anmeldung.",
+			"viewAll": "Alle Tools anzeigen"
+		},
+		"trustBar": {
+			"subtitle": "Built on recognized standards",
+			"metric1": {
+				"label": "Prozesse kartiert"
+			},
+			"metric2": {
+				"label": "schnellere Erkennung"
+			},
+			"metric3": {
+				"label": "zum ersten SIPOC"
+			},
+			"metric4": {
+				"label": "Risikominderung"
+			}
+		}
+	},
+	"newsletter": {
+		"email": "E-Mail",
+		"hints": {
+			"error": {
+				"message": "Anmeldung fehlgeschlagen. Bitte versuchen Sie es später erneut."
+			},
+			"success": {
+				"message": "Sie sind auf der Liste. Wir benachrichtigen Sie, wenn Auditora.ai startet.",
+				"title": "Angemeldet"
+			}
+		},
+		"submit": "Anmelden",
+		"subtitle": "Gehören Sie zu den Ersten, die Zugang zu Auditora.ai erhalten.",
+		"title": "Frühzugang sichern"
+	},
+	"cta": {
+		"title": "Beginnen Sie, Prozesse mit mehr Präzision und Geschwindigkeit zu kartieren",
+		"subtitle": "Kostenlose Erstdiagnose. Geführtes Gespräch für tiefere Analyse. Professionelle Ergebnisse.",
+		"button": "Auditora.ai kostenlos testen",
+		"note": "Keine Kreditkarte. Keine Anmeldung. Ihre erste Prozesskarte in Minuten."
+	},
+	"notFound": {
+		"code": "404",
+		"title": "Seite nicht gefunden",
+		"goToDashboard": "Zum Dashboard",
+		"goToHomepage": "Zur Startseite"
+	},
+	"consent": {
+		"title": "Cookie-Einstellungen",
+		"description": "Wir verwenden Cookies, um Ihre Erfahrung zu verbessern und die Nutzung der Website zu analysieren. Sie können anpassen, welche Cookies Sie zulassen.",
+		"acceptAll": "Alle akzeptieren",
+		"rejectAll": "Alle ablehnen",
+		"customize": "Anpassen",
+		"savePreferences": "Einstellungen speichern",
+		"essential": {
+			"title": "Essenziell",
+			"description": "Für die Funktion der Website erforderlich. Kann nicht deaktiviert werden."
+		},
+		"analytics": {
+			"title": "Analyse",
+			"description": "Helfen uns zu verstehen, wie Sie die Website nutzen, damit wir sie verbessern können."
+		},
+		"marketing": {
+			"title": "Marketing",
+			"description": "Werden verwendet, um Ihnen relevante Inhalte zu zeigen und die Wirksamkeit von Kampagnen zu messen."
+		},
+		"gpcDetected": "Wir haben Ihre Global Privacy Control-Einstellung erkannt. Analyse- und Marketing-Cookies sind deaktiviert."
+	},
+	"common": {
+		"footer": {
+			"blog": "Blog",
+			"features": "Funktionen",
+			"pricing": "Preise",
+			"privacyPolicy": "Datenschutz",
+			"termsAndConditions": "AGB",
+			"doNotSell": "Meine Daten nicht verkaufen",
+			"cookieSettings": "Cookie-Einstellungen",
+			"tools": "Kostenlose Tools",
+			"builtWith": "Auditora.ai",
+			"aiDisclaimer": "Auditora.ai verwendet künstliche Intelligenz. Die Ergebnisse dienen nur zur Information und ersetzen keine professionelle Beratung.",
+			"tagline": "KI-gestützte Audit-Intelligenz für moderne Unternehmen. Compliance automatisieren, Risiken reduzieren und operative Exzellenz vorantreiben.",
+			"productTitle": "Produkt",
+			"scan": "Scan",
+			"processes": "Prozesse",
+			"evaluations": "Bewertungen",
+			"resourcesTitle": "Ressourcen",
+			"docs": "Dokumentation",
+			"api": "API-Referenz",
+			"changelog": "Changelog",
+			"companyTitle": "Unternehmen",
+			"about": "Über uns",
+			"contact": "Kontakt",
+			"careers": "Karriere",
+			"legalTitle": "Rechtliches",
+			"ccpa": "CCPA",
+			"copyright": "© {year} {appName}. Alle Rechte vorbehalten.",
+			"soc2": "SOC 2",
+			"gdpr": "DSGVO",
+			"iso27001": "ISO 27001"
+		},
+		"menu": {
+			"blog": "Blog",
+			"changelog": "Changelog",
+			"contact": "Kontakt",
+			"dashboard": "Dashboard",
+			"docs": "Docs",
+			"faq": "FAQ",
+			"solution": "Lösung",
+			"methodology": "Methodik",
+			"cases": "Fälle",
+			"howItWorks": "So funktioniert es",
+			"login": "Anmelden",
+			"pricing": "Preise",
+			"tools": "Unternehmen scannen",
+			"trial": "Kostenlos testen"
+		},
+		"aria": {
+			"menu": "Menü",
+			"language": "Sprache"
+		},
+		"tableOfContents": {
+			"title": "Auf dieser Seite"
+		},
+		"colorMode": {
+			"system": "System",
+			"light": "Hell",
+			"dark": "Dunkel"
+		}
+	}
 }

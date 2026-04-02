@@ -3,10 +3,14 @@
 import { Button } from "@repo/ui/components/button";
 import { useCookieConsent } from "@shared/hooks/cookie-consent";
 import { COOKIE_INVENTORY } from "@shared/lib/consent-types";
-import { CookieIcon, Settings2Icon, XIcon } from "lucide-react";
+import { Settings2Icon, XIcon } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
+/* ------------------------------------------------------------------ */
+/*  Tiny toggle – unchanged from original                             */
+/* ------------------------------------------------------------------ */
 function Toggle({
 	checked,
 	onChange,
@@ -23,12 +27,12 @@ function Toggle({
 			aria-checked={checked}
 			disabled={disabled}
 			onClick={() => onChange?.(!checked)}
-			className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
-				checked ? "bg-primary" : "bg-muted"
+			className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00E5C0]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A1428] disabled:cursor-not-allowed disabled:opacity-50 ${
+				checked ? "bg-[#00E5C0]" : "bg-white/20"
 			}`}
 		>
 			<span
-				className={`pointer-events-none block size-4 rounded-full bg-background shadow-lg ring-0 transition-transform ${
+				className={`pointer-events-none block size-4 rounded-full bg-white shadow-lg ring-0 transition-transform ${
 					checked ? "translate-x-4" : "translate-x-0"
 				}`}
 			/>
@@ -36,6 +40,9 @@ function Toggle({
 	);
 }
 
+/* ------------------------------------------------------------------ */
+/*  ConsentBanner – minimal bottom bar                                */
+/* ------------------------------------------------------------------ */
 export function ConsentBanner() {
 	const {
 		showBanner,
@@ -48,8 +55,12 @@ export function ConsentBanner() {
 	const t = useTranslations("consent");
 	const [mounted, setMounted] = useState(false);
 	const [showCustomize, setShowCustomize] = useState(false);
-	const [analyticsEnabled, setAnalyticsEnabled] = useState(preferences?.analytics ?? false);
-	const [marketingEnabled, setMarketingEnabled] = useState(preferences?.marketing ?? false);
+	const [analyticsEnabled, setAnalyticsEnabled] = useState(
+		preferences?.analytics ?? false,
+	);
+	const [marketingEnabled, setMarketingEnabled] = useState(
+		preferences?.marketing ?? false,
+	);
 
 	useEffect(() => {
 		setMounted(true);
@@ -63,120 +74,167 @@ export function ConsentBanner() {
 		savePreferences(analyticsEnabled, marketingEnabled);
 	};
 
-	const analyticsCookies = COOKIE_INVENTORY.filter((c) => c.category === "analytics");
-	const essentialCookies = COOKIE_INVENTORY.filter((c) => c.category === "essential");
+	const analyticsCookies = COOKIE_INVENTORY.filter(
+		(c) => c.category === "analytics",
+	);
+	const essentialCookies = COOKIE_INVENTORY.filter(
+		(c) => c.category === "essential",
+	);
 
 	return (
-		<div className="fixed left-4 bottom-4 z-50 max-w-md">
-			<div className="rounded-2xl border bg-card p-5 text-card-foreground shadow-xl">
-				{/* Header */}
-				<div className="flex items-start gap-3">
-					<CookieIcon className="mt-0.5 size-5 shrink-0 text-primary/60" />
-					<div className="flex-1">
-						<p className="text-sm font-medium">{t("title")}</p>
-						<p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-							{t("description")}
-						</p>
-					</div>
-					{showCustomize && (
-						<button
-							type="button"
-							onClick={() => setShowCustomize(false)}
-							className="text-muted-foreground hover:text-foreground"
-						>
-							<XIcon className="size-4" />
-						</button>
-					)}
-				</div>
+		<AnimatePresence>
+			{showBanner && (
+				<motion.div
+					key="consent-banner"
+					initial={{ y: "100%" }}
+					animate={{ y: 0 }}
+					exit={{ y: "100%" }}
+					transition={{ type: "spring", stiffness: 400, damping: 35 }}
+					className="fixed inset-x-0 bottom-0 z-50"
+				>
+					{/* ---- Customize drawer (expands above the bar) ---- */}
+					<AnimatePresence>
+						{showCustomize && (
+							<motion.div
+								key="customize-panel"
+								initial={{ height: 0, opacity: 0 }}
+								animate={{ height: "auto", opacity: 1 }}
+								exit={{ height: 0, opacity: 0 }}
+								transition={{ duration: 0.25, ease: "easeInOut" }}
+								className="overflow-hidden border-b border-white/10 bg-[#0A1428]/95 backdrop-blur-md"
+							>
+								<div className="mx-auto flex max-w-5xl flex-col gap-4 px-4 py-4 sm:px-6 lg:px-8">
+									{/* Close row */}
+									<div className="flex items-center justify-between">
+										<span className="text-xs font-semibold uppercase tracking-wider text-white/60">
+											{t("customize")}
+										</span>
+										<button
+											type="button"
+											onClick={() => setShowCustomize(false)}
+											className="rounded-md p-1 text-white/50 transition-colors hover:text-white"
+										>
+											<XIcon className="size-4" />
+										</button>
+									</div>
 
-				{/* Customize panel */}
-				{showCustomize && (
-					<div className="mt-4 space-y-3 border-t pt-4">
-						{/* Essential — always on */}
-						<div className="flex items-center justify-between gap-4">
-							<div className="min-w-0">
-								<p className="text-sm font-medium">{t("essential.title")}</p>
-								<p className="text-xs text-muted-foreground">
-									{t("essential.description")}
+									{/* Cookie categories in a row on desktop, stacked on mobile */}
+									<div className="grid gap-4 sm:grid-cols-3">
+										{/* Essential */}
+										<div className="flex items-start justify-between gap-3 rounded-lg border border-white/10 bg-white/5 p-3">
+											<div className="min-w-0 flex-1">
+												<p className="text-sm font-medium text-white">
+													{t("essential.title")}
+												</p>
+												<p className="mt-0.5 text-[11px] leading-snug text-white/50">
+													{t("essential.description")}
+												</p>
+												<p className="mt-1 text-[10px] text-white/30">
+													{essentialCookies
+														.map((c) => c.name)
+														.join(", ")}
+												</p>
+											</div>
+											<Toggle checked disabled />
+										</div>
+
+										{/* Analytics */}
+										<div className="flex items-start justify-between gap-3 rounded-lg border border-white/10 bg-white/5 p-3">
+											<div className="min-w-0 flex-1">
+												<p className="text-sm font-medium text-white">
+													{t("analytics.title")}
+												</p>
+												<p className="mt-0.5 text-[11px] leading-snug text-white/50">
+													{t("analytics.description")}
+												</p>
+												<p className="mt-1 text-[10px] text-white/30">
+													{analyticsCookies
+														.map((c) => c.name)
+														.join(", ")}
+												</p>
+											</div>
+											<Toggle
+												checked={analyticsEnabled}
+												onChange={setAnalyticsEnabled}
+											/>
+										</div>
+
+										{/* Marketing */}
+										<div className="flex items-start justify-between gap-3 rounded-lg border border-white/10 bg-white/5 p-3">
+											<div className="min-w-0 flex-1">
+												<p className="text-sm font-medium text-white">
+													{t("marketing.title")}
+												</p>
+												<p className="mt-0.5 text-[11px] leading-snug text-white/50">
+													{t("marketing.description")}
+												</p>
+											</div>
+											<Toggle
+												checked={marketingEnabled}
+												onChange={setMarketingEnabled}
+											/>
+										</div>
+									</div>
+
+									{/* Save button */}
+									<div className="flex justify-end">
+										<Button
+											size="sm"
+											onClick={handleSaveCustom}
+											className="bg-[#00E5C0] text-[#0A1428] hover:bg-[#00E5C0]/90"
+										>
+											{t("savePreferences")}
+										</Button>
+									</div>
+								</div>
+							</motion.div>
+						)}
+					</AnimatePresence>
+
+					{/* ---- Main thin bar ---- */}
+					<div className="border-t border-white/10 bg-[#0A1428]/95 backdrop-blur-md">
+						<div className="mx-auto flex h-[60px] max-w-5xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+							{/* Left: text + customize link */}
+							<div className="flex min-w-0 flex-1 items-center gap-3">
+								<p className="truncate text-sm text-white/80">
+									{t("description")}
 								</p>
-								<p className="mt-1 text-[10px] text-muted-foreground/70">
-									{essentialCookies.map((c) => c.name).join(", ")}
-								</p>
+								{!showCustomize && (
+									<button
+										type="button"
+										onClick={() => setShowCustomize(true)}
+										className="inline-flex shrink-0 items-center gap-1 text-xs text-[#00E5C0] transition-colors hover:text-[#00E5C0]/80"
+									>
+										<Settings2Icon className="size-3" />
+										<span className="hidden sm:inline">
+											{t("customize")}
+										</span>
+									</button>
+								)}
 							</div>
-							<Toggle checked disabled />
-						</div>
 
-						{/* Analytics */}
-						<div className="flex items-center justify-between gap-4">
-							<div className="min-w-0">
-								<p className="text-sm font-medium">{t("analytics.title")}</p>
-								<p className="text-xs text-muted-foreground">
-									{t("analytics.description")}
-								</p>
-								<p className="mt-1 text-[10px] text-muted-foreground/70">
-									{analyticsCookies.map((c) => c.name).join(", ")}
-								</p>
+							{/* Right: action buttons */}
+							<div className="flex shrink-0 items-center gap-2">
+								<Button
+									variant="outline"
+									size="sm"
+									onClick={rejectAll}
+									className="h-8 border-white/20 bg-transparent text-xs text-white hover:bg-white/10 hover:text-white"
+								>
+									{t("rejectAll")}
+								</Button>
+								<Button
+									size="sm"
+									onClick={acceptAll}
+									className="h-8 bg-[#00E5C0] text-xs text-[#0A1428] hover:bg-[#00E5C0]/90"
+								>
+									{t("acceptAll")}
+								</Button>
 							</div>
-							<Toggle
-								checked={analyticsEnabled}
-								onChange={setAnalyticsEnabled}
-							/>
 						</div>
-
-						{/* Marketing */}
-						<div className="flex items-center justify-between gap-4">
-							<div className="min-w-0">
-								<p className="text-sm font-medium">{t("marketing.title")}</p>
-								<p className="text-xs text-muted-foreground">
-									{t("marketing.description")}
-								</p>
-							</div>
-							<Toggle
-								checked={marketingEnabled}
-								onChange={setMarketingEnabled}
-							/>
-						</div>
-
-						<Button
-							className="w-full"
-							size="sm"
-							onClick={handleSaveCustom}
-						>
-							{t("savePreferences")}
-						</Button>
 					</div>
-				)}
-
-				{/* Action buttons — shown when not customizing */}
-				{!showCustomize && (
-					<div className="mt-4 flex gap-2">
-						<Button
-							variant="ghost"
-							size="sm"
-							className="flex-1 text-xs"
-							onClick={() => setShowCustomize(true)}
-						>
-							<Settings2Icon className="mr-1.5 size-3.5" />
-							{t("customize")}
-						</Button>
-						<Button
-							variant="secondary"
-							size="sm"
-							className="flex-1"
-							onClick={rejectAll}
-						>
-							{t("rejectAll")}
-						</Button>
-						<Button
-							size="sm"
-							className="flex-1"
-							onClick={acceptAll}
-						>
-							{t("acceptAll")}
-						</Button>
-					</div>
-				)}
-			</div>
-		</div>
+				</motion.div>
+			)}
+		</AnimatePresence>
 	);
 }
