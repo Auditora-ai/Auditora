@@ -58,7 +58,7 @@
 | Issue | Depende de | Status | Fecha |
 |---|---|---|---|
 | #11 F1-09: Absorber deliverables | #4, #6 | **DONE** | 2026-04-02 | S ✓ All /deliverables/* routes redirect to /processes. Sub-pages (risks, raci, process-cards, process-map, horizontal-view) redirected. API routes kept for backward compat. |
-| #9 F1-07: Refactorizar NavBar | #3, #4, #6 | PENDING | — |
+| #9 F1-07: Refactorizar NavBar | #3, #4, #6 | **DONE** | 2026-04-02 | M ✓ Sidebar: 4 items only (Descubrir→Procesos→Evaluaciones→Panorama). Removed sessions, evaluation, deliverables, documents. MobileBottomBar matches. `pnpm build` passes. |
 
 ### Wave 4 (último, sincroniza todo)
 | Issue | Depende de | Status | Fecha |

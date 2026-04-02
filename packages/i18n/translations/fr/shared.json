@@ -1,96 +1,94 @@
 {
-	"pricing": {
-		"title": "Tarification simple. Des évaluations qui évoluent avec votre équipe.",
-		"subtitle": "Chaque plan commence par un essai gratuit de 14 jours. Sans carte bancaire.",
-		"monthly": "Mensuel",
-		"yearly": "Annuel",
-		"perMonth": "/mois",
-		"savePercent": "Économisez {percent}%",
-		"billedAnnually": "facturation annuelle",
-		"perSeat": "utilisateur",
-		"recommended": "Le plus populaire",
-		"contactSales": "Contacter les ventes",
-		"getStarted": "Essai gratuit",
-		"startTrial": "Essai gratuit",
-		"trialPeriod": "{days} {days, plural, one {jour} other {jours}} d'essai gratuit",
-		"choosePlan": "Choisir un plan",
-		"purchase": "Acheter",
-		"subscribe": "S'abonner",
-		"month": "{count, plural, one {mois} other {{count} mois}}",
-		"year": "{count, plural, one {an} other {{count} ans}}",
-		"sessionsIncluded": "{count} sessions IA incluses",
-		"extraSession": "+{price}€ par session supplémentaire",
-		"evaluationsTitle": "Évaluations",
-		"evaluationsUsed": "{used} / {limit} évaluations utilisées",
-		"evaluationsUnlimited": "Évaluations illimitées",
-		"evaluationsExhausted": "Vous avez atteint votre limite d'évaluations ce mois-ci.",
-		"evaluationsRemaining": "{count} évaluations restantes ce mois-ci.",
-		"evaluationsAvailable": "{count} évaluations disponibles.",
-		"resetDate": "Réinitialisation le {date}",
-		"products": {
-			"starter": {
-				"title": "Starter",
-				"description": "Pour les petites équipes qui démarrent avec l'intelligence des processus",
-				"price": "49$",
-				"unit": "/mois",
-				"features": {
-					"processes": "3 processus",
-					"evaluations": "10 évaluations / mois",
-					"evaluators": "5 évaluateurs",
-					"discovery": "Découverte de processus par IA",
-					"bpmn": "Diagrammes BPMN 2.0",
-					"riskAssessment": "Évaluation des risques (FMEA)",
-					"trial": "Essai gratuit de 14 jours"
-				}
-			},
-			"growth": {
-				"title": "Growth",
-				"description": "Pour les entreprises en croissance qui développent leur culture processus",
-				"price": "199$",
-				"unit": "/mois",
-				"features": {
-					"processes": "15 processus",
-					"evaluations": "50 évaluations / mois",
-					"evaluators": "30 évaluateurs",
-					"everythingInStarter": "Tout de Starter, plus :",
-					"procedures": "Génération de procédures (SOPs)",
-					"simulations": "Évaluations de style Harvard",
-					"teamDashboard": "Tableaux de bord d'équipe",
-					"prioritySupport": "Support prioritaire"
-				}
-			},
-			"scale": {
-				"title": "Scale",
-				"description": "Pour les entreprises qui mesurent le risque humain à grande échelle",
-				"price": "499$",
-				"unit": "/mois",
-				"features": {
-					"processes": "Processus illimités",
-					"evaluations": "250 évaluations / mois",
-					"evaluators": "150 évaluateurs",
-					"everythingInGrowth": "Tout de Growth, plus :",
-					"advancedAnalytics": "Analyses avancées et reporting",
-					"apiAccess": "Accès API",
-					"sharedLibrary": "Bibliothèque de processus partagée",
-					"byok": "BYOK (apportez votre propre clé IA)",
-					"sso": "Authentification SSO et SAML"
-				}
-			},
-			"enterprise": {
-				"title": "Enterprise",
-				"description": "Pour les grandes organisations avec des besoins personnalisés",
-				"price": "Sur mesure",
-				"unit": "",
-				"features": {
-					"unlimited": "Tout en illimité",
-					"everythingInScale": "Tout de Scale, plus :",
-					"dedicatedManager": "Account manager dédié",
-					"sla": "Garanties SLA",
-					"customIntegrations": "Intégrations personnalisées",
-					"customDeployment": "Déploiement on-premise / cloud privé",
-					"auditTrail": "Audit trail complet et conformité"
-				}
-			}
-		}
-	}
+  "pricing": {
+    "title": "Tarification simple. Des évaluations qui évoluent avec votre équipe.",
+    "subtitle": "Chaque plan commence par un essai gratuit de 14 jours. Sans carte bancaire.",
+    "monthly": "Mensuel",
+    "yearly": "Annuel",
+    "perMonth": "/mois",
+    "savePercent": "Économisez {percent}%",
+    "billedAnnually": "facturation annuelle",
+    "perSeat": "utilisateur",
+    "recommended": "Le plus populaire",
+    "contactSales": "Contacter les ventes",
+    "getStarted": "Essai gratuit",
+    "startTrial": "Essai gratuit",
+    "trialPeriod": "{days} {days, plural, one {jour} other {jours}} d'essai gratuit",
+    "choosePlan": "Choisir un plan",
+    "purchase": "Acheter",
+    "subscribe": "S'abonner",
+    "month": "{count, plural, one {mois} other {{count} mois}}",
+    "year": "{count, plural, one {an} other {{count} ans}}",
+    "evaluationsTitle": "Évaluations",
+    "evaluationsUsed": "{used} / {limit} évaluations utilisées",
+    "evaluationsUnlimited": "Évaluations illimitées",
+    "evaluationsExhausted": "Vous avez atteint votre limite d'évaluations ce mois-ci.",
+    "evaluationsRemaining": "{count} évaluations restantes ce mois-ci.",
+    "evaluationsAvailable": "{count} évaluations disponibles.",
+    "resetDate": "Réinitialisation le {date}",
+    "products": {
+      "starter": {
+        "title": "Starter",
+        "description": "Pour les petites équipes qui démarrent avec l'intelligence des processus",
+        "price": "49$",
+        "unit": "/mois",
+        "features": {
+          "processes": "3 processus",
+          "evaluations": "10 évaluations / mois",
+          "evaluators": "5 évaluateurs",
+          "discovery": "Découverte de processus par IA",
+          "bpmn": "Diagrammes BPMN 2.0",
+          "riskAssessment": "Évaluation des risques (FMEA)",
+          "trial": "Essai gratuit de 14 jours"
+        }
+      },
+      "growth": {
+        "title": "Growth",
+        "description": "Pour les entreprises en croissance qui développent leur culture processus",
+        "price": "199$",
+        "unit": "/mois",
+        "features": {
+          "processes": "15 processus",
+          "evaluations": "50 évaluations / mois",
+          "evaluators": "30 évaluateurs",
+          "everythingInStarter": "Tout de Starter, plus :",
+          "procedures": "Génération de procédures (SOPs)",
+          "simulations": "Évaluations de style Harvard",
+          "teamDashboard": "Tableaux de bord d'équipe",
+          "prioritySupport": "Support prioritaire"
+        }
+      },
+      "scale": {
+        "title": "Scale",
+        "description": "Pour les entreprises qui mesurent le risque humain à grande échelle",
+        "price": "499$",
+        "unit": "/mois",
+        "features": {
+          "processes": "Processus illimités",
+          "evaluations": "250 évaluations / mois",
+          "evaluators": "150 évaluateurs",
+          "everythingInGrowth": "Tout de Growth, plus :",
+          "advancedAnalytics": "Analyses avancées et reporting",
+          "apiAccess": "Accès API",
+          "sharedLibrary": "Bibliothèque de processus partagée",
+          "byok": "BYOK (apportez votre propre clé IA)",
+          "sso": "Authentification SSO et SAML"
+        }
+      },
+      "enterprise": {
+        "title": "Enterprise",
+        "description": "Pour les grandes organisations avec des besoins personnalisés",
+        "price": "Sur mesure",
+        "unit": "",
+        "features": {
+          "unlimited": "Tout en illimité",
+          "everythingInScale": "Tout de Scale, plus :",
+          "dedicatedManager": "Account manager dédié",
+          "sla": "Garanties SLA",
+          "customIntegrations": "Intégrations personnalisées",
+          "customDeployment": "Déploiement on-premise / cloud privé",
+          "auditTrail": "Audit trail complet et conformité"
+        }
+      }
+    }
+  }
 }

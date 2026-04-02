@@ -1,99 +1,97 @@
 {
-	"pricing": {
-		"title": "Simple pricing. Evaluations that scale with your team.",
-		"subtitle": "Every plan starts with a 14-day free trial. No credit card required.",
-		"monthly": "Monthly",
-		"yearly": "Annual",
-		"perMonth": "/mo",
-		"savePercent": "Save {percent}%",
-		"billedAnnually": "billed annually",
-		"perSeat": "seat",
-		"recommended": "Most popular",
-		"contactSales": "Talk to sales",
-		"getStarted": "Start free trial",
-		"startTrial": "Start free trial",
-		"trialPeriod": "{days} {days, plural, one {day} other {days}} free trial",
-		"choosePlan": "Choose plan",
-		"purchase": "Purchase",
-		"subscribe": "Subscribe",
-		"month": "{count, plural, one {month} other {{count} months}}",
-		"year": "{count, plural, one {year} other {{count} years}}",
-		"sessionsIncluded": "{count} AI sessions included",
-		"extraSession": "+${price} per extra session",
-		"evaluationsTitle": "Evaluations",
-		"evaluationsUsed": "{used} / {limit} evaluations used",
-		"evaluationsUnlimited": "Unlimited evaluations",
-		"evaluationsExhausted": "You've reached your evaluation limit this month.",
-		"evaluationsRemaining": "{count} evaluations remaining this month.",
-		"evaluationsAvailable": "{count} evaluations available.",
-		"resetDate": "Resets {date}",
-		"metricProcesses": "processes",
-		"metricEvaluations": "eval/mo",
-		"metricEvaluators": "evaluators",
-		"products": {
-			"starter": {
-				"title": "Starter",
-				"description": "For small teams getting started with process intelligence",
-				"price": "$49",
-				"unit": "/month",
-				"features": {
-					"processes": "3 processes",
-					"evaluations": "10 evaluations / month",
-					"evaluators": "5 evaluators",
-					"discovery": "AI process discovery",
-					"bpmn": "BPMN 2.0 diagrams",
-					"riskAssessment": "Risk assessment (FMEA)",
-					"trial": "14-day free trial"
-				}
-			},
-			"growth": {
-				"title": "Growth",
-				"description": "For growing companies scaling their process culture",
-				"price": "$199",
-				"unit": "/month",
-				"features": {
-					"processes": "15 processes",
-					"evaluations": "50 evaluations / month",
-					"evaluators": "30 evaluators",
-					"everythingInStarter": "Everything in Starter, plus:",
-					"procedures": "Procedure generation (SOPs)",
-					"simulations": "Harvard-style evaluations",
-					"teamDashboard": "Team dashboards",
-					"prioritySupport": "Priority support"
-				}
-			},
-			"scale": {
-				"title": "Scale",
-				"description": "For enterprises measuring human risk at scale",
-				"price": "$499",
-				"unit": "/month",
-				"features": {
-					"processes": "Unlimited processes",
-					"evaluations": "250 evaluations / month",
-					"evaluators": "150 evaluators",
-					"everythingInGrowth": "Everything in Growth, plus:",
-					"advancedAnalytics": "Advanced analytics & reporting",
-					"apiAccess": "API access",
-					"sharedLibrary": "Shared process library",
-					"byok": "BYOK (bring your own AI key)",
-					"sso": "SSO & SAML authentication"
-				}
-			},
-			"enterprise": {
-				"title": "Enterprise",
-				"description": "For large organizations with custom requirements",
-				"price": "Custom",
-				"unit": "",
-				"features": {
-					"unlimited": "Unlimited everything",
-					"everythingInScale": "Everything in Scale, plus:",
-					"dedicatedManager": "Dedicated account manager",
-					"sla": "SLA guarantees",
-					"customIntegrations": "Custom integrations",
-					"customDeployment": "On-premise / private cloud deployment",
-					"auditTrail": "Full audit trail & compliance"
-				}
-			}
-		}
-	}
+  "pricing": {
+    "title": "Simple pricing. Evaluations that scale with your team.",
+    "subtitle": "Every plan starts with a 14-day free trial. No credit card required.",
+    "monthly": "Monthly",
+    "yearly": "Annual",
+    "perMonth": "/mo",
+    "savePercent": "Save {percent}%",
+    "billedAnnually": "billed annually",
+    "perSeat": "seat",
+    "recommended": "Most popular",
+    "contactSales": "Talk to sales",
+    "getStarted": "Start free trial",
+    "startTrial": "Start free trial",
+    "trialPeriod": "{days} {days, plural, one {day} other {days}} free trial",
+    "choosePlan": "Choose plan",
+    "purchase": "Purchase",
+    "subscribe": "Subscribe",
+    "month": "{count, plural, one {month} other {{count} months}}",
+    "year": "{count, plural, one {year} other {{count} years}}",
+    "evaluationsTitle": "Evaluations",
+    "evaluationsUsed": "{used} / {limit} evaluations used",
+    "evaluationsUnlimited": "Unlimited evaluations",
+    "evaluationsExhausted": "You've reached your evaluation limit this month.",
+    "evaluationsRemaining": "{count} evaluations remaining this month.",
+    "evaluationsAvailable": "{count} evaluations available.",
+    "resetDate": "Resets {date}",
+    "metricProcesses": "processes",
+    "metricEvaluations": "eval/mo",
+    "metricEvaluators": "evaluators",
+    "products": {
+      "starter": {
+        "title": "Starter",
+        "description": "For small teams getting started with process intelligence",
+        "price": "$49",
+        "unit": "/month",
+        "features": {
+          "processes": "3 processes",
+          "evaluations": "10 evaluations / month",
+          "evaluators": "5 evaluators",
+          "discovery": "AI process discovery",
+          "bpmn": "BPMN 2.0 diagrams",
+          "riskAssessment": "Risk assessment (FMEA)",
+          "trial": "14-day free trial"
+        }
+      },
+      "growth": {
+        "title": "Growth",
+        "description": "For growing companies scaling their process culture",
+        "price": "$199",
+        "unit": "/month",
+        "features": {
+          "processes": "15 processes",
+          "evaluations": "50 evaluations / month",
+          "evaluators": "30 evaluators",
+          "everythingInStarter": "Everything in Starter, plus:",
+          "procedures": "Procedure generation (SOPs)",
+          "simulations": "Harvard-style evaluations",
+          "teamDashboard": "Team dashboards",
+          "prioritySupport": "Priority support"
+        }
+      },
+      "scale": {
+        "title": "Scale",
+        "description": "For enterprises measuring human risk at scale",
+        "price": "$499",
+        "unit": "/month",
+        "features": {
+          "processes": "Unlimited processes",
+          "evaluations": "250 evaluations / month",
+          "evaluators": "150 evaluators",
+          "everythingInGrowth": "Everything in Growth, plus:",
+          "advancedAnalytics": "Advanced analytics & reporting",
+          "apiAccess": "API access",
+          "sharedLibrary": "Shared process library",
+          "byok": "BYOK (bring your own AI key)",
+          "sso": "SSO & SAML authentication"
+        }
+      },
+      "enterprise": {
+        "title": "Enterprise",
+        "description": "For large organizations with custom requirements",
+        "price": "Custom",
+        "unit": "",
+        "features": {
+          "unlimited": "Unlimited everything",
+          "everythingInScale": "Everything in Scale, plus:",
+          "dedicatedManager": "Dedicated account manager",
+          "sla": "SLA guarantees",
+          "customIntegrations": "Custom integrations",
+          "customDeployment": "On-premise / private cloud deployment",
+          "auditTrail": "Full audit trail & compliance"
+        }
+      }
+    }
+  }
 }
