@@ -9,6 +9,7 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { BpmnHeroBackground } from "./BpmnHeroBackground";
 import { ParticleNetwork } from "./animations/ParticleNetwork";
+import { BpmnRealTimeBuilder } from "./animations/BpmnRealTimeBuilder";
 
 const MOCKUP_STEPS = [
 	{ num: "01", label: "Scan" },
@@ -224,32 +225,9 @@ export function HeroSection() {
 										<div className="h-4 w-32 rounded bg-white/15" />
 										<div className="h-4 w-20 rounded bg-[#00E5C0]/20" />
 									</div>
-									<div className="flex flex-1 items-center justify-center">
-										<svg
-											viewBox="0 0 400 200"
-											className="h-auto w-full opacity-70 bpmn-draw is-drawing"
-											fill="none"
-										>
-											<circle cx="30" cy="100" r="14" stroke="#00E5C0" strokeWidth="2" fill="rgba(0,229,192,0.15)" />
-											<line x1="44" y1="100" x2="80" y2="100" stroke="#00E5C0" strokeWidth="1.5" />
-											<circle cx="80" cy="100" r="2" fill="#00E5C0" />
-											<rect x="88" y="80" width="76" height="40" rx="6" stroke="#00E5C0" strokeWidth="1.5" fill="rgba(0,229,192,0.1)" />
-											<text x="126" y="104" textAnchor="middle" fill="#00E5C0" fontSize="9" fontFamily="system-ui">Identify</text>
-											<line x1="164" y1="100" x2="200" y2="100" stroke="#00E5C0" strokeWidth="1.5" />
-											<rect x="200" y="88" width="24" height="24" rx="3" transform="rotate(45 212 100)" stroke="#00E5C0" strokeWidth="1.5" fill="rgba(0,229,192,0.08)" />
-											<line x1="217" y1="83" x2="255" y2="55" stroke="#00E5C0" strokeWidth="1.5" />
-											<circle cx="255" cy="55" r="2" fill="#00E5C0" />
-											<rect x="263" y="35" width="76" height="40" rx="6" stroke="#00E5C0" strokeWidth="1.5" fill="rgba(0,229,192,0.1)" />
-											<text x="301" y="59" textAnchor="middle" fill="#00E5C0" fontSize="9" fontFamily="system-ui">Assess</text>
-											<line x1="217" y1="117" x2="255" y2="145" stroke="#00E5C0" strokeWidth="1.5" />
-											<circle cx="255" cy="145" r="2" fill="#00E5C0" />
-											<rect x="263" y="125" width="76" height="40" rx="6" stroke="#00E5C0" strokeWidth="1.5" fill="rgba(0,229,192,0.1)" />
-											<text x="301" y="149" textAnchor="middle" fill="#00E5C0" fontSize="9" fontFamily="system-ui">Document</text>
-											<line x1="339" y1="55" x2="365" y2="85" stroke="#00E5C0" strokeWidth="1.5" />
-											<line x1="339" y1="145" x2="365" y2="115" stroke="#00E5C0" strokeWidth="1.5" />
-											<circle cx="380" cy="100" r="14" stroke="#00E5C0" strokeWidth="3" fill="rgba(0,229,192,0.15)" />
-										</svg>
-									</div>
+						<div className="flex flex-1 items-center justify-center p-2">
+									<BpmnRealTimeBuilder className="w-full" loopMs={9000} />
+								</div>
 									<div className="mt-3 flex gap-2">
 										<div className="flex-1 rounded-lg bg-red-500/10 px-3 py-2">
 											<div className="mb-1 h-2 w-12 rounded bg-red-400/30" />

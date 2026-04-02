@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { cn } from "@repo/ui";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { BeforeAfterComparison } from "./animations/BeforeAfterComparison";
 
 const painCards = [
 	{ id: "pain1", icon: ClockIcon },
@@ -123,6 +124,17 @@ export function ProblemSection() {
 						{t("home.problem.statSource")}
 					</motion.p>
 				</div>
+
+				{/* Before / After Comparison Animation */}
+				<motion.div
+					initial={{ opacity: 0, y: 32 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					viewport={{ once: true, margin: "-60px" }}
+					transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+					className="mb-12 sm:mb-16"
+				>
+					<BeforeAfterComparison />
+				</motion.div>
 
 				{/* Pain Point Cards */}
 				<motion.div
