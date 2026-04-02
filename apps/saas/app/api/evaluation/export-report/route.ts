@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@repo/auth";
 import { headers } from "next/headers";
-import { fetchHumanRiskDashboardData } from "@evaluaciones/lib/dashboard-queries";
+import { fetchHumanRiskDashboardData, fetchProgressData } from "@evaluaciones/lib/dashboard-queries";
 import { generateHumanRiskReportHtml } from "../../../../lib/export/human-risk-report-generator";
 
 async function getSession() {
@@ -23,7 +23,10 @@ export async function GET() {
 	if (!org)
 		return NextResponse.json({ error: "No organization" }, { status: 400 });
 
-	const data = await fetchHumanRiskDashboardData(org.id);
+	const [data, progressData] = await Promise.all([
+		fetchHumanRiskDashboardData(org.id),
+		fetchProgressData(org.id),
+	]);
 
 	if (data.insufficientData) {
 		return NextResponse.json(
@@ -40,6 +43,7 @@ export async function GET() {
 			day: "numeric",
 		}),
 		data,
+		progressData,
 	});
 
 	return new NextResponse(html, {
