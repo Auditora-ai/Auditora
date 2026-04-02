@@ -192,6 +192,70 @@
 			"cta": "Crear cuenta gratuita",
 			"ctaSubtext": "Todo lo que generaste en el diagnostico gratuito migra automaticamente a tu cuenta."
 		},
+		"bento": {
+			"badge": "Plataforma",
+			"title": "Todo lo que necesitas para descubrir, analizar y documentar procesos",
+			"subtitle": "Una plataforma que reemplaza hojas de cálculo, pizarras y herramientas manuales de diagramación.",
+			"process": {
+				"title": "Descubrimiento de Procesos con IA",
+				"description": "Escanea un sitio web o inicia una conversación guiada. La IA identifica la industria, servicios y mapea la estructura SIPOC completa automáticamente."
+			},
+			"bpmn": {
+				"title": "Modelado BPMN 2.0 en Tiempo Real",
+				"description": "Diagramas profesionales construidos durante la sesión. Tareas, gateways, pools, lanes — toda la notación estándar BPMN 2.0 con layout ELK."
+			},
+			"fmea": {
+				"title": "Matriz de Riesgos FMEA",
+				"description": "Cada actividad evaluada por Severidad, Ocurrencia y Detección. Números de Prioridad de Riesgo calculados automáticamente con mapas de calor."
+			},
+			"elicitation": {
+				"title": "Elicitación Inteligente con IA",
+				"description": "La IA detecta huecos en tu mapa de procesos y formula preguntas específicas. Cada respuesta cierra un hueco concreto — no prompts genéricos."
+			},
+			"export": {
+				"title": "Exporta a Cualquier Herramienta",
+				"description": "Entregables profesionales listos para stakeholders. Compatible con Camunda, Signavio, Bizagi y cualquier herramienta BPMN 2.0."
+			}
+		},
+		"showcase": {
+			"badge": "Demo en Vivo",
+			"title": "Velólo en acción",
+			"subtitle": "Desde el escaneo hasta entregables profesionales — todo el flujo ocurre en una plataforma.",
+			"discover": "Descubrir",
+			"analyze": "Analizar",
+			"document": "Documentar",
+			"monitor": "Monitorear",
+			"cta": "Iniciar prueba gratis"
+		},
+		"workflow": {
+			"badge": "Como funciona",
+			"title": "El ciclo de consultoría completo, potenciado por IA",
+			"subtitle": "Desde el escaneo inicial hasta entregables profesionales — una metodología estructurada que escala con cada proyecto.",
+			"scan": {
+				"title": "Escanear",
+				"description": "Ingresa una URL. La IA analiza las páginas públicas y genera un mapa de procesos inicial."
+			},
+			"discover": {
+				"title": "Descubrir",
+				"description": "La elicitación guiada por IA identifica actividades, inputs, outputs y stakeholders."
+			},
+			"analyze": {
+				"title": "Analizar",
+				"description": "Matriz FMEA con scoring de riesgos, modos de falla y RPN por actividad."
+			},
+			"document": {
+				"title": "Documentar",
+				"description": "Tablas SIPOC, diagramas BPMN y SOPs generados automáticamente."
+			},
+			"simulate": {
+				"title": "Simular",
+				"description": "Ejecuta simulaciones de escenarios para probar la resiliencia de los procesos."
+			},
+			"evaluate": {
+				"title": "Evaluar",
+				"description": "Puntúa riesgos, da seguimiento a mitigaciones y entrega reportes profesionales."
+			}
+		},
 		"credibility": {
 			"badge": "Metodologia",
 			"title": "Construido sobre frameworks reconocidos",

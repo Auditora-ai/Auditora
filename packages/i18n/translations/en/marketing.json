@@ -192,6 +192,70 @@
 			"cta": "Create free account",
 			"ctaSubtext": "Everything you generated in the free diagnostic migrates automatically to your account."
 		},
+		"bento": {
+			"badge": "Platform",
+			"title": "Everything you need to discover, analyze, and document processes",
+			"subtitle": "One platform that replaces spreadsheets, whiteboards, and manual diagramming tools.",
+			"process": {
+				"title": "AI Process Discovery",
+				"description": "Scan a website or start a guided conversation. The AI identifies industry, services, and maps the complete SIPOC structure automatically."
+			},
+			"bpmn": {
+				"title": "Real-time BPMN 2.0 Modeling",
+				"description": "Professional diagrams built during the session. Tasks, gateways, pools, lanes — all standard BPMN 2.0 notation with ELK-powered layout."
+			},
+			"fmea": {
+				"title": "FMEA Risk Matrix",
+				"description": "Each activity scored by Severity, Occurrence, and Detection. Risk Priority Numbers calculated automatically with color-coded heat maps."
+			},
+			"elicitation": {
+				"title": "Smart AI Elicitation",
+				"description": "The AI detects gaps in your process map and asks targeted questions. Each answer closes a specific gap — not generic prompts."
+			},
+			"export": {
+				"title": "Export to Any Tool",
+				"description": "Professional deliverables ready for stakeholders. Compatible with Camunda, Signavio, Bizagi, and any BPMN 2.0 tool."
+			}
+		},
+		"showcase": {
+			"badge": "Live Demo",
+			"title": "See it in action",
+			"subtitle": "From scanning to professional deliverables — the entire workflow happens in one platform.",
+			"discover": "Discover",
+			"analyze": "Analyze",
+			"document": "Document",
+			"monitor": "Monitor",
+			"cta": "Start free trial"
+		},
+		"workflow": {
+			"badge": "How it works",
+			"title": "The complete consulting lifecycle, powered by AI",
+			"subtitle": "From initial scan to professional deliverables — a structured methodology that scales with every engagement.",
+			"scan": {
+				"title": "Scan",
+				"description": "Enter a URL. The AI crawls public pages and generates an initial process map."
+			},
+			"discover": {
+				"title": "Discover",
+				"description": "AI-guided elicitation identifies activities, inputs, outputs, and stakeholders."
+			},
+			"analyze": {
+				"title": "Analyze",
+				"description": "FMEA matrix with risk scoring, failure modes, and RPN per activity."
+			},
+			"document": {
+				"title": "Document",
+				"description": "Auto-generated SIPOC tables, BPMN diagrams, and SOPs."
+			},
+			"simulate": {
+				"title": "Simulate",
+				"description": "Run scenario simulations to test process resilience and identify weaknesses."
+			},
+			"evaluate": {
+				"title": "Evaluate",
+				"description": "Score risks, track mitigation, and deliver stakeholder-ready reports."
+			}
+		},
 		"credibility": {
 			"badge": "Methodology",
 			"title": "Built on recognized frameworks",
