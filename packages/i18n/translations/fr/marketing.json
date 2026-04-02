@@ -1,378 +1,378 @@
 {
-	"blog": {
-		"description": "Articles sur le conseil en processus, l'automatisation BPM et l'élicitation par IA",
-		"title": "Blog",
-		"back": "Retour au blog"
-	},
-	"changelog": {
-		"description": "Restez informé des dernières modifications de Auditora.ai.",
-		"title": "Changelog"
-	},
-	"contact": {
-		"description": "Des questions sur Auditora.ai ? Nous serions ravis d'échanger avec vous.",
-		"form": {
-			"email": "E-mail",
-			"message": "Message",
-			"name": "Nom",
-			"notifications": {
-				"error": "Impossible d'envoyer votre message. Veuillez réessayer plus tard.",
-				"success": "Message envoyé. Nous vous répondrons sous 24 heures."
-			},
-			"submit": "Envoyer le message"
-		},
-		"title": "Contactez-nous"
-	},
-	"documentation": {
-		"title": "Documentation"
-	},
-	"faq": {
-		"description": "Réponses aux questions les plus fréquentes sur Auditora.ai.",
-		"title": "Questions fréquentes",
-		"items": {
-			"urlLimitations": {
-				"question": "S'il ne lit que mon site web public, comment peut-il identifier de vrais risques ?",
-				"answer": "Le diagnostic initial identifie des risques structurels et logiques basés sur les modèles de l'industrie et la structure du processus déduit. Ce sont des hypothèses fondées, pas des constats opérationnels. La précision de l'analyse augmente significativement avec l'utilisation de la conversation guidée ou de la plateforme complète avec un vrai contexte opérationnel."
-			},
-			"vsChatgpt": {
-				"question": "En quoi est-ce différent d'utiliser ChatGPT pour générer des processus ?",
-				"answer": "Auditora.ai se différencie sur trois aspects clés. Premièrement, la méthodologie : chaque session suit le framework SIPOC avec détection automatique des lacunes de couverture. Deuxièmement, les livrables : les diagrammes générés sont du vrai BPMN 2.0, exportables en XML, pas des représentations approximatives. Troisièmement, la persistance : les processus, risques et actions correctives sont stockés, suivis et évoluent de manière structurée."
-			},
-			"dataAccess": {
-				"question": "À quelles données de mon site web accédez-vous exactement ?",
-				"answer": "Le contenu textuel de jusqu'à 5 pages publiques est analysé : accueil, à propos, services et similaires. C'est le même contenu visible par n'importe quel visiteur dans un navigateur. Aucun accès aux systèmes internes, APIs, bases de données ou zones protégées."
-			},
-			"bpmKnowledge": {
-				"question": "Ai-je besoin de connaissances en BPM ou BPMN pour utiliser l'outil ?",
-				"answer": "Non. Auditora.ai est conçu pour que quiconque connaît son activité puisse l'utiliser. L'IA formule les questions pertinentes en langage accessible et la notation technique est générée automatiquement. Pour les consultants expérimentés en BPM, l'outil accélère le processus de documentation. Pour ceux sans formation technique, la plateforme gère la complexité méthodologique."
-			},
-			"deepening": {
-				"question": "Puis-je approfondir au-delà du rapport instantané ?",
-				"answer": "Oui. Après le diagnostic initial, il est possible de démarrer une conversation guidée avec l'IA. La plateforme pose des questions spécifiques sur les opérations — fournisseurs, entrées, activités, sorties, clients — et construit une analyse progressivement plus détaillée. Le résultat inclut une AMDEC complète avec modes de défaillance et Indice de Priorité du Risque (IPR) par activité."
-			},
-			"dataSecurity": {
-				"question": "Mes données sont-elles sécurisées ?",
-				"answer": "Oui. Toutes les informations sont transmises avec chiffrement TLS et stockées chiffrées au repos. Les sessions anonymes expirent après 24 heures. Les informations fournies ne sont pas utilisées pour entraîner des modèles d'IA. À la création de compte, les données sont stockées dans l'espace privé de l'organisation avec un isolement complet."
-			},
-			"accountMigration": {
-				"question": "Que se passe-t-il avec mon analyse si je crée un compte ?",
-				"answer": "Toutes les informations générées pendant la session anonyme — carte de processus, analyse de risques, conversation guidée et livrables — sont transférées automatiquement vers le compte sans perte de données."
-			},
-			"vsProcessMining": {
-				"question": "Est-ce du process mining ?",
-				"answer": "Non. Le process mining analyse les logs systèmes (ERP, CRM) pour découvrir comment les processus s'exécutent réellement. Auditora.ai est un outil de découverte de processus basé sur l'élicitation : il guide des conversations structurées pour documenter les processus et analyser les risques. Ce sont des approches complémentaires. Le process mining nécessite des données système ; Auditora.ai travaille avec la connaissance humaine."
-			}
-		}
-	},
-	"home": {
-		"hero": {
-			"badge": "Plateforme de découverte de processus par IA",
-			"title": "Découverte et analyse de processus avec méthodologie éprouvée",
-			"subtitle": "Nous combinons l'intelligence artificielle avec des frameworks standard (SIPOC, BPMN 2.0 et AMDEC) pour aider les consultants et auditeurs à cartographier les processus et évaluer les risques de manière structurée.",
-			"inputPlaceholder": "https://votre-entreprise.fr",
-			"cta": "Analyser mon entreprise gratuitement",
-			"ctaSecondary": "Décrire le processus manuellement",
-			"subtext": "Entrez une URL. L'IA analyse le contexte public et génère un diagnostic initial avec carte de processus et analyse de risques.",
-			"alt": {
-				"badge": "L'outil manquant à votre pratique",
-				"title": "Chaque processus non documenté est un risque que vous signez",
-				"subtitle": "Vos clients ont des processus critiques que personne n'a cartographiés. Auditora.ai les découvre : élicitation SIPOC guidée par IA, diagrammes BPMN 2.0 automatiques et matrice AMDEC avec évaluation de la gravité. En une fraction du temps.",
-				"cta": "Voir le diagnostic de mon entreprise",
-				"subtext": "Entrez votre URL d'entreprise. Recevez une carte de processus et une analyse de risques en minutes — sans inscription, sans engagement."
-			}
-		},
-		"problem": {
-			"badge": "Le problème",
-			"title": "La découverte traditionnelle de processus présente des limitations importantes",
-			"card1": {
-				"title": "Des semaines d'entretiens et de multiples cycles de révision",
-				"description": "Nécessite des semaines d'entretiens et de multiples cycles de révision pour obtenir une carte de processus initiale."
-			},
-			"card2": {
-				"title": "Les diagrammes manuels deviennent rapidement obsolètes",
-				"description": "Les diagrammes manuels deviennent rapidement obsolètes et nécessitent une mise à jour constante."
-			},
-			"card3": {
-				"title": "Le process mining nécessite des event logs et un accès technique",
-				"description": "Les outils de process mining nécessitent des event logs et des accès techniques que la plupart des organisations n'ont pas disponibles."
-			},
-			"card4": {
-				"title": "Les solutions IA génériques manquent de structure méthodologique",
-				"description": "Les solutions IA génériques manquent de structure méthodologique et produisent des résultats difficiles à défendre."
-			}
-		},
-		"solution": {
-			"badge": "La solution",
-			"title": "Auditora.ai accélère la cartographie et l'analyse des processus",
-			"description": "La plateforme combine l'IA avec des méthodologies éprouvées pour générer un diagnostic initial à partir d'informations publiques et l'enrichir via une conversation guidée structurée.",
-			"diff1": {
-				"title": "Méthodologie SIPOC intégrée",
-				"description": "Chaque session suit le framework SIPOC (Fournisseurs, Entrées, Processus, Sorties, Clients). L'IA détecte les lacunes de couverture et génère des questions contextuelles pour les combler."
-			},
-			"diff2": {
-				"title": "Diagrammes BPMN 2.0 en temps réel",
-				"description": "Le diagramme se construit pendant la session. Exportable en XML, compatible avec Camunda, Signavio et tout outil BPMN 2.0."
-			},
-			"diff3": {
-				"title": "Matrice AMDEC avec IPR par activité",
-				"description": "Chaque activité est évaluée contre les modes de défaillance potentiels. Gravité, Occurrence, Détection et Indice de Priorité du Risque sont calculés."
-			}
-		},
-		"howItWorks": {
-			"badge": "Diagnostic initial",
-			"title": "Diagnostic initial à partir d'informations publiques",
-			"subtitle": "Un point de départ structuré basé sur les pages web publiques de l'organisation.",
-			"step1": {
-				"title": "Entrez l'URL de l'organisation",
-				"description": "Fournissez l'adresse web de l'organisation que vous souhaitez analyser."
-			},
-			"step2": {
-				"title": "L'IA analyse les pages publiques disponibles",
-				"description": "Le système traite le contenu public pour identifier l'industrie, les services et la structure opérationnelle."
-			},
-			"step3": {
-				"title": "Génère une carte SIPOC initiale et une évaluation des risques",
-				"description": "Une carte SIPOC initiale et une évaluation préliminaire des risques structurels sont générées."
-			},
-			"step4": {
-				"title": "Prépare la base pour une élicitation approfondie",
-				"description": "Le diagnostic sert de point de départ pour une conversation guidée plus approfondie."
-			},
-			"disclaimer": "Cette analyse est un point de départ. La précision augmente avec les informations que vous apportez pendant la conversation guidée."
-		},
-		"deepDive": {
-			"badge": "Élicitation guidée",
-			"title": "Élicitation structurée par conversation guidée",
-			"subtitle": "L'IA formule des questions spécifiques basées sur les lacunes détectées, suivant les principes SIPOC et AMDEC. Chaque réponse enrichit le modèle et permet une analyse plus complète.",
-			"methodTitle": "Questions ciblées basées sur les lacunes",
-			"methodDescription": "L'IA ne demande pas une description générale du processus. Elle formule des questions spécifiques basées sur les lacunes détectées dans la carte SIPOC :",
-			"question1": "« Vous avez mentionné 3 fournisseurs mais seulement 1 entrée. Qui d'autre fournit des matériaux ou informations pour cette étape ? »",
-			"question2": "« Votre processus a 5 activités mais aucune bifurcation. Y a-t-il un point où le flux change selon une condition ? »",
-			"question3": "« Vous avez identifié le client final mais pas le client interne. Qui reçoit le résultat de cette étape avant qu'il n'atteigne le client ? »",
-			"methodNote": "Chaque question comble une lacune spécifique du modèle.",
-			"outputTitle": "Comparaison des résultats",
-			"instant": {
-				"label": "Diagnostic initial",
-				"processes": "1 processus cartographié",
-				"risks": "3-5 risques généraux",
-				"analysis": "Notation de base",
-				"diagram": "SIPOC basique"
-			},
-			"guided": {
-				"label": "Après conversation guidée",
-				"processes": "Processus enrichi avec 2-3x plus d'activités",
-				"risks": "10-15+ risques spécifiques avec modes de défaillance",
-				"analysis": "AMDEC complète avec IPR par activité",
-				"diagram": "BPMN 2.0 exportable"
-			}
-		},
-		"platform": {
-			"badge": "La plateforme",
-			"title": "Livrables professionnels",
-			"subtitle": "La plateforme génère une documentation prête à présenter aux parties prenantes et équipes d'audit.",
-			"feature1": {
-				"title": "Diagrammes BPMN 2.0 exportables",
-				"description": "Diagrammes générés automatiquement pendant la session. Exportez XML, PNG ou PDF. Compatible avec Camunda, Signavio, Bizagi."
-			},
-			"feature2": {
-				"title": "Matrice AMDEC complète avec calcul IPR",
-				"description": "Chaque activité évaluée contre les modes de défaillance potentiels avec calcul de Gravité, Occurrence, Détection et IPR."
-			},
-			"feature3": {
-				"title": "Identification des risques par activité",
-				"description": "Risques cartographiés directement sur chaque activité du processus, avec traçabilité complète."
-			},
-			"feature4": {
-				"title": "Rapports prêts pour les parties prenantes",
-				"description": "Exportez des rapports professionnels avec cartes de processus, matrices de risques et recommandations structurées."
-			},
-			"feature5": {
-				"title": "Historique d'analyses et versions",
-				"description": "Chaque itération d'analyse est stockée avec historique des modifications. Comparez les versions et suivez l'évolution du processus."
-			},
-			"cta": "Créer un compte gratuit",
-			"ctaSubtext": "Tout ce que vous avez généré dans le diagnostic gratuit migre automatiquement vers votre compte."
-		},
-		"credibility": {
-			"badge": "Méthodologie",
-			"title": "Construit sur des frameworks reconnus",
-			"pillar1": {
-				"title": "SIPOC (Six Sigma)",
-				"description": "Framework standard pour la cartographie des processus : Fournisseurs, Entrées, Processus, Sorties, Clients. Nous automatisons la structure que les consultants seniors utilisent déjà."
-			},
-			"pillar2": {
-				"title": "BPMN 2.0 (OMG)",
-				"description": "Notation standard de l'industrie pour la modélisation des processus métier. Diagrammes interopérables et exportables."
-			},
-			"pillar3": {
-				"title": "AMDEC (Analyse des Modes de Défaillance)",
-				"description": "Méthodologie systématique pour identifier et prioriser les risques. Nous automatisons le calcul de Gravité, Occurrence, Détection et IPR."
-			},
-			"radarCaption": "Exposition au risque avant et après la mise en œuvre des processus avec Auditora"
-		},
-		"socialProof": {
-			"badge": "Cas d'utilisation",
-			"title": "Ce que disent les professionnels",
-			"testimonial1": {
-				"quote": "A réduit significativement le temps de cartographie initiale. La matrice AMDEC générée est claire et utile pour les présentations de direction.",
-				"name": "Maria Rodriguez",
-				"role": "Consultante Senior",
-				"company": "Cabinet de Conseil"
-			},
-			"testimonial2": {
-				"quote": "Permet aux consultants juniors de livrer des analyses de meilleure qualité dès leurs premières sessions.",
-				"name": "Carlos Mendez",
-				"role": "Responsable Amélioration Continue",
-				"company": "Entreprise Manufacturière"
-			},
-			"testimonial3": {
-				"quote": "La traçabilité de la méthodologie SIPOC fournit les preuves nécessaires pour les audits internes. Le processus est transparent et documentable.",
-				"name": "Ana Torres",
-				"role": "Auditrice Interne",
-				"company": "Institution Financière"
-			},
-			"logosLabel": "Utilisé par des équipes de conseil et d'audit dans"
-		},
-		"logos": {
-			"title": "Des professionnels de multiples secteurs nous font confiance",
-			"categories": {
-				"consulting": "Conseil",
-				"finance": "Finance & Banque",
-				"manufacturing": "Fabrication",
-				"healthcare": "Santé",
-				"audit": "Audit & Conformité",
-				"technology": "Technologie",
-				"retail": "Commerce & E-commerce",
-				"logistics": "Logistique & Transport"
-			}
-		},
-		"tools": {
-			"title": "Outils IA gratuits pour les professionnels des processus",
-			"subtitle": "La même IA qui analyse votre entreprise, maintenant en outils autonomes. Sans inscription.",
-			"viewAll": "Voir tous les outils"
-		},
-		"trustBar": {
-			"subtitle": "Built on recognized standards",
-			"metric1": {
-				"label": "processus cartographiés"
-			},
-			"metric2": {
-				"label": "plus rapide"
-			},
-			"metric3": {
-				"label": "au premier SIPOC"
-			},
-			"metric4": {
-				"label": "réduction des risques"
-			}
-		}
-	},
-	"newsletter": {
-		"email": "E-mail",
-		"hints": {
-			"error": {
-				"message": "Impossible de s'inscrire. Veuillez réessayer plus tard."
-			},
-			"success": {
-				"message": "Vous êtes sur la liste. Nous vous notifierons au lancement de Auditora.ai.",
-				"title": "Inscrit"
-			}
-		},
-		"submit": "S'inscrire",
-		"subtitle": "Soyez parmi les premiers à accéder à Auditora.ai.",
-		"title": "Accès anticipé"
-	},
-	"cta": {
-		"title": "Commencez à cartographier les processus avec plus de rigueur et de rapidité",
-		"subtitle": "Diagnostic initial gratuit. Conversation guidée pour une analyse approfondie. Livrables professionnels.",
-		"button": "Essayer Auditora.ai gratuitement",
-		"note": "Sans carte de crédit. Sans inscription. Votre première carte de processus en minutes."
-	},
-	"notFound": {
-		"code": "404",
-		"title": "Page non trouvée",
-		"goToDashboard": "Aller au tableau de bord",
-		"goToHomepage": "Aller à l'accueil"
-	},
-	"consent": {
-		"title": "Préférences de cookies",
-		"description": "Nous utilisons des cookies pour améliorer votre expérience et analyser l'utilisation du site. Vous pouvez personnaliser les cookies que vous autorisez.",
-		"acceptAll": "Tout accepter",
-		"rejectAll": "Tout refuser",
-		"customize": "Personnaliser",
-		"savePreferences": "Enregistrer les préférences",
-		"essential": {
-			"title": "Essentiels",
-			"description": "Nécessaires au fonctionnement du site. Ne peuvent pas être désactivés."
-		},
-		"analytics": {
-			"title": "Analytiques",
-			"description": "Nous aident à comprendre comment vous utilisez le site pour l'améliorer."
-		},
-		"marketing": {
-			"title": "Marketing",
-			"description": "Utilisés pour vous montrer du contenu pertinent et mesurer l'efficacité des campagnes."
-		},
-		"gpcDetected": "Nous avons détecté votre préférence Global Privacy Control. Les cookies analytiques et marketing sont désactivés."
-	},
-	"common": {
-		"footer": {
-			"blog": "Blog",
-			"features": "Fonctionnalités",
-			"pricing": "Tarifs",
-			"privacyPolicy": "Politique de Confidentialité",
-			"termsAndConditions": "Conditions Générales",
-			"doNotSell": "Ne pas vendre mes informations personnelles",
-			"cookieSettings": "Paramètres des Cookies",
-			"tools": "Outils gratuits",
-			"builtWith": "Auditora.ai",
-			"aiDisclaimer": "Auditora.ai utilise l'intelligence artificielle. Les résultats sont fournis à titre informatif uniquement et ne remplacent pas un avis professionnel.",
-			"tagline": "Intelligence d'audit alimentée par l'IA pour les entreprises modernes. Automatisez la conformité, réduisez les risques et favorisez l'excellence opérationnelle.",
-			"productTitle": "Produit",
-			"scan": "Scanner",
-			"processes": "Processus",
-			"evaluations": "Évaluations",
-			"resourcesTitle": "Ressources",
-			"docs": "Documentation",
-			"api": "Référence API",
-			"changelog": "Changelog",
-			"companyTitle": "Entreprise",
-			"about": "À propos",
-			"contact": "Contact",
-			"careers": "Carrières",
-			"legalTitle": "Mentions légales",
-			"ccpa": "CCPA",
-			"copyright": "© {year} {appName}. Tous droits réservés.",
-			"soc2": "SOC 2",
-			"gdpr": "RGPD",
-			"iso27001": "ISO 27001"
-		},
-		"menu": {
-			"blog": "Blog",
-			"changelog": "Changelog",
-			"contact": "Contact",
-			"dashboard": "Tableau de bord",
-			"docs": "Docs",
-			"faq": "FAQ",
-			"solution": "Solution",
-			"methodology": "Méthodologie",
-			"cases": "Cas",
-			"howItWorks": "Comment ça marche",
-			"login": "Se connecter",
-			"pricing": "Tarifs",
-			"tools": "Analyser votre entreprise",
-			"trial": "Essai gratuit"
-		},
-		"aria": {
-			"menu": "Menu",
-			"language": "Langue"
-		},
-		"tableOfContents": {
-			"title": "Sur cette page"
-		},
-		"colorMode": {
-			"system": "Système",
-			"light": "Clair",
-			"dark": "Sombre"
-		}
-	}
+  "blog": {
+    "description": "Articles sur le conseil en processus, l'automatisation BPM et l'élicitation par IA",
+    "title": "Blog",
+    "back": "Retour au blog"
+  },
+  "changelog": {
+    "description": "Restez informé des dernières modifications de Auditora.ai.",
+    "title": "Changelog"
+  },
+  "contact": {
+    "description": "Des questions sur Auditora.ai ? Nous serions ravis d'échanger avec vous.",
+    "form": {
+      "email": "E-mail",
+      "message": "Message",
+      "name": "Nom",
+      "notifications": {
+        "error": "Impossible d'envoyer votre message. Veuillez réessayer plus tard.",
+        "success": "Message envoyé. Nous vous répondrons sous 24 heures."
+      },
+      "submit": "Envoyer le message"
+    },
+    "title": "Contactez-nous"
+  },
+  "documentation": {
+    "title": "Documentation"
+  },
+  "faq": {
+    "description": "Réponses aux questions les plus fréquentes sur Auditora.ai.",
+    "title": "Questions fréquentes",
+    "items": {
+      "urlLimitations": {
+        "question": "S'il ne lit que mon site web public, comment peut-il identifier de vrais risques ?",
+        "answer": "Le diagnostic initial identifie des risques structurels et logiques basés sur les modèles de l'industrie et la structure du processus déduit. Ce sont des hypothèses fondées, pas des constats opérationnels. La précision de l'analyse augmente significativement avec l'utilisation de la conversation guidée ou de la plateforme complète avec un vrai contexte opérationnel."
+      },
+      "vsChatgpt": {
+        "question": "En quoi est-ce différent d'utiliser ChatGPT pour générer des processus ?",
+        "answer": "Auditora.ai se différencie sur trois aspects clés. Premièrement, la méthodologie : chaque session suit le framework SIPOC avec détection automatique des lacunes de couverture. Deuxièmement, les livrables : les diagrammes générés sont du vrai BPMN 2.0, exportables en XML, pas des représentations approximatives. Troisièmement, la persistance : les processus, risques et actions correctives sont stockés, suivis et évoluent de manière structurée."
+      },
+      "dataAccess": {
+        "question": "À quelles données de mon site web accédez-vous exactement ?",
+        "answer": "Le contenu textuel de jusqu'à 5 pages publiques est analysé : accueil, à propos, services et similaires. C'est le même contenu visible par n'importe quel visiteur dans un navigateur. Aucun accès aux systèmes internes, APIs, bases de données ou zones protégées."
+      },
+      "bpmKnowledge": {
+        "question": "Ai-je besoin de connaissances en BPM ou BPMN pour utiliser l'outil ?",
+        "answer": "Non. Auditora.ai est conçu pour que quiconque connaît son activité puisse l'utiliser. L'IA formule les questions pertinentes en langage accessible et la notation technique est générée automatiquement. Pour les consultants expérimentés en BPM, l'outil accélère le processus de documentation. Pour ceux sans formation technique, la plateforme gère la complexité méthodologique."
+      },
+      "deepening": {
+        "question": "Puis-je approfondir au-delà du rapport instantané ?",
+        "answer": "Oui. Après le diagnostic initial, il est possible de démarrer une conversation guidée avec l'IA. La plateforme pose des questions spécifiques sur les opérations — fournisseurs, entrées, activités, sorties, clients — et construit une analyse progressivement plus détaillée. Le résultat inclut une AMDEC complète avec modes de défaillance et Indice de Priorité du Risque (IPR) par activité."
+      },
+      "dataSecurity": {
+        "question": "Mes données sont-elles sécurisées ?",
+        "answer": "Oui. Toutes les informations sont transmises avec chiffrement TLS et stockées chiffrées au repos. Les sessions anonymes expirent après 24 heures. Les informations fournies ne sont pas utilisées pour entraîner des modèles d'IA. À la création de compte, les données sont stockées dans l'espace privé de l'organisation avec un isolement complet."
+      },
+      "accountMigration": {
+        "question": "Que se passe-t-il avec mon analyse si je crée un compte ?",
+        "answer": "Toutes les informations générées pendant la session anonyme — carte de processus, analyse de risques, conversation guidée et livrables — sont transférées automatiquement vers le compte sans perte de données."
+      },
+      "vsProcessMining": {
+        "question": "Est-ce du process mining ?",
+        "answer": "Non. Le process mining analyse les logs systèmes (ERP, CRM) pour découvrir comment les processus s'exécutent réellement. Auditora.ai est un outil de découverte de processus basé sur l'élicitation : il guide des conversations structurées pour documenter les processus et analyser les risques. Ce sont des approches complémentaires. Le process mining nécessite des données système ; Auditora.ai travaille avec la connaissance humaine."
+      }
+    }
+  },
+  "home": {
+    "hero": {
+      "badge": "Plateforme de découverte de processus par IA",
+      "title": "Découverte et analyse de processus avec méthodologie éprouvée",
+      "subtitle": "Nous combinons l'intelligence artificielle avec des frameworks standard (SIPOC, BPMN 2.0 et AMDEC) pour aider les consultants et auditeurs à cartographier les processus et évaluer les risques de manière structurée.",
+      "inputPlaceholder": "votreentreprise.com",
+      "cta": "Analyser mon entreprise gratuitement",
+      "ctaSecondary": "Décrire le processus manuellement",
+      "subtext": "Entrez une URL. L'IA analyse le contexte public et génère un diagnostic initial avec carte de processus et analyse de risques.",
+      "alt": {
+        "badge": "L'outil manquant à votre pratique",
+        "title": "Chaque processus non documenté est un risque que vous signez",
+        "subtitle": "Vos clients ont des processus critiques que personne n'a cartographiés. Auditora.ai les découvre : élicitation SIPOC guidée par IA, diagrammes BPMN 2.0 automatiques et matrice AMDEC avec évaluation de la gravité. En une fraction du temps.",
+        "cta": "Voir le diagnostic de mon entreprise",
+        "subtext": "Entrez votre URL d'entreprise. Recevez une carte de processus et une analyse de risques en minutes — sans inscription, sans engagement."
+      }
+    },
+    "problem": {
+      "badge": "Le problème",
+      "title": "La découverte traditionnelle de processus présente des limitations importantes",
+      "card1": {
+        "title": "Des semaines d'entretiens et de multiples cycles de révision",
+        "description": "Nécessite des semaines d'entretiens et de multiples cycles de révision pour obtenir une carte de processus initiale."
+      },
+      "card2": {
+        "title": "Les diagrammes manuels deviennent rapidement obsolètes",
+        "description": "Les diagrammes manuels deviennent rapidement obsolètes et nécessitent une mise à jour constante."
+      },
+      "card3": {
+        "title": "Le process mining nécessite des event logs et un accès technique",
+        "description": "Les outils de process mining nécessitent des event logs et des accès techniques que la plupart des organisations n'ont pas disponibles."
+      },
+      "card4": {
+        "title": "Les solutions IA génériques manquent de structure méthodologique",
+        "description": "Les solutions IA génériques manquent de structure méthodologique et produisent des résultats difficiles à défendre."
+      }
+    },
+    "solution": {
+      "badge": "La solution",
+      "title": "Auditora.ai accélère la cartographie et l'analyse des processus",
+      "description": "La plateforme combine l'IA avec des méthodologies éprouvées pour générer un diagnostic initial à partir d'informations publiques et l'enrichir via une conversation guidée structurée.",
+      "diff1": {
+        "title": "Méthodologie SIPOC intégrée",
+        "description": "Chaque session suit le framework SIPOC (Fournisseurs, Entrées, Processus, Sorties, Clients). L'IA détecte les lacunes de couverture et génère des questions contextuelles pour les combler."
+      },
+      "diff2": {
+        "title": "Diagrammes BPMN 2.0 en temps réel",
+        "description": "Le diagramme se construit pendant la session. Exportable en XML, compatible avec Camunda, Signavio et tout outil BPMN 2.0."
+      },
+      "diff3": {
+        "title": "Matrice AMDEC avec IPR par activité",
+        "description": "Chaque activité est évaluée contre les modes de défaillance potentiels. Gravité, Occurrence, Détection et Indice de Priorité du Risque sont calculés."
+      }
+    },
+    "howItWorks": {
+      "badge": "Diagnostic initial",
+      "title": "Diagnostic initial à partir d'informations publiques",
+      "subtitle": "Un point de départ structuré basé sur les pages web publiques de l'organisation.",
+      "step1": {
+        "title": "Entrez l'URL de l'organisation",
+        "description": "Fournissez l'adresse web de l'organisation que vous souhaitez analyser."
+      },
+      "step2": {
+        "title": "L'IA analyse les pages publiques disponibles",
+        "description": "Le système traite le contenu public pour identifier l'industrie, les services et la structure opérationnelle."
+      },
+      "step3": {
+        "title": "Génère une carte SIPOC initiale et une évaluation des risques",
+        "description": "Une carte SIPOC initiale et une évaluation préliminaire des risques structurels sont générées."
+      },
+      "step4": {
+        "title": "Prépare la base pour une élicitation approfondie",
+        "description": "Le diagnostic sert de point de départ pour une conversation guidée plus approfondie."
+      },
+      "disclaimer": "Cette analyse est un point de départ. La précision augmente avec les informations que vous apportez pendant la conversation guidée."
+    },
+    "deepDive": {
+      "badge": "Élicitation guidée",
+      "title": "Élicitation structurée par conversation guidée",
+      "subtitle": "L'IA formule des questions spécifiques basées sur les lacunes détectées, suivant les principes SIPOC et AMDEC. Chaque réponse enrichit le modèle et permet une analyse plus complète.",
+      "methodTitle": "Questions ciblées basées sur les lacunes",
+      "methodDescription": "L'IA ne demande pas une description générale du processus. Elle formule des questions spécifiques basées sur les lacunes détectées dans la carte SIPOC :",
+      "question1": "« Vous avez mentionné 3 fournisseurs mais seulement 1 entrée. Qui d'autre fournit des matériaux ou informations pour cette étape ? »",
+      "question2": "« Votre processus a 5 activités mais aucune bifurcation. Y a-t-il un point où le flux change selon une condition ? »",
+      "question3": "« Vous avez identifié le client final mais pas le client interne. Qui reçoit le résultat de cette étape avant qu'il n'atteigne le client ? »",
+      "methodNote": "Chaque question comble une lacune spécifique du modèle.",
+      "outputTitle": "Comparaison des résultats",
+      "instant": {
+        "label": "Diagnostic initial",
+        "processes": "1 processus cartographié",
+        "risks": "3-5 risques généraux",
+        "analysis": "Notation de base",
+        "diagram": "SIPOC basique"
+      },
+      "guided": {
+        "label": "Après conversation guidée",
+        "processes": "Processus enrichi avec 2-3x plus d'activités",
+        "risks": "10-15+ risques spécifiques avec modes de défaillance",
+        "analysis": "AMDEC complète avec IPR par activité",
+        "diagram": "BPMN 2.0 exportable"
+      }
+    },
+    "platform": {
+      "badge": "La plateforme",
+      "title": "Livrables professionnels",
+      "subtitle": "La plateforme génère une documentation prête à présenter aux parties prenantes et équipes d'audit.",
+      "feature1": {
+        "title": "Diagrammes BPMN 2.0 exportables",
+        "description": "Diagrammes générés automatiquement pendant la session. Exportez XML, PNG ou PDF. Compatible avec Camunda, Signavio, Bizagi."
+      },
+      "feature2": {
+        "title": "Matrice AMDEC complète avec calcul IPR",
+        "description": "Chaque activité évaluée contre les modes de défaillance potentiels avec calcul de Gravité, Occurrence, Détection et IPR."
+      },
+      "feature3": {
+        "title": "Identification des risques par activité",
+        "description": "Risques cartographiés directement sur chaque activité du processus, avec traçabilité complète."
+      },
+      "feature4": {
+        "title": "Rapports prêts pour les parties prenantes",
+        "description": "Exportez des rapports professionnels avec cartes de processus, matrices de risques et recommandations structurées."
+      },
+      "feature5": {
+        "title": "Historique d'analyses et versions",
+        "description": "Chaque itération d'analyse est stockée avec historique des modifications. Comparez les versions et suivez l'évolution du processus."
+      },
+      "cta": "Créer un compte gratuit",
+      "ctaSubtext": "Tout ce que vous avez généré dans le diagnostic gratuit migre automatiquement vers votre compte."
+    },
+    "credibility": {
+      "badge": "Méthodologie",
+      "title": "Construit sur des frameworks reconnus",
+      "pillar1": {
+        "title": "SIPOC (Six Sigma)",
+        "description": "Framework standard pour la cartographie des processus : Fournisseurs, Entrées, Processus, Sorties, Clients. Nous automatisons la structure que les consultants seniors utilisent déjà."
+      },
+      "pillar2": {
+        "title": "BPMN 2.0 (OMG)",
+        "description": "Notation standard de l'industrie pour la modélisation des processus métier. Diagrammes interopérables et exportables."
+      },
+      "pillar3": {
+        "title": "AMDEC (Analyse des Modes de Défaillance)",
+        "description": "Méthodologie systématique pour identifier et prioriser les risques. Nous automatisons le calcul de Gravité, Occurrence, Détection et IPR."
+      },
+      "radarCaption": "Exposition au risque avant et après la mise en œuvre des processus avec Auditora"
+    },
+    "socialProof": {
+      "badge": "Cas d'utilisation",
+      "title": "Ce que disent les professionnels",
+      "testimonial1": {
+        "quote": "A réduit significativement le temps de cartographie initiale. La matrice AMDEC générée est claire et utile pour les présentations de direction.",
+        "name": "Maria Rodriguez",
+        "role": "Consultante Senior",
+        "company": "Cabinet de Conseil"
+      },
+      "testimonial2": {
+        "quote": "Permet aux consultants juniors de livrer des analyses de meilleure qualité dès leurs premières sessions.",
+        "name": "Carlos Mendez",
+        "role": "Responsable Amélioration Continue",
+        "company": "Entreprise Manufacturière"
+      },
+      "testimonial3": {
+        "quote": "La traçabilité de la méthodologie SIPOC fournit les preuves nécessaires pour les audits internes. Le processus est transparent et documentable.",
+        "name": "Ana Torres",
+        "role": "Auditrice Interne",
+        "company": "Institution Financière"
+      },
+      "logosLabel": "Utilisé par des équipes de conseil et d'audit dans"
+    },
+    "logos": {
+      "title": "Des professionnels de multiples secteurs nous font confiance",
+      "categories": {
+        "consulting": "Conseil",
+        "finance": "Finance & Banque",
+        "manufacturing": "Fabrication",
+        "healthcare": "Santé",
+        "audit": "Audit & Conformité",
+        "technology": "Technologie",
+        "retail": "Commerce & E-commerce",
+        "logistics": "Logistique & Transport"
+      }
+    },
+    "tools": {
+      "title": "Outils IA gratuits pour les professionnels des processus",
+      "subtitle": "La même IA qui analyse votre entreprise, maintenant en outils autonomes. Sans inscription.",
+      "viewAll": "Voir tous les outils"
+    },
+    "trustBar": {
+      "subtitle": "Built on recognized standards",
+      "metric1": {
+        "label": "processus cartographiés"
+      },
+      "metric2": {
+        "label": "plus rapide"
+      },
+      "metric3": {
+        "label": "au premier SIPOC"
+      },
+      "metric4": {
+        "label": "réduction des risques"
+      }
+    }
+  },
+  "newsletter": {
+    "email": "E-mail",
+    "hints": {
+      "error": {
+        "message": "Impossible de s'inscrire. Veuillez réessayer plus tard."
+      },
+      "success": {
+        "message": "Vous êtes sur la liste. Nous vous notifierons au lancement de Auditora.ai.",
+        "title": "Inscrit"
+      }
+    },
+    "submit": "S'inscrire",
+    "subtitle": "Soyez parmi les premiers à accéder à Auditora.ai.",
+    "title": "Accès anticipé"
+  },
+  "cta": {
+    "title": "Commencez à cartographier les processus avec plus de rigueur et de rapidité",
+    "subtitle": "Diagnostic initial gratuit. Conversation guidée pour une analyse approfondie. Livrables professionnels.",
+    "button": "Essayer Auditora.ai gratuitement",
+    "note": "Sans carte de crédit. Sans inscription. Votre première carte de processus en minutes."
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Page non trouvée",
+    "goToDashboard": "Aller au tableau de bord",
+    "goToHomepage": "Aller à l'accueil"
+  },
+  "consent": {
+    "title": "Préférences de cookies",
+    "description": "Nous utilisons des cookies pour améliorer votre expérience et analyser l'utilisation du site. Vous pouvez personnaliser les cookies que vous autorisez.",
+    "acceptAll": "Tout accepter",
+    "rejectAll": "Tout refuser",
+    "customize": "Personnaliser",
+    "savePreferences": "Enregistrer les préférences",
+    "essential": {
+      "title": "Essentiels",
+      "description": "Nécessaires au fonctionnement du site. Ne peuvent pas être désactivés."
+    },
+    "analytics": {
+      "title": "Analytiques",
+      "description": "Nous aident à comprendre comment vous utilisez le site pour l'améliorer."
+    },
+    "marketing": {
+      "title": "Marketing",
+      "description": "Utilisés pour vous montrer du contenu pertinent et mesurer l'efficacité des campagnes."
+    },
+    "gpcDetected": "Nous avons détecté votre préférence Global Privacy Control. Les cookies analytiques et marketing sont désactivés."
+  },
+  "common": {
+    "footer": {
+      "blog": "Blog",
+      "features": "Fonctionnalités",
+      "pricing": "Tarifs",
+      "privacyPolicy": "Politique de Confidentialité",
+      "termsAndConditions": "Conditions Générales",
+      "doNotSell": "Ne pas vendre mes informations personnelles",
+      "cookieSettings": "Paramètres des Cookies",
+      "tools": "Outils gratuits",
+      "builtWith": "Auditora.ai",
+      "aiDisclaimer": "Auditora.ai utilise l'intelligence artificielle. Les résultats sont fournis à titre informatif uniquement et ne remplacent pas un avis professionnel.",
+      "tagline": "Intelligence d'audit alimentée par l'IA pour les entreprises modernes. Automatisez la conformité, réduisez les risques et favorisez l'excellence opérationnelle.",
+      "productTitle": "Produit",
+      "scan": "Scanner",
+      "processes": "Processus",
+      "evaluations": "Évaluations",
+      "resourcesTitle": "Ressources",
+      "docs": "Documentation",
+      "api": "Référence API",
+      "changelog": "Changelog",
+      "companyTitle": "Entreprise",
+      "about": "À propos",
+      "contact": "Contact",
+      "careers": "Carrières",
+      "legalTitle": "Mentions légales",
+      "ccpa": "CCPA",
+      "copyright": "© {year} {appName}. Tous droits réservés.",
+      "soc2": "SOC 2",
+      "gdpr": "RGPD",
+      "iso27001": "ISO 27001"
+    },
+    "menu": {
+      "blog": "Blog",
+      "changelog": "Changelog",
+      "contact": "Contact",
+      "dashboard": "Tableau de bord",
+      "docs": "Docs",
+      "faq": "FAQ",
+      "solution": "Solution",
+      "methodology": "Méthodologie",
+      "cases": "Cas",
+      "howItWorks": "Comment ça marche",
+      "login": "Se connecter",
+      "pricing": "Tarifs",
+      "tools": "Analyser votre entreprise",
+      "trial": "Essai gratuit"
+    },
+    "aria": {
+      "menu": "Menu",
+      "language": "Langue"
+    },
+    "tableOfContents": {
+      "title": "Sur cette page"
+    },
+    "colorMode": {
+      "system": "Système",
+      "light": "Clair",
+      "dark": "Sombre"
+    }
+  }
 }

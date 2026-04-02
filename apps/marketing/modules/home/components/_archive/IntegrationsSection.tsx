@@ -1,0 +1,122 @@
+"use client";
+
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { FileText, MessageSquareText, Mic } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useRef } from "react";
+
+gsap.registerPlugin(ScrollTrigger);
+
+function ZoomLogo() {
+	return (
+		<svg viewBox="0 0 580 140" className="h-7 w-auto opacity-50" aria-label="Zoom">
+			<g fill="currentColor">
+				<rect x="8" y="30" width="80" height="80" rx="20" fill="#2D8CFF" />
+				<rect x="22" y="48" width="40" height="44" rx="8" fill="white" />
+				<polygon points="66,58 88,46 88,94 66,82" fill="white" />
+				<path d="M130,52 L130,100 L200,100 L200,84 L158,84 L200,52 L200,40 L130,40 L130,56 L172,56 Z" fill="currentColor" />
+				<path d="M215,70 C215,50 230,38 252,38 C274,38 289,50 289,70 C289,90 274,102 252,102 C230,102 215,90 215,70 Z M265,70 C265,58 260,52 252,52 C244,52 239,58 239,70 C239,82 244,88 252,88 C260,88 265,82 265,70 Z" fill="currentColor" />
+				<path d="M305,70 C305,50 320,38 342,38 C364,38 379,50 379,70 C379,90 364,102 342,102 C320,102 305,90 305,70 Z M355,70 C355,58 350,52 342,52 C334,52 329,58 329,70 C329,82 334,88 342,88 C350,88 355,82 355,70 Z" fill="currentColor" />
+				<path d="M395,40 L395,100 L419,100 L419,56 L445,56 L445,100 L469,100 L469,40 Z" fill="currentColor" />
+			</g>
+		</svg>
+	);
+}
+
+function TeamsLogo() {
+	return (
+		<svg viewBox="0 0 160 40" className="h-7 w-auto opacity-50" aria-label="Microsoft Teams">
+			<g>
+				<rect x="4" y="4" width="32" height="32" rx="6" fill="#5B5FC7" />
+				<rect x="12" y="11" width="16" height="3.5" rx="1" fill="white" />
+				<rect x="18" y="11" width="4" height="18" rx="1" fill="white" />
+				<circle cx="30" cy="10" r="5" fill="#7B83EB" />
+				<ellipse cx="30" cy="22" rx="7" ry="5" fill="#7B83EB" />
+				<text x="44" y="27" className="text-[16px]" fontFamily="'Segoe UI', system-ui, sans-serif" fontWeight="600" fill="currentColor">Teams</text>
+			</g>
+		</svg>
+	);
+}
+
+function MeetLogo() {
+	return (
+		<svg viewBox="0 0 160 40" className="h-7 w-auto opacity-50" aria-label="Google Meet">
+			<g>
+				<rect x="4" y="8" width="22" height="24" rx="4" fill="#00897B" />
+				<polygon points="26,14 36,8 36,32 26,26" fill="#00897B" />
+				<rect x="4" y="8" width="22" height="12" rx="4" fill="#00AC47" />
+				<polygon points="26,14 36,8 36,20 26,20" fill="#00AC47" />
+				<text x="44" y="27" className="text-[16px]" fontFamily="'Google Sans', 'Product Sans', system-ui, sans-serif" fontWeight="500" fill="currentColor">Meet</text>
+			</g>
+		</svg>
+	);
+}
+
+export function IntegrationsSection() {
+	const t = useTranslations();
+	const sectionRef = useRef<HTMLElement>(null);
+
+	useGSAP(
+		() => {
+			if (!sectionRef.current) return;
+
+			const tl = gsap.timeline({
+				scrollTrigger: {
+					trigger: sectionRef.current,
+					start: "top 80%",
+					once: true,
+				},
+			});
+
+			tl.from(".works-with-logo", {
+				scale: 0.7,
+				opacity: 0,
+				filter: "blur(4px)",
+				stagger: { from: "center", each: 0.1 },
+				duration: 0.5,
+				ease: "power3.out",
+			});
+		},
+		{ scope: sectionRef },
+	);
+
+	return (
+		<section ref={sectionRef} className="py-16 lg:py-24 border-y border-border">
+			<div className="container max-w-4xl">
+				<div className="flex flex-col items-center">
+					<div className="text-center">
+						<p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-8">
+							{t("home.integrations.worksWithTitle")}
+						</p>
+						<div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 text-muted-foreground">
+							<span className="works-with-logo flex flex-col items-center gap-2">
+								<div className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary">
+									<MessageSquareText className="size-5" strokeWidth={1.5} />
+								</div>
+								<span className="text-xs text-muted-foreground">{t("home.integrations.chat")}</span>
+							</span>
+							<span className="works-with-logo flex flex-col items-center gap-2">
+								<div className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary">
+									<Mic className="size-5" strokeWidth={1.5} />
+								</div>
+								<span className="text-xs text-muted-foreground">{t("home.integrations.audio")}</span>
+							</span>
+							<span className="works-with-logo flex flex-col items-center gap-2">
+								<div className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary">
+									<FileText className="size-5" strokeWidth={1.5} />
+								</div>
+								<span className="text-xs text-muted-foreground">{t("home.integrations.documents")}</span>
+							</span>
+							<div className="works-with-logo w-px h-10 bg-border hidden md:block" />
+							<span className="works-with-logo"><ZoomLogo /></span>
+							<span className="works-with-logo"><TeamsLogo /></span>
+							<span className="works-with-logo"><MeetLogo /></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	);
+}
