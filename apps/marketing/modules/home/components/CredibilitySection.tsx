@@ -4,6 +4,7 @@ import { cn } from "@repo/ui";
 import { AwardIcon, EyeIcon, LockIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
+import { RiskRadarChart } from "./animations/RiskRadarChart";
 
 const pillars = [
 	{ id: "pillar1", icon: AwardIcon },
@@ -25,7 +26,7 @@ export function CredibilitySection() {
 
 	return (
 		<section id="methodology" className="py-16 sm:py-20 lg:py-28 bg-[#0A1428]">
-			<div className="container max-w-5xl">
+			<div className="container max-w-6xl">
 				<motion.div
 					initial={{ opacity: 0, y: 20 }}
 					whileInView={{ opacity: 1, y: 0 }}
@@ -41,39 +42,59 @@ export function CredibilitySection() {
 					</h2>
 				</motion.div>
 
-				<motion.div
-					initial="hidden"
-					whileInView="visible"
-					viewport={{ once: true, margin: "-40px" }}
-					className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8"
-				>
-					{pillars.map((pillar, i) => {
-						const Icon = pillar.icon;
-						return (
-							<motion.div
-								key={pillar.id}
-								custom={i}
-								variants={cardVariants}
-								whileHover={{ y: -6, transition: { type: "spring", stiffness: 300, damping: 20 } }}
-								className="text-center rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 sm:p-8 transition-colors duration-300 hover:border-[#00E5C0]/20"
-							>
+				{/* Two-column layout: pillars + radar chart */}
+				<div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+					{/* Left: Pillar Cards */}
+					<motion.div
+						initial="hidden"
+						whileInView="visible"
+						viewport={{ once: true, margin: "-40px" }}
+						className="grid grid-cols-1 gap-5"
+					>
+						{pillars.map((pillar, i) => {
+							const Icon = pillar.icon;
+							return (
 								<motion.div
-									whileHover={{ scale: 1.1, rotate: 5 }}
-									transition={{ type: "spring", stiffness: 400, damping: 20 }}
-									className="flex items-center justify-center w-12 h-12 rounded-xl bg-[#00E5C0]/15 text-[#00E5C0] mx-auto mb-5"
+									key={pillar.id}
+									custom={i}
+									variants={cardVariants}
+									whileHover={{ x: 4, transition: { type: "spring", stiffness: 300, damping: 20 } }}
+									className="flex items-start gap-4 rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 sm:p-6 transition-colors duration-300 hover:border-[#00E5C0]/20"
 								>
-									<Icon className="size-6" strokeWidth={1.5} />
+									<motion.div
+										whileHover={{ scale: 1.1, rotate: 5 }}
+										transition={{ type: "spring", stiffness: 400, damping: 20 }}
+										className="flex items-center justify-center w-11 h-11 shrink-0 rounded-xl bg-[#00E5C0]/15 text-[#00E5C0]"
+									>
+										<Icon className="size-5" strokeWidth={1.5} />
+									</motion.div>
+									<div>
+										<h3 className="text-base font-semibold text-white mb-1.5">
+											{t(`home.credibility.${pillar.id}.title`)}
+										</h3>
+										<p className="text-sm text-[#94A3B8] leading-relaxed">
+											{t(`home.credibility.${pillar.id}.description`)}
+										</p>
+									</div>
 								</motion.div>
-								<h3 className="text-base font-semibold text-white mb-3">
-									{t(`home.credibility.${pillar.id}.title`)}
-								</h3>
-								<p className="text-sm text-[#94A3B8] leading-relaxed">
-									{t(`home.credibility.${pillar.id}.description`)}
-								</p>
-							</motion.div>
-						);
-					})}
-				</motion.div>
+							);
+						})}
+					</motion.div>
+
+					{/* Right: Risk Radar Chart */}
+					<motion.div
+						initial={{ opacity: 0, x: 32 }}
+						whileInView={{ opacity: 1, x: 0 }}
+						viewport={{ once: true, margin: "-60px" }}
+						transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+						className="flex flex-col items-center gap-4"
+					>
+						<RiskRadarChart />
+						<p className="text-center text-xs text-white/30 max-w-[260px] leading-relaxed">
+							{t("home.credibility.radarCaption")}
+						</p>
+					</motion.div>
+				</div>
 			</div>
 		</section>
 	);

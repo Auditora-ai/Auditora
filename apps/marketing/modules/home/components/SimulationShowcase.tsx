@@ -1,18 +1,16 @@
 "use client";
 
 import { cn } from "@repo/ui";
-import { SplitWords } from "@shared/components/SplitWords";
 import {
-	Brain,
 	MapPin,
 	Users,
 	BarChart3,
 	Sparkles,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
+import { DecisionTreeInteractive } from "./animations/DecisionTreeInteractive";
 
 interface Feature {
 	id: string;
@@ -25,8 +23,6 @@ const features: Feature[] = [
 	{ id: "feature3", icon: BarChart3 },
 ];
 
-const OPTIONS = ["A", "B", "C"] as const;
-
 const featureVariants = {
 	hidden: { opacity: 0, x: 32 },
 	visible: (i: number) => ({
@@ -38,7 +34,6 @@ const featureVariants = {
 
 export function SimulationShowcase() {
 	const t = useTranslations("home.evaluacion");
-	const [selectedOption, setSelectedOption] = useState<"A" | "B" | "C" | null>(null);
 
 	return (
 		<section id="simulation" className="py-16 sm:py-20 lg:py-28 bg-[#0A1428] text-white">
@@ -63,11 +58,8 @@ export function SimulationShowcase() {
 						viewport={{ once: true, margin: "-60px" }}
 						transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
 						className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-white text-balance"
-						style={{ perspective: "600px" }}
 					>
-						<SplitWords innerClassName="sim-word-inner">
-							{t("title")}
-						</SplitWords>
+						{t("title")}
 					</motion.h2>
 					<motion.p
 						initial={{ opacity: 0, y: 16 }}
@@ -82,106 +74,14 @@ export function SimulationShowcase() {
 
 				{/* Two-column layout */}
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-					{/* LEFT: Scenario mockup */}
+					{/* LEFT: DecisionTreeInteractive animation */}
 					<motion.div
 						initial={{ opacity: 0, x: -32 }}
 						whileInView={{ opacity: 1, x: 0 }}
 						viewport={{ once: true, margin: "-60px" }}
 						transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
 					>
-						<motion.div
-							whileHover={{ borderColor: "rgba(0,229,192,0.15)" }}
-							transition={{ duration: 0.3 }}
-							className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm overflow-hidden"
-						>
-							{/* Top bar */}
-							<div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-3">
-								<div className="flex items-center gap-2">
-									<Brain className="size-4 text-[#00E5C0]" strokeWidth={1.5} />
-									<span className="text-xs font-medium text-[#94A3B8]">Decision 3 of 8</span>
-								</div>
-								<div className="flex items-center gap-1.5">
-									<span className="text-xs text-[#64748B]">COO</span>
-									<div className="h-1.5 w-20 rounded-full bg-white/10 overflow-hidden">
-										<motion.div
-											initial={{ width: "0%" }}
-											whileInView={{ width: "37.5%" }}
-											viewport={{ once: true }}
-											transition={{ duration: 1.2, delay: 0.8, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
-											className="h-full rounded-full bg-[#00E5C0]"
-										/>
-									</div>
-								</div>
-							</div>
-
-							{/* Progress bar */}
-							<div className="h-0.5 w-full bg-white/[0.04]">
-								<motion.div
-									initial={{ width: "0%" }}
-									whileInView={{ width: "37.5%" }}
-									viewport={{ once: true }}
-									transition={{ duration: 1.2, delay: 0.8, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
-									className="h-full bg-gradient-to-r from-[#00E5C0] to-[#00E5C0]/60"
-								/>
-							</div>
-
-							{/* Question */}
-							<div className="px-5 sm:px-6 pt-6 pb-2">
-								<p className="text-[11px] uppercase tracking-widest text-[#00E5C0]/70 font-medium mb-3">Scenario</p>
-								<p className="text-sm sm:text-base text-white/90 leading-relaxed font-medium">
-									{t("exampleQuestion")}
-								</p>
-							</div>
-
-							{/* Options */}
-							<div className="px-5 sm:px-6 pb-6 pt-4 space-y-2.5">
-								{OPTIONS.map((letter, i) => (
-									<motion.button
-										key={letter}
-										type="button"
-										initial={{ opacity: 0, x: -16 }}
-										whileInView={{ opacity: 1, x: 0 }}
-										viewport={{ once: true }}
-										transition={{ duration: 0.4, delay: 0.3 + i * 0.08 }}
-										onClick={() => setSelectedOption(letter)}
-										whileHover={{ borderColor: "rgba(0,229,192,0.3)", backgroundColor: "rgba(0,229,192,0.04)" }}
-										whileTap={{ scale: 0.98 }}
-										className={cn(
-											"group flex items-start gap-3 w-full rounded-xl border px-4 py-3.5 text-left transition-colors duration-200",
-											selectedOption === letter
-												? "border-[#00E5C0]/50 bg-[#00E5C0]/10"
-												: "border-white/[0.06] bg-white/[0.02]",
-											"cursor-pointer",
-										)}
-									>
-										<span className={cn(
-											"flex size-7 shrink-0 items-center justify-center rounded-lg border text-xs font-bold transition-colors duration-200",
-											selectedOption === letter
-												? "border-[#00E5C0] bg-[#00E5C0] text-[#0A1428]"
-												: "border-white/[0.1] bg-white/[0.05] text-[#94A3B8] group-hover:border-[#00E5C0]/40 group-hover:bg-[#00E5C0]/10 group-hover:text-[#00E5C0]",
-										)}>
-											{letter}
-										</span>
-										<span className="text-sm text-white/70 leading-relaxed group-hover:text-white/90 transition-colors duration-200">
-											{t(`exampleOption${letter}`)}
-										</span>
-									</motion.button>
-								))}
-
-								<AnimatePresence>
-									{selectedOption && (
-										<motion.p
-											initial={{ opacity: 0, y: -8, height: 0 }}
-											animate={{ opacity: 1, y: 0, height: "auto" }}
-											exit={{ opacity: 0, y: -8, height: 0 }}
-											className="text-xs text-[#00E5C0] pt-1 pl-1 overflow-hidden"
-										>
-											✓ Answer recorded — this is a demo preview
-										</motion.p>
-									)}
-								</AnimatePresence>
-							</div>
-						</motion.div>
+						<DecisionTreeInteractive loopMs={7500} />
 					</motion.div>
 
 					{/* RIGHT: Feature cards */}

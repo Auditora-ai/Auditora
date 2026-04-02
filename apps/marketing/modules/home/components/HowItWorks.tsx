@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { SplitWords } from "@shared/components/SplitWords";
 import { motion } from "framer-motion";
+import { ProcessDiscoveryFlow } from "./animations/ProcessDiscoveryFlow";
 
 const steps = [
 	{ number: 1, titleKey: "step1.title", descriptionKey: "step1.description" },
@@ -31,7 +32,7 @@ export function HowItWorks() {
 					whileInView={{ opacity: 1, y: 0 }}
 					viewport={{ once: true, margin: "-60px" }}
 					transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
-					className="mb-16 text-center"
+					className="mb-12 text-center"
 				>
 					<span className="mb-4 inline-block rounded-full border border-[#00E5C0]/20 bg-[#00E5C0]/5 px-4 py-1.5 text-xs font-medium text-[#00E5C0]">
 						{t("badge")}
@@ -39,6 +40,18 @@ export function HowItWorks() {
 					<h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
 						<SplitWords>{t("title")}</SplitWords>
 					</h2>
+				</motion.div>
+
+				{/* ProcessDiscovery Animation — illustrates Step 1 visually */}
+				<motion.div
+					initial={{ opacity: 0, y: 24 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					viewport={{ once: true, margin: "-40px" }}
+					transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+					className="mb-14 max-w-2xl mx-auto"
+					aria-hidden="true"
+				>
+					<ProcessDiscoveryFlow loopMs={7500} />
 				</motion.div>
 
 				{/* Steps */}

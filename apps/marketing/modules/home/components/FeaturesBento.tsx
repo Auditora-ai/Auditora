@@ -13,6 +13,7 @@ import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 import { FmeaHeatmap } from "./animations/FmeaHeatmap";
+import { SopGeneration } from "./animations/SopGeneration";
 
 interface Feature {
 	id: string;
@@ -103,25 +104,30 @@ export function FeaturesBento() {
 										: "border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/[0.07]",
 								)}
 							>
-					<div className="flex items-center gap-3 mb-3">
-								<div className={cn(
-									"flex h-10 w-10 items-center justify-center rounded-xl shrink-0",
-									feature.highlighted ? "bg-[#00E5C0]/20" : "bg-[#00E5C0]/15",
-								)}>
-									<Icon className="size-5 text-[#00E5C0]" strokeWidth={1.5} />
+								<div className="flex items-center gap-3 mb-3">
+									<div className={cn(
+										"flex h-10 w-10 items-center justify-center rounded-xl shrink-0",
+										feature.highlighted ? "bg-[#00E5C0]/20" : "bg-[#00E5C0]/15",
+									)}>
+										<Icon className="size-5 text-[#00E5C0]" strokeWidth={1.5} />
+									</div>
+									<h3 className="font-display text-base sm:text-lg font-semibold text-white">
+										{t(`${feature.id}.title`)}
+									</h3>
 								</div>
-								<h3 className="font-display text-base sm:text-lg font-semibold text-white">
-									{t(`${feature.id}.title`)}
-								</h3>
-							</div>
-							<p className="text-sm text-[#94A3B8] leading-relaxed">
-								{t(`${feature.id}.description`)}
-							</p>
-							{feature.id === "feature3" && (
-								<div className="mt-4 rounded-xl bg-white/[0.03] border border-white/[0.06] p-3 max-w-[280px]">
-									<FmeaHeatmap className="opacity-80" />
-								</div>
-							)}
+								<p className="text-sm text-[#94A3B8] leading-relaxed">
+									{t(`${feature.id}.description`)}
+								</p>
+								{feature.id === "feature3" && (
+									<div className="mt-4 rounded-xl bg-white/[0.03] border border-white/[0.06] p-3 max-w-[280px]">
+										<FmeaHeatmap className="opacity-80" />
+									</div>
+								)}
+								{feature.id === "feature6" && (
+									<div className="mt-5">
+										<SopGeneration loopMs={6000} />
+									</div>
+								)}
 							</motion.div>
 						);
 					})}

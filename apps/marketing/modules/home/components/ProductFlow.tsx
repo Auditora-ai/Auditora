@@ -3,6 +3,7 @@
 import { cn } from "@repo/ui";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
+import { WorkflowEndToEnd } from "./animations/WorkflowEndToEnd";
 
 const steps = [
 	{ id: "step1", number: "01", titleKey: "title", descKey: "description" },
@@ -61,6 +62,18 @@ export function ProductFlow() {
 						{t("subtitle")}
 					</motion.p>
 				</div>
+
+				{/* Workflow Animation */}
+				<motion.div
+					initial={{ opacity: 0, y: 20 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					viewport={{ once: true, margin: "-40px" }}
+					transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+					className="mb-12 sm:mb-14 max-w-2xl mx-auto"
+					aria-hidden="true"
+				>
+					<WorkflowEndToEnd />
+				</motion.div>
 
 				{/* Steps Grid */}
 				<motion.div
