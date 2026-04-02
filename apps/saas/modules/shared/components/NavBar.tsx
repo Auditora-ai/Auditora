@@ -14,12 +14,8 @@ import {
 import { UserMenu } from "@shared/components/UserMenu";
 import { useNavData } from "@shared/hooks/use-nav-data";
 import {
-	BarChart3Icon,
-	FileTextIcon,
-	FolderOpenIcon,
 	GraduationCapIcon,
 	LayoutDashboardIcon,
-	MicIcon,
 	PanelLeftCloseIcon,
 	PanelLeftOpenIcon,
 	PlusIcon,
@@ -29,7 +25,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import type { ElementType } from "react";
 import { OrganzationSelect } from "../../organizations/components/OrganizationSelect";
 import { UpgradeBanner } from "../../payments/components/UpgradeBanner";
@@ -66,22 +62,8 @@ function getGreetingKey(): "morning" | "afternoon" | "evening" {
 	return "evening";
 }
 
-function formatNextSession(date: Date, locale: string, todayLabel: string, tomorrowLabel: string): string {
-	const now = new Date();
-	const diff = date.getTime() - now.getTime();
-	const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-	const time = date.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" });
-
-	if (days === 0) return `${todayLabel} ${time}`;
-	if (days === 1) return `${tomorrowLabel} ${time}`;
-
-	const day = date.toLocaleDateString(locale, { weekday: "short" });
-	return `${day} ${time}`;
-}
-
 export function NavBar() {
 	const t = useTranslations();
-	const locale = useLocale();
 	const pathname = usePathname();
 	const { user } = useSession();
 	const { activeOrganization, loaded } = useActiveOrganization();
@@ -95,54 +77,25 @@ export function NavBar() {
 	const hasOrg =
 		authConfig.organizations.enable && !!activeOrganization;
 
-	// Build badge data
-	const sessionBadge = navData
-		? {
-				text: navData.hasActiveSession
-					? `🔴 ${t("app.badges.live")}`
-					: navData.nextSession
-						? formatNextSession(new Date(navData.nextSession.date), locale, t("app.status.today"), t("app.status.tomorrow"))
-						: undefined,
-				dotColor: navData.hasActiveSession
-					? ("red" as const)
-					: navData.nextSession
+// Build badge data
+const processBadge = navData
+	? {
+			text:
+				navData.processStats.total > 0
+					? `${navData.processStats.documented}/${navData.processStats.total}`
+					: undefined,
+			dotColor:
+				navData.processStats.total > 0
+					? navData.processStats.documented /
+							navData.processStats.total >=
+						0.8
 						? ("green" as const)
-						: null,
-				pulse: navData.hasActiveSession,
-			}
-		: undefined;
+						: ("amber" as const)
+					: null,
+		}
+	: undefined;
 
-	const processBadge = navData
-		? {
-				text:
-					navData.processStats.total > 0
-						? `${navData.processStats.documented}/${navData.processStats.total}`
-						: undefined,
-				dotColor:
-					navData.processStats.total > 0
-						? navData.processStats.documented /
-									navData.processStats.total >=
-							0.8
-							? ("green" as const)
-							: ("amber" as const)
-						: null,
-			}
-		: undefined;
-
-	const deliverableBadge = navData
-		? {
-				text:
-					navData.pendingDeliverables > 0
-						? t("app.badges.pending", { count: navData.pendingDeliverables })
-						: undefined,
-				dotColor:
-					navData.pendingDeliverables > 0
-						? ("amber" as const)
-						: null,
-			}
-		: undefined;
-
-	// Derive flow completion from navData
+// Derive flow completion from navData
 	const hasArchitecture = !!navData && navData.maturityScore > 0;
 	const hasProcesses = !!navData && navData.processStats.total > 0;
 	const hasEvaluation = !!navData && navData.maturityScore >= 40;
@@ -197,53 +150,7 @@ export function NavBar() {
 			flowStep: 4,
 			flowCompleted: hasEvaluation,
 		},
-		// ─── MAIN (cross-cutting workspace) ───
-		{
-			id: "sessions",
-			label: t("app.menu.sessions"),
-			href: `${basePath}/sessions`,
-			icon: MicIcon,
-			isActive: pathname.startsWith(`${basePath}/session`),
-			hidden: !hasOrg,
-			section: "main",
-			badge: sessionBadge,
-			quickAction: {
-				label: t("app.actions.newSession"),
-				href: `${basePath}/sessions/new`,
-			},
-		},
-		{
-			id: "evaluation",
-			label: t("app.menu.evaluation"),
-			href: `${basePath}/evaluation`,
-			icon: BarChart3Icon,
-			isActive: pathname.startsWith(`${basePath}/evaluation`),
-			hidden: !hasOrg,
-			section: "main",
-		},
-		// ─── TOOLS ───
-		{
-			id: "deliverables",
-			label: t("app.menu.deliverables"),
-			href: `${basePath}/deliverables`,
-			icon: FileTextIcon,
-			isActive:
-				pathname.startsWith(`${basePath}/deliverables`) &&
-				!pathname.startsWith(`${basePath}/deliverables/risks`),
-			hidden: !hasOrg,
-			section: "tools",
-			badge: deliverableBadge,
-		},
-		{
-			id: "documents",
-			label: t("app.menu.documents"),
-			href: `${basePath}/documents`,
-			icon: FolderOpenIcon,
-			isActive: pathname.startsWith(`${basePath}/documents`),
-			hidden: !hasOrg,
-			section: "tools",
-		},
-			// ─── BOTTOM ───
+		// ─── BOTTOM ───
 		{
 			id: "settings",
 			label: t("app.menu.organizationSettings"),
@@ -257,12 +164,6 @@ export function NavBar() {
 
 	const flowItems = menuItems.filter(
 		(i) => i.section === "flow" && !i.hidden,
-	);
-	const mainItems = menuItems.filter(
-		(i) => i.section === "main" && !i.hidden,
-	);
-	const toolItems = menuItems.filter(
-		(i) => i.section === "tools" && !i.hidden,
 	);
 	const bottomItems = menuItems.filter(
 		(i) => i.section === "bottom" && !i.hidden,
@@ -594,44 +495,7 @@ export function NavBar() {
 						</>
 					)}
 
-					{/* Workspace section — cross-cutting */}
-					{mainItems.length > 0 && (
-						<>
-							{!isCollapsedEffective && (
-								<div className="mx-3 mt-5 mb-2">
-									<span className="text-[10px] font-medium uppercase tracking-wider text-slate-600">
-										{t("app.menu.workspace")}
-									</span>
-								</div>
-							)}
-							{isCollapsedEffective && (
-								<div className="mx-auto my-3 h-px w-6 bg-slate-700" />
-							)}
-							<ul className="flex flex-col gap-0.5">
-								{mainItems.map(renderNavItem)}
-							</ul>
-						</>
-					)}
-
-					{/* Tools section */}
-					{toolItems.length > 0 && (
-						<>
-							{!isCollapsedEffective && (
-								<div className="mx-3 mt-5 mb-2">
-									<span className="text-[10px] font-medium uppercase tracking-wider text-slate-600">
-										{t("app.menu.tools")}
-									</span>
-								</div>
-							)}
-							{isCollapsedEffective && (
-								<div className="mx-auto my-3 h-px w-6 bg-slate-700" />
-							)}
-							<ul className="flex flex-col gap-0.5">
-								{toolItems.map(renderNavItem)}
-							</ul>
-						</>
-					)}
-				</TooltipProvider>
+			</TooltipProvider>
 
 				{/* Upgrade banner (shown when session credits are low) */}
 				{hasOrg && !isCollapsedEffective && activeOrganization && (

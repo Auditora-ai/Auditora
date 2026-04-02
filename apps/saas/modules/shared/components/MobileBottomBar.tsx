@@ -12,18 +12,11 @@ import {
 } from "@repo/ui/components/sheet";
 import { useNavData } from "@shared/hooks/use-nav-data";
 import {
-	BarChart3Icon,
-	BotIcon,
-	ClipboardListIcon,
-	FileTextIcon,
-	FolderOpenIcon,
 	GraduationCapIcon,
 	LayoutDashboardIcon,
-	MicIcon,
 	MoreHorizontalIcon,
 	ScanSearchIcon,
 	SettingsIcon,
-	ShieldAlertIcon,
 	WorkflowIcon,
 } from "lucide-react";
 import Link from "next/link";
@@ -65,12 +58,10 @@ export function MobileBottomBar() {
 			isActive: pathname.startsWith(`${basePath}/processes`),
 		},
 		{
-			label: t("app.menu.risks"),
-			href: `${basePath}/risks`,
-			icon: ShieldAlertIcon,
-			isActive: pathname.startsWith(`${basePath}/risks`),
-			dotColor:
-				navData && navData.criticalRiskCount > 0 ? "red" : null,
+			label: t("app.menu.evaluaciones"),
+			href: `${basePath}/evaluaciones`,
+			icon: GraduationCapIcon,
+			isActive: pathname.startsWith(`${basePath}/evaluaciones`),
 		},
 		{
 			label: t("app.menu.dashboard"),
@@ -81,41 +72,6 @@ export function MobileBottomBar() {
 	];
 
 	const moreItems = [
-		{
-			label: t("app.menu.procedures"),
-			href: `${basePath}/procedures`,
-			icon: ClipboardListIcon,
-		},
-		{
-			label: t("app.menu.evaluaciones"),
-			href: `${basePath}/evaluaciones`,
-			icon: GraduationCapIcon,
-		},
-		{
-			label: t("app.menu.sessions"),
-			href: `${basePath}/sessions`,
-			icon: MicIcon,
-		},
-		{
-			label: t("app.menu.evaluation"),
-			href: `${basePath}/evaluation`,
-			icon: BarChart3Icon,
-		},
-		{
-			label: t("app.menu.deliverables"),
-			href: `${basePath}/deliverables`,
-			icon: FileTextIcon,
-		},
-		{
-			label: t("app.menu.documents"),
-			href: `${basePath}/documents`,
-			icon: FolderOpenIcon,
-		},
-		{
-			label: t("app.menu.assistant"),
-			href: "#",
-			icon: BotIcon,
-		},
 		{
 			label: t("app.menu.organizationSettings"),
 			href: `${basePath}/settings`,
@@ -164,7 +120,7 @@ export function MobileBottomBar() {
 							className="flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] text-slate-500"
 						>
 							<MoreHorizontalIcon className="size-5" />
-							<span>{t("app.menu.tools")}</span>
+							<span>{t("app.menu.more")}</span>
 						</button>
 					</SheetTrigger>
 					<SheetContent
@@ -173,7 +129,7 @@ export function MobileBottomBar() {
 					>
 						<SheetHeader>
 							<SheetTitle className="text-slate-200">
-								{t("app.menu.tools")}
+								{t("app.menu.more")}
 							</SheetTitle>
 						</SheetHeader>
 						<div className="grid grid-cols-3 gap-4 py-6">
