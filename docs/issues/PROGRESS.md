@@ -44,7 +44,7 @@
 | #2 F1-01: process-engine | **DONE** | 2026-04-02 | L, extract BPMN lib shared package ✓ |
 | #3 F1-02: Limpiar módulos muertos | **DONE** | 2026-04-02 | S, quick win ✓ |
 | #4 F1-03: Renombrar Simulations | **DONE** | 2026-04-02 | M ✓ Rename completado: dirs, files, imports, routes, nav, i18n (en/es/de/fr), marketing. Prisma schema intacto (compat DB). `tsc --noEmit` pasa limpio. |
-| #7 F1-05: PlanLimits | PENDING | — | M |
+| #7 F1-05: PlanLimits | **DONE** | 2026-04-02 | M ✓ PlanLimits: evaluations/evaluators/processes/sessions/reports/adminUsers. 3 planes (Starter $49, Growth $199, Scale $499). 10 tests pass. FR/DE pricing rewritten. UsageDashboard → evaluations. `tsc --noEmit` limpio. |
 
 ### Wave 2 (dependen de Wave 1)
 | Issue | Depende de | Status | Fecha |
