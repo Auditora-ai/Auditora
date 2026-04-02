@@ -177,6 +177,127 @@ CONFIGURAR (bottom)
 
 ---
 
+---
+
+## Modelo de Negocio
+
+### Problema del modelo actual
+
+El modelo de negocio está diseñado para "levantamiento de procesos" — vende sesiones IA. Esto no tiene sentido con el producto actual por varias razones:
+
+1. **Las sesiones no son el producto.** Vender "10 sesiones IA al mes" es como vender "10 llamadas con tu doctor al mes". La llamada no es el valor — el diagnóstico es. El dueño de empresa no piensa en "cuántas sesiones necesito", piensa en "quiero saber si mi equipo está listo".
+
+2. **El onboarding es débil.** Un solo step (OnboardingAccountStep) que solo pide datos de cuenta. No pide industria, no pide tamaño de empresa, no guía al usuario a su primer proceso. El usuario se registra y se queda mirando un dashboard vacío.
+
+3. **El scan free tier no tiene funnel.** Existen rutas públicas (`/api/public/scan/*`) pero no hay un flujo claro de "scan gratis → impresionar → registrar → convertir". El scan está dentro de la app autenticada — debería ser público y sin registro.
+
+4. **Los límites miden lo equivocado.** Sessions: 10/40/100. Processes: 5/unlimited/unlimited. Usuarios: 1/5/15. Nada de esto mide lo que el cliente valora. El cliente valora: "cuántos de mis empleados evalué", "cuántos riesgos identifiqué", "cuántos procedimientos tengo publicados".
+
+5. **No hay unidad de valor que escale naturalmente.** El consultor independiente que levanta 5 procesos es un cliente chico con poco upsell. La empresa de 500 empleados que quiere evaluar a 200 personas en 8 procesos distintos es el cliente grande — y el modelo actual no está diseñado para eso.
+
+### Nuevo Modelo de Negocio
+
+**Unidad de valor: Evaluaciones completadas.**
+
+La empresa paga por evaluar a su gente. La documentación de procesos es el prerequisite — necesitas procesos documentados para generar evaluaciones relevantes. Pero el dinero está en las evaluaciones.
+
+#### Funnel de Adquisición
+
+```
+LANDING (marketing)
+  ↓
+SCAN GRATIS (publico, sin registro)
+  "Pega tu URL y en 60 segundos ve qué tan expuesta está tu operación"
+  ↓ salida: "Regístrate para el diagnóstico completo"
+  ↓
+REGISTRO
+  Onboarding inteligente: nombre empresa, industria, tamaño, ¿cuántos empleados evaluarías?
+  ↓ auto-genera: primera org, primer scan real
+  ↓
+PRUEBA GRATIS (14 días, full access)
+  - Documentar hasta 3 procesos (via chat o session)
+  - Generar hasta 10 evaluaciones
+  - Ver resultados y dashboard de riesgo humano
+  - Exportar 1 reporte
+  ↓ salida: "Tu equipo tiene 62% de alineación. Upgrade para evaluar a todos."
+  ↓
+CONVERSIÓN
+```
+
+#### Planes
+
+| | Starter | Growth | Scale | Enterprise |
+|---|---|---|---|---|
+| **Para quién** | La empresa que empieza, 1 proceso clave | El equipo que quiere cubrir un área completa | La empresa que quiere evaluar toda su operación | Custom |
+| **Precio** | $49/mes | $199/mes | $499/mes | Custom |
+| **Procesos** | 3 | 15 | Ilimitados | Ilimitados |
+| **Evaluaciones/mes** | 10 | 50 | 250 | Ilimitadas |
+| **Evaluadores** | 5 personas | 30 personas | 150 personas | Ilimitados |
+| **Sesiones IA** | 3/mes | 10/mes | Ilimitadas | Ilimitadas |
+| **Reportes** | 1/mes | 10/mes | Ilimitados | Ilimitados |
+| **Usuarios admin** | 2 | 5 | 15 | Ilimitados |
+| **Export** | PDF básico | PDF + PPTX + Excel | Todo + API | Todo + API + SSO |
+
+**Lógica de precios:**
+- Starter = "prueba Auditora en tu proceso más crítico". Barato enough para decidir.
+- Growth = "cubrir un departamento completo". El sweet spot para empresas de 50-200.
+- Scale = "transformación operacional completa". Para empresas de 200-1000.
+- Enterprise = custom por número de evaluadores, SSO, integraciones, SLA.
+
+**Por qué funciona:**
+- Las evaluaciones son consumibles naturales. Se agotan, se renuevan. Igual que los créditos de OpenAI.
+- Los procesos documentados son "sunk cost" — una vez que el cliente documentó 15 procesos, no se va a ir a la competencia y empezar de cero. High switching cost.
+- El valor es medible: "pasamos de 45% a 82% de alineación procedimental en 3 meses". Eso se presenta en junta directiva.
+- El seat model (evaluadores) escala con el tamaño de la empresa. Más empleados = más evaluaciones = más ingresos.
+
+#### Límites que importan
+
+| Métrica | Por qué importa | Cómo se mide |
+|---|---|---|
+| Evaluaciones completadas/mes | Unidad de valor principal | SimulationRun.count por mes por org |
+| Evaluadores únicos/mes | Escala con tamaño de empresa | SimulationRun.userId distinct por mes |
+| Procesos documentados | Sunk cost / switching cost | ProcessDefinition.count por org |
+| Sesiones IA/mes | Costo real para nosotros (API calls) | Session.count por mes por org |
+| Reportes exportados/mes | Deliverable tangible | Export.count por mes por org |
+
+#### Onboarding Rediseñado
+
+El onboarding actual es un solo step que pide datos de cuenta. Necesita ser un wizard que guíe al valor:
+
+**Step 1 — Cuenta** (ya existe, OnboardingAccountStep)
+- Nombre, email, contraseña
+
+**Step 2 — Tu Empresa**
+- Nombre de la empresa
+- Industria (dropdown con las industries del scan)
+- Tamaño de empresa (rangos: 10-50, 51-200, 201-500, 501-1000)
+- ¿Cuántas personas te gustaría evaluar? (5, 10-30, 31-100, 100+)
+- ¿Cuál es el proceso que más te preocupa? (texto libre)
+
+**Step 3 — Primer Valor**
+- "Basado en lo que nos contaste, te recomendamos empezar con [proceso inferido]"
+- Opción A: "Iniciar entrevista por chat" (va al chat de captura de procesos)
+- Opción B: "Agendar una sesión en vivo" (va a crear session)
+- Opción C: "Explorar el dashboard" (skip, va al panorama)
+
+**Step 4 — Setup Completo**
+- Invitar miembros (opcional)
+- "Tu organización está lista. Te recomendamos documentar tu primer proceso antes de crear evaluaciones."
+
+#### Cambios al Código Existente
+
+| Archivo | Cambio |
+|---|---|
+| `packages/payments/config.ts` | Nuevos planes, nuevos límites (evaluaciones, evaluadores, procesos) |
+| `packages/payments/types.ts` | PlanLimits: reemplazar sessions/processes/users por evaluations/evaluators/processes/sessions/reports |
+| `apps/saas/modules/payments/components/UsageDashboard.tsx` | Mostrar evaluaciones usadas, no sesiones |
+| `apps/saas/modules/payments/components/PricingTable.tsx` | Actualizar features por plan |
+| `packages/i18n/translations/*/shared.json` | Reescribir sección `pricing` completa |
+| `apps/saas/modules/onboarding/components/OnboardingForm.tsx` | Agregar Steps 2-4 (empresa, primer valor, setup) |
+| `apps/saas/app/(authenticated)/choose-plan/page.tsx` | Actualizar copy para nuevo modelo |
+
+---
+
 ## Roadmap Sugerido (no es orden definitivo)
 
 ### Fase 1 — Fundamentos
@@ -184,15 +305,18 @@ CONFIGURAR (bottom)
 - Mergear procedimientos y riesgos dentro de process-library
 - Renombrar simulaciones → evaluaciones
 - Limpiar módulos muertos (documents, discovery standalone, assistant)
+- Rediseñar modelo de negocio: planes, límites, onboarding
 
 ### Fase 2 — El Producto que se Vende
 - Evaluaciones como módulo estrella: generación automática de escenarios desde procedimientos
 - Dashboard de riesgo humano por persona y por proceso
 - Before/after metrics (alineación procedimental)
 - Reportes exportables para junta directiva
+- Scan free tier rebuild (público, sin registro, theatrical reveal, CTA registro)
 
 ### Fase 3 — Crecimiento
 - Colaboración multi-usuario en procesos
 - Notificaciones y gestión del cambio ("el procedimiento X cambió, 3 de 5 responsables no lo han confirmado")
 - Integraciones (Slack, Teams, Google Workspace)
 - Módulo de onboarding basado en evaluaciones
+- Programa de certificación ("Tu equipo está certificado en Proceso de Compras")

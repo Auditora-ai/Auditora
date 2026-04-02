@@ -115,7 +115,7 @@ export function ProductFlow() {
 							{/* Star badge for Simulate */}
 							{step.id === "step5" && (
 								<span className="absolute top-4 right-4 inline-flex items-center gap-1 rounded-full bg-[#00E5C0]/20 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#00E5C0]">
-									★ Star feature
+									★ {t("starFeature")}
 								</span>
 							)}
 						</div>

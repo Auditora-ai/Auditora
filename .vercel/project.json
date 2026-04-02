@@ -1,16 +1,13 @@
 {
-  "projectId": "prj_HOqnmxh1t3RNyV1mJeofGf649LnS",
   "orgId": "team_a3E0eOO1oxC7y3jmYXPUaeqU",
+  "projectId": "prj_HOqnmxh1t3RNyV1mJeofGf649LnS",
   "projectName": "marketing",
   "settings": {
-    "createdAt": 1775085071721,
     "framework": "nextjs",
-    "devCommand": null,
-    "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
-    "buildCommand": "cd ../.. && pnpm --filter marketing build",
-    "outputDirectory": ".next",
+    "installCommand": "pnpm install --frozen-lockfile",
+    "buildCommand": "pnpm --filter marketing build",
+    "outputDirectory": "apps/marketing/.next",
     "rootDirectory": ".",
-    "directoryListing": false,
     "nodeVersion": "24.x"
   }
 }

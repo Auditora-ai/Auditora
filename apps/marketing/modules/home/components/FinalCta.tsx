@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { config } from "@config";
 import { useTranslations } from "next-intl";
 import { useGSAP } from "@gsap/react";
 import { SplitWords } from "@shared/components/SplitWords";
@@ -9,8 +10,6 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
-
-const SAAS_URL = "https://saas-auditora.vercel.app";
 
 export function FinalCta() {
   const t = useTranslations("home.finalCta");
@@ -49,7 +48,7 @@ export function FinalCta() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const targetUrl = url.trim() ? `${SAAS_URL}/scan?url=${encodeURIComponent(url.trim())}` : SAAS_URL;
+    const targetUrl = url.trim() ? `${config.saasUrl}/scan?url=${encodeURIComponent(url.trim())}` : config.saasUrl;
     window.open(targetUrl, "_blank", "noopener,noreferrer");
   };
 

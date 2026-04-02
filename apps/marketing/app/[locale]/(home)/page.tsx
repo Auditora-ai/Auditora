@@ -19,7 +19,7 @@ export default async function Home({
 	const { locale } = await params;
 
 	return (
-		<div data-landing>
+		<div data-landing className="dark bg-[#0A1428] text-slate-50">
 			<HeroSection />
 			<TrustBar />
 			<ProblemSection />

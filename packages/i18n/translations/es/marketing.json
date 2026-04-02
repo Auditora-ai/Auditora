@@ -142,7 +142,8 @@
 				"number": "06",
 				"title": "Medir",
 				"description": "Mide el riesgo humano en tu organizacion con simulaciones calificadas, analisis de fortalezas y areas de riesgo, y paneles para todo el equipo."
-			}
+			},
+			"starFeature": "Función estrella"
 		},
 		"simulation": {
 			"badge": "Capacidad unica",
@@ -242,7 +243,9 @@
 			"title": "Tu primer mapa de procesos esta a 2 minutos",
 			"subtitle": "Sin registro. Sin tarjeta de credito. Ingresa una URL y descubre lo que Auditora.ai puede encontrar sobre cualquier organizacion.",
 			"cta": "Iniciar escaneo gratis",
-			"note": "El diagnostico gratuito incluye mapa SIPOC, evaluacion de riesgos y reporte PDF."
+			"note": "El diagnostico gratuito incluye mapa SIPOC, evaluacion de riesgos y reporte PDF.",
+			"inputPlaceholder": "https://tu-empresa.com",
+			"button": "Iniciar escaneo gratis"
 		},
 		"credibility": {
 			"badge": "Metodología",

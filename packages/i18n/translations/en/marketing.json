@@ -142,7 +142,8 @@
 				"number": "06",
 				"title": "Evaluate",
 				"description": "Measure human risk across your organization with scored simulations, strength/risk area analysis, and team-wide dashboards."
-			}
+			},
+			"starFeature": "Star feature"
 		},
 		"simulation": {
 			"badge": "Unique capability",
@@ -242,7 +243,9 @@
 			"title": "Your first process map is 2 minutes away",
 			"subtitle": "No signup. No credit card. Enter a URL and see what Auditora.ai can discover about any organization.",
 			"cta": "Start free scan",
-			"note": "Free diagnostic includes SIPOC map, risk assessment, and PDF report."
+			"note": "Free diagnostic includes SIPOC map, risk assessment, and PDF report.",
+			"inputPlaceholder": "https://your-company.com",
+			"button": "Start free scan"
 		},
 		"credibility": {
 			"badge": "Methodology",
