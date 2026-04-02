@@ -3,9 +3,17 @@
 import { AlertTriangleIcon, FileXIcon, ClockIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@repo/ui";
-import { motion, useMotionValue, useTransform, animate } from "framer-motion";
+import {
+	motion,
+	useMotionValue,
+	useTransform,
+	useInView,
+	animate,
+} from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { BeforeAfterComparison } from "./animations/BeforeAfterComparison";
+
+const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
 const painCards = [
 	{ id: "pain1", icon: ClockIcon },
@@ -13,43 +21,50 @@ const painCards = [
 	{ id: "pain3", icon: AlertTriangleIcon },
 ] as const;
 
-function AnimatedCounter({ target, suffix = "%" }: { target: number; suffix?: string }) {
-	const [display, setDisplay] = useState(0);
+/**
+ * AnimatedCounter — animates from 0 to `target` when scrolled into view.
+ * Hooks (useMotionValue, useTransform, useInView) are called at the top level
+ * to comply with React's rules of hooks.
+ */
+function AnimatedCounter({
+	target,
+	suffix = "%",
+}: {
+	target: number;
+	suffix?: string;
+}) {
 	const ref = useRef<HTMLSpanElement>(null);
+	const isInView = useInView(ref, { once: true, margin: "-80px" });
 	const hasAnimated = useRef(false);
 
+	// Hooks called unconditionally at the top level
+	const motionVal = useMotionValue(0);
+	const rounded = useTransform(motionVal, (v) => Math.round(v));
+	const [display, setDisplay] = useState(0);
+
+	// Subscribe to rounded value changes
 	useEffect(() => {
-		const node = ref.current;
-		if (!node) return;
+		const unsubscribe = rounded.on("change", (v) => setDisplay(v));
+		return unsubscribe;
+	}, [rounded]);
 
-		const observer = new IntersectionObserver(
-			([entry]) => {
-				if (entry.isIntersecting && !hasAnimated.current) {
-					hasAnimated.current = true;
-					const motionVal = useMotionValue(0);
-					const rounded = useTransform(motionVal, (v) => Math.round(v));
+	// Trigger animation when in view
+	useEffect(() => {
+		if (isInView && !hasAnimated.current) {
+			hasAnimated.current = true;
+			animate(motionVal, target, {
+				duration: 2.2,
+				ease: EASE,
+			});
+		}
+	}, [isInView, motionVal, target]);
 
-					const unsubscribe = rounded.on("change", (v) => setDisplay(v));
-					animate(motionVal, target, {
-						duration: 2.2,
-						ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-					});
-
-					// Cleanup after animation
-					setTimeout(() => {
-						unsubscribe();
-						motionVal.set(target);
-					}, 3000);
-				}
-			},
-			{ threshold: 0.3 },
-		);
-
-		observer.observe(node);
-		return () => observer.disconnect();
-	}, [target]);
-
-	return <span ref={ref}>{display}{suffix}</span>;
+	return (
+		<span ref={ref}>
+			{display}
+			{suffix}
+		</span>
+	);
 }
 
 const cardVariants = {
@@ -57,16 +72,88 @@ const cardVariants = {
 	visible: (i: number) => ({
 		opacity: 1,
 		y: 0,
-		transition: { duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] },
+		transition: {
+			duration: 0.6,
+			delay: i * 0.1,
+			ease: EASE,
+		},
 	}),
 };
+
+function PainCard({
+	card,
+	index,
+	t,
+}: {
+	card: (typeof painCards)[number];
+	index: number;
+	t: ReturnType<typeof useTranslations>;
+}) {
+	const Icon = card.icon;
+	const [isHovered, setIsHovered] = useState(false);
+
+	return (
+		<motion.div
+			key={card.id}
+			custom={index}
+			variants={cardVariants}
+			onHoverStart={() => setIsHovered(true)}
+			onHoverEnd={() => setIsHovered(false)}
+			whileHover={{
+				y: -6,
+				borderColor: "rgba(0,229,192,0.25)",
+				transition: { type: "spring", stiffness: 300, damping: 20 },
+			}}
+			className="group relative rounded-2xl p-5 sm:p-6 lg:p-8 border border-white/10 bg-white/[0.04] backdrop-blur-sm transition-colors duration-300 hover:bg-white/[0.07]"
+		>
+			{/* Subtle glow on hover */}
+			<motion.div
+				className="pointer-events-none absolute inset-0 rounded-2xl"
+				animate={{
+					boxShadow: isHovered
+						? "inset 0 1px 0 0 rgba(0,229,192,0.1), 0 0 20px rgba(0,229,192,0.04)"
+						: "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 0 0 rgba(0,229,192,0)",
+				}}
+				transition={{ duration: 0.3 }}
+			/>
+
+			<div className="relative">
+				<motion.div
+					className="w-10 h-10 rounded-xl flex items-center justify-center mb-5"
+					animate={{
+						backgroundColor: isHovered
+							? "rgba(0,229,192,0.2)"
+							: "rgba(0,229,192,0.1)",
+					}}
+					transition={{ duration: 0.3 }}
+				>
+					<motion.div
+						animate={{
+							color: isHovered ? "#5EFFE0" : "#00E5C0",
+							scale: isHovered ? 1.1 : 1,
+						}}
+						transition={{ duration: 0.25, ease: "easeOut" }}
+					>
+						<Icon className="size-5" strokeWidth={1.5} />
+					</motion.div>
+				</motion.div>
+				<h3 className="text-lg font-semibold mb-3 text-white">
+					{t(`home.problem.${card.id}.title`)}
+				</h3>
+				<p className="text-sm leading-relaxed text-[#94A3B8]">
+					{t(`home.problem.${card.id}.description`)}
+				</p>
+			</div>
+		</motion.div>
+	);
+}
 
 export function ProblemSection() {
 	const t = useTranslations();
 
 	return (
 		<section className="py-16 sm:py-20 lg:py-28 bg-[#111827] relative overflow-hidden">
-			{/* Subtle gradient */}
+			{/* Subtle background gradient */}
 			<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(0,229,192,0.04),transparent)]" />
 
 			<div className="container relative max-w-6xl">
@@ -76,7 +163,7 @@ export function ProblemSection() {
 						initial={{ opacity: 0, y: -12 }}
 						whileInView={{ opacity: 1, y: 0 }}
 						viewport={{ once: true, margin: "-60px" }}
-						transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+						transition={{ duration: 0.5, ease: EASE }}
 						className={cn(
 							"badge-pulse inline-flex items-center rounded-full bg-[#00E5C0]/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#00E5C0] mb-6",
 						)}
@@ -87,7 +174,7 @@ export function ProblemSection() {
 						initial={{ opacity: 0, y: 24 }}
 						whileInView={{ opacity: 1, y: 0 }}
 						viewport={{ once: true, margin: "-60px" }}
-						transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+						transition={{ duration: 0.6, delay: 0.1, ease: EASE }}
 						className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-white max-w-3xl mx-auto leading-tight"
 					>
 						{t("home.problem.title")}
@@ -100,7 +187,7 @@ export function ProblemSection() {
 						initial={{ opacity: 0, scale: 0.8 }}
 						whileInView={{ opacity: 1, scale: 1 }}
 						viewport={{ once: true, margin: "-60px" }}
-						transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+						transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
 						className="font-display text-6xl sm:text-7xl lg:text-8xl font-bold text-[#00E5C0] leading-none"
 					>
 						<AnimatedCounter target={73} />
@@ -125,13 +212,26 @@ export function ProblemSection() {
 					</motion.p>
 				</div>
 
-				{/* Before / After Comparison Animation */}
+				{/* Gradient divider between stat and comparison/cards */}
+				<motion.div
+					initial={{ opacity: 0, scaleX: 0 }}
+					whileInView={{ opacity: 1, scaleX: 1 }}
+					viewport={{ once: true }}
+					transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
+					className="mx-auto mb-12 sm:mb-16 h-px max-w-md"
+					style={{
+						background:
+							"linear-gradient(90deg, transparent, rgba(0,229,192,0.3) 30%, rgba(0,229,192,0.5) 50%, rgba(0,229,192,0.3) 70%, transparent)",
+					}}
+				/>
+
+				{/* Before / After Comparison Animation — hidden on mobile */}
 				<motion.div
 					initial={{ opacity: 0, y: 32 }}
 					whileInView={{ opacity: 1, y: 0 }}
 					viewport={{ once: true, margin: "-60px" }}
-					transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
-					className="mb-12 sm:mb-16"
+					transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
+					className="mb-12 sm:mb-16 hidden sm:block"
 				>
 					<BeforeAfterComparison />
 				</motion.div>
@@ -143,28 +243,9 @@ export function ProblemSection() {
 					viewport={{ once: true, margin: "-60px" }}
 					className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6"
 				>
-					{painCards.map((card, i) => {
-						const Icon = card.icon;
-						return (
-							<motion.div
-								key={card.id}
-								custom={i}
-								variants={cardVariants}
-								whileHover={{ y: -6, borderColor: "rgba(0,229,192,0.2)", transition: { type: "spring", stiffness: 300, damping: 20 } }}
-								className="card-hover rounded-2xl p-5 sm:p-6 lg:p-8 border border-white/10 bg-white/5 backdrop-blur-sm"
-							>
-								<div className="w-10 h-10 rounded-xl flex items-center justify-center mb-5 bg-[#00E5C0]/15">
-									<Icon className="size-5 text-[#00E5C0]" strokeWidth={1.5} />
-								</div>
-								<h3 className="text-lg font-semibold mb-3 text-white">
-									{t(`home.problem.${card.id}.title`)}
-								</h3>
-								<p className="text-sm leading-relaxed text-[#94A3B8]">
-									{t(`home.problem.${card.id}.description`)}
-								</p>
-							</motion.div>
-						);
-					})}
+					{painCards.map((card, i) => (
+						<PainCard key={card.id} card={card} index={i} t={t} />
+					))}
 				</motion.div>
 			</div>
 		</section>

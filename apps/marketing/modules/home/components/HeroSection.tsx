@@ -9,15 +9,39 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { BpmnHeroBackground } from "./BpmnHeroBackground";
 import { ParticleNetwork } from "./animations/ParticleNetwork";
-import { BpmnRealTimeBuilder } from "./animations/BpmnRealTimeBuilder";
 
-const MOCKUP_STEPS = [
-	{ num: "01", label: "Scan" },
-	{ num: "02", label: "Map" },
-	{ num: "03", label: "Assess" },
-	{ num: "04", label: "Document" },
-	{ num: "05", label: "Simulate" },
-	{ num: "06", label: "Evaluate" },
+/* ─── SIPOC diagram data for the product preview ─── */
+const SIPOC_COLUMNS = [
+	{
+		key: "S",
+		label: "Suppliers",
+		color: "#8B5CF6",
+		items: ["Raw Material Co.", "Logistics Partner", "IT Services"],
+	},
+	{
+		key: "I",
+		label: "Inputs",
+		color: "#3B82F6",
+		items: ["Steel Grade A", "Transport Schedule", "ERP System Data"],
+	},
+	{
+		key: "P",
+		label: "Process",
+		color: "#00E5C0",
+		items: ["Receive Order", "Quality Check", "Assembly Line"],
+	},
+	{
+		key: "O",
+		label: "Outputs",
+		color: "#F59E0B",
+		items: ["Finished Product", "QC Report", "Shipping Docs"],
+	},
+	{
+		key: "C",
+		label: "Customers",
+		color: "#EF4444",
+		items: ["End Consumer", "Distributor", "Retail Partner"],
+	},
 ] as const;
 
 export function HeroSection() {
@@ -64,7 +88,7 @@ export function HeroSection() {
 			</div>
 
 			<div className="container relative z-10 pt-16 pb-12 sm:pt-24 sm:pb-16 md:pt-32 md:pb-20 lg:pt-40 lg:pb-24">
-				<div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+				<div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 items-center">
 					{/* Left Column */}
 					<div className="text-center lg:text-left">
 						{/* Badge */}
@@ -149,7 +173,21 @@ export function HeroSection() {
 									<ArrowRightIcon className="ml-2 size-4" />
 								</Button>
 							</div>
+
+							{/* Trust indicators */}
+							<div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-white/40 lg:justify-start">
+								<span>✓ No signup required</span>
+								<span>✓ Results in 2 min</span>
+								<span>✓ SIPOC + FMEA included</span>
+							</div>
+
 							<p className="mt-3 text-sm text-white/50">{t("subtext")}</p>
+
+							{/* No credit card line */}
+							<p className="mt-1.5 text-xs text-white/35">
+								No credit card required · 14-day free trial
+							</p>
+
 							<a
 								href={`${config.saasUrl}/scan?mode=text&ref=hero`}
 								className={cn(
@@ -163,7 +201,7 @@ export function HeroSection() {
 						</motion.div>
 					</div>
 
-					{/* Right Column: Mockup */}
+					{/* Right Column: Product Preview Mockup */}
 					<motion.div
 						initial={{ opacity: 0, scale: 0.92, y: 20 }}
 						animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -184,66 +222,133 @@ export function HeroSection() {
 							{/* Browser chrome */}
 							<div className="flex items-center gap-2 border-b border-white/10 bg-white/5 px-4 py-3">
 								<div className="flex gap-1.5">
-									<div className="size-3 rounded-full bg-white/20" />
-									<div className="size-3 rounded-full bg-white/20" />
-									<div className="size-3 rounded-full bg-white/20" />
+									<div className="size-3 rounded-full bg-[#FF5F57]" />
+									<div className="size-3 rounded-full bg-[#FEBC2E]" />
+									<div className="size-3 rounded-full bg-[#28C840]" />
 								</div>
-								<div className="mx-8 flex-1">
-									<div className="mx-auto h-5 max-w-[200px] rounded-full bg-white/10" />
+								<div className="mx-4 flex-1">
+									<div className="mx-auto flex h-6 max-w-[260px] items-center rounded-md bg-white/[0.08] px-3">
+										<span className="text-[10px] text-white/30 truncate">app.auditora.ai/analysis/sipoc-diagram</span>
+									</div>
 								</div>
 							</div>
 
-							{/* App layout */}
-							<div className="grid min-h-[380px]" style={{ gridTemplateColumns: "180px 1fr" }}>
-								<div className="flex flex-col border-r border-white/10 bg-white/[0.02] p-4">
-									{MOCKUP_STEPS.map((step, i) => (
+							{/* App toolbar */}
+							<div className="flex items-center justify-between border-b border-white/[0.06] bg-white/[0.02] px-5 py-2.5">
+								<div className="flex items-center gap-2">
+									<div className="size-2 rounded-full bg-[#00E5C0] shadow-[0_0_6px_rgba(0,229,192,0.8)]" />
+									<span className="text-xs font-medium text-white/60">SIPOC Diagram</span>
+									<span className="text-[10px] text-white/25">—</span>
+									<span className="text-[10px] text-white/30">Manufacturing Process</span>
+								</div>
+								<div className="flex items-center gap-2">
+									<span className="rounded bg-[#00E5C0]/10 px-2 py-0.5 text-[10px] font-medium text-[#00E5C0]">Complete</span>
+								</div>
+							</div>
+
+							{/* SIPOC Diagram Content */}
+							<div className="p-4">
+								{/* Column Headers */}
+								<div className="grid grid-cols-5 gap-2 mb-3">
+									{SIPOC_COLUMNS.map((col, colIdx) => (
 										<motion.div
-											key={step.num}
-											initial={{ opacity: 0, x: -12 }}
-											animate={{ opacity: 1, x: 0 }}
-											transition={{ delay: 1 + i * 0.1, duration: 0.4 }}
-											className={cn(
-												"flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm",
-												i === 0 ? "bg-[#00E5C0]/10 text-[#00E5C0]"
-													: i === 1 ? "bg-white/5 text-white/70"
-													: "text-white/30",
-											)}
+											key={col.key}
+											initial={{ opacity: 0, y: -8 }}
+											animate={{ opacity: 1, y: 0 }}
+											transition={{ delay: 0.9 + colIdx * 0.1, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+											className="text-center"
 										>
-											<span className={cn(
-												"flex size-6 shrink-0 items-center justify-center rounded-md text-xs font-bold",
-												i === 0 ? "bg-[#00E5C0] text-[#0A1428]" : "bg-white/10 text-white/40",
-											)}>
-												{step.num}
-											</span>
-											<span className="font-medium">{step.label}</span>
+											<div
+												className="rounded-lg px-2 py-2"
+												style={{ backgroundColor: `${col.color}15`, borderBottom: `2px solid ${col.color}40` }}
+											>
+												<span
+													className="text-sm font-bold"
+													style={{ color: col.color }}
+												>
+													{col.key}
+												</span>
+												<p
+													className="text-[9px] font-medium mt-0.5"
+													style={{ color: `${col.color}99` }}
+												>
+													{col.label}
+												</p>
+											</div>
 										</motion.div>
 									))}
 								</div>
 
-								<div className="flex flex-col p-5">
-									<div className="mb-4 flex items-center justify-between">
-										<div className="h-4 w-32 rounded bg-white/15" />
-										<div className="h-4 w-20 rounded bg-[#00E5C0]/20" />
-									</div>
-						<div className="flex flex-1 items-center justify-center p-2">
-									<BpmnRealTimeBuilder className="w-full" loopMs={9000} />
+								{/* Column Items */}
+								<div className="grid grid-cols-5 gap-2">
+									{SIPOC_COLUMNS.map((col, colIdx) => (
+										<div key={col.key} className="flex flex-col gap-1.5">
+											{col.items.map((item, itemIdx) => (
+												<motion.div
+													key={item}
+													initial={{ opacity: 0, x: -6 }}
+													animate={{ opacity: 1, x: 0 }}
+													transition={{
+														delay: 1.3 + colIdx * 0.12 + itemIdx * 0.15,
+														duration: 0.35,
+														ease: [0.22, 1, 0.36, 1],
+													}}
+													className="rounded-md border border-white/[0.06] bg-white/[0.03] px-2 py-2"
+												>
+													<span className="text-[10px] leading-tight text-white/60 block">
+														{item}
+													</span>
+												</motion.div>
+											))}
+										</div>
+									))}
 								</div>
-									<div className="mt-3 flex gap-2">
-										<div className="flex-1 rounded-lg bg-red-500/10 px-3 py-2">
-											<div className="mb-1 h-2 w-12 rounded bg-red-400/30" />
-											<div className="h-3 w-16 rounded bg-red-400/20" />
-										</div>
-										<div className="flex-1 rounded-lg bg-amber-500/10 px-3 py-2">
-											<div className="mb-1 h-2 w-12 rounded bg-amber-400/30" />
-											<div className="h-3 w-16 rounded bg-amber-400/20" />
-										</div>
-										<div className="flex-1 rounded-lg bg-emerald-500/10 px-3 py-2">
-											<div className="mb-1 h-2 w-12 rounded bg-emerald-400/30" />
-											<div className="h-3 w-16 rounded bg-emerald-400/20" />
-										</div>
-									</div>
+
+								{/* Flow arrows between columns */}
+								<div className="mt-3 grid grid-cols-5 gap-2">
+									{[0, 1, 2, 3].map((i) => (
+										<motion.div
+											key={i}
+											initial={{ opacity: 0 }}
+											animate={{ opacity: 1 }}
+											transition={{ delay: 2.0 + i * 0.15, duration: 0.3 }}
+											className="flex items-center justify-end col-span-1"
+										>
+											<svg width="100%" height="12" viewBox="0 0 80 12" className="text-white/15">
+												<line x1="10" y1="6" x2="70" y2="6" stroke="currentColor" strokeWidth="1" strokeDasharray="3 2" />
+												<polygon points="70,3 76,6 70,9" fill="currentColor" />
+											</svg>
+										</motion.div>
+									))}
+									<div />
 								</div>
 							</div>
+
+							{/* Status footer */}
+							<div className="flex items-center justify-between border-t border-white/[0.06] bg-white/[0.02] px-5 py-2">
+								<div className="flex items-center gap-3">
+									<span className="text-[10px] text-white/30">5 categories</span>
+									<span className="text-[10px] text-white/15">·</span>
+									<span className="text-[10px] text-white/30">15 elements mapped</span>
+									<span className="text-[10px] text-white/15">·</span>
+									<span className="text-[10px] text-white/30">ISO 9001</span>
+								</div>
+								<motion.div
+									initial={{ opacity: 0, scale: 0.9 }}
+									animate={{ opacity: 1, scale: 1 }}
+									transition={{ delay: 2.6, duration: 0.4 }}
+									className="flex items-center gap-1.5 rounded-full bg-[#00E5C0]/10 px-2.5 py-0.5"
+								>
+									<div className="size-1.5 rounded-full bg-[#00E5C0]" />
+									<span className="text-[10px] font-medium text-[#00E5C0]">Analysis ready</span>
+								</motion.div>
+							</div>
+
+							{/* Ambient glow */}
+							<div
+								className="pointer-events-none absolute inset-0 rounded-2xl"
+								style={{ background: "radial-gradient(ellipse at 50% 40%, rgba(0,229,192,0.04) 0%, transparent 70%)" }}
+							/>
 						</motion.div>
 					</motion.div>
 				</div>

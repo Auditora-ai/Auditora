@@ -1,5 +1,6 @@
 {
   "pricing": {
+    "badge": "Pricing",
     "title": "Simple pricing. Evaluations that scale with your team.",
     "subtitle": "Every plan starts with a 14-day free trial. No credit card required.",
     "monthly": "Monthly",
@@ -25,6 +26,7 @@
     "evaluationsRemaining": "{count} evaluations remaining this month.",
     "evaluationsAvailable": "{count} evaluations available.",
     "resetDate": "Resets {date}",
+    "trialNote": "All plans include 14-day free trial. No credit card required.",
     "metricProcesses": "processes",
     "metricEvaluations": "eval/mo",
     "metricEvaluators": "evaluators",
