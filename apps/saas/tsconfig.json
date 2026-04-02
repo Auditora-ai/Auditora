@@ -23,12 +23,10 @@
 			"@command-center/*": ["./modules/command-center/*"],
 			"@process-library/*": ["./modules/process-library/*"],
 			"@discovery/*": ["./modules/discovery/*"],
-			"@risk/*": ["./modules/risk/*"],
 			"@deliverables/*": ["./modules/deliverables/*"],
 			"@radiografia/*": ["./modules/radiografia/*"],
 			"@ai-interview/*": ["./modules/ai-interview/*"],
-			"@procedures/*": ["./modules/procedures/*"],
-			"@simulations/*": ["./modules/simulations/*"]
+			"@evaluaciones/*": ["./modules/evaluaciones/*"]
 		}
 	},
 	"include": [

@@ -15,7 +15,6 @@ import { UserMenu } from "@shared/components/UserMenu";
 import { useNavData } from "@shared/hooks/use-nav-data";
 import {
 	BarChart3Icon,
-	ClipboardListIcon,
 	FileTextIcon,
 	FolderOpenIcon,
 	GraduationCapIcon,
@@ -26,7 +25,6 @@ import {
 	PlusIcon,
 	ScanSearchIcon,
 	SettingsIcon,
-	ShieldAlertIcon,
 	WorkflowIcon,
 } from "lucide-react";
 import Link from "next/link";
@@ -98,21 +96,6 @@ export function NavBar() {
 		authConfig.organizations.enable && !!activeOrganization;
 
 	// Build badge data
-	const riskBadge = navData
-		? {
-				text:
-					navData.criticalRiskCount > 0
-						? t("app.badges.critical", { count: navData.criticalRiskCount })
-						: undefined,
-				dotColor:
-					navData.criticalRiskCount > 0
-						? ("red" as const)
-						: navData.maturityScore > 0
-							? ("green" as const)
-							: null,
-			}
-		: undefined;
-
 	const sessionBadge = navData
 		? {
 				text: navData.hasActiveSession
@@ -162,7 +145,6 @@ export function NavBar() {
 	// Derive flow completion from navData
 	const hasArchitecture = !!navData && navData.maturityScore > 0;
 	const hasProcesses = !!navData && navData.processStats.total > 0;
-	const hasRisks = !!navData && navData.criticalRiskCount >= 0 && hasProcesses && navData.maturityScore > 15;
 	const hasEvaluation = !!navData && navData.maturityScore >= 40;
 
 	const menuItems: NavItem[] = [
@@ -195,41 +177,14 @@ export function NavBar() {
 			flowCompleted: hasProcesses,
 		},
 		{
-			id: "risks",
-			label: t("app.menu.risks"),
-			href: `${basePath}/risks`,
-			icon: ShieldAlertIcon,
-			isActive: pathname.startsWith(`${basePath}/risks`),
-			hidden: !hasOrg,
-			section: "flow",
-			badge: riskBadge,
-			quickAction: {
-				label: t("app.actions.registerRisk"),
-				href: `${basePath}/risks`,
-			},
-			flowStep: 3,
-			flowCompleted: hasRisks,
-		},
-		{
-			id: "procedures",
-			label: t("app.menu.procedures"),
-			href: `${basePath}/procedures`,
-			icon: ClipboardListIcon,
-			isActive: pathname.startsWith(`${basePath}/procedures`),
-			hidden: !hasOrg,
-			section: "flow",
-			flowStep: 4,
-			flowCompleted: false,
-		},
-		{
-			id: "simulations",
-			label: t("app.menu.simulations"),
-			href: `${basePath}/simulations`,
+			id: "evaluaciones",
+			label: t("app.menu.evaluaciones"),
+			href: `${basePath}/evaluaciones`,
 			icon: GraduationCapIcon,
-			isActive: pathname.startsWith(`${basePath}/simulations`),
+			isActive: pathname.startsWith(`${basePath}/evaluaciones`),
 			hidden: !hasOrg,
 			section: "flow",
-			flowStep: 5,
+			flowStep: 3,
 			flowCompleted: false,
 		},
 		{
@@ -239,7 +194,7 @@ export function NavBar() {
 			icon: LayoutDashboardIcon,
 			isActive: pathname === "/" || pathname === basePath,
 			section: "flow",
-			flowStep: 6,
+			flowStep: 4,
 			flowCompleted: hasEvaluation,
 		},
 		// ─── MAIN (cross-cutting workspace) ───
