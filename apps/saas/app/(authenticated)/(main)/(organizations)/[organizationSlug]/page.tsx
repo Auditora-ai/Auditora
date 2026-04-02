@@ -1,6 +1,7 @@
 import { getActiveOrganization } from "@auth/lib/server";
 import { RiskDashboard, type TopRisk, type ActivityItem } from "@command-center/components/RiskDashboard";
 import { db } from "@repo/database";
+import { fetchHumanRiskDashboardData } from "@evaluaciones/lib/dashboard-queries";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -32,7 +33,7 @@ export default async function OrganizationPage({
 	});
 
 	// Parallel queries for dashboard data
-	const [processes, topRisksRaw, nextSession, activeSession, recentSessions] =
+	const [processes, topRisksRaw, nextSession, activeSession, recentSessions, evaluacionesData] =
 		await Promise.all([
 			// Process stats
 			architecture
@@ -107,6 +108,9 @@ export default async function OrganizationPage({
 					_count: { select: { diagramNodes: true } },
 				},
 			}),
+
+			// Evaluaciones / human risk data
+			fetchHumanRiskDashboardData(orgId).catch(() => null),
 		]);
 
 	const totalProcesses = processes.length;
@@ -175,6 +179,18 @@ export default async function OrganizationPage({
 				documentedCount={documentedProcesses}
 				riskCount={riskCount}
 				hasActiveSession={!!activeSession}
+				evaluaciones={
+					evaluacionesData && !evaluacionesData.insufficientData
+						? {
+								orgAvgScore: evaluacionesData.orgAvgScore,
+								totalSimulations: evaluacionesData.totalSimulations,
+								membersEvaluated: evaluacionesData.membersEvaluated,
+								completionRate: evaluacionesData.completionRate,
+								dimensionAverages: evaluacionesData.dimensionAverages,
+								scoreTrend: evaluacionesData.scoreTrend,
+							}
+						: null
+				}
 			/>
 		</div>
 	);

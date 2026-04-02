@@ -800,7 +800,17 @@
       "nextSessionLabel": "Next session",
       "noProcess": "No process assigned",
       "viewDetails": "View details",
-      "coverage": "Coverage"
+      "coverage": "Coverage",
+      "evaluaciones": "Evaluations",
+      "viewAll": "View all",
+      "teamAlignment": "Team alignment",
+      "evaluationsCompleted": "Evaluations completed",
+      "membersEvaluated": "Members evaluated",
+      "completionRate": "Completion rate",
+      "alignment": "Procedural alignment",
+      "controlLevel": "Control level",
+      "criterio": "Decision criteria",
+      "scoreTrend": "Score trend"
     }
   },
   "processLibrary": {

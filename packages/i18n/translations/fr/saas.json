@@ -798,7 +798,17 @@
 			"nextSessionLabel": "Prochaine session",
 			"noProcess": "Aucun processus attribué",
 			"viewDetails": "Voir les détails",
-			"coverage": "Couverture"
+			"coverage": "Couverture",
+			"evaluaciones": "Évaluations",
+			"viewAll": "Voir tout",
+			"teamAlignment": "Alignement de l'équipe",
+			"evaluationsCompleted": "Évaluations terminées",
+			"membersEvaluated": "Membres évalués",
+			"completionRate": "Taux de complétion",
+			"alignment": "Alignement procédural",
+			"controlLevel": "Niveau de contrôle",
+			"criterio": "Critères de décision",
+			"scoreTrend": "Tendance des scores"
 		}
 	},
 	"processLibrary": {

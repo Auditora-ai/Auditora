@@ -3,11 +3,15 @@
 import { RiskMaturityRing } from "@shared/components/RiskMaturityRing";
 import {
 	CalendarIcon,
+	ClipboardCheckIcon,
 	MicIcon,
 	PlusIcon,
 	ShieldAlertIcon,
 	TrendingUpIcon,
+	UsersIcon,
 	WorkflowIcon,
+	BarChart3Icon,
+	TargetIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -17,6 +21,19 @@ import { EmptyState } from "@shared/components/EmptyState";
 import { SessionWizard } from "./SessionWizard";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
+
+export interface EvaluacionesSummary {
+	orgAvgScore: number;
+	totalSimulations: number;
+	membersEvaluated: number;
+	completionRate: number;
+	dimensionAverages: {
+		alignment: number;
+		riskLevel: number;
+		criterio: number;
+	};
+	scoreTrend: Array<{ month: string; score: number }>;
+}
 
 export interface RiskDashboardProps {
 	organizationId: string;
@@ -35,6 +52,7 @@ export interface RiskDashboardProps {
 	documentedCount: number;
 	riskCount: number;
 	hasActiveSession: boolean;
+	evaluaciones?: EvaluacionesSummary | null;
 }
 
 export interface TopRisk {
@@ -68,6 +86,7 @@ export function RiskDashboard({
 	documentedCount,
 	riskCount,
 	hasActiveSession,
+	evaluaciones,
 }: RiskDashboardProps) {
 	const router = useRouter();
 	const t = useTranslations("dashboard.riskDashboard");
@@ -270,11 +289,182 @@ export function RiskDashboard({
 									</div>
 								)}
 							</div>
-						</div>
+					</div>
 
-						{/* Next Session */}
-						{nextSession && (
-							<div className="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-200 rounded-xl border border-border bg-background p-4">
+					{/* Evaluaciones Summary */}
+					{evaluaciones && (
+						<div className="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-150">
+							<div className="flex items-center justify-between mb-3">
+								<h2 className="text-sm font-semibold text-foreground">
+									{t("evaluaciones")}
+								</h2>
+								<Link
+									href={`${basePath}/evaluaciones?tab=dashboard`}
+									className="text-xs font-medium text-primary hover:underline"
+								>
+									{t("viewAll")}
+								</Link>
+							</div>
+							<div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+								{/* Org Score */}
+								<Link
+									href={`${basePath}/evaluaciones?tab=dashboard`}
+									className="rounded-xl border border-border bg-background p-4 transition-all hover:shadow-sm hover:border-primary/30 group"
+								>
+									<div className="flex items-center gap-3">
+										<div className="flex size-10 items-center justify-center rounded-lg bg-primary/10">
+											<TargetIcon className="size-5 text-primary" />
+										</div>
+										<div>
+											<p className="text-2xl font-bold tabular-nums text-foreground group-hover:text-primary transition-colors">
+												{evaluaciones.orgAvgScore}
+												<span className="text-sm font-normal text-muted-foreground">
+													/100
+												</span>
+											</p>
+											<p className="text-[11px] text-muted-foreground">
+												{t("teamAlignment")}
+											</p>
+										</div>
+									</div>
+								</Link>
+
+								{/* Total Evaluations */}
+								<Link
+									href={`${basePath}/evaluaciones`}
+									className="rounded-xl border border-border bg-background p-4 transition-all hover:shadow-sm hover:border-primary/30 group"
+								>
+									<div className="flex items-center gap-3">
+										<div className="flex size-10 items-center justify-center rounded-lg bg-blue-500/10">
+											<ClipboardCheckIcon className="size-5 text-blue-500" />
+										</div>
+										<div>
+											<p className="text-2xl font-bold tabular-nums text-foreground group-hover:text-blue-500 transition-colors">
+												{evaluaciones.totalSimulations}
+											</p>
+											<p className="text-[11px] text-muted-foreground">
+												{t("evaluationsCompleted")}
+											</p>
+										</div>
+									</div>
+								</Link>
+
+								{/* Members Evaluated */}
+								<Link
+									href={`${basePath}/evaluaciones?tab=dashboard`}
+									className="rounded-xl border border-border bg-background p-4 transition-all hover:shadow-sm hover:border-primary/30 group"
+								>
+									<div className="flex items-center gap-3">
+										<div className="flex size-10 items-center justify-center rounded-lg bg-green-500/10">
+											<UsersIcon className="size-5 text-green-500" />
+										</div>
+										<div>
+											<p className="text-2xl font-bold tabular-nums text-foreground group-hover:text-green-500 transition-colors">
+												{evaluaciones.membersEvaluated}
+											</p>
+											<p className="text-[11px] text-muted-foreground">
+												{t("membersEvaluated")}
+											</p>
+										</div>
+									</div>
+								</Link>
+
+								{/* Completion Rate */}
+								<Link
+									href={`${basePath}/evaluaciones?tab=dashboard`}
+									className="rounded-xl border border-border bg-background p-4 transition-all hover:shadow-sm hover:border-primary/30 group"
+								>
+									<div className="flex items-center gap-3">
+										<div className="flex size-10 items-center justify-center rounded-lg bg-amber-500/10">
+											<BarChart3Icon className="size-5 text-amber-500" />
+										</div>
+										<div>
+											<p className="text-2xl font-bold tabular-nums text-foreground group-hover:text-amber-500 transition-colors">
+												{evaluaciones.completionRate}%
+											</p>
+											<p className="text-[11px] text-muted-foreground">
+												{t("completionRate")}
+											</p>
+										</div>
+									</div>
+								</Link>
+							</div>
+
+							{/* Dimension mini-bars */}
+							<div className="mt-4 rounded-xl border border-border bg-background p-4">
+								<div className="space-y-3">
+									{[
+										{
+											label: t("alignment"),
+											value: evaluaciones.dimensionAverages.alignment,
+											color: "bg-primary",
+										},
+										{
+											label: t("controlLevel"),
+											value: 100 - evaluaciones.dimensionAverages.riskLevel,
+											color: "bg-blue-500",
+										},
+										{
+											label: t("criterio"),
+											value: evaluaciones.dimensionAverages.criterio,
+											color: "bg-green-500",
+										},
+									].map((dim) => (
+										<div key={dim.label}>
+											<div className="flex items-center justify-between text-xs mb-1">
+												<span className="text-muted-foreground">{dim.label}</span>
+												<span className="font-medium tabular-nums text-foreground">{dim.value}%</span>
+											</div>
+											<div className="h-2 rounded-full bg-accent">
+												<div
+													className={`h-full rounded-full ${dim.color} transition-all duration-1000 ease-out`}
+													style={{ width: `${dim.value}%` }}
+												/>
+											</div>
+										</div>
+									))}
+								</div>
+
+								{/* Score trend mini-sparkline */}
+								{evaluaciones.scoreTrend.length >= 2 && (
+									<div className="mt-4 pt-3 border-t border-border">
+										<p className="text-xs text-muted-foreground mb-2">{t("scoreTrend")}</p>
+										<div className="flex items-end gap-1 h-8">
+											{evaluaciones.scoreTrend.slice(-6).map((point, i) => {
+												const maxScore = Math.max(...evaluaciones.scoreTrend.slice(-6).map((p) => p.score), 1);
+												const height = (point.score / maxScore) * 100;
+												return (
+													<div
+														key={i}
+														className="flex-1 flex flex-col items-center gap-0.5"
+													>
+														<div
+															className="w-full rounded-t bg-primary/60 min-h-[2px] transition-all duration-700"
+															style={{ height: `${height}%` }}
+															title={`${point.month}: ${point.score}`}
+														/>
+													</div>
+												);
+											})}
+										</div>
+										<div className="flex justify-between mt-1">
+											<span className="text-[9px] text-muted-foreground">
+												{evaluaciones.scoreTrend.slice(-6)[0]?.month}
+											</span>
+											<span className="text-[9px] text-muted-foreground">
+												{evaluaciones.scoreTrend.slice(-1)[0]?.month}
+											</span>
+										</div>
+									</div>
+								)}
+							</div>
+						</div>
+					)}
+
+				{/* Next Session */}
+					{nextSession && (
+						<div className="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-200 rounded-xl border border-border bg-background p-4">
+
 								<div className="flex items-center gap-3">
 									<div className="flex size-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
 										<MicIcon className="size-5" />
