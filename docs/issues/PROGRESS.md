@@ -67,6 +67,35 @@
 
 ---
 
+## QA Status
+
+**Último ciclo:** 2026-04-02 Cycle 1 — QA Agent #05
+
+### Tests
+- ✅ 48/48 tests pass (process-engine: bpmn-builder fixed 19 failures)
+- ❌ 6 TypeScript errors in saas (evaluaciones duplicate prop, Prisma _ext type)
+- ✅ SaaS build passes, Marketing build passes
+
+### Bugs Found (21 total)
+| Severity | Count | Key Issues |
+|----------|-------|------------|
+| 🔴 Critical | 3 | Auth bypass (BUG-001), wrong org in profile API (BUG-002), missing forgot-password page (BUG-003) |
+| 🟠 High | 6 | Duplicate prop, unsafe JSON.parse, SessionProvider bug, no input validation, wrong route, missing .min(1) |
+| 🟡 Medium | 8 | Hardcoded strings, sequential DB queries, silent error swallowing |
+| 🟢 Low | 4 | Missing ARIA, blank page on invalid step, indentation, silent catch |
+
+### Code Quality Score: 68/100
+- **Blocker for Fase 2:** 3 Critical bugs must be fixed first (auth bypass is showstopper)
+
+### QA Reports
+- `docs/issues/qa/qa-2026-04-02-cycle-1.md` — Full report
+- `docs/issues/qa/BUG-001.md` through `BUG-009.md` — Individual bug reports (Critical + High)
+
+### ⚠️ Push Blocked
+GitHub push protection blocks all pushes due to `.pm-config` token in commit 922b0bd. Agent #04 needs to remove the token from git history before any pushes can succeed.
+
+---
+
 ## Fase 2 — Producto que se Vende (pendiente Fase 1)
 | Issue | Status |
 |---|---|
