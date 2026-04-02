@@ -63,7 +63,7 @@
 ### Wave 4 (último, sincroniza todo)
 | Issue | Depende de | Status | Fecha |
 |---|---|---|---|
-| #13 F1-11: Actualizar translations | #4, #7, #9 | PENDING | — |
+| #13 F1-11: Actualizar translations | #4, #7, #9 | **DONE** | 2026-04-02 | S ✓ Removed stale sessionsIncluded/extraSession keys from en/es/fr/de. All pricing refs evaluations as value unit. |
 
 ---
 
