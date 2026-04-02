@@ -8,7 +8,7 @@ import { Textarea } from "@repo/ui/components/textarea";
 import {
 	ExtractionCard,
 	type ExtractedProcessData,
-} from "@discovery/components/ExtractionCard";
+} from "./ExtractionCard";
 
 interface Message {
 	id: string;

@@ -44,7 +44,10 @@
 	letter-spacing: -0.02em;
 }
 
-/* Landing page theme override — cold blue + teal palette */
+/* ═══════════════════════════════════════════════
+   LANDING THEME
+   ═══════════════════════════════════════════════ */
+
 [data-landing] {
 	--landing-deep: #0A1428;
 	--landing-deep-light: #111827;
@@ -59,88 +62,38 @@
 }
 
 /* ═══════════════════════════════════════════════
-   SCROLL-REVEAL ANIMATIONS
-   Elements start hidden, animate when .is-visible is added
+   NOISE TEXTURE OVERLAY
+   Subtle grain for premium depth
    ═══════════════════════════════════════════════ */
 
-[data-landing] .reveal {
-	opacity: 0;
-	will-change: opacity, transform;
+[data-landing]::before {
+	content: "";
+	position: fixed;
+	inset: 0;
+	z-index: 9999;
+	pointer-events: none;
+	opacity: 0.025;
+	background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+	background-repeat: repeat;
+	background-size: 128px 128px;
 }
-
-[data-landing] .reveal.is-visible {
-	opacity: 1;
-}
-
-/* Fade up */
-[data-landing] .reveal-fade-up {
-	opacity: 0;
-	transform: translateY(32px);
-	transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-				transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-[data-landing] .reveal-fade-up.is-visible {
-	opacity: 1;
-	transform: translateY(0);
-}
-
-/* Fade up with scale */
-[data-landing] .reveal-scale-up {
-	opacity: 0;
-	transform: translateY(24px) scale(0.96);
-	transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-				transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-[data-landing] .reveal-scale-up.is-visible {
-	opacity: 1;
-	transform: translateY(0) scale(1);
-}
-
-/* Fade in from left */
-[data-landing] .reveal-slide-left {
-	opacity: 0;
-	transform: translateX(-40px);
-	transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-				transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-[data-landing] .reveal-slide-left.is-visible {
-	opacity: 1;
-	transform: translateX(0);
-}
-
-/* Fade in from right */
-[data-landing] .reveal-slide-right {
-	opacity: 0;
-	transform: translateX(40px);
-	transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-				transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-}
-[data-landing] .reveal-slide-right.is-visible {
-	opacity: 1;
-	transform: translateX(0);
-}
-
-/* Stagger delays for children */
-[data-landing] .stagger > *:nth-child(1) { transition-delay: 0ms; }
-[data-landing] .stagger > *:nth-child(2) { transition-delay: 80ms; }
-[data-landing] .stagger > *:nth-child(3) { transition-delay: 160ms; }
-[data-landing] .stagger > *:nth-child(4) { transition-delay: 240ms; }
-[data-landing] .stagger > *:nth-child(5) { transition-delay: 320ms; }
-[data-landing] .stagger > *:nth-child(6) { transition-delay: 400ms; }
-[data-landing] .stagger > *:nth-child(7) { transition-delay: 480ms; }
-[data-landing] .stagger > *:nth-child(8) { transition-delay: 560ms; }
-
-/* Per-element delay classes */
-[data-landing] .delay-100 { transition-delay: 100ms; }
-[data-landing] .delay-200 { transition-delay: 200ms; }
-[data-landing] .delay-300 { transition-delay: 300ms; }
-[data-landing] .delay-400 { transition-delay: 400ms; }
-[data-landing] .delay-500 { transition-delay: 500ms; }
-[data-landing] .delay-600 { transition-delay: 600ms; }
-[data-landing] .delay-700 { transition-delay: 700ms; }
 
 /* ═══════════════════════════════════════════════
-   ANIMATED GRADIENT TEXT
+   DOT GRID BACKGROUND
+   ═══════════════════════════════════════════════ */
+
+[data-landing] .bg-grid {
+	background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+	background-size: 32px 32px;
+}
+
+[data-landing] .bg-grid-dense {
+	background-image: radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px);
+	background-size: 20px 20px;
+}
+
+/* ═══════════════════════════════════════════════
+   GRADIENT TEXT
    ═══════════════════════════════════════════════ */
 
 @keyframes gradientShift {
@@ -152,20 +105,19 @@
 [data-landing] .text-gradient-animated {
 	background: linear-gradient(
 		135deg,
-		#00E5C0 0%,
-		#00D4AA 25%,
-		#38BDF8 50%,
-		#00E5C0 75%,
-		#00D4AA 100%
+		#ffffff 0%,
+		#00E5C0 40%,
+		#38BDF8 70%,
+		#ffffff 100%
 	);
 	background-size: 300% 300%;
 	-webkit-background-clip: text;
 	background-clip: text;
 	-webkit-text-fill-color: transparent;
-	animation: gradientShift 6s ease-in-out infinite;
+	animation: gradientShift 8s ease-in-out infinite;
 }
 
-[data-landing] .text-gradient-static {
+[data-landing] .text-gradient-teal {
 	background: linear-gradient(135deg, #00E5C0 0%, #38BDF8 100%);
 	-webkit-background-clip: text;
 	background-clip: text;
@@ -173,13 +125,8 @@
 }
 
 /* ═══════════════════════════════════════════════
-   ANIMATED GRADIENT BORDERS
+   ANIMATED GRADIENT BORDER (rotating conic)
    ═══════════════════════════════════════════════ */
-
-@keyframes borderRotate {
-	0% { --border-angle: 0deg; }
-	100% { --border-angle: 360deg; }
-}
 
 @property --border-angle {
 	syntax: "<angle>";
@@ -187,12 +134,16 @@
 	inherits: false;
 }
 
-[data-landing] .border-gradient-animated {
-	position: relative;
-	border: none;
+@keyframes borderRotate {
+	0% { --border-angle: 0deg; }
+	100% { --border-angle: 360deg; }
 }
 
-[data-landing] .border-gradient-animated::before {
+[data-landing] .border-glow {
+	position: relative;
+}
+
+[data-landing] .border-glow::before {
 	content: "";
 	position: absolute;
 	inset: 0;
@@ -210,20 +161,6 @@
 	mask-composite: exclude;
 	animation: borderRotate 4s linear infinite;
 	pointer-events: none;
-}
-
-/* ═══════════════════════════════════════════════
-   DOT GRID BACKGROUND
-   ═══════════════════════════════════════════════ */
-
-[data-landing] .bg-grid {
-	background-image: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
-	background-size: 32px 32px;
-}
-
-[data-landing] .bg-grid-dense {
-	background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
-	background-size: 20px 20px;
 }
 
 /* ═══════════════════════════════════════════════
@@ -252,7 +189,36 @@
 }
 
 /* ═══════════════════════════════════════════════
-   SHIMMER EFFECT (loading / premium feel)
+   CARD HOVER EFFECTS
+   ═══════════════════════════════════════════════ */
+
+[data-landing] .card-hover {
+	transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+				box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+				border-color 0.3s ease;
+}
+
+[data-landing] .card-hover:hover {
+	transform: translateY(-6px);
+	box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+				0 0 0 1px rgba(0, 229, 192, 0.08);
+}
+
+/* ═══════════════════════════════════════════════
+   BADGE PULSE
+   ═══════════════════════════════════════════════ */
+
+@keyframes pulseGlow {
+	0%, 100% { box-shadow: 0 0 0 0 rgba(0, 229, 192, 0.25); }
+	50% { box-shadow: 0 0 0 6px rgba(0, 229, 192, 0); }
+}
+
+[data-landing] .badge-pulse {
+	animation: pulseGlow 2.5s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════
+   SHIMMER LINE
    ═══════════════════════════════════════════════ */
 
 @keyframes shimmer {
@@ -274,67 +240,70 @@
 }
 
 /* ═══════════════════════════════════════════════
-   PULSE BADGE
+   SECTION DIVIDER GRADIENT
+   Smooth transitions between sections
    ═══════════════════════════════════════════════ */
 
-@keyframes pulseGlow {
-	0%, 100% { box-shadow: 0 0 0 0 rgba(0, 229, 192, 0.3); }
-	50% { box-shadow: 0 0 0 8px rgba(0, 229, 192, 0); }
+[data-landing] .section-fade-top {
+	position: relative;
 }
 
-[data-landing] .badge-pulse {
-	animation: pulseGlow 2.5s ease-in-out infinite;
+[data-landing] .section-fade-top::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 120px;
+	background: linear-gradient(to bottom, #0A1428, transparent);
+	pointer-events: none;
+	z-index: 1;
+}
+
+[data-landing] .section-fade-bottom::after {
+	content: "";
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 120px;
+	background: linear-gradient(to top, #0A1428, transparent);
+	pointer-events: none;
+	z-index: 1;
 }
 
 /* ═══════════════════════════════════════════════
-   HOVER CARD LIFT
+   BPMN SVG DRAW ANIMATION
    ═══════════════════════════════════════════════ */
 
-[data-landing] .card-lift {
-	transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-				box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-				border-color 0.3s ease;
+[data-landing] .bpmn-draw line,
+[data-landing] .bpmn-draw circle,
+[data-landing] .bpmn-draw rect,
+[data-landing] .bpmn-draw path {
+	stroke-dasharray: 1000;
+	stroke-dashoffset: 1000;
 }
 
-[data-landing] .card-lift:hover {
-	transform: translateY(-4px);
-	box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.4),
-				0 0 0 1px rgba(0, 229, 192, 0.1);
+[data-landing] .bpmn-draw.is-drawing line,
+[data-landing] .bpmn-draw.is-drawing circle,
+[data-landing] .bpmn-draw.is-drawing rect,
+[data-landing] .bpmn-draw.is-drawing path {
+	stroke-dashoffset: 0;
+	transition: stroke-dashoffset 1.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* ═══════════════════════════════════════════════
-   HERO WORD REVEAL (3D flip)
-   ═══════════════════════════════════════════════ */
-
-@keyframes wordReveal {
-	from {
-		opacity: 0;
-		transform: translateY(100%) rotateX(-15deg);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0) rotateX(0);
-	}
-}
-
-[data-landing] .hero-word-reveal {
+[data-landing] .bpmn-draw.is-drawing text {
 	opacity: 0;
-	animation: wordReveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+	animation: fadeInText 0.5s ease forwards;
+	animation-delay: 1s;
 }
 
-[data-landing] .hero-word-reveal:nth-child(1) { animation-delay: 0.2s; }
-[data-landing] .hero-word-reveal:nth-child(2) { animation-delay: 0.3s; }
-[data-landing] .hero-word-reveal:nth-child(3) { animation-delay: 0.4s; }
-[data-landing] .hero-word-reveal:nth-child(4) { animation-delay: 0.5s; }
-[data-landing] .hero-word-reveal:nth-child(5) { animation-delay: 0.6s; }
-[data-landing] .hero-word-reveal:nth-child(6) { animation-delay: 0.7s; }
-[data-landing] .hero-word-reveal:nth-child(7) { animation-delay: 0.8s; }
-[data-landing] .hero-word-reveal:nth-child(8) { animation-delay: 0.9s; }
-[data-landing] .hero-word-reveal:nth-child(9) { animation-delay: 1.0s; }
-[data-landing] .hero-word-reveal:nth-child(10) { animation-delay: 1.1s; }
+@keyframes fadeInText {
+	to { opacity: 1; }
+}
 
 /* ═══════════════════════════════════════════════
-   WAVEFORM + RIPPLE (existing)
+   WAVEFORM (existing)
    ═══════════════════════════════════════════════ */
 
 @keyframes waveform {

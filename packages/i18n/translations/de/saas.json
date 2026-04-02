@@ -83,9 +83,7 @@
 			"processes": "Prozesse",
 			"risks": "Risiken",
 			"deliverables": "Ergebnisse",
-			"documents": "Dokumente",
 			"scan": "Röntgenbild",
-			"assistant": "KI-Assistent",
 			"tools": "Werkzeuge",
 			"procedures": "Verfahren",
 			"simulations": "Simulationen",
@@ -1579,10 +1577,6 @@
 			"noSessions": "Keine Sitzungen",
 			"noSessionsDesc": "Starten Sie einen Deep Dive, um diesen Prozess im Detail abzubilden."
 		},
-		"documents": {
-			"noDocuments": "Keine Dokumente",
-			"noDocumentsDesc": "Laden Sie Referenzdokumente hoch, damit die KI sie als Kontext in Ihren Sitzungen verwenden kann."
-		},
 		"deliverables": {
 			"noProcessCards": "Keine Prozesse registriert",
 			"noProcessCardsDesc": "Starten Sie eine Discovery-Sitzung, um Prozesse zu dokumentieren und Karten automatisch zu generieren."
@@ -1717,10 +1711,6 @@
 		"noDocuments": "Keine Dokumente",
 		"defaultProcessName": "Prozess",
 		"noNodesData": "Keine Knotendaten zum Regenerieren des Diagramms."
-	},
-	"discovery": {
-		"errorProcessing": "Fehler bei der Verarbeitung der Nachricht. Bitte erneut versuchen.",
-		"errorTranscribing": "Fehler bei der Transkription"
 	},
 	"intelligenceTab": {
 		"noOpenQuestions": "Keine offenen Fragen. Der Prozess ist vollständig oder benötigt ein Audit.",

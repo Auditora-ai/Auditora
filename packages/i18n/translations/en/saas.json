@@ -83,9 +83,7 @@
 			"processes": "Processes",
 			"risks": "Risks",
 			"deliverables": "Deliverables",
-			"documents": "Documents",
 			"scan": "X-Ray",
-			"assistant": "AI Assistant",
 			"tools": "Tools",
 			"procedures": "Procedures",
 			"simulations": "Simulations",
@@ -956,10 +954,7 @@
 			"cancel": "Cancel",
 			"confirm": "Confirm"
 		},
-		"actions": {
-			"continue": "Continue",
-			"verify": "Verify"
-		},
+		"actions": "Actions",
 		"colorMode": {
 			"system": "System",
 			"light": "Light",
@@ -999,7 +994,6 @@
 		"type": "Type",
 		"status": "Status",
 		"date": "Date",
-		"actions": "Actions",
 		"process": "Process",
 		"noDescription": "No description",
 		"noNote": "No note",
@@ -1679,10 +1673,6 @@
 			"noSessions": "No sessions",
 			"noSessionsDesc": "Start a Deep Dive to map this process in detail."
 		},
-		"documents": {
-			"noDocuments": "No documents",
-			"noDocumentsDesc": "Upload reference documents so the AI can use them as context in your sessions."
-		},
 		"deliverables": {
 			"noProcessCards": "No processes registered",
 			"noProcessCardsDesc": "Start a discovery session to document processes and generate cards automatically."
@@ -1817,10 +1807,6 @@
 		"noDocuments": "No documents",
 		"defaultProcessName": "Process",
 		"noNodesData": "No node data to regenerate the diagram."
-	},
-	"discovery": {
-		"errorProcessing": "Error processing the message. Please try again.",
-		"errorTranscribing": "Error transcribing"
 	},
 	"intelligenceTab": {
 		"noOpenQuestions": "No open questions. The process is complete or needs an audit.",

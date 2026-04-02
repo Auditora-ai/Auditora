@@ -1,39 +1,32 @@
 "use client";
 
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { useEffect, useRef } from "react";
 
-gsap.registerPlugin(ScrollTrigger);
-
+/**
+ * Smooth scroll provider using Lenis.
+ * Wrap the page content to enable buttery-smooth scrolling.
+ */
 export function LenisProvider({ children }: { children: React.ReactNode }) {
 	const lenisRef = useRef<Lenis | null>(null);
 
 	useEffect(() => {
 		const lenis = new Lenis({
-			autoRaf: false,
-			smoothWheel: true,
-			lerp: 0.08,
 			duration: 1.2,
+			easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+			smoothWheel: true,
 		});
+
 		lenisRef.current = lenis;
 
-		// Sync Lenis scroll position with GSAP ScrollTrigger
-		lenis.on("scroll", ScrollTrigger.update);
+		function raf(time: number) {
+			lenis.raf(time);
+			requestAnimationFrame(raf);
+		}
 
-		// Drive Lenis from GSAP's ticker for frame-perfect sync
-		const tickerCallback = (time: number) => {
-			lenis.raf(time * 1000);
-		};
-		gsap.ticker.add(tickerCallback);
-		gsap.ticker.lagSmoothing(0);
-
-		// Refresh ScrollTrigger after Lenis is ready
-		ScrollTrigger.refresh();
+		requestAnimationFrame(raf);
 
 		return () => {
-			gsap.ticker.remove(tickerCallback);
 			lenis.destroy();
 			lenisRef.current = null;
 		};

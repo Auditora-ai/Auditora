@@ -83,9 +83,7 @@
 			"processes": "Processus",
 			"risks": "Risques",
 			"deliverables": "Livrables",
-			"documents": "Documents",
 			"scan": "Radiographie",
-			"assistant": "Assistant IA",
 			"tools": "Outils",
 			"procedures": "Procédures",
 			"simulations": "Simulations",
@@ -1579,10 +1577,6 @@
 			"noSessions": "Aucune session",
 			"noSessionsDesc": "Lancez un Deep Dive pour mapper ce processus en détail."
 		},
-		"documents": {
-			"noDocuments": "Aucun document",
-			"noDocumentsDesc": "Téléchargez des documents de référence pour que l'IA les utilise comme contexte dans vos sessions."
-		},
 		"deliverables": {
 			"noProcessCards": "Aucun processus enregistré",
 			"noProcessCardsDesc": "Lancez une session de découverte pour documenter les processus et générer des fiches automatiquement."
@@ -1717,10 +1711,6 @@
 		"noDocuments": "Aucun document",
 		"defaultProcessName": "Processus",
 		"noNodesData": "Aucune donnée de nœud pour régénérer le diagramme."
-	},
-	"discovery": {
-		"errorProcessing": "Erreur lors du traitement du message. Veuillez réessayer.",
-		"errorTranscribing": "Erreur de transcription"
 	},
 	"intelligenceTab": {
 		"noOpenQuestions": "Aucune question ouverte. Le processus est complet ou nécessite un audit.",

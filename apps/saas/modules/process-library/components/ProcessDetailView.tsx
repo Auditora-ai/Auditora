@@ -47,7 +47,6 @@ import {
 	ListIcon,
 	CheckSquareIcon,
 	MessageSquareIcon,
-	FileUpIcon,
 	ShareIcon,
 	SparklesIcon,
 	CircleIcon,
@@ -70,7 +69,6 @@ import { ProcessSchedule } from "@projects/components/ProcessSchedule";
 import { useBpmnModeler } from "@meeting/hooks/useBpmnModeler";
 // BpmnIntelligence and BpmnVersionDiff available but not rendered inside canvas
 // to avoid breaking modeler interaction. Activated via toolbar toggles.
-import { DocumentList } from "@documents/components/DocumentList";
 import { ContextChat } from "./ContextChat";
 import { VersionDiff } from "./VersionDiff";
 import {
@@ -652,18 +650,10 @@ function ContextoTab({
 					processesPath={processesPath}
 					onChildAdded={onChildAdded}
 				/>
-			</CollapsibleSection>
+		</CollapsibleSection>
 
-			<CollapsibleSection
-				title={t("documents")}
-				icon={FileUpIcon}
-				badge={{ type: "status", status: "empty", label: t("uploadDocs") }}
-			>
-				<DocumentsTab organizationSlug={organizationSlug} />
-			</CollapsibleSection>
-
-			<CollapsibleSection
-				title={t("processDetails")}
+		<CollapsibleSection
+			title={t("processDetails")}
 				icon={FileText}
 				defaultOpen={false}
 			>
@@ -1482,124 +1472,6 @@ function SessionsTab({
 					))}
 				</div>
 			)}
-		</div>
-	);
-}
-
-// ─── Documents Tab ──────────────────────────────────────────────────────────
-
-function DocumentsTab({ organizationSlug }: { organizationSlug: string }) {
-	const [documents, setDocuments] = useState<any[]>([]);
-	const [loading, setLoading] = useState(true);
-	const [uploading, setUploading] = useState(false);
-	const [dragOver, setDragOver] = useState(false);
-	const fileInputRef = useRef<HTMLInputElement>(null);
-
-	const fetchDocs = useCallback(async () => {
-		setLoading(true);
-		try {
-			const { orpcClient } = await import("@shared/lib/orpc-client");
-			const docs = await orpcClient.documents.list();
-			setDocuments(docs || []);
-		} catch {
-			try {
-				const res = await fetch("/api/rpc/documents.list", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({}) });
-				if (res.ok) {
-					const data = await res.json();
-					setDocuments(data || []);
-				}
-			} catch {
-				// no documents endpoint available
-			}
-		} finally {
-			setLoading(false);
-		}
-	}, []);
-
-	useEffect(() => {
-		fetchDocs();
-	}, [fetchDocs]);
-
-	const handleUpload = async (files: FileList | null) => {
-		if (!files || files.length === 0) return;
-		setUploading(true);
-		try {
-			for (const file of Array.from(files)) {
-				const { orpcClient } = await import("@shared/lib/orpc-client");
-				const { signedUploadUrl, documentId } = await orpcClient.documents.createUploadUrl({
-					fileName: file.name,
-					mimeType: file.type,
-				});
-				await fetch(signedUploadUrl, { method: "PUT", body: file, headers: { "Content-Type": file.type } });
-			}
-			await fetchDocs();
-		} catch (err) {
-			console.error("Upload error:", err);
-		} finally {
-			setUploading(false);
-		}
-	};
-
-	if (loading) {
-		return (
-			<div className="flex items-center justify-center py-8">
-				<div className="h-6 w-6 animate-pulse rounded-lg bg-muted" />
-			</div>
-		);
-	}
-
-	return (
-		<div className="space-y-4">
-			{/* Upload Zone */}
-			<div
-				className={`relative flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-6 text-center transition-colors ${
-					dragOver ? "border-primary bg-accent" : "border-border hover:border-primary/50"
-				}`}
-				onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-				onDragLeave={() => setDragOver(false)}
-				onDrop={(e) => { e.preventDefault(); setDragOver(false); handleUpload(e.dataTransfer.files); }}
-				onClick={() => fileInputRef.current?.click()}
-			>
-				<FileUpIcon className="mb-2 h-6 w-6 text-muted-foreground" />
-				<p className="text-sm text-muted-foreground">
-					{uploading ? "Subiendo..." : "Arrastra archivos o haz click para subir"}
-				</p>
-				<p className="mt-1 text-xs text-muted-foreground/60">
-					PDF, DOCX, TXT, imagenes — max 50MB
-				</p>
-				<input
-					ref={fileInputRef}
-					type="file"
-					className="hidden"
-					multiple
-					accept=".pdf,.docx,.doc,.txt,.png,.jpg,.jpeg"
-					onChange={(e) => handleUpload(e.target.files)}
-				/>
-			</div>
-
-			<DocumentList
-				documents={documents}
-				showExtract={true}
-				onExtracted={fetchDocs}
-				onDelete={async (id) => {
-					try {
-						const { orpcClient } = await import("@shared/lib/orpc-client");
-						await orpcClient.documents.delete({ documentId: id });
-						await fetchDocs();
-					} catch (err) {
-						console.error("Delete error:", err);
-					}
-				}}
-				onEdit={async (id, data) => {
-					try {
-						const { orpcClient } = await import("@shared/lib/orpc-client");
-						await orpcClient.documents.update({ documentId: id, ...data });
-						await fetchDocs();
-					} catch (err) {
-						console.error("Update error:", err);
-					}
-				}}
-			/>
 		</div>
 	);
 }

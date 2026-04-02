@@ -15,7 +15,6 @@ import { UserMenu } from "@shared/components/UserMenu";
 import { useNavData } from "@shared/hooks/use-nav-data";
 import {
 	BarChart3Icon,
-	BotIcon,
 	ClipboardListIcon,
 	FileTextIcon,
 	FolderOpenIcon,
@@ -289,16 +288,7 @@ export function NavBar() {
 			hidden: !hasOrg,
 			section: "tools",
 		},
-		{
-			id: "assistant",
-			label: t("app.menu.assistant"),
-			href: "#",
-			icon: BotIcon,
-			isActive: false,
-			hidden: !hasOrg,
-			section: "tools",
-		},
-		// ─── BOTTOM ───
+			// ─── BOTTOM ───
 		{
 			id: "settings",
 			label: t("app.menu.organizationSettings"),

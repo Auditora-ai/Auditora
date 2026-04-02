@@ -1,14 +1,13 @@
 "use client";
 
 import { Button } from "@repo/ui/components/button";
-import { FileTextIcon, PlusIcon, SparklesIcon } from "lucide-react";
+import { FileTextIcon, PlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useCallback } from "react";
 import { useConfirmationAlert } from "@shared/components/ConfirmationAlertProvider";
 import { ProcessCard, type ProcessCardData } from "./ProcessCard";
 import { ProcessFilters, type FilterState } from "./ProcessFilters";
-import { DiscoveryPanel } from "@discovery/components/DiscoveryPanel";
 import { AddProcessModal } from "./AddProcessModal";
 import { ImportBpmnDialog } from "./ImportBpmnDialog";
 import { TemplatePicker } from "./TemplatePicker";
@@ -42,7 +41,6 @@ export function ProcessLibrary({
 		level: "all",
 	});
 	const [categoryTab, setCategoryTab] = useState<string>("all");
-	const [showDiscovery, setShowDiscovery] = useState(false);
 	const [showAddModal, setShowAddModal] = useState(false);
 	const [showImport, setShowImport] = useState(false);
 	const [showTemplates, setShowTemplates] = useState(false);
@@ -153,18 +151,11 @@ export function ProcessLibrary({
 					>
 						<PlusIcon className="mr-1.5 size-4" />
 						Manual
-					</Button>
-					<Button
-						size="sm"
-						onClick={() => setShowDiscovery(true)}
-					>
-						<SparklesIcon className="mr-1.5 size-4" />
-						Discovery con IA
-					</Button>
-				</div>
+			</Button>
 			</div>
+		</div>
 
-			<ProcessFilters
+		<ProcessFilters
 				filters={filters}
 				onFiltersChange={setFilters}
 			/>
@@ -189,16 +180,10 @@ export function ProcessLibrary({
 						>
 							<PlusIcon className="mr-2 size-4" />
 							Agregar manual
-						</Button>
-						<Button
-							onClick={() => setShowDiscovery(true)}
-						>
-							<SparklesIcon className="mr-2 size-4" />
-							Discovery con IA
-						</Button>
-					</div>
+					</Button>
 				</div>
-			) : (
+			</div>
+		) : (
 				<div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
 					{filteredProcesses.map((process) => (
 						<ProcessCard
@@ -224,15 +209,6 @@ export function ProcessLibrary({
 						</span>
 					</button>
 				</div>
-			)}
-
-			{/* Discovery panel */}
-			{showDiscovery && (
-				<DiscoveryPanel
-					organizationId={organizationId}
-					onClose={() => setShowDiscovery(false)}
-					onProcessAccepted={handleProcessAccepted}
-				/>
 			)}
 
 			{/* Add process modal */}
