@@ -1,0 +1,462 @@
+"use client";
+
+import { Button } from "@repo/ui/components/button";
+import { Skeleton } from "@repo/ui/components/skeleton";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@repo/ui/components/card";
+import {
+  AlertTriangleIcon,
+  RefreshCwIcon,
+  ShieldAlertIcon,
+  SparklesIcon,
+  TrendingUpIcon,
+  ChevronDownIcon,
+  ClipboardListIcon,
+} from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
+import { EmptyState } from "@shared/components/EmptyState";
+import { ControlMapping } from "./ControlMapping";
+import { FmeaView } from "./FmeaView";
+import { OpportunityRegister } from "./OpportunityRegister";
+import { RiskHeatMatrix } from "./RiskHeatMatrix";
+import { RiskRegister } from "./RiskRegister";
+import { RiskTrendChart } from "./RiskTrendChart";
+
+// ─── Types ──────────────────────────────────────────────────────────────────
+
+interface Risk {
+  id: string;
+  title: string;
+  description: string | null;
+  riskType: string;
+  severity: number;
+  probability: number;
+  riskScore: number;
+  affectedStep: string | null;
+  affectedNode?: { id: string; label: string; nodeType: string } | null;
+  status: string;
+  isOpportunity: boolean;
+  failureMode: string | null;
+  failureEffect: string | null;
+  detection: number | null;
+  rpn: number | null;
+  opportunityValue: number | null;
+  residualSeverity: number | null;
+  residualProbability: number | null;
+  residualScore: number | null;
+  mitigations: any[];
+  controls: any[];
+}
+
+type SubTab = "registro" | "oportunidades" | "controles" | "fmea";
+
+interface RiskTabProps {
+  processId: string;
+}
+
+// ─── Helpers ────────────────────────────────────────────────────────────────
+
+function getScoreBadge(score: number) {
+  if (score >= 20) return "bg-red-600/20 text-red-400";
+  if (score >= 12) return "bg-amber-600/20 text-amber-400";
+  if (score >= 6) return "bg-sky-500/20 text-sky-400";
+  return "bg-green-600/20 text-green-400";
+}
+
+// ─── Component ──────────────────────────────────────────────────────────────
+
+export function RiskTab({ processId }: RiskTabProps) {
+  const te = useTranslations("emptyStates.risks");
+  const t = useTranslations("riskTab");
+  const tc = useTranslations("common");
+  const [risks, setRisks] = useState<Risk[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [auditing, setAuditing] = useState(false);
+  const [activeSubTab, setActiveSubTab] = useState<SubTab>("registro");
+  const [activeCell, setActiveCell] = useState<{
+    severity: number;
+    probability: number;
+  } | null>(null);
+  const [showTrend, setShowTrend] = useState(false);
+
+  const fetchRisks = useCallback(async () => {
+    setError(false);
+    try {
+      const res = await fetch(`/api/processes/${processId}/risks`);
+      if (!res.ok) throw new Error("Fetch failed");
+      const data = await res.json();
+      setRisks(data.risks || []);
+    } catch (err) {
+      console.error("Failed to fetch risks:", err);
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  }, [processId]);
+
+  useEffect(() => {
+    fetchRisks();
+  }, [fetchRisks]);
+
+  const handleAudit = async () => {
+    setAuditing(true);
+    try {
+      await fetch(`/api/processes/${processId}/risks`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "analyze" }),
+      });
+      await fetchRisks();
+    } catch (err) {
+      console.error("Audit failed:", err);
+      setError(true);
+    } finally {
+      setAuditing(false);
+    }
+  };
+
+  const handleFmea = async () => {
+    setAuditing(true);
+    try {
+      await fetch(`/api/processes/${processId}/risks`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "fmea" }),
+      });
+      await fetchRisks();
+      setActiveSubTab("fmea");
+    } catch (err) {
+      console.error("FMEA failed:", err);
+    } finally {
+      setAuditing(false);
+    }
+  };
+
+  const handleCellClick = (severity: number, probability: number) => {
+    if (
+      activeCell?.severity === severity &&
+      activeCell?.probability === probability
+    ) {
+      setActiveCell(null);
+    } else {
+      setActiveCell({ severity, probability });
+      setActiveSubTab("registro");
+    }
+  };
+
+  // ─── Computed stats ─────────────────────────────────────────────────────
+
+  const stats = useMemo(() => {
+    const actualRisks = risks.filter((r) => !r.isOpportunity);
+    const opportunities = risks.filter((r) => r.isOpportunity);
+    const totalScore =
+      actualRisks.length > 0
+        ? Math.round(
+            actualRisks.reduce((sum, r) => sum + r.riskScore, 0) /
+              actualRisks.length,
+          )
+        : 0;
+    const critical = actualRisks.filter((r) => r.riskScore >= 20).length;
+    const high = actualRisks.filter(
+      (r) => r.riskScore >= 12 && r.riskScore < 20,
+    ).length;
+
+    return {
+      avgScore: totalScore,
+      critical,
+      high,
+      opportunities: opportunities.length,
+      totalRisks: actualRisks.length,
+    };
+  }, [risks]);
+
+  // ─── Loading State ────────────────────────────────────────────────────
+
+  if (loading) {
+    return (
+      <div className="space-y-3">
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-48 w-full" />
+        <Skeleton className="h-24 w-full" />
+      </div>
+    );
+  }
+
+  // ─── Error State ──────────────────────────────────────────────────────
+
+  if (error && risks.length === 0) {
+    return (
+      <Card className="border-chrome-border bg-chrome-raised">
+        <CardContent className="flex flex-col items-center justify-center py-12 text-center">
+          <AlertTriangleIcon className="mb-4 h-10 w-10 text-red-400" />
+          <p className="mb-4 text-sm text-muted-foreground">
+            {t("errorAnalyzing")}
+          </p>
+          <Button onClick={fetchRisks} variant="outline">
+            <RefreshCwIcon className="mr-2 h-4 w-4" />
+            {tc("retry")}
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // ─── Empty State ──────────────────────────────────────────────────────
+
+  if (risks.length === 0) {
+    return (
+      <Card className="border-chrome-border bg-chrome-raised">
+        <CardContent className="flex flex-col items-center justify-center py-12 text-center">
+          <ShieldAlertIcon className="mb-4 h-12 w-12 text-muted-foreground" />
+          <h3 className="mb-2 text-lg font-semibold text-chrome-text">
+            {t("noRisks")}
+          </h3>
+          <p className="mb-6 max-w-md text-sm text-muted-foreground">
+            {t("noRisksDesc")}
+          </p>
+          <Button onClick={handleAudit} disabled={auditing}>
+            {auditing ? (
+              <>
+                <RefreshCwIcon className="mr-2 h-4 w-4 animate-spin" />
+                {t("analyzing")}
+              </>
+            ) : (
+              <>
+                <ShieldAlertIcon className="mr-2 h-4 w-4" />
+                {t("analyze")}
+              </>
+            )}
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // ─── Data State ───────────────────────────────────────────────────────
+
+  const SUB_TABS: { key: SubTab; label: string }[] = [
+    { key: "registro", label: t("tabs.register") },
+    { key: "oportunidades", label: t("tabs.opportunities") },
+    { key: "controles", label: t("tabs.controls") },
+    { key: "fmea", label: t("tabs.fmea") },
+  ];
+
+  return (
+    <div className="space-y-6">
+      {/* ─── Header ────────────────────────────────────────────────── */}
+      <Card className="border-chrome-border bg-chrome-raised">
+        <CardContent className="p-4">
+          <div className="flex flex-wrap items-center gap-4">
+            {/* Average score */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground">{t("avgRisk")}</span>
+              <span
+                className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-bold ${getScoreBadge(stats.avgScore)}`}
+              >
+                {stats.avgScore}
+              </span>
+            </div>
+
+            {/* Summary badges */}
+            <div className="flex items-center gap-2">
+              {stats.critical > 0 && (
+                <span className="inline-flex items-center rounded-full bg-red-600/20 px-2 py-0.5 text-xs font-medium text-red-400">
+                  {stats.critical} {t("critical")}
+                </span>
+              )}
+              {stats.high > 0 && (
+                <span className="inline-flex items-center rounded-full bg-amber-600/20 px-2 py-0.5 text-xs font-medium text-amber-400">
+                  {stats.high} {t("high")}
+                </span>
+              )}
+              {stats.opportunities > 0 && (
+                <span className="inline-flex items-center rounded-full bg-green-600/20 px-2 py-0.5 text-xs font-medium text-green-400">
+                  {stats.opportunities} {t("opportunity")}
+                </span>
+              )}
+            </div>
+
+            {/* Actions */}
+            <div className="ml-auto flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleAudit}
+                disabled={auditing}
+                className="border-chrome-border text-muted-foreground"
+              >
+                {auditing ? (
+                  <>
+                    <RefreshCwIcon className="mr-1 h-3.5 w-3.5 animate-spin" />
+                    {t("analyzing")}
+                  </>
+                ) : (
+                  <>
+                    <ShieldAlertIcon className="mr-1 h-3.5 w-3.5" />
+                    {t("analyze")}
+                  </>
+                )}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleFmea}
+                disabled={auditing}
+                className="border-chrome-border text-muted-foreground"
+              >
+                <ClipboardListIcon className="mr-1 h-3.5 w-3.5" />
+                FMEA
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* ─── Heat Matrix ──────────────────────────────────────────── */}
+      <Card className="border-chrome-border bg-chrome-raised">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-sm text-chrome-text-secondary">
+            {t("riskMatrix")}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <RiskHeatMatrix
+            risks={risks
+              .filter((r) => !r.isOpportunity)
+              .map((r) => ({
+                severity: r.severity,
+                probability: r.probability,
+              }))}
+            activeCell={activeCell}
+            onCellClick={handleCellClick}
+          />
+          {activeCell && (
+            <div className="mt-2 flex items-center justify-between">
+              <span className="text-xs text-muted-foreground">
+                {t("filterSeverity", { sev: activeCell.severity, prob: activeCell.probability })}
+              </span>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-6 text-xs text-muted-foreground"
+                onClick={() => setActiveCell(null)}
+              >
+                {t("clearFilter")}
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* ─── Sub-tabs ─────────────────────────────────────────────── */}
+      <div className="flex gap-1 rounded-lg border border-chrome-border bg-chrome-base/50 p-1">
+        {SUB_TABS.map((tab) => (
+          <button
+            key={tab.key}
+            type="button"
+            onClick={() => setActiveSubTab(tab.key)}
+            className={`flex-1 rounded-md px-3 py-2 text-xs font-medium transition-colors ${
+              activeSubTab === tab.key
+                ? "bg-chrome-hover text-chrome-text"
+                : "text-muted-foreground hover:text-chrome-text-secondary"
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* ─── Sub-tab content ──────────────────────────────────────── */}
+      <div>
+        {activeSubTab === "registro" && (
+          <RiskRegister
+            risks={risks}
+            onRiskUpdate={fetchRisks}
+            processId={processId}
+            filterSeverity={activeCell?.severity}
+            filterProbability={activeCell?.probability}
+          />
+        )}
+
+        {activeSubTab === "oportunidades" && (
+          <OpportunityRegister
+            risks={risks}
+            onRiskUpdate={fetchRisks}
+            processId={processId}
+          />
+        )}
+
+        {activeSubTab === "controles" && (
+          <div className="space-y-4">
+            {risks
+              .filter((r) => !r.isOpportunity)
+              .sort((a, b) => b.riskScore - a.riskScore)
+              .map((risk) => (
+                <Card
+                  key={risk.id}
+                  className="border-chrome-border bg-chrome-raised"
+                >
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm text-chrome-text-secondary">
+                      {risk.title}
+                      <span
+                        className={`ml-2 inline-flex items-center rounded-full px-2 py-0.5 text-xs ${getScoreBadge(risk.riskScore)}`}
+                      >
+                        {risk.riskScore}
+                      </span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ControlMapping
+                      riskId={risk.id}
+                      risk={risk}
+                      controls={risk.controls || []}
+                      onUpdate={fetchRisks}
+                    />
+                  </CardContent>
+                </Card>
+              ))}
+            {risks.filter((r) => !r.isOpportunity).length === 0 && (
+              <EmptyState
+                icon={ShieldAlertIcon}
+                title={te("noControls")}
+                description={te("noControlsDesc")}
+                compact
+              />
+            )}
+          </div>
+        )}
+
+        {activeSubTab === "fmea" && <FmeaView risks={risks} />}
+      </div>
+
+      {/* ─── Trend Chart (collapsible) ────────────────────────────── */}
+      <div>
+        <button
+          type="button"
+          onClick={() => setShowTrend(!showTrend)}
+          className="flex w-full items-center justify-between rounded-lg border border-chrome-border bg-chrome-raised/50 px-4 py-2 text-xs text-muted-foreground transition-colors hover:bg-chrome-raised"
+        >
+          <span className="flex items-center gap-2">
+            <TrendingUpIcon className="h-3.5 w-3.5" />
+            {t("riskTrend")}
+          </span>
+          <ChevronDownIcon
+            className={`h-3.5 w-3.5 transition-transform ${showTrend ? "rotate-180" : ""}`}
+          />
+        </button>
+        {showTrend && (
+          <div className="mt-2">
+            <RiskTrendChart processId={processId} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

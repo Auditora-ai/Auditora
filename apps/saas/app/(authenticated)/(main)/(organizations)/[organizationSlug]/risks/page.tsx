@@ -1,8 +1,8 @@
 import { getActiveOrganization } from "@auth/lib/server";
 import { db } from "@repo/database";
 import { notFound } from "next/navigation";
-import { OrgRisksDashboard } from "@risk/components/OrgRisksDashboard";
-import type { OrgRiskData, ProcessSummary, RiskStats } from "@risk/components/OrgRisksDashboard";
+import { OrgRisksDashboard } from "@/modules/process-library/components/risks/OrgRisksDashboard";
+import type { OrgRiskData, ProcessSummary, RiskStats } from "@/modules/process-library/components/risks/OrgRisksDashboard";
 
 export const metadata = { title: "Riesgos Operativos — Auditora.ai" };
 

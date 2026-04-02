@@ -64,7 +64,7 @@ import { EmptyState } from "@shared/components/EmptyState";
 import { RaciTab } from "./RaciTab";
 import { ConsolidationView } from "./ConsolidationView";
 import { IntelligenceTab } from "@projects/components/IntelligenceTab";
-import { RiskTab } from "@risk/components/RiskTab";
+import { RiskTab } from "./risks/RiskTab";
 import { ProcessSchedule } from "@projects/components/ProcessSchedule";
 import { useBpmnModeler } from "@meeting/hooks/useBpmnModeler";
 // BpmnIntelligence and BpmnVersionDiff available but not rendered inside canvas

@@ -1,5 +1,5 @@
 import { getActiveOrganization } from "@auth/lib/server";
-import { CrossProcessRiskDashboard } from "@risk/components/CrossProcessRiskDashboard";
+import { CrossProcessRiskDashboard } from "@/modules/process-library/components/risks/CrossProcessRiskDashboard";
 import { PageHeader } from "@shared/components/PageHeader";
 import { StatsTile } from "@shared/components/StatsTile";
 import { Card } from "@repo/ui/components/card";
