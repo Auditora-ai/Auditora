@@ -45,26 +45,18 @@ export type PlanPrice =
 	| (BasePrice & OneTimePrice);
 
 export interface PlanLimits {
-	/**
-	 * AI session credits included per billing cycle.
-	 * null = unlimited (e.g. Enterprise with BYOK).
-	 */
-	sessions: number | null;
-	/**
-	 * Maximum team members allowed.
-	 * null = unlimited.
-	 */
-	users: number | null;
-	/**
-	 * Maximum processes allowed.
-	 * null = unlimited.
-	 */
+	/** Maximum processes allowed. null = unlimited */
 	processes: number | null;
-	/**
-	 * Cost per additional session credit beyond the included limit (USD).
-	 * null = no overage allowed (must upgrade).
-	 */
-	overagePerSession?: number | null;
+	/** Evaluations completed per billing cycle. null = unlimited */
+	evaluations: number | null;
+	/** Maximum unique evaluators per billing cycle. null = unlimited */
+	evaluators: number | null;
+	/** AI session credits included per billing cycle. null = unlimited */
+	sessions: number | null;
+	/** Reports exported per billing cycle. null = unlimited */
+	reports: number | null;
+	/** Maximum admin users allowed. null = unlimited */
+	adminUsers: number | null;
 }
 
 export interface PaidPlan {

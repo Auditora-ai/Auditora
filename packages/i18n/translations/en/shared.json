@@ -20,6 +20,13 @@
 		"year": "{count, plural, one {year} other {{count} years}}",
 		"sessionsIncluded": "{count} AI sessions included",
 		"extraSession": "+${price} per extra session",
+		"evaluationsTitle": "Evaluations",
+		"evaluationsUsed": "{used} / {limit} evaluations used",
+		"evaluationsUnlimited": "Unlimited evaluations",
+		"evaluationsExhausted": "You've reached your evaluation limit this month.",
+		"evaluationsRemaining": "{count} evaluations remaining this month.",
+		"evaluationsAvailable": "{count} evaluations available.",
+		"resetDate": "Resets {date}",
 		"products": {
 			"starter": {
 				"title": "Starter",
@@ -47,7 +54,7 @@
 					"evaluators": "30 evaluators",
 					"everythingInStarter": "Everything in Starter, plus:",
 					"procedures": "Procedure generation (SOPs)",
-					"simulations": "Harvard-style simulations",
+					"simulations": "Harvard-style evaluations",
 					"teamDashboard": "Team dashboards",
 					"prioritySupport": "Priority support"
 				}

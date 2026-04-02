@@ -26,7 +26,7 @@ export function UsageDashboard({
 		async function fetchCredits() {
 			try {
 				const res = await fetch(
-					`/api/organizations/session-credits?organizationId=${organizationId}`,
+					`/api/organizations/usage-credits?organizationId=${organizationId}`,
 				);
 				if (res.ok) {
 					setCredits(await res.json());
@@ -47,11 +47,11 @@ export function UsageDashboard({
 	// Unlimited plan (Enterprise or BYOK)
 	if (credits.limit === null) {
 		return (
-			<SettingsItem title="Sesiones IA">
+			<SettingsItem title={t("pricing.evaluationsTitle")}>
 				<div className="rounded-lg border p-4">
 					<div className="flex items-center gap-2 text-sm text-muted-foreground">
 						<ZapIcon className="size-4" />
-						<span>Sesiones ilimitadas</span>
+						<span>{t("pricing.evaluationsUnlimited")}</span>
 					</div>
 				</div>
 			</SettingsItem>
@@ -73,18 +73,18 @@ export function UsageDashboard({
 		: null;
 
 	return (
-		<SettingsItem title="Sesiones IA">
+		<SettingsItem title={t("pricing.evaluationsTitle")}>
 			<div className="rounded-lg border p-4 space-y-3">
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-2">
 						<BarChart3Icon className="size-4 text-muted-foreground" />
 						<span className="text-sm font-medium">
-							{credits.used} / {credits.limit} sesiones usadas
+							{t("pricing.evaluationsUsed", { used: credits.used, limit: credits.limit })}
 						</span>
 					</div>
 					{resetDate && (
 						<span className="text-xs text-muted-foreground">
-							Se reinicia el {resetDate}
+							{t("pricing.resetDate", { date: resetDate })}
 						</span>
 					)}
 				</div>
@@ -103,10 +103,10 @@ export function UsageDashboard({
 				{credits.remaining !== null && (
 					<p className="text-xs text-muted-foreground">
 						{isExhausted
-							? "Has alcanzado tu límite de sesiones este mes."
+							? t("pricing.evaluationsExhausted")
 							: isWarning
-								? `Te quedan ${credits.remaining} sesiones este mes.`
-								: `${credits.remaining} sesiones disponibles.`}
+								? t("pricing.evaluationsRemaining", { count: credits.remaining })
+								: t("pricing.evaluationsAvailable", { count: credits.remaining })}
 					</p>
 				)}
 			</div>

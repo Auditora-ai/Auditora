@@ -1,82 +1,96 @@
 {
 	"pricing": {
-		"choosePlan": "Plan wählen",
-		"contactSales": "Vertrieb kontaktieren",
-		"description": "Jeder Plan enthält die KI-Engine, automatische BPMN-Diagrammerstellung und Risikoanalyse. Wählen Sie nach dem Sitzungsvolumen Ihres Teams.",
-		"getStarted": "Loslegen",
-		"startTrial": "Kostenlos testen",
-		"month": "{count, plural, one {Monat} other {{count} Monate}}",
+		"title": "Einfache Preise. Bewertungen, die mit Ihrem Team wachsen.",
+		"subtitle": "Jeder Plan startet mit einem 14-tägigen kostenlosen Probeabo. Ohne Kreditkarte.",
 		"monthly": "Monatlich",
-		"products": {
-			"starter": {
-				"description": "Für den unabhängigen Berater, der schneller liefern will",
-				"features": {
-					"freeTrial": "14 Tage kostenlos testen",
-					"sessions": "10 KI-Sitzungen pro Monat",
-					"aiEngine": "Claude Opus KI-Engine",
-					"liveBpmn": "Automatisch generierte BPMN-Diagramme",
-					"riskAnalysis": "Automatische Risikoanalyse",
-					"pdfExport": "PDF-Export",
-					"fiveProcesses": "Bis zu 5 Prozesse",
-					"oneUser": "1 Benutzer"
-				},
-				"title": "Starter"
-			},
-			"growth": {
-				"description": "Für Beratungsfirmen, die ihre Praxis skalieren",
-				"features": {
-					"freeTrial": "14 Tage kostenlos testen",
-					"sessions": "40 KI-Sitzungen pro Monat",
-					"everythingInStarter": "Alles aus Starter",
-					"unlimitedProcesses": "Unbegrenzte Prozesse",
-					"fullExport": "Vollständiger BPMN/XML/PDF-Export",
-					"adminDashboard": "Admin-Dashboard & Rollen",
-					"prioritySupport": "Prioritäts-Support",
-					"fiveUsers": "Bis zu 5 Benutzer"
-				},
-				"title": "Growth"
-			},
-			"scale": {
-				"description": "Für große Teams mit hohem Sitzungsvolumen",
-				"features": {
-					"freeTrial": "14 Tage kostenlos testen",
-					"sessions": "100 KI-Sitzungen pro Monat",
-					"everythingInGrowth": "Alles aus Growth",
-					"teamAnalytics": "Team-Analysen",
-					"sharedLibrary": "Gemeinsame Prozessbibliothek",
-					"apiAccess": "API-Zugang",
-					"byok": "Eigenen API-Schlüssel mitbringen (BYOK)",
-					"fifteenUsers": "Bis zu 15 Benutzer"
-				},
-				"title": "Scale"
-			},
-			"enterprise": {
-				"description": "Für große Firmen oder Unternehmensbereitstellungen",
-				"features": {
-					"everythingInScale": "Alles aus Scale",
-					"unlimitedUsers": "Unbegrenzte Benutzer",
-					"byokIncluded": "BYOK inklusive (unbegrenzte Sitzungen mit eigenem API-Schlüssel)",
-					"ssoAuth": "SSO & SAML-Authentifizierung",
-					"slaGuarantees": "SLA-Garantien",
-					"customIntegrations": "Individuelle Integrationen",
-					"dedicatedManager": "Dedizierter Account Manager",
-					"customDeployment": "Individuelle Bereitstellung"
-				},
-				"title": "Enterprise"
-			}
-		},
-		"purchase": "Kaufen",
-		"recommended": "Empfohlen",
-		"subscribe": "Abonnieren",
-		"title": "Pläne nach Analysevolumen",
-		"trialPeriod": "{days} {days, plural, one {Tag} other {Tage}} kostenlos testen",
-		"year": "{count, plural, one {Jahr} other {{count} Jahre}}",
 		"yearly": "Jährlich",
-		"perSeat": "Platz",
+		"perMonth": "/Mo.",
 		"savePercent": "{percent}% sparen",
 		"billedAnnually": "Jährlich abgerechnet",
-		"perMonth": "/Mo.",
+		"perSeat": "Platz",
+		"recommended": "Am beliebtesten",
+		"contactSales": "Vertrieb kontaktieren",
+		"getStarted": "Kostenlos testen",
+		"startTrial": "Probeabo starten",
+		"trialPeriod": "{days} {days, plural, one {Tag} other {Tage}} kostenlos testen",
+		"choosePlan": "Plan wählen",
+		"purchase": "Kaufen",
+		"subscribe": "Abonnieren",
+		"month": "{count, plural, one {Monat} other {{count} Monate}}",
+		"year": "{count, plural, one {Jahr} other {{count} Jahre}}",
 		"sessionsIncluded": "{count} KI-Sitzungen inklusive",
-		"extraSession": "+{price}$ pro zusätzliche Sitzung"
+		"extraSession": "+{price}€ pro zusätzliche Sitzung",
+		"evaluationsTitle": "Bewertungen",
+		"evaluationsUsed": "{used} / {limit} Bewertungen verwendet",
+		"evaluationsUnlimited": "Unbegrenzte Bewertungen",
+		"evaluationsExhausted": "Sie haben Ihr Bewertungslimit für diesen Monat erreicht.",
+		"evaluationsRemaining": "{count} Bewertungen verbleibend diesen Monat.",
+		"evaluationsAvailable": "{count} Bewertungen verfügbar.",
+		"resetDate": "Reset am {date}",
+		"products": {
+			"starter": {
+				"title": "Starter",
+				"description": "Für kleine Teams, die mit Prozessintelligenz starten",
+				"price": "49$",
+				"unit": "/Monat",
+				"features": {
+					"processes": "3 Prozesse",
+					"evaluations": "10 Bewertungen / Monat",
+					"evaluators": "5 Bewertende",
+					"discovery": "KI-Prozessentdeckung",
+					"bpmn": "BPMN 2.0-Diagramme",
+					"riskAssessment": "Risikobewertung (FMEA)",
+					"trial": "14 Tage kostenlos testen"
+				}
+			},
+			"growth": {
+				"title": "Growth",
+				"description": "Für wachsende Unternehmen, die ihre Prozesskultur skalieren",
+				"price": "199$",
+				"unit": "/Monat",
+				"features": {
+					"processes": "15 Prozesse",
+					"evaluations": "50 Bewertungen / Monat",
+					"evaluators": "30 Bewertende",
+					"everythingInStarter": "Alles aus Starter, plus:",
+					"procedures": "Verfahrenserstellung (SOPs)",
+					"simulations": "Harvard-Stil-Bewertungen",
+					"teamDashboard": "Team-Dashboards",
+					"prioritySupport": "Prioritäts-Support"
+				}
+			},
+			"scale": {
+				"title": "Scale",
+				"description": "Für Unternehmen, die menschliche Risiken in großem Maßstab messen",
+				"price": "499$",
+				"unit": "/Monat",
+				"features": {
+					"processes": "Unbegrenzte Prozesse",
+					"evaluations": "250 Bewertungen / Monat",
+					"evaluators": "150 Bewertende",
+					"everythingInGrowth": "Alles aus Growth, plus:",
+					"advancedAnalytics": "Erweiterte Analysen & Reporting",
+					"apiAccess": "API-Zugang",
+					"sharedLibrary": "Gemeinsame Prozessbibliothek",
+					"byok": "BYOK (eigener KI-Schlüssel)",
+					"sso": "SSO & SAML-Authentifizierung"
+				}
+			},
+			"enterprise": {
+				"title": "Enterprise",
+				"description": "Für große Organisationen mit individuellen Anforderungen",
+				"price": "Individuell",
+				"unit": "",
+				"features": {
+					"unlimited": "Alles unbegrenzt",
+					"everythingInScale": "Alles aus Scale, plus:",
+					"dedicatedManager": "Dedizierter Account Manager",
+					"sla": "SLA-Garantien",
+					"customIntegrations": "Individuelle Integrationen",
+					"customDeployment": "On-Premise / Private Cloud Bereitstellung",
+					"auditTrail": "Vollständiger Audit Trail & Compliance"
+				}
+			}
+		}
 	}
 }
