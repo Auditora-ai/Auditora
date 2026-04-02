@@ -292,6 +292,24 @@
       "resultStat": "El 45% de los equipos que evaluamos se equivoca en esto. La brecha entre lo que la gente sabe y lo que hace bajo presión es donde vive el riesgo operativo.",
       "cta": "¿Cómo respondería TU equipo? Descúbrelo.",
       "tryAgain": "Intentar de nuevo"
+    },
+    "beforeAfter": {
+      "label": "La Transformación",
+      "title": "Qué cambia cuando tus procesos realmente funcionan",
+      "story": "Una empresa manufacturera de 200 personas perdía $200K/año por errores operativos. A los 90 días de implementar Auditora, obtuvieron estos resultados.",
+      "beforeLabel": "Antes de Auditora",
+      "afterLabel": "Después de Auditora",
+      "before": {
+        "0": "errores operativos / mes",
+        "1": "alineación de procesos",
+        "2": "tiempo de onboarding"
+      },
+      "after": {
+        "0": "errores / mes",
+        "1": "alineación de procesos",
+        "2": "tiempo de onboarding"
+      },
+      "savings": "ahorro anual promedio por reducción de errores operativos"
     }
   },
   "tools": {

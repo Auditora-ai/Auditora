@@ -264,6 +264,24 @@
       "metric4": {
         "label": "Risikominderung"
       }
+    },
+    "beforeAfter": {
+      "label": "Die Transformation",
+      "title": "Was sich ändert, wenn Ihre Prozesse tatsächlich funktionieren",
+      "story": "Ein Fertigungsunternehmen mit 200 Mitarbeitern verlor 200.000 $/Jahr durch Betriebsfehler. Innerhalb von 90 Tagen nach der Einführung von Auditora sahen sie diese Ergebnisse.",
+      "beforeLabel": "Vor Auditora",
+      "afterLabel": "Nach Auditora",
+      "before": {
+        "0": "Betriebsfehler / Monat",
+        "1": "Prozessausrichtung",
+        "2": "Einarbeitungszeit"
+      },
+      "after": {
+        "0": "Fehler / Monat",
+        "1": "Prozessausrichtung",
+        "2": "Einarbeitungszeit"
+      },
+      "savings": "durchschnittliche jährliche Einsparungen durch reduzierte Betriebsfehler"
     }
   },
   "newsletter": {

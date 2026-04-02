@@ -292,6 +292,24 @@
       "resultStat": "45% of teams we evaluate get this wrong. The gap between what people know and what they do under pressure is where operational risk lives.",
       "cta": "How would YOUR team respond? Find out.",
       "tryAgain": "Try again"
+    },
+    "beforeAfter": {
+      "label": "The Transformation",
+      "title": "What changes when your processes actually work",
+      "story": "A 200-person manufacturing company was losing $200K/year to operational errors. Within 90 days of implementing Auditora, they saw these results.",
+      "beforeLabel": "Before Auditora",
+      "afterLabel": "After Auditora",
+      "before": {
+        "0": "operational errors / month",
+        "1": "process alignment",
+        "2": "onboarding time"
+      },
+      "after": {
+        "0": "errors / month",
+        "1": "process alignment",
+        "2": "onboarding time"
+      },
+      "savings": "average annual savings from reduced operational errors"
     }
   },
   "tools": {

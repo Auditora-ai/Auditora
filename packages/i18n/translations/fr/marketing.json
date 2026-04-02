@@ -264,6 +264,24 @@
       "metric4": {
         "label": "réduction des risques"
       }
+    },
+    "beforeAfter": {
+      "label": "La Transformation",
+      "title": "Ce qui change quand vos processus fonctionnent vraiment",
+      "story": "Une entreprise manufacturière de 200 personnes perdait 200 000 $/an en erreurs opérationnelles. En 90 jours après l'implémentation d'Auditora, ils ont obtenu ces résultats.",
+      "beforeLabel": "Avant Auditora",
+      "afterLabel": "Après Auditora",
+      "before": {
+        "0": "erreurs opérationnelles / mois",
+        "1": "alignement des processus",
+        "2": "temps d'intégration"
+      },
+      "after": {
+        "0": "erreurs / mois",
+        "1": "alignement des processus",
+        "2": "temps d'intégration"
+      },
+      "savings": "économies annuelles moyennes grâce à la réduction des erreurs opérationnelles"
     }
   },
   "newsletter": {
