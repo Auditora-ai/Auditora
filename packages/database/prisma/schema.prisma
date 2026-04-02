@@ -1286,6 +1286,8 @@ model AnonymousSession {
   researchData        Json?     // Business intelligence research findings from web search
   conversationLog     Json?     // Array<{ role, content, timestamp }>
   completenessScore   Int       @default(0)
+  shareToken          String?   @unique // Public share token for scan results
+  shareExpiresAt      DateTime? // Share link expiry (7 days from generation)
   convertedToUserId   String?
   convertedAt         DateTime?
   expiresAt           DateTime  // 24h from creation

@@ -1651,6 +1651,22 @@
       "savedToOrg": "¡Guardado en tu organización!",
       "goToProcesses": "Ver mis procesos"
     },
+    "share": {
+      "shareResults": "Compartir resultados",
+      "copyLink": "Copiar enlace",
+      "copied": "¡Copiado!",
+      "linkCopied": "Enlace copiado al portapapeles",
+      "linkGenerated": "Enlace de compartir generado",
+      "sharedResult": "Resultado de escaneo compartido",
+      "notFound": "Escaneo no encontrado",
+      "notFoundDesc": "Este resultado de escaneo no existe o el enlace es inválido. Prueba ejecutar tu propio escaneo gratuito.",
+      "expired": "Enlace expirado",
+      "expiredDesc": "Este enlace compartido ha expirado. Los enlaces compartidos están disponibles por 7 días.",
+      "retry": "Intentar de nuevo",
+      "runYourOwn": "Ejecuta tu propio escaneo gratis",
+      "ctaTitle": "¿Quieres el diagnóstico completo para tu empresa?",
+      "ctaDesc": "Este escaneo es solo el comienzo. Crea una cuenta gratuita para obtener planes de acción, dar seguimiento a mejoras y evaluar la alineación de tu equipo."
+    },
     "discovery": {
       "intakeTitle": "Discovery de {company}",
       "intakeDesc": "Cuéntanos sobre tu empresa para personalizar el análisis de procesos.",

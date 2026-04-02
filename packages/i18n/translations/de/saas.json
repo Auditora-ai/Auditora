@@ -1592,6 +1592,22 @@
 			"TECHNOLOGY": "Technologie",
 			"HUMAN_RESOURCE": "Personal",
 			"REPUTATIONAL": "Reputation"
+		},
+		"share": {
+			"shareResults": "Ergebnisse teilen",
+			"copyLink": "Link kopieren",
+			"copied": "Kopiert!",
+			"linkCopied": "Teilen-Link in die Zwischenablage kopiert",
+			"linkGenerated": "Teilen-Link generiert",
+			"sharedResult": "Geteiltes Scan-Ergebnis",
+			"notFound": "Scan nicht gefunden",
+			"notFoundDesc": "Dieses Scan-Ergebnis existiert nicht oder der Link ist ungültig. Starten Sie Ihren eigenen kostenlosen Scan.",
+			"expired": "Link abgelaufen",
+			"expiredDesc": "Dieser geteilte Link ist abgelaufen. Geteilte Links sind 7 Tage verfügbar.",
+			"retry": "Erneut versuchen",
+			"runYourOwn": "Starten Sie Ihren eigenen kostenlosen Scan",
+			"ctaTitle": "Möchten Sie die vollständige Diagnose für Ihr Unternehmen?",
+			"ctaDesc": "Dieser Scan ist nur der Anfang. Erstellen Sie ein kostenloses Konto, um Aktionspläne zu erhalten, Verbesserungen zu verfolgen und die Ausrichtung Ihres Teams zu bewerten."
 		}
 	},
 	"maturityRing": {

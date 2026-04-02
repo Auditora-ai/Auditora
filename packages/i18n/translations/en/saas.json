@@ -1651,6 +1651,22 @@
       "savedToOrg": "Saved to your organization!",
       "goToProcesses": "View my processes"
     },
+    "share": {
+      "shareResults": "Share results",
+      "copyLink": "Copy link",
+      "copied": "Copied!",
+      "linkCopied": "Share link copied to clipboard",
+      "linkGenerated": "Share link generated",
+      "sharedResult": "Shared scan result",
+      "notFound": "Scan not found",
+      "notFoundDesc": "This scan result doesn't exist or the link is invalid. Try running your own free scan.",
+      "expired": "Link expired",
+      "expiredDesc": "This shared scan link has expired. Shared links are available for 7 days.",
+      "retry": "Try again",
+      "runYourOwn": "Run your own free scan",
+      "ctaTitle": "Want the full diagnosis for your company?",
+      "ctaDesc": "This scan is just the beginning. Create a free account to get action plans, track improvements, and evaluate your team's alignment."
+    },
     "discovery": {
       "intakeTitle": "Discovery of {company}",
       "intakeDesc": "Tell us about your company to personalize the process analysis.",

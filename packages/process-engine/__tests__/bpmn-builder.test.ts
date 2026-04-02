@@ -314,3 +314,74 @@ describe("buildBpmnXml", () => {
 		expect(xml).toContain('name="Team B"');
 	});
 });
+
+// ─── BpmnBuildOptions ────────────────────────────────────────────────
+describe("buildBpmnXml — BpmnBuildOptions", () => {
+	const singleNode: DiagramNode[] = [
+		makeNode({ id: "t1", label: "Process Task", lane: "Operations" }),
+	];
+
+	it("uses empty string for start/end labels by default (no options)", async () => {
+		const xml = await buildBpmnXml(singleNode);
+		// Default: no startLabel/endLabel options → empty name attributes
+		expect(xml).toContain('id="_start"');
+		expect(xml).toContain('id="_end"');
+		// Should NOT have hardcoded language-specific labels
+		expect(xml).not.toContain('name="Start"');
+		expect(xml).not.toContain('name="End"');
+		expect(xml).not.toContain('name="Inicio"');
+		expect(xml).not.toContain('name="Fin"');
+	});
+
+	it("applies custom startLabel and endLabel from options", async () => {
+		const xml = await buildBpmnXml(singleNode, {
+			startLabel: "Process Start",
+			endLabel: "Process End",
+		});
+		expect(xml).toContain('name="Process Start"');
+		expect(xml).toContain('name="Process End"');
+	});
+
+	it("applies only startLabel when endLabel is omitted", async () => {
+		const xml = await buildBpmnXml(singleNode, { startLabel: "Inicio del Proceso" });
+		expect(xml).toContain('name="Inicio del Proceso"');
+		// endLabel defaults to empty string
+		expect(xml).not.toContain('name="End"');
+		expect(xml).not.toContain('name="Fin"');
+	});
+
+	it("applies only endLabel when startLabel is omitted", async () => {
+		const xml = await buildBpmnXml(singleNode, { endLabel: "Fin del Proceso" });
+		expect(xml).toContain('name="Fin del Proceso"');
+		// startLabel defaults to empty string
+		expect(xml).not.toContain('name="Start"');
+		expect(xml).not.toContain('name="Inicio"');
+	});
+
+	it("handles empty string options explicitly (same as default)", async () => {
+		const xml = await buildBpmnXml(singleNode, { startLabel: "", endLabel: "" });
+		expect(xml).toContain('id="_start"');
+		expect(xml).toContain('id="_end"');
+		// Empty name should not produce extra noise
+		expect(xml).not.toContain('name="Start"');
+		expect(xml).not.toContain('name="Inicio"');
+	});
+
+	it("supports locale-specific labels for Spanish (es)", async () => {
+		const xml = await buildBpmnXml(singleNode, {
+			startLabel: "Inicio",
+			endLabel: "Fin",
+		});
+		expect(xml).toContain('name="Inicio"');
+		expect(xml).toContain('name="Fin"');
+	});
+
+	it("is backward compatible: existing callers without options still work", async () => {
+		// Simulate old API call style (no options arg)
+		const xml = await buildBpmnXml(singleNode);
+		expect(xml).not.toBeNull();
+		expect(typeof xml).toBe("string");
+		expect(xml.length).toBeGreaterThan(100);
+		expect(xml).toContain("bpmn:definitions");
+	});
+});
