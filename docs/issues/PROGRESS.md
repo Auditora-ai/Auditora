@@ -1,8 +1,8 @@
 # Auditora.ai — Progreso de Ejecución
 
-**Última actualización:** 2026-04-02 (PM Cycle — Bug Fix Sprint)
+**Última actualización:** 2026-04-03 (PM Cycle — Phase 2 Progress Check)
 **PM:** Hermes Agent #03
-**Estado:** Fase 1 COMPLETE ✅ — Fase 2 UNBLOCKED (all Critical+High bugs fixed)
+**Estado:** Fase 1 COMPLETE ✅ — Fase 2 IN PROGRESS (3/5 done, 2 pending)
 
 ---
 
@@ -80,8 +80,8 @@
 ### Bugs Found — Cycle 2 (4 new)
 | # | Severity | Component | Summary | Status |
 |---|----------|-----------|---------|--------|
-| BUG-022 | 🟠 High | `api/organization/profile/route.ts:66` | TS error: `name: null` incompatible with Prisma `String` | 🔴 OPEN |
-| BUG-023 | 🟠 High | `modules/auth/components/LoginForm.tsx:77` | TS error: `mode: "***"` not in Zod schema (should be `"magic-link"`) | 🔴 OPEN |
+| BUG-022 | 🟠 High | `api/organization/profile/route.ts:66` | TS error: `name: null` incompatible with Prisma `String` | ✅ FIXED (2026-04-03) |
+| BUG-023 | 🟠 High | `modules/auth/components/LoginForm.tsx:77` | TS error: `mode: "***"` not in Zod schema (should be `"magic-link"`) | ✅ FIXED (2026-04-03) |
 | BUG-024 | 🟡 Medium | `modules/radiografia/lib/sipoc-to-nodes.ts:27,82` | Hardcoded Spanish `"Inicio"`/`"Fin"` fallbacks in scan/BPMN pipeline | 🔴 OPEN |
 | BUG-025 | 🟢 Low | `meeting/lib/node-display-config.ts` + `NodeContextPanel.tsx` | Hardcoded Spanish labels in BPMN node workspace UI | 🔴 OPEN |
 
@@ -139,14 +139,14 @@
 
 ---
 
-## Fase 2 — Producto que se Vende (pendiente Fase 1)
-| Issue | Status |
-|---|---|
-| #14 F2-01: Scan free tier rebuild | PENDING |
-| #15 F2-02: Generación automática de escenarios | PENDING |
-| #16 F2-03: Dashboard riesgo humano | PENDING |
-| #17 F2-04: Before/after metrics | PENDING |
-| #18 F2-05: Reportes exportables | PENDING |
+## Fase 2 — Producto que se Vende
+| Issue | Status | Fecha | Notas |
+|---|---|---|---|
+| #15 F2-02: Generación automática de escenarios | **DONE** ✅ | 2026-04-02 | GenerateEvaluationDialog (239 lines) wired into ProcessDetailView. Role selector (9 roles), risk picker (top 5 auto-selected), POSTs to /api/evaluaciones/generate. |
+| #14 F2-01: Scan free tier rebuild | **DONE** ✅ | 2026-04-02 | Theatrical progressive reveal (staggered 200ms-1800ms), shareable links (7-day tokens via /api/public/scan/share), CTA registration form for anonymous users, SharedScanResults page. Schema: shareToken + shareExpiresAt on AnonymousSession. |
+| #41 F2-03: Panorama dashboard evaluaciones | **DONE** ✅ | 2026-04-03 | 4 KPI cards (org score, evaluations completed, members evaluated, completion rate), dimension progress bars (alignment, control, criterio), score trend sparkline. Data fetched server-side in parallel. |
+| #17 F2-04: Before/after metrics | **PENDING** | — | ScoreTrendChart exists but no dedicated "Progress" comparison view (first vs latest scores). Needs: comparison cards, delta indicators, per-process improvement tracking. |
+| #18 F2-05: Reportes exportables | **PENDING** | — | human-risk-report-generator.ts exists (HTML report). Needs: branded PDF export for evaluation results with per-person breakdowns, suitable for board presentations. |
 
 ## Fase 3 — Crecimiento (pendiente Fase 2)
 | Issue | Status |
