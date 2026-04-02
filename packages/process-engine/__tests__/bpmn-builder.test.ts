@@ -57,7 +57,7 @@ describe("bpmnTag", () => {
 // ─── dims ─────────────────────────────────────────────────────────────
 describe("dims", () => {
 	it("returns correct dimensions for tasks", () => {
-		expect(dims("task")).toEqual({ w: 100, h: 80 });
+		expect(dims("task")).toEqual({ w: 160, h: 80 });
 	});
 
 	it("returns correct dimensions for gateways", () => {
@@ -71,7 +71,7 @@ describe("dims", () => {
 	});
 
 	it("defaults to task dimensions for unknown types", () => {
-		expect(dims("unknown")).toEqual({ w: 100, h: 80 });
+		expect(dims("unknown")).toEqual({ w: 160, h: 80 });
 	});
 });
 
@@ -92,29 +92,30 @@ describe("bpmnType", () => {
 
 // ─── buildBpmnXml ─────────────────────────────────────────────────────
 describe("buildBpmnXml", () => {
-	it("returns valid empty BPMN XML for empty array", () => {
-		const xml = buildBpmnXml([]);
+	it("returns valid empty BPMN XML for empty array", async () => {
+		const xml = await buildBpmnXml([]);
 		expect(xml).toContain('<?xml version="1.0" encoding="UTF-8"?>');
 		expect(xml).toContain("bpmn:definitions");
 		expect(xml).toContain("bpmn:process");
 		expect(xml).not.toContain("bpmn:task");
 	});
 
-	it("returns empty XML when all nodes are rejected", () => {
+	it("returns empty XML when all nodes are rejected", async () => {
 		const nodes: DiagramNode[] = [
 			makeNode({ id: "n1", state: "rejected" }),
 			makeNode({ id: "n2", state: "rejected" }),
 		];
-		const xml = buildBpmnXml(nodes);
+		const xml = await buildBpmnXml(nodes);
 		expect(xml).not.toContain("bpmn:task");
 		expect(xml).toContain("bpmn:process");
 	});
 
-	it("generates XML with start and end events for a single task", () => {
+	it("generates XML with start and end events for a single task", async () => {
 		const nodes: DiagramNode[] = [
-			makeNode({ id: "n1", label: "Do Something", lane: "Sales" }),
+			makeNode({ id: "n1", label: "Do Something", lane: "Sales", connections: ["n2"] }),
+			makeNode({ id: "n2" }),
 		];
-		const xml = buildBpmnXml(nodes);
+		const xml = await buildBpmnXml(nodes);
 
 		expect(xml).toContain('id="_start"');
 		expect(xml).toContain('id="_end"');
@@ -125,12 +126,12 @@ describe("buildBpmnXml", () => {
 		expect(xml).toContain("bpmn:task");
 	});
 
-	it("creates lanes from node lane properties", () => {
+	it("creates lanes from node lane properties", async () => {
 		const nodes: DiagramNode[] = [
 			makeNode({ id: "n1", lane: "Sales", connections: ["n2"] }),
 			makeNode({ id: "n2", lane: "IT" }),
 		];
-		const xml = buildBpmnXml(nodes);
+		const xml = await buildBpmnXml(nodes);
 
 		expect(xml).toContain('name="Sales"');
 		expect(xml).toContain('name="IT"');
@@ -138,19 +139,22 @@ describe("buildBpmnXml", () => {
 		expect(xml).toContain("bpmn:laneSet");
 	});
 
-	it("defaults lane to 'General' when not specified", () => {
-		const nodes: DiagramNode[] = [makeNode({ id: "n1" })];
-		const xml = buildBpmnXml(nodes);
+	it("defaults lane to 'General' when not specified", async () => {
+		const nodes: DiagramNode[] = [
+			makeNode({ id: "n1", connections: ["n2"] }),
+			makeNode({ id: "n2" }),
+		];
+		const xml = await buildBpmnXml(nodes);
 		expect(xml).toContain('name="General"');
 	});
 
-	it("generates sequence flows for connected nodes", () => {
+	it("generates sequence flows for connected nodes", async () => {
 		const nodes: DiagramNode[] = [
 			makeNode({ id: "n1", connections: ["n2"] }),
 			makeNode({ id: "n2", connections: ["n3"] }),
 			makeNode({ id: "n3" }),
 		];
-		const xml = buildBpmnXml(nodes);
+		const xml = await buildBpmnXml(nodes);
 
 		expect(xml).toContain("bpmn:sequenceFlow");
 		expect(xml).toContain('sourceRef="n1"');
@@ -159,7 +163,7 @@ describe("buildBpmnXml", () => {
 		expect(xml).toContain('targetRef="n3"');
 	});
 
-	it("handles exclusive gateway branching", () => {
+	it("handles exclusive gateway branching", async () => {
 		const nodes: DiagramNode[] = [
 			makeNode({
 				id: "gw1",
@@ -170,7 +174,7 @@ describe("buildBpmnXml", () => {
 			makeNode({ id: "n2", label: "Path A" }),
 			makeNode({ id: "n3", label: "Path B" }),
 		];
-		const xml = buildBpmnXml(nodes);
+		const xml = await buildBpmnXml(nodes);
 
 		expect(xml).toContain("bpmn:exclusiveGateway");
 		expect(xml).toContain('sourceRef="gw1"');
@@ -178,7 +182,7 @@ describe("buildBpmnXml", () => {
 		expect(xml).toContain('targetRef="n3"');
 	});
 
-	it("handles parallel gateway branching", () => {
+	it("handles parallel gateway branching", async () => {
 		const nodes: DiagramNode[] = [
 			makeNode({
 				id: "pg1",
@@ -188,28 +192,28 @@ describe("buildBpmnXml", () => {
 			makeNode({ id: "n2" }),
 			makeNode({ id: "n3" }),
 		];
-		const xml = buildBpmnXml(nodes);
+		const xml = await buildBpmnXml(nodes);
 		expect(xml).toContain("bpmn:parallelGateway");
 	});
 
-	it("filters out connections to non-existent nodes", () => {
+	it("filters out connections to non-existent nodes", async () => {
 		const nodes: DiagramNode[] = [
 			makeNode({ id: "n1", connections: ["n2", "nonexistent"] }),
 			makeNode({ id: "n2" }),
 		];
-		const xml = buildBpmnXml(nodes);
+		const xml = await buildBpmnXml(nodes);
 
 		expect(xml).toContain('targetRef="n2"');
 		expect(xml).not.toContain('targetRef="nonexistent"');
 	});
 
-	it("skips LLM-generated start/end events (uses own _start/_end)", () => {
+	it("skips LLM-generated start/end events (uses own _start/_end)", async () => {
 		const nodes: DiagramNode[] = [
 			makeNode({ id: "llm_start", type: "start_event", label: "Begin" }),
 			makeNode({ id: "n1", connections: ["llm_end"] }),
 			makeNode({ id: "llm_end", type: "end_event", label: "End" }),
 		];
-		const xml = buildBpmnXml(nodes);
+		const xml = await buildBpmnXml(nodes);
 
 		// Should have _start and _end, not llm_start/llm_end
 		expect(xml).toContain('id="_start"');
@@ -218,34 +222,35 @@ describe("buildBpmnXml", () => {
 		expect(xml).not.toContain('id="llm_end"');
 	});
 
-	it("connects _start to root nodes (no incoming connections)", () => {
+	it("connects _start to root nodes (no incoming connections)", async () => {
 		const nodes: DiagramNode[] = [
 			makeNode({ id: "n1", connections: ["n2"] }),
 			makeNode({ id: "n2" }),
 		];
-		const xml = buildBpmnXml(nodes);
+		const xml = await buildBpmnXml(nodes);
 
 		// _start should connect to n1 (root node)
 		expect(xml).toContain('sourceRef="_start"');
 		expect(xml).toContain('targetRef="n1"');
 	});
 
-	it("connects terminal nodes (no outgoing) to _end", () => {
+	it("connects terminal nodes (no outgoing) to _end", async () => {
 		const nodes: DiagramNode[] = [
 			makeNode({ id: "n1", connections: ["n2"] }),
 			makeNode({ id: "n2" }), // terminal — no connections
 		];
-		const xml = buildBpmnXml(nodes);
+		const xml = await buildBpmnXml(nodes);
 
 		expect(xml).toContain('sourceRef="n2"');
 		expect(xml).toContain('targetRef="_end"');
 	});
 
-	it("escapes special XML characters in labels", () => {
+	it("escapes special XML characters in labels", async () => {
 		const nodes: DiagramNode[] = [
-			makeNode({ id: "n1", label: 'Check "A" & <B>' }),
+			makeNode({ id: "n1", label: 'Check "A" & <B>', connections: ["n2"] }),
+			makeNode({ id: "n2" }),
 		];
-		const xml = buildBpmnXml(nodes);
+		const xml = await buildBpmnXml(nodes);
 
 		expect(xml).toContain("&amp;");
 		expect(xml).toContain("&lt;");
@@ -254,12 +259,12 @@ describe("buildBpmnXml", () => {
 		expect(xml).not.toContain('name="Check "A"');
 	});
 
-	it("generates BPMNDiagram shapes for all elements", () => {
+	it("generates BPMNDiagram shapes for all elements", async () => {
 		const nodes: DiagramNode[] = [
 			makeNode({ id: "n1", connections: ["n2"] }),
 			makeNode({ id: "n2" }),
 		];
-		const xml = buildBpmnXml(nodes);
+		const xml = await buildBpmnXml(nodes);
 
 		expect(xml).toContain("BPMNShape");
 		expect(xml).toContain("BPMNEdge");
@@ -269,9 +274,9 @@ describe("buildBpmnXml", () => {
 		expect(xml).toContain("di:waypoint");
 	});
 
-	it("includes Pool and Collaboration elements", () => {
+	it("includes Pool and Collaboration elements", async () => {
 		const nodes: DiagramNode[] = [makeNode({ id: "n1" })];
-		const xml = buildBpmnXml(nodes);
+		const xml = await buildBpmnXml(nodes);
 
 		expect(xml).toContain("bpmn:collaboration");
 		expect(xml).toContain("bpmn:participant");
@@ -279,18 +284,18 @@ describe("buildBpmnXml", () => {
 		expect(xml).toContain('bpmnElement="Pool"');
 	});
 
-	it("handles forming nodes (visible in diagram)", () => {
+	it("handles forming nodes (visible in diagram)", async () => {
 		const nodes: DiagramNode[] = [
 			makeNode({ id: "n1", state: "forming", connections: ["n2"] }),
 			makeNode({ id: "n2", state: "confirmed" }),
 		];
-		const xml = buildBpmnXml(nodes);
+		const xml = await buildBpmnXml(nodes);
 
 		expect(xml).toContain('id="n1"');
 		expect(xml).toContain('id="n2"');
 	});
 
-	it("handles large graph (10+ nodes) without errors", () => {
+	it("handles large graph (10+ nodes) without errors", async () => {
 		const nodes: DiagramNode[] = [];
 		for (let i = 1; i <= 10; i++) {
 			nodes.push(
@@ -301,7 +306,7 @@ describe("buildBpmnXml", () => {
 				}),
 			);
 		}
-		const xml = buildBpmnXml(nodes);
+		const xml = await buildBpmnXml(nodes);
 
 		expect(xml).toContain('id="n1"');
 		expect(xml).toContain('id="n10"');
