@@ -1,4 +1,4 @@
-import type { DashboardData, ProfileItem, ProcessHeatmapRow } from "@simulations/lib/dashboard-queries";
+import type { DashboardData, ProfileItem, ProcessHeatmapRow } from "@evaluaciones/lib/dashboard-queries";
 
 export interface HumanRiskReportInput {
   organizationName: string;

@@ -4,9 +4,11 @@ import { config } from "@config";
 import { Button, cn } from "@repo/ui";
 import { SplitWords } from "@shared/components/SplitWords";
 import { ArrowRightIcon, SearchIcon } from "lucide-react";
+import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { BpmnHeroBackground } from "./BpmnHeroBackground";
+import { ParticleNetwork } from "./animations/ParticleNetwork";
 
 const MOCKUP_STEPS = [
 	{ num: "01", label: "Scan" },
@@ -36,38 +38,54 @@ export function HeroSection() {
 
 	return (
 		<section className="bg-grid relative overflow-hidden">
-			{/* ── Background orbs ── */}
-			<div
-				className="pointer-events-none absolute inset-0"
-				aria-hidden="true"
-			>
-				<div className="orb absolute -top-40 -right-40 h-[600px] w-[600px] rounded-full bg-[#00E5C0]/20 blur-[120px]" />
-				<div className="orb-slow absolute -bottom-40 -left-40 h-[400px] w-[400px] rounded-full bg-[#00E5C0]/10 blur-[100px]" />
+			{/* Background orbs */}
+			<div className="pointer-events-none absolute inset-0" aria-hidden="true">
+				<motion.div
+					animate={{ x: [0, 15, -10, 0], y: [0, -25, -15, 0], scale: [1, 1.05, 0.98, 1] }}
+					transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+					className="absolute -top-40 -right-40 h-[600px] w-[600px] rounded-full bg-[#00E5C0]/20 blur-[120px]"
+				/>
+				<motion.div
+					animate={{ x: [0, -20, 15, 0], y: [0, 12, -10, 0], scale: [1, 0.95, 1.08, 1] }}
+					transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+					className="absolute -bottom-40 -left-40 h-[400px] w-[400px] rounded-full bg-[#00E5C0]/10 blur-[100px]"
+				/>
 			</div>
 
-			{/* ── Animated BPMN diagram background — hidden on mobile ── */}
+			{/* BPMN diagram background */}
 			<div className="pointer-events-none hidden md:block" aria-hidden="true">
 				<BpmnHeroBackground />
 			</div>
 
+			{/* Particle network background */}
+			<div className="pointer-events-none hidden lg:block" aria-hidden="true">
+				<ParticleNetwork />
+			</div>
+
 			<div className="container relative z-10 pt-16 pb-12 sm:pt-24 sm:pb-16 md:pt-32 md:pb-20 lg:pt-40 lg:pb-24">
 				<div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
-					{/* ── Left Column: Text Content ── */}
+					{/* Left Column */}
 					<div className="text-center lg:text-left">
-						{/* Badge pill */}
-						<div className="mb-6 flex justify-center lg:justify-start">
-							<div
-								className={cn(
-									"badge-pulse inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-medium",
-									"border-[#00E5C0]/20 bg-[#00E5C0]/10 text-[#00E5C0]",
-								)}
-							>
+						{/* Badge */}
+						<motion.div
+							initial={{ opacity: 0, y: -16 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+							className="mb-6 flex justify-center lg:justify-start"
+						>
+							<div className={cn(
+								"badge-pulse inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-medium",
+								"border-[#00E5C0]/20 bg-[#00E5C0]/10 text-[#00E5C0]",
+							)}>
 								{t("badge")}
 							</div>
-						</div>
+						</motion.div>
 
-						{/* Headline — 3D word-by-word reveal */}
-						<h1
+						{/* Headline */}
+						<motion.h1
+							initial={{ opacity: 0, y: 24 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.8, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
 							className={cn(
 								"font-display text-4xl md:text-5xl lg:text-6xl leading-[1.08] text-white",
 								"mx-auto max-w-2xl lg:mx-0",
@@ -77,35 +95,39 @@ export function HeroSection() {
 							<SplitWords innerClassName="hero-word-reveal">
 								{t("title")}
 							</SplitWords>
-						</h1>
+						</motion.h1>
 
 						{/* Subtitle */}
-						<p
+						<motion.p
+							initial={{ opacity: 0, y: 20 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.7, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
 							className={cn(
-								"reveal-fade-up is-visible delay-200 mt-6 text-base sm:text-lg lg:text-xl max-w-xl",
+								"mt-6 text-base sm:text-lg lg:text-xl max-w-xl",
 								"mx-auto lg:mx-0 leading-relaxed text-[#94A3B8]",
 							)}
 						>
 							{t("subtitle")}
-						</p>
+						</motion.p>
 
-						{/* URL Input area */}
-						<div className="reveal-fade-up is-visible delay-300 mt-8 sm:mt-10 mx-auto lg:mx-0 max-w-xl">
-							<div
-								className={cn(
-									"flex flex-col gap-2 rounded-xl border border-white/10 bg-white/5 p-2 backdrop-blur-sm",
-									"sm:flex-row sm:items-center",
-								)}
-							>
+						{/* Input area */}
+						<motion.div
+							initial={{ opacity: 0, y: 20 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.7, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+							className="mt-8 sm:mt-10 mx-auto lg:mx-0 max-w-xl"
+						>
+							<div className={cn(
+								"flex flex-col gap-2 rounded-xl border border-white/10 bg-white/5 p-2 backdrop-blur-sm",
+								"sm:flex-row sm:items-center",
+							)}>
 								<div className="flex flex-1 items-center gap-2">
 									<SearchIcon className="ml-2 size-5 shrink-0 text-[#94A3B8]" />
 									<input
 										type="url"
 										value={url}
 										onChange={(e) => setUrl(e.target.value)}
-										onKeyDown={(e) =>
-											e.key === "Enter" && handleSubmit()
-										}
+										onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
 										placeholder={t("inputPlaceholder")}
 										className={cn(
 											"flex-1 min-h-[44px] bg-transparent text-white text-base outline-none",
@@ -126,13 +148,7 @@ export function HeroSection() {
 									<ArrowRightIcon className="ml-2 size-4" />
 								</Button>
 							</div>
-
-							{/* Subtext */}
-							<p className="mt-3 text-sm text-white/50">
-								{t("subtext")}
-							</p>
-
-							{/* Secondary link */}
+							<p className="mt-3 text-sm text-white/50">{t("subtext")}</p>
 							<a
 								href={`${config.saasUrl}/scan?mode=text&ref=hero`}
 								className={cn(
@@ -143,26 +159,28 @@ export function HeroSection() {
 								{t("ctaSecondary")}
 								<ArrowRightIcon className="size-3.5" />
 							</a>
-						</div>
+						</motion.div>
 					</div>
 
-					{/* ── Right Column: Product Mockup ── */}
-					<div className="reveal-scale-up is-visible delay-500 hidden lg:block">
-						{/* Radial gradient glow behind mockup */}
-						<div
-							className="pointer-events-none absolute -inset-4 -z-10"
-							aria-hidden="true"
-						>
+					{/* Right Column: Mockup */}
+					<motion.div
+						initial={{ opacity: 0, scale: 0.92, y: 20 }}
+						animate={{ opacity: 1, scale: 1, y: 0 }}
+						transition={{ duration: 1, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
+						className="hidden lg:block"
+					>
+						<div className="pointer-events-none absolute -inset-4 -z-10" aria-hidden="true">
 							<div className="absolute inset-0 rounded-3xl bg-[radial-gradient(ellipse_at_center,rgba(0,229,192,0.12)_0%,transparent_70%)]" />
 						</div>
-
-						<div
+						<motion.div
+							whileHover={{ y: -8, boxShadow: "0 30px 60px -12px rgba(0,229,192,0.15), 0 0 0 1px rgba(0,229,192,0.08)" }}
+							transition={{ type: "spring", stiffness: 300, damping: 20 }}
 							className={cn(
-								"card-lift relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm",
+								"relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm",
 								"shadow-2xl shadow-[#00E5C0]/5",
 							)}
 						>
-							{/* Browser chrome bar */}
+							{/* Browser chrome */}
 							<div className="flex items-center gap-2 border-b border-white/10 bg-white/5 px-4 py-3">
 								<div className="flex gap-1.5">
 									<div className="size-3 rounded-full bg-white/20" />
@@ -174,89 +192,64 @@ export function HeroSection() {
 								</div>
 							</div>
 
-							{/* App layout: sidebar + main */}
+							{/* App layout */}
 							<div className="grid min-h-[380px]" style={{ gridTemplateColumns: "180px 1fr" }}>
-								{/* Sidebar: numbered steps */}
 								<div className="flex flex-col border-r border-white/10 bg-white/[0.02] p-4">
 									{MOCKUP_STEPS.map((step, i) => (
-										<div
+										<motion.div
 											key={step.num}
+											initial={{ opacity: 0, x: -12 }}
+											animate={{ opacity: 1, x: 0 }}
+											transition={{ delay: 1 + i * 0.1, duration: 0.4 }}
 											className={cn(
-												"flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors",
-												i === 0
-													? "bg-[#00E5C0]/10 text-[#00E5C0]"
-													: i === 1
-														? "bg-white/5 text-white/70"
-														: "text-white/30",
+												"flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm",
+												i === 0 ? "bg-[#00E5C0]/10 text-[#00E5C0]"
+													: i === 1 ? "bg-white/5 text-white/70"
+													: "text-white/30",
 											)}
 										>
-											<span
-												className={cn(
-													"flex size-6 shrink-0 items-center justify-center rounded-md text-xs font-bold",
-													i === 0
-														? "bg-[#00E5C0] text-[#0A1428]"
-														: "bg-white/10 text-white/40",
-												)}
-											>
+											<span className={cn(
+												"flex size-6 shrink-0 items-center justify-center rounded-md text-xs font-bold",
+												i === 0 ? "bg-[#00E5C0] text-[#0A1428]" : "bg-white/10 text-white/40",
+											)}>
 												{step.num}
 											</span>
 											<span className="font-medium">{step.label}</span>
-										</div>
+										</motion.div>
 									))}
 								</div>
 
-								{/* Main content area: BPMN diagram + risk cards */}
 								<div className="flex flex-col p-5">
-									{/* Mini header */}
 									<div className="mb-4 flex items-center justify-between">
 										<div className="h-4 w-32 rounded bg-white/15" />
 										<div className="h-4 w-20 rounded bg-[#00E5C0]/20" />
 									</div>
-
-									{/* BPMN diagram */}
 									<div className="flex flex-1 items-center justify-center">
 										<svg
 											viewBox="0 0 400 200"
-											className="h-auto w-full opacity-70"
+											className="h-auto w-full opacity-70 bpmn-draw is-drawing"
 											fill="none"
 										>
-											{/* Start event */}
-											<circle
-												cx="30"
-												cy="100"
-												r="14"
-												stroke="#00E5C0"
-												strokeWidth="2"
-												fill="rgba(0,229,192,0.15)"
-											/>
-											{/* Arrow → Task 1 */}
+											<circle cx="30" cy="100" r="14" stroke="#00E5C0" strokeWidth="2" fill="rgba(0,229,192,0.15)" />
 											<line x1="44" y1="100" x2="80" y2="100" stroke="#00E5C0" strokeWidth="1.5" />
 											<circle cx="80" cy="100" r="2" fill="#00E5C0" />
-											{/* Task 1: "Identify" */}
 											<rect x="88" y="80" width="76" height="40" rx="6" stroke="#00E5C0" strokeWidth="1.5" fill="rgba(0,229,192,0.1)" />
 											<text x="126" y="104" textAnchor="middle" fill="#00E5C0" fontSize="9" fontFamily="system-ui">Identify</text>
-											{/* Arrow → Gateway */}
 											<line x1="164" y1="100" x2="200" y2="100" stroke="#00E5C0" strokeWidth="1.5" />
-											{/* Diamond gateway */}
 											<rect x="200" y="88" width="24" height="24" rx="3" transform="rotate(45 212 100)" stroke="#00E5C0" strokeWidth="1.5" fill="rgba(0,229,192,0.08)" />
-											{/* Branch up → Task 2 */}
 											<line x1="217" y1="83" x2="255" y2="55" stroke="#00E5C0" strokeWidth="1.5" />
 											<circle cx="255" cy="55" r="2" fill="#00E5C0" />
 											<rect x="263" y="35" width="76" height="40" rx="6" stroke="#00E5C0" strokeWidth="1.5" fill="rgba(0,229,192,0.1)" />
 											<text x="301" y="59" textAnchor="middle" fill="#00E5C0" fontSize="9" fontFamily="system-ui">Assess</text>
-											{/* Branch down → Task 3 */}
 											<line x1="217" y1="117" x2="255" y2="145" stroke="#00E5C0" strokeWidth="1.5" />
 											<circle cx="255" cy="145" r="2" fill="#00E5C0" />
 											<rect x="263" y="125" width="76" height="40" rx="6" stroke="#00E5C0" strokeWidth="1.5" fill="rgba(0,229,192,0.1)" />
 											<text x="301" y="149" textAnchor="middle" fill="#00E5C0" fontSize="9" fontFamily="system-ui">Document</text>
-											{/* Merge → End */}
 											<line x1="339" y1="55" x2="365" y2="85" stroke="#00E5C0" strokeWidth="1.5" />
 											<line x1="339" y1="145" x2="365" y2="115" stroke="#00E5C0" strokeWidth="1.5" />
 											<circle cx="380" cy="100" r="14" stroke="#00E5C0" strokeWidth="3" fill="rgba(0,229,192,0.15)" />
 										</svg>
 									</div>
-
-									{/* Risk indicator row */}
 									<div className="mt-3 flex gap-2">
 										<div className="flex-1 rounded-lg bg-red-500/10 px-3 py-2">
 											<div className="mb-1 h-2 w-12 rounded bg-red-400/30" />
@@ -273,8 +266,8 @@ export function HeroSection() {
 									</div>
 								</div>
 							</div>
-						</div>
-					</div>
+						</motion.div>
+					</motion.div>
 				</div>
 			</div>
 		</section>

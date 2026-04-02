@@ -27,6 +27,9 @@
 		"evaluationsRemaining": "{count} evaluations remaining this month.",
 		"evaluationsAvailable": "{count} evaluations available.",
 		"resetDate": "Resets {date}",
+		"metricProcesses": "processes",
+		"metricEvaluations": "eval/mo",
+		"metricEvaluators": "evaluators",
 		"products": {
 			"starter": {
 				"title": "Starter",

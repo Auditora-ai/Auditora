@@ -87,8 +87,8 @@ export function MobileBottomBar() {
 			icon: ClipboardListIcon,
 		},
 		{
-			label: t("app.menu.simulations"),
-			href: `${basePath}/simulations`,
+			label: t("app.menu.evaluaciones"),
+			href: `${basePath}/evaluaciones`,
 			icon: GraduationCapIcon,
 		},
 		{

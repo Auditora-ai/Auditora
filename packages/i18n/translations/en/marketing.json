@@ -61,8 +61,8 @@
 				"question": "Is this process mining?",
 				"answer": "No. Process mining analyzes system logs (ERP, CRM) to discover how processes actually execute. Auditora.ai is an elicitation-based process discovery tool: it guides structured conversations to document processes and analyze risks. These are complementary approaches. Process mining requires system data; Auditora.ai works with human knowledge."
 			},
-			"simulations": {
-				"question": "What are Harvard-style simulations?",
+			"evaluaciones": {
+				"question": "What are Harvard-style evaluations?",
 				"answer": "AI-generated decision scenarios based on your actual process maps and identified risks. Each scenario presents realistic operational dilemmas where team members make choices under pressure. The system scores their decisions across three dimensions: alignment with procedures, risk awareness, and decision criteria. Think of it as a flight simulator for operations teams."
 			},
 			"procedures": {
@@ -73,9 +73,9 @@
 	},
 	"home": {
 		"hero": {
-			"badge": "The AI-powered consulting platform",
-			"title": "Turn any organization into a living process map",
-			"subtitle": "Discover processes, assess risks, generate procedures, and simulate decisions — all powered by AI and grounded in proven methodology.",
+		"badge": "AI-Powered Process Intelligence",
+		"title": "Your processes exist. But nobody follows them.",
+		"subtitle": "Discover, document, and evaluate your organization's processes with AI — grounded in SIPOC, BPMN 2.0, and FMEA methodology.",
 			"inputPlaceholder": "https://your-company.com",
 			"cta": "Scan any company free",
 			"ctaSecondary": "Describe the process manually",
@@ -141,18 +141,18 @@
 			"step6": {
 				"number": "06",
 				"title": "Evaluate",
-				"description": "Measure human risk across your organization with scored simulations, strength/risk area analysis, and team-wide dashboards."
+				"description": "Measure human risk across your organization with scored evaluations, strength/risk area analysis, and team-wide dashboards."
 			},
 			"starFeature": "Star feature"
 		},
-		"simulation": {
-			"badge": "Unique capability",
-			"title": "Test your team before a crisis tests them",
-			"subtitle": "AI generates decision scenarios from your actual BPMN processes and identified risks. Your people make decisions under pressure. You measure their readiness.",
-			"exampleQuestion": "A supplier delivers contaminated raw material. As the COO, do you:",
-			"exampleOptionA": "A) Stop the production line immediately and notify the quality team",
-			"exampleOptionB": "B) Quarantine the batch and switch to backup supplier",
-			"exampleOptionC": "C) Run quality tests and continue production pending results",
+	"evaluacion": {
+		"badge": "Unique capability",
+		"title": "Test your team before a crisis tests them",
+		"subtitle": "AI generates decision scenarios from your actual BPMN processes and identified risks. Your people make decisions under pressure. You measure their readiness.",
+		"exampleQuestion": "A supplier delivers contaminated raw material. As the COO, do you:",
+		"exampleOptionA": "A) Stop the production line immediately and notify the quality team",
+		"exampleOptionB": "B) Quarantine the batch and switch to backup supplier",
+		"exampleOptionC": "C) Run quality tests and continue production pending results",
 			"feature1": {
 				"title": "Grounded in your reality",
 				"description": "Scenarios are generated from your actual process maps, not generic templates. Each decision tests a real operational risk."
@@ -263,6 +263,17 @@
 				"description": "Systematic methodology for identifying and prioritizing risks. We automate the calculation of Severity, Occurrence, Detection, and RPN."
 			}
 		}
+	},
+	"tools": {
+		"badge": "100% Free — No signup required",
+		"title": "AI-Powered Tools for BPM Professionals",
+		"subtitle": "The same AI that diagrams during meetings, now in your hands. Try any tool instantly.",
+		"useFree": "Use free",
+		"ctaTitle": "Want this LIVE during your meetings?",
+		"ctaDescription": "Auditora.ai joins your video call and generates everything automatically — BPMN diagrams, SIPOC maps, risk assessments, and more.",
+		"ctaButton": "Try Auditora.ai Free",
+		"toolsCount": "{count} free tools",
+		"seoDescription": "Browse all free AI-powered process tools"
 	},
 	"newsletter": {
 		"email": "Email",

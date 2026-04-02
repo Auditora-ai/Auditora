@@ -86,7 +86,8 @@
 			"scan": "Röntgenbild",
 			"tools": "Werkzeuge",
 			"procedures": "Verfahren",
-			"simulations": "Simulationen",
+			"simulations": "Bewertungen",
+			"evaluaciones": "Bewertungen",
 			"evaluation": "Bewertung",
 			"workflow": "Workflow",
 			"workspace": "Arbeitsbereich"

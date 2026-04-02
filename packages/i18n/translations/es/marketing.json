@@ -61,8 +61,8 @@
 				"question": "Es esto process mining?",
 				"answer": "No. El process mining analiza logs de sistemas (ERP, CRM) para descubrir como se ejecutan los procesos en la realidad. Auditora.ai es una herramienta de descubrimiento de procesos basada en elicitacion: guia conversaciones estructuradas para documentar procesos y analizar riesgos. Son enfoques complementarios. El process mining requiere datos de sistema; Auditora.ai trabaja con conocimiento humano."
 			},
-			"simulations": {
-				"question": "Que son las simulaciones estilo Harvard?",
+			"evaluaciones": {
+				"question": "Que son las evaluaciones estilo Harvard?",
 				"answer": "Escenarios de decision generados por IA basados en tus mapas de procesos reales y riesgos identificados. Cada escenario presenta dilemas operativos realistas donde los miembros del equipo toman decisiones bajo presion. El sistema califica sus decisiones en tres dimensiones: alineacion con procedimientos, conciencia de riesgos y criterios de decision. Piensa en ello como un simulador de vuelo para equipos operativos."
 			},
 			"procedures": {
@@ -73,9 +73,9 @@
 	},
 	"home": {
 		"hero": {
-			"badge": "La plataforma de consultoria con IA",
-			"title": "Convierte cualquier organizacion en un mapa de procesos vivo",
-			"subtitle": "Descubre procesos, evalua riesgos, genera procedimientos y simula decisiones — todo impulsado por IA y fundamentado en metodologia comprobada.",
+		"badge": "Inteligencia de Procesos con IA",
+		"title": "Tus procesos existen. Pero nadie los sigue.",
+		"subtitle": "Descubre, documenta y evalúa los procesos de tu organización con IA — fundamentado en SIPOC, BPMN 2.0 y FMEA.",
 			"inputPlaceholder": "https://tu-empresa.com",
 			"cta": "Analizar cualquier empresa gratis",
 			"ctaSecondary": "Describir el proceso manualmente",
@@ -141,18 +141,18 @@
 			"step6": {
 				"number": "06",
 				"title": "Medir",
-				"description": "Mide el riesgo humano en tu organizacion con simulaciones calificadas, analisis de fortalezas y areas de riesgo, y paneles para todo el equipo."
+				"description": "Mide el riesgo humano en tu organizacion con evaluaciones calificadas, analisis de fortalezas y areas de riesgo, y paneles para todo el equipo."
 			},
 			"starFeature": "Función estrella"
 		},
-		"simulation": {
-			"badge": "Capacidad unica",
-			"title": "Pon a prueba tu equipo antes de que una crisis lo haga",
-			"subtitle": "La IA genera escenarios de decision a partir de tus procesos BPMN reales y riesgos identificados. Tu gente toma decisiones bajo presion. Tu mides su preparacion.",
-			"exampleQuestion": "Un proveedor entrega materia prima contaminada. Como COO, tu:",
-			"exampleOptionA": "A) Detienes la linea de produccion inmediatamente y notificas al equipo de calidad",
-			"exampleOptionB": "B) Pones en cuarentena el lote y cambias al proveedor de respaldo",
-			"exampleOptionC": "C) Realizas pruebas de calidad y continuas la produccion pendiente de los resultados",
+	"evaluacion": {
+		"badge": "Capacidad unica",
+		"title": "Pon a prueba tu equipo antes de que una crisis lo haga",
+		"subtitle": "La IA genera escenarios de decision a partir de tus procesos BPMN reales y riesgos identificados. Tu gente toma decisiones bajo presion. Tu mides su preparacion.",
+		"exampleQuestion": "Un proveedor entrega materia prima contaminada. Como COO, tu:",
+		"exampleOptionA": "A) Detienes la linea de produccion inmediatamente y notificas al equipo de calidad",
+		"exampleOptionB": "B) Pones en cuarentena el lote y cambias al proveedor de respaldo",
+		"exampleOptionC": "C) Realizas pruebas de calidad y continuas la produccion pendiente de los resultados",
 			"feature1": {
 				"title": "Basado en tu realidad",
 				"description": "Los escenarios se generan a partir de tus mapas de procesos reales, no de plantillas genericas. Cada decision evalua un riesgo operativo real."
@@ -263,6 +263,17 @@
 				"description": "Metodología sistemática para identificar y priorizar riesgos. Automatizamos el cálculo de Severidad, Ocurrencia, Detección y RPN."
 			}
 		}
+	},
+	"tools": {
+		"badge": "100% Gratis — Sin registro",
+		"title": "Herramientas IA para Profesionales BPM",
+		"subtitle": "El mismo IA que diagrama en reuniones, ahora en tus manos. Prueba cualquier herramienta al instante.",
+		"useFree": "Usar gratis",
+		"ctaTitle": "¿Quieres esto EN VIVO durante tus reuniones?",
+		"ctaDescription": "Auditora.ai se une a tu videollamada y genera todo automáticamente — diagramas BPMN, mapas SIPOC, evaluaciones de riesgo y más.",
+		"ctaButton": "Probar Auditora.ai Gratis",
+		"toolsCount": "{count} herramientas gratis",
+		"seoDescription": "Explora todas las herramientas de procesos gratuitas con IA"
 	},
 	"newsletter": {
 		"email": "Correo electronico",

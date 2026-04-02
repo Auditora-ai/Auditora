@@ -27,6 +27,9 @@
 		"evaluationsRemaining": "{count} evaluaciones restantes este mes.",
 		"evaluationsAvailable": "{count} evaluaciones disponibles.",
 		"resetDate": "Se reinicia el {date}",
+		"metricProcesses": "procesos",
+		"metricEvaluations": "eval/mes",
+		"metricEvaluators": "evaluadores",
 		"products": {
 			"starter": {
 				"title": "Starter",

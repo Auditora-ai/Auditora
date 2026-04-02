@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRef } from "react";
+import { WorkflowEndToEnd } from "./animations/WorkflowEndToEnd";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -93,6 +94,11 @@ export function WorkflowSection() {
 					<p className="mt-4 text-[#94A3B8] text-base sm:text-lg max-w-2xl mx-auto">
 						{t("home.workflow.subtitle")}
 					</p>
+				</div>
+
+				{/* Animated workflow flow */}
+				<div className="mb-12 max-w-3xl mx-auto px-4">
+					<WorkflowEndToEnd />
 				</div>
 
 				{/* Desktop: horizontal flow */}

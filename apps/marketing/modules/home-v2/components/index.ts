@@ -1,0 +1,12 @@
+export { Hero } from "./Hero";
+export { TrustBar } from "./TrustBar";
+export { ProblemSection } from "./ProblemSection";
+export { HowItWorks } from "./HowItWorks";
+export { StarFeature } from "./StarFeature";
+export { CapabilitiesGrid } from "./CapabilitiesGrid";
+export { SocialProof } from "./SocialProof";
+export { WhoItsFor } from "./WhoItsFor";
+export { Methodology } from "./Methodology";
+export { PricingTeaser } from "./PricingTeaser";
+export { Faq } from "./Faq";
+export { FinalCta } from "./FinalCta";

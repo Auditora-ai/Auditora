@@ -11,6 +11,9 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
+
 import { db } from "@repo/database";
 
 export async function POST(request: NextRequest) {

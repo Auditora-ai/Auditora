@@ -1,112 +1,228 @@
 "use client";
 
+import { config } from "@config";
+import { cn } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
 import {
-  ArrowRightIcon,
-  BookOpenIcon,
-  CalculatorIcon,
-  FileTextIcon,
-  GaugeIcon,
-  GitBranchIcon,
-  Grid3X3Icon,
-  ShieldCheckIcon,
-  SparklesIcon,
-  TableIcon,
+	ArrowRightIcon,
+	BookOpenIcon,
+	CalculatorIcon,
+	FileTextIcon,
+	GaugeIcon,
+	GitBranchIcon,
+	Grid3X3Icon,
+	ShieldCheckIcon,
+	SparklesIcon,
+	TableIcon,
 } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { motion } from "framer-motion";
 import type { ToolConfig } from "@tools/tools-config";
+import type { LucideIcon } from "lucide-react";
 
-const ICON_MAP: Record<string, React.ReactNode> = {
-  GitBranch: <GitBranchIcon className="h-5 w-5" />,
-  Table: <TableIcon className="h-5 w-5" />,
-  Grid3X3: <Grid3X3Icon className="h-5 w-5" />,
-  ShieldCheck: <ShieldCheckIcon className="h-5 w-5" />,
-  FileText: <FileTextIcon className="h-5 w-5" />,
-  Gauge: <GaugeIcon className="h-5 w-5" />,
-  BookOpen: <BookOpenIcon className="h-5 w-5" />,
-  Calculator: <CalculatorIcon className="h-5 w-5" />,
+const ICON_MAP: Record<string, LucideIcon> = {
+	GitBranch: GitBranchIcon,
+	Table: TableIcon,
+	Grid3X3: Grid3X3Icon,
+	ShieldCheck: ShieldCheckIcon,
+	FileText: FileTextIcon,
+	Gauge: GaugeIcon,
+	BookOpen: BookOpenIcon,
+	Calculator: CalculatorIcon,
+};
+
+const cardVariants = {
+	hidden: { opacity: 0, y: 24, scale: 0.97 },
+	visible: (i: number) => ({
+		opacity: 1,
+		y: 0,
+		scale: 1,
+		transition: {
+			duration: 0.6,
+			delay: i * 0.07,
+			ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+		},
+	}),
 };
 
 interface ToolsHubClientProps {
-  tools: ToolConfig[];
-  locale: string;
+	tools: ToolConfig[];
+	locale: string;
 }
 
 export function ToolsHubClient({ tools, locale }: ToolsHubClientProps) {
-  const isEs = locale === "es";
+	const t = useTranslations("tools");
 
-  return (
-    <div className="min-h-screen bg-[#0F172A]">
-      {/* Hero */}
-      <section className="px-4 pb-12 pt-24 text-center">
-        <div className="mx-auto max-w-3xl">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
-            <SparklesIcon className="h-4 w-4" />
-            {isEs ? "100% Gratis" : "100% Free"}
-          </div>
-          <h1 className="font-display mb-4 text-4xl font-bold tracking-tight text-[#F1F5F9] md:text-5xl">
-            {isEs
-              ? "Herramientas IA para Profesionales BPM"
-              : "AI Tools for BPM Professionals"}
-          </h1>
-          <p className="text-lg text-[#94A3B8]">
-            {isEs
-              ? "El mismo AI que diagrama en reuniones, ahora en tus manos. Sin registro."
-              : "The same AI that diagrams in meetings, now in your hands. No signup required."}
-          </p>
-        </div>
-      </section>
+	return (
+		<div className="dark bg-[#0A1428] text-slate-50 min-h-screen">
+			{/* Hero */}
+			<section className="relative py-16 sm:py-20 lg:py-28 overflow-hidden">
+				{/* Background orbs */}
+				<div className="pointer-events-none absolute inset-0" aria-hidden="true">
+					<motion.div
+						animate={{
+							x: [0, 15, -10, 0],
+							y: [0, -20, -15, 0],
+							scale: [1, 1.05, 0.98, 1],
+						}}
+						transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+						className="absolute -top-40 right-1/4 h-[400px] w-[400px] rounded-full bg-[#00E5C0]/10 blur-[100px]"
+					/>
+				</div>
 
-      {/* Tool Grid */}
-      <section className="mx-auto max-w-5xl px-4 pb-16">
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {tools.map((tool) => (
-            <Link
-              key={tool.slug}
-              href={`/${locale}/tools/${tool.slug}`}
-              className="group flex items-start gap-4 rounded-xl border border-[#334155] bg-[#1E293B] p-5 transition-all duration-200 hover:border-primary/50 hover:bg-[#1E293B]/80"
-            >
-              <div className="mt-0.5 flex-shrink-0 text-primary">
-                {ICON_MAP[tool.icon] || <SparklesIcon className="h-5 w-5" />}
-              </div>
-              <div className="min-w-0">
-                <h3 className="text-base font-semibold text-[#F1F5F9]">
-                  {isEs ? tool.nameEs : tool.name}
-                </h3>
-                <p className="mt-1 text-sm text-[#64748B] line-clamp-2">
-                  {isEs ? tool.descriptionEs : tool.description}
-                </p>
-                <span className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-primary">
-                  {isEs ? "Usar gratis" : "Use free"}
-                  <ArrowRightIcon className="h-3 w-3 transition-transform group-hover:translate-x-1" />
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
+				<div className="container relative max-w-5xl">
+					<motion.div
+						initial={{ opacity: 0, y: -12 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{
+							duration: 0.6,
+							delay: 0.1,
+							ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+						}}
+						className="mb-6 flex justify-center"
+					>
+						<div
+							className={cn(
+								"badge-pulse inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-medium",
+								"border-[#00E5C0]/20 bg-[#00E5C0]/10 text-[#00E5C0]",
+							)}
+						>
+							<SparklesIcon className="size-3.5" strokeWidth={2} />
+							{t("badge")}
+						</div>
+					</motion.div>
 
-      {/* CTA */}
-      <section className="border-t border-[#334155] px-4 py-16 text-center">
-        <div className="mx-auto max-w-2xl">
-          <h2 className="font-display mb-4 text-3xl font-bold text-[#F1F5F9]">
-            {isEs
-              ? "Quieres esto en VIVO durante tus reuniones?"
-              : "Want this LIVE during your meetings?"}
-          </h2>
-          <p className="mb-8 text-[#94A3B8]">
-            {isEs
-              ? "Auditora.ai se une a tu videollamada y genera todo automaticamente."
-              : "Auditora.ai joins your video call and generates everything automatically."}
-          </p>
-          <Button size="lg" className="gap-2" asChild>
-            <a href="/signup">
-              {isEs ? "Probar Auditora.ai Gratis" : "Try Auditora.ai Free"}
-              <ArrowRightIcon className="h-4 w-4" />
-            </a>
-          </Button>
-        </div>
-      </section>
-    </div>
-  );
+					<motion.h1
+						initial={{ opacity: 0, y: 24 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{
+							duration: 0.8,
+							delay: 0.2,
+							ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+						}}
+						className="font-display text-3xl sm:text-4xl lg:text-5xl text-white text-center max-w-3xl mx-auto leading-tight"
+					>
+						{t("title")}
+					</motion.h1>
+
+					<motion.p
+						initial={{ opacity: 0, y: 16 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{
+							duration: 0.7,
+							delay: 0.35,
+							ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+						}}
+						className="mt-6 text-base sm:text-lg text-[#94A3B8] max-w-2xl mx-auto text-center leading-relaxed"
+					>
+						{t("subtitle")}
+					</motion.p>
+				</div>
+			</section>
+
+			{/* Tool Grid */}
+			<section className="pb-16 sm:pb-20 lg:pb-28">
+				<div className="container max-w-5xl">
+					<motion.div
+						initial="hidden"
+						whileInView="visible"
+						viewport={{ once: true, margin: "-40px" }}
+						className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5"
+					>
+						{tools.map((tool, i) => {
+							const Icon = ICON_MAP[tool.icon] || SparklesIcon;
+							return (
+								<motion.div
+									key={tool.slug}
+									custom={i}
+									variants={cardVariants}
+									whileHover={{
+										y: -6,
+										borderColor: "rgba(0,229,192,0.3)",
+										transition: {
+											type: "spring",
+											stiffness: 300,
+											damping: 20,
+										},
+									}}
+								>
+									<Link
+										href={`/${locale}/tools/${tool.slug}`}
+										className={cn(
+											"group flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 sm:p-6 transition-colors duration-300",
+											"hover:bg-white/[0.07]",
+										)}
+									>
+										<div
+											className={cn(
+												"flex size-10 shrink-0 items-center justify-center rounded-xl",
+												"bg-[#00E5C0]/15 border border-[#00E5C0]/20",
+											)}
+										>
+											<Icon
+												className="size-5 text-[#00E5C0]"
+												strokeWidth={1.5}
+											/>
+										</div>
+										<div className="min-w-0 flex-1">
+											<h3 className="text-base font-semibold text-white group-hover:text-[#00E5C0] transition-colors duration-200">
+												{locale === "es" ? tool.nameEs : tool.name}
+											</h3>
+											<p className="mt-1.5 text-sm text-[#94A3B8] leading-relaxed line-clamp-2">
+												{locale === "es"
+													? tool.descriptionEs
+													: tool.description}
+											</p>
+											<span
+												className={cn(
+													"mt-3 inline-flex items-center gap-1.5 text-sm font-medium",
+													"text-[#00E5C0]/70 group-hover:text-[#00E5C0] transition-colors duration-200",
+												)}
+											>
+												{t("useFree")}
+												<ArrowRightIcon className="size-3.5 transition-transform group-hover:translate-x-1" />
+											</span>
+										</div>
+									</Link>
+								</motion.div>
+							);
+						})}
+					</motion.div>
+				</div>
+			</section>
+
+			{/* CTA Section */}
+			<section className="relative overflow-hidden border-t border-white/[0.06] py-16 sm:py-20 lg:py-28">
+				<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_60%,rgba(0,229,192,0.06),transparent_70%)]" />
+				<motion.div
+					initial={{ opacity: 0, y: 24 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					viewport={{ once: true, margin: "-60px" }}
+					transition={{
+						duration: 0.7,
+						ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+					}}
+					className="container relative max-w-2xl text-center"
+				>
+					<h2 className="font-display text-2xl sm:text-3xl lg:text-4xl text-white mb-4">
+						{t("ctaTitle")}
+					</h2>
+					<p className="text-[#94A3B8] text-base sm:text-lg leading-relaxed mb-8">
+						{t("ctaDescription")}
+					</p>
+					<Button
+						size="lg"
+						className="gap-2 bg-[#00E5C0] hover:bg-[#00C4A3] text-[#0A1428] font-semibold"
+						asChild
+					>
+						<a href={`${config.saasUrl}/signup?ref=tools`}>
+							{t("ctaButton")}
+							<ArrowRightIcon className="size-4" />
+						</a>
+					</Button>
+				</motion.div>
+			</section>
+		</div>
+	);
 }

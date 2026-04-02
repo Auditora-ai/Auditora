@@ -6,6 +6,7 @@
 			"@config": ["./config"],
 			"@analytics": ["./modules/analytics"],
 			"@home/*": ["./modules/home/*"],
+			"@home-v2/*": ["./modules/home-v2/*"],
 			"@blog/*": ["./modules/blog/*"],
 			"@i18n/*": ["./modules/i18n/*"],
 			"@changelog/*": ["./modules/changelog/*"],

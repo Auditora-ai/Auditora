@@ -31,7 +31,7 @@ import { ProcessTreeEditor } from "./ProcessTreeEditor";
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-js.css";
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
-import "../styles/bpmn-editor.css";
+import "@repo/process-engine/styles/bpmn-editor.css";
 
 interface CentralCanvasProps {
 	containerRef: RefObject<HTMLDivElement | null>;

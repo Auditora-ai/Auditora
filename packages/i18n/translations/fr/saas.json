@@ -86,7 +86,8 @@
 			"scan": "Radiographie",
 			"tools": "Outils",
 			"procedures": "Procédures",
-			"simulations": "Simulations",
+			"simulations": "Évaluations",
+			"evaluaciones": "Évaluations",
 			"evaluation": "Évaluation",
 			"workflow": "Workflow",
 			"workspace": "Espace"

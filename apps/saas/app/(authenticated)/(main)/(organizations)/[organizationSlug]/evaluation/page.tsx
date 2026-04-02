@@ -1,7 +1,7 @@
 import { getActiveOrganization } from "@auth/lib/server";
 import { notFound } from "next/navigation";
-import { fetchHumanRiskDashboardData } from "@simulations/lib/dashboard-queries";
-import { HumanRiskDashboard } from "@simulations/components/HumanRiskDashboard";
+import { fetchHumanRiskDashboardData } from "@evaluaciones/lib/dashboard-queries";
+import { HumanRiskDashboard } from "@evaluaciones/components/HumanRiskDashboard";
 
 export async function generateMetadata() {
 	return { title: "Evaluación — Dashboard de Riesgo Humano" };

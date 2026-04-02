@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@repo/auth";
 import { headers } from "next/headers";
-import { fetchHumanRiskDashboardData } from "@simulations/lib/dashboard-queries";
+import { fetchHumanRiskDashboardData } from "@evaluaciones/lib/dashboard-queries";
 import { generateHumanRiskReportHtml } from "../../../../lib/export/human-risk-report-generator";
 
 async function getSession() {

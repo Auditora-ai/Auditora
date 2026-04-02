@@ -86,7 +86,8 @@
 			"scan": "X-Ray",
 			"tools": "Tools",
 			"procedures": "Procedures",
-			"simulations": "Simulations",
+			"simulations": "Evaluations",
+			"evaluaciones": "Evaluations",
 			"evaluation": "Evaluation",
 			"workflow": "Workflow",
 			"workspace": "Workspace"
