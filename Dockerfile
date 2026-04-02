@@ -28,11 +28,15 @@ ARG APP_NAME=saas
 
 COPY . .
 
-# Generate Prisma client
-RUN pnpm --filter @repo/database generate
+# Generate Prisma client (dummy URLs - generate only creates types, no DB connection)
+RUN DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy?pgbouncer=true" \
+    DIRECT_URL="postgresql://dummy:dummy@localhost:5432/dummy" \
+    pnpm --filter @repo/database generate
 
-# Build target app
-RUN pnpm --filter ${APP_NAME} build
+# Build target app (NEXT_PUBLIC vars are baked at build time via Railway env)
+RUN DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy?pgbouncer=true" \
+    DIRECT_URL="postgresql://dummy:dummy@localhost:5432/dummy" \
+    pnpm --filter ${APP_NAME} build
 
 # ---- Runner: production ----
 FROM node:22-alpine AS runner
