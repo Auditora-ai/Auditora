@@ -275,6 +275,23 @@
         "description": "Metodología sistemática para identificar y priorizar riesgos. Automatizamos el cálculo de Severidad, Ocurrencia, Detección y RPN."
       },
       "radarCaption": "Exposición al riesgo antes y después de implementar procesos con Auditora"
+    },
+    "liveDemo": {
+      "badge": "Simulación interactiva",
+      "title": "Pon a prueba tu instinto",
+      "subtitle": "Una decisión. Tres opciones. Descubre si te alineas con las mejores prácticas — o si eres parte del 45% que se equivoca.",
+      "cardBadge": "Simulación de decisión",
+      "processLabel": "Proceso: Control de Calidad de Proveedores",
+      "scenario": "Un proveedor entrega <danger>materia prima contaminada</danger> que pasó la inspección de entrada. Como <role>COO</role>, tú:",
+      "optionA": "Detienes la línea de producción inmediatamente, pones en cuarentena el lote y notificas al equipo de calidad",
+      "optionB": "Pones en cuarentena el lote y cambias al proveedor de respaldo mientras investigas",
+      "optionC": "Realizas pruebas de calidad en una muestra y continúas la producción pendiente de resultados",
+      "hint": "Selecciona la mejor respuesta según los SOPs de gestión de calidad",
+      "yourAnswer": "Tu respuesta: Opción {letter}",
+      "resultExplanation": "La respuesta correcta es A — contención inmediata. ISO 22000 y la mayoría de los SOPs de gestión de calidad requieren detener la producción al detectar contaminación para prevenir mayor exposición. La opción B retrasa el análisis de causa raíz. La opción C arriesga distribuir producto contaminado.",
+      "resultStat": "El 45% de los equipos que evaluamos se equivoca en esto. La brecha entre lo que la gente sabe y lo que hace bajo presión es donde vive el riesgo operativo.",
+      "cta": "¿Cómo respondería TU equipo? Descúbrelo.",
+      "tryAgain": "Intentar de nuevo"
     }
   },
   "tools": {
