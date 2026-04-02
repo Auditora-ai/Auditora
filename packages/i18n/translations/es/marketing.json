@@ -60,274 +60,205 @@
 			"vsProcessMining": {
 				"question": "Es esto process mining?",
 				"answer": "No. El process mining analiza logs de sistemas (ERP, CRM) para descubrir como se ejecutan los procesos en la realidad. Auditora.ai es una herramienta de descubrimiento de procesos basada en elicitacion: guia conversaciones estructuradas para documentar procesos y analizar riesgos. Son enfoques complementarios. El process mining requiere datos de sistema; Auditora.ai trabaja con conocimiento humano."
+			},
+			"simulations": {
+				"question": "Que son las simulaciones estilo Harvard?",
+				"answer": "Escenarios de decision generados por IA basados en tus mapas de procesos reales y riesgos identificados. Cada escenario presenta dilemas operativos realistas donde los miembros del equipo toman decisiones bajo presion. El sistema califica sus decisiones en tres dimensiones: alineacion con procedimientos, conciencia de riesgos y criterios de decision. Piensa en ello como un simulador de vuelo para equipos operativos."
+			},
+			"procedures": {
+				"question": "Puede Auditora generar procedimientos operativos estandar?",
+				"answer": "Si. Una vez documentados los procesos, la IA genera SOPs versionados (Procedimientos Operativos Estandar) con objetivos, alcance, responsables, instrucciones paso a paso, controles y KPIs. Revisas y apruebas cada version antes de publicarla."
 			}
 		}
 	},
 	"home": {
 		"hero": {
-			"badge": "Plataforma de descubrimiento de procesos con IA",
-			"title": "Descubrimiento y analisis de procesos con metodologia probada",
-			"subtitle": "Combinamos inteligencia artificial con frameworks estandar (SIPOC, BPMN 2.0 y FMEA) para ayudar a consultores y auditores a mapear procesos y evaluar riesgos de forma estructurada.",
+			"badge": "La plataforma de consultoria con IA",
+			"title": "Convierte cualquier organizacion en un mapa de procesos vivo",
+			"subtitle": "Descubre procesos, evalua riesgos, genera procedimientos y simula decisiones — todo impulsado por IA y fundamentado en metodologia comprobada.",
 			"inputPlaceholder": "https://tu-empresa.com",
-			"cta": "Analizar mi negocio gratis",
+			"cta": "Analizar cualquier empresa gratis",
 			"ctaSecondary": "Describir el proceso manualmente",
-			"subtext": "Ingresa una URL. La IA analiza el contexto publico y genera un diagnostico inicial con mapa de procesos y analisis de riesgos.",
-			"alt": {
-				"badge": "La herramienta que le faltaba a tu practica",
-				"title": "Cada proceso sin documentar es un riesgo que estas firmando",
-				"subtitle": "Tus clientes tienen procesos criticos que nadie ha mapeado. Auditora.ai los descubre: elicitacion SIPOC guiada por IA, diagramas BPMN 2.0 automaticos y matriz FMEA con puntuacion de severidad. En una fraccion del tiempo.",
-				"cta": "Ver diagnostico de mi negocio",
-				"subtext": "Ingresa tu URL corporativa. Recibe un mapa de procesos y analisis de riesgos en minutos — sin registro, sin compromisos."
-			}
+			"subtext": "Sin registro. Ingresa una URL y obtén un mapa SIPOC + evaluacion de riesgos en 2 minutos."
+		},
+		"trustBar": {
+			"subtitle": "Construido sobre estandares reconocidos",
+			"frameworks": [
+				"SIPOC (Six Sigma)",
+				"BPMN 2.0 (OMG)",
+				"FMEA (ISO 17359)",
+				"ISO 31000 (Gestion de Riesgos)"
+			]
 		},
 		"problem": {
-			"badge": "El problema",
-			"title": "El descubrimiento tradicional de procesos presenta limitaciones importantes",
-			"card1": {
-				"title": "Semanas de entrevistas y multiples rondas de revision",
-				"description": "Requiere semanas de entrevistas y multiples rondas de revision para obtener un mapa de procesos inicial."
+			"badge": "Por que ahora",
+			"title": "Tus competidores mapean procesos 8x mas rapido",
+			"stat": "73",
+			"statLabel": "% de las organizaciones carecen de procesos documentados para operaciones criticas",
+			"statSource": "Gartner, 2024",
+			"pain1": {
+				"title": "Semanas perdidas en entrevistas",
+				"description": "El descubrimiento tradicional de procesos requiere 3-6 semanas de entrevistas y multiples rondas de revision antes de tener un mapa util."
 			},
-			"card2": {
-				"title": "Los diagramas manuales se vuelven obsoletos",
-				"description": "Los diagramas manuales se vuelven obsoletos rapidamente y requieren actualizacion constante."
+			"pain2": {
+				"title": "Diagramas que mueren el primer dia",
+				"description": "Los diagramas de Visio y PowerPoint quedan obsoletos en cuanto cambian las operaciones. Sin versionado, sin trazabilidad."
 			},
-			"card3": {
-				"title": "Process mining requiere event logs y accesos tecnicos",
-				"description": "Las herramientas de process mining requieren event logs y accesos tecnicos que la mayoria de las organizaciones no tienen disponibles."
-			},
-			"card4": {
-				"title": "Soluciones genericas de IA sin estructura metodologica",
-				"description": "Las soluciones genericas de IA carecen de estructura metodologica y generan resultados dificiles de defender."
+			"pain3": {
+				"title": "Riesgos ocultos a simple vista",
+				"description": "Sin un analisis FMEA estructurado, los modos de falla criticos pasan desapercibidos hasta que se convierten en incidentes."
 			}
 		},
-		"solution": {
-			"badge": "La solucion",
-			"title": "Auditora.ai acelera el mapeo y analisis de procesos",
-			"description": "La plataforma combina IA con metodologias probadas para generar un diagnostico inicial a partir de informacion publica y enriquecerlo mediante una conversacion guiada estructurada.",
-			"diff1": {
-				"title": "Metodologia SIPOC integrada",
-				"description": "Cada sesion sigue el framework SIPOC (Proveedores, Entradas, Proceso, Salidas, Clientes). La IA detecta brechas de cobertura y genera preguntas contextuales para cerrarlas."
+		"productFlow": {
+			"badge": "La plataforma",
+			"title": "Una plataforma. Seis capacidades. Cero fragmentacion.",
+			"subtitle": "Reemplaza hojas de calculo, pizarras y cinco herramientas diferentes con un espacio de trabajo de consultoria impulsado por IA.",
+			"step1": {
+				"number": "01",
+				"title": "Descubrir",
+				"description": "Escanea un sitio web o inicia una conversacion guiada. La IA genera un mapa SIPOC inicial y una evaluacion de riesgos en minutos."
 			},
-			"diff2": {
-				"title": "Diagramas BPMN 2.0 en tiempo real",
-				"description": "El diagrama se construye durante la sesion. Exportable a XML, compatible con Camunda, Signavio y cualquier herramienta BPMN 2.0."
+			"step2": {
+				"number": "02",
+				"title": "Mapear",
+				"description": "Transforma conversaciones en diagramas BPMN 2.0 interactivos en tiempo real. Compatible con Camunda, Signavio y cualquier herramienta BPMN."
 			},
-			"diff3": {
-				"title": "Matriz FMEA con RPN por actividad",
-				"description": "Cada actividad se evalua contra modos de falla potenciales. Se calcula Severidad, Ocurrencia, Deteccion y Numero de Prioridad de Riesgo."
+			"step3": {
+				"number": "03",
+				"title": "Evaluar",
+				"description": "Matriz FMEA, mapas de calor 5x5, registros de riesgos con mitigaciones y controles — automatizados, no en hojas de calculo."
+			},
+			"step4": {
+				"number": "04",
+				"title": "Documentar",
+				"description": "Genera SOPs versionados a partir de tu documentacion de procesos. La IA redacta los procedimientos, tu revisas y apruebas."
+			},
+			"step5": {
+				"number": "05",
+				"title": "Simular",
+				"description": "Pon a prueba la capacidad de decision de tu equipo con escenarios estilo Harvard generados por IA basados en tus procesos y riesgos reales."
+			},
+			"step6": {
+				"number": "06",
+				"title": "Medir",
+				"description": "Mide el riesgo humano en tu organizacion con simulaciones calificadas, analisis de fortalezas y areas de riesgo, y paneles para todo el equipo."
+			}
+		},
+		"simulation": {
+			"badge": "Capacidad unica",
+			"title": "Pon a prueba tu equipo antes de que una crisis lo haga",
+			"subtitle": "La IA genera escenarios de decision a partir de tus procesos BPMN reales y riesgos identificados. Tu gente toma decisiones bajo presion. Tu mides su preparacion.",
+			"exampleQuestion": "Un proveedor entrega materia prima contaminada. Como COO, tu:",
+			"exampleOptionA": "A) Detienes la linea de produccion inmediatamente y notificas al equipo de calidad",
+			"exampleOptionB": "B) Pones en cuarentena el lote y cambias al proveedor de respaldo",
+			"exampleOptionC": "C) Realizas pruebas de calidad y continuas la produccion pendiente de los resultados",
+			"feature1": {
+				"title": "Basado en tu realidad",
+				"description": "Los escenarios se generan a partir de tus mapas de procesos reales, no de plantillas genericas. Cada decision evalua un riesgo operativo real."
+			},
+			"feature2": {
+				"title": "Evaluacion por rol",
+				"description": "Escenarios personalizados para CEOs, COOs, CFOs, Directores de Operaciones, Gerentes de Calidad y roles personalizados."
+			},
+			"feature3": {
+				"title": "Riesgo humano medible",
+				"description": "Puntuaciones en tres dimensiones: alineacion, nivel de riesgo y criterios de decision. Haz seguimiento de la preparacion individual y del equipo."
+			}
+		},
+		"features": {
+			"badge": "Capacidades",
+			"title": "Todo lo que necesita una consultoria",
+			"subtitle": "Desde el descubrimiento hasta la evaluacion — una plataforma reemplaza todo tu conjunto de herramientas.",
+			"feature1": {
+				"title": "Descubrimiento de Procesos con IA",
+				"description": "Escanea un sitio web o guia una conversacion. La IA mapea la estructura SIPOC, identifica patrones de industria y detecta riesgos automaticamente.",
+				"icon": "scan"
+			},
+			"feature2": {
+				"title": "Diagramas BPMN 2.0",
+				"description": "Diagramas profesionales construidos en tiempo real. Exporta XML, PNG, PDF. Compatible con Camunda, Signavio, Bizagi.",
+				"icon": "diagram"
+			},
+			"feature3": {
+				"title": "Evaluacion de Riesgos",
+				"description": "Matriz FMEA, mapas de calor, registros de riesgos con mitigaciones, controles y seguimiento de riesgo residual.",
+				"icon": "shield"
+			},
+			"feature4": {
+				"title": "Elicitacion con IA",
+				"description": "La IA detecta brechas en tu mapa de procesos y formula preguntas dirigidas. Cada respuesta cierra una brecha especifica.",
+				"icon": "message"
+			},
+			"feature5": {
+				"title": "Generacion de Procedimientos",
+				"description": "La IA redacta SOPs versionados a partir de la documentacion de procesos. Flujo de trabajo de revision, aprobacion y publicacion.",
+				"icon": "document"
+			},
+			"feature6": {
+				"title": "Simulaciones Estilo Harvard",
+				"description": "Escenarios de decision generados a partir de procesos reales. Califica la preparacion del equipo e identifica brechas de capacitacion.",
+				"icon": "play"
 			}
 		},
 		"howItWorks": {
-			"badge": "Diagnostico inicial",
-			"title": "Diagnostico inicial a partir de informacion publica",
-			"subtitle": "Un punto de partida estructurado basado en las paginas web publicas de la organizacion.",
+			"badge": "Pruébalo ahora",
+			"title": "De URL a mapa de procesos en 3 pasos",
 			"step1": {
-				"title": "Ingresa la URL de la organizacion",
-				"description": "Proporciona la direccion web de la organizacion que deseas analizar."
+				"number": "1",
+				"title": "Ingresa la URL de cualquier empresa",
+				"description": "Pega el sitio web de la organizacion que deseas analizar."
 			},
 			"step2": {
-				"title": "La IA analiza las paginas publicas disponibles",
-				"description": "El sistema procesa el contenido publico para identificar industria, servicios y estructura operativa."
+				"number": "2",
+				"title": "La IA analiza en tiempo real",
+				"description": "El sistema explora las paginas publicas, identifica la industria, los servicios y la estructura operativa."
 			},
 			"step3": {
-				"title": "Genera un mapa SIPOC inicial y evaluacion de riesgos",
-				"description": "Se genera un mapa SIPOC inicial y una evaluacion preliminar de riesgos estructurales."
-			},
-			"step4": {
-				"title": "Prepara la base para una elicitacion mas profunda",
-				"description": "El diagnostico sirve como punto de partida para la conversacion guiada con mayor profundidad."
-			},
-			"disclaimer": "Este analisis es un punto de partida. La precision aumenta con la informacion que aportes durante la conversacion guiada."
-		},
-		"deepDive": {
-			"badge": "Elicitacion guiada",
-			"title": "Elicitacion estructurada mediante conversacion guiada",
-			"subtitle": "La IA formula preguntas especificas basadas en las brechas detectadas, siguiendo principios de SIPOC y FMEA. Cada respuesta enriquece el modelo y permite generar un analisis mas completo.",
-			"methodTitle": "Preguntas dirigidas basadas en brechas",
-			"methodDescription": "La IA no solicita una descripcion general del proceso. Formula preguntas especificas basadas en las brechas detectadas en el mapa SIPOC:",
-			"question1": "\"Mencionaste 3 proveedores pero solo 1 entrada. Quien mas aporta materiales o informacion a este paso?\"",
-			"question2": "\"Tu proceso tiene 5 actividades pero ninguna bifurcacion. Hay algun punto donde el flujo cambie segun una condicion?\"",
-			"question3": "\"Identificaste al cliente final pero no al cliente interno. Quien recibe el output de este paso antes de que llegue al cliente?\"",
-			"methodNote": "Cada pregunta cierra una brecha especifica del modelo.",
-			"outputTitle": "Comparativa de resultados",
-			"instant": {
-				"label": "Diagnostico inicial",
-				"processes": "1 proceso mapeado",
-				"risks": "3-5 riesgos generales",
-				"analysis": "Puntuacion basica",
-				"diagram": "SIPOC basico"
-			},
-			"guided": {
-				"label": "Despues de conversacion guiada",
-				"processes": "Proceso enriquecido con 2-3x mas actividades",
-				"risks": "10-15+ riesgos especificos con modos de falla",
-				"analysis": "FMEA completo con RPN por actividad",
-				"diagram": "BPMN 2.0 exportable"
+				"number": "3",
+				"title": "Obtén SIPOC + evaluacion de riesgos",
+				"description": "Recibe un mapa de procesos inicial con puntuaciones de riesgo y un reporte PDF descargable."
 			}
 		},
-		"platform": {
-			"badge": "La plataforma",
-			"title": "Entregables profesionales",
-			"subtitle": "La plataforma genera documentacion lista para presentar a stakeholders y equipos de auditoria.",
-			"feature1": {
-				"title": "Diagramas BPMN 2.0 exportables",
-				"description": "Diagramas generados automaticamente durante la sesion. Exporta XML, PNG o PDF. Compatible con Camunda, Signavio, Bizagi."
+		"useCases": {
+			"badge": "Para quien es",
+			"title": "Construido para quienes mapean los procesos del mundo",
+			"tab1": {
+				"label": "Consultores",
+				"title": "Entrega mas rapido, gana mas proyectos",
+				"description": "Reemplaza semanas de entrevistas manuales con descubrimiento impulsado por IA. Genera entregables listos para stakeholders en horas, no meses. El ciclo completo de consultoria en una plataforma."
 			},
-			"feature2": {
-				"title": "Matriz FMEA completa con calculo de RPN",
-				"description": "Cada actividad evaluada contra modos de falla potenciales con calculo de Severidad, Ocurrencia, Deteccion y RPN."
+			"tab2": {
+				"label": "Auditores",
+				"title": "Audita con evidencia, no con suposiciones",
+				"description": "La metodologia SIPOC estructurada proporciona trazabilidad completa para auditorias internas y externas. Matrices FMEA con puntuacion RPN. Registros de riesgos con seguimiento de mitigaciones. Exporta reportes de auditoria profesionales."
 			},
-			"feature3": {
-				"title": "Identificacion de riesgos por actividad",
-				"description": "Riesgos mapeados directamente a cada actividad del proceso, con trazabilidad completa."
-			},
-			"feature4": {
-				"title": "Reportes listos para stakeholders",
-				"description": "Exporta reportes profesionales con mapas de proceso, matrices de riesgo y recomendaciones estructuradas."
-			},
-			"feature5": {
-				"title": "Historial de analisis y versiones",
-				"description": "Cada iteracion del analisis se almacena con historial de cambios. Compara versiones y rastrea la evolucion del proceso."
-			},
-			"cta": "Crear cuenta gratuita",
-			"ctaSubtext": "Todo lo que generaste en el diagnostico gratuito migra automaticamente a tu cuenta."
-		},
-		"bento": {
-			"badge": "Plataforma",
-			"title": "Todo lo que necesitas para descubrir, analizar y documentar procesos",
-			"subtitle": "Una plataforma que reemplaza hojas de cálculo, pizarras y herramientas manuales de diagramación.",
-			"process": {
-				"title": "Descubrimiento de Procesos con IA",
-				"description": "Escanea un sitio web o inicia una conversación guiada. La IA identifica la industria, servicios y mapea la estructura SIPOC completa automáticamente."
-			},
-			"bpmn": {
-				"title": "Modelado BPMN 2.0 en Tiempo Real",
-				"description": "Diagramas profesionales construidos durante la sesión. Tareas, gateways, pools, lanes — toda la notación estándar BPMN 2.0 con layout ELK."
-			},
-			"fmea": {
-				"title": "Matriz de Riesgos FMEA",
-				"description": "Cada actividad evaluada por Severidad, Ocurrencia y Detección. Números de Prioridad de Riesgo calculados automáticamente con mapas de calor."
-			},
-			"elicitation": {
-				"title": "Elicitación Inteligente con IA",
-				"description": "La IA detecta huecos en tu mapa de procesos y formula preguntas específicas. Cada respuesta cierra un hueco concreto — no prompts genéricos."
-			},
-			"export": {
-				"title": "Exporta a Cualquier Herramienta",
-				"description": "Entregables profesionales listos para stakeholders. Compatible con Camunda, Signavio, Bizagi y cualquier herramienta BPMN 2.0."
+			"tab3": {
+				"label": "Operaciones",
+				"title": "Excelencia operativa, sistematizada",
+				"description": "Mapea cada proceso critico, identifica riesgos ocultos, genera procedimientos estandarizados. Simula escenarios de decision para evaluar la preparacion del equipo antes de que ocurran incidentes."
 			}
 		},
-		"showcase": {
-			"badge": "Demo en Vivo",
-			"title": "Velólo en acción",
-			"subtitle": "Desde el escaneo hasta entregables profesionales — todo el flujo ocurre en una plataforma.",
-			"discover": "Descubrir",
-			"analyze": "Analizar",
-			"document": "Documentar",
-			"monitor": "Monitorear",
-			"cta": "Iniciar prueba gratis"
-		},
-		"workflow": {
-			"badge": "Como funciona",
-			"title": "El ciclo de consultoría completo, potenciado por IA",
-			"subtitle": "Desde el escaneo inicial hasta entregables profesionales — una metodología estructurada que escala con cada proyecto.",
-			"scan": {
-				"title": "Escanear",
-				"description": "Ingresa una URL. La IA analiza las páginas públicas y genera un mapa de procesos inicial."
-			},
-			"discover": {
-				"title": "Descubrir",
-				"description": "La elicitación guiada por IA identifica actividades, inputs, outputs y stakeholders."
-			},
-			"analyze": {
-				"title": "Analizar",
-				"description": "Matriz FMEA con scoring de riesgos, modos de falla y RPN por actividad."
-			},
-			"document": {
-				"title": "Documentar",
-				"description": "Tablas SIPOC, diagramas BPMN y SOPs generados automáticamente."
-			},
-			"simulate": {
-				"title": "Simular",
-				"description": "Ejecuta simulaciones de escenarios para probar la resiliencia de los procesos."
-			},
-			"evaluate": {
-				"title": "Evaluar",
-				"description": "Puntúa riesgos, da seguimiento a mitigaciones y entrega reportes profesionales."
-			}
+		"finalCta": {
+			"title": "Tu primer mapa de procesos esta a 2 minutos",
+			"subtitle": "Sin registro. Sin tarjeta de credito. Ingresa una URL y descubre lo que Auditora.ai puede encontrar sobre cualquier organizacion.",
+			"cta": "Iniciar escaneo gratis",
+			"note": "El diagnostico gratuito incluye mapa SIPOC, evaluacion de riesgos y reporte PDF."
 		},
 		"credibility": {
-			"badge": "Metodologia",
-			"title": "Construido sobre frameworks reconocidos",
+			"badge": "Metodología",
+			"title": "Construido sobre marcos reconocidos",
 			"pillar1": {
 				"title": "SIPOC (Six Sigma)",
-				"description": "Framework estandar para mapeo de procesos: Proveedores, Entradas, Proceso, Salidas, Clientes. Automatizamos la estructura que los consultores senior ya utilizan."
+				"description": "Marco estándar para mapeo de procesos: Proveedores, Insumos, Proceso, Productos, Clientes. Automatizamos la estructura que los consultores senior ya utilizan."
 			},
 			"pillar2": {
 				"title": "BPMN 2.0 (OMG)",
-				"description": "Notacion estandar de la industria para modelado de procesos de negocio. Diagramas interoperables y exportables."
+				"description": "Notación estándar de la industria para modelado de procesos de negocio. Diagramas interoperables y exportables."
 			},
 			"pillar3": {
-				"title": "FMEA (Analisis de Modos de Falla)",
-				"description": "Metodologia sistematica para identificar y priorizar riesgos. Automatizamos el calculo de Severidad, Ocurrencia, Deteccion y RPN."
+				"title": "FMEA (Análisis de Modos de Falla)",
+				"description": "Metodología sistemática para identificar y priorizar riesgos. Automatizamos el cálculo de Severidad, Ocurrencia, Detección y RPN."
 			}
-		},
-		"socialProof": {
-			"badge": "Casos de uso",
-			"title": "Lo que dicen los profesionales",
-			"testimonial1": {
-				"quote": "Redujo significativamente el tiempo de mapeo inicial. La matriz FMEA generada es clara y util para presentaciones directivas.",
-				"name": "Maria Rodriguez",
-				"role": "Consultora Senior",
-				"company": "Firma de Consultoria"
-			},
-			"testimonial2": {
-				"quote": "Permite que consultores junior entreguen analisis de mayor calidad desde las primeras sesiones.",
-				"name": "Carlos Mendez",
-				"role": "Gerente de Mejora Continua",
-				"company": "Empresa Manufacturera"
-			},
-			"testimonial3": {
-				"quote": "La trazabilidad de la metodologia SIPOC proporciona la evidencia necesaria para auditorias internas. El proceso es transparente y documentable.",
-				"name": "Ana Torres",
-				"role": "Auditora Interna",
-				"company": "Institucion Financiera"
-			},
-			"logosLabel": "Utilizado por equipos de consultoria y auditoria en"
-		},
-		"logos": {
-			"title": "Profesionales de múltiples industrias confían en nosotros",
-			"categories": {
-				"consulting": "Consultoría",
-				"finance": "Finanzas y Banca",
-				"manufacturing": "Manufactura",
-				"healthcare": "Salud",
-				"audit": "Auditoría y Cumplimiento",
-				"technology": "Tecnología",
-				"retail": "Retail y E-commerce",
-				"logistics": "Logística y Transporte"
-			}
-		},
-		"metrics": {
-			"badge": "Resultados",
-			"title": "Impacto medible desde el primer día",
-			"metric1": {
-				"label": "Más rápido que métodos tradicionales"
-			},
-			"metric2": {
-				"label": "Cobertura de procesos"
-			},
-			"metric3": {
-				"label": "Elementos SIPOC identificados"
-			},
-			"metric4": {
-				"label": "Frameworks integrados"
-			}
-		},
-		"tools": {
-			"title": "Herramientas IA Gratis para Profesionales de Procesos",
-			"subtitle": "La misma IA que analiza tu negocio, ahora como herramientas independientes. Sin registro.",
-			"viewAll": "Ver todas las herramientas"
 		}
 	},
 	"newsletter": {
@@ -346,10 +277,10 @@
 		"title": "Acceso anticipado"
 	},
 	"cta": {
-		"title": "Comienza a mapear procesos con mayor rigor y velocidad",
-		"subtitle": "Diagnostico inicial gratuito. Conversacion guiada para mayor profundidad. Entregables profesionales.",
-		"button": "Probar Auditora.ai gratis",
-		"note": "Sin tarjeta. Sin registro. Tu primer mapa de procesos en minutos."
+		"title": "Tu primer mapa de procesos esta a 2 minutos",
+		"subtitle": "Sin registro. Sin tarjeta de credito. Ingresa una URL y descubre lo que Auditora.ai puede encontrar.",
+		"button": "Iniciar escaneo gratis",
+		"note": "El diagnostico gratuito incluye mapa SIPOC, evaluacion de riesgos y reporte PDF."
 	},
 	"notFound": {
 		"code": "404",

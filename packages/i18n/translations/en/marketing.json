@@ -60,201 +60,189 @@
 			"vsProcessMining": {
 				"question": "Is this process mining?",
 				"answer": "No. Process mining analyzes system logs (ERP, CRM) to discover how processes actually execute. Auditora.ai is an elicitation-based process discovery tool: it guides structured conversations to document processes and analyze risks. These are complementary approaches. Process mining requires system data; Auditora.ai works with human knowledge."
+			},
+			"simulations": {
+				"question": "What are Harvard-style simulations?",
+				"answer": "AI-generated decision scenarios based on your actual process maps and identified risks. Each scenario presents realistic operational dilemmas where team members make choices under pressure. The system scores their decisions across three dimensions: alignment with procedures, risk awareness, and decision criteria. Think of it as a flight simulator for operations teams."
+			},
+			"procedures": {
+				"question": "Can Auditora generate standard operating procedures?",
+				"answer": "Yes. Once processes are documented, AI generates versioned SOPs (Standard Operating Procedures) with objectives, scope, responsible parties, step-by-step instructions, controls, and KPIs. You review and approve each version before publishing."
 			}
 		}
 	},
 	"home": {
 		"hero": {
-			"badge": "AI-powered process discovery platform",
-			"title": "Process discovery and analysis with proven methodology",
-			"subtitle": "We combine artificial intelligence with standard frameworks (SIPOC, BPMN 2.0, and FMEA) to help consultants and auditors map processes and assess risks in a structured way.",
+			"badge": "The AI-powered consulting platform",
+			"title": "Turn any organization into a living process map",
+			"subtitle": "Discover processes, assess risks, generate procedures, and simulate decisions — all powered by AI and grounded in proven methodology.",
 			"inputPlaceholder": "https://your-company.com",
-			"cta": "Analyze my business free",
+			"cta": "Scan any company free",
 			"ctaSecondary": "Describe the process manually",
-			"subtext": "Enter a URL. The AI analyzes the public context and generates an initial diagnostic with process map and risk analysis.",
-			"alt": {
-				"badge": "The missing tool for your practice",
-				"title": "Every undocumented process is a risk you're signing off on",
-				"subtitle": "Your clients have critical processes nobody has mapped. Auditora.ai discovers them: AI-guided SIPOC elicitation, automatic BPMN 2.0 diagrams, and FMEA matrix with severity scoring. In a fraction of the time.",
-				"cta": "See diagnostic of my business",
-				"subtext": "Enter your corporate URL. Receive a process map and risk analysis in minutes — no signup, no commitments."
-			}
+			"subtext": "No signup required. Enter a URL and get a SIPOC map + risk assessment in 2 minutes."
+		},
+		"trustBar": {
+			"subtitle": "Built on recognized standards",
+			"frameworks": [
+				"SIPOC (Six Sigma)",
+				"BPMN 2.0 (OMG)",
+				"FMEA (ISO 17359)",
+				"ISO 31000 (Risk Management)"
+			]
 		},
 		"problem": {
-			"badge": "The problem",
-			"title": "Traditional process discovery has significant limitations",
-			"card1": {
-				"title": "Weeks of interviews and multiple rounds of revision",
-				"description": "Requires weeks of interviews and multiple rounds of revision to obtain an initial process map."
+			"badge": "Why now",
+			"title": "Your competitors are mapping processes 8x faster",
+			"stat": "73",
+			"statLabel": "% of organizations lack documented processes for critical operations",
+			"statSource": "Gartner, 2024",
+			"pain1": {
+				"title": "Weeks lost to interviews",
+				"description": "Traditional process discovery requires 3-6 weeks of interviews and multiple revision rounds before you have a usable map."
 			},
-			"card2": {
-				"title": "Manual diagrams become obsolete quickly",
-				"description": "Manual diagrams become obsolete rapidly and require constant updating."
+			"pain2": {
+				"title": "Diagrams that die on day one",
+				"description": "Visio and PowerPoint diagrams become obsolete the moment operations change. No versioning, no traceability."
 			},
-			"card3": {
-				"title": "Process mining requires event logs and technical access",
-				"description": "Process mining tools require event logs and technical access that most organizations don't have available."
-			},
-			"card4": {
-				"title": "Generic AI solutions lack methodological structure",
-				"description": "Generic AI solutions lack methodological structure and produce results that are difficult to defend."
+			"pain3": {
+				"title": "Risks hiding in plain sight",
+				"description": "Without structured FMEA analysis, critical failure modes go undetected until they become incidents."
 			}
 		},
-		"solution": {
-			"badge": "The solution",
-			"title": "Auditora.ai accelerates process mapping and analysis",
-			"description": "The platform combines AI with proven methodologies to generate an initial diagnostic from public information and enrich it through a structured guided conversation.",
-			"diff1": {
-				"title": "Integrated SIPOC methodology",
-				"description": "Every session follows the SIPOC framework (Suppliers, Inputs, Process, Outputs, Customers). The AI detects coverage gaps and generates contextual questions to close them."
+		"productFlow": {
+			"badge": "The platform",
+			"title": "One platform. Six capabilities. Zero fragmentation.",
+			"subtitle": "Replace spreadsheets, whiteboards, and five different tools with one AI-powered consulting workspace.",
+			"step1": {
+				"number": "01",
+				"title": "Discover",
+				"description": "Scan a company website or start a guided conversation. AI generates an initial SIPOC map and risk assessment in minutes."
 			},
-			"diff2": {
-				"title": "Real-time BPMN 2.0 diagrams",
-				"description": "The diagram is built during the session. Exportable to XML, compatible with Camunda, Signavio, and any BPMN 2.0 tool."
+			"step2": {
+				"number": "02",
+				"title": "Map",
+				"description": "Transform conversations into interactive BPMN 2.0 diagrams in real time. Compatible with Camunda, Signavio, and any BPMN tool."
 			},
-			"diff3": {
-				"title": "FMEA matrix with RPN per activity",
-				"description": "Each activity is evaluated against potential failure modes. Severity, Occurrence, Detection, and Risk Priority Number are calculated."
+			"step3": {
+				"number": "03",
+				"title": "Assess",
+				"description": "FMEA matrix, 5×5 heat maps, risk registers with mitigations and controls — automated, not spreadsheet-driven."
+			},
+			"step4": {
+				"number": "04",
+				"title": "Document",
+				"description": "Generate versioned SOPs from your process documentation. AI writes the procedures, you review and approve."
+			},
+			"step5": {
+				"number": "05",
+				"title": "Simulate",
+				"description": "Test your team's decision-making with AI-generated Harvard-style scenarios based on your actual processes and risks."
+			},
+			"step6": {
+				"number": "06",
+				"title": "Evaluate",
+				"description": "Measure human risk across your organization with scored simulations, strength/risk area analysis, and team-wide dashboards."
+			}
+		},
+		"simulation": {
+			"badge": "Unique capability",
+			"title": "Test your team before a crisis tests them",
+			"subtitle": "AI generates decision scenarios from your actual BPMN processes and identified risks. Your people make decisions under pressure. You measure their readiness.",
+			"exampleQuestion": "A supplier delivers contaminated raw material. As the COO, do you:",
+			"exampleOptionA": "A) Stop the production line immediately and notify the quality team",
+			"exampleOptionB": "B) Quarantine the batch and switch to backup supplier",
+			"exampleOptionC": "C) Run quality tests and continue production pending results",
+			"feature1": {
+				"title": "Grounded in your reality",
+				"description": "Scenarios are generated from your actual process maps, not generic templates. Each decision tests a real operational risk."
+			},
+			"feature2": {
+				"title": "Role-specific evaluation",
+				"description": "Scenarios tailored for CEOs, COOs, CFOs, Operations Directors, Quality Managers, and custom roles."
+			},
+			"feature3": {
+				"title": "Measurable human risk",
+				"description": "Scores across three dimensions: alignment, risk level, and decision criteria. Track individual and team-wide readiness."
+			}
+		},
+		"features": {
+			"badge": "Capabilities",
+			"title": "Everything a consulting engagement needs",
+			"subtitle": "From discovery to evaluation — one platform replaces your entire toolkit.",
+			"feature1": {
+				"title": "AI Process Discovery",
+				"description": "Scan a website or guide a conversation. AI maps SIPOC structure, identifies industry patterns, and detects risks automatically.",
+				"icon": "scan"
+			},
+			"feature2": {
+				"title": "BPMN 2.0 Diagrams",
+				"description": "Professional diagrams built in real time. Export XML, PNG, PDF. Compatible with Camunda, Signavio, Bizagi.",
+				"icon": "diagram"
+			},
+			"feature3": {
+				"title": "Risk Assessment",
+				"description": "FMEA matrix, heat maps, risk registers with mitigations, controls, and residual risk tracking.",
+				"icon": "shield"
+			},
+			"feature4": {
+				"title": "AI Elicitation",
+				"description": "AI detects gaps in your process map and asks targeted questions. Each answer closes a specific gap.",
+				"icon": "message"
+			},
+			"feature5": {
+				"title": "Procedure Generation",
+				"description": "AI writes versioned SOPs from process documentation. Review, approve, publish workflow.",
+				"icon": "document"
+			},
+			"feature6": {
+				"title": "Harvard-Style Simulations",
+				"description": "Decision scenarios generated from real processes. Score team readiness and identify training gaps.",
+				"icon": "play"
 			}
 		},
 		"howItWorks": {
-			"badge": "Initial diagnostic",
-			"title": "Initial diagnostic from public information",
-			"subtitle": "A structured starting point based on the organization's public web pages.",
+			"badge": "Try it now",
+			"title": "From URL to process map in 3 steps",
 			"step1": {
-				"title": "Enter the organization's URL",
-				"description": "Provide the web address of the organization you want to analyze."
+				"number": "1",
+				"title": "Enter any company URL",
+				"description": "Paste the website of the organization you want to analyze."
 			},
 			"step2": {
-				"title": "The AI analyzes available public pages",
-				"description": "The system processes public content to identify industry, services, and operational structure."
+				"number": "2",
+				"title": "AI analyzes in real time",
+				"description": "The system crawls public pages, identifies the industry, services, and operational structure."
 			},
 			"step3": {
-				"title": "Generates an initial SIPOC map and risk assessment",
-				"description": "An initial SIPOC map and preliminary assessment of structural risks are generated."
-			},
-			"step4": {
-				"title": "Prepares the foundation for deeper elicitation",
-				"description": "The diagnostic serves as a starting point for a more in-depth guided conversation."
-			},
-			"disclaimer": "This analysis is a starting point. Precision increases with the information you provide during the guided conversation."
-		},
-		"deepDive": {
-			"badge": "Guided elicitation",
-			"title": "Structured elicitation through guided conversation",
-			"subtitle": "The AI formulates specific questions based on detected gaps, following SIPOC and FMEA principles. Each response enriches the model and enables a more complete analysis.",
-			"methodTitle": "Targeted questions based on gaps",
-			"methodDescription": "The AI does not request a general process description. It formulates specific questions based on gaps detected in the SIPOC map:",
-			"question1": "\"You mentioned 3 suppliers but only 1 input. Who else provides materials or information to this step?\"",
-			"question2": "\"Your process has 5 activities but no branching. Is there a point where the flow changes based on a condition?\"",
-			"question3": "\"You identified the end customer but not the internal customer. Who receives this step's output before it reaches the customer?\"",
-			"methodNote": "Each question closes a specific gap in the model.",
-			"outputTitle": "Results comparison",
-			"instant": {
-				"label": "Initial diagnostic",
-				"processes": "1 process mapped",
-				"risks": "3-5 general risks",
-				"analysis": "Basic scoring",
-				"diagram": "Basic SIPOC"
-			},
-			"guided": {
-				"label": "After guided conversation",
-				"processes": "Enriched process with 2-3x more activities",
-				"risks": "10-15+ specific risks with failure modes",
-				"analysis": "Complete FMEA with RPN per activity",
-				"diagram": "Exportable BPMN 2.0"
+				"number": "3",
+				"title": "Get SIPOC + risk assessment",
+				"description": "Receive an initial process map with risk scores and a downloadable PDF report."
 			}
 		},
-		"platform": {
-			"badge": "The platform",
-			"title": "Professional deliverables",
-			"subtitle": "The platform generates documentation ready to present to stakeholders and audit teams.",
-			"feature1": {
-				"title": "Exportable BPMN 2.0 diagrams",
-				"description": "Diagrams generated automatically during the session. Export XML, PNG, or PDF. Compatible with Camunda, Signavio, Bizagi."
+		"useCases": {
+			"badge": "Who it's for",
+			"title": "Built for the people who map the world's processes",
+			"tab1": {
+				"label": "Consultants",
+				"title": "Deliver faster, win more engagements",
+				"description": "Replace weeks of manual interviews with AI-powered discovery. Generate stakeholder-ready deliverables in hours, not months. The complete engagement lifecycle in one platform."
 			},
-			"feature2": {
-				"title": "Complete FMEA matrix with RPN calculation",
-				"description": "Each activity evaluated against potential failure modes with Severity, Occurrence, Detection, and RPN calculation."
+			"tab2": {
+				"label": "Auditors",
+				"title": "Audit with evidence, not assumptions",
+				"description": "Structured SIPOC methodology provides full traceability for internal and external audits. FMEA matrices with RPN scoring. Risk registers with mitigation tracking. Export professional audit reports."
 			},
-			"feature3": {
-				"title": "Risk identification per activity",
-				"description": "Risks mapped directly to each process activity, with complete traceability."
-			},
-			"feature4": {
-				"title": "Stakeholder-ready reports",
-				"description": "Export professional reports with process maps, risk matrices, and structured recommendations."
-			},
-			"feature5": {
-				"title": "Analysis history and versioning",
-				"description": "Each analysis iteration is stored with change history. Compare versions and track process evolution."
-			},
-			"cta": "Create free account",
-			"ctaSubtext": "Everything you generated in the free diagnostic migrates automatically to your account."
-		},
-		"bento": {
-			"badge": "Platform",
-			"title": "Everything you need to discover, analyze, and document processes",
-			"subtitle": "One platform that replaces spreadsheets, whiteboards, and manual diagramming tools.",
-			"process": {
-				"title": "AI Process Discovery",
-				"description": "Scan a website or start a guided conversation. The AI identifies industry, services, and maps the complete SIPOC structure automatically."
-			},
-			"bpmn": {
-				"title": "Real-time BPMN 2.0 Modeling",
-				"description": "Professional diagrams built during the session. Tasks, gateways, pools, lanes — all standard BPMN 2.0 notation with ELK-powered layout."
-			},
-			"fmea": {
-				"title": "FMEA Risk Matrix",
-				"description": "Each activity scored by Severity, Occurrence, and Detection. Risk Priority Numbers calculated automatically with color-coded heat maps."
-			},
-			"elicitation": {
-				"title": "Smart AI Elicitation",
-				"description": "The AI detects gaps in your process map and asks targeted questions. Each answer closes a specific gap — not generic prompts."
-			},
-			"export": {
-				"title": "Export to Any Tool",
-				"description": "Professional deliverables ready for stakeholders. Compatible with Camunda, Signavio, Bizagi, and any BPMN 2.0 tool."
+			"tab3": {
+				"label": "Operations",
+				"title": "Operational excellence, systematized",
+				"description": "Map every critical process, identify hidden risks, generate standardized procedures. Simulate decision scenarios to evaluate team readiness before incidents occur."
 			}
 		},
-		"showcase": {
-			"badge": "Live Demo",
-			"title": "See it in action",
-			"subtitle": "From scanning to professional deliverables — the entire workflow happens in one platform.",
-			"discover": "Discover",
-			"analyze": "Analyze",
-			"document": "Document",
-			"monitor": "Monitor",
-			"cta": "Start free trial"
-		},
-		"workflow": {
-			"badge": "How it works",
-			"title": "The complete consulting lifecycle, powered by AI",
-			"subtitle": "From initial scan to professional deliverables — a structured methodology that scales with every engagement.",
-			"scan": {
-				"title": "Scan",
-				"description": "Enter a URL. The AI crawls public pages and generates an initial process map."
-			},
-			"discover": {
-				"title": "Discover",
-				"description": "AI-guided elicitation identifies activities, inputs, outputs, and stakeholders."
-			},
-			"analyze": {
-				"title": "Analyze",
-				"description": "FMEA matrix with risk scoring, failure modes, and RPN per activity."
-			},
-			"document": {
-				"title": "Document",
-				"description": "Auto-generated SIPOC tables, BPMN diagrams, and SOPs."
-			},
-			"simulate": {
-				"title": "Simulate",
-				"description": "Run scenario simulations to test process resilience and identify weaknesses."
-			},
-			"evaluate": {
-				"title": "Evaluate",
-				"description": "Score risks, track mitigation, and deliver stakeholder-ready reports."
-			}
+		"finalCta": {
+			"title": "Your first process map is 2 minutes away",
+			"subtitle": "No signup. No credit card. Enter a URL and see what Auditora.ai can discover about any organization.",
+			"cta": "Start free scan",
+			"note": "Free diagnostic includes SIPOC map, risk assessment, and PDF report."
 		},
 		"credibility": {
 			"badge": "Methodology",
@@ -271,63 +259,6 @@
 				"title": "FMEA (Failure Mode Analysis)",
 				"description": "Systematic methodology for identifying and prioritizing risks. We automate the calculation of Severity, Occurrence, Detection, and RPN."
 			}
-		},
-		"socialProof": {
-			"badge": "Use cases",
-			"title": "What professionals are saying",
-			"testimonial1": {
-				"quote": "Significantly reduced initial mapping time. The generated FMEA matrix is clear and useful for executive presentations.",
-				"name": "Maria Rodriguez",
-				"role": "Senior Consultant",
-				"company": "Consulting Firm"
-			},
-			"testimonial2": {
-				"quote": "Enables junior consultants to deliver higher quality analyses from their first sessions.",
-				"name": "Carlos Mendez",
-				"role": "Continuous Improvement Manager",
-				"company": "Manufacturing Company"
-			},
-			"testimonial3": {
-				"quote": "The traceability of the SIPOC methodology provides the evidence needed for internal audits. The process is transparent and documentable.",
-				"name": "Ana Torres",
-				"role": "Internal Auditor",
-				"company": "Financial Institution"
-			},
-			"logosLabel": "Used by consulting and audit teams at"
-		},
-		"metrics": {
-			"badge": "Results",
-			"title": "Measurable impact from day one",
-			"metric1": {
-				"label": "Faster than traditional methods"
-			},
-			"metric2": {
-				"label": "Process coverage"
-			},
-			"metric3": {
-				"label": "SIPOC elements identified"
-			},
-			"metric4": {
-				"label": "Integrated frameworks"
-			}
-		},
-		"logos": {
-			"title": "Trusted by professionals across industries",
-			"categories": {
-				"consulting": "Consulting",
-				"finance": "Finance & Banking",
-				"manufacturing": "Manufacturing",
-				"healthcare": "Healthcare",
-				"audit": "Audit & Compliance",
-				"technology": "Technology",
-				"retail": "Retail & E-commerce",
-				"logistics": "Logistics & Transport"
-			}
-		},
-		"tools": {
-			"title": "Free AI Tools for Process Professionals",
-			"subtitle": "The same AI that analyzes your business, now as standalone tools. No signup required.",
-			"viewAll": "View all tools"
 		}
 	},
 	"newsletter": {
@@ -346,10 +277,10 @@
 		"title": "Get early access"
 	},
 	"cta": {
-		"title": "Start mapping processes with greater rigor and speed",
-		"subtitle": "Free initial diagnostic. Guided conversation for deeper analysis. Professional deliverables.",
-		"button": "Try Auditora.ai free",
-		"note": "No credit card. No signup. Your first process map in minutes."
+		"title": "Your first process map is 2 minutes away",
+		"subtitle": "No signup. No credit card. Enter a URL and see what Auditora.ai can discover.",
+		"button": "Start free scan",
+		"note": "Free diagnostic includes SIPOC map, risk assessment, and PDF report."
 	},
 	"notFound": {
 		"code": "404",

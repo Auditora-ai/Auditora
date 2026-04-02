@@ -1,18 +1,15 @@
-import { BentoFeatureSection } from "@home/components/BentoFeatureSection";
-import { CredibilitySection } from "@home/components/CredibilitySection";
-import { CtaSection } from "@home/components/CtaSection";
-import { DeepDiveSection } from "@home/components/DeepDiveSection";
-import { FaqSection } from "@home/components/FaqSection";
 import { HeroSection } from "@home/components/HeroSection";
-import { LogoBar } from "@home/components/LogoBar";
-import { MetricsSection } from "@home/components/MetricsSection";
-import { PricingSection } from "@home/components/PricingSection";
+import { TrustBar } from "@home/components/TrustBar";
 import { ProblemSection } from "@home/components/ProblemSection";
-import { ProductShowcaseSection } from "@home/components/ProductShowcaseSection";
-import { SocialProofSection } from "@home/components/SocialProofSection";
-import { SolutionSection } from "@home/components/SolutionSection";
-import { WorkflowSection } from "@home/components/WorkflowSection";
-import { setRequestLocale } from "next-intl/server";
+import { ProductFlow } from "@home/components/ProductFlow";
+import { SimulationShowcase } from "@home/components/SimulationShowcase";
+import { FeaturesBento } from "@home/components/FeaturesBento";
+import { HowItWorks } from "@home/components/HowItWorks";
+import { UseCases } from "@home/components/UseCases";
+import { CredibilitySection } from "@home/components/CredibilitySection";
+import { PricingSection } from "@home/components/PricingSection";
+import { FaqSection } from "@home/components/FaqSection";
+import { FinalCta } from "@home/components/FinalCta";
 
 export default async function Home({
 	params,
@@ -20,24 +17,21 @@ export default async function Home({
 	params: Promise<{ locale: string }>;
 }) {
 	const { locale } = await params;
-	setRequestLocale(locale);
 
 	return (
 		<div data-landing>
 			<HeroSection />
-			<LogoBar />
-			<MetricsSection />
+			<TrustBar />
 			<ProblemSection />
-			<SolutionSection />
-			<ProductShowcaseSection />
-			<BentoFeatureSection />
-			<WorkflowSection />
-			<DeepDiveSection />
+			<ProductFlow />
+			<SimulationShowcase />
+			<FeaturesBento />
+			<HowItWorks />
+			<UseCases />
 			<CredibilitySection />
-			<SocialProofSection />
 			<PricingSection />
 			<FaqSection />
-			<CtaSection />
+			<FinalCta />
 		</div>
 	);
 }
