@@ -1,1870 +1,1877 @@
 {
-	"admin": {
-		"menu": {
-			"organizations": "Organizations",
-			"users": "Users"
-		},
-		"organizations": {
-			"backToList": "Back to organizations",
-			"confirmDelete": {
-				"confirm": "Delete",
-				"message": "Are you sure you want to delete this organization? This action cannot be undone.",
-				"title": "Delete organization"
-			},
-			"create": "Create",
-			"delete": "Delete",
-			"deleteOrganization": {
-				"deleted": "Organization has been deleted successfully!",
-				"deleting": "Deleting organization...",
-				"notDeleted": "Organization could not be deleted. Please try again."
-			},
-			"edit": "Edit",
-			"form": {
-				"createTitle": "Create an organization",
-				"name": "Organization name",
-				"notifications": {
-					"error": "Could not save the organization. Please try again later.",
-					"success": "Organization has been saved."
-				},
-				"save": "Save",
-				"updateTitle": "Edit organization"
-			},
-			"loading": "Loading organizations...",
-			"membersCount": "{count} {count, plural, one {member} other {members}}",
-			"search": "Search for an organization...",
-			"title": "Manage organizations"
-		},
-		"title": "Administration",
-		"users": {
-			"confirmDelete": {
-				"confirm": "Delete",
-				"message": "Are you sure you want to delete this user? This action cannot be undone.",
-				"title": "Delete user"
-			},
-			"delete": "Delete",
-			"deleteUser": {
-				"deleted": "User has been deleted successfully!",
-				"deleting": "Deleting user...",
-				"notDeleted": "User could not be deleted. Please try again."
-			},
-			"emailVerified": {
-				"verified": "Email verified",
-				"waiting": "Email waiting for verification"
-			},
-			"impersonate": "Impersonate",
-			"impersonation": {
-				"impersonating": "Impersonating as {name}..."
-			},
-			"loading": "Loading users...",
-			"resendVerificationMail": {
-				"error": "Could not resend verification mail. Please try again.",
-				"submitting": "Resending verification mail...",
-				"success": "Verification mail has been sent.",
-				"title": "Resend verification mail"
-			},
-			"search": "Search for name or email...",
-			"title": "Manage users",
-			"assignAdminRole": "Assign admin role",
-			"removeAdminRole": "Remove admin role"
-		},
-		"description": "Manage your application."
-	},
-	"app": {
-		"menu": {
-			"accountSettings": "Account settings",
-			"admin": "Admin",
-			"aiChatbot": "AI Chatbot",
-			"organizationSettings": "Settings",
-			"analytics": "Analytics",
-			"clients": "Clients",
-			"sessions": "Sessions",
-			"start": "Start",
-			"dashboard": "Overview",
-			"processes": "Processes",
-			"risks": "Risks",
-			"deliverables": "Deliverables",
-			"scan": "X-Ray",
-			"tools": "Tools",
-			"procedures": "Procedures",
-			"simulations": "Evaluations",
-			"evaluaciones": "Evaluations",
-			"evaluation": "Evaluation",
-			"workflow": "Workflow",
-			"workspace": "Workspace"
-		},
-		"greeting": {
-			"morning": "Good morning",
-			"afternoon": "Good afternoon",
-			"evening": "Good evening"
-		},
-		"badges": {
-			"critical": "{count} critical",
-			"live": "LIVE",
-			"pending": "{count} pending"
-		},
-		"actions": {
-			"registerRisk": "Register Risk",
-			"newSession": "New Session",
-			"newProcess": "New Process"
-		},
-		"status": {
-			"riskScore": "Risk score: {score}",
-			"attentionNeeded": "{count} need mitigation",
-			"underControl": "Exposure controlled",
-			"setupFirst": "Start by setting up your first client",
-			"today": "Today",
-			"tomorrow": "Tomorrow"
-		},
-		"userMenu": {
-			"accountSettings": "Account settings",
-			"colorMode": "Color mode",
-			"documentation": "Documentation",
-			"home": "Home",
-			"logout": "Logout"
-		}
-	},
-	"auth": {
-		"errors": {
-			"invalidEmailOrPassword": "The credentials you entered are invalid. Please check them and try again.",
-			"unknown": "Something went wrong. Please try again.",
-			"userNotFound": "This user does not exists",
-			"failedToCreateUser": "Could not create user. Please try again.",
-			"failedToCreateSession": "Could not create a session. Please try again.",
-			"failedToUpdateUser": "Could not update user. Please try again.",
-			"failedToGetSession": "Could not get the session.",
-			"invalidPassword": "The entered password is incorrect.",
-			"invalidEmail": "The entered email is invalid.",
-			"invalidToken": "The token you entered is invalid or has expired.",
-			"credentialAccountNotFound": "Account not found.",
-			"emailCanNotBeUpdated": "Email could not be updated. Please try again.",
-			"emailNotVerified": "Please verify your email first before logging in.",
-			"failedToGetUserInfo": "Could not load user information.",
-			"idTokenNotSupported": "ID token is not supported.",
-			"passwordTooLong": "Password is too long.",
-			"passwordTooShort": "Password is too short.",
-			"providerNotFound": "This provider is not suppported.",
-			"socialAccountAlreadyLinked": "This account is already linked to a user.",
-			"userEmailNotFound": "Email not found.",
-			"userAlreadyExists": "This user already exists.",
-			"userAlreadyExistsUseAnotherEmail": "User already exists. Use another email.",
-			"invalidInvitation": "The invitation is invalid or expired.",
-			"sessionExpired": "The session has expired.",
-			"failedToUnlinkLastAccount": "Failed to unlink account",
-			"accountNotFound": "Account not found"
-		},
-		"forgotPassword": {
-			"backToSignin": "Back to signin",
-			"email": "Email",
-			"hints": {
-				"linkNotSent": {
-					"message": "We are sorry, but we were unable to send you a link to reset your password. Please try again later.",
-					"title": "Link not sent"
-				},
-				"linkSent": {
-					"message": "We have sent you a link to continue. Please check your inbox.",
-					"title": "Link sent"
-				}
-			},
-			"message": "Please enter your email address and we will send you a link to reset your password.",
-			"submit": "Send link",
-			"title": "Forgot your password?"
-		},
-		"login": {
-			"continueWith": "Or continue with",
-			"createAnAccount": "Create an account",
-			"dontHaveAnAccount": "Don't have an account yet?",
-			"forgotPassword": "Forgot password?",
-			"hints": {
-				"invalidCredentials": "The email or password you entered are invalid. Please try again.",
-				"linkSent": {
-					"message": "We have sent you a link to continue. Please check your inbox.",
-					"title": "Link sent"
-				}
-			},
-			"loginWithPasskey": "Login with passkey",
-			"modes": {
-				"magicLink": "Magic link",
-				"password": "Password"
-			},
-			"rememberMe": "Remember me",
-			"security": "Your data is encrypted and protected",
-			"submit": "Sign in",
-			"subtitle": "Enter your credentials to continue.",
-			"title": "Welcome back",
-			"sendMagicLink": "Send magic link"
-		},
-		"showcase": {
-			"badge": "Process Intelligence Platform",
-			"login": {
-				"title": "Your processes, analyzed with precision",
-				"subtitle": "Elicit, analyze and transform business processes with real-time AI"
-			},
-			"signup": {
-				"title": "Start mapping with intelligence",
-				"subtitle": "Join the consultants transforming interviews into automatic BPMN diagrams"
-			},
-			"feature": {
-				"ai": "AI Analysis",
-				"bpmn": "BPMN Diagrams",
-				"risk": "Risk Detection"
-			},
-			"metric": {
-				"processes": "Processes mapped",
-				"organizations": "Organizations",
-				"accuracy": "Accuracy rate"
-			}
-		},
-		"resetPassword": {
-			"backToSignin": "Back to signin",
-			"hints": {
-				"error": "We are sorry, but we were unable to reset your password. Please try again.",
-				"success": "Your password has been reset successfully."
-			},
-			"message": "Please enter a new password.",
-			"newPassword": "New password",
-			"submit": "Reset password",
-			"title": "Reset your password"
-		},
-		"signup": {
-			"alreadyHaveAccount": "Already have an account?",
-			"email": "Email",
-			"hints": {
-				"signupFailed": "We are sorry, but we were unable to create your account. Please try again later.",
-				"verifyEmail": "We have sent you a link to verify your email. Please check your inbox."
-			},
-			"message": "We are happy that you want to join us. Please fill in the form below to create your account.",
-			"name": "Name",
-			"password": "Password",
-			"signIn": "Sign in",
-			"submit": "Create account",
-			"title": "Create an account",
-			"acceptTerms": "I have read and accept the <termsLink>Terms of Service</termsLink> and the <privacyLink>Privacy Policy</privacyLink>",
-			"acceptRequired": "You must accept the Terms of Service and Privacy Policy to create an account."
-		},
-		"verify": {
-			"title": "Verify your account",
-			"code": "One-time password",
-			"submit": "Verify",
-			"backToSignin": "Back to login",
-			"message": "Enter the one-time password from your authenticator app to continue."
-		}
-	},
-	"choosePlan": {
-		"title": "Choose your plan",
-		"description": "To continue, please select a plan.",
-		"trialExpiredTitle": "Your trial has ended",
-		"trialExpiredDescription": "Your 14-day free trial has expired. Choose a plan to continue using Auditora.ai."
-	},
-	"documentation": {
-		"title": "Documentation"
-	},
-	"notFound": {
-		"code": "404",
-		"title": "Page not found",
-		"goToDashboard": "Go to dashboard",
-		"goToHomepage": "Go to homepage"
-	},
-	"onboarding": {
-		"welcome": {
-			"title": "Welcome to Auditora.ai",
-			"subtitle": "Your AI-powered process elicitation platform",
-			"step1": "Create a client",
-			"step1Desc": "The company whose processes you'll map",
-			"step2": "Start a session",
-			"step2Desc": "Join a video call and let AI guide you",
-			"step3": "Get your diagram",
-			"step3Desc": "The process is diagrammed automatically in BPMN",
-			"cta": "Start your first session",
-			"explore": "Explore the dashboard first"
-		},
-		"account": {
-			"avatar": "Avatar",
-			"avatarDescription": "Click the circle or drop an image to it to upload your avatar.",
-			"name": "Name"
-		},
-		"continue": "Continue",
-		"message": "Just a few quick steps to get you started.",
-		"notifications": {
-			"accountSetupFailed": "We are sorry, but we were unable to set up your account. Please try again later.",
-			"companySetupFailed": "We are sorry, but we were unable to save your company information. Please try again later."
-		},
-		"pricing": {
-			"planSelected": "Your plan has been selected successfully.",
-			"skip": "Skip for now"
-		},
-		"step": "Step {step} / {total}",
-		"title": "Set up your account",
-		"company": {
-			"title": "Tell us about your company",
-			"subtitle": "This helps us tailor Auditora to your needs",
-			"companyName": "Company name",
-			"companyNamePlaceholder": "Acme Corp",
-			"industry": "Industry",
-			"industryPlaceholder": "Select your industry",
-			"companySize": "Company size",
-			"companySizePlaceholder": "Select size range",
-			"evaluationTarget": "How many people would you like to evaluate?",
-			"evaluationTargetPlaceholder": "Select range",
-			"concernProcess": "Which process worries you the most?",
-			"concernProcessPlaceholder": "e.g., Purchase orders, Quality control...",
-			"concernProcessOptional": "Optional — helps us suggest where to start"
-		},
-		"firstValue": {
-			"title": "Start getting value",
-			"subtitle": "Based on your industry, we recommend starting here",
-			"recommendation": "We recommend documenting your most critical process first. Evaluations are more valuable when based on real procedures.",
-			"chatInterview": "Start AI interview",
-			"chatInterviewDesc": "Let AI guide you through documenting a process in minutes",
-			"exploreDashboard": "Explore dashboard",
-			"exploreDashboardDesc": "See what Auditora can do for your team",
-			"documentProcess": "Document a process",
-			"documentProcessDesc": "Start with your most critical process"
-		},
-		"setupComplete": {
-			"title": "Your organization is ready!",
-			"subtitle": "You're all set to start improving process compliance.",
-			"inviteMembers": "Invite team members",
-			"inviteMembersDesc": "Add colleagues who should participate in evaluations",
-			"goToDashboard": "Go to dashboard"
-		}
-	},
-	"organizations": {
-		"createForm": {
-			"name": "Organization name",
-			"notifications": {
-				"error": "We are sorry, but we were unable to create your organization. Please try again later.",
-				"success": "Your organization has been created. You can now invite members."
-			},
-			"submit": "Create organization",
-			"subtitle": "Enter a name for your organization to get started. You can change the name later in the organization settings.",
-			"title": "Create an organization"
-		},
-		"invitationAlert": {
-			"description": "You need to sign in or create an account to join the organization.",
-			"title": "You have been invited to join an organization."
-		},
-		"invitationModal": {
-			"accept": "Accept",
-			"decline": "Decline",
-			"description": "You have been invited to join the organization {organizationName}. Do you want to accept the invitation and join the organization?",
-			"title": "Join the organization"
-		},
-		"organizationSelect": {
-			"createNewOrganization": "Create new organization",
-			"organizations": "Organizations",
-			"personalAccount": "Personal account"
-		},
-		"organizationsGrid": {
-			"createNewOrganization": "Create new organization",
-			"title": "Your organizations"
-		},
-		"roles": {
-			"admin": "Admin",
-			"member": "Member",
-			"owner": "Owner"
-		},
-		"settings": {
-			"changeName": {
-				"title": "Organization name"
-			},
-			"deleteOrganization": {
-				"confirmation": "Are you sure you want to delete your organization?",
-				"description": "Permanently delete your organization. Once you delete your organization, there is no going back. To confirm, please enter your password below:",
-				"submit": "Delete organization",
-				"title": "Delete organization"
-			},
-			"logo": {
-				"description": "Upload a logo for your organization.",
-				"title": "Organization logo"
-			},
-			"members": {
-				"activeMembers": "Active members",
-				"description": "See all active members and the pending invites of your organization.",
-				"invitations": {
-					"empty": "You have not invited any members yet.",
-					"expiresAt": "Expires at {date}",
-					"invitationStatus": {
-						"accepted": "Accepted",
-						"canceled": "Canceled",
-						"pending": "Pending",
-						"rejected": "Rejected"
-					},
-					"revoke": "Revoke invitation",
-					"resend": "Resend invitation"
-				},
-				"inviteMember": {
-					"description": "To invite a new member, send them an invitation.",
-					"email": "Email",
-					"notifications": {
-						"error": {
-							"description": "We were unable to invite the member. Please try again later.",
-							"title": "Could not invite member"
-						},
-						"success": {
-							"description": "The member has been invited.",
-							"title": "Member invited"
-						}
-					},
-					"role": "Role",
-					"submit": "Invite",
-					"title": "Invite member"
-				},
-				"leaveOrganization": "Leave organization",
-				"notifications": {
-					"removeMember": {
-						"error": {
-							"description": "Could not remove the member from your organization. Please try again."
-						},
-						"loading": {
-							"description": "Removing member from organization..."
-						},
-						"success": {
-							"description": "The member has been successfully removed from your organization."
-						}
-					},
-					"revokeInvitation": {
-						"error": {
-							"description": "The invitation could not be revoked. Please try again later."
-						},
-						"loading": {
-							"description": "Revoking invitation..."
-						},
-						"success": {
-							"description": "The invitation has been revoked."
-						}
-					},
-					"updateMembership": {
-						"error": {
-							"description": "Could not update organization membership. Please try again."
-						},
-						"loading": {
-							"description": "Updating membership..."
-						},
-						"success": {
-							"description": "Membership was updated successfully"
-						}
-					},
-					"resendInvitation": {
-						"loading": {
-							"description": "Resending invitation..."
-						},
-						"success": {
-							"description": "Invitation sent"
-						},
-						"error": {
-							"description": "Could not sent invitation. Please try again."
-						}
-					}
-				},
-				"pendingInvitations": "Pending invitations",
-				"removeMember": "Remove member",
-				"title": "Members"
-			},
-			"notifications": {
-				"organizationDeleted": "Your organization has been deleted.",
-				"organizationNameNotUpdated": "We were unable to update your organization name. Please try again later.",
-				"organizationNameUpdated": "Your organization name has been updated.",
-				"organizationNotDeleted": "We were unable to delete your organization. Please try again later."
-			},
-			"subtitle": "Manage the settings of the organization.",
-			"title": "Organization",
-			"dangerZone": {
-				"title": "Danger zone"
-			},
-			"ai": {
-				"title": "AI Configuration",
-				"subtitle": "Monitor AI usage and manage API keys",
-				"usage": {
-					"title": "AI Usage",
-					"description": "Token consumption and estimated costs for the last 30 days",
-					"totalTokens": "Total tokens",
-					"totalCalls": "AI calls",
-					"inputTokens": "Input tokens",
-					"errors": "Errors",
-					"estimatedCost": "Est. cost",
-					"pipeline": "Pipeline",
-					"calls": "Calls",
-					"avgDuration": "Avg duration",
-					"dailyUsage": "Daily usage",
-					"noData": "No usage data available",
-					"currentTier": "Current AI tier",
-					"pipelineBreakdown": "Consumption by pipeline"
-				},
-				"externalCosts": {
-					"title": "External Service Costs",
-					"description": "Estimated costs for speech-to-text and meeting bot services",
-					"deepgramStt": "Deepgram STT",
-					"recallBot": "Recall.ai Bot",
-					"minutes": "minutes"
-				},
-				"keys": {
-					"title": "Custom API Keys (BYOK)",
-					"description": "Use your own API keys instead of platform keys. Keys are stored encrypted.",
-					"anthropicKey": "Anthropic API Key",
-					"deepseekKey": "DeepSeek API Key",
-					"configured": "Configured",
-					"notConfigured": "Not configured",
-					"lastUpdated": "Last updated",
-					"save": "Save",
-					"saving": "Saving...",
-					"saved": "Saved!",
-					"delete": "Remove",
-					"deleteConfirm": "Are you sure you want to remove this API key? The platform key will be used instead.",
-					"placeholder": "sk-...",
-					"hint": "When set, your organization's AI calls will use this key instead of the platform key."
-				}
-			}
-		},
-		"start": {
-			"subtitle": "Welcome to the start page of this organization!"
-		}
-	},
-	"settings": {
-		"account": {
-			"avatar": {
-				"description": "To change your avatar click the picture in this block and select a file from your computer to upload.",
-				"notifications": {
-					"error": "Could not update avatar",
-					"success": "Avatar was updated successfully"
-				},
-				"title": "Your avatar"
-			},
-			"changeEmail": {
-				"description": "To change your email, enter the new email and hit save. You will have to confirm the new email before it will become active.",
-				"notifications": {
-					"error": "Could not update email",
-					"success": "Email was updated successfully"
-				},
-				"title": "Your email"
-			},
-			"changeName": {
-				"notifications": {
-					"error": "Could not update name",
-					"success": "Name was updated successfully"
-				},
-				"title": "Your name"
-			},
-			"deleteAccount": {
-				"confirmation": "Are you sure you want to delete your account?",
-				"description": "Permanently delete your account. Once you delete your account, there is no going back. To confirm, please enter your password below:",
-				"notifications": {
-					"error": "Could not delete account",
-					"success": "Account was deleted successfully"
-				},
-				"submit": "Delete account",
-				"title": "Delete account"
-			},
-			"language": {
-				"description": "To change the language of the app for your account, select a language from the list and click save.",
-				"notifications": {
-					"error": "Could not update language",
-					"success": "Language was updated successfully"
-				},
-				"title": "Your language"
-			},
-			"security": {
-				"activeSessions": {
-					"description": "These are all the active sessions of your account. Click the X to end a specifc session.",
-					"title": "Active sessions",
-					"notifications": {
-						"revokeSession": {
-							"success": "Session revoked"
-						}
-					},
-					"currentSession": "Current session"
-				},
-				"changePassword": {
-					"currentPassword": "Current password",
-					"newPassword": "New password",
-					"notifications": {
-						"error": "Could not update password",
-						"success": "Password was updated successfully"
-					},
-					"title": "Your password"
-				},
-				"connectedAccounts": {
-					"connect": "Connect",
-					"connected": "Connected",
-					"disconnect": "Disconnect",
-					"title": "Connected accounts"
-				},
-				"passkeys": {
-					"addPasskey": "Add passkey",
-					"description": "Use passkeys as a secure alternative to passwords.",
-					"notifications": {
-						"addPasskey": {
-							"error": {
-								"title": "Could not add passkey"
-							},
-							"success": {
-								"title": "Passkey added"
-							}
-						},
-						"deletePasskey": {
-							"error": {
-								"title": "Could not delete passkey"
-							},
-							"loading": {
-								"title": "Deleting passkey..."
-							},
-							"success": {
-								"title": "Passkey deleted"
-							}
-						}
-					},
-					"title": "Passkeys"
-				},
-				"setPassword": {
-					"description": "You have not set a password yet. To set one, you need to go through the password reset flow. Click the button below to send an email to reset your password and follow the instructions in the email.",
-					"notifications": {
-						"error": "Could not send link to set password. Please try again.",
-						"success": "Check your inbox for the link to set your password."
-					},
-					"submit": "Set password",
-					"title": "Your password"
-				},
-				"title": "Security",
-				"twoFactor": {
-					"title": "Two-factor authentication",
-					"description": "Add an extra layer of security to your account.",
-					"dialog": {
-						"password": {
-							"title": "Verify with password",
-							"description": "Please verify your account by entering your password:",
-							"label": "Your password:"
-						},
-						"totpUrl": {
-							"description": "Use your preferred authenticator app and scan the QR code with it or enter the secret below manually to set up two-factor authentication.",
-							"code": "Enter 6-digit code to verify the setup:",
-							"title": "Enable two-factor authentication"
-						}
-					},
-					"enable": "Enable two-factor authentication",
-					"notifications": {
-						"verify": {
-							"success": {
-								"title": "Two-factor authentication has been enabled successfully."
-							}
-						},
-						"enable": {
-							"error": {
-								"title": "Could not verify your account with the provided password. Please try again."
-							}
-						},
-						"disable": {
-							"success": {
-								"title": "Two-factor authentication has been disabled successfully."
-							}
-						}
-					},
-					"disable": "Disable two-factor authentication",
-					"enabled": "You have two-factor authentication enabled for your account."
-				}
-			},
-			"subtitle": "Manage the settings of your personal account.",
-			"title": "Account settings"
-		},
-		"billing": {
-			"createCustomerPortal": {
-				"label": "Manage billing",
-				"notifications": {
-					"error": {
-						"title": "Could not create a customer portal session. Please try again."
-					}
-				}
-			},
-			"activePlan": {
-				"status": {
-					"active": "Active",
-					"canceled": "Canceled",
-					"expired": "Expired",
-					"incomplete": "Incomplete",
-					"past_due": "Past due",
-					"paused": "Paused",
-					"trialing": "Trialing",
-					"unpaid": "Unpaid"
-				},
-				"title": "Your plan"
-			},
-			"changePlan": {
-				"description": "Choose a plan to subscribe to.",
-				"title": "Change your plan"
-			},
-			"title": "Billing"
-		},
-		"menu": {
-			"account": {
-				"billing": "Billing",
-				"dangerZone": "Danger zone",
-				"general": "General",
-				"security": "Security",
-				"title": "Account"
-			},
-			"organization": {
-				"ai": "AI",
-				"billing": "Billing",
-				"general": "General",
-				"members": "Members",
-				"title": "Organization",
-				"dangerZone": "Danger zone"
-			}
-		},
-		"save": "Save"
-	},
-	"start": {
-		"subtitle": "See the latest stats of your awesome business.",
-		"welcome": "Welcome {name}!"
-	},
-	"dashboard": {
-		"title": "Dashboard",
-		"subtitle": "Your client engagement overview",
-		"sessionsThisMonth": "Sessions This Month",
-		"processesMapped": "Processes Mapped",
-		"aiAccuracy": "AI Accuracy",
-		"recentActivity": "Recent Activity",
-		"newSession": "New Session",
-		"projects": "Projects",
-		"engagementProgress": "Engagement Progress",
-		"processesGoal": "{mapped} of {goal} processes",
-		"setGoal": "Set goal",
-		"emptyProjects": "Your projects will appear here after your first session",
-		"noActivity": "No activity yet. Start a session to begin.",
-		"recentProcesses": "Recent Processes",
-		"viewAll": "View all",
-		"noProcesses": "Discover your first process to see it here",
-		"activity": {
-			"sessionCreated": "Session created",
-			"sessionEnded": "Session ended",
-			"processCreated": "Process created",
-			"nodesConfirmed": "{count} nodes confirmed"
-		},
-		"hero": {
-			"title": "Process Architecture",
-			"aiStat": "AI extracted {nodes} activities from {sessions} conversations",
-			"demoTitle": "This is what the AI generates",
-			"demoSubtitle": "Start a conversation and Auditora.ai will automatically extract process diagrams"
-		},
-		"cta": {
-			"firstDiscovery": "Discover your first process",
-			"deepDive": "Deep Dive: {name}",
-			"newDiscovery": "New Discovery"
-		},
-		"quickActions": {
-			"chat": "Chat with AI",
-			"chatDesc": "Describe your processes in a conversation",
-			"audio": "Upload Audio",
-			"audioDesc": "Upload mp3, wav, m4a recordings",
-			"call": "Join Call",
-			"callDesc": "Paste your meeting URL"
-		},
-		"arch": {
-			"title": "Process Architecture",
-			"core": "Core",
-			"strategic": "Strategic",
-			"support": "Support",
-			"empty": "No processes mapped yet"
-		},
-		"insight": {
-			"title": "Auditora.ai AI",
-			"empty": "Start a conversation with AI to discover your business processes.",
-			"noSupport": "You've mapped {count} processes but none are support. Suggestion: discover IT, Facilities, or HR.",
-			"fewCore": "You have {count} core processes. Similar industries typically have 5-7. What other processes are essential?",
-			"noStrategic": "You have {count} processes mapped but none are strategic. Which ones drive differentiation?",
-			"continue": "{count} processes mapped. Continue with deep dives to refine the diagrams."
-		},
-		"riskDashboard": {
-			"title": "Overview",
-			"live": "LIVE",
-			"newSession": "New Session",
-			"emptyTitle": "Welcome to Auditora.ai",
-			"emptyDesc": "Run your first X-Ray to discover your business risks, or schedule a session with your consultant.",
-			"scanCta": "Run X-Ray",
-			"risks": "Risks",
-			"processes": "Processes",
-			"sessions": "Sessions",
-			"topRisks": "Top Open Risks",
-			"noRisks": "No risks identified",
-			"nextSession": "Next Session",
-			"noSessions": "No sessions scheduled",
-			"scheduleSession": "Schedule Session",
-			"recentActivity": "Recent Activity",
-			"noActivity": "No recent activity",
-			"viewAllRisks": "View all risks",
-			"viewProcesses": "View processes",
-			"viewDeliverables": "View deliverables",
-			"noRisksDesc": "No critical risks. Schedule a session to analyze your processes.",
-			"nextSessionLabel": "Next session",
-			"noProcess": "No process assigned",
-			"viewDetails": "View details",
-			"coverage": "Coverage"
-		}
-	},
-	"processLibrary": {
-		"title": "Processes",
-		"subtitle": "Business process hub",
-		"search": "Search processes...",
-		"filterByStatus": "Filter by status",
-		"filterByLevel": "Filter by level",
-		"filterByProject": "Filter by project",
-		"allStatuses": "All statuses",
-		"allLevels": "All levels",
-		"allProjects": "All projects",
-		"empty": {
-			"title": "No processes mapped yet",
-			"description": "Schedule a discovery session to start mapping processes.",
-			"cta": "New Session"
-		},
-		"export": "Export BPMN",
-		"view": "View",
-		"share": "Share",
-		"versions": "{count} {count, plural, one {version} other {versions}}",
-		"nodes": "{count} {count, plural, one {node} other {nodes}}",
-		"sessions": "{count} {count, plural, one {session} other {sessions}}",
-		"sidebar": {
-			"noSessions": "No sessions. Start a Deep Dive to map this process.",
-			"noVersions": "No versions. Versions are created when saving the diagram or ending a session.",
-			"noDiagram": "No BPMN diagram",
-			"noDescription": "No description",
-			"noRaci": "No RACI matrix",
-			"noRiskAnalysis": "No risk analysis",
-			"noCaptureSessions": "No capture sessions",
-			"noGoals": "No goals defined",
-			"noChanges": "No changes between selected versions",
-			"contexto": "Context"
-		}
-	},
-	"commandPalette": {
-		"placeholder": "Search clients, processes, sessions...",
-		"newSession": "New Session",
-		"newClient": "New Client",
-		"noResults": "No results found",
-		"sections": {
-			"actions": "Actions",
-			"navigation": "Navigate",
-			"clients": "Clients",
-			"processes": "Processes",
-			"sessions": "Sessions"
-		}
-	},
-	"clientSelector": {
-		"title": "Your Clients",
-		"subtitle": "Select a client to view their engagement",
-		"newClient": "New Client",
-		"empty": {
-			"title": "No clients yet",
-			"description": "Create your first client to start consulting.",
-			"cta": "New Client"
-		},
-		"sessions": "{count} {count, plural, one {session} other {sessions}}",
-		"processes": "{count} {count, plural, one {process} other {processes}}"
-	},
-	"clients": {
-		"title": "Clients",
-		"newClient": "New Client",
-		"emptyState": "No clients yet. Add your first client to start consulting.",
-		"industry": "Industry",
-		"businessModel": "Business Model",
-		"operations": "Operations Profile",
-		"employees": "Employee Count",
-		"notes": "Consultant Notes",
-		"overview": "Overview",
-		"projects": "Projects",
-		"documents": "Documents",
-		"sessionHistory": "Session History"
-	},
-	"projects": {
-		"title": "Projects",
-		"newProject": "New Project",
-		"architecture": "Architecture",
-		"sessions": "Sessions",
-		"versions": "Versions",
-		"addProcess": "Add Process",
-		"startDiscovery": "Start Discovery Session",
-		"startSession": "Start Session"
-	},
-	"processes": {
-		"process": "Process",
-		"subprocess": "Subprocess",
-		"task": "Task",
-		"procedure": "Procedure",
-		"draft": "Draft",
-		"mapped": "Mapped",
-		"validated": "Validated",
-		"approved": "Approved",
-		"detail": "Process Detail",
-		"diagram": "Diagram",
-		"details": "Details",
-		"children": "Sub-processes",
-		"sessions": "Sessions",
-		"schedule": "Schedule",
-		"intelligence": "Intelligence",
-		"risks": "Risks & Quality",
-		"riskAnalysis": "Analyze Risks",
-		"fmeaAnalysis": "FMEA",
-		"riskRegister": "Register",
-		"opportunities": "Opportunities",
-		"controls": "Controls",
-		"heatMatrix": "Heat Matrix",
-		"mitigation": "Mitigation",
-		"severity": "Severity",
-		"probability": "Probability",
-		"riskScore": "Risk Score",
-		"residualRisk": "Residual Risk",
-		"noRisks": "No risks analyzed yet. Run the analysis to identify risks.",
-		"noOpportunities": "No opportunities detected yet.",
-		"noControls": "No controls. Add a control.",
-		"noMitigations": "No mitigations. Add an action.",
-		"noFmea": "No BPMN data. Add a diagram first.",
-		"needsTrend": "Need at least 2 audits for trend.",
-		"analyzing": "Analyzing...",
-		"analyzeError": "Analysis error. Try again.",
-		"exportReport": "Export Risk Report",
-		"shareRisks": "Share Risks",
-		"critical": "Critical",
-		"high": "High",
-		"medium": "Medium",
-		"low": "Low",
-		"addRisk": "Add Risk",
-		"addMitigation": "Add Mitigation",
-		"addControl": "Add Control",
-		"inherentRisk": "Inherent Risk",
-		"riskTypes": {
-			"OPERATIONAL": "Operational",
-			"COMPLIANCE": "Compliance",
-			"STRATEGIC": "Strategic",
-			"FINANCIAL": "Financial",
-			"TECHNOLOGY": "Technology",
-			"HUMAN_RESOURCE": "Human Resources",
-			"REPUTATIONAL": "Reputational"
-		},
-		"saveDiagram": "Save Diagram",
-		"addChild": "Add Sub-process",
-		"startDeepDive": "Start Deep Dive",
-		"continueLast": "Continue Last Session",
-		"description": "Description",
-		"goals": "Goals",
-		"triggers": "Triggers",
-		"outputs": "Outputs",
-		"owner": "Owner",
-		"status": "Status",
-		"noChildren": "No sub-processes yet",
-		"noSessions": "No sessions yet for this process",
-		"noDiagram": "No BPMN diagram yet. Start a session or create one manually."
-	},
-	"sessions": {
-		"title": "Sessions",
-		"subtitle": "Your process elicitation meetings",
-		"newSession": "New Session",
-		"empty": {
-			"title": "No sessions yet",
-			"description": "Create a new session to start mapping business processes during your next call."
-		},
-		"new": {
-			"title": "New Session",
-			"subtitle": "Set up a new process elicitation meeting",
-			"form": {
-				"meetingUrl": "Meeting URL",
-				"meetingUrlPlaceholder": "https://zoom.us/j/... or https://meet.google.com/...",
-				"meetingUrlHint": "Paste your Zoom, Google Meet, or Teams meeting link",
-				"clientName": "Client Name",
-				"clientNamePlaceholder": "Acme Corp",
-				"clientHint": "Select or create the company whose processes you'll map",
-				"projectName": "Project Name",
-				"projectNamePlaceholder": "Process Optimization Q1",
-				"projectHint": "Projects group your sessions by department or initiative",
-				"sessionType": "Session Type",
-				"sessionTypeHint": "Discovery maps the business overview. Deep Dive focuses on a specific process.",
-				"typeDiscovery": "Discovery — Business overview",
-				"typeDeepDive": "Deep Dive — Specific process",
-				"typeDiscoveryDesc": "Map the company's process architecture",
-				"typeDeepDiveDesc": "Deep dive into a specific process",
-				"typeContinuationDesc": "Continue where you left off in a previous session",
-				"create": "Create Session & Join Call",
-				"creating": "Connecting..."
-			}
-		}
-	},
-	"common": {
-		"confirmation": {
-			"cancel": "Cancel",
-			"confirm": "Confirm"
-		},
-		"actions": "Actions",
-		"colorMode": {
-			"system": "System",
-			"light": "Light",
-			"dark": "Dark"
-		},
-		"passwordCriteria": {
-			"minLength": "Min. 8 characters",
-			"upperAndLowercase": "Upper & lowercase",
-			"number": "Number",
-			"specialCharacter": "Special character"
-		},
-		"save": "Save",
-		"saving": "Saving...",
-		"cancel": "Cancel",
-		"delete": "Delete",
-		"edit": "Edit",
-		"create": "Create",
-		"add": "Add",
-		"view": "View",
-		"close": "Close",
-		"back": "Back",
-		"retry": "Retry",
-		"search": "Search",
-		"loading": "Loading...",
-		"noResults": "No results",
-		"error": "Error",
-		"success": "Success",
-		"errorGeneric": "Something went wrong. Please try again.",
-		"errorSaving": "Error saving",
-		"errorDeleting": "Error deleting",
-		"errorLoading": "Error loading",
-		"savedSuccess": "Saved successfully",
-		"deletedSuccess": "Deleted successfully",
-		"copiedSuccess": "Copied to clipboard",
-		"description": "Description",
-		"name": "Name",
-		"type": "Type",
-		"status": "Status",
-		"date": "Date",
-		"process": "Process",
-		"noDescription": "No description",
-		"noNote": "No note",
-		"exit": "Exit",
-		"maximize": "Maximize",
-		"coverage": "Coverage",
-		"severity": "Severity",
-		"probability": "Probability",
-		"size": "Size"
-	},
-	"meeting": {
-		"topBar": {
-			"processNameTitle": "Click to edit process name",
-			"newSession": "New session",
-			"endButton": "End",
-			"aiNotInCall": "Activate live AI",
-			"aiAnalyzing": "AI Analyzing",
-			"aiPaused": "AI Paused",
-			"fontDecrease": "Decrease text",
-			"fontNormal": "Normal size",
-			"fontIncrease": "Increase text",
-			"botDisconnected": "Bot disconnected",
-			"disconnected": "Disconnected",
-			"connecting": "Connecting...",
-			"reconnecting": "Reconnecting...",
-			"inCall": "In call",
-			"analyzing": "Analyzing...",
-			"diagramming": "Diagramming...",
-			"suggesting": "Suggesting...",
-			"local": "Local",
-			"activeConnection": "Active connection",
-			"connectToCall": "Connect to call",
-			"statusFailed": "Bot could not join the call",
-			"statusLostConnection": "Lost connection to bot",
-			"statusConnected": "Bot connected and listening",
-			"statusReconnecting": "Reconnecting to bot...",
-			"statusLocal": "Local mode — you can connect to a call",
-			"reconnectSameLink": "Reconnect to same link",
-			"pasteCallLink": "Paste call link",
-			"changeCallLink": "Change call link",
-			"infoLocal": "Paste your video call link so the bot joins and transcribes in real time.",
-			"infoConnected": "You can keep working on the diagram offline. The bot reconnects to the link you paste.",
-			"cancelLocalMode": "Cancel and return to local mode",
-			"disconnectBot": "Disconnect bot",
-			"sharing": "Sharing",
-			"share": "Share",
-			"viewLink": "View link",
-			"copy": "Copy",
-			"disabling": "Disabling...",
-			"stopSharing": "Stop sharing",
-			"shareDisableNote": "The link is disabled when you stop sharing or end the session.",
-			"enabling": "Enabling...",
-			"enableShareLink": "Enable share link",
-			"shareNote": "Generate a read-only link for others to see the live diagram.",
-			"export": "Export",
-			"diagramSection": "Diagram",
-			"pngLabel": "PNG (image)",
-			"svgLabel": "SVG (vector)",
-			"bpmnLabel": "BPMN (XML)",
-			"documentationSection": "Documentation",
-			"transcription": "Transcription",
-			"proceduresSops": "Procedures (SOPs)",
-			"reportSection": "Report",
-			"sessionReport": "Session report (PDF)",
-			"cleanSection": "Clean",
-			"cleanDiagram": "Clean diagram",
-			"cleanTranscription": "Clean transcription",
-			"cleanAll": "Clean all",
-			"confirmCleanDiagram": "the diagram",
-			"confirmCleanTranscript": "the transcription",
-			"confirmCleanAll": "the entire session",
-			"confirmCleanPrompt": "Are you sure you want to clean {label}? This action cannot be undone.",
-			"exportSopHeader": "WORK PROCEDURES (SOPs)",
-			"exportProcedure": "PROCEDURE",
-			"exportCode": "Code",
-			"exportResponsible": "Responsible",
-			"exportFrequency": "Frequency",
-			"exportObjective": "OBJECTIVE",
-			"exportScope": "SCOPE",
-			"exportPrerequisites": "PREREQUISITES",
-			"exportSteps": "STEPS",
-			"exportSystems": "Systems",
-			"exportInputs": "Inputs",
-			"exportOutputs": "Outputs",
-			"exportPendingInfo": "PENDING INFORMATION"
-		},
-		"toast": {
-			"botDisconnected": "Bot disconnected — local mode",
-			"disconnectError": "Error disconnecting",
-			"connectionError": "Connection error",
-			"reconnectNew": "Bot joining new call...",
-			"reconnecting": "Reconnecting bot...",
-			"reconnectError": "Error reconnecting",
-			"shareDisabled": "Share link disabled",
-			"linkCopied": "Link copied to clipboard",
-			"linkCopiedShort": "Link copied",
-			"shareError": "Error changing share status",
-			"cleaned": "{label} cleaned",
-			"cleanError": "Error cleaning",
-			"noTranscription": "No transcription",
-			"transcriptionDownloaded": "Transcription downloaded",
-			"noProcedures": "No procedures generated",
-			"sopsDownloaded": "{count} procedure(s) downloaded",
-			"sessionEndedFull": "Session ended. Generating deliverables...",
-			"sessionEndedSave": "Session ended. Data saved.",
-			"sessionDiscarded": "Session discarded.",
-			"sessionEndError": "Error ending the session",
-			"diagramSaved": "Diagram saved",
-			"saveError": "Error saving",
-			"diagramReorganized": "Diagram reorganized",
-			"noNodes": "No nodes found to reorganize",
-			"reorganizeError": "Error reorganizing. Diagram restored.",
-			"reorganizeRetry": "Error reorganizing. Try again.",
-			"relayoutDone": "Diagram rearranged",
-			"relayoutError": "Error rearranging",
-			"labelsFixed": "{count} labels fixed",
-			"labelsCorrect": "All labels are correct",
-			"labelsError": "Error fixing labels",
-			"complete": "{score}% complete",
-			"newQuestions": "{count} new questions",
-			"answerError": "Error sending answer",
-			"modeChanging": "Switching to {label}...",
-			"modeChanged": "Mode: {label} — questions regenerated",
-			"modeError": "Error changing mode",
-			"generateError": "Error generating",
-			"nodeDeleted": "Node deleted",
-			"deleteError": "Error deleting node",
-			"nodeCreated": "Node created",
-			"createError": "Error creating node",
-			"connectionError2": "Error updating connections",
-			"labelSaveError": "Error saving label",
-			"typeChangeError": "Error changing type",
-			"renamed": "Renamed to \"{name}\"",
-			"convertedGateway": "Converted to gateway",
-			"reorganizingFlows": "Reorganizing diagram to fix flows...",
-			"mergeCreated": "Merge gateway created",
-			"reorganizingBuilder": "Reorganizing — builder will connect loose nodes...",
-			"reorganizedReconnected": "Diagram reorganized — nodes reconnected",
-			"laneUnified": "Lane unified to \"{name}\"",
-			"reorganizing": "Reorganizing diagram...",
-			"fixError": "Error applying fix",
-			"noAuditNodes": "No nodes to audit",
-			"auditScore": "BPMN diagram correct — Score: {score}/100",
-			"auditObservations": "{count} observations found",
-			"connectNotAvailable": "Connect tool not available",
-			"savePropsError": "Error saving properties"
-		},
-		"leftPanel": {
-			"header": "BPMN Elements",
-			"catEvents": "Events",
-			"startEvent": "Start",
-			"startEventTip": "Where the process starts. There should be only one per main flow.",
-			"endEvent": "End",
-			"endEventTip": "Where the process ends. There can be multiple if there are different paths.",
-			"intermediateEvent": "Intermediate",
-			"intermediateEventTip": "Something that happens mid-flow. E.g.: send a notification, escalate a case.",
-			"timerEvent": "Timer",
-			"timerEventTip": "A wait or deadline. E.g.: wait 24 hrs for approval, response deadline.",
-			"boundaryEvent": "Boundary Event",
-			"boundaryEventTip": "Event attached to a task border. E.g.: SLA timeout, error interrupting the task.",
-			"catTasks": "Tasks",
-			"task": "Task",
-			"taskTip": "Generic activity. Use when it doesn't matter if manual or system.",
-			"userTask": "User Task",
-			"userTaskTip": "A person performs this task. E.g.: review document, approve request.",
-			"serviceTask": "Service Task",
-			"serviceTaskTip": "A system does it automatically. E.g.: send email, query API, generate report.",
-			"manualTask": "Manual Task",
-			"manualTaskTip": "Physical work without a system. E.g.: deliver package, sign paper document.",
-			"businessRule": "Business Rule",
-			"businessRuleTip": "Decision based on defined rules. E.g.: calculate discount per policy, validate credit.",
-			"scriptTask": "Script Task",
-			"scriptTaskTip": "Automatic code execution. E.g.: transform data, calculate totals.",
-			"catGateways": "Gateways",
-			"exclusive": "Exclusive",
-			"exclusiveTip": "Only ONE path executes. E.g.: If approved → continue, If not → reject.",
-			"parallel": "Parallel",
-			"parallelTip": "ALL paths execute simultaneously. E.g.: send email AND update system.",
-			"inclusive": "Inclusive",
-			"inclusiveTip": "ONE OR MORE paths execute. E.g.: notify manager AND/OR director per amount.",
-			"catSubprocesses": "Subprocesses",
-			"subprocess": "Subprocess",
-			"subprocessTip": "A process within another. Groups steps that go together. E.g.: 'Document validation'.",
-			"callActivity": "Call Activity",
-			"callActivityTip": "Calls another already-defined process. E.g.: reuse 'Purchase approval' process.",
-			"catData": "Data",
-			"dataObject": "Data Object",
-			"dataObjectTip": "A document or data used or produced. E.g.: invoice, purchase order, contract.",
-			"dataStore": "Data Store",
-			"dataStoreTip": "A system where data is stored. E.g.: ERP, database, SharePoint.",
-			"annotation": "Annotation",
-			"annotationTip": "Clarifying note. Doesn't affect flow, only documents. E.g.: 'SLA: 48 hrs'.",
-			"group": "Group",
-			"groupTip": "Visual grouping. Doesn't affect flow, just organizes visually. E.g.: demarcate process phases."
-		},
-		"rightPanel": {
-			"transcription": "Transcription",
-			"aiSuggestions": "AI Suggestions",
-			"documents": "Documents",
-			"gapRoles": "Roles",
-			"gapSuppliers": "Suppliers",
-			"gapInputs": "Inputs",
-			"gapOutputs": "Outputs",
-			"gapCustomers": "Customers",
-			"gapTriggers": "Triggers",
-			"gapDecisions": "Decisions",
-			"gapExceptions": "Exceptions",
-			"gapTimings": "Timelines",
-			"gapSystems": "Systems",
-			"gapExploration": "Exploration"
-		},
-		"teleprompter": {
-			"header": "AI Suggestions",
-			"gapRoles": "Roles",
-			"gapSuppliers": "Suppliers",
-			"gapInputs": "Inputs",
-			"gapOutputs": "Outputs",
-			"gapCustomers": "Customers",
-			"gapTriggers": "Triggers",
-			"gapDecisions": "Decisions",
-			"gapExceptions": "Exceptions",
-			"gapTimelines": "Timelines",
-			"gapSystems": "Systems",
-			"gapExploration": "Exploration",
-			"modeExplore": "Explore",
-			"modeExploreHint": "Cover all SIPOC dimensions",
-			"modeDeepen": "Deepen",
-			"modeDeepenHint": "Detail the weakest dimension",
-			"modeValidate": "Validate",
-			"modeValidateHint": "Review each node, seal gaps",
-			"sipocSuppliers": "Suppliers",
-			"sipocInputs": "Inputs",
-			"sipocProcess": "Process",
-			"sipocOutputs": "Outputs",
-			"sipocCustomers": "Customers",
-			"processQuestions": "Process questions",
-			"sipocQuestionsProgress": "SIPOC Questions ({answered}/{total} answered)",
-			"sipocQuestionsInitial": "Initial SIPOC questions",
-			"allSipocAnswered": "All SIPOC questions answered. AI will generate contextual questions.",
-			"answerPlaceholder": "Type the answer...",
-			"q1": "Who are the suppliers or areas that initiate this process?",
-			"q2": "What information, documents or materials are needed to begin?",
-			"q3": "What are the main steps of the process from start to finish?",
-			"q4": "What deliverables or results does this process produce?",
-			"q5": "Who are the customers or areas that receive the result?",
-			"q6": "What decisions are made during the process and who makes them?",
-			"q7": "What exceptions or alternative paths exist?",
-			"q8": "What systems or tools are used?",
-			"answeredCount": "{count, plural, one {# question answered} other {# questions answered}}"
-		},
-		"canvas": {
-			"aiPhase1": "Analyzing tasks and connections",
-			"aiPhase2": "Identifying roles and lanes",
-			"aiPhase3": "Evaluating process flow",
-			"aiPhase4": "Detecting missing elements",
-			"aiPhase5": "Fixing labels",
-			"aiPhase6": "Reorganizing nodes",
-			"aiPhase7": "Optimizing layout",
-			"aiPhase8": "Applying BPMN best practices",
-			"tabDiagram": "Diagram",
-			"tabTree": "Tree View",
-			"openProcessProps": "Open process properties",
-			"processDefault": "Process",
-			"breadcrumbRoot": "Main Process",
-			"toggleShowElements": "Show elements",
-			"toggleHideElements": "Hide elements",
-			"toggleShowPanels": "Show panels",
-			"toggleHidePanels": "Hide panels",
-			"toolUndo": "Undo",
-			"toolRedo": "Redo",
-			"toolFit": "Fit",
-			"toolSave": "Save",
-			"toolSort": "Sort",
-			"toolSpelling": "Spelling",
-			"toolAiFull": "Full AI",
-			"fixingLabels": "Fixing labels...",
-			"reorganizingLayout": "Reorganizing layout...",
-			"shortcutSave": "Save diagram",
-			"shortcutFit": "Fit to viewport",
-			"shortcutRelayout": "Re-layout (ELK)",
-			"shortcutFixLabels": "Fix labels (AI)",
-			"shortcutFullReorganize": "Full reorganize (AI)"
-		},
-		"bottomBar": {
-			"toolSelect": "Select",
-			"toolConnect": "Connect",
-			"toolText": "Text",
-			"auditBpmn": "Audit BPMN",
-			"auditHeader": "BPMN Audit",
-			"observations": "{count} observations",
-			"diagramCorrect": "The diagram complies with BPMN 2.0 best practices",
-			"suggestion": "Suggestion",
-			"fix": "Fix",
-			"aiElements": "AI Elements",
-			"layoutDefault": "Full view",
-			"layoutChatFocus": "Chat focus"
-		},
-		"layout": {
-			"sipocAnalysis": "SIPOC Analysis"
-		},
-		"endDialog": {
-			"title": "End session",
-			"description": "Choose how you want to end this session.",
-			"processNameLabel": "Process name",
-			"processNamePlaceholder": "E.g.: Purchasing process",
-			"processNameHint": "A new process will be created with the diagram nodes.",
-			"fullButton": "End and generate report",
-			"fullDescription": "Saves the diagram and generates summary, RACI, audit and risks.",
-			"saveOnlyButton": "End without report",
-			"saveOnlyDescription": "Saves the diagram and data, but doesn't generate deliverables.",
-			"discardButton": "Discard session",
-			"discardDescription": "Cancels the session without saving diagram data.",
-			"backButton": "Back to session"
-		},
-		"treeEditor": {
-			"noNodes": "No nodes in the process",
-			"header": "Process structure",
-			"nodeCount": "{count} nodes",
-			"doubleClickHint": "Double-click to edit",
-			"connectTo": "Connect to...",
-			"noAvailableNodes": "No available nodes",
-			"connectionCount": "{count} connection(s)",
-			"addConnection": "Add connection",
-			"insertAfter": "Insert node after",
-			"deleteNode": "Delete node",
-			"confirmDelete": "Confirm delete \"{label}\"?",
-			"cancel": "Cancel",
-			"delete": "Delete",
-			"newTask": "New task"
-		},
-		"sop": {
-			"generating": "Generating procedure...",
-			"generatingContext": "Analyzing transcript and BPMN context",
-			"retry": "Retry",
-			"noProcedure": "No procedure",
-			"noProcedureDescription": "Generate a complete SOP document using the session transcription and the BPMN diagram context.",
-			"generateSop": "Generate SOP with AI",
-			"procedureLabel": "Procedure",
-			"regenerate": "Regenerate",
-			"export": "Export",
-			"codeField": "Code",
-			"responsibleField": "Responsible",
-			"frequencyField": "Frequency",
-			"confidenceLabel": "Confidence",
-			"objectiveSection": "Objective",
-			"scopeSection": "Scope",
-			"prerequisitesSection": "Prerequisites",
-			"stepsSection": "Procedure Steps",
-			"inputsLabel": "Inputs",
-			"outputsLabel": "Outputs",
-			"exceptionPrefix": "If: ",
-			"indicatorsSection": "Indicators",
-			"targetLabel": "Target",
-			"pendingInfoSection": "Pending Information",
-			"supportMaterialSection": "Support Material",
-			"addScreenshot": "Add screenshot",
-			"screenshotHint": "System screenshot, form or screen relevant to this procedure",
-			"addVideo": "Add explanatory video",
-			"videoHint": "YouTube, Vimeo or Loom video showing how to execute the procedure",
-			"clickToEdit": "Click to edit...",
-			"doneEditing": "Done",
-			"describeStep": "Describe this step in detail...",
-			"notesPlaceholder": "Notes, screenshots, videos...",
-			"videoPrompt": "Video URL (YouTube, Vimeo, Loom):"
-		},
-		"sopPanel": {
-			"selectTask": "Select a task to document its procedure",
-			"headerSop": "SOP",
-			"newConversation": "New conversation",
-			"aiIntro": "AI will ask the right questions to document this task. Answer and the procedure builds itself.",
-			"thinking": "Thinking...",
-			"generateFull": "Generate full SOP with what we know",
-			"generatingFull": "Generating...",
-			"inputPlaceholder": "Answer here...",
-			"errorMessage": "Error processing. Try again."
-		},
-		"nodeProperties": {
-			"elementCount": "{count} element(s)",
-			"documented": "documented",
-			"selectElement": "Select a process element",
-			"selectElementSub": "to document its properties",
-			"tabProperties": "Properties",
-			"tabSopComplete": "Full SOP",
-			"hasProcedure": "Has procedure",
-			"attachments": "Attachments",
-			"attachFile": "Attach file (PDF, Word, PPT)",
-			"generateDraft": "Generate draft",
-			"generating": "Generating..."
-		},
-		"procedureEditor": {
-			"placeholder": "Describe the procedure step by step...",
-			"bold": "Bold",
-			"italic": "Italic",
-			"underline": "Underline",
-			"heading1": "Heading 1",
-			"heading2": "Heading 2",
-			"bulletList": "List",
-			"orderedList": "Numbered list",
-			"link": "Link",
-			"image": "Image",
-			"video": "Video",
-			"videoPrompt": "Video URL (YouTube, Vimeo, Loom):",
-			"urlPrompt": "URL:"
-		},
-		"diagramEditor": {
-			"title": "Edit Diagram",
-			"cancel": "Cancel",
-			"saving": "Saving...",
-			"save": "Save",
-			"initError": "Could not load the diagram editor."
-		},
-		"shortcuts": {
-			"zenMode": "Zen mode (toggle both panels)",
-			"leftPanel": "Toggle left panel",
-			"rightPanel": "Toggle right panel"
-		},
-		"nodeConfig": {
-			"startEvent": "Start",
-			"endEvent": "End",
-			"task": "Task",
-			"userTask": "User Task",
-			"serviceTask": "Service Task",
-			"manualTask": "Manual Task",
-			"exclusiveGateway": "Gateway",
-			"parallelGateway": "Parallel",
-			"subprocess": "Subprocess",
-			"defaultElement": "Element",
-			"stateConfirmed": "Confirmed",
-			"stateForming": "Forming",
-			"stateRejected": "Rejected"
-		},
-		"propFields": {
-			"description": "Description / Procedure",
-			"descriptionTooltip": "Explain what this activity consists of, how it's done, and any important notes for the person performing it.",
-			"responsable": "Responsible",
-			"responsableTooltip": "The role or position that performs this activity. Not a person's name, but the role.",
-			"sla": "SLA",
-			"slaTooltip": "Maximum time allowed to complete this activity from when it starts.",
-			"slaUnit": "SLA Unit",
-			"slaMinutes": "Minutes",
-			"slaHours": "Hours",
-			"slaDays": "Days",
-			"frequency": "Frequency",
-			"frequencyTooltip": "How often is this activity executed?",
-			"frequencyDaily": "Daily",
-			"frequencyWeekly": "Weekly",
-			"frequencyMonthly": "Monthly",
-			"frequencyPerEvent": "Per event",
-			"frequencyCount": "Quantity per period",
-			"frequencyCountTooltip": "How many times does it repeat in the selected period?",
-			"estimatedDuration": "Estimated duration (min)",
-			"estimatedDurationTooltip": "How many minutes does an experienced person take to complete this activity?",
-			"systems": "Systems",
-			"systemsPlaceholder": "SAP, CRM, etc.",
-			"systemsTooltip": "Software, applications or tools used to perform this activity.",
-			"inputs": "Inputs",
-			"inputsPlaceholder": "Purchase order, supplier data...",
-			"inputsTooltip": "Documents, data or information needed BEFORE starting this activity.",
-			"outputs": "Outputs",
-			"outputsPlaceholder": "Validated invoice, report...",
-			"outputsTooltip": "Documents, data or results produced UPON COMPLETION of this activity.",
-			"costPerExecution": "Cost per execution",
-			"costTooltip": "Approximate cost each time this activity executes.",
-			"currency": "Currency",
-			"currencyPlaceholder": "USD, MXN",
-			"groupGeneral": "General",
-			"groupResources": "Resources and Times",
-			"groupInputsOutputs": "Inputs / Outputs",
-			"groupCosts": "Costs"
-		}
-	},
-	"scan": {
-		"title": "Business Process Scan",
-		"subtitle": "Discover hidden risks in your processes. Free. No signup.",
-		"urlPlaceholder": "https://yourcompany.com",
-		"descriptionPlaceholder": "Describe your company: what it does, who it sells to, its main activities...",
-		"noWebsite": "I don't have a website — I'll describe my company",
-		"hasWebsite": "I have a website — paste URL",
-		"generate": "Generate scan",
-		"generating": "Generating scan...",
-		"disclaimer": "Under a minute. Your information is not shared with third parties.",
-		"readingWebsite": "Reading your website...",
-		"loaderConnecting": "Connecting to site...",
-		"loaderReading": "Reading pages...",
-		"loaderExtracting": "Extracting business context...",
-		"loaderPreparing": "Preparing analysis...",
-		"loaderAnalyzing": "Analyzing",
-		"analyzingIndustry": "Analyzing your industry...",
-		"mappingProcess": "Mapping key process...",
-		"generatingDiagram": "Generating diagram...",
-		"evaluatingRisks": "Evaluating risks...",
-		"scanReady": "Scan ready",
-		"sipocAnalysis": "SIPOC Analysis",
-		"sipocDetailed": "Detailed SIPOC Analysis",
-		"suppliers": "Suppliers",
-		"inputs": "Inputs",
-		"process": "Process",
-		"outputs": "Outputs",
-		"customers": "Customers",
-		"risksIdentified": "Risks Identified",
-		"riskRegistry": "Risk Registry",
-		"totalScore": "Total score",
-		"critical": "Critical",
-		"high": "High",
-		"medium": "Medium",
-		"low": "Low",
-		"highestRiskArea": "Highest risk area",
-		"firstScan": "This is a first scan",
-		"deepenCta": "By answering a few questions, the AI can find risks specific to YOUR operation, not just your industry. In 5-10 minutes you'll have a much deeper analysis.",
-		"deepenButton": "Deepen my scan",
-		"processCoverage": "Process coverage",
-		"readyForDiagram": "Ready to generate diagram",
-		"keepAnswering": "Keep answering to improve",
-		"viewDiagram": "View my process diagram",
-		"skipToResults": "Skip to diagram",
-		"buildingDiagram": "Building your process map...",
-		"yourProcessMap": "Your process map",
-		"generatingDeepScan": "Generating your complete scan...",
-		"revealTitle": "Deep analysis in progress",
-		"revealCorrelating": "Correlating research findings...",
-		"revealMapping": "Mapping process flows...",
-		"revealAnalyzing": "Running deep risk analysis...",
-		"revealGenerating": "Generating BPMN diagram...",
-		"completeScan": "Complete Scan",
-		"additionalRisks": "The conversation revealed {count} additional risks that the initial scan didn't detect.",
-		"initialVsDeep": "Initial scan: {initial} risks. Deep scan: {deep} risks.",
-		"suggestedMitigations": "Suggested mitigations",
-		"opportunity": "Opportunity",
-		"affectedStep": "Affected step: {step}",
-		"saveScan": "Save your scan",
-		"saveDescription": "Found {count} risks in \"{process}\". Create your account to save this analysis and map more processes.",
-		"createAccount": "Create account and save",
-		"convertBullet1": "Full risk registry with mitigations",
-		"convertBullet2": "BPMN process diagram you can edit",
-		"convertBullet3": "Track improvements over time",
-		"creatingAccount": "Creating account...",
-		"termsNotice": "By creating your account you accept our <termsLink>Terms of Service</termsLink> and <privacyLink>Privacy Policy</privacyLink>.",
-		"existingUserError": "You already have an account.",
-		"goToLogin": "Go to login",
-		"name": "Name",
-		"namePlaceholder": "Your name",
-		"email": "Email",
-		"companyName": "Company name",
-		"optional": "(optional)",
-		"companyNamePlaceholder": "My Company Inc.",
-		"writeResponse": "Write your response...",
-		"send": "Send",
-		"connectionError": "Connection error. Try again.",
-		"couldNotReadWebsite": "We couldn't read your website. Describe your company manually.",
-		"errorProcessing": "Error processing your description.",
-		"errorGenerating": "Error generating scan.",
-		"errorCreatingSession": "Error creating session. Try again.",
-		"deepenIntro": "Let's dig deeper into your process \"{process}\". I'll ask you some questions to better understand how your operation works. Answer with what you know — there are no wrong answers.",
-		"riskTypes": {
-			"OPERATIONAL": "Operational",
-			"COMPLIANCE": "Compliance",
-			"STRATEGIC": "Strategic",
-			"FINANCIAL": "Financial",
-			"TECHNOLOGY": "Technology",
-			"HUMAN_RESOURCE": "HR",
-			"REPUTATIONAL": "Reputational"
-		},
-		"aiDisclaimer": "This analysis was generated by artificial intelligence. Results are informational only and do not constitute professional consulting, legal, or financial advice. Validate with qualified professionals before making business decisions.",
-		"reportBanner": "AI-generated report — for informational purposes only. Does not constitute professional advice.",
-		"v2": {
-			"stepDatosBasicos": "Basic info",
-			"stepProcesosClave": "Key processes",
-			"stepAnalisis": "Risk analysis",
-			"stepResultados": "Results",
-			"pasoNdeM": "Step {n} of {m}",
-			"stepDatosBasicosTitle": "Tell us about your company",
-			"stepDatosBasicosDesc": "We use this to personalize the analysis to your industry and context.",
-			"companyName": "Company name",
-			"companyNamePlaceholder": "E.g. Northern Industries Inc.",
-			"industry": "Industry",
-			"industryPlaceholder": "Select your industry",
-			"companySize": "Company size",
-			"companySizePlaceholder": "Select size",
-			"country": "Country",
-			"countryPlaceholder": "Select your country",
-			"urlOptional": "Website (optional)",
-			"urlHelper": "Helps us better understand your company and personalize the analysis.",
-			"selectProcess": "Select the process you want to analyze in depth.",
-			"aiSuggestions": "AI-suggested processes",
-			"analyzing": "Analyzing operational risks...",
-			"analyzingIndustry": "Analyzing your industry...",
-			"analysisComplete": "{count} risks identified in your process.",
-			"downloadPdf": "Download PDF Report",
-			"completed": "Scan complete!",
-			"back": "Back",
-			"next": "Next",
-			"viewResults": "View results",
-			"processing": "Processing...",
-			"creatingSession": "Preparing analysis...",
-			"crawling": "Analyzing your company information...",
-			"researching": "Researching your industry...",
-			"resultsDesc": "Operational scan of {company}.",
-			"risksDetected": "{count} risks identified",
-			"saveScan": "Save your scan",
-			"saveScanDesc": "Create an account to keep this analysis, edit the process diagram, and monitor improvements.",
-			"yourName": "Your name",
-			"yourEmail": "Your email",
-			"orgName": "Organization name",
-			"orgNamePlaceholder": "My Company Inc. (optional)",
-			"createAccount": "Create account and save",
-			"creating": "Creating account...",
-			"stepExploracion": "Exploration",
-			"chatIntro": "I found the most critical processes in your industry ({industry}). Select the one you want to analyze in depth.",
-			"chatProcessSelected": "Great, let's explore \"{process}\". I'll ask you some questions to better understand how your operation works.",
-			"chatPlaceholder": "Describe your process or answer the question...",
-			"exploracionLoading": "This will take a few seconds...",
-			"saveToOrg": "Save to your organization",
-			"saveToOrgDesc": "Add this process and its risks to your process architecture.",
-			"saveToOrgButton": "Save process and risks",
-			"savingToOrg": "Saving...",
-			"savedToOrg": "Saved to your organization!",
-			"goToProcesses": "View my processes"
-		},
-		"discovery": {
-			"intakeTitle": "Discovery of {company}",
-			"intakeDesc": "Tell us about your company to personalize the process analysis.",
-			"industry": "Industry",
-			"industryPlaceholder": "Select your industry",
-			"companySize": "Company size",
-			"companySizePlaceholder": "Select size",
-			"country": "Country",
-			"countryPlaceholder": "Select your country",
-			"urlOptional": "Website (optional)",
-			"urlHelper": "Helps us research your industry and context.",
-			"challenge": "Main operational challenge",
-			"challengePlaceholder": "Describe the most important problem you face in your operations...",
-			"challengeHelper": "This guides the conversation toward what matters most.",
-			"chatWelcome": "Hi! I'm ready to help you discover your company's processes. Tell me about your operations, main activities, or the problems you face.",
-			"chatPlaceholder": "Describe your processes, answer the question, or paste notes...",
-			"chatError": "Error processing your message. Please try again.",
-			"analyzing": "Analyzing...",
-			"transcribing": "Transcribing audio...",
-			"processesDiscovered": "Processes discovered",
-			"noProcessesYet": "Processes will appear here as we identify them.",
-			"coverage": "Coverage",
-			"deliverables": "Deliverables",
-			"generateDeliverables": "Generate deliverables",
-			"generating": "Generating...",
-			"needMoreProcesses": "Discover at least 2 processes to generate deliverables.",
-			"generatingTitle": "Generating your deliverables...",
-			"generatingDesc": "We're building your process visualizations.",
-			"deliverablesTitle": "Deliverables ready!",
-			"deliverablesDesc": "Your process architecture is ready to explore.",
-			"deliverablesReady": "Deliverables generated!",
-			"deliverableReady": "Ready to view",
-			"deliverableGenerating": "Generating...",
-			"deliverablePending": "Pending",
-			"deliverableFailed": "Generation failed",
-			"goToDashboard": "Go to dashboard",
-			"downloadPdf": "Download PDF report"
-		}
-	},
-	"maturityRing": {
-		"label": "Risk Maturity",
-		"noData": "No data",
-		"tooltip": "Composite score based on documentation coverage (30%), risk analysis coverage (30%), process maturity (20%), and control effectiveness (20%)."
-	},
-	"emptyStates": {
-		"risks": {
-			"noFilter": "No results",
-			"noFilterDesc": "No risks match the selected filters.",
-			"noControls": "No risks to map",
-			"noControlsDesc": "Run a risk analysis to identify controls associated with each activity.",
-			"noFmea": "No FMEA data",
-			"noFmeaDesc": "FMEA analysis identifies failure modes, their effects, and risk priority number (RPN) for each process activity.",
-			"noOpportunities": "No opportunities identified",
-			"noOpportunitiesDesc": "Improvement opportunities are automatically detected during the process risk analysis."
-		},
-		"processes": {
-			"noSubprocesses": "No sub-processes",
-			"noSubprocessesDesc": "Add a sub-process to decompose and detail this process.",
-			"noSessions": "No sessions",
-			"noSessionsDesc": "Start a Deep Dive to map this process in detail."
-		},
-		"deliverables": {
-			"noProcessCards": "No processes registered",
-			"noProcessCardsDesc": "Start a discovery session to document processes and generate cards automatically."
-		},
-		"commandCenter": {
-			"title": "Command Center",
-			"description": "Schedule your first elicitation session to start mapping processes with AI.",
-			"cta": "Schedule First Session"
-		}
-	},
-	"riskTab": {
-		"errorAnalyzing": "Analysis failed. Please try again.",
-		"noRisks": "No risks analyzed",
-		"noRisksDesc": "Run the analysis to identify risks, opportunities, and failure modes in this process.",
-		"analyzing": "Analyzing...",
-		"analyze": "Analyze Risks",
-		"avgRisk": "Average risk:",
-		"critical": "Critical",
-		"high": "High",
-		"opportunity": "Opportunity",
-		"tabs": {
-			"register": "Register",
-			"opportunities": "Opportunities",
-			"controls": "Controls",
-			"fmea": "FMEA"
-		},
-		"riskMatrix": "Risk Matrix",
-		"filterSeverity": "Filter: Severity {sev}, Probability {prob}",
-		"clearFilter": "Clear filter",
-		"riskTrend": "Risk Trend",
-		"noControls": "No controls defined. Add controls to reduce the risk.",
-		"addControl": "Add Control",
-		"noMitigations": "No mitigations defined.",
-		"mitigationPlaceholder": "Mitigation action..."
-	},
-	"commandCenter": {
-		"title": "Command Center",
-		"editLive": "Edit Live",
-		"newSession": "New Session",
-		"defaultProcess": "General session",
-		"errorReschedule": "Error rescheduling session",
-		"errorUpdate": "Error updating session",
-		"errorEditSession": "Error starting edit session",
-		"sessionUpdated": "Session updated",
-		"intakeLinkGenerated": "Intake link generated",
-		"noSessionsScheduled": "No sessions scheduled",
-		"noResponses": "No responses yet",
-		"scheduleSession": "Schedule Session",
-		"wizard": {
-			"process": "Process",
-			"participants": "Participants",
-			"context": "Context",
-			"schedule": "Schedule",
-			"invitation": "Invitation",
-			"searchProcess": "Search process or type a new name...",
-			"loadingProcesses": "Loading processes...",
-			"noProcesses": "No processes. Type a name to create one.",
-			"createNew": "Create",
-			"newProcess": "New process",
-			"sessionType": "Session type",
-			"noSelection": "Not selected",
-			"noParticipants": "None added",
-			"noContext": "No context",
-			"noCall": "No call",
-			"notScheduled": "Not scheduled",
-			"contextPlaceholder": "Describe the process context, session objectives, relevant client information...",
-			"coverPlaceholder": "What to cover in this session...",
-			"errorRaci": "Error fetching RACI",
-			"noParticipantsEmpty": "No participants"
-		}
-	},
-	"processDetail": {
-		"deleteConfirm": "Delete process",
-		"deleteMessage": "All associated data will be permanently deleted: sub-processes, sessions, RACI, risks, and versions.",
-		"linkCopied": "Link copied",
-		"nameRequired": "Name is required",
-		"subprocesses": "Sub-processes",
-		"noSubprocesses": "No sub-processes",
-		"documents": "Documents",
-		"uploadDocs": "Upload SOPs or manuals",
-		"processDetails": "Process details",
-		"raciMatrix": "RACI Matrix",
-		"notGenerated": "Not generated",
-		"intelligence": "Intelligence",
-		"analyzeProcess": "Analyze process",
-		"risksQuality": "Risks & Quality",
-		"analyzeRisks": "Analyze risks",
-		"consolidation": "Consolidation",
-		"conflicts": "{count} conflicts",
-		"consolidate": "Consolidate perspectives",
-		"noDiagram": "No diagram. Create one or run a session to generate it.",
-		"createDiagram": "Create Diagram",
-		"regenerate": "Regenerate",
-		"fixWithAi": "Fix with AI",
-		"repairingDiagram": "Repairing diagram...",
-		"detailsSaved": "Details saved",
-		"errorSavingDetails": "Error saving details",
-		"descriptionLabel": "Description",
-		"ownerPlaceholder": "Department or person responsible...",
-		"goals": "Goals",
-		"triggers": "Triggers",
-		"outputs": "Outputs",
-		"addGoalPlaceholder": "Add goal...",
-		"addTriggerPlaceholder": "Add trigger...",
-		"addOutputPlaceholder": "Add output...",
-		"subprocess": "Sub-process",
-		"task": "Task",
-		"procedure": "Procedure",
-		"level": "Level",
-		"continueLastSession": "Continue last",
-		"nodes": "{count} nodes",
-		"risks": "{count} risks",
-		"join": "Join",
-		"onboardingTitle": "Start documenting your process",
-		"onboardingDesc1": "This workspace lets you build your process documentation iteratively.",
-		"onboardingDesc2": "Start a discovery session to capture information, or add details manually.",
-		"noCategoryFilter": "No processes in this category",
-		"noCategoryFilterDesc": "Add processes manually or use AI Discovery",
-		"errorStatusChange": "Error changing status",
-		"noRaciAssignment": "No RACI assignment for this activity. Generate the RACI matrix from the analysis tab."
-	},
-	"meetingModule": {
-		"noSessions": "No sessions",
-		"noSessionsDesc": "Create your first session to start mapping processes.",
-		"newSession": "New session",
-		"noProcess": "No process",
-		"errorSendMessage": "Error sending message",
-		"errorEdit": "Error editing",
-		"errorDelete": "Error deleting",
-		"errorRetry": "Error retrying",
-		"errorApplyPattern": "Error applying pattern",
-		"noDocuments": "No documents",
-		"defaultProcessName": "Process",
-		"noNodesData": "No node data to regenerate the diagram."
-	},
-	"intelligenceTab": {
-		"noOpenQuestions": "No open questions. The process is complete or needs an audit.",
-		"noQuestionsCategory": "No questions in this category."
-	},
-	"deliverables": {
-		"noOwner": "No owner",
-		"noDepartment": "No department"
-	},
-	"usage": {
-		"title": "Plan Usage",
-		"evaluations": "Evaluations",
-		"evaluators": "Evaluators",
-		"processes": "Processes",
-		"sessions": "AI Sessions",
-		"reports": "Reports",
-		"used": "{used} / {limit}",
-		"unlimited": "Unlimited",
-		"remaining": "{count} remaining",
-		"exhausted": "Limit reached",
-		"resets": "Resets {date}",
-		"categoryEvaluations": "Evaluations",
-		"categoryProcesses": "Processes",
-		"categoryTools": "Tools"
-	}
+  "admin": {
+    "menu": {
+      "organizations": "Organizations",
+      "users": "Users"
+    },
+    "organizations": {
+      "backToList": "Back to organizations",
+      "confirmDelete": {
+        "confirm": "Delete",
+        "message": "Are you sure you want to delete this organization? This action cannot be undone.",
+        "title": "Delete organization"
+      },
+      "create": "Create",
+      "delete": "Delete",
+      "deleteOrganization": {
+        "deleted": "Organization has been deleted successfully!",
+        "deleting": "Deleting organization...",
+        "notDeleted": "Organization could not be deleted. Please try again."
+      },
+      "edit": "Edit",
+      "form": {
+        "createTitle": "Create an organization",
+        "name": "Organization name",
+        "notifications": {
+          "error": "Could not save the organization. Please try again later.",
+          "success": "Organization has been saved."
+        },
+        "save": "Save",
+        "updateTitle": "Edit organization"
+      },
+      "loading": "Loading organizations...",
+      "membersCount": "{count} {count, plural, one {member} other {members}}",
+      "search": "Search for an organization...",
+      "title": "Manage organizations"
+    },
+    "title": "Administration",
+    "users": {
+      "confirmDelete": {
+        "confirm": "Delete",
+        "message": "Are you sure you want to delete this user? This action cannot be undone.",
+        "title": "Delete user"
+      },
+      "delete": "Delete",
+      "deleteUser": {
+        "deleted": "User has been deleted successfully!",
+        "deleting": "Deleting user...",
+        "notDeleted": "User could not be deleted. Please try again."
+      },
+      "emailVerified": {
+        "verified": "Email verified",
+        "waiting": "Email waiting for verification"
+      },
+      "impersonate": "Impersonate",
+      "impersonation": {
+        "impersonating": "Impersonating as {name}..."
+      },
+      "loading": "Loading users...",
+      "resendVerificationMail": {
+        "error": "Could not resend verification mail. Please try again.",
+        "submitting": "Resending verification mail...",
+        "success": "Verification mail has been sent.",
+        "title": "Resend verification mail"
+      },
+      "search": "Search for name or email...",
+      "title": "Manage users",
+      "assignAdminRole": "Assign admin role",
+      "removeAdminRole": "Remove admin role"
+    },
+    "description": "Manage your application."
+  },
+  "app": {
+    "menu": {
+      "accountSettings": "Account settings",
+      "admin": "Admin",
+      "aiChatbot": "AI Chatbot",
+      "organizationSettings": "Settings",
+      "analytics": "Analytics",
+      "clients": "Clients",
+      "sessions": "Sessions",
+      "start": "Start",
+      "dashboard": "Overview",
+      "processes": "Processes",
+      "risks": "Risks",
+      "deliverables": "Deliverables",
+      "scan": "X-Ray",
+      "tools": "Tools",
+      "procedures": "Procedures",
+      "simulations": "Evaluations",
+      "evaluaciones": "Evaluations",
+      "evaluation": "Evaluation",
+      "workflow": "Workflow",
+      "workspace": "Workspace"
+    },
+    "greeting": {
+      "morning": "Good morning",
+      "afternoon": "Good afternoon",
+      "evening": "Good evening"
+    },
+    "badges": {
+      "critical": "{count} critical",
+      "live": "LIVE",
+      "pending": "{count} pending"
+    },
+    "actions": {
+      "registerRisk": "Register Risk",
+      "newSession": "New Session",
+      "newProcess": "New Process"
+    },
+    "status": {
+      "riskScore": "Risk score: {score}",
+      "attentionNeeded": "{count} need mitigation",
+      "underControl": "Exposure controlled",
+      "setupFirst": "Start by setting up your first client",
+      "today": "Today",
+      "tomorrow": "Tomorrow"
+    },
+    "userMenu": {
+      "accountSettings": "Account settings",
+      "colorMode": "Color mode",
+      "documentation": "Documentation",
+      "home": "Home",
+      "logout": "Logout"
+    }
+  },
+  "auth": {
+    "errors": {
+      "invalidEmailOrPassword": "The credentials you entered are invalid. Please check them and try again.",
+      "unknown": "Something went wrong. Please try again.",
+      "userNotFound": "This user does not exists",
+      "failedToCreateUser": "Could not create user. Please try again.",
+      "failedToCreateSession": "Could not create a session. Please try again.",
+      "failedToUpdateUser": "Could not update user. Please try again.",
+      "failedToGetSession": "Could not get the session.",
+      "invalidPassword": "The entered password is incorrect.",
+      "invalidEmail": "The entered email is invalid.",
+      "invalidToken": "The token you entered is invalid or has expired.",
+      "credentialAccountNotFound": "Account not found.",
+      "emailCanNotBeUpdated": "Email could not be updated. Please try again.",
+      "emailNotVerified": "Please verify your email first before logging in.",
+      "failedToGetUserInfo": "Could not load user information.",
+      "idTokenNotSupported": "ID token is not supported.",
+      "passwordTooLong": "Password is too long.",
+      "passwordTooShort": "Password is too short.",
+      "providerNotFound": "This provider is not suppported.",
+      "socialAccountAlreadyLinked": "This account is already linked to a user.",
+      "userEmailNotFound": "Email not found.",
+      "userAlreadyExists": "This user already exists.",
+      "userAlreadyExistsUseAnotherEmail": "User already exists. Use another email.",
+      "invalidInvitation": "The invitation is invalid or expired.",
+      "sessionExpired": "The session has expired.",
+      "failedToUnlinkLastAccount": "Failed to unlink account",
+      "accountNotFound": "Account not found"
+    },
+    "forgotPassword": {
+      "backToSignin": "Back to signin",
+      "email": "Email",
+      "hints": {
+        "linkNotSent": {
+          "message": "We are sorry, but we were unable to send you a link to reset your password. Please try again later.",
+          "title": "Link not sent"
+        },
+        "linkSent": {
+          "message": "We have sent you a link to continue. Please check your inbox.",
+          "title": "Link sent"
+        }
+      },
+      "message": "Please enter your email address and we will send you a link to reset your password.",
+      "submit": "Send link",
+      "title": "Forgot your password?"
+    },
+    "login": {
+      "continueWith": "Or continue with",
+      "createAnAccount": "Create an account",
+      "dontHaveAnAccount": "Don't have an account yet?",
+      "forgotPassword": "Forgot password?",
+      "hints": {
+        "invalidCredentials": "The email or password you entered are invalid. Please try again.",
+        "linkSent": {
+          "message": "We have sent you a link to continue. Please check your inbox.",
+          "title": "Link sent"
+        }
+      },
+      "loginWithPasskey": "Login with passkey",
+      "modes": {
+        "magicLink": "Magic link",
+        "password": "Password"
+      },
+      "rememberMe": "Remember me",
+      "security": "Your data is encrypted and protected",
+      "submit": "Sign in",
+      "subtitle": "Enter your credentials to continue.",
+      "title": "Welcome back",
+      "sendMagicLink": "Send magic link"
+    },
+    "showcase": {
+      "badge": "Process Intelligence Platform",
+      "login": {
+        "title": "Your processes, analyzed with precision",
+        "subtitle": "Elicit, analyze and transform business processes with real-time AI"
+      },
+      "signup": {
+        "title": "Start mapping with intelligence",
+        "subtitle": "Join the consultants transforming interviews into automatic BPMN diagrams"
+      },
+      "feature": {
+        "ai": "AI Analysis",
+        "bpmn": "BPMN Diagrams",
+        "risk": "Risk Detection"
+      },
+      "metric": {
+        "processes": "Processes mapped",
+        "organizations": "Organizations",
+        "accuracy": "Accuracy rate"
+      }
+    },
+    "resetPassword": {
+      "backToSignin": "Back to signin",
+      "hints": {
+        "error": "We are sorry, but we were unable to reset your password. Please try again.",
+        "success": "Your password has been reset successfully."
+      },
+      "message": "Please enter a new password.",
+      "newPassword": "New password",
+      "submit": "Reset password",
+      "title": "Reset your password"
+    },
+    "signup": {
+      "alreadyHaveAccount": "Already have an account?",
+      "email": "Email",
+      "hints": {
+        "signupFailed": "We are sorry, but we were unable to create your account. Please try again later.",
+        "verifyEmail": "We have sent you a link to verify your email. Please check your inbox."
+      },
+      "message": "We are happy that you want to join us. Please fill in the form below to create your account.",
+      "name": "Name",
+      "password": "Password",
+      "signIn": "Sign in",
+      "submit": "Create account",
+      "title": "Create an account",
+      "acceptTerms": "I have read and accept the <termsLink>Terms of Service</termsLink> and the <privacyLink>Privacy Policy</privacyLink>",
+      "acceptRequired": "You must accept the Terms of Service and Privacy Policy to create an account."
+    },
+    "verify": {
+      "title": "Verify your account",
+      "code": "One-time password",
+      "submit": "Verify",
+      "backToSignin": "Back to login",
+      "message": "Enter the one-time password from your authenticator app to continue."
+    }
+  },
+  "choosePlan": {
+    "title": "Choose your plan",
+    "description": "To continue, please select a plan.",
+    "trialExpiredTitle": "Your trial has ended",
+    "trialExpiredDescription": "Your 14-day free trial has expired. Choose a plan to continue using Auditora.ai."
+  },
+  "documentation": {
+    "title": "Documentation"
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Page not found",
+    "goToDashboard": "Go to dashboard",
+    "goToHomepage": "Go to homepage"
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "Welcome to Auditora.ai",
+      "subtitle": "Your AI-powered process elicitation platform",
+      "step1": "Create a client",
+      "step1Desc": "The company whose processes you'll map",
+      "step2": "Start a session",
+      "step2Desc": "Join a video call and let AI guide you",
+      "step3": "Get your diagram",
+      "step3Desc": "The process is diagrammed automatically in BPMN",
+      "cta": "Start your first session",
+      "explore": "Explore the dashboard first"
+    },
+    "account": {
+      "avatar": "Avatar",
+      "avatarDescription": "Click the circle or drop an image to it to upload your avatar.",
+      "name": "Name"
+    },
+    "continue": "Continue",
+    "message": "Just a few quick steps to get you started.",
+    "notifications": {
+      "accountSetupFailed": "We are sorry, but we were unable to set up your account. Please try again later.",
+      "companySetupFailed": "We are sorry, but we were unable to save your company information. Please try again later."
+    },
+    "pricing": {
+      "planSelected": "Your plan has been selected successfully.",
+      "skip": "Skip for now"
+    },
+    "step": "Step {step} / {total}",
+    "title": "Set up your account",
+    "company": {
+      "title": "Tell us about your company",
+      "subtitle": "This helps us tailor Auditora to your needs",
+      "companyName": "Company name",
+      "companyNamePlaceholder": "Acme Corp",
+      "industry": "Industry",
+      "industryPlaceholder": "Select your industry",
+      "companySize": "Company size",
+      "companySizePlaceholder": "Select size range",
+      "evaluationTarget": "How many people would you like to evaluate?",
+      "evaluationTargetPlaceholder": "Select range",
+      "concernProcess": "Which process worries you the most?",
+      "concernProcessPlaceholder": "e.g., Purchase orders, Quality control...",
+      "concernProcessOptional": "Optional — helps us suggest where to start"
+    },
+    "firstValue": {
+      "title": "Start getting value",
+      "subtitle": "Based on your industry, we recommend starting here",
+      "recommendation": "We recommend documenting your most critical process first. Evaluations are more valuable when based on real procedures.",
+      "chatInterview": "Start AI interview",
+      "chatInterviewDesc": "Let AI guide you through documenting a process in minutes",
+      "exploreDashboard": "Explore dashboard",
+      "exploreDashboardDesc": "See what Auditora can do for your team",
+      "documentProcess": "Document a process",
+      "documentProcessDesc": "Start with your most critical process"
+    },
+    "setupComplete": {
+      "title": "Your organization is ready!",
+      "subtitle": "You're all set to start improving process compliance.",
+      "inviteMembers": "Invite team members",
+      "inviteMembersDesc": "Add colleagues who should participate in evaluations",
+      "goToDashboard": "Go to dashboard"
+    }
+  },
+  "organizations": {
+    "createForm": {
+      "name": "Organization name",
+      "notifications": {
+        "error": "We are sorry, but we were unable to create your organization. Please try again later.",
+        "success": "Your organization has been created. You can now invite members."
+      },
+      "submit": "Create organization",
+      "subtitle": "Enter a name for your organization to get started. You can change the name later in the organization settings.",
+      "title": "Create an organization"
+    },
+    "invitationAlert": {
+      "description": "You need to sign in or create an account to join the organization.",
+      "title": "You have been invited to join an organization."
+    },
+    "invitationModal": {
+      "accept": "Accept",
+      "decline": "Decline",
+      "description": "You have been invited to join the organization {organizationName}. Do you want to accept the invitation and join the organization?",
+      "title": "Join the organization"
+    },
+    "organizationSelect": {
+      "createNewOrganization": "Create new organization",
+      "organizations": "Organizations",
+      "personalAccount": "Personal account"
+    },
+    "organizationsGrid": {
+      "createNewOrganization": "Create new organization",
+      "title": "Your organizations"
+    },
+    "roles": {
+      "admin": "Admin",
+      "member": "Member",
+      "owner": "Owner"
+    },
+    "settings": {
+      "changeName": {
+        "title": "Organization name"
+      },
+      "deleteOrganization": {
+        "confirmation": "Are you sure you want to delete your organization?",
+        "description": "Permanently delete your organization. Once you delete your organization, there is no going back. To confirm, please enter your password below:",
+        "submit": "Delete organization",
+        "title": "Delete organization"
+      },
+      "logo": {
+        "description": "Upload a logo for your organization.",
+        "title": "Organization logo"
+      },
+      "members": {
+        "activeMembers": "Active members",
+        "description": "See all active members and the pending invites of your organization.",
+        "invitations": {
+          "empty": "You have not invited any members yet.",
+          "expiresAt": "Expires at {date}",
+          "invitationStatus": {
+            "accepted": "Accepted",
+            "canceled": "Canceled",
+            "pending": "Pending",
+            "rejected": "Rejected"
+          },
+          "revoke": "Revoke invitation",
+          "resend": "Resend invitation"
+        },
+        "inviteMember": {
+          "description": "To invite a new member, send them an invitation.",
+          "email": "Email",
+          "notifications": {
+            "error": {
+              "description": "We were unable to invite the member. Please try again later.",
+              "title": "Could not invite member"
+            },
+            "success": {
+              "description": "The member has been invited.",
+              "title": "Member invited"
+            }
+          },
+          "role": "Role",
+          "submit": "Invite",
+          "title": "Invite member"
+        },
+        "leaveOrganization": "Leave organization",
+        "notifications": {
+          "removeMember": {
+            "error": {
+              "description": "Could not remove the member from your organization. Please try again."
+            },
+            "loading": {
+              "description": "Removing member from organization..."
+            },
+            "success": {
+              "description": "The member has been successfully removed from your organization."
+            }
+          },
+          "revokeInvitation": {
+            "error": {
+              "description": "The invitation could not be revoked. Please try again later."
+            },
+            "loading": {
+              "description": "Revoking invitation..."
+            },
+            "success": {
+              "description": "The invitation has been revoked."
+            }
+          },
+          "updateMembership": {
+            "error": {
+              "description": "Could not update organization membership. Please try again."
+            },
+            "loading": {
+              "description": "Updating membership..."
+            },
+            "success": {
+              "description": "Membership was updated successfully"
+            }
+          },
+          "resendInvitation": {
+            "loading": {
+              "description": "Resending invitation..."
+            },
+            "success": {
+              "description": "Invitation sent"
+            },
+            "error": {
+              "description": "Could not sent invitation. Please try again."
+            }
+          }
+        },
+        "pendingInvitations": "Pending invitations",
+        "removeMember": "Remove member",
+        "title": "Members"
+      },
+      "notifications": {
+        "organizationDeleted": "Your organization has been deleted.",
+        "organizationNameNotUpdated": "We were unable to update your organization name. Please try again later.",
+        "organizationNameUpdated": "Your organization name has been updated.",
+        "organizationNotDeleted": "We were unable to delete your organization. Please try again later."
+      },
+      "subtitle": "Manage the settings of the organization.",
+      "title": "Organization",
+      "dangerZone": {
+        "title": "Danger zone"
+      },
+      "ai": {
+        "title": "AI Configuration",
+        "subtitle": "Monitor AI usage and manage API keys",
+        "usage": {
+          "title": "AI Usage",
+          "description": "Token consumption and estimated costs for the last 30 days",
+          "totalTokens": "Total tokens",
+          "totalCalls": "AI calls",
+          "inputTokens": "Input tokens",
+          "errors": "Errors",
+          "estimatedCost": "Est. cost",
+          "pipeline": "Pipeline",
+          "calls": "Calls",
+          "avgDuration": "Avg duration",
+          "dailyUsage": "Daily usage",
+          "noData": "No usage data available",
+          "currentTier": "Current AI tier",
+          "pipelineBreakdown": "Consumption by pipeline"
+        },
+        "externalCosts": {
+          "title": "External Service Costs",
+          "description": "Estimated costs for speech-to-text and meeting bot services",
+          "deepgramStt": "Deepgram STT",
+          "recallBot": "Recall.ai Bot",
+          "minutes": "minutes"
+        },
+        "keys": {
+          "title": "Custom API Keys (BYOK)",
+          "description": "Use your own API keys instead of platform keys. Keys are stored encrypted.",
+          "anthropicKey": "Anthropic API Key",
+          "deepseekKey": "DeepSeek API Key",
+          "configured": "Configured",
+          "notConfigured": "Not configured",
+          "lastUpdated": "Last updated",
+          "save": "Save",
+          "saving": "Saving...",
+          "saved": "Saved!",
+          "delete": "Remove",
+          "deleteConfirm": "Are you sure you want to remove this API key? The platform key will be used instead.",
+          "placeholder": "sk-...",
+          "hint": "When set, your organization's AI calls will use this key instead of the platform key."
+        }
+      }
+    },
+    "start": {
+      "subtitle": "Welcome to the start page of this organization!"
+    }
+  },
+  "settings": {
+    "account": {
+      "avatar": {
+        "description": "To change your avatar click the picture in this block and select a file from your computer to upload.",
+        "notifications": {
+          "error": "Could not update avatar",
+          "success": "Avatar was updated successfully"
+        },
+        "title": "Your avatar"
+      },
+      "changeEmail": {
+        "description": "To change your email, enter the new email and hit save. You will have to confirm the new email before it will become active.",
+        "notifications": {
+          "error": "Could not update email",
+          "success": "Email was updated successfully"
+        },
+        "title": "Your email"
+      },
+      "changeName": {
+        "notifications": {
+          "error": "Could not update name",
+          "success": "Name was updated successfully"
+        },
+        "title": "Your name"
+      },
+      "deleteAccount": {
+        "confirmation": "Are you sure you want to delete your account?",
+        "description": "Permanently delete your account. Once you delete your account, there is no going back. To confirm, please enter your password below:",
+        "notifications": {
+          "error": "Could not delete account",
+          "success": "Account was deleted successfully"
+        },
+        "submit": "Delete account",
+        "title": "Delete account"
+      },
+      "language": {
+        "description": "To change the language of the app for your account, select a language from the list and click save.",
+        "notifications": {
+          "error": "Could not update language",
+          "success": "Language was updated successfully"
+        },
+        "title": "Your language"
+      },
+      "security": {
+        "activeSessions": {
+          "description": "These are all the active sessions of your account. Click the X to end a specifc session.",
+          "title": "Active sessions",
+          "notifications": {
+            "revokeSession": {
+              "success": "Session revoked"
+            }
+          },
+          "currentSession": "Current session"
+        },
+        "changePassword": {
+          "currentPassword": "Current password",
+          "newPassword": "New password",
+          "notifications": {
+            "error": "Could not update password",
+            "success": "Password was updated successfully"
+          },
+          "title": "Your password"
+        },
+        "connectedAccounts": {
+          "connect": "Connect",
+          "connected": "Connected",
+          "disconnect": "Disconnect",
+          "title": "Connected accounts"
+        },
+        "passkeys": {
+          "addPasskey": "Add passkey",
+          "description": "Use passkeys as a secure alternative to passwords.",
+          "notifications": {
+            "addPasskey": {
+              "error": {
+                "title": "Could not add passkey"
+              },
+              "success": {
+                "title": "Passkey added"
+              }
+            },
+            "deletePasskey": {
+              "error": {
+                "title": "Could not delete passkey"
+              },
+              "loading": {
+                "title": "Deleting passkey..."
+              },
+              "success": {
+                "title": "Passkey deleted"
+              }
+            }
+          },
+          "title": "Passkeys"
+        },
+        "setPassword": {
+          "description": "You have not set a password yet. To set one, you need to go through the password reset flow. Click the button below to send an email to reset your password and follow the instructions in the email.",
+          "notifications": {
+            "error": "Could not send link to set password. Please try again.",
+            "success": "Check your inbox for the link to set your password."
+          },
+          "submit": "Set password",
+          "title": "Your password"
+        },
+        "title": "Security",
+        "twoFactor": {
+          "title": "Two-factor authentication",
+          "description": "Add an extra layer of security to your account.",
+          "dialog": {
+            "password": {
+              "title": "Verify with password",
+              "description": "Please verify your account by entering your password:",
+              "label": "Your password:"
+            },
+            "totpUrl": {
+              "description": "Use your preferred authenticator app and scan the QR code with it or enter the secret below manually to set up two-factor authentication.",
+              "code": "Enter 6-digit code to verify the setup:",
+              "title": "Enable two-factor authentication"
+            }
+          },
+          "enable": "Enable two-factor authentication",
+          "notifications": {
+            "verify": {
+              "success": {
+                "title": "Two-factor authentication has been enabled successfully."
+              }
+            },
+            "enable": {
+              "error": {
+                "title": "Could not verify your account with the provided password. Please try again."
+              }
+            },
+            "disable": {
+              "success": {
+                "title": "Two-factor authentication has been disabled successfully."
+              }
+            }
+          },
+          "disable": "Disable two-factor authentication",
+          "enabled": "You have two-factor authentication enabled for your account."
+        }
+      },
+      "subtitle": "Manage the settings of your personal account.",
+      "title": "Account settings"
+    },
+    "billing": {
+      "createCustomerPortal": {
+        "label": "Manage billing",
+        "notifications": {
+          "error": {
+            "title": "Could not create a customer portal session. Please try again."
+          }
+        }
+      },
+      "activePlan": {
+        "status": {
+          "active": "Active",
+          "canceled": "Canceled",
+          "expired": "Expired",
+          "incomplete": "Incomplete",
+          "past_due": "Past due",
+          "paused": "Paused",
+          "trialing": "Trialing",
+          "unpaid": "Unpaid"
+        },
+        "title": "Your plan"
+      },
+      "changePlan": {
+        "description": "Choose a plan to subscribe to.",
+        "title": "Change your plan"
+      },
+      "title": "Billing"
+    },
+    "menu": {
+      "account": {
+        "billing": "Billing",
+        "dangerZone": "Danger zone",
+        "general": "General",
+        "security": "Security",
+        "title": "Account"
+      },
+      "organization": {
+        "ai": "AI",
+        "billing": "Billing",
+        "general": "General",
+        "members": "Members",
+        "title": "Organization",
+        "dangerZone": "Danger zone"
+      }
+    },
+    "save": "Save"
+  },
+  "start": {
+    "subtitle": "See the latest stats of your awesome business.",
+    "welcome": "Welcome {name}!"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Your client engagement overview",
+    "sessionsThisMonth": "Sessions This Month",
+    "processesMapped": "Processes Mapped",
+    "aiAccuracy": "AI Accuracy",
+    "recentActivity": "Recent Activity",
+    "newSession": "New Session",
+    "projects": "Projects",
+    "engagementProgress": "Engagement Progress",
+    "processesGoal": "{mapped} of {goal} processes",
+    "setGoal": "Set goal",
+    "emptyProjects": "Your projects will appear here after your first session",
+    "noActivity": "No activity yet. Start a session to begin.",
+    "recentProcesses": "Recent Processes",
+    "viewAll": "View all",
+    "noProcesses": "Discover your first process to see it here",
+    "activity": {
+      "sessionCreated": "Session created",
+      "sessionEnded": "Session ended",
+      "processCreated": "Process created",
+      "nodesConfirmed": "{count} nodes confirmed"
+    },
+    "hero": {
+      "title": "Process Architecture",
+      "aiStat": "AI extracted {nodes} activities from {sessions} conversations",
+      "demoTitle": "This is what the AI generates",
+      "demoSubtitle": "Start a conversation and Auditora.ai will automatically extract process diagrams"
+    },
+    "cta": {
+      "firstDiscovery": "Discover your first process",
+      "deepDive": "Deep Dive: {name}",
+      "newDiscovery": "New Discovery"
+    },
+    "quickActions": {
+      "chat": "Chat with AI",
+      "chatDesc": "Describe your processes in a conversation",
+      "audio": "Upload Audio",
+      "audioDesc": "Upload mp3, wav, m4a recordings",
+      "call": "Join Call",
+      "callDesc": "Paste your meeting URL"
+    },
+    "arch": {
+      "title": "Process Architecture",
+      "core": "Core",
+      "strategic": "Strategic",
+      "support": "Support",
+      "empty": "No processes mapped yet"
+    },
+    "insight": {
+      "title": "Auditora.ai AI",
+      "empty": "Start a conversation with AI to discover your business processes.",
+      "noSupport": "You've mapped {count} processes but none are support. Suggestion: discover IT, Facilities, or HR.",
+      "fewCore": "You have {count} core processes. Similar industries typically have 5-7. What other processes are essential?",
+      "noStrategic": "You have {count} processes mapped but none are strategic. Which ones drive differentiation?",
+      "continue": "{count} processes mapped. Continue with deep dives to refine the diagrams."
+    },
+    "riskDashboard": {
+      "title": "Overview",
+      "live": "LIVE",
+      "newSession": "New Session",
+      "emptyTitle": "Welcome to Auditora.ai",
+      "emptyDesc": "Run your first X-Ray to discover your business risks, or schedule a session with your consultant.",
+      "scanCta": "Run X-Ray",
+      "risks": "Risks",
+      "processes": "Processes",
+      "sessions": "Sessions",
+      "topRisks": "Top Open Risks",
+      "noRisks": "No risks identified",
+      "nextSession": "Next Session",
+      "noSessions": "No sessions scheduled",
+      "scheduleSession": "Schedule Session",
+      "recentActivity": "Recent Activity",
+      "noActivity": "No recent activity",
+      "viewAllRisks": "View all risks",
+      "viewProcesses": "View processes",
+      "viewDeliverables": "View deliverables",
+      "noRisksDesc": "No critical risks. Schedule a session to analyze your processes.",
+      "nextSessionLabel": "Next session",
+      "noProcess": "No process assigned",
+      "viewDetails": "View details",
+      "coverage": "Coverage"
+    }
+  },
+  "processLibrary": {
+    "title": "Processes",
+    "subtitle": "Business process hub",
+    "search": "Search processes...",
+    "filterByStatus": "Filter by status",
+    "filterByLevel": "Filter by level",
+    "filterByProject": "Filter by project",
+    "allStatuses": "All statuses",
+    "allLevels": "All levels",
+    "allProjects": "All projects",
+    "empty": {
+      "title": "No processes mapped yet",
+      "description": "Schedule a discovery session to start mapping processes.",
+      "cta": "New Session"
+    },
+    "export": "Export BPMN",
+    "view": "View",
+    "share": "Share",
+    "versions": "{count} {count, plural, one {version} other {versions}}",
+    "nodes": "{count} {count, plural, one {node} other {nodes}}",
+    "sessions": "{count} {count, plural, one {session} other {sessions}}",
+    "sidebar": {
+      "noSessions": "No sessions. Start a Deep Dive to map this process.",
+      "noVersions": "No versions. Versions are created when saving the diagram or ending a session.",
+      "noDiagram": "No BPMN diagram",
+      "noDescription": "No description",
+      "noRaci": "No RACI matrix",
+      "noRiskAnalysis": "No risk analysis",
+      "noCaptureSessions": "No capture sessions",
+      "noGoals": "No goals defined",
+      "noChanges": "No changes between selected versions",
+      "contexto": "Context"
+    }
+  },
+  "commandPalette": {
+    "placeholder": "Search clients, processes, sessions...",
+    "newSession": "New Session",
+    "newClient": "New Client",
+    "noResults": "No results found",
+    "sections": {
+      "actions": "Actions",
+      "navigation": "Navigate",
+      "clients": "Clients",
+      "processes": "Processes",
+      "sessions": "Sessions"
+    }
+  },
+  "clientSelector": {
+    "title": "Your Clients",
+    "subtitle": "Select a client to view their engagement",
+    "newClient": "New Client",
+    "empty": {
+      "title": "No clients yet",
+      "description": "Create your first client to start consulting.",
+      "cta": "New Client"
+    },
+    "sessions": "{count} {count, plural, one {session} other {sessions}}",
+    "processes": "{count} {count, plural, one {process} other {processes}}"
+  },
+  "clients": {
+    "title": "Clients",
+    "newClient": "New Client",
+    "emptyState": "No clients yet. Add your first client to start consulting.",
+    "industry": "Industry",
+    "businessModel": "Business Model",
+    "operations": "Operations Profile",
+    "employees": "Employee Count",
+    "notes": "Consultant Notes",
+    "overview": "Overview",
+    "projects": "Projects",
+    "documents": "Documents",
+    "sessionHistory": "Session History"
+  },
+  "projects": {
+    "title": "Projects",
+    "newProject": "New Project",
+    "architecture": "Architecture",
+    "sessions": "Sessions",
+    "versions": "Versions",
+    "addProcess": "Add Process",
+    "startDiscovery": "Start Discovery Session",
+    "startSession": "Start Session"
+  },
+  "processes": {
+    "process": "Process",
+    "subprocess": "Subprocess",
+    "task": "Task",
+    "procedure": "Procedure",
+    "draft": "Draft",
+    "mapped": "Mapped",
+    "validated": "Validated",
+    "approved": "Approved",
+    "detail": "Process Detail",
+    "diagram": "Diagram",
+    "details": "Details",
+    "children": "Sub-processes",
+    "sessions": "Sessions",
+    "schedule": "Schedule",
+    "intelligence": "Intelligence",
+    "risks": "Risks & Quality",
+    "riskAnalysis": "Analyze Risks",
+    "fmeaAnalysis": "FMEA",
+    "riskRegister": "Register",
+    "opportunities": "Opportunities",
+    "controls": "Controls",
+    "heatMatrix": "Heat Matrix",
+    "mitigation": "Mitigation",
+    "severity": "Severity",
+    "probability": "Probability",
+    "riskScore": "Risk Score",
+    "residualRisk": "Residual Risk",
+    "noRisks": "No risks analyzed yet. Run the analysis to identify risks.",
+    "noOpportunities": "No opportunities detected yet.",
+    "noControls": "No controls. Add a control.",
+    "noMitigations": "No mitigations. Add an action.",
+    "noFmea": "No BPMN data. Add a diagram first.",
+    "needsTrend": "Need at least 2 audits for trend.",
+    "analyzing": "Analyzing...",
+    "analyzeError": "Analysis error. Try again.",
+    "exportReport": "Export Risk Report",
+    "shareRisks": "Share Risks",
+    "critical": "Critical",
+    "high": "High",
+    "medium": "Medium",
+    "low": "Low",
+    "addRisk": "Add Risk",
+    "addMitigation": "Add Mitigation",
+    "addControl": "Add Control",
+    "inherentRisk": "Inherent Risk",
+    "riskTypes": {
+      "OPERATIONAL": "Operational",
+      "COMPLIANCE": "Compliance",
+      "STRATEGIC": "Strategic",
+      "FINANCIAL": "Financial",
+      "TECHNOLOGY": "Technology",
+      "HUMAN_RESOURCE": "Human Resources",
+      "REPUTATIONAL": "Reputational"
+    },
+    "saveDiagram": "Save Diagram",
+    "addChild": "Add Sub-process",
+    "startDeepDive": "Start Deep Dive",
+    "continueLast": "Continue Last Session",
+    "description": "Description",
+    "goals": "Goals",
+    "triggers": "Triggers",
+    "outputs": "Outputs",
+    "owner": "Owner",
+    "status": "Status",
+    "noChildren": "No sub-processes yet",
+    "noSessions": "No sessions yet for this process",
+    "noDiagram": "No BPMN diagram yet. Start a session or create one manually."
+  },
+  "sessions": {
+    "title": "Sessions",
+    "subtitle": "Your process elicitation meetings",
+    "newSession": "New Session",
+    "empty": {
+      "title": "No sessions yet",
+      "description": "Create a new session to start mapping business processes during your next call."
+    },
+    "new": {
+      "title": "New Session",
+      "subtitle": "Set up a new process elicitation meeting",
+      "form": {
+        "meetingUrl": "Meeting URL",
+        "meetingUrlPlaceholder": "https://zoom.us/j/... or https://meet.google.com/...",
+        "meetingUrlHint": "Paste your Zoom, Google Meet, or Teams meeting link",
+        "clientName": "Client Name",
+        "clientNamePlaceholder": "Acme Corp",
+        "clientHint": "Select or create the company whose processes you'll map",
+        "projectName": "Project Name",
+        "projectNamePlaceholder": "Process Optimization Q1",
+        "projectHint": "Projects group your sessions by department or initiative",
+        "sessionType": "Session Type",
+        "sessionTypeHint": "Discovery maps the business overview. Deep Dive focuses on a specific process.",
+        "typeDiscovery": "Discovery — Business overview",
+        "typeDeepDive": "Deep Dive — Specific process",
+        "typeDiscoveryDesc": "Map the company's process architecture",
+        "typeDeepDiveDesc": "Deep dive into a specific process",
+        "typeContinuationDesc": "Continue where you left off in a previous session",
+        "create": "Create Session & Join Call",
+        "creating": "Connecting..."
+      }
+    }
+  },
+  "common": {
+    "confirmation": {
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    },
+    "actions": "Actions",
+    "colorMode": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "passwordCriteria": {
+      "minLength": "Min. 8 characters",
+      "upperAndLowercase": "Upper & lowercase",
+      "number": "Number",
+      "specialCharacter": "Special character"
+    },
+    "save": "Save",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "add": "Add",
+    "view": "View",
+    "close": "Close",
+    "back": "Back",
+    "retry": "Retry",
+    "search": "Search",
+    "loading": "Loading...",
+    "noResults": "No results",
+    "error": "Error",
+    "success": "Success",
+    "errorGeneric": "Something went wrong. Please try again.",
+    "errorSaving": "Error saving",
+    "errorDeleting": "Error deleting",
+    "errorLoading": "Error loading",
+    "savedSuccess": "Saved successfully",
+    "deletedSuccess": "Deleted successfully",
+    "copiedSuccess": "Copied to clipboard",
+    "description": "Description",
+    "name": "Name",
+    "type": "Type",
+    "status": "Status",
+    "date": "Date",
+    "process": "Process",
+    "noDescription": "No description",
+    "noNote": "No note",
+    "exit": "Exit",
+    "maximize": "Maximize",
+    "coverage": "Coverage",
+    "severity": "Severity",
+    "probability": "Probability",
+    "size": "Size"
+  },
+  "meeting": {
+    "topBar": {
+      "processNameTitle": "Click to edit process name",
+      "newSession": "New session",
+      "endButton": "End",
+      "aiNotInCall": "Activate live AI",
+      "aiAnalyzing": "AI Analyzing",
+      "aiPaused": "AI Paused",
+      "fontDecrease": "Decrease text",
+      "fontNormal": "Normal size",
+      "fontIncrease": "Increase text",
+      "botDisconnected": "Bot disconnected",
+      "disconnected": "Disconnected",
+      "connecting": "Connecting...",
+      "reconnecting": "Reconnecting...",
+      "inCall": "In call",
+      "analyzing": "Analyzing...",
+      "diagramming": "Diagramming...",
+      "suggesting": "Suggesting...",
+      "local": "Local",
+      "activeConnection": "Active connection",
+      "connectToCall": "Connect to call",
+      "statusFailed": "Bot could not join the call",
+      "statusLostConnection": "Lost connection to bot",
+      "statusConnected": "Bot connected and listening",
+      "statusReconnecting": "Reconnecting to bot...",
+      "statusLocal": "Local mode — you can connect to a call",
+      "reconnectSameLink": "Reconnect to same link",
+      "pasteCallLink": "Paste call link",
+      "changeCallLink": "Change call link",
+      "infoLocal": "Paste your video call link so the bot joins and transcribes in real time.",
+      "infoConnected": "You can keep working on the diagram offline. The bot reconnects to the link you paste.",
+      "cancelLocalMode": "Cancel and return to local mode",
+      "disconnectBot": "Disconnect bot",
+      "sharing": "Sharing",
+      "share": "Share",
+      "viewLink": "View link",
+      "copy": "Copy",
+      "disabling": "Disabling...",
+      "stopSharing": "Stop sharing",
+      "shareDisableNote": "The link is disabled when you stop sharing or end the session.",
+      "enabling": "Enabling...",
+      "enableShareLink": "Enable share link",
+      "shareNote": "Generate a read-only link for others to see the live diagram.",
+      "export": "Export",
+      "diagramSection": "Diagram",
+      "pngLabel": "PNG (image)",
+      "svgLabel": "SVG (vector)",
+      "bpmnLabel": "BPMN (XML)",
+      "documentationSection": "Documentation",
+      "transcription": "Transcription",
+      "proceduresSops": "Procedures (SOPs)",
+      "reportSection": "Report",
+      "sessionReport": "Session report (PDF)",
+      "cleanSection": "Clean",
+      "cleanDiagram": "Clean diagram",
+      "cleanTranscription": "Clean transcription",
+      "cleanAll": "Clean all",
+      "confirmCleanDiagram": "the diagram",
+      "confirmCleanTranscript": "the transcription",
+      "confirmCleanAll": "the entire session",
+      "confirmCleanPrompt": "Are you sure you want to clean {label}? This action cannot be undone.",
+      "exportSopHeader": "WORK PROCEDURES (SOPs)",
+      "exportProcedure": "PROCEDURE",
+      "exportCode": "Code",
+      "exportResponsible": "Responsible",
+      "exportFrequency": "Frequency",
+      "exportObjective": "OBJECTIVE",
+      "exportScope": "SCOPE",
+      "exportPrerequisites": "PREREQUISITES",
+      "exportSteps": "STEPS",
+      "exportSystems": "Systems",
+      "exportInputs": "Inputs",
+      "exportOutputs": "Outputs",
+      "exportPendingInfo": "PENDING INFORMATION"
+    },
+    "toast": {
+      "botDisconnected": "Bot disconnected — local mode",
+      "disconnectError": "Error disconnecting",
+      "connectionError": "Connection error",
+      "reconnectNew": "Bot joining new call...",
+      "reconnecting": "Reconnecting bot...",
+      "reconnectError": "Error reconnecting",
+      "shareDisabled": "Share link disabled",
+      "linkCopied": "Link copied to clipboard",
+      "linkCopiedShort": "Link copied",
+      "shareError": "Error changing share status",
+      "cleaned": "{label} cleaned",
+      "cleanError": "Error cleaning",
+      "noTranscription": "No transcription",
+      "transcriptionDownloaded": "Transcription downloaded",
+      "noProcedures": "No procedures generated",
+      "sopsDownloaded": "{count} procedure(s) downloaded",
+      "sessionEndedFull": "Session ended. Generating deliverables...",
+      "sessionEndedSave": "Session ended. Data saved.",
+      "sessionDiscarded": "Session discarded.",
+      "sessionEndError": "Error ending the session",
+      "diagramSaved": "Diagram saved",
+      "saveError": "Error saving",
+      "diagramReorganized": "Diagram reorganized",
+      "noNodes": "No nodes found to reorganize",
+      "reorganizeError": "Error reorganizing. Diagram restored.",
+      "reorganizeRetry": "Error reorganizing. Try again.",
+      "relayoutDone": "Diagram rearranged",
+      "relayoutError": "Error rearranging",
+      "labelsFixed": "{count} labels fixed",
+      "labelsCorrect": "All labels are correct",
+      "labelsError": "Error fixing labels",
+      "complete": "{score}% complete",
+      "newQuestions": "{count} new questions",
+      "answerError": "Error sending answer",
+      "modeChanging": "Switching to {label}...",
+      "modeChanged": "Mode: {label} — questions regenerated",
+      "modeError": "Error changing mode",
+      "generateError": "Error generating",
+      "nodeDeleted": "Node deleted",
+      "deleteError": "Error deleting node",
+      "nodeCreated": "Node created",
+      "createError": "Error creating node",
+      "connectionError2": "Error updating connections",
+      "labelSaveError": "Error saving label",
+      "typeChangeError": "Error changing type",
+      "renamed": "Renamed to \"{name}\"",
+      "convertedGateway": "Converted to gateway",
+      "reorganizingFlows": "Reorganizing diagram to fix flows...",
+      "mergeCreated": "Merge gateway created",
+      "reorganizingBuilder": "Reorganizing — builder will connect loose nodes...",
+      "reorganizedReconnected": "Diagram reorganized — nodes reconnected",
+      "laneUnified": "Lane unified to \"{name}\"",
+      "reorganizing": "Reorganizing diagram...",
+      "fixError": "Error applying fix",
+      "noAuditNodes": "No nodes to audit",
+      "auditScore": "BPMN diagram correct — Score: {score}/100",
+      "auditObservations": "{count} observations found",
+      "connectNotAvailable": "Connect tool not available",
+      "savePropsError": "Error saving properties"
+    },
+    "leftPanel": {
+      "header": "BPMN Elements",
+      "catEvents": "Events",
+      "startEvent": "Start",
+      "startEventTip": "Where the process starts. There should be only one per main flow.",
+      "endEvent": "End",
+      "endEventTip": "Where the process ends. There can be multiple if there are different paths.",
+      "intermediateEvent": "Intermediate",
+      "intermediateEventTip": "Something that happens mid-flow. E.g.: send a notification, escalate a case.",
+      "timerEvent": "Timer",
+      "timerEventTip": "A wait or deadline. E.g.: wait 24 hrs for approval, response deadline.",
+      "boundaryEvent": "Boundary Event",
+      "boundaryEventTip": "Event attached to a task border. E.g.: SLA timeout, error interrupting the task.",
+      "catTasks": "Tasks",
+      "task": "Task",
+      "taskTip": "Generic activity. Use when it doesn't matter if manual or system.",
+      "userTask": "User Task",
+      "userTaskTip": "A person performs this task. E.g.: review document, approve request.",
+      "serviceTask": "Service Task",
+      "serviceTaskTip": "A system does it automatically. E.g.: send email, query API, generate report.",
+      "manualTask": "Manual Task",
+      "manualTaskTip": "Physical work without a system. E.g.: deliver package, sign paper document.",
+      "businessRule": "Business Rule",
+      "businessRuleTip": "Decision based on defined rules. E.g.: calculate discount per policy, validate credit.",
+      "scriptTask": "Script Task",
+      "scriptTaskTip": "Automatic code execution. E.g.: transform data, calculate totals.",
+      "catGateways": "Gateways",
+      "exclusive": "Exclusive",
+      "exclusiveTip": "Only ONE path executes. E.g.: If approved → continue, If not → reject.",
+      "parallel": "Parallel",
+      "parallelTip": "ALL paths execute simultaneously. E.g.: send email AND update system.",
+      "inclusive": "Inclusive",
+      "inclusiveTip": "ONE OR MORE paths execute. E.g.: notify manager AND/OR director per amount.",
+      "catSubprocesses": "Subprocesses",
+      "subprocess": "Subprocess",
+      "subprocessTip": "A process within another. Groups steps that go together. E.g.: 'Document validation'.",
+      "callActivity": "Call Activity",
+      "callActivityTip": "Calls another already-defined process. E.g.: reuse 'Purchase approval' process.",
+      "catData": "Data",
+      "dataObject": "Data Object",
+      "dataObjectTip": "A document or data used or produced. E.g.: invoice, purchase order, contract.",
+      "dataStore": "Data Store",
+      "dataStoreTip": "A system where data is stored. E.g.: ERP, database, SharePoint.",
+      "annotation": "Annotation",
+      "annotationTip": "Clarifying note. Doesn't affect flow, only documents. E.g.: 'SLA: 48 hrs'.",
+      "group": "Group",
+      "groupTip": "Visual grouping. Doesn't affect flow, just organizes visually. E.g.: demarcate process phases."
+    },
+    "rightPanel": {
+      "transcription": "Transcription",
+      "aiSuggestions": "AI Suggestions",
+      "documents": "Documents",
+      "gapRoles": "Roles",
+      "gapSuppliers": "Suppliers",
+      "gapInputs": "Inputs",
+      "gapOutputs": "Outputs",
+      "gapCustomers": "Customers",
+      "gapTriggers": "Triggers",
+      "gapDecisions": "Decisions",
+      "gapExceptions": "Exceptions",
+      "gapTimings": "Timelines",
+      "gapSystems": "Systems",
+      "gapExploration": "Exploration"
+    },
+    "teleprompter": {
+      "header": "AI Suggestions",
+      "gapRoles": "Roles",
+      "gapSuppliers": "Suppliers",
+      "gapInputs": "Inputs",
+      "gapOutputs": "Outputs",
+      "gapCustomers": "Customers",
+      "gapTriggers": "Triggers",
+      "gapDecisions": "Decisions",
+      "gapExceptions": "Exceptions",
+      "gapTimelines": "Timelines",
+      "gapSystems": "Systems",
+      "gapExploration": "Exploration",
+      "modeExplore": "Explore",
+      "modeExploreHint": "Cover all SIPOC dimensions",
+      "modeDeepen": "Deepen",
+      "modeDeepenHint": "Detail the weakest dimension",
+      "modeValidate": "Validate",
+      "modeValidateHint": "Review each node, seal gaps",
+      "sipocSuppliers": "Suppliers",
+      "sipocInputs": "Inputs",
+      "sipocProcess": "Process",
+      "sipocOutputs": "Outputs",
+      "sipocCustomers": "Customers",
+      "processQuestions": "Process questions",
+      "sipocQuestionsProgress": "SIPOC Questions ({answered}/{total} answered)",
+      "sipocQuestionsInitial": "Initial SIPOC questions",
+      "allSipocAnswered": "All SIPOC questions answered. AI will generate contextual questions.",
+      "answerPlaceholder": "Type the answer...",
+      "q1": "Who are the suppliers or areas that initiate this process?",
+      "q2": "What information, documents or materials are needed to begin?",
+      "q3": "What are the main steps of the process from start to finish?",
+      "q4": "What deliverables or results does this process produce?",
+      "q5": "Who are the customers or areas that receive the result?",
+      "q6": "What decisions are made during the process and who makes them?",
+      "q7": "What exceptions or alternative paths exist?",
+      "q8": "What systems or tools are used?",
+      "answeredCount": "{count, plural, one {# question answered} other {# questions answered}}"
+    },
+    "canvas": {
+      "aiPhase1": "Analyzing tasks and connections",
+      "aiPhase2": "Identifying roles and lanes",
+      "aiPhase3": "Evaluating process flow",
+      "aiPhase4": "Detecting missing elements",
+      "aiPhase5": "Fixing labels",
+      "aiPhase6": "Reorganizing nodes",
+      "aiPhase7": "Optimizing layout",
+      "aiPhase8": "Applying BPMN best practices",
+      "tabDiagram": "Diagram",
+      "tabTree": "Tree View",
+      "openProcessProps": "Open process properties",
+      "processDefault": "Process",
+      "breadcrumbRoot": "Main Process",
+      "toggleShowElements": "Show elements",
+      "toggleHideElements": "Hide elements",
+      "toggleShowPanels": "Show panels",
+      "toggleHidePanels": "Hide panels",
+      "toolUndo": "Undo",
+      "toolRedo": "Redo",
+      "toolFit": "Fit",
+      "toolSave": "Save",
+      "toolSort": "Sort",
+      "toolSpelling": "Spelling",
+      "toolAiFull": "Full AI",
+      "fixingLabels": "Fixing labels...",
+      "reorganizingLayout": "Reorganizing layout...",
+      "shortcutSave": "Save diagram",
+      "shortcutFit": "Fit to viewport",
+      "shortcutRelayout": "Re-layout (ELK)",
+      "shortcutFixLabels": "Fix labels (AI)",
+      "shortcutFullReorganize": "Full reorganize (AI)"
+    },
+    "bottomBar": {
+      "toolSelect": "Select",
+      "toolConnect": "Connect",
+      "toolText": "Text",
+      "auditBpmn": "Audit BPMN",
+      "auditHeader": "BPMN Audit",
+      "observations": "{count} observations",
+      "diagramCorrect": "The diagram complies with BPMN 2.0 best practices",
+      "suggestion": "Suggestion",
+      "fix": "Fix",
+      "aiElements": "AI Elements",
+      "layoutDefault": "Full view",
+      "layoutChatFocus": "Chat focus"
+    },
+    "layout": {
+      "sipocAnalysis": "SIPOC Analysis"
+    },
+    "endDialog": {
+      "title": "End session",
+      "description": "Choose how you want to end this session.",
+      "processNameLabel": "Process name",
+      "processNamePlaceholder": "E.g.: Purchasing process",
+      "processNameHint": "A new process will be created with the diagram nodes.",
+      "fullButton": "End and generate report",
+      "fullDescription": "Saves the diagram and generates summary, RACI, audit and risks.",
+      "saveOnlyButton": "End without report",
+      "saveOnlyDescription": "Saves the diagram and data, but doesn't generate deliverables.",
+      "discardButton": "Discard session",
+      "discardDescription": "Cancels the session without saving diagram data.",
+      "backButton": "Back to session"
+    },
+    "treeEditor": {
+      "noNodes": "No nodes in the process",
+      "header": "Process structure",
+      "nodeCount": "{count} nodes",
+      "doubleClickHint": "Double-click to edit",
+      "connectTo": "Connect to...",
+      "noAvailableNodes": "No available nodes",
+      "connectionCount": "{count} connection(s)",
+      "addConnection": "Add connection",
+      "insertAfter": "Insert node after",
+      "deleteNode": "Delete node",
+      "confirmDelete": "Confirm delete \"{label}\"?",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "newTask": "New task"
+    },
+    "sop": {
+      "generating": "Generating procedure...",
+      "generatingContext": "Analyzing transcript and BPMN context",
+      "retry": "Retry",
+      "noProcedure": "No procedure",
+      "noProcedureDescription": "Generate a complete SOP document using the session transcription and the BPMN diagram context.",
+      "generateSop": "Generate SOP with AI",
+      "procedureLabel": "Procedure",
+      "regenerate": "Regenerate",
+      "export": "Export",
+      "codeField": "Code",
+      "responsibleField": "Responsible",
+      "frequencyField": "Frequency",
+      "confidenceLabel": "Confidence",
+      "objectiveSection": "Objective",
+      "scopeSection": "Scope",
+      "prerequisitesSection": "Prerequisites",
+      "stepsSection": "Procedure Steps",
+      "inputsLabel": "Inputs",
+      "outputsLabel": "Outputs",
+      "exceptionPrefix": "If: ",
+      "indicatorsSection": "Indicators",
+      "targetLabel": "Target",
+      "pendingInfoSection": "Pending Information",
+      "supportMaterialSection": "Support Material",
+      "addScreenshot": "Add screenshot",
+      "screenshotHint": "System screenshot, form or screen relevant to this procedure",
+      "addVideo": "Add explanatory video",
+      "videoHint": "YouTube, Vimeo or Loom video showing how to execute the procedure",
+      "clickToEdit": "Click to edit...",
+      "doneEditing": "Done",
+      "describeStep": "Describe this step in detail...",
+      "notesPlaceholder": "Notes, screenshots, videos...",
+      "videoPrompt": "Video URL (YouTube, Vimeo, Loom):"
+    },
+    "sopPanel": {
+      "selectTask": "Select a task to document its procedure",
+      "headerSop": "SOP",
+      "newConversation": "New conversation",
+      "aiIntro": "AI will ask the right questions to document this task. Answer and the procedure builds itself.",
+      "thinking": "Thinking...",
+      "generateFull": "Generate full SOP with what we know",
+      "generatingFull": "Generating...",
+      "inputPlaceholder": "Answer here...",
+      "errorMessage": "Error processing. Try again."
+    },
+    "nodeProperties": {
+      "elementCount": "{count} element(s)",
+      "documented": "documented",
+      "selectElement": "Select a process element",
+      "selectElementSub": "to document its properties",
+      "tabProperties": "Properties",
+      "tabSopComplete": "Full SOP",
+      "hasProcedure": "Has procedure",
+      "attachments": "Attachments",
+      "attachFile": "Attach file (PDF, Word, PPT)",
+      "generateDraft": "Generate draft",
+      "generating": "Generating..."
+    },
+    "procedureEditor": {
+      "placeholder": "Describe the procedure step by step...",
+      "bold": "Bold",
+      "italic": "Italic",
+      "underline": "Underline",
+      "heading1": "Heading 1",
+      "heading2": "Heading 2",
+      "bulletList": "List",
+      "orderedList": "Numbered list",
+      "link": "Link",
+      "image": "Image",
+      "video": "Video",
+      "videoPrompt": "Video URL (YouTube, Vimeo, Loom):",
+      "urlPrompt": "URL:"
+    },
+    "diagramEditor": {
+      "title": "Edit Diagram",
+      "cancel": "Cancel",
+      "saving": "Saving...",
+      "save": "Save",
+      "initError": "Could not load the diagram editor."
+    },
+    "shortcuts": {
+      "zenMode": "Zen mode (toggle both panels)",
+      "leftPanel": "Toggle left panel",
+      "rightPanel": "Toggle right panel"
+    },
+    "nodeConfig": {
+      "startEvent": "Start",
+      "endEvent": "End",
+      "task": "Task",
+      "userTask": "User Task",
+      "serviceTask": "Service Task",
+      "manualTask": "Manual Task",
+      "exclusiveGateway": "Gateway",
+      "parallelGateway": "Parallel",
+      "subprocess": "Subprocess",
+      "defaultElement": "Element",
+      "stateConfirmed": "Confirmed",
+      "stateForming": "Forming",
+      "stateRejected": "Rejected"
+    },
+    "propFields": {
+      "description": "Description / Procedure",
+      "descriptionTooltip": "Explain what this activity consists of, how it's done, and any important notes for the person performing it.",
+      "responsable": "Responsible",
+      "responsableTooltip": "The role or position that performs this activity. Not a person's name, but the role.",
+      "sla": "SLA",
+      "slaTooltip": "Maximum time allowed to complete this activity from when it starts.",
+      "slaUnit": "SLA Unit",
+      "slaMinutes": "Minutes",
+      "slaHours": "Hours",
+      "slaDays": "Days",
+      "frequency": "Frequency",
+      "frequencyTooltip": "How often is this activity executed?",
+      "frequencyDaily": "Daily",
+      "frequencyWeekly": "Weekly",
+      "frequencyMonthly": "Monthly",
+      "frequencyPerEvent": "Per event",
+      "frequencyCount": "Quantity per period",
+      "frequencyCountTooltip": "How many times does it repeat in the selected period?",
+      "estimatedDuration": "Estimated duration (min)",
+      "estimatedDurationTooltip": "How many minutes does an experienced person take to complete this activity?",
+      "systems": "Systems",
+      "systemsPlaceholder": "SAP, CRM, etc.",
+      "systemsTooltip": "Software, applications or tools used to perform this activity.",
+      "inputs": "Inputs",
+      "inputsPlaceholder": "Purchase order, supplier data...",
+      "inputsTooltip": "Documents, data or information needed BEFORE starting this activity.",
+      "outputs": "Outputs",
+      "outputsPlaceholder": "Validated invoice, report...",
+      "outputsTooltip": "Documents, data or results produced UPON COMPLETION of this activity.",
+      "costPerExecution": "Cost per execution",
+      "costTooltip": "Approximate cost each time this activity executes.",
+      "currency": "Currency",
+      "currencyPlaceholder": "USD, MXN",
+      "groupGeneral": "General",
+      "groupResources": "Resources and Times",
+      "groupInputsOutputs": "Inputs / Outputs",
+      "groupCosts": "Costs"
+    }
+  },
+  "scan": {
+    "title": "Business Process Scan",
+    "subtitle": "Discover hidden risks in your processes. Free. No signup.",
+    "urlPlaceholder": "https://yourcompany.com",
+    "descriptionPlaceholder": "Describe your company: what it does, who it sells to, its main activities...",
+    "noWebsite": "I don't have a website — I'll describe my company",
+    "hasWebsite": "I have a website — paste URL",
+    "generate": "Generate scan",
+    "generating": "Generating scan...",
+    "disclaimer": "Under a minute. Your information is not shared with third parties.",
+    "readingWebsite": "Reading your website...",
+    "loaderConnecting": "Connecting to site...",
+    "loaderReading": "Reading pages...",
+    "loaderExtracting": "Extracting business context...",
+    "loaderPreparing": "Preparing analysis...",
+    "loaderAnalyzing": "Analyzing",
+    "analyzingIndustry": "Analyzing your industry...",
+    "mappingProcess": "Mapping key process...",
+    "generatingDiagram": "Generating diagram...",
+    "evaluatingRisks": "Evaluating risks...",
+    "scanReady": "Scan ready",
+    "sipocAnalysis": "SIPOC Analysis",
+    "sipocDetailed": "Detailed SIPOC Analysis",
+    "suppliers": "Suppliers",
+    "inputs": "Inputs",
+    "process": "Process",
+    "outputs": "Outputs",
+    "customers": "Customers",
+    "risksIdentified": "Risks Identified",
+    "riskRegistry": "Risk Registry",
+    "totalScore": "Total score",
+    "critical": "Critical",
+    "high": "High",
+    "medium": "Medium",
+    "low": "Low",
+    "highestRiskArea": "Highest risk area",
+    "firstScan": "This is a first scan",
+    "deepenCta": "By answering a few questions, the AI can find risks specific to YOUR operation, not just your industry. In 5-10 minutes you'll have a much deeper analysis.",
+    "deepenButton": "Deepen my scan",
+    "processCoverage": "Process coverage",
+    "readyForDiagram": "Ready to generate diagram",
+    "keepAnswering": "Keep answering to improve",
+    "viewDiagram": "View my process diagram",
+    "skipToResults": "Skip to diagram",
+    "buildingDiagram": "Building your process map...",
+    "yourProcessMap": "Your process map",
+    "generatingDeepScan": "Generating your complete scan...",
+    "revealTitle": "Deep analysis in progress",
+    "revealCorrelating": "Correlating research findings...",
+    "revealMapping": "Mapping process flows...",
+    "revealAnalyzing": "Running deep risk analysis...",
+    "revealGenerating": "Generating BPMN diagram...",
+    "completeScan": "Complete Scan",
+    "additionalRisks": "The conversation revealed {count} additional risks that the initial scan didn't detect.",
+    "initialVsDeep": "Initial scan: {initial} risks. Deep scan: {deep} risks.",
+    "suggestedMitigations": "Suggested mitigations",
+    "opportunity": "Opportunity",
+    "affectedStep": "Affected step: {step}",
+    "saveScan": "Save your scan",
+    "saveDescription": "Found {count} risks in \"{process}\". Create your account to save this analysis and map more processes.",
+    "createAccount": "Create account and save",
+    "convertBullet1": "Full risk registry with mitigations",
+    "convertBullet2": "BPMN process diagram you can edit",
+    "convertBullet3": "Track improvements over time",
+    "creatingAccount": "Creating account...",
+    "termsNotice": "By creating your account you accept our <termsLink>Terms of Service</termsLink> and <privacyLink>Privacy Policy</privacyLink>.",
+    "existingUserError": "You already have an account.",
+    "goToLogin": "Go to login",
+    "name": "Name",
+    "namePlaceholder": "Your name",
+    "email": "Email",
+    "companyName": "Company name",
+    "optional": "(optional)",
+    "companyNamePlaceholder": "My Company Inc.",
+    "writeResponse": "Write your response...",
+    "send": "Send",
+    "connectionError": "Connection error. Try again.",
+    "couldNotReadWebsite": "We couldn't read your website. Describe your company manually.",
+    "errorProcessing": "Error processing your description.",
+    "errorGenerating": "Error generating scan.",
+    "errorCreatingSession": "Error creating session. Try again.",
+    "deepenIntro": "Let's dig deeper into your process \"{process}\". I'll ask you some questions to better understand how your operation works. Answer with what you know — there are no wrong answers.",
+    "riskTypes": {
+      "OPERATIONAL": "Operational",
+      "COMPLIANCE": "Compliance",
+      "STRATEGIC": "Strategic",
+      "FINANCIAL": "Financial",
+      "TECHNOLOGY": "Technology",
+      "HUMAN_RESOURCE": "HR",
+      "REPUTATIONAL": "Reputational"
+    },
+    "aiDisclaimer": "This analysis was generated by artificial intelligence. Results are informational only and do not constitute professional consulting, legal, or financial advice. Validate with qualified professionals before making business decisions.",
+    "reportBanner": "AI-generated report — for informational purposes only. Does not constitute professional advice.",
+    "v2": {
+      "stepDatosBasicos": "Basic info",
+      "stepProcesosClave": "Key processes",
+      "stepAnalisis": "Risk analysis",
+      "stepResultados": "Results",
+      "pasoNdeM": "Step {n} of {m}",
+      "stepDatosBasicosTitle": "Tell us about your company",
+      "stepDatosBasicosDesc": "We use this to personalize the analysis to your industry and context.",
+      "companyName": "Company name",
+      "companyNamePlaceholder": "E.g. Northern Industries Inc.",
+      "industry": "Industry",
+      "industryPlaceholder": "Select your industry",
+      "companySize": "Company size",
+      "companySizePlaceholder": "Select size",
+      "country": "Country",
+      "countryPlaceholder": "Select your country",
+      "urlOptional": "Website (optional)",
+      "urlHelper": "Helps us better understand your company and personalize the analysis.",
+      "selectProcess": "Select the process you want to analyze in depth.",
+      "aiSuggestions": "AI-suggested processes",
+      "analyzing": "Analyzing operational risks...",
+      "analyzingIndustry": "Analyzing your industry...",
+      "analysisComplete": "{count} risks identified in your process.",
+      "downloadPdf": "Download PDF Report",
+      "completed": "Scan complete!",
+      "back": "Back",
+      "next": "Next",
+      "viewResults": "View results",
+      "processing": "Processing...",
+      "creatingSession": "Preparing analysis...",
+      "crawling": "Analyzing your company information...",
+      "researching": "Researching your industry...",
+      "resultsDesc": "Operational scan of {company}.",
+      "risksDetected": "{count} risks identified",
+      "saveScan": "Save your scan",
+      "saveScanDesc": "Create an account to keep this analysis, edit the process diagram, and monitor improvements.",
+      "yourName": "Your name",
+      "yourEmail": "Your email",
+      "orgName": "Organization name",
+      "orgNamePlaceholder": "My Company Inc. (optional)",
+      "createAccount": "Create account and save",
+      "creating": "Creating account...",
+      "stepExploracion": "Exploration",
+      "chatIntro": "I found the most critical processes in your industry ({industry}). Select the one you want to analyze in depth.",
+      "chatProcessSelected": "Great, let's explore \"{process}\". I'll ask you some questions to better understand how your operation works.",
+      "chatPlaceholder": "Describe your process or answer the question...",
+      "exploracionLoading": "This will take a few seconds...",
+      "saveToOrg": "Save to your organization",
+      "saveToOrgDesc": "Add this process and its risks to your process architecture.",
+      "saveToOrgButton": "Save process and risks",
+      "savingToOrg": "Saving...",
+      "savedToOrg": "Saved to your organization!",
+      "goToProcesses": "View my processes"
+    },
+    "discovery": {
+      "intakeTitle": "Discovery of {company}",
+      "intakeDesc": "Tell us about your company to personalize the process analysis.",
+      "industry": "Industry",
+      "industryPlaceholder": "Select your industry",
+      "companySize": "Company size",
+      "companySizePlaceholder": "Select size",
+      "country": "Country",
+      "countryPlaceholder": "Select your country",
+      "urlOptional": "Website (optional)",
+      "urlHelper": "Helps us research your industry and context.",
+      "challenge": "Main operational challenge",
+      "challengePlaceholder": "Describe the most important problem you face in your operations...",
+      "challengeHelper": "This guides the conversation toward what matters most.",
+      "chatWelcome": "Hi! I'm ready to help you discover your company's processes. Tell me about your operations, main activities, or the problems you face.",
+      "chatPlaceholder": "Describe your processes, answer the question, or paste notes...",
+      "chatError": "Error processing your message. Please try again.",
+      "analyzing": "Analyzing...",
+      "transcribing": "Transcribing audio...",
+      "processesDiscovered": "Processes discovered",
+      "noProcessesYet": "Processes will appear here as we identify them.",
+      "coverage": "Coverage",
+      "deliverables": "Deliverables",
+      "generateDeliverables": "Generate deliverables",
+      "generating": "Generating...",
+      "needMoreProcesses": "Discover at least 2 processes to generate deliverables.",
+      "generatingTitle": "Generating your deliverables...",
+      "generatingDesc": "We're building your process visualizations.",
+      "deliverablesTitle": "Deliverables ready!",
+      "deliverablesDesc": "Your process architecture is ready to explore.",
+      "deliverablesReady": "Deliverables generated!",
+      "deliverableReady": "Ready to view",
+      "deliverableGenerating": "Generating...",
+      "deliverablePending": "Pending",
+      "deliverableFailed": "Generation failed",
+      "goToDashboard": "Go to dashboard",
+      "downloadPdf": "Download PDF report"
+    }
+  },
+  "maturityRing": {
+    "label": "Risk Maturity",
+    "noData": "No data",
+    "tooltip": "Composite score based on documentation coverage (30%), risk analysis coverage (30%), process maturity (20%), and control effectiveness (20%)."
+  },
+  "emptyStates": {
+    "risks": {
+      "noFilter": "No results",
+      "noFilterDesc": "No risks match the selected filters.",
+      "noControls": "No risks to map",
+      "noControlsDesc": "Run a risk analysis to identify controls associated with each activity.",
+      "noFmea": "No FMEA data",
+      "noFmeaDesc": "FMEA analysis identifies failure modes, their effects, and risk priority number (RPN) for each process activity.",
+      "noOpportunities": "No opportunities identified",
+      "noOpportunitiesDesc": "Improvement opportunities are automatically detected during the process risk analysis."
+    },
+    "processes": {
+      "noSubprocesses": "No sub-processes",
+      "noSubprocessesDesc": "Add a sub-process to decompose and detail this process.",
+      "noSessions": "No sessions",
+      "noSessionsDesc": "Start a Deep Dive to map this process in detail."
+    },
+    "deliverables": {
+      "noProcessCards": "No processes registered",
+      "noProcessCardsDesc": "Start a discovery session to document processes and generate cards automatically."
+    },
+    "commandCenter": {
+      "title": "Command Center",
+      "description": "Schedule your first elicitation session to start mapping processes with AI.",
+      "cta": "Schedule First Session"
+    }
+  },
+  "riskTab": {
+    "errorAnalyzing": "Analysis failed. Please try again.",
+    "noRisks": "No risks analyzed",
+    "noRisksDesc": "Run the analysis to identify risks, opportunities, and failure modes in this process.",
+    "analyzing": "Analyzing...",
+    "analyze": "Analyze Risks",
+    "avgRisk": "Average risk:",
+    "critical": "Critical",
+    "high": "High",
+    "opportunity": "Opportunity",
+    "tabs": {
+      "register": "Register",
+      "opportunities": "Opportunities",
+      "controls": "Controls",
+      "fmea": "FMEA"
+    },
+    "riskMatrix": "Risk Matrix",
+    "filterSeverity": "Filter: Severity {sev}, Probability {prob}",
+    "clearFilter": "Clear filter",
+    "riskTrend": "Risk Trend",
+    "noControls": "No controls defined. Add controls to reduce the risk.",
+    "addControl": "Add Control",
+    "noMitigations": "No mitigations defined.",
+    "mitigationPlaceholder": "Mitigation action..."
+  },
+  "commandCenter": {
+    "title": "Command Center",
+    "editLive": "Edit Live",
+    "newSession": "New Session",
+    "defaultProcess": "General session",
+    "errorReschedule": "Error rescheduling session",
+    "errorUpdate": "Error updating session",
+    "errorEditSession": "Error starting edit session",
+    "sessionUpdated": "Session updated",
+    "intakeLinkGenerated": "Intake link generated",
+    "noSessionsScheduled": "No sessions scheduled",
+    "noResponses": "No responses yet",
+    "scheduleSession": "Schedule Session",
+    "wizard": {
+      "process": "Process",
+      "participants": "Participants",
+      "context": "Context",
+      "schedule": "Schedule",
+      "invitation": "Invitation",
+      "searchProcess": "Search process or type a new name...",
+      "loadingProcesses": "Loading processes...",
+      "noProcesses": "No processes. Type a name to create one.",
+      "createNew": "Create",
+      "newProcess": "New process",
+      "sessionType": "Session type",
+      "noSelection": "Not selected",
+      "noParticipants": "None added",
+      "noContext": "No context",
+      "noCall": "No call",
+      "notScheduled": "Not scheduled",
+      "contextPlaceholder": "Describe the process context, session objectives, relevant client information...",
+      "coverPlaceholder": "What to cover in this session...",
+      "errorRaci": "Error fetching RACI",
+      "noParticipantsEmpty": "No participants"
+    }
+  },
+  "processDetail": {
+    "deleteConfirm": "Delete process",
+    "deleteMessage": "All associated data will be permanently deleted: sub-processes, sessions, RACI, risks, and versions.",
+    "linkCopied": "Link copied",
+    "nameRequired": "Name is required",
+    "subprocesses": "Sub-processes",
+    "noSubprocesses": "No sub-processes",
+    "documents": "Documents",
+    "uploadDocs": "Upload SOPs or manuals",
+    "processDetails": "Process details",
+    "raciMatrix": "RACI Matrix",
+    "notGenerated": "Not generated",
+    "intelligence": "Intelligence",
+    "analyzeProcess": "Analyze process",
+    "risksQuality": "Risks & Quality",
+    "analyzeRisks": "Analyze risks",
+    "consolidation": "Consolidation",
+    "conflicts": "{count} conflicts",
+    "consolidate": "Consolidate perspectives",
+    "noDiagram": "No diagram. Create one or run a session to generate it.",
+    "createDiagram": "Create Diagram",
+    "regenerate": "Regenerate",
+    "fixWithAi": "Fix with AI",
+    "repairingDiagram": "Repairing diagram...",
+    "detailsSaved": "Details saved",
+    "errorSavingDetails": "Error saving details",
+    "descriptionLabel": "Description",
+    "ownerPlaceholder": "Department or person responsible...",
+    "goals": "Goals",
+    "triggers": "Triggers",
+    "outputs": "Outputs",
+    "addGoalPlaceholder": "Add goal...",
+    "addTriggerPlaceholder": "Add trigger...",
+    "addOutputPlaceholder": "Add output...",
+    "subprocess": "Sub-process",
+    "task": "Task",
+    "procedure": "Procedure",
+    "level": "Level",
+    "continueLastSession": "Continue last",
+    "nodes": "{count} nodes",
+    "risks": "{count} risks",
+    "join": "Join",
+    "onboardingTitle": "Start documenting your process",
+    "onboardingDesc1": "This workspace lets you build your process documentation iteratively.",
+    "onboardingDesc2": "Start a discovery session to capture information, or add details manually.",
+    "noCategoryFilter": "No processes in this category",
+    "noCategoryFilterDesc": "Add processes manually or use AI Discovery",
+    "errorStatusChange": "Error changing status",
+    "noRaciAssignment": "No RACI assignment for this activity. Generate the RACI matrix from the analysis tab."
+  },
+  "meetingModule": {
+    "noSessions": "No sessions",
+    "noSessionsDesc": "Create your first session to start mapping processes.",
+    "newSession": "New session",
+    "noProcess": "No process",
+    "errorSendMessage": "Error sending message",
+    "errorEdit": "Error editing",
+    "errorDelete": "Error deleting",
+    "errorRetry": "Error retrying",
+    "errorApplyPattern": "Error applying pattern",
+    "noDocuments": "No documents",
+    "defaultProcessName": "Process",
+    "noNodesData": "No node data to regenerate the diagram."
+  },
+  "intelligenceTab": {
+    "noOpenQuestions": "No open questions. The process is complete or needs an audit.",
+    "noQuestionsCategory": "No questions in this category."
+  },
+  "deliverables": {
+    "noOwner": "No owner",
+    "noDepartment": "No department"
+  },
+  "usage": {
+    "title": "Plan Usage",
+    "evaluations": "Evaluations",
+    "evaluators": "Evaluators",
+    "processes": "Processes",
+    "sessions": "AI Sessions",
+    "reports": "Reports",
+    "used": "{used} / {limit}",
+    "unlimited": "Unlimited",
+    "remaining": "{count} remaining",
+    "exhausted": "Limit reached",
+    "resets": "Resets {date}",
+    "categoryEvaluations": "Evaluations",
+    "categoryProcesses": "Processes",
+    "categoryTools": "Tools"
+  },
+  "evaluaciones": {
+    "pageDescription": "Harvard-style case evaluations generated from your real processes and risks.",
+    "tabs": {
+      "catalog": "Catalog",
+      "dashboard": "Risk Dashboard"
+    }
+  }
 }

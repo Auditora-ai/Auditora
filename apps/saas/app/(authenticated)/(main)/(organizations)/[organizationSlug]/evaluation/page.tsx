@@ -1,30 +1,14 @@
-import { getActiveOrganization } from "@auth/lib/server";
-import { notFound } from "next/navigation";
-import { fetchHumanRiskDashboardData } from "@evaluaciones/lib/dashboard-queries";
-import { HumanRiskDashboard } from "@evaluaciones/components/HumanRiskDashboard";
+import { redirect } from "next/navigation";
 
-export async function generateMetadata() {
-	return { title: "Evaluación — Dashboard de Riesgo Humano" };
-}
-
-export default async function EvaluationPage({
+export default function EvaluationRedirectPage({
 	params,
 }: {
 	params: Promise<{ organizationSlug: string }>;
 }) {
-	const { organizationSlug } = await params;
+	// Redirect to evaluaciones with dashboard tab active
+	params.then(({ organizationSlug }) => {
+		redirect(`/${organizationSlug}/evaluaciones?tab=dashboard`);
+	});
 
-	const activeOrganization = await getActiveOrganization(organizationSlug);
-	if (!activeOrganization) return notFound();
-
-	const data = await fetchHumanRiskDashboardData(activeOrganization.id);
-
-	return (
-		<div className="p-6">
-			<HumanRiskDashboard
-				data={data}
-				organizationSlug={organizationSlug}
-			/>
-		</div>
-	);
+	return null;
 }
