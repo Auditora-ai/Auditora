@@ -219,3 +219,245 @@ function formatMonth(yyyyMm: string): string {
   const [year, month] = yyyyMm.split("-");
   return `${MONTH_NAMES[parseInt(month!, 10) - 1]} ${year}`;
 }
+
+/* ─────────────────── Progress Data (Before / After) ─────────────────── */
+
+export interface PeriodScores {
+  overall: number;
+  alignment: number;
+  riskLevel: number;
+  criterio: number;
+  count: number;
+}
+
+export interface ProcessProgress {
+  processName: string;
+  processId: string;
+  first: PeriodScores;
+  latest: PeriodScores;
+  delta: number; // overall score improvement (latest - first)
+  runCount: number;
+}
+
+export interface MemberProgress {
+  userId: string;
+  userName: string;
+  userEmail: string;
+  userImage: string | null;
+  firstScore: number;
+  latestScore: number;
+  delta: number;
+  totalRuns: number;
+}
+
+export interface DimensionTrend {
+  month: string;
+  alignment: number;
+  riskLevel: number;
+  criterio: number;
+}
+
+export interface ProgressData {
+  insufficientData: boolean;
+  overallFirst: PeriodScores;
+  overallLatest: PeriodScores;
+  overallDelta: number;
+  processProgress: ProcessProgress[];
+  memberProgress: MemberProgress[];
+  dimensionTrends: DimensionTrend[];
+  totalMonths: number;
+}
+
+export async function fetchProgressData(
+  organizationId: string,
+): Promise<ProgressData> {
+  const completedRuns = await db.simulationRun.findMany({
+    where: {
+      status: "COMPLETED",
+      scenario: { template: { organizationId } },
+    },
+    select: {
+      userId: true,
+      overallScore: true,
+      alignment: true,
+      riskLevel: true,
+      criterio: true,
+      completedAt: true,
+      scenario: {
+        select: {
+          template: {
+            select: {
+              processDefinitionId: true,
+              title: true,
+            },
+          },
+        },
+      },
+      user: {
+        select: {
+          name: true,
+          email: true,
+          image: true,
+        },
+      },
+    },
+    orderBy: { completedAt: "asc" },
+  });
+
+  // Need at least 2 runs to show progress
+  if (completedRuns.length < 2) {
+    return {
+      insufficientData: true,
+      overallFirst: { overall: 0, alignment: 0, riskLevel: 0, criterio: 0, count: 0 },
+      overallLatest: { overall: 0, alignment: 0, riskLevel: 0, criterio: 0, count: 0 },
+      overallDelta: 0,
+      processProgress: [],
+      memberProgress: [],
+      dimensionTrends: [],
+      totalMonths: 0,
+    };
+  }
+
+  // Split runs into first half and second half for overall comparison
+  const midpoint = Math.floor(completedRuns.length / 2);
+  const firstHalf = completedRuns.slice(0, midpoint);
+  const secondHalf = completedRuns.slice(midpoint);
+
+  const toPeriodScores = (runs: typeof completedRuns): PeriodScores => {
+    const scored = runs.filter(
+      (r) => r.overallScore !== null && r.alignment !== null && r.riskLevel !== null && r.criterio !== null,
+    );
+    if (scored.length === 0) return { overall: 0, alignment: 0, riskLevel: 0, criterio: 0, count: 0 };
+    return {
+      overall: Math.round(avg(scored.map((r) => r.overallScore!))),
+      alignment: Math.round(avg(scored.map((r) => r.alignment!))),
+      riskLevel: Math.round(avg(scored.map((r) => r.riskLevel!))),
+      criterio: Math.round(avg(scored.map((r) => r.criterio!))),
+      count: scored.length,
+    };
+  };
+
+  const overallFirst = toPeriodScores(firstHalf);
+  const overallLatest = toPeriodScores(secondHalf);
+  const overallDelta = overallLatest.overall - overallFirst.overall;
+
+  // ── Per-process progress ──
+  const processRunMap = new Map<
+    string,
+    { name: string; runs: typeof completedRuns }
+  >();
+  for (const run of completedRuns) {
+    const procId = run.scenario.template.processDefinitionId;
+    if (!procId) continue;
+    const entry = processRunMap.get(procId) ?? {
+      name: run.scenario.template.title,
+      runs: [],
+    };
+    entry.runs.push(run);
+    processRunMap.set(procId, entry);
+  }
+
+  const processProgress: ProcessProgress[] = [];
+  processRunMap.forEach(({ name, runs }, procId) => {
+    if (runs.length < 2) return;
+    const mid = Math.floor(runs.length / 2);
+    const first = toPeriodScores(runs.slice(0, mid));
+    const latest = toPeriodScores(runs.slice(mid));
+    processProgress.push({
+      processName: name,
+      processId: procId,
+      first,
+      latest,
+      delta: latest.overall - first.overall,
+      runCount: runs.length,
+    });
+  });
+  processProgress.sort((a, b) => b.delta - a.delta);
+
+  // ── Per-member progress ──
+  const memberRunMap = new Map<
+    string,
+    { user: { name: string | null; email: string; image: string | null }; runs: typeof completedRuns }
+  >();
+  for (const run of completedRuns) {
+    const entry = memberRunMap.get(run.userId) ?? {
+      user: run.user,
+      runs: [],
+    };
+    entry.runs.push(run);
+    memberRunMap.set(run.userId, entry);
+  }
+
+  const memberProgress: MemberProgress[] = [];
+  memberRunMap.forEach(({ user, runs }, userId) => {
+    if (runs.length < 2) return;
+    const firstRuns = runs.slice(0, Math.max(1, Math.floor(runs.length / 3)));
+    const latestRuns = runs.slice(-Math.max(1, Math.floor(runs.length / 3)));
+    const firstScore = Math.round(avg(firstRuns.filter((r) => r.overallScore !== null).map((r) => r.overallScore!)));
+    const latestScore = Math.round(avg(latestRuns.filter((r) => r.overallScore !== null).map((r) => r.overallScore!)));
+    memberProgress.push({
+      userId,
+      userName: user.name ?? user.email.split("@")[0]!,
+      userEmail: user.email,
+      userImage: user.image,
+      firstScore,
+      latestScore,
+      delta: latestScore - firstScore,
+      totalRuns: runs.length,
+    });
+  });
+  memberProgress.sort((a, b) => b.delta - a.delta);
+
+  // ── Dimension trends by month ──
+  const dimMonthMap = new Map<
+    string,
+    { alignment: number[]; riskLevel: number[]; criterio: number[] }
+  >();
+  for (const run of completedRuns) {
+    if (
+      run.completedAt &&
+      run.alignment !== null &&
+      run.riskLevel !== null &&
+      run.criterio !== null
+    ) {
+      const key = run.completedAt.toISOString().slice(0, 7);
+      const entry = dimMonthMap.get(key) ?? {
+        alignment: [],
+        riskLevel: [],
+        criterio: [],
+      };
+      entry.alignment.push(run.alignment);
+      entry.riskLevel.push(run.riskLevel);
+      entry.criterio.push(run.criterio);
+      dimMonthMap.set(key, entry);
+    }
+  }
+
+  const dimensionTrends: DimensionTrend[] = Array.from(dimMonthMap.entries())
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([month, { alignment, riskLevel, criterio }]) => ({
+      month: formatMonth(month),
+      alignment: Math.round(avg(alignment)),
+      riskLevel: Math.round(avg(riskLevel)),
+      criterio: Math.round(avg(criterio)),
+    }));
+
+  // Total months of data
+  const months = new Set<string>();
+  for (const run of completedRuns) {
+    if (run.completedAt) {
+      months.add(run.completedAt.toISOString().slice(0, 7));
+    }
+  }
+
+  return {
+    insufficientData: false,
+    overallFirst,
+    overallLatest,
+    overallDelta,
+    processProgress,
+    memberProgress,
+    dimensionTrends,
+    totalMonths: months.size,
+  };
+}

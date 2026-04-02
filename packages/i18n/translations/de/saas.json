@@ -1,1797 +1,1847 @@
 {
-	"admin": {
-		"menu": {
-			"organizations": "Organisationen",
-			"users": "Benutzer"
-		},
-		"organizations": {
-			"backToList": "Zurück zu Organisationen",
-			"confirmDelete": {
-				"confirm": "Löschen",
-				"message": "Bist du sicher, dass du diese Organisation löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
-				"title": "Organisation löschen"
-			},
-			"create": "Erstellen",
-			"delete": "Löschen",
-			"deleteOrganization": {
-				"deleted": "Die Organisation wurde erfolgreich gelöscht!",
-				"deleting": "Löschung der Organisation...",
-				"notDeleted": "Organisation konnte nicht gelöscht werden. Bitte versuche es erneut."
-			},
-			"edit": "bearbeiten",
-			"form": {
-				"createTitle": "Erstellen eine Organisation",
-				"name": "Name der Organisation",
-				"notifications": {
-					"error": "Die Organisation konnte nicht gespeichert werden. Bitte versuche es später noch einmal.",
-					"success": "Die Organisation wurde erfolgreich gespeichert."
-				},
-				"save": "Speichern",
-				"updateTitle": "Organisation bearbeiten"
-			},
-			"loading": "Organisationen laden...",
-			"membersCount": "{count} {count, plural, one {Mitglied} other {Mitglieder}}",
-			"search": "Suche nach einer Organisation...",
-			"title": "Verwalten von Organisationen"
-		},
-		"title": "Administration",
-		"users": {
-			"confirmDelete": {
-				"confirm": "Löschen",
-				"message": "Bist du sicher, dass du diesen Benutzer löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
-				"title": "Benutzer löschen"
-			},
-			"delete": "Löschen",
-			"deleteUser": {
-				"deleted": "Der Benutzer wurde erfolgreich gelöscht!",
-				"deleting": "Benutzer wird gelöscht...",
-				"notDeleted": "Der Benutzer konnte nicht gelöscht werden. \nBitte versuche es erneut."
-			},
-			"emailVerified": {
-				"verified": "Email verifiziert",
-				"waiting": "E-Mail wartet auf Verifizierung"
-			},
-			"impersonate": "Imitieren",
-			"impersonation": {
-				"impersonating": "Ich gebe mich als {name} aus..."
-			},
-			"loading": "Benutzer werden geladen...",
-			"resendVerificationMail": {
-				"error": "Bestätigungsmail konnte nicht erneut gesendet werden. \nBitte versuche es erneut.",
-				"submitting": "Bestätigungsmail wird erneut gesendet...",
-				"success": "Bestätigungsmail wurde gesendet.",
-				"title": "Bestätigungsmail erneut senden"
-			},
-			"search": "Nach Name oder E-Mail suchen...",
-			"title": "Benutzer verwalten",
-			"assignAdminRole": "Administration-Rolle zuweisen",
-			"removeAdminRole": "Adminstrator-Rolle entfernen"
-		},
-		"description": "Verwalte deine Anwendung."
-	},
-	"app": {
-		"menu": {
-			"accountSettings": "Kontoeinstellungen",
-			"admin": "Administration",
-			"aiChatbot": "AI Chatbot",
-			"organizationSettings": "Einstellungen",
-			"analytics": "Analysen",
-			"clients": "Kunden",
-			"sessions": "Sitzungen",
-			"start": "Start",
-			"dashboard": "Überblick",
-			"processes": "Prozesse",
-			"risks": "Risiken",
-			"deliverables": "Ergebnisse",
-			"scan": "Röntgenbild",
-			"tools": "Werkzeuge",
-			"procedures": "Verfahren",
-			"simulations": "Bewertungen",
-			"evaluaciones": "Bewertungen",
-			"evaluation": "Bewertung",
-			"workflow": "Workflow",
-			"workspace": "Arbeitsbereich",
-			"more": "Mehr"
-		},
-		"greeting": {
-			"morning": "Guten Morgen",
-			"afternoon": "Guten Tag",
-			"evening": "Guten Abend"
-		},
-		"badges": {
-			"critical": "{count} kritisch",
-			"live": "LIVE",
-			"pending": "{count} ausstehend"
-		},
-		"actions": {
-			"registerRisk": "Risiko erfassen",
-			"newSession": "Neue Sitzung",
-			"newProcess": "Neuer Prozess"
-		},
-		"status": {
-			"riskScore": "Risiko-Score: {score}",
-			"attentionNeeded": "{count} erfordern Maßnahmen",
-			"underControl": "Exposition kontrolliert",
-			"setupFirst": "Beginnen Sie mit der Einrichtung Ihres ersten Kunden",
-			"today": "Heute",
-			"tomorrow": "Morgen"
-		},
-		"userMenu": {
-			"accountSettings": "Kontoeinstellungen",
-			"colorMode": "Farbmodus",
-			"documentation": "Dokumentation",
-			"home": "Startseite",
-			"logout": "Abmelden"
-		}
-	},
-	"auth": {
-		"errors": {
-			"credentialAccountNotFound": "Konto nicht gefunden.",
-			"emailCanNotBeUpdated": "E-Mail konnte nicht aktualisiert werden.",
-			"emailNotVerified": "Bitte verifiziere zunächst deine E-Mail, bevor du dich anmeldest.",
-			"failedToCreateSession": "Eine Sitzung konnte nicht erstellt werden.",
-			"failedToCreateUser": "Benutzer konnte nicht erstellt werden.",
-			"failedToGetSession": "Session konnte nicht geladen werden.",
-			"failedToGetUserInfo": "Benutzerinformationen konnten nicht geladen werden.",
-			"failedToUpdateUser": "Benutzer konnte nicht aktualisiert werden.",
-			"idTokenNotSupported": "ID-Token wird nicht unterstützt.",
-			"invalidEmail": "Die eingegebene E-Mail ist ungültig.",
-			"invalidEmailOrPassword": "Die von dir eingegebenen Anmeldedaten sind ungültig. Bitte überprüfe sie und versuche es erneut.",
-			"invalidInvitation": "Die Einladung ist ungültig oder abgelaufen.",
-			"invalidPassword": "Das eingegebene Passwort ist falsch.",
-			"invalidToken": "Das von dir eingegebene Token ist ungültig oder abgelaufen.",
-			"passwordTooLong": "Das Passwort ist zu lang.",
-			"passwordTooShort": "Das Passwort ist zu kurz.",
-			"providerNotFound": "Dieser Anbieter wird nicht unterstützt.",
-			"socialAccountAlreadyLinked": "Dieses Konto ist bereits mit einem Benutzer verknüpft.",
-			"unknown": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
-			"userAlreadyExists": "Dieser Benutzer existiert bereits.",
-			"userAlreadyExistsUseAnotherEmail": "Benutzer existiert bereits. Verwenden Sie eine andere E-Mail.",
-			"userEmailNotFound": "E-Mail nicht gefunden.",
-			"userNotFound": "Dieser Benutzer existiert nicht",
-			"sessionExpired": "Die Sitzung ist abgelaufen.",
-			"accountNotFound": "Konto nicht gefunden",
-			"failedToUnlinkLastAccount": "Konto kann nicht entkoppelt werden"
-		},
-		"forgotPassword": {
-			"backToSignin": "Zurück zum Login",
-			"email": "E-Mail",
-			"hints": {
-				"linkNotSent": {
-					"message": "Es tut uns leid, aber wir konnten keinen Link zum Zurücksetzen des Passworts senden. \nBitte versuche es später noch einmal.",
-					"title": "Link nicht gesendet"
-				},
-				"linkSent": {
-					"message": "Wir haben dir einen Link zum Fortfahren gesendet. \nBitte überprüfe deinen Posteingang.",
-					"title": "Link gesendet"
-				}
-			},
-			"message": "Bitte gib deine E-Mail-Adresse ein und wir senden dir einen Link zum Zurücksetzen deines Passworts.",
-			"submit": "Link senden",
-			"title": "Hast du dein Passwort vergessen?"
-		},
-		"login": {
-			"continueWith": "Oder weiter mit",
-			"createAnAccount": "Ein Konto erstellen",
-			"dontHaveAnAccount": "Du hast noch kein Konto?",
-			"forgotPassword": "Passwort vergessen?",
-			"hints": {
-				"invalidCredentials": "Die von dir eingegebenen Anmeldeinformationen sind ungültig. \nBitte versuche es erneut.",
-				"linkSent": {
-					"message": "Wir haben dir einen Link zum Fortfahren gesendet. \nBitte überprüfe deinen Posteingang.",
-					"title": "Link gesendet"
-				}
-			},
-			"loginWithPasskey": "Anmeldung mit Passkey",
-			"modes": {
-				"magicLink": "Magischer Link",
-				"password": "Passwort"
-			},
-			"rememberMe": "Angemeldet bleiben",
-			"security": "Deine Daten sind verschlüsselt und geschützt",
-			"submit": "Anmelden",
-			"subtitle": "Gib deine Zugangsdaten ein, um fortzufahren.",
-			"title": "Willkommen zurück",
-			"sendMagicLink": "Anmelde-Link senden"
-		},
-		"showcase": {
-			"badge": "Prozess-Intelligenz-Plattform",
-			"login": {
-				"title": "Deine Prozesse, präzise analysiert",
-				"subtitle": "Erfasse, analysiere und transformiere Geschäftsprozesse mit KI in Echtzeit"
-			},
-			"signup": {
-				"title": "Beginne intelligent zu kartieren",
-				"subtitle": "Schließe dich den Beratern an, die Interviews in automatische BPMN-Diagramme verwandeln"
-			},
-			"feature": {
-				"ai": "KI-Analyse",
-				"bpmn": "BPMN-Diagramme",
-				"risk": "Risikoerkennung"
-			},
-			"metric": {
-				"processes": "Kartierte Prozesse",
-				"organizations": "Organisationen",
-				"accuracy": "Genauigkeit"
-			}
-		},
-		"resetPassword": {
-			"backToSignin": "Zurück zu Signin",
-			"hints": {
-				"error": "Es tut uns leid, aber wir konnten dein Passwort nicht zurücksetzen. Bitte versuche es erneut.",
-				"success": "Dein Passwort wurde erfolgreich zurückgesetzt."
-			},
-			"message": "Bitte gib ein neues Passwort ein.",
-			"newPassword": "Neues Passwort",
-			"submit": "Passwort zurücksetzen",
-			"title": "Dein Passwort zurücksetzen"
-		},
-		"signup": {
-			"alreadyHaveAccount": "Du hast bereits ein Konto?",
-			"email": "Email",
-			"hints": {
-				"signupFailed": "Es tut uns leid, aber wir konnten dein Konto nicht erstellen. \nBitte versuche es später noch einmal.",
-				"verifyEmail": "Wir haben dir einen Link zur Bestätigung deiner E-Mail-Adresse gesendet. \nBitte überprüfe deinen Posteingang."
-			},
-			"message": "Wir freuen uns, dass du dich uns anschließen möchtest. \nBitte fülle das untenstehende Formular aus, um dein Konto zu erstellen.",
-			"name": "Name",
-			"password": "Passwort",
-			"signIn": "Anmelden",
-			"submit": "Benutzerkonto erstellen",
-			"title": "Ein Konto erstellen"
-		},
-		"verify": {
-			"backToSignin": "Zurück zur Anmeldung",
-			"code": "Einmaliges Passwort",
-			"message": "Gib das Einmalpasswort aus deiner Authentifizierungs-App ein, um fortzufahren.",
-			"submit": "Verifizieren",
-			"title": "Verifiziere dein Konto"
-		}
-	},
-	"choosePlan": {
-		"title": "Wähle einen Plan",
-		"description": "Um weiterzumachen, wähle bitte einen Plan aus.",
-		"trialExpiredTitle": "Deine Testphase ist beendet",
-		"trialExpiredDescription": "Deine 14-tägige kostenlose Testphase ist abgelaufen. Wähle einen Plan, um Auditora.ai weiter zu nutzen."
-	},
-	"documentation": {
-		"title": "Dokumentation"
-	},
-	"notFound": {
-		"code": "404",
-		"title": "Seite nicht gefunden",
-		"goToDashboard": "Zum Dashboard gehen",
-		"goToHomepage": "Zur Startseite gehen"
-	},
-	"onboarding": {
-		"welcome": {
-			"title": "Willkommen bei Auditora.ai",
-			"subtitle": "Ihre KI-gestützte Plattform zur Prozesserhebung",
-			"step1": "Kunden anlegen",
-			"step1Desc": "Das Unternehmen, dessen Prozesse Sie kartieren werden",
-			"step2": "Sitzung starten",
-			"step2Desc": "Nehmen Sie an einem Videoanruf teil und lassen Sie sich von der KI leiten",
-			"step3": "Ihr Diagramm erhalten",
-			"step3Desc": "Der Prozess wird automatisch in BPMN diagrammiert",
-			"cta": "Erste Sitzung starten",
-			"explore": "Zuerst das Dashboard erkunden"
-		},
-		"account": {
-			"avatar": "Avatar",
-			"avatarDescription": "Klicke auf den Kreis oder ziehe ein Bild hinein, um deinen Avatar hochzuladen.",
-			"name": "Name"
-		},
-		"continue": "Weiter",
-		"message": "Nur ein paar schnelle Schritte, um dir den Einstieg zu erleichtern.",
-		"notifications": {
-			"accountSetupFailed": "Es tut uns leid, aber wir konnten dein Konto nicht einrichten. \nBitte versuche es später noch einmal.",
-			"companySetupFailed": "Es tut uns leid, aber wir konnten deine Unternehmensinformationen nicht speichern. Bitte versuche es später noch einmal."
-		},
-		"pricing": {
-			"planSelected": "Dein Plan wurde erfolgreich ausgewählt.",
-			"skip": "Vorerst überspringen"
-		},
-		"step": "Schritt {step} / {total}",
-		"title": "Richte dein Konto ein",
-		"company": {
-			"title": "Erzähl uns von deinem Unternehmen",
-			"subtitle": "Das hilft uns, Auditora auf deine Bedürfnisse anzupassen",
-			"companyName": "Unternehmensname",
-			"companyNamePlaceholder": "Acme Corp",
-			"industry": "Branche",
-			"industryPlaceholder": "Wähle deine Branche",
-			"companySize": "Unternehmensgröße",
-			"companySizePlaceholder": "Größenbereich wählen",
-			"evaluationTarget": "Wie viele Personen möchtest du bewerten?",
-			"evaluationTargetPlaceholder": "Bereich wählen",
-			"concernProcess": "Welcher Prozess bereitet dir die größten Sorgen?",
-			"concernProcessPlaceholder": "z.B. Bestellungen, Qualitätskontrolle...",
-			"concernProcessOptional": "Optional — hilft uns, den Einstieg zu empfehlen",
-			"industries": {"manufacturing": "Fertigung", "healthcare": "Gesundheitswesen", "finance": "Finanzen und Bankwesen", "technology": "Technologie", "retail": "Einzelhandel und E-Commerce", "logistics": "Logistik und Lieferkette", "construction": "Bauwesen", "education": "Bildung", "government": "Regierung", "food": "Lebensmittel und Getränke", "energy": "Energie und Versorgung", "other": "Sonstiges"},
-			"sizes": {"10-50": "10–50 Mitarbeiter", "51-200": "51–200 Mitarbeiter", "201-500": "201–500 Mitarbeiter", "501-1000": "501–1000 Mitarbeiter"},
-			"targets": {"5": "5 Personen", "10-30": "10–30 Personen", "31-100": "31–100 Personen", "100+": "100+ Personen"}
-		},
-		"firstValue": {
-			"title": "Starte mit ersten Ergebnissen",
-			"subtitle": "Basierend auf deiner Branche empfehlen wir, hier zu beginnen",
-			"recommendation": "Wir empfehlen, zuerst deinen kritischsten Prozess zu dokumentieren. Bewertungen sind wertvoller, wenn sie auf realen Verfahren basieren.",
-			"chatInterview": "KI-Interview starten",
-			"chatInterviewDesc": "Lass die KI dich durch die Dokumentation eines Prozesses in Minuten führen",
-			"exploreDashboard": "Dashboard erkunden",
-			"exploreDashboardDesc": "Entdecke, was Auditora für dein Team tun kann",
-			"documentProcess": "Einen Prozess dokumentieren",
-			"documentProcessDesc": "Starte mit deinem kritischsten Prozess"
-		},
-		"setupComplete": {
-			"title": "Deine Organisation ist bereit!",
-			"subtitle": "Du bist bereit, die Prozesskonformität zu verbessern.",
-			"inviteMembers": "Mitglieder einladen",
-			"inviteMembersDesc": "Füge Kollegen hinzu, die an Bewertungen teilnehmen sollten",
-			"goToDashboard": "Zum Dashboard"
-		}
-	},
-	"organizations": {
-		"createForm": {
-			"name": "Name der Organisation",
-			"notifications": {
-				"error": "Es tut uns leid, aber wir konnten deine Organisation nicht erstellen. Bitte versuche es später noch einmal.",
-				"success": "Deine Organisation wurde erstellt. Du kannst nun Mitglieder einladen."
-			},
-			"submit": "Organisation erstellen",
-			"subtitle": "Gib einen Namen für deine Organisation ein, um loszulegen. Du kannst den Namen später in den Organisationseinstellungen ändern.",
-			"title": "Erstelle eine Organisation"
-		},
-		"invitationAlert": {
-			"description": "Du bist eingeladen worden, einer Organisation beizutreten. Wenn du dich anmeldest oder registrierst, akzeptierst du automatisch die Einladung und trittst der Organisation bei.",
-			"title": "Einladung der Organisation annehmen"
-		},
-		"invitationModal": {
-			"accept": "Annehmen",
-			"decline": "Ablehnen",
-			"description": "Du wurdest eingeladen, der Organisation {organizationName} beizutreten. Möchtest du die Einladung annehmen und der Organisation beitreten?",
-			"title": "Organisation beitreten"
-		},
-		"organizationSelect": {
-			"createNewOrganization": "Neue Organisation erstellen",
-			"organizations": "Organisationen",
-			"personalAccount": "Persönliches Konto"
-		},
-		"organizationsGrid": {
-			"createNewOrganization": "Neue Organisation erstellen",
-			"title": "Deine Organisationen"
-		},
-		"roles": {
-			"admin": "Administration",
-			"member": "Mitglied",
-			"owner": "Eigentümer"
-		},
-		"settings": {
-			"changeName": {
-				"title": "Name der Organisation"
-			},
-			"deleteOrganization": {
-				"confirmation": "Bist du sicher, dass du deine Organisation löschen möchtest?",
-				"description": "Lösche deine Organisation dauerhaft. Sobald du deine Organisation gelöscht hast, gibt es kein Zurück mehr. Zur Bestätigung gib bitte unten dein Passwort ein:",
-				"submit": "Organisation löschen",
-				"title": "Organisation löschen"
-			},
-			"logo": {
-				"description": "Lade ein Logo für deine Organisation hoch.",
-				"title": "Logo der Organisation"
-			},
-			"members": {
-				"activeMembers": "Aktive Mitglieder",
-				"description": "Sieh dir alle aktiven Mitglieder und die ausstehenden Einladungen deiner Organisation an.",
-				"invitations": {
-					"empty": "Es wurden noch keine Mitglieder eingeladen.",
-					"expiresAt": "Läuft am {date} ab",
-					"invitationStatus": {
-						"accepted": "Angenommen",
-						"canceled": "Abgebrochen",
-						"pending": "Ausstehend",
-						"rejected": "Abgelehnt"
-					},
-					"revoke": "Einladung widerrufen",
-					"resend": "Einladung erneut senden"
-				},
-				"inviteMember": {
-					"description": "Um ein neues Mitglied einzuladen, sende ihm eine Einladung.",
-					"email": "E-Mail",
-					"notifications": {
-						"error": {
-							"description": "Wir konnten das Mitglied nicht einladen. Bitte versuche es später noch einmal.",
-							"title": "Mitglied konnte nicht eingeladen werden"
-						},
-						"success": {
-							"description": "Das Mitglied ist eingeladen worden.",
-							"title": "Eingeladenes Mitglied"
-						}
-					},
-					"role": "Rolle",
-					"submit": "Einladen",
-					"title": "Mitglied einladen"
-				},
-				"leaveOrganization": "Organisation verlassen",
-				"notifications": {
-					"removeMember": {
-						"error": {
-							"description": "Das Mitglied konnte nicht aus deiner Organisation entfernt werden. Bitte versuche es erneut."
-						},
-						"loading": {
-							"description": "Mitglied aus der Organisation entfernen..."
-						},
-						"success": {
-							"description": "Das Mitglied wurde erfolgreich aus deiner Organisation entfernt."
-						}
-					},
-					"revokeInvitation": {
-						"error": {
-							"description": "Die Einladung konnte nicht widerrufen werden. Bitte versuche es später noch einmal."
-						},
-						"loading": {
-							"description": "Widerruf der Einladung..."
-						},
-						"success": {
-							"description": "Die Einladung ist widerrufen worden."
-						}
-					},
-					"updateMembership": {
-						"error": {
-							"description": "Die Mitgliedschaft in der Organisation konnte nicht aktualisiert werden. Bitte versuche es erneut."
-						},
-						"loading": {
-							"description": "Aktualisierung der Mitgliedschaft..."
-						},
-						"success": {
-							"description": "Die Mitgliedschaft wurde erfolgreich aktualisiert"
-						}
-					},
-					"resendInvitation": {
-						"error": {
-							"description": "Die Einladung konnte nicht gesendet werden. Bitte versuche es erneut."
-						},
-						"loading": {
-							"description": "Einladung erneut senden..."
-						},
-						"success": {
-							"description": "Einladung verschickt"
-						}
-					}
-				},
-				"pendingInvitations": "Ausstehende Einladungen",
-				"removeMember": "Mitglied entfernen",
-				"title": "Mitglieder"
-			},
-			"notifications": {
-				"organizationDeleted": "Deine Organisation wurde gelöscht.",
-				"organizationNameNotUpdated": "Wir konnten den Namen deiner Organisation nicht aktualisieren. Bitte versuche es später noch einmal.",
-				"organizationNameUpdated": "Der Name deiner Organisation wurde aktualisiert.",
-				"organizationNotDeleted": "Wir konnten deine Organisation nicht löschen. Bitte versuche es später noch einmal."
-			},
-			"subtitle": "Verwalte die Einstellungen der Organisation.",
-			"title": "Organisation",
-			"dangerZone": {
-				"title": "Gefahrenzone"
-			},
-			"ai": {
-				"title": "KI-Konfiguration",
-				"subtitle": "KI-Nutzung überwachen und API-Schlüssel verwalten",
-				"usage": {
-					"title": "KI-Nutzung",
-					"description": "Token-Verbrauch und geschätzte Kosten der letzten 30 Tage",
-					"totalTokens": "Tokens gesamt",
-					"totalCalls": "KI-Aufrufe",
-					"inputTokens": "Eingangs-Tokens",
-					"errors": "Fehler",
-					"estimatedCost": "Gesch. Kosten",
-					"pipeline": "Pipeline",
-					"calls": "Aufrufe",
-					"avgDuration": "Durchschn. Dauer",
-					"dailyUsage": "Tägliche Nutzung",
-					"noData": "Keine Nutzungsdaten verfügbar",
-					"currentTier": "Aktuelle KI-Stufe",
-					"pipelineBreakdown": "Verbrauch nach Pipeline"
-				},
-				"externalCosts": {
-					"title": "Externe Servicekosten",
-					"description": "Geschätzte Kosten für Sprache-zu-Text und Meeting-Bot-Dienste",
-					"deepgramStt": "Deepgram STT",
-					"recallBot": "Recall.ai Bot",
-					"minutes": "Minuten"
-				},
-				"keys": {
-					"title": "Eigene API-Schlüssel (BYOK)",
-					"description": "Verwenden Sie Ihre eigenen API-Schlüssel anstelle der Plattform-Schlüssel. Schlüssel werden verschlüsselt gespeichert.",
-					"anthropicKey": "Anthropic API-Schlüssel",
-					"deepseekKey": "DeepSeek API-Schlüssel",
-					"configured": "Konfiguriert",
-					"notConfigured": "Nicht konfiguriert",
-					"lastUpdated": "Zuletzt aktualisiert",
-					"save": "Speichern",
-					"saving": "Wird gespeichert...",
-					"saved": "Gespeichert!",
-					"delete": "Entfernen",
-					"deleteConfirm": "Sind Sie sicher, dass Sie diesen API-Schlüssel entfernen möchten? Stattdessen wird der Plattform-Schlüssel verwendet.",
-					"placeholder": "sk-...",
-					"hint": "Wenn gesetzt, verwenden die KI-Aufrufe Ihrer Organisation diesen Schlüssel anstelle des Plattform-Schlüssels."
-				}
-			}
-		},
-		"start": {
-			"subtitle": "Willkommen auf der Startseite dieser Organisation!"
-		}
-	},
-	"settings": {
-		"account": {
-			"avatar": {
-				"description": "Um deinen Avatar zu ändern, klicke auf das Bild in diesem Block und wähle eine Datei von deinem Computer zum Hochladen aus.",
-				"notifications": {
-					"error": "Avatar konnte nicht aktualisiert werden",
-					"success": "Avatar wurde erfolgreich aktualisiert"
-				},
-				"title": "Dein Avatar"
-			},
-			"changeEmail": {
-				"description": "Um deine E-Mail zu ändern, ändere sie im Eingabefeld und drücke auf Speichern. Du musst die neue E-Mail bestätigen, bevor sie aktiv wird.",
-				"notifications": {
-					"error": "E-Mail konnte nicht aktualisiert werden",
-					"success": "E-Mail wurde erfolgreich aktualisiert"
-				},
-				"title": "Deine E-Mail"
-			},
-			"changeName": {
-				"notifications": {
-					"error": "Name konnte nicht aktualisiert werden",
-					"success": "Name wurde erfolgreich aktualisiert"
-				},
-				"title": "Dein Name"
-			},
-			"deleteAccount": {
-				"confirmation": "Bist du sicher, dass du dein Konto löschen möchtest?",
-				"description": "Lösche dein Konto dauerhaft. \nSobald Du dein Konto gelöscht hast, gibt es kein Zurück mehr. \nBitte sei dir sicher, bevor du hier weitermachst.",
-				"notifications": {
-					"error": "Konto konnte nicht gelöscht werden",
-					"success": "Konto wurde erfolgreich gelöscht"
-				},
-				"submit": "Konto löschen",
-				"title": "Konto löschen"
-			},
-			"language": {
-				"description": "Um die Sprache der App für dein Konto zu ändern, wähle eine Sprache aus der Liste aus und klicke auf Speichern.",
-				"notifications": {
-					"error": "Sprache konnte nicht aktualisiert werden",
-					"success": "Sprache wurde erfolgreich aktualisiert"
-				},
-				"title": "Deine Sprache"
-			},
-			"security": {
-				"activeSessions": {
-					"description": "Dies sind alle aktiven Sitzungen deines Kontos. Klicke auf das X, um eine bestimmte Sitzung zu beenden.",
-					"title": "Aktive Sitzungen",
-					"notifications": {
-						"revokeSession": {
-							"success": "Session beendet"
-						}
-					},
-					"currentSession": "Aktuelle Sitzung"
-				},
-				"changePassword": {
-					"currentPassword": "Aktuelles Passwort",
-					"newPassword": "Neues Passwort",
-					"notifications": {
-						"error": "Passwort kann nicht aktualisiert werden",
-						"success": "Passwort wurde erfolgreich aktualisiert"
-					},
-					"title": "Dein Passwort"
-				},
-				"connectedAccounts": {
-					"connect": "Verbinden",
-					"connected": "Verbunden",
-					"disconnect": "Trennen",
-					"title": "Verbundene Konten"
-				},
-				"passkeys": {
-					"addPasskey": "Passkey hinzufügen",
-					"description": "Verwende Passkeys als sichere alternative zu Passwörtern.",
-					"notifications": {
-						"addPasskey": {
-							"error": {
-								"title": "Kann keinen Hauptschlüssel hinzufügen"
-							},
-							"success": {
-								"title": "Passkey hinzugefügt"
-							}
-						},
-						"deletePasskey": {
-							"error": {
-								"title": "Der Hauptschlüssel konnte nicht gelöscht werden"
-							},
-							"loading": {
-								"title": "Hauptschlüssel löschen..."
-							},
-							"success": {
-								"title": "Passkey gelöscht"
-							}
-						}
-					},
-					"title": "Passwörter"
-				},
-				"setPassword": {
-					"description": "Du hast noch kein Passwort festgelegt. Um ein solches festzulegen, musst du den Ablauf der Passwortrücksetzung durchlaufen. Klicke auf die Schaltfläche unten, um eine E-Mail zum Zurücksetzen deines Passworts zu senden, und folge den Anweisungen in der E-Mail.",
-					"notifications": {
-						"error": "Der Link zum Festlegen des Passworts konnte nicht gesendet werden. Bitte versuche es erneut.",
-						"success": "Prüfen deinen Posteingang auf den Link, um Ihr Passwort festzulegen."
-					},
-					"submit": "Passwort festlegen",
-					"title": "Dein Passwort"
-				},
-				"title": "Sicherheit",
-				"twoFactor": {
-					"description": "Füge deinem Konto eine zusätzliche Sicherheitsebene hinzu.",
-					"dialog": {
-						"password": {
-							"description": "Bitte verifiziere dein Konto, indem du dein Passwort eingibst:",
-							"label": "Dein Passwort:",
-							"title": "Mit Passwort verifizieren"
-						},
-						"totpUrl": {
-							"code": "Geben Sie den 6-stelligen Code ein, um die Einrichtung zu bestätigen:",
-							"description": "Verwende deine bevorzugte Authentifizierungs-App und scanne den QR-Code damit oder gib das unten stehende Geheimnis manuell ein, um die Zwei-Faktor-Authentifizierung einzurichten.",
-							"title": "Zwei-Faktor-Authentifizierung aktivieren"
-						}
-					},
-					"disable": "Zwei-Faktor-Authentifizierung deaktivieren",
-					"enable": "Zwei-Faktor-Authentifizierung aktivieren",
-					"enabled": "Du hast die Zwei-Faktor-Authentifizierung für dein Konto aktiviert.",
-					"notifications": {
-						"disable": {
-							"success": {
-								"title": "Die Zwei-Faktor-Authentifizierung wurde erfolgreich deaktiviert."
-							}
-						},
-						"enable": {
-							"error": {
-								"title": "Dein Konto konnte mit dem angegebenen Passwort nicht verifiziert werden. Bitte versuche es erneut."
-							}
-						},
-						"verify": {
-							"success": {
-								"title": "Die Zwei-Faktor-Authentifizierung wurde erfolgreich aktiviert."
-							}
-						}
-					},
-					"title": "Zwei-Faktor-Authentifizierung"
-				}
-			},
-			"subtitle": "Verwalte die Einstellungen deines persönlichen Kontos.",
-			"title": "Kontoeinstellungen"
-		},
-		"billing": {
-			"createCustomerPortal": {
-				"label": "Abrechung verwalten",
-				"notifications": {
-					"error": {
-						"title": "Es konnte keine Kundenportalsitzung erstellt werden. \nBitte versuche es erneut."
-					}
-				}
-			},
-			"activePlan": {
-				"status": {
-					"active": "Aktiv",
-					"canceled": "Gekündigt",
-					"expired": "Ausgelaufen",
-					"incomplete": "Unvollständig",
-					"past_due": "Überfällig",
-					"paused": "Pausiert",
-					"trialing": "Testversion",
-					"unpaid": "Unbezahlt"
-				},
-				"title": "Dein Plan"
-			},
-			"changePlan": {
-				"description": "Wähle einen Plan aus, den du abonnieren möchtest.",
-				"title": "Ändere deinen Plan"
-			},
-			"title": "Zahlung"
-		},
-		"menu": {
-			"account": {
-				"billing": "Abrechnung",
-				"dangerZone": "Danger-Zone",
-				"general": "Allgemein",
-				"security": "Sicherheit",
-				"title": "Konto"
-			},
-			"organization": {
-				"ai": "KI",
-				"billing": "Abrechnung",
-				"general": "Allgemein",
-				"members": "Mitglieder",
-				"title": "Organisation",
-				"dangerZone": "Gefahrenzone"
-			}
-		},
-		"save": "Speichern"
-	},
-	"start": {
-		"subtitle": "Sieh dir die neuesten Statistiken über dein großartiges Unternehmen an.",
-		"welcome": "Willkommen {name}!"
-	},
-	"dashboard": {
-		"title": "Dashboard",
-		"subtitle": "Übersicht über Ihr Kundenengagement",
-		"sessionsThisMonth": "Sitzungen diesen Monat",
-		"processesMapped": "Prozesse kartiert",
-		"aiAccuracy": "KI-Genauigkeit",
-		"recentActivity": "Letzte Aktivität",
-		"newSession": "Neue Sitzung",
-		"projects": "Projekte",
-		"engagementProgress": "Engagement-Fortschritt",
-		"processesGoal": "{mapped} von {goal} Prozessen",
-		"setGoal": "Ziel setzen",
-		"emptyProjects": "Ihre Projekte erscheinen hier nach Ihrer ersten Sitzung",
-		"noActivity": "Noch keine Aktivität. Starten Sie eine Sitzung.",
-		"recentProcesses": "Neueste Prozesse",
-		"viewAll": "Alle anzeigen",
-		"noProcesses": "Entdecken Sie Ihren ersten Prozess, um ihn hier zu sehen",
-		"activity": {
-			"sessionCreated": "Sitzung erstellt",
-			"sessionEnded": "Sitzung beendet",
-			"processCreated": "Prozess erstellt",
-			"nodesConfirmed": "{count} Knoten bestätigt"
-		},
-		"hero": {
-			"title": "Prozessarchitektur",
-			"aiStat": "KI hat {nodes} Aktivitäten aus {sessions} Gesprächen extrahiert",
-			"demoTitle": "Das ist, was die KI generiert",
-			"demoSubtitle": "Starten Sie ein Gespräch und Auditora.ai extrahiert automatisch Prozessdiagramme"
-		},
-		"cta": {
-			"firstDiscovery": "Ersten Prozess entdecken",
-			"deepDive": "Deep Dive: {name}",
-			"newDiscovery": "Neue Discovery"
-		},
-		"quickActions": {
-			"chat": "Chat mit KI",
-			"chatDesc": "Beschreiben Sie Ihre Prozesse in einem Gespräch",
-			"audio": "Audio hochladen",
-			"audioDesc": "Laden Sie mp3-, wav-, m4a-Aufnahmen hoch",
-			"call": "Anruf beitreten",
-			"callDesc": "Fügen Sie Ihre Meeting-URL ein"
-		},
-		"arch": {
-			"title": "Prozessarchitektur",
-			"core": "Kern",
-			"strategic": "Strategisch",
-			"support": "Unterstützend",
-			"empty": "Noch keine Prozesse kartiert"
-		},
-		"insight": {
-			"title": "Auditora.ai KI",
-			"empty": "Starten Sie ein Gespräch mit der KI, um Ihre Geschäftsprozesse zu entdecken.",
-			"noSupport": "Sie haben {count} Prozesse kartiert, aber keinen unterstützenden. Vorschlag: IT, Facilities oder HR entdecken.",
-			"fewCore": "Sie haben {count} Kernprozesse. Ähnliche Branchen haben typischerweise 5-7. Welche anderen Prozesse sind wesentlich?",
-			"noStrategic": "Sie haben {count} Prozesse kartiert, aber keinen strategischen. Welche treiben die Differenzierung?",
-			"continue": "{count} Prozesse kartiert. Fahren Sie mit Deep Dives fort, um die Diagramme zu verfeinern."
-		},
-		"riskDashboard": {
-			"title": "Überblick",
-			"live": "LIVE",
-			"newSession": "Neue Sitzung",
-			"emptyTitle": "Willkommen bei Auditora.ai",
-			"emptyDesc": "Führen Sie Ihren ersten Scan durch, um die Risiken Ihres Unternehmens zu entdecken, oder planen Sie eine Sitzung mit Ihrem Berater.",
-			"scanCta": "Scan starten",
-			"risks": "Risiken",
-			"processes": "Prozesse",
-			"sessions": "Sitzungen",
-			"topRisks": "Offene Top-Risiken",
-			"noRisks": "Keine Risiken identifiziert",
-			"nextSession": "Nächste Sitzung",
-			"noSessions": "Keine Sitzungen geplant",
-			"scheduleSession": "Sitzung planen",
-			"recentActivity": "Letzte Aktivität",
-			"noActivity": "Keine aktuelle Aktivität",
-			"viewAllRisks": "Alle Risiken anzeigen",
-			"viewProcesses": "Prozesse anzeigen",
-			"viewDeliverables": "Ergebnisse anzeigen",
-			"noRisksDesc": "Keine kritischen Risiken. Planen Sie eine Sitzung, um Ihre Prozesse zu analysieren.",
-			"nextSessionLabel": "Nächste Sitzung",
-			"noProcess": "Kein Prozess zugewiesen",
-			"viewDetails": "Details anzeigen",
-			"coverage": "Abdeckung",
-			"evaluaciones": "Bewertungen",
-			"viewAll": "Alle anzeigen",
-			"teamAlignment": "Team-Ausrichtung",
-			"evaluationsCompleted": "Bewertungen abgeschlossen",
-			"membersEvaluated": "Bewertete Mitglieder",
-			"completionRate": "Abschlussrate",
-			"alignment": "Verfahrensausrichtung",
-			"controlLevel": "Kontrollniveau",
-			"criterio": "Entscheidungskriterien",
-			"scoreTrend": "Score-Trend"
-		}
-	},
-	"processLibrary": {
-		"title": "Prozessbibliothek",
-		"subtitle": "Alle kartierten Geschäftsprozesse",
-		"search": "Prozesse suchen...",
-		"filterByStatus": "Nach Status filtern",
-		"filterByLevel": "Nach Ebene filtern",
-		"filterByProject": "Nach Projekt filtern",
-		"allStatuses": "Alle Status",
-		"allLevels": "Alle Ebenen",
-		"allProjects": "Alle Projekte",
-		"empty": {
-			"title": "Noch keine Prozesse kartiert",
-			"description": "Planen Sie eine Discovery-Sitzung, um mit der Prozesskartierung zu beginnen.",
-			"cta": "Neue Sitzung"
-		},
-		"export": "BPMN exportieren",
-		"view": "Ansehen",
-		"share": "Teilen",
-		"versions": "{count} {count, plural, one {Version} other {Versionen}}",
-		"nodes": "{count} {count, plural, one {Knoten} other {Knoten}}",
-		"sessions": "{count} {count, plural, one {Sitzung} other {Sitzungen}}",
-		"sidebar": {
-			"noSessions": "Keine Sitzungen. Starten Sie einen Deep Dive, um diesen Prozess abzubilden.",
-			"noVersions": "Keine Versionen. Versionen werden beim Speichern des Diagramms oder Beenden einer Sitzung erstellt.",
-			"noDiagram": "Kein BPMN-Diagramm",
-			"noDescription": "Keine Beschreibung",
-			"noRaci": "Keine RACI-Matrix",
-			"noRiskAnalysis": "Keine Risikoanalyse",
-			"noCaptureSessions": "Keine Erfassungssitzungen",
-			"noGoals": "Keine Ziele definiert",
-			"noChanges": "Keine Änderungen zwischen den ausgewählten Versionen",
-			"contexto": "Kontext"
-		}
-	},
-	"commandPalette": {
-		"placeholder": "Kunden, Prozesse, Sitzungen suchen...",
-		"newSession": "Neue Sitzung",
-		"newClient": "Neuer Kunde",
-		"noResults": "Keine Ergebnisse gefunden",
-		"sections": {
-			"actions": "Aktionen",
-			"navigation": "Navigieren",
-			"clients": "Kunden",
-			"processes": "Prozesse",
-			"sessions": "Sitzungen"
-		}
-	},
-	"clientSelector": {
-		"title": "Ihre Kunden",
-		"subtitle": "Wählen Sie einen Kunden, um sein Engagement anzuzeigen",
-		"newClient": "Neuer Kunde",
-		"empty": {
-			"title": "Noch keine Kunden",
-			"description": "Erstellen Sie Ihren ersten Kunden, um mit der Beratung zu beginnen.",
-			"cta": "Neuer Kunde"
-		},
-		"sessions": "{count} {count, plural, one {Sitzung} other {Sitzungen}}",
-		"processes": "{count} {count, plural, one {Prozess} other {Prozesse}}"
-	},
-	"clients": {
-		"title": "Kunden",
-		"newClient": "Neuer Kunde",
-		"emptyState": "Noch keine Kunden. Fügen Sie Ihren ersten Kunden hinzu, um mit der Beratung zu beginnen.",
-		"industry": "Branche",
-		"businessModel": "Geschäftsmodell",
-		"operations": "Betriebsprofil",
-		"employees": "Mitarbeiterzahl",
-		"notes": "Beraternotizen",
-		"overview": "Übersicht",
-		"projects": "Projekte",
-		"documents": "Dokumente",
-		"sessionHistory": "Sitzungsverlauf"
-	},
-	"projects": {
-		"title": "Projekte",
-		"newProject": "Neues Projekt",
-		"architecture": "Architektur",
-		"sessions": "Sitzungen",
-		"versions": "Versionen",
-		"addProcess": "Prozess hinzufügen",
-		"startDiscovery": "Discovery-Sitzung starten",
-		"startSession": "Sitzung starten"
-	},
-	"processes": {
-		"process": "Prozess",
-		"subprocess": "Unterprozess",
-		"task": "Aufgabe",
-		"procedure": "Verfahren",
-		"draft": "Entwurf",
-		"mapped": "Kartiert",
-		"validated": "Validiert",
-		"approved": "Genehmigt",
-		"detail": "Prozessdetail",
-		"diagram": "Diagramm",
-		"details": "Details",
-		"children": "Unterprozesse",
-		"sessions": "Sitzungen",
-		"schedule": "Zeitplan",
-		"intelligence": "Intelligenz",
-		"risks": "Risiken & Qualität",
-		"riskAnalysis": "Risiken analysieren",
-		"fmeaAnalysis": "FMEA",
-		"riskRegister": "Register",
-		"opportunities": "Chancen",
-		"controls": "Kontrollen",
-		"heatMatrix": "Heatmap-Matrix",
-		"mitigation": "Risikominderung",
-		"severity": "Schweregrad",
-		"probability": "Wahrscheinlichkeit",
-		"riskScore": "Risiko-Score",
-		"residualRisk": "Restrisiko",
-		"noRisks": "Noch keine Risiken analysiert. Führen Sie die Analyse durch, um Risiken zu identifizieren.",
-		"noOpportunities": "Noch keine Chancen erkannt.",
-		"noControls": "Keine Kontrollen. Fügen Sie eine Kontrolle hinzu.",
-		"noMitigations": "Keine Maßnahmen. Fügen Sie eine Maßnahme hinzu.",
-		"noFmea": "Keine BPMN-Daten. Fügen Sie zuerst ein Diagramm hinzu.",
-		"needsTrend": "Mindestens 2 Audits für einen Trend erforderlich.",
-		"analyzing": "Wird analysiert...",
-		"analyzeError": "Analysefehler. Versuchen Sie es erneut.",
-		"exportReport": "Risikobericht exportieren",
-		"shareRisks": "Risiken teilen",
-		"critical": "Kritisch",
-		"high": "Hoch",
-		"medium": "Mittel",
-		"low": "Niedrig",
-		"addRisk": "Risiko hinzufügen",
-		"addMitigation": "Maßnahme hinzufügen",
-		"addControl": "Kontrolle hinzufügen",
-		"inherentRisk": "Inhärentes Risiko",
-		"riskTypes": {
-			"OPERATIONAL": "Operativ",
-			"COMPLIANCE": "Compliance",
-			"STRATEGIC": "Strategisch",
-			"FINANCIAL": "Finanziell",
-			"TECHNOLOGY": "Technologie",
-			"HUMAN_RESOURCE": "Personalwesen",
-			"REPUTATIONAL": "Reputation"
-		},
-		"saveDiagram": "Diagramm speichern",
-		"addChild": "Unterprozess hinzufügen",
-		"startDeepDive": "Deep Dive starten",
-		"continueLast": "Letzte Sitzung fortsetzen",
-		"description": "Beschreibung",
-		"goals": "Ziele",
-		"triggers": "Auslöser",
-		"outputs": "Ergebnisse",
-		"owner": "Verantwortlicher",
-		"status": "Status",
-		"noChildren": "Noch keine Unterprozesse",
-		"noSessions": "Noch keine Sitzungen für diesen Prozess",
-		"noDiagram": "Noch kein BPMN-Diagramm. Starten Sie eine Sitzung oder erstellen Sie eines manuell."
-	},
-	"sessions": {
-		"title": "Sitzungen",
-		"subtitle": "Ihre Prozesserhebungsmeetings",
-		"newSession": "Neue Sitzung",
-		"empty": {
-			"title": "Noch keine Sitzungen",
-			"description": "Erstellen Sie eine neue Sitzung, um bei Ihrem nächsten Anruf mit der Prozesskartierung zu beginnen."
-		},
-		"new": {
-			"title": "Neue Sitzung",
-			"subtitle": "Neues Prozesserhebungsmeeting einrichten",
-			"form": {
-				"meetingUrl": "Meeting-URL",
-				"meetingUrlPlaceholder": "https://zoom.us/j/... oder https://meet.google.com/...",
-				"meetingUrlHint": "Fügen Sie Ihren Zoom-, Google Meet- oder Teams-Meeting-Link ein",
-				"clientName": "Kundenname",
-				"clientNamePlaceholder": "Acme GmbH",
-				"clientHint": "Wählen oder erstellen Sie das Unternehmen, dessen Prozesse Sie kartieren",
-				"projectName": "Projektname",
-				"projectNamePlaceholder": "Prozessoptimierung Q1",
-				"projectHint": "Projekte gruppieren Ihre Sitzungen nach Abteilung oder Initiative",
-				"sessionType": "Sitzungstyp",
-				"sessionTypeHint": "Discovery kartiert den Geschäftsüberblick. Deep Dive fokussiert auf einen bestimmten Prozess.",
-				"typeDiscovery": "Discovery — Geschäftsüberblick",
-				"typeDeepDive": "Deep Dive — Bestimmter Prozess",
-				"typeDiscoveryDesc": "Prozessarchitektur des Unternehmens kartieren",
-				"typeDeepDiveDesc": "Tiefenanalyse eines bestimmten Prozesses",
-				"typeContinuationDesc": "Dort fortfahren, wo Sie in einer vorherigen Sitzung aufgehört haben",
-				"create": "Sitzung erstellen & Anruf beitreten",
-				"creating": "Wird verbunden..."
-			}
-		}
-	},
-	"common": {
-		"confirmation": {
-			"cancel": "Abbrechen",
-			"confirm": "Bestätigen"
-		},
-		"actions": "Aktionen",
-		"colorMode": {
-			"system": "System",
-			"light": "Hell",
-			"dark": "Dunkel"
-		},
-		"passwordCriteria": {
-			"minLength": "Min. 8 Zeichen",
-			"upperAndLowercase": "Groß- & Kleinbuchstaben",
-			"number": "Zahl",
-			"specialCharacter": "Sonderzeichen"
-		},
-		"save": "Speichern",
-		"saving": "Speichern...",
-		"cancel": "Abbrechen",
-		"delete": "Löschen",
-		"edit": "Bearbeiten",
-		"create": "Erstellen",
-		"add": "Hinzufügen",
-		"view": "Anzeigen",
-		"close": "Schließen",
-		"back": "Zurück",
-		"retry": "Erneut versuchen",
-		"search": "Suchen",
-		"loading": "Laden...",
-		"noResults": "Keine Ergebnisse",
-		"error": "Fehler",
-		"success": "Erfolg",
-		"errorGeneric": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
-		"errorSaving": "Fehler beim Speichern",
-		"errorDeleting": "Fehler beim Löschen",
-		"errorLoading": "Fehler beim Laden",
-		"savedSuccess": "Erfolgreich gespeichert",
-		"deletedSuccess": "Erfolgreich gelöscht",
-		"copiedSuccess": "In die Zwischenablage kopiert",
-		"description": "Beschreibung",
-		"name": "Name",
-		"type": "Typ",
-		"status": "Status",
-		"date": "Datum",
-		"process": "Prozess",
-		"noDescription": "Keine Beschreibung",
-		"noNote": "Keine Notiz",
-		"exit": "Beenden",
-		"maximize": "Maximieren",
-		"coverage": "Abdeckung",
-		"severity": "Schweregrad",
-		"probability": "Wahrscheinlichkeit",
-		"size": "Größe"
-	},
-	"meeting": {
-		"topBar": {
-			"processNameTitle": "Klicken, um den Prozessnamen zu bearbeiten",
-			"newSession": "Neue Sitzung",
-			"endButton": "Beenden",
-			"aiNotInCall": "Live-KI aktivieren",
-			"aiAnalyzing": "KI analysiert",
-			"aiPaused": "KI pausiert",
-			"fontDecrease": "Text verkleinern",
-			"fontNormal": "Normale Größe",
-			"fontIncrease": "Text vergrößern",
-			"botDisconnected": "Bot getrennt",
-			"disconnected": "Getrennt",
-			"connecting": "Verbindung wird hergestellt...",
-			"reconnecting": "Neuverbindung...",
-			"inCall": "Im Anruf",
-			"analyzing": "Wird analysiert...",
-			"diagramming": "Diagramm wird erstellt...",
-			"suggesting": "Vorschläge...",
-			"local": "Lokal",
-			"activeConnection": "Aktive Verbindung",
-			"connectToCall": "Mit Anruf verbinden",
-			"statusFailed": "Bot konnte dem Anruf nicht beitreten",
-			"statusLostConnection": "Verbindung zum Bot verloren",
-			"statusConnected": "Bot verbunden und hört zu",
-			"statusReconnecting": "Neuverbindung zum Bot...",
-			"statusLocal": "Lokaler Modus — Sie können sich mit einem Anruf verbinden",
-			"reconnectSameLink": "Mit demselben Link neu verbinden",
-			"pasteCallLink": "Anruf-Link einfügen",
-			"changeCallLink": "Anruf-Link ändern",
-			"infoLocal": "Fügen Sie Ihren Videoanruf-Link ein, damit der Bot beitritt und in Echtzeit transkribiert.",
-			"infoConnected": "Sie können offline am Diagramm weiterarbeiten. Der Bot verbindet sich mit dem eingefügten Link.",
-			"cancelLocalMode": "Abbrechen und zum lokalen Modus zurückkehren",
-			"disconnectBot": "Bot trennen",
-			"sharing": "Wird geteilt",
-			"share": "Teilen",
-			"viewLink": "Ansichtslink",
-			"copy": "Kopieren",
-			"disabling": "Wird deaktiviert...",
-			"stopSharing": "Teilen beenden",
-			"shareDisableNote": "Der Link wird deaktiviert, wenn Sie das Teilen beenden oder die Sitzung beenden.",
-			"enabling": "Wird aktiviert...",
-			"enableShareLink": "Freigabelink aktivieren",
-			"shareNote": "Erstellen Sie einen schreibgeschützten Link, damit andere das Live-Diagramm sehen können.",
-			"export": "Exportieren",
-			"diagramSection": "Diagramm",
-			"pngLabel": "PNG (Bild)",
-			"svgLabel": "SVG (Vektor)",
-			"bpmnLabel": "BPMN (XML)",
-			"documentationSection": "Dokumentation",
-			"transcription": "Transkription",
-			"proceduresSops": "Verfahren (SOPs)",
-			"reportSection": "Bericht",
-			"sessionReport": "Sitzungsbericht (PDF)",
-			"cleanSection": "Bereinigen",
-			"cleanDiagram": "Diagramm bereinigen",
-			"cleanTranscription": "Transkription bereinigen",
-			"cleanAll": "Alles bereinigen",
-			"confirmCleanDiagram": "das Diagramm",
-			"confirmCleanTranscript": "die Transkription",
-			"confirmCleanAll": "die gesamte Sitzung",
-			"confirmCleanPrompt": "Sind Sie sicher, dass Sie {label} bereinigen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
-			"exportSopHeader": "ARBEITSVERFAHREN (SOPs)",
-			"exportProcedure": "VERFAHREN",
-			"exportCode": "Code",
-			"exportResponsible": "Verantwortlich",
-			"exportFrequency": "Häufigkeit",
-			"exportObjective": "ZIEL",
-			"exportScope": "UMFANG",
-			"exportPrerequisites": "VORAUSSETZUNGEN",
-			"exportSteps": "SCHRITTE",
-			"exportSystems": "Systeme",
-			"exportInputs": "Eingaben",
-			"exportOutputs": "Ausgaben",
-			"exportPendingInfo": "AUSSTEHENDE INFORMATIONEN"
-		},
-		"toast": {
-			"botDisconnected": "Bot getrennt — lokaler Modus",
-			"disconnectError": "Fehler beim Trennen",
-			"connectionError": "Verbindungsfehler",
-			"reconnectNew": "Bot tritt neuem Anruf bei...",
-			"reconnecting": "Bot wird neu verbunden...",
-			"reconnectError": "Fehler bei der Neuverbindung",
-			"shareDisabled": "Freigabelink deaktiviert",
-			"linkCopied": "Link in die Zwischenablage kopiert",
-			"linkCopiedShort": "Link kopiert",
-			"shareError": "Fehler beim Ändern des Freigabestatus",
-			"cleaned": "{label} bereinigt",
-			"cleanError": "Fehler beim Bereinigen",
-			"noTranscription": "Keine Transkription",
-			"transcriptionDownloaded": "Transkription heruntergeladen",
-			"noProcedures": "Keine Verfahren generiert",
-			"sopsDownloaded": "{count} Verfahren heruntergeladen",
-			"sessionEndedFull": "Sitzung beendet. Ergebnisse werden generiert...",
-			"sessionEndedSave": "Sitzung beendet. Daten gespeichert.",
-			"sessionDiscarded": "Sitzung verworfen.",
-			"sessionEndError": "Fehler beim Beenden der Sitzung",
-			"diagramSaved": "Diagramm gespeichert",
-			"saveError": "Fehler beim Speichern",
-			"diagramReorganized": "Diagramm reorganisiert",
-			"noNodes": "Keine Knoten zum Reorganisieren gefunden",
-			"reorganizeError": "Fehler beim Reorganisieren. Diagramm wiederhergestellt.",
-			"reorganizeRetry": "Fehler beim Reorganisieren. Versuchen Sie es erneut.",
-			"relayoutDone": "Diagramm neu angeordnet",
-			"relayoutError": "Fehler beim Neuanordnen",
-			"labelsFixed": "{count} Bezeichnungen korrigiert",
-			"labelsCorrect": "Alle Bezeichnungen sind korrekt",
-			"labelsError": "Fehler beim Korrigieren der Bezeichnungen",
-			"complete": "{score}% vollständig",
-			"newQuestions": "{count} neue Fragen",
-			"answerError": "Fehler beim Senden der Antwort",
-			"modeChanging": "Wechsel zu {label}...",
-			"modeChanged": "Modus: {label} — Fragen neu generiert",
-			"modeError": "Fehler beim Moduswechsel",
-			"generateError": "Fehler beim Generieren",
-			"nodeDeleted": "Knoten gelöscht",
-			"deleteError": "Fehler beim Löschen des Knotens",
-			"nodeCreated": "Knoten erstellt",
-			"createError": "Fehler beim Erstellen des Knotens",
-			"connectionError2": "Fehler beim Aktualisieren der Verbindungen",
-			"labelSaveError": "Fehler beim Speichern der Bezeichnung",
-			"typeChangeError": "Fehler beim Ändern des Typs",
-			"renamed": "Umbenannt in \"{name}\"",
-			"convertedGateway": "In Gateway umgewandelt",
-			"reorganizingFlows": "Diagramm wird reorganisiert, um Flüsse zu korrigieren...",
-			"mergeCreated": "Zusammenführungs-Gateway erstellt",
-			"reorganizingBuilder": "Reorganisierung — Builder verbindet lose Knoten...",
-			"reorganizedReconnected": "Diagramm reorganisiert — Knoten neu verbunden",
-			"laneUnified": "Lane vereinheitlicht zu \"{name}\"",
-			"reorganizing": "Diagramm wird reorganisiert...",
-			"fixError": "Fehler beim Anwenden der Korrektur",
-			"noAuditNodes": "Keine Knoten zum Auditieren",
-			"auditScore": "BPMN-Diagramm korrekt — Score: {score}/100",
-			"auditObservations": "{count} Beobachtungen gefunden",
-			"connectNotAvailable": "Verbindungswerkzeug nicht verfügbar",
-			"savePropsError": "Fehler beim Speichern der Eigenschaften"
-		},
-		"leftPanel": {
-			"header": "BPMN-Elemente",
-			"catEvents": "Ereignisse",
-			"startEvent": "Start",
-			"startEventTip": "Wo der Prozess beginnt. Es sollte nur einen pro Hauptfluss geben.",
-			"endEvent": "Ende",
-			"endEventTip": "Wo der Prozess endet. Es kann mehrere geben, wenn verschiedene Pfade existieren.",
-			"intermediateEvent": "Zwischenereignis",
-			"intermediateEventTip": "Etwas, das mitten im Fluss passiert. Z.B.: Benachrichtigung senden, Fall eskalieren.",
-			"timerEvent": "Timer",
-			"timerEventTip": "Eine Wartezeit oder Frist. Z.B.: 24 Std. auf Genehmigung warten, Antwortfrist.",
-			"boundaryEvent": "Grenzereignis",
-			"boundaryEventTip": "Ereignis am Rand einer Aufgabe. Z.B.: SLA-Timeout, Fehler der die Aufgabe unterbricht.",
-			"catTasks": "Aufgaben",
-			"task": "Aufgabe",
-			"taskTip": "Generische Aktivität. Verwenden, wenn es egal ist ob manuell oder systembasiert.",
-			"userTask": "Benutzeraufgabe",
-			"userTaskTip": "Eine Person führt diese Aufgabe aus. Z.B.: Dokument prüfen, Anfrage genehmigen.",
-			"serviceTask": "Serviceaufgabe",
-			"serviceTaskTip": "Ein System erledigt es automatisch. Z.B.: E-Mail senden, API abfragen, Bericht generieren.",
-			"manualTask": "Manuelle Aufgabe",
-			"manualTaskTip": "Physische Arbeit ohne System. Z.B.: Paket liefern, Papierdokument unterschreiben.",
-			"businessRule": "Geschäftsregel",
-			"businessRuleTip": "Entscheidung basierend auf definierten Regeln. Z.B.: Rabatt nach Richtlinie berechnen, Kredit validieren.",
-			"scriptTask": "Skriptaufgabe",
-			"scriptTaskTip": "Automatische Codeausführung. Z.B.: Daten transformieren, Summen berechnen.",
-			"catGateways": "Gateways",
-			"exclusive": "Exklusiv",
-			"exclusiveTip": "Nur EIN Pfad wird ausgeführt. Z.B.: Wenn genehmigt → weiter, Wenn nicht → ablehnen.",
-			"parallel": "Parallel",
-			"parallelTip": "ALLE Pfade werden gleichzeitig ausgeführt. Z.B.: E-Mail senden UND System aktualisieren.",
-			"inclusive": "Inklusiv",
-			"inclusiveTip": "EIN ODER MEHRERE Pfade werden ausgeführt. Z.B.: Manager UND/ODER Direktor je nach Betrag benachrichtigen.",
-			"catSubprocesses": "Unterprozesse",
-			"subprocess": "Unterprozess",
-			"subprocessTip": "Ein Prozess innerhalb eines anderen. Gruppiert zusammengehörige Schritte. Z.B.: 'Dokumentenvalidierung'.",
-			"callActivity": "Aufrufaktivität",
-			"callActivityTip": "Ruft einen bereits definierten Prozess auf. Z.B.: Prozess 'Einkaufsgenehmigung' wiederverwenden.",
-			"catData": "Daten",
-			"dataObject": "Datenobjekt",
-			"dataObjectTip": "Ein Dokument oder Daten, das/die verwendet oder erzeugt wird/werden. Z.B.: Rechnung, Bestellung, Vertrag.",
-			"dataStore": "Datenspeicher",
-			"dataStoreTip": "Ein System, in dem Daten gespeichert werden. Z.B.: ERP, Datenbank, SharePoint.",
-			"annotation": "Anmerkung",
-			"annotationTip": "Erläuternde Notiz. Beeinflusst den Fluss nicht, nur zur Dokumentation. Z.B.: 'SLA: 48 Std.'.",
-			"group": "Gruppe",
-			"groupTip": "Visuelle Gruppierung. Beeinflusst den Fluss nicht, organisiert nur visuell. Z.B.: Prozessphasen markieren."
-		},
-		"rightPanel": {
-			"transcription": "Transkription",
-			"aiSuggestions": "KI-Vorschläge",
-			"documents": "Dokumente",
-			"gapRoles": "Rollen",
-			"gapSuppliers": "Lieferanten",
-			"gapInputs": "Eingaben",
-			"gapOutputs": "Ausgaben",
-			"gapCustomers": "Kunden",
-			"gapTriggers": "Auslöser",
-			"gapDecisions": "Entscheidungen",
-			"gapExceptions": "Ausnahmen",
-			"gapTimings": "Zeitabläufe",
-			"gapSystems": "Systeme",
-			"gapExploration": "Erkundung"
-		},
-		"teleprompter": {
-			"header": "KI-Vorschläge",
-			"gapRoles": "Rollen",
-			"gapSuppliers": "Lieferanten",
-			"gapInputs": "Eingaben",
-			"gapOutputs": "Ausgaben",
-			"gapCustomers": "Kunden",
-			"gapTriggers": "Auslöser",
-			"gapDecisions": "Entscheidungen",
-			"gapExceptions": "Ausnahmen",
-			"gapTimelines": "Zeitabläufe",
-			"gapSystems": "Systeme",
-			"gapExploration": "Erkundung",
-			"modeExplore": "Erkunden",
-			"modeExploreHint": "Alle SIPOC-Dimensionen abdecken",
-			"modeDeepen": "Vertiefen",
-			"modeDeepenHint": "Die schwächste Dimension detaillieren",
-			"modeValidate": "Validieren",
-			"modeValidateHint": "Jeden Knoten prüfen, Lücken schließen",
-			"sipocSuppliers": "Lieferanten",
-			"sipocInputs": "Eingaben",
-			"sipocProcess": "Prozess",
-			"sipocOutputs": "Ausgaben",
-			"sipocCustomers": "Kunden",
-			"processQuestions": "Prozessfragen",
-			"sipocQuestionsProgress": "SIPOC-Fragen ({answered}/{total} beantwortet)",
-			"sipocQuestionsInitial": "Initiale SIPOC-Fragen",
-			"allSipocAnswered": "Alle SIPOC-Fragen beantwortet. KI wird kontextuelle Fragen generieren.",
-			"answerPlaceholder": "Antwort eingeben...",
-			"q1": "Wer sind die Lieferanten oder Bereiche, die diesen Prozess initiieren?",
-			"q2": "Welche Informationen, Dokumente oder Materialien werden zum Start benötigt?",
-			"q3": "Was sind die Hauptschritte des Prozesses von Anfang bis Ende?",
-			"q4": "Welche Ergebnisse oder Liefergegenstände produziert dieser Prozess?",
-			"q5": "Wer sind die Kunden oder Bereiche, die das Ergebnis erhalten?",
-			"q6": "Welche Entscheidungen werden während des Prozesses getroffen und wer trifft sie?",
-			"q7": "Welche Ausnahmen oder alternativen Pfade gibt es?",
-			"q8": "Welche Systeme oder Werkzeuge werden verwendet?",
-			"answeredCount": "{count, plural, one {# Frage beantwortet} other {# Fragen beantwortet}}"
-		},
-		"canvas": {
-			"aiPhase1": "Aufgaben und Verbindungen werden analysiert",
-			"aiPhase2": "Rollen und Lanes werden identifiziert",
-			"aiPhase3": "Prozessfluss wird bewertet",
-			"aiPhase4": "Fehlende Elemente werden erkannt",
-			"aiPhase5": "Bezeichnungen werden korrigiert",
-			"aiPhase6": "Knoten werden reorganisiert",
-			"aiPhase7": "Layout wird optimiert",
-			"aiPhase8": "BPMN-Best-Practices werden angewandt",
-			"tabDiagram": "Diagramm",
-			"tabTree": "Baumansicht",
-			"openProcessProps": "Prozesseigenschaften öffnen",
-			"processDefault": "Prozess",
-			"breadcrumbRoot": "Hauptprozess",
-			"toggleShowElements": "Elemente anzeigen",
-			"toggleHideElements": "Elemente ausblenden",
-			"toggleShowPanels": "Panels anzeigen",
-			"toggleHidePanels": "Panels ausblenden",
-			"toolUndo": "Rückgängig",
-			"toolRedo": "Wiederholen",
-			"toolFit": "Einpassen",
-			"toolSave": "Speichern",
-			"toolSort": "Sortieren",
-			"toolSpelling": "Rechtschreibung",
-			"toolAiFull": "Voll-KI",
-			"fixingLabels": "Bezeichnungen werden korrigiert...",
-			"reorganizingLayout": "Layout wird reorganisiert...",
-			"shortcutSave": "Diagramm speichern",
-			"shortcutFit": "An Ansicht anpassen",
-			"shortcutRelayout": "Neu layouten (ELK)",
-			"shortcutFixLabels": "Bezeichnungen korrigieren (KI)",
-			"shortcutFullReorganize": "Voll reorganisieren (KI)"
-		},
-		"bottomBar": {
-			"toolSelect": "Auswählen",
-			"toolConnect": "Verbinden",
-			"toolText": "Text",
-			"auditBpmn": "BPMN auditieren",
-			"auditHeader": "BPMN-Audit",
-			"observations": "{count} Beobachtungen",
-			"diagramCorrect": "Das Diagramm entspricht den BPMN 2.0 Best Practices",
-			"suggestion": "Vorschlag",
-			"fix": "Korrigieren",
-			"aiElements": "KI-Elemente",
-			"layoutDefault": "Vollansicht",
-			"layoutChatFocus": "Chat-Fokus"
-		},
-		"layout": {
-			"sipocAnalysis": "SIPOC-Analyse"
-		},
-		"endDialog": {
-			"title": "Sitzung beenden",
-			"description": "Wählen Sie, wie Sie diese Sitzung beenden möchten.",
-			"processNameLabel": "Prozessname",
-			"processNamePlaceholder": "Z.B.: Einkaufsprozess",
-			"processNameHint": "Ein neuer Prozess wird mit den Diagrammknoten erstellt.",
-			"fullButton": "Beenden und Bericht generieren",
-			"fullDescription": "Speichert das Diagramm und generiert Zusammenfassung, RACI, Audit und Risiken.",
-			"saveOnlyButton": "Beenden ohne Bericht",
-			"saveOnlyDescription": "Speichert Diagramm und Daten, generiert aber keine Ergebnisse.",
-			"discardButton": "Sitzung verwerfen",
-			"discardDescription": "Bricht die Sitzung ab, ohne Diagrammdaten zu speichern.",
-			"backButton": "Zurück zur Sitzung"
-		},
-		"treeEditor": {
-			"noNodes": "Keine Knoten im Prozess",
-			"header": "Prozessstruktur",
-			"nodeCount": "{count} Knoten",
-			"doubleClickHint": "Doppelklick zum Bearbeiten",
-			"connectTo": "Verbinden mit...",
-			"noAvailableNodes": "Keine verfügbaren Knoten",
-			"connectionCount": "{count} Verbindung(en)",
-			"addConnection": "Verbindung hinzufügen",
-			"insertAfter": "Knoten danach einfügen",
-			"deleteNode": "Knoten löschen",
-			"confirmDelete": "Löschen von \"{label}\" bestätigen?",
-			"cancel": "Abbrechen",
-			"delete": "Löschen",
-			"newTask": "Neue Aufgabe"
-		},
-		"sop": {
-			"generating": "Verfahren wird generiert...",
-			"generatingContext": "Transkript und BPMN-Kontext werden analysiert",
-			"retry": "Erneut versuchen",
-			"noProcedure": "Kein Verfahren",
-			"noProcedureDescription": "Erstellen Sie ein vollständiges SOP-Dokument aus der Sitzungstranskription und dem BPMN-Diagrammkontext.",
-			"generateSop": "SOP mit KI generieren",
-			"procedureLabel": "Verfahren",
-			"regenerate": "Neu generieren",
-			"export": "Exportieren",
-			"codeField": "Code",
-			"responsibleField": "Verantwortlich",
-			"frequencyField": "Häufigkeit",
-			"confidenceLabel": "Konfidenz",
-			"objectiveSection": "Ziel",
-			"scopeSection": "Umfang",
-			"prerequisitesSection": "Voraussetzungen",
-			"stepsSection": "Verfahrensschritte",
-			"inputsLabel": "Eingaben",
-			"outputsLabel": "Ausgaben",
-			"exceptionPrefix": "Wenn: ",
-			"indicatorsSection": "Indikatoren",
-			"targetLabel": "Zielwert",
-			"pendingInfoSection": "Ausstehende Informationen",
-			"supportMaterialSection": "Begleitmaterial",
-			"addScreenshot": "Screenshot hinzufügen",
-			"screenshotHint": "System-Screenshot, Formular oder Bildschirm, der für dieses Verfahren relevant ist",
-			"addVideo": "Erklärvideo hinzufügen",
-			"videoHint": "YouTube-, Vimeo- oder Loom-Video, das zeigt, wie das Verfahren ausgeführt wird",
-			"clickToEdit": "Klicken zum Bearbeiten...",
-			"doneEditing": "Fertig",
-			"describeStep": "Beschreiben Sie diesen Schritt im Detail...",
-			"notesPlaceholder": "Notizen, Screenshots, Videos...",
-			"videoPrompt": "Video-URL (YouTube, Vimeo, Loom):"
-		},
-		"sopPanel": {
-			"selectTask": "Wählen Sie eine Aufgabe, um ihr Verfahren zu dokumentieren",
-			"headerSop": "SOP",
-			"newConversation": "Neues Gespräch",
-			"aiIntro": "KI stellt die richtigen Fragen, um diese Aufgabe zu dokumentieren. Antworten Sie und das Verfahren erstellt sich von selbst.",
-			"thinking": "Denkt nach...",
-			"generateFull": "Vollständiges SOP mit vorhandenen Informationen generieren",
-			"generatingFull": "Wird generiert...",
-			"inputPlaceholder": "Hier antworten...",
-			"errorMessage": "Fehler bei der Verarbeitung. Versuchen Sie es erneut."
-		},
-		"nodeProperties": {
-			"elementCount": "{count} Element(e)",
-			"documented": "dokumentiert",
-			"selectElement": "Prozesselement auswählen",
-			"selectElementSub": "um seine Eigenschaften zu dokumentieren",
-			"tabProperties": "Eigenschaften",
-			"tabSopComplete": "Vollständiges SOP",
-			"hasProcedure": "Hat Verfahren",
-			"attachments": "Anhänge",
-			"attachFile": "Datei anhängen (PDF, Word, PPT)",
-			"generateDraft": "Entwurf generieren",
-			"generating": "Wird generiert..."
-		},
-		"procedureEditor": {
-			"placeholder": "Beschreiben Sie das Verfahren Schritt für Schritt...",
-			"bold": "Fett",
-			"italic": "Kursiv",
-			"underline": "Unterstrichen",
-			"heading1": "Überschrift 1",
-			"heading2": "Überschrift 2",
-			"bulletList": "Liste",
-			"orderedList": "Nummerierte Liste",
-			"link": "Link",
-			"image": "Bild",
-			"video": "Video",
-			"videoPrompt": "Video-URL (YouTube, Vimeo, Loom):",
-			"urlPrompt": "URL:"
-		},
-		"diagramEditor": {
-			"title": "Diagramm bearbeiten",
-			"cancel": "Abbrechen",
-			"saving": "Wird gespeichert...",
-			"save": "Speichern",
-			"initError": "Der Diagramm-Editor konnte nicht geladen werden."
-		},
-		"shortcuts": {
-			"zenMode": "Zen-Modus (beide Panels umschalten)",
-			"leftPanel": "Linkes Panel umschalten",
-			"rightPanel": "Rechtes Panel umschalten"
-		},
-		"nodeConfig": {
-			"startEvent": "Start",
-			"endEvent": "Ende",
-			"task": "Aufgabe",
-			"userTask": "Benutzeraufgabe",
-			"serviceTask": "Serviceaufgabe",
-			"manualTask": "Manuelle Aufgabe",
-			"exclusiveGateway": "Gateway",
-			"parallelGateway": "Parallel",
-			"subprocess": "Unterprozess",
-			"defaultElement": "Element",
-			"stateConfirmed": "Bestätigt",
-			"stateForming": "In Bildung",
-			"stateRejected": "Abgelehnt"
-		},
-		"propFields": {
-			"description": "Beschreibung / Verfahren",
-			"descriptionTooltip": "Erklären Sie, worin diese Aktivität besteht, wie sie durchgeführt wird und wichtige Hinweise für die ausführende Person.",
-			"responsable": "Verantwortlich",
-			"responsableTooltip": "Die Rolle oder Position, die diese Aktivität ausführt. Nicht der Name der Person, sondern die Rolle.",
-			"sla": "SLA",
-			"slaTooltip": "Maximal zulässige Zeit zum Abschluss dieser Aktivität ab Beginn.",
-			"slaUnit": "SLA-Einheit",
-			"slaMinutes": "Minuten",
-			"slaHours": "Stunden",
-			"slaDays": "Tage",
-			"frequency": "Häufigkeit",
-			"frequencyTooltip": "Wie oft wird diese Aktivität ausgeführt?",
-			"frequencyDaily": "Täglich",
-			"frequencyWeekly": "Wöchentlich",
-			"frequencyMonthly": "Monatlich",
-			"frequencyPerEvent": "Pro Ereignis",
-			"frequencyCount": "Anzahl pro Zeitraum",
-			"frequencyCountTooltip": "Wie oft wiederholt es sich im gewählten Zeitraum?",
-			"estimatedDuration": "Geschätzte Dauer (Min.)",
-			"estimatedDurationTooltip": "Wie viele Minuten braucht eine erfahrene Person, um diese Aktivität abzuschließen?",
-			"systems": "Systeme",
-			"systemsPlaceholder": "SAP, CRM usw.",
-			"systemsTooltip": "Software, Anwendungen oder Werkzeuge, die zur Durchführung dieser Aktivität verwendet werden.",
-			"inputs": "Eingaben",
-			"inputsPlaceholder": "Bestellung, Lieferantendaten...",
-			"inputsTooltip": "Dokumente, Daten oder Informationen, die VOR Beginn dieser Aktivität benötigt werden.",
-			"outputs": "Ausgaben",
-			"outputsPlaceholder": "Geprüfte Rechnung, Bericht...",
-			"outputsTooltip": "Dokumente, Daten oder Ergebnisse, die BEI ABSCHLUSS dieser Aktivität erstellt werden.",
-			"costPerExecution": "Kosten pro Ausführung",
-			"costTooltip": "Ungefähre Kosten bei jeder Ausführung dieser Aktivität.",
-			"currency": "Währung",
-			"currencyPlaceholder": "EUR, USD",
-			"groupGeneral": "Allgemein",
-			"groupResources": "Ressourcen und Zeiten",
-			"groupInputsOutputs": "Eingaben / Ausgaben",
-			"groupCosts": "Kosten"
-		}
-	},
-	"scan": {
-		"title": "Geschäftsprozess-Scan",
-		"subtitle": "Entdecken Sie versteckte Risiken in Ihren Prozessen. Kostenlos. Ohne Registrierung.",
-		"urlPlaceholder": "https://ihrunternehmen.de",
-		"descriptionPlaceholder": "Beschreiben Sie Ihr Unternehmen: Was es tut, an wen es verkauft, seine Hauptaktivitäten...",
-		"noWebsite": "Ich habe keine Website — ich beschreibe mein Unternehmen",
-		"hasWebsite": "Ich habe eine Website — URL einfügen",
-		"generate": "Scan erstellen",
-		"generating": "Scan wird erstellt...",
-		"disclaimer": "Unter einer Minute. Ihre Daten werden nicht an Dritte weitergegeben.",
-		"readingWebsite": "Ihre Website wird gelesen...",
-		"loaderConnecting": "Verbindung zur Website...",
-		"loaderReading": "Seiten werden gelesen...",
-		"loaderExtracting": "Geschaftskontext wird extrahiert...",
-		"loaderPreparing": "Analyse wird vorbereitet...",
-		"loaderAnalyzing": "Analyse von",
-		"analyzingIndustry": "Ihre Branche wird analysiert...",
-		"mappingProcess": "Schlüsselprozess wird kartiert...",
-		"generatingDiagram": "Diagramm wird erstellt...",
-		"evaluatingRisks": "Risiken werden bewertet...",
-		"scanReady": "Scan fertig",
-		"sipocAnalysis": "SIPOC-Analyse",
-		"sipocDetailed": "Detaillierte SIPOC-Analyse",
-		"suppliers": "Lieferanten",
-		"inputs": "Eingaben",
-		"process": "Prozess",
-		"outputs": "Ausgaben",
-		"customers": "Kunden",
-		"risksIdentified": "Identifizierte Risiken",
-		"riskRegistry": "Risikoregister",
-		"totalScore": "Gesamtpunktzahl",
-		"critical": "Kritisch",
-		"high": "Hoch",
-		"medium": "Mittel",
-		"low": "Niedrig",
-		"highestRiskArea": "Bereich mit dem höchsten Risiko",
-		"firstScan": "Dies ist ein erster Scan",
-		"deepenCta": "Durch die Beantwortung einiger Fragen kann die KI spezifische Risiken IHRER Operation finden, nicht nur Ihrer Branche. In 5-10 Minuten haben Sie eine viel tiefere Analyse.",
-		"deepenButton": "Meinen Scan vertiefen",
-		"processCoverage": "Prozessabdeckung",
-		"readyForDiagram": "Bereit zur Diagrammerstellung",
-		"keepAnswering": "Antworten Sie weiter zur Verbesserung",
-		"viewDiagram": "Mein Prozessdiagramm anzeigen",
-		"skipToResults": "Zum Diagramm springen",
-		"buildingDiagram": "Ihre Prozesskarte wird erstellt...",
-		"yourProcessMap": "Ihre Prozesskarte",
-		"generatingDeepScan": "Ihr vollständiger Scan wird erstellt...",
-		"revealTitle": "Tiefenanalyse läuft",
-		"revealCorrelating": "Forschungsergebnisse werden korreliert...",
-		"revealMapping": "Prozessabläufe werden kartiert...",
-		"revealAnalyzing": "Tiefe Risikoanalyse wird durchgeführt...",
-		"revealGenerating": "BPMN-Diagramm wird erstellt...",
-		"completeScan": "Vollständiger Scan",
-		"additionalRisks": "Das Gespräch hat {count} zusätzliche Risiken aufgedeckt, die der erste Scan nicht erkannt hat.",
-		"initialVsDeep": "Erster Scan: {initial} Risiken. Tiefer Scan: {deep} Risiken.",
-		"suggestedMitigations": "Vorgeschlagene Maßnahmen",
-		"opportunity": "Chance",
-		"affectedStep": "Betroffener Schritt: {step}",
-		"saveScan": "Ihren Scan speichern",
-		"saveDescription": "{count} Risiken in \"{process}\" gefunden. Erstellen Sie Ihr Konto, um diese Analyse zu speichern und weitere Prozesse zu kartieren.",
-		"createAccount": "Konto erstellen und speichern",
-		"convertBullet1": "Vollständiges Risikoregister mit Maßnahmen",
-		"convertBullet2": "BPMN-Prozessdiagramm zum Bearbeiten",
-		"convertBullet3": "Verbesserungen über die Zeit verfolgen",
-		"creatingAccount": "Konto wird erstellt...",
-		"termsNotice": "Mit der Kontoerstellung akzeptieren Sie unsere Nutzungsbedingungen.",
-		"existingUserError": "Sie haben bereits ein Konto.",
-		"goToLogin": "Zur Anmeldung",
-		"name": "Name",
-		"namePlaceholder": "Ihr Name",
-		"email": "E-Mail",
-		"companyName": "Firmenname",
-		"optional": "(optional)",
-		"companyNamePlaceholder": "Meine Firma GmbH",
-		"writeResponse": "Schreiben Sie Ihre Antwort...",
-		"send": "Senden",
-		"connectionError": "Verbindungsfehler. Versuchen Sie es erneut.",
-		"couldNotReadWebsite": "Wir konnten Ihre Website nicht lesen. Beschreiben Sie Ihr Unternehmen manuell.",
-		"errorProcessing": "Fehler bei der Verarbeitung Ihrer Beschreibung.",
-		"errorGenerating": "Fehler beim Erstellen des Scans.",
-		"errorCreatingSession": "Fehler beim Erstellen der Sitzung. Versuchen Sie es erneut.",
-		"deepenIntro": "Vertiefen wir Ihren Prozess \"{process}\". Ich stelle Ihnen einige Fragen, um besser zu verstehen, wie Ihr Betrieb funktioniert. Antworten Sie mit dem, was Sie wissen — es gibt keine falschen Antworten.",
-		"riskTypes": {
-			"OPERATIONAL": "Operativ",
-			"COMPLIANCE": "Compliance",
-			"STRATEGIC": "Strategisch",
-			"FINANCIAL": "Finanziell",
-			"TECHNOLOGY": "Technologie",
-			"HUMAN_RESOURCE": "Personal",
-			"REPUTATIONAL": "Reputation"
-		},
-		"share": {
-			"shareResults": "Ergebnisse teilen",
-			"copyLink": "Link kopieren",
-			"copied": "Kopiert!",
-			"linkCopied": "Teilen-Link in die Zwischenablage kopiert",
-			"linkGenerated": "Teilen-Link generiert",
-			"sharedResult": "Geteiltes Scan-Ergebnis",
-			"notFound": "Scan nicht gefunden",
-			"notFoundDesc": "Dieses Scan-Ergebnis existiert nicht oder der Link ist ungültig. Starten Sie Ihren eigenen kostenlosen Scan.",
-			"expired": "Link abgelaufen",
-			"expiredDesc": "Dieser geteilte Link ist abgelaufen. Geteilte Links sind 7 Tage verfügbar.",
-			"retry": "Erneut versuchen",
-			"runYourOwn": "Starten Sie Ihren eigenen kostenlosen Scan",
-			"ctaTitle": "Möchten Sie die vollständige Diagnose für Ihr Unternehmen?",
-			"ctaDesc": "Dieser Scan ist nur der Anfang. Erstellen Sie ein kostenloses Konto, um Aktionspläne zu erhalten, Verbesserungen zu verfolgen und die Ausrichtung Ihres Teams zu bewerten."
-		}
-	},
-	"maturityRing": {
-		"label": "Risikoreife",
-		"noData": "Keine Daten",
-		"tooltip": "Zusammengesetzter Score basierend auf Dokumentationsabdeckung (30 %), Risikoanalyseabdeckung (30 %), Prozessreife (20 %) und Kontrolleffektivität (20 %)."
-	},
-	"emptyStates": {
-		"risks": {
-			"noFilter": "Keine Ergebnisse",
-			"noFilterDesc": "Keine Risiken entsprechen den ausgewählten Filtern.",
-			"noControls": "Keine Risiken zum Zuordnen",
-			"noControlsDesc": "Führen Sie eine Risikoanalyse durch, um die mit jeder Aktivität verbundenen Kontrollen zu identifizieren.",
-			"noFmea": "Keine FMEA-Daten",
-			"noFmeaDesc": "Die FMEA-Analyse identifiziert Fehlermodi, ihre Auswirkungen und die Risikoprioritätszahl (RPN) für jede Prozessaktivität.",
-			"noOpportunities": "Keine Chancen identifiziert",
-			"noOpportunitiesDesc": "Verbesserungsmöglichkeiten werden automatisch während der Prozessrisikoanalyse erkannt."
-		},
-		"processes": {
-			"noSubprocesses": "Keine Unterprozesse",
-			"noSubprocessesDesc": "Fügen Sie einen Unterprozess hinzu, um diesen Prozess zu zerlegen und zu detaillieren.",
-			"noSessions": "Keine Sitzungen",
-			"noSessionsDesc": "Starten Sie einen Deep Dive, um diesen Prozess im Detail abzubilden."
-		},
-		"deliverables": {
-			"noProcessCards": "Keine Prozesse registriert",
-			"noProcessCardsDesc": "Starten Sie eine Discovery-Sitzung, um Prozesse zu dokumentieren und Karten automatisch zu generieren."
-		},
-		"commandCenter": {
-			"title": "Kommandozentrale",
-			"description": "Planen Sie Ihre erste Erhebungssitzung, um mit der KI-gestützten Prozessabbildung zu beginnen.",
-			"cta": "Erste Sitzung planen"
-		}
-	},
-	"riskTab": {
-		"errorAnalyzing": "Analyse fehlgeschlagen. Bitte erneut versuchen.",
-		"noRisks": "Keine Risiken analysiert",
-		"noRisksDesc": "Führen Sie die Analyse durch, um Risiken, Chancen und Fehlermodi in diesem Prozess zu identifizieren.",
-		"analyzing": "Analyse läuft...",
-		"analyze": "Risiken analysieren",
-		"avgRisk": "Durchschnittliches Risiko:",
-		"critical": "Kritisch",
-		"high": "Hoch",
-		"opportunity": "Chance",
-		"tabs": {
-			"register": "Register",
-			"opportunities": "Chancen",
-			"controls": "Kontrollen",
-			"fmea": "FMEA"
-		},
-		"riskMatrix": "Risikomatrix",
-		"filterSeverity": "Filter: Schweregrad {sev}, Wahrscheinlichkeit {prob}",
-		"clearFilter": "Filter löschen",
-		"riskTrend": "Risikotrend",
-		"noControls": "Keine Kontrollen definiert. Fügen Sie Kontrollen hinzu, um das Risiko zu reduzieren.",
-		"addControl": "Kontrolle hinzufügen",
-		"noMitigations": "Keine Maßnahmen definiert.",
-		"mitigationPlaceholder": "Maßnahme zur Risikominderung..."
-	},
-	"commandCenter": {
-		"title": "Kommandozentrale",
-		"editLive": "Live bearbeiten",
-		"newSession": "Neue Sitzung",
-		"defaultProcess": "Allgemeine Sitzung",
-		"errorReschedule": "Fehler beim Umplanen",
-		"errorUpdate": "Fehler beim Aktualisieren",
-		"errorEditSession": "Fehler beim Starten der Bearbeitungssitzung",
-		"sessionUpdated": "Sitzung aktualisiert",
-		"intakeLinkGenerated": "Intake-Link generiert",
-		"noSessionsScheduled": "Keine Sitzungen geplant",
-		"noResponses": "Noch keine Antworten",
-		"scheduleSession": "Sitzung planen",
-		"wizard": {
-			"process": "Prozess",
-			"participants": "Teilnehmer",
-			"context": "Kontext",
-			"schedule": "Planen",
-			"invitation": "Einladung",
-			"searchProcess": "Prozess suchen oder neuen Namen eingeben...",
-			"loadingProcesses": "Prozesse laden...",
-			"noProcesses": "Keine Prozesse. Geben Sie einen Namen ein, um einen zu erstellen.",
-			"createNew": "Erstellen",
-			"newProcess": "Neuer Prozess",
-			"sessionType": "Sitzungstyp",
-			"noSelection": "Nicht ausgewählt",
-			"noParticipants": "Keine hinzugefügt",
-			"noContext": "Kein Kontext",
-			"noCall": "Kein Anruf",
-			"notScheduled": "Nicht geplant",
-			"contextPlaceholder": "Beschreiben Sie den Prozesskontext, Sitzungsziele, relevante Kundeninformationen...",
-			"coverPlaceholder": "Was in dieser Sitzung behandelt werden soll...",
-			"errorRaci": "Fehler beim Abrufen der RACI-Daten",
-			"noParticipantsEmpty": "Keine Teilnehmer",
-			"discoverWithAI": "Mit KI entdecken"
-		}
-	},
-	"processDetail": {
-		"deleteConfirm": "Prozess löschen",
-		"deleteMessage": "Alle zugehörigen Daten werden dauerhaft gelöscht: Unterprozesse, Sitzungen, RACI, Risiken und Versionen.",
-		"linkCopied": "Link kopiert",
-		"nameRequired": "Name ist erforderlich",
-		"subprocesses": "Unterprozesse",
-		"noSubprocesses": "Keine Unterprozesse",
-		"documents": "Dokumente",
-		"uploadDocs": "SOPs oder Handbücher hochladen",
-		"processDetails": "Prozessdetails",
-		"raciMatrix": "RACI-Matrix",
-		"notGenerated": "Nicht generiert",
-		"intelligence": "Intelligenz",
-		"analyzeProcess": "Prozess analysieren",
-		"risksQuality": "Risiken & Qualität",
-		"analyzeRisks": "Risiken analysieren",
-		"consolidation": "Konsolidierung",
-		"conflicts": "{count} Konflikte",
-		"consolidate": "Perspektiven konsolidieren",
-		"noDiagram": "Kein Diagramm. Erstellen Sie eines oder führen Sie eine Sitzung durch.",
-		"createDiagram": "Diagramm erstellen",
-		"regenerate": "Neu generieren",
-		"fixWithAi": "Mit KI reparieren",
-		"repairingDiagram": "Diagramm wird repariert...",
-		"detailsSaved": "Details gespeichert",
-		"errorSavingDetails": "Fehler beim Speichern der Details",
-		"descriptionLabel": "Beschreibung",
-		"ownerPlaceholder": "Abteilung oder verantwortliche Person...",
-		"goals": "Ziele",
-		"triggers": "Auslöser",
-		"outputs": "Ergebnisse",
-		"addGoalPlaceholder": "Ziel hinzufügen...",
-		"addTriggerPlaceholder": "Auslöser hinzufügen...",
-		"addOutputPlaceholder": "Ergebnis hinzufügen...",
-		"subprocess": "Unterprozess",
-		"task": "Aufgabe",
-		"procedure": "Verfahren",
-		"level": "Ebene",
-		"continueLastSession": "Letzte fortsetzen",
-		"nodes": "{count} Knoten",
-		"risks": "{count} Risiken",
-		"join": "Beitreten",
-		"onboardingTitle": "Beginnen Sie mit der Dokumentation Ihres Prozesses",
-		"onboardingDesc1": "Dieser Arbeitsbereich ermöglicht es Ihnen, Ihre Prozessdokumentation iterativ aufzubauen.",
-		"onboardingDesc2": "Starten Sie eine Discovery-Sitzung oder fügen Sie Details manuell hinzu.",
-		"noCategoryFilter": "Keine Prozesse in dieser Kategorie",
-		"noCategoryFilterDesc": "Prozesse manuell hinzufügen oder KI-Discovery verwenden",
-		"errorStatusChange": "Fehler beim Statuswechsel",
-		"noRaciAssignment": "Keine RACI-Zuordnung für diese Aktivität. Generieren Sie die RACI-Matrix im Analyse-Tab."
-	},
-	"meetingModule": {
-		"noSessions": "Keine Sitzungen",
-		"noSessionsDesc": "Erstellen Sie Ihre erste Sitzung, um mit der Prozessabbildung zu beginnen.",
-		"newSession": "Neue Sitzung",
-		"noProcess": "Kein Prozess",
-		"errorSendMessage": "Fehler beim Senden der Nachricht",
-		"errorEdit": "Fehler beim Bearbeiten",
-		"errorDelete": "Fehler beim Löschen",
-		"errorRetry": "Fehler beim erneuten Versuch",
-		"errorApplyPattern": "Fehler beim Anwenden des Musters",
-		"noDocuments": "Keine Dokumente",
-		"defaultProcessName": "Prozess",
-		"noNodesData": "Keine Knotendaten zum Regenerieren des Diagramms."
-	},
-	"intelligenceTab": {
-		"noOpenQuestions": "Keine offenen Fragen. Der Prozess ist vollständig oder benötigt ein Audit.",
-		"noQuestionsCategory": "Keine Fragen in dieser Kategorie."
-	},
-	"deliverables": {
-		"noOwner": "Kein Eigentümer",
-		"noDepartment": "Keine Abteilung"
-	},
-	"evaluaciones": {
-		"pageDescription": "Harvard-Fallbewertungen basierend auf Ihren realen Prozessen und Risiken.",
-		"tabs": {
-			"label": "Bewertungsnavigation",
-			"catalog": "Katalog",
-			"dashboard": "Risiko-Dashboard"
-		}
-	}
+  "admin": {
+    "menu": {
+      "organizations": "Organisationen",
+      "users": "Benutzer"
+    },
+    "organizations": {
+      "backToList": "Zurück zu Organisationen",
+      "confirmDelete": {
+        "confirm": "Löschen",
+        "message": "Bist du sicher, dass du diese Organisation löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
+        "title": "Organisation löschen"
+      },
+      "create": "Erstellen",
+      "delete": "Löschen",
+      "deleteOrganization": {
+        "deleted": "Die Organisation wurde erfolgreich gelöscht!",
+        "deleting": "Löschung der Organisation...",
+        "notDeleted": "Organisation konnte nicht gelöscht werden. Bitte versuche es erneut."
+      },
+      "edit": "bearbeiten",
+      "form": {
+        "createTitle": "Erstellen eine Organisation",
+        "name": "Name der Organisation",
+        "notifications": {
+          "error": "Die Organisation konnte nicht gespeichert werden. Bitte versuche es später noch einmal.",
+          "success": "Die Organisation wurde erfolgreich gespeichert."
+        },
+        "save": "Speichern",
+        "updateTitle": "Organisation bearbeiten"
+      },
+      "loading": "Organisationen laden...",
+      "membersCount": "{count} {count, plural, one {Mitglied} other {Mitglieder}}",
+      "search": "Suche nach einer Organisation...",
+      "title": "Verwalten von Organisationen"
+    },
+    "title": "Administration",
+    "users": {
+      "confirmDelete": {
+        "confirm": "Löschen",
+        "message": "Bist du sicher, dass du diesen Benutzer löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.",
+        "title": "Benutzer löschen"
+      },
+      "delete": "Löschen",
+      "deleteUser": {
+        "deleted": "Der Benutzer wurde erfolgreich gelöscht!",
+        "deleting": "Benutzer wird gelöscht...",
+        "notDeleted": "Der Benutzer konnte nicht gelöscht werden. \nBitte versuche es erneut."
+      },
+      "emailVerified": {
+        "verified": "Email verifiziert",
+        "waiting": "E-Mail wartet auf Verifizierung"
+      },
+      "impersonate": "Imitieren",
+      "impersonation": {
+        "impersonating": "Ich gebe mich als {name} aus..."
+      },
+      "loading": "Benutzer werden geladen...",
+      "resendVerificationMail": {
+        "error": "Bestätigungsmail konnte nicht erneut gesendet werden. \nBitte versuche es erneut.",
+        "submitting": "Bestätigungsmail wird erneut gesendet...",
+        "success": "Bestätigungsmail wurde gesendet.",
+        "title": "Bestätigungsmail erneut senden"
+      },
+      "search": "Nach Name oder E-Mail suchen...",
+      "title": "Benutzer verwalten",
+      "assignAdminRole": "Administration-Rolle zuweisen",
+      "removeAdminRole": "Adminstrator-Rolle entfernen"
+    },
+    "description": "Verwalte deine Anwendung."
+  },
+  "app": {
+    "menu": {
+      "accountSettings": "Kontoeinstellungen",
+      "admin": "Administration",
+      "aiChatbot": "AI Chatbot",
+      "organizationSettings": "Einstellungen",
+      "analytics": "Analysen",
+      "clients": "Kunden",
+      "sessions": "Sitzungen",
+      "start": "Start",
+      "dashboard": "Überblick",
+      "processes": "Prozesse",
+      "risks": "Risiken",
+      "deliverables": "Ergebnisse",
+      "scan": "Röntgenbild",
+      "tools": "Werkzeuge",
+      "procedures": "Verfahren",
+      "simulations": "Bewertungen",
+      "evaluaciones": "Bewertungen",
+      "evaluation": "Bewertung",
+      "workflow": "Workflow",
+      "workspace": "Arbeitsbereich",
+      "more": "Mehr"
+    },
+    "greeting": {
+      "morning": "Guten Morgen",
+      "afternoon": "Guten Tag",
+      "evening": "Guten Abend"
+    },
+    "badges": {
+      "critical": "{count} kritisch",
+      "live": "LIVE",
+      "pending": "{count} ausstehend"
+    },
+    "actions": {
+      "registerRisk": "Risiko erfassen",
+      "newSession": "Neue Sitzung",
+      "newProcess": "Neuer Prozess"
+    },
+    "status": {
+      "riskScore": "Risiko-Score: {score}",
+      "attentionNeeded": "{count} erfordern Maßnahmen",
+      "underControl": "Exposition kontrolliert",
+      "setupFirst": "Beginnen Sie mit der Einrichtung Ihres ersten Kunden",
+      "today": "Heute",
+      "tomorrow": "Morgen"
+    },
+    "userMenu": {
+      "accountSettings": "Kontoeinstellungen",
+      "colorMode": "Farbmodus",
+      "documentation": "Dokumentation",
+      "home": "Startseite",
+      "logout": "Abmelden"
+    }
+  },
+  "auth": {
+    "errors": {
+      "credentialAccountNotFound": "Konto nicht gefunden.",
+      "emailCanNotBeUpdated": "E-Mail konnte nicht aktualisiert werden.",
+      "emailNotVerified": "Bitte verifiziere zunächst deine E-Mail, bevor du dich anmeldest.",
+      "failedToCreateSession": "Eine Sitzung konnte nicht erstellt werden.",
+      "failedToCreateUser": "Benutzer konnte nicht erstellt werden.",
+      "failedToGetSession": "Session konnte nicht geladen werden.",
+      "failedToGetUserInfo": "Benutzerinformationen konnten nicht geladen werden.",
+      "failedToUpdateUser": "Benutzer konnte nicht aktualisiert werden.",
+      "idTokenNotSupported": "ID-Token wird nicht unterstützt.",
+      "invalidEmail": "Die eingegebene E-Mail ist ungültig.",
+      "invalidEmailOrPassword": "Die von dir eingegebenen Anmeldedaten sind ungültig. Bitte überprüfe sie und versuche es erneut.",
+      "invalidInvitation": "Die Einladung ist ungültig oder abgelaufen.",
+      "invalidPassword": "Das eingegebene Passwort ist falsch.",
+      "invalidToken": "Das von dir eingegebene Token ist ungültig oder abgelaufen.",
+      "passwordTooLong": "Das Passwort ist zu lang.",
+      "passwordTooShort": "Das Passwort ist zu kurz.",
+      "providerNotFound": "Dieser Anbieter wird nicht unterstützt.",
+      "socialAccountAlreadyLinked": "Dieses Konto ist bereits mit einem Benutzer verknüpft.",
+      "unknown": "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+      "userAlreadyExists": "Dieser Benutzer existiert bereits.",
+      "userAlreadyExistsUseAnotherEmail": "Benutzer existiert bereits. Verwenden Sie eine andere E-Mail.",
+      "userEmailNotFound": "E-Mail nicht gefunden.",
+      "userNotFound": "Dieser Benutzer existiert nicht",
+      "sessionExpired": "Die Sitzung ist abgelaufen.",
+      "accountNotFound": "Konto nicht gefunden",
+      "failedToUnlinkLastAccount": "Konto kann nicht entkoppelt werden"
+    },
+    "forgotPassword": {
+      "backToSignin": "Zurück zum Login",
+      "email": "E-Mail",
+      "hints": {
+        "linkNotSent": {
+          "message": "Es tut uns leid, aber wir konnten keinen Link zum Zurücksetzen des Passworts senden. \nBitte versuche es später noch einmal.",
+          "title": "Link nicht gesendet"
+        },
+        "linkSent": {
+          "message": "Wir haben dir einen Link zum Fortfahren gesendet. \nBitte überprüfe deinen Posteingang.",
+          "title": "Link gesendet"
+        }
+      },
+      "message": "Bitte gib deine E-Mail-Adresse ein und wir senden dir einen Link zum Zurücksetzen deines Passworts.",
+      "submit": "Link senden",
+      "title": "Hast du dein Passwort vergessen?"
+    },
+    "login": {
+      "continueWith": "Oder weiter mit",
+      "createAnAccount": "Ein Konto erstellen",
+      "dontHaveAnAccount": "Du hast noch kein Konto?",
+      "forgotPassword": "Passwort vergessen?",
+      "hints": {
+        "invalidCredentials": "Die von dir eingegebenen Anmeldeinformationen sind ungültig. \nBitte versuche es erneut.",
+        "linkSent": {
+          "message": "Wir haben dir einen Link zum Fortfahren gesendet. \nBitte überprüfe deinen Posteingang.",
+          "title": "Link gesendet"
+        }
+      },
+      "loginWithPasskey": "Anmeldung mit Passkey",
+      "modes": {
+        "magicLink": "Magischer Link",
+        "password": "Passwort"
+      },
+      "rememberMe": "Angemeldet bleiben",
+      "security": "Deine Daten sind verschlüsselt und geschützt",
+      "submit": "Anmelden",
+      "subtitle": "Gib deine Zugangsdaten ein, um fortzufahren.",
+      "title": "Willkommen zurück",
+      "sendMagicLink": "Anmelde-Link senden"
+    },
+    "showcase": {
+      "badge": "Prozess-Intelligenz-Plattform",
+      "login": {
+        "title": "Deine Prozesse, präzise analysiert",
+        "subtitle": "Erfasse, analysiere und transformiere Geschäftsprozesse mit KI in Echtzeit"
+      },
+      "signup": {
+        "title": "Beginne intelligent zu kartieren",
+        "subtitle": "Schließe dich den Beratern an, die Interviews in automatische BPMN-Diagramme verwandeln"
+      },
+      "feature": {
+        "ai": "KI-Analyse",
+        "bpmn": "BPMN-Diagramme",
+        "risk": "Risikoerkennung"
+      },
+      "metric": {
+        "processes": "Kartierte Prozesse",
+        "organizations": "Organisationen",
+        "accuracy": "Genauigkeit"
+      }
+    },
+    "resetPassword": {
+      "backToSignin": "Zurück zu Signin",
+      "hints": {
+        "error": "Es tut uns leid, aber wir konnten dein Passwort nicht zurücksetzen. Bitte versuche es erneut.",
+        "success": "Dein Passwort wurde erfolgreich zurückgesetzt."
+      },
+      "message": "Bitte gib ein neues Passwort ein.",
+      "newPassword": "Neues Passwort",
+      "submit": "Passwort zurücksetzen",
+      "title": "Dein Passwort zurücksetzen"
+    },
+    "signup": {
+      "alreadyHaveAccount": "Du hast bereits ein Konto?",
+      "email": "Email",
+      "hints": {
+        "signupFailed": "Es tut uns leid, aber wir konnten dein Konto nicht erstellen. \nBitte versuche es später noch einmal.",
+        "verifyEmail": "Wir haben dir einen Link zur Bestätigung deiner E-Mail-Adresse gesendet. \nBitte überprüfe deinen Posteingang."
+      },
+      "message": "Wir freuen uns, dass du dich uns anschließen möchtest. \nBitte fülle das untenstehende Formular aus, um dein Konto zu erstellen.",
+      "name": "Name",
+      "password": "Passwort",
+      "signIn": "Anmelden",
+      "submit": "Benutzerkonto erstellen",
+      "title": "Ein Konto erstellen"
+    },
+    "verify": {
+      "backToSignin": "Zurück zur Anmeldung",
+      "code": "Einmaliges Passwort",
+      "message": "Gib das Einmalpasswort aus deiner Authentifizierungs-App ein, um fortzufahren.",
+      "submit": "Verifizieren",
+      "title": "Verifiziere dein Konto"
+    }
+  },
+  "choosePlan": {
+    "title": "Wähle einen Plan",
+    "description": "Um weiterzumachen, wähle bitte einen Plan aus.",
+    "trialExpiredTitle": "Deine Testphase ist beendet",
+    "trialExpiredDescription": "Deine 14-tägige kostenlose Testphase ist abgelaufen. Wähle einen Plan, um Auditora.ai weiter zu nutzen."
+  },
+  "documentation": {
+    "title": "Dokumentation"
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Seite nicht gefunden",
+    "goToDashboard": "Zum Dashboard gehen",
+    "goToHomepage": "Zur Startseite gehen"
+  },
+  "onboarding": {
+    "welcome": {
+      "title": "Willkommen bei Auditora.ai",
+      "subtitle": "Ihre KI-gestützte Plattform zur Prozesserhebung",
+      "step1": "Kunden anlegen",
+      "step1Desc": "Das Unternehmen, dessen Prozesse Sie kartieren werden",
+      "step2": "Sitzung starten",
+      "step2Desc": "Nehmen Sie an einem Videoanruf teil und lassen Sie sich von der KI leiten",
+      "step3": "Ihr Diagramm erhalten",
+      "step3Desc": "Der Prozess wird automatisch in BPMN diagrammiert",
+      "cta": "Erste Sitzung starten",
+      "explore": "Zuerst das Dashboard erkunden"
+    },
+    "account": {
+      "avatar": "Avatar",
+      "avatarDescription": "Klicke auf den Kreis oder ziehe ein Bild hinein, um deinen Avatar hochzuladen.",
+      "name": "Name"
+    },
+    "continue": "Weiter",
+    "message": "Nur ein paar schnelle Schritte, um dir den Einstieg zu erleichtern.",
+    "notifications": {
+      "accountSetupFailed": "Es tut uns leid, aber wir konnten dein Konto nicht einrichten. \nBitte versuche es später noch einmal.",
+      "companySetupFailed": "Es tut uns leid, aber wir konnten deine Unternehmensinformationen nicht speichern. Bitte versuche es später noch einmal."
+    },
+    "pricing": {
+      "planSelected": "Dein Plan wurde erfolgreich ausgewählt.",
+      "skip": "Vorerst überspringen"
+    },
+    "step": "Schritt {step} / {total}",
+    "title": "Richte dein Konto ein",
+    "company": {
+      "title": "Erzähl uns von deinem Unternehmen",
+      "subtitle": "Das hilft uns, Auditora auf deine Bedürfnisse anzupassen",
+      "companyName": "Unternehmensname",
+      "companyNamePlaceholder": "Acme Corp",
+      "industry": "Branche",
+      "industryPlaceholder": "Wähle deine Branche",
+      "companySize": "Unternehmensgröße",
+      "companySizePlaceholder": "Größenbereich wählen",
+      "evaluationTarget": "Wie viele Personen möchtest du bewerten?",
+      "evaluationTargetPlaceholder": "Bereich wählen",
+      "concernProcess": "Welcher Prozess bereitet dir die größten Sorgen?",
+      "concernProcessPlaceholder": "z.B. Bestellungen, Qualitätskontrolle...",
+      "concernProcessOptional": "Optional — hilft uns, den Einstieg zu empfehlen",
+      "industries": {
+        "manufacturing": "Fertigung",
+        "healthcare": "Gesundheitswesen",
+        "finance": "Finanzen und Bankwesen",
+        "technology": "Technologie",
+        "retail": "Einzelhandel und E-Commerce",
+        "logistics": "Logistik und Lieferkette",
+        "construction": "Bauwesen",
+        "education": "Bildung",
+        "government": "Regierung",
+        "food": "Lebensmittel und Getränke",
+        "energy": "Energie und Versorgung",
+        "other": "Sonstiges"
+      },
+      "sizes": {
+        "10-50": "10–50 Mitarbeiter",
+        "51-200": "51–200 Mitarbeiter",
+        "201-500": "201–500 Mitarbeiter",
+        "501-1000": "501–1000 Mitarbeiter"
+      },
+      "targets": {
+        "5": "5 Personen",
+        "10-30": "10–30 Personen",
+        "31-100": "31–100 Personen",
+        "100+": "100+ Personen"
+      }
+    },
+    "firstValue": {
+      "title": "Starte mit ersten Ergebnissen",
+      "subtitle": "Basierend auf deiner Branche empfehlen wir, hier zu beginnen",
+      "recommendation": "Wir empfehlen, zuerst deinen kritischsten Prozess zu dokumentieren. Bewertungen sind wertvoller, wenn sie auf realen Verfahren basieren.",
+      "chatInterview": "KI-Interview starten",
+      "chatInterviewDesc": "Lass die KI dich durch die Dokumentation eines Prozesses in Minuten führen",
+      "exploreDashboard": "Dashboard erkunden",
+      "exploreDashboardDesc": "Entdecke, was Auditora für dein Team tun kann",
+      "documentProcess": "Einen Prozess dokumentieren",
+      "documentProcessDesc": "Starte mit deinem kritischsten Prozess"
+    },
+    "setupComplete": {
+      "title": "Deine Organisation ist bereit!",
+      "subtitle": "Du bist bereit, die Prozesskonformität zu verbessern.",
+      "inviteMembers": "Mitglieder einladen",
+      "inviteMembersDesc": "Füge Kollegen hinzu, die an Bewertungen teilnehmen sollten",
+      "goToDashboard": "Zum Dashboard"
+    }
+  },
+  "organizations": {
+    "createForm": {
+      "name": "Name der Organisation",
+      "notifications": {
+        "error": "Es tut uns leid, aber wir konnten deine Organisation nicht erstellen. Bitte versuche es später noch einmal.",
+        "success": "Deine Organisation wurde erstellt. Du kannst nun Mitglieder einladen."
+      },
+      "submit": "Organisation erstellen",
+      "subtitle": "Gib einen Namen für deine Organisation ein, um loszulegen. Du kannst den Namen später in den Organisationseinstellungen ändern.",
+      "title": "Erstelle eine Organisation"
+    },
+    "invitationAlert": {
+      "description": "Du bist eingeladen worden, einer Organisation beizutreten. Wenn du dich anmeldest oder registrierst, akzeptierst du automatisch die Einladung und trittst der Organisation bei.",
+      "title": "Einladung der Organisation annehmen"
+    },
+    "invitationModal": {
+      "accept": "Annehmen",
+      "decline": "Ablehnen",
+      "description": "Du wurdest eingeladen, der Organisation {organizationName} beizutreten. Möchtest du die Einladung annehmen und der Organisation beitreten?",
+      "title": "Organisation beitreten"
+    },
+    "organizationSelect": {
+      "createNewOrganization": "Neue Organisation erstellen",
+      "organizations": "Organisationen",
+      "personalAccount": "Persönliches Konto"
+    },
+    "organizationsGrid": {
+      "createNewOrganization": "Neue Organisation erstellen",
+      "title": "Deine Organisationen"
+    },
+    "roles": {
+      "admin": "Administration",
+      "member": "Mitglied",
+      "owner": "Eigentümer"
+    },
+    "settings": {
+      "changeName": {
+        "title": "Name der Organisation"
+      },
+      "deleteOrganization": {
+        "confirmation": "Bist du sicher, dass du deine Organisation löschen möchtest?",
+        "description": "Lösche deine Organisation dauerhaft. Sobald du deine Organisation gelöscht hast, gibt es kein Zurück mehr. Zur Bestätigung gib bitte unten dein Passwort ein:",
+        "submit": "Organisation löschen",
+        "title": "Organisation löschen"
+      },
+      "logo": {
+        "description": "Lade ein Logo für deine Organisation hoch.",
+        "title": "Logo der Organisation"
+      },
+      "members": {
+        "activeMembers": "Aktive Mitglieder",
+        "description": "Sieh dir alle aktiven Mitglieder und die ausstehenden Einladungen deiner Organisation an.",
+        "invitations": {
+          "empty": "Es wurden noch keine Mitglieder eingeladen.",
+          "expiresAt": "Läuft am {date} ab",
+          "invitationStatus": {
+            "accepted": "Angenommen",
+            "canceled": "Abgebrochen",
+            "pending": "Ausstehend",
+            "rejected": "Abgelehnt"
+          },
+          "revoke": "Einladung widerrufen",
+          "resend": "Einladung erneut senden"
+        },
+        "inviteMember": {
+          "description": "Um ein neues Mitglied einzuladen, sende ihm eine Einladung.",
+          "email": "E-Mail",
+          "notifications": {
+            "error": {
+              "description": "Wir konnten das Mitglied nicht einladen. Bitte versuche es später noch einmal.",
+              "title": "Mitglied konnte nicht eingeladen werden"
+            },
+            "success": {
+              "description": "Das Mitglied ist eingeladen worden.",
+              "title": "Eingeladenes Mitglied"
+            }
+          },
+          "role": "Rolle",
+          "submit": "Einladen",
+          "title": "Mitglied einladen"
+        },
+        "leaveOrganization": "Organisation verlassen",
+        "notifications": {
+          "removeMember": {
+            "error": {
+              "description": "Das Mitglied konnte nicht aus deiner Organisation entfernt werden. Bitte versuche es erneut."
+            },
+            "loading": {
+              "description": "Mitglied aus der Organisation entfernen..."
+            },
+            "success": {
+              "description": "Das Mitglied wurde erfolgreich aus deiner Organisation entfernt."
+            }
+          },
+          "revokeInvitation": {
+            "error": {
+              "description": "Die Einladung konnte nicht widerrufen werden. Bitte versuche es später noch einmal."
+            },
+            "loading": {
+              "description": "Widerruf der Einladung..."
+            },
+            "success": {
+              "description": "Die Einladung ist widerrufen worden."
+            }
+          },
+          "updateMembership": {
+            "error": {
+              "description": "Die Mitgliedschaft in der Organisation konnte nicht aktualisiert werden. Bitte versuche es erneut."
+            },
+            "loading": {
+              "description": "Aktualisierung der Mitgliedschaft..."
+            },
+            "success": {
+              "description": "Die Mitgliedschaft wurde erfolgreich aktualisiert"
+            }
+          },
+          "resendInvitation": {
+            "error": {
+              "description": "Die Einladung konnte nicht gesendet werden. Bitte versuche es erneut."
+            },
+            "loading": {
+              "description": "Einladung erneut senden..."
+            },
+            "success": {
+              "description": "Einladung verschickt"
+            }
+          }
+        },
+        "pendingInvitations": "Ausstehende Einladungen",
+        "removeMember": "Mitglied entfernen",
+        "title": "Mitglieder"
+      },
+      "notifications": {
+        "organizationDeleted": "Deine Organisation wurde gelöscht.",
+        "organizationNameNotUpdated": "Wir konnten den Namen deiner Organisation nicht aktualisieren. Bitte versuche es später noch einmal.",
+        "organizationNameUpdated": "Der Name deiner Organisation wurde aktualisiert.",
+        "organizationNotDeleted": "Wir konnten deine Organisation nicht löschen. Bitte versuche es später noch einmal."
+      },
+      "subtitle": "Verwalte die Einstellungen der Organisation.",
+      "title": "Organisation",
+      "dangerZone": {
+        "title": "Gefahrenzone"
+      },
+      "ai": {
+        "title": "KI-Konfiguration",
+        "subtitle": "KI-Nutzung überwachen und API-Schlüssel verwalten",
+        "usage": {
+          "title": "KI-Nutzung",
+          "description": "Token-Verbrauch und geschätzte Kosten der letzten 30 Tage",
+          "totalTokens": "Tokens gesamt",
+          "totalCalls": "KI-Aufrufe",
+          "inputTokens": "Eingangs-Tokens",
+          "errors": "Fehler",
+          "estimatedCost": "Gesch. Kosten",
+          "pipeline": "Pipeline",
+          "calls": "Aufrufe",
+          "avgDuration": "Durchschn. Dauer",
+          "dailyUsage": "Tägliche Nutzung",
+          "noData": "Keine Nutzungsdaten verfügbar",
+          "currentTier": "Aktuelle KI-Stufe",
+          "pipelineBreakdown": "Verbrauch nach Pipeline"
+        },
+        "externalCosts": {
+          "title": "Externe Servicekosten",
+          "description": "Geschätzte Kosten für Sprache-zu-Text und Meeting-Bot-Dienste",
+          "deepgramStt": "Deepgram STT",
+          "recallBot": "Recall.ai Bot",
+          "minutes": "Minuten"
+        },
+        "keys": {
+          "title": "Eigene API-Schlüssel (BYOK)",
+          "description": "Verwenden Sie Ihre eigenen API-Schlüssel anstelle der Plattform-Schlüssel. Schlüssel werden verschlüsselt gespeichert.",
+          "anthropicKey": "Anthropic API-Schlüssel",
+          "deepseekKey": "DeepSeek API-Schlüssel",
+          "configured": "Konfiguriert",
+          "notConfigured": "Nicht konfiguriert",
+          "lastUpdated": "Zuletzt aktualisiert",
+          "save": "Speichern",
+          "saving": "Wird gespeichert...",
+          "saved": "Gespeichert!",
+          "delete": "Entfernen",
+          "deleteConfirm": "Sind Sie sicher, dass Sie diesen API-Schlüssel entfernen möchten? Stattdessen wird der Plattform-Schlüssel verwendet.",
+          "placeholder": "sk-...",
+          "hint": "Wenn gesetzt, verwenden die KI-Aufrufe Ihrer Organisation diesen Schlüssel anstelle des Plattform-Schlüssels."
+        }
+      }
+    },
+    "start": {
+      "subtitle": "Willkommen auf der Startseite dieser Organisation!"
+    }
+  },
+  "settings": {
+    "account": {
+      "avatar": {
+        "description": "Um deinen Avatar zu ändern, klicke auf das Bild in diesem Block und wähle eine Datei von deinem Computer zum Hochladen aus.",
+        "notifications": {
+          "error": "Avatar konnte nicht aktualisiert werden",
+          "success": "Avatar wurde erfolgreich aktualisiert"
+        },
+        "title": "Dein Avatar"
+      },
+      "changeEmail": {
+        "description": "Um deine E-Mail zu ändern, ändere sie im Eingabefeld und drücke auf Speichern. Du musst die neue E-Mail bestätigen, bevor sie aktiv wird.",
+        "notifications": {
+          "error": "E-Mail konnte nicht aktualisiert werden",
+          "success": "E-Mail wurde erfolgreich aktualisiert"
+        },
+        "title": "Deine E-Mail"
+      },
+      "changeName": {
+        "notifications": {
+          "error": "Name konnte nicht aktualisiert werden",
+          "success": "Name wurde erfolgreich aktualisiert"
+        },
+        "title": "Dein Name"
+      },
+      "deleteAccount": {
+        "confirmation": "Bist du sicher, dass du dein Konto löschen möchtest?",
+        "description": "Lösche dein Konto dauerhaft. \nSobald Du dein Konto gelöscht hast, gibt es kein Zurück mehr. \nBitte sei dir sicher, bevor du hier weitermachst.",
+        "notifications": {
+          "error": "Konto konnte nicht gelöscht werden",
+          "success": "Konto wurde erfolgreich gelöscht"
+        },
+        "submit": "Konto löschen",
+        "title": "Konto löschen"
+      },
+      "language": {
+        "description": "Um die Sprache der App für dein Konto zu ändern, wähle eine Sprache aus der Liste aus und klicke auf Speichern.",
+        "notifications": {
+          "error": "Sprache konnte nicht aktualisiert werden",
+          "success": "Sprache wurde erfolgreich aktualisiert"
+        },
+        "title": "Deine Sprache"
+      },
+      "security": {
+        "activeSessions": {
+          "description": "Dies sind alle aktiven Sitzungen deines Kontos. Klicke auf das X, um eine bestimmte Sitzung zu beenden.",
+          "title": "Aktive Sitzungen",
+          "notifications": {
+            "revokeSession": {
+              "success": "Session beendet"
+            }
+          },
+          "currentSession": "Aktuelle Sitzung"
+        },
+        "changePassword": {
+          "currentPassword": "Aktuelles Passwort",
+          "newPassword": "Neues Passwort",
+          "notifications": {
+            "error": "Passwort kann nicht aktualisiert werden",
+            "success": "Passwort wurde erfolgreich aktualisiert"
+          },
+          "title": "Dein Passwort"
+        },
+        "connectedAccounts": {
+          "connect": "Verbinden",
+          "connected": "Verbunden",
+          "disconnect": "Trennen",
+          "title": "Verbundene Konten"
+        },
+        "passkeys": {
+          "addPasskey": "Passkey hinzufügen",
+          "description": "Verwende Passkeys als sichere alternative zu Passwörtern.",
+          "notifications": {
+            "addPasskey": {
+              "error": {
+                "title": "Kann keinen Hauptschlüssel hinzufügen"
+              },
+              "success": {
+                "title": "Passkey hinzugefügt"
+              }
+            },
+            "deletePasskey": {
+              "error": {
+                "title": "Der Hauptschlüssel konnte nicht gelöscht werden"
+              },
+              "loading": {
+                "title": "Hauptschlüssel löschen..."
+              },
+              "success": {
+                "title": "Passkey gelöscht"
+              }
+            }
+          },
+          "title": "Passwörter"
+        },
+        "setPassword": {
+          "description": "Du hast noch kein Passwort festgelegt. Um ein solches festzulegen, musst du den Ablauf der Passwortrücksetzung durchlaufen. Klicke auf die Schaltfläche unten, um eine E-Mail zum Zurücksetzen deines Passworts zu senden, und folge den Anweisungen in der E-Mail.",
+          "notifications": {
+            "error": "Der Link zum Festlegen des Passworts konnte nicht gesendet werden. Bitte versuche es erneut.",
+            "success": "Prüfen deinen Posteingang auf den Link, um Ihr Passwort festzulegen."
+          },
+          "submit": "Passwort festlegen",
+          "title": "Dein Passwort"
+        },
+        "title": "Sicherheit",
+        "twoFactor": {
+          "description": "Füge deinem Konto eine zusätzliche Sicherheitsebene hinzu.",
+          "dialog": {
+            "password": {
+              "description": "Bitte verifiziere dein Konto, indem du dein Passwort eingibst:",
+              "label": "Dein Passwort:",
+              "title": "Mit Passwort verifizieren"
+            },
+            "totpUrl": {
+              "code": "Geben Sie den 6-stelligen Code ein, um die Einrichtung zu bestätigen:",
+              "description": "Verwende deine bevorzugte Authentifizierungs-App und scanne den QR-Code damit oder gib das unten stehende Geheimnis manuell ein, um die Zwei-Faktor-Authentifizierung einzurichten.",
+              "title": "Zwei-Faktor-Authentifizierung aktivieren"
+            }
+          },
+          "disable": "Zwei-Faktor-Authentifizierung deaktivieren",
+          "enable": "Zwei-Faktor-Authentifizierung aktivieren",
+          "enabled": "Du hast die Zwei-Faktor-Authentifizierung für dein Konto aktiviert.",
+          "notifications": {
+            "disable": {
+              "success": {
+                "title": "Die Zwei-Faktor-Authentifizierung wurde erfolgreich deaktiviert."
+              }
+            },
+            "enable": {
+              "error": {
+                "title": "Dein Konto konnte mit dem angegebenen Passwort nicht verifiziert werden. Bitte versuche es erneut."
+              }
+            },
+            "verify": {
+              "success": {
+                "title": "Die Zwei-Faktor-Authentifizierung wurde erfolgreich aktiviert."
+              }
+            }
+          },
+          "title": "Zwei-Faktor-Authentifizierung"
+        }
+      },
+      "subtitle": "Verwalte die Einstellungen deines persönlichen Kontos.",
+      "title": "Kontoeinstellungen"
+    },
+    "billing": {
+      "createCustomerPortal": {
+        "label": "Abrechung verwalten",
+        "notifications": {
+          "error": {
+            "title": "Es konnte keine Kundenportalsitzung erstellt werden. \nBitte versuche es erneut."
+          }
+        }
+      },
+      "activePlan": {
+        "status": {
+          "active": "Aktiv",
+          "canceled": "Gekündigt",
+          "expired": "Ausgelaufen",
+          "incomplete": "Unvollständig",
+          "past_due": "Überfällig",
+          "paused": "Pausiert",
+          "trialing": "Testversion",
+          "unpaid": "Unbezahlt"
+        },
+        "title": "Dein Plan"
+      },
+      "changePlan": {
+        "description": "Wähle einen Plan aus, den du abonnieren möchtest.",
+        "title": "Ändere deinen Plan"
+      },
+      "title": "Zahlung"
+    },
+    "menu": {
+      "account": {
+        "billing": "Abrechnung",
+        "dangerZone": "Danger-Zone",
+        "general": "Allgemein",
+        "security": "Sicherheit",
+        "title": "Konto"
+      },
+      "organization": {
+        "ai": "KI",
+        "billing": "Abrechnung",
+        "general": "Allgemein",
+        "members": "Mitglieder",
+        "title": "Organisation",
+        "dangerZone": "Gefahrenzone"
+      }
+    },
+    "save": "Speichern"
+  },
+  "start": {
+    "subtitle": "Sieh dir die neuesten Statistiken über dein großartiges Unternehmen an.",
+    "welcome": "Willkommen {name}!"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Übersicht über Ihr Kundenengagement",
+    "sessionsThisMonth": "Sitzungen diesen Monat",
+    "processesMapped": "Prozesse kartiert",
+    "aiAccuracy": "KI-Genauigkeit",
+    "recentActivity": "Letzte Aktivität",
+    "newSession": "Neue Sitzung",
+    "projects": "Projekte",
+    "engagementProgress": "Engagement-Fortschritt",
+    "processesGoal": "{mapped} von {goal} Prozessen",
+    "setGoal": "Ziel setzen",
+    "emptyProjects": "Ihre Projekte erscheinen hier nach Ihrer ersten Sitzung",
+    "noActivity": "Noch keine Aktivität. Starten Sie eine Sitzung.",
+    "recentProcesses": "Neueste Prozesse",
+    "viewAll": "Alle anzeigen",
+    "noProcesses": "Entdecken Sie Ihren ersten Prozess, um ihn hier zu sehen",
+    "activity": {
+      "sessionCreated": "Sitzung erstellt",
+      "sessionEnded": "Sitzung beendet",
+      "processCreated": "Prozess erstellt",
+      "nodesConfirmed": "{count} Knoten bestätigt"
+    },
+    "hero": {
+      "title": "Prozessarchitektur",
+      "aiStat": "KI hat {nodes} Aktivitäten aus {sessions} Gesprächen extrahiert",
+      "demoTitle": "Das ist, was die KI generiert",
+      "demoSubtitle": "Starten Sie ein Gespräch und Auditora.ai extrahiert automatisch Prozessdiagramme"
+    },
+    "cta": {
+      "firstDiscovery": "Ersten Prozess entdecken",
+      "deepDive": "Deep Dive: {name}",
+      "newDiscovery": "Neue Discovery"
+    },
+    "quickActions": {
+      "chat": "Chat mit KI",
+      "chatDesc": "Beschreiben Sie Ihre Prozesse in einem Gespräch",
+      "audio": "Audio hochladen",
+      "audioDesc": "Laden Sie mp3-, wav-, m4a-Aufnahmen hoch",
+      "call": "Anruf beitreten",
+      "callDesc": "Fügen Sie Ihre Meeting-URL ein"
+    },
+    "arch": {
+      "title": "Prozessarchitektur",
+      "core": "Kern",
+      "strategic": "Strategisch",
+      "support": "Unterstützend",
+      "empty": "Noch keine Prozesse kartiert"
+    },
+    "insight": {
+      "title": "Auditora.ai KI",
+      "empty": "Starten Sie ein Gespräch mit der KI, um Ihre Geschäftsprozesse zu entdecken.",
+      "noSupport": "Sie haben {count} Prozesse kartiert, aber keinen unterstützenden. Vorschlag: IT, Facilities oder HR entdecken.",
+      "fewCore": "Sie haben {count} Kernprozesse. Ähnliche Branchen haben typischerweise 5-7. Welche anderen Prozesse sind wesentlich?",
+      "noStrategic": "Sie haben {count} Prozesse kartiert, aber keinen strategischen. Welche treiben die Differenzierung?",
+      "continue": "{count} Prozesse kartiert. Fahren Sie mit Deep Dives fort, um die Diagramme zu verfeinern."
+    },
+    "riskDashboard": {
+      "title": "Überblick",
+      "live": "LIVE",
+      "newSession": "Neue Sitzung",
+      "emptyTitle": "Willkommen bei Auditora.ai",
+      "emptyDesc": "Führen Sie Ihren ersten Scan durch, um die Risiken Ihres Unternehmens zu entdecken, oder planen Sie eine Sitzung mit Ihrem Berater.",
+      "scanCta": "Scan starten",
+      "risks": "Risiken",
+      "processes": "Prozesse",
+      "sessions": "Sitzungen",
+      "topRisks": "Offene Top-Risiken",
+      "noRisks": "Keine Risiken identifiziert",
+      "nextSession": "Nächste Sitzung",
+      "noSessions": "Keine Sitzungen geplant",
+      "scheduleSession": "Sitzung planen",
+      "recentActivity": "Letzte Aktivität",
+      "noActivity": "Keine aktuelle Aktivität",
+      "viewAllRisks": "Alle Risiken anzeigen",
+      "viewProcesses": "Prozesse anzeigen",
+      "viewDeliverables": "Ergebnisse anzeigen",
+      "noRisksDesc": "Keine kritischen Risiken. Planen Sie eine Sitzung, um Ihre Prozesse zu analysieren.",
+      "nextSessionLabel": "Nächste Sitzung",
+      "noProcess": "Kein Prozess zugewiesen",
+      "viewDetails": "Details anzeigen",
+      "coverage": "Abdeckung",
+      "evaluaciones": "Bewertungen",
+      "viewAll": "Alle anzeigen",
+      "teamAlignment": "Team-Ausrichtung",
+      "evaluationsCompleted": "Bewertungen abgeschlossen",
+      "membersEvaluated": "Bewertete Mitglieder",
+      "completionRate": "Abschlussrate",
+      "alignment": "Verfahrensausrichtung",
+      "controlLevel": "Kontrollniveau",
+      "criterio": "Entscheidungskriterien",
+      "scoreTrend": "Score-Trend"
+    }
+  },
+  "processLibrary": {
+    "title": "Prozessbibliothek",
+    "subtitle": "Alle kartierten Geschäftsprozesse",
+    "search": "Prozesse suchen...",
+    "filterByStatus": "Nach Status filtern",
+    "filterByLevel": "Nach Ebene filtern",
+    "filterByProject": "Nach Projekt filtern",
+    "allStatuses": "Alle Status",
+    "allLevels": "Alle Ebenen",
+    "allProjects": "Alle Projekte",
+    "empty": {
+      "title": "Noch keine Prozesse kartiert",
+      "description": "Planen Sie eine Discovery-Sitzung, um mit der Prozesskartierung zu beginnen.",
+      "cta": "Neue Sitzung"
+    },
+    "export": "BPMN exportieren",
+    "view": "Ansehen",
+    "share": "Teilen",
+    "versions": "{count} {count, plural, one {Version} other {Versionen}}",
+    "nodes": "{count} {count, plural, one {Knoten} other {Knoten}}",
+    "sessions": "{count} {count, plural, one {Sitzung} other {Sitzungen}}",
+    "sidebar": {
+      "noSessions": "Keine Sitzungen. Starten Sie einen Deep Dive, um diesen Prozess abzubilden.",
+      "noVersions": "Keine Versionen. Versionen werden beim Speichern des Diagramms oder Beenden einer Sitzung erstellt.",
+      "noDiagram": "Kein BPMN-Diagramm",
+      "noDescription": "Keine Beschreibung",
+      "noRaci": "Keine RACI-Matrix",
+      "noRiskAnalysis": "Keine Risikoanalyse",
+      "noCaptureSessions": "Keine Erfassungssitzungen",
+      "noGoals": "Keine Ziele definiert",
+      "noChanges": "Keine Änderungen zwischen den ausgewählten Versionen",
+      "contexto": "Kontext"
+    }
+  },
+  "commandPalette": {
+    "placeholder": "Kunden, Prozesse, Sitzungen suchen...",
+    "newSession": "Neue Sitzung",
+    "newClient": "Neuer Kunde",
+    "noResults": "Keine Ergebnisse gefunden",
+    "sections": {
+      "actions": "Aktionen",
+      "navigation": "Navigieren",
+      "clients": "Kunden",
+      "processes": "Prozesse",
+      "sessions": "Sitzungen"
+    }
+  },
+  "clientSelector": {
+    "title": "Ihre Kunden",
+    "subtitle": "Wählen Sie einen Kunden, um sein Engagement anzuzeigen",
+    "newClient": "Neuer Kunde",
+    "empty": {
+      "title": "Noch keine Kunden",
+      "description": "Erstellen Sie Ihren ersten Kunden, um mit der Beratung zu beginnen.",
+      "cta": "Neuer Kunde"
+    },
+    "sessions": "{count} {count, plural, one {Sitzung} other {Sitzungen}}",
+    "processes": "{count} {count, plural, one {Prozess} other {Prozesse}}"
+  },
+  "clients": {
+    "title": "Kunden",
+    "newClient": "Neuer Kunde",
+    "emptyState": "Noch keine Kunden. Fügen Sie Ihren ersten Kunden hinzu, um mit der Beratung zu beginnen.",
+    "industry": "Branche",
+    "businessModel": "Geschäftsmodell",
+    "operations": "Betriebsprofil",
+    "employees": "Mitarbeiterzahl",
+    "notes": "Beraternotizen",
+    "overview": "Übersicht",
+    "projects": "Projekte",
+    "documents": "Dokumente",
+    "sessionHistory": "Sitzungsverlauf"
+  },
+  "projects": {
+    "title": "Projekte",
+    "newProject": "Neues Projekt",
+    "architecture": "Architektur",
+    "sessions": "Sitzungen",
+    "versions": "Versionen",
+    "addProcess": "Prozess hinzufügen",
+    "startDiscovery": "Discovery-Sitzung starten",
+    "startSession": "Sitzung starten"
+  },
+  "processes": {
+    "process": "Prozess",
+    "subprocess": "Unterprozess",
+    "task": "Aufgabe",
+    "procedure": "Verfahren",
+    "draft": "Entwurf",
+    "mapped": "Kartiert",
+    "validated": "Validiert",
+    "approved": "Genehmigt",
+    "detail": "Prozessdetail",
+    "diagram": "Diagramm",
+    "details": "Details",
+    "children": "Unterprozesse",
+    "sessions": "Sitzungen",
+    "schedule": "Zeitplan",
+    "intelligence": "Intelligenz",
+    "risks": "Risiken & Qualität",
+    "riskAnalysis": "Risiken analysieren",
+    "fmeaAnalysis": "FMEA",
+    "riskRegister": "Register",
+    "opportunities": "Chancen",
+    "controls": "Kontrollen",
+    "heatMatrix": "Heatmap-Matrix",
+    "mitigation": "Risikominderung",
+    "severity": "Schweregrad",
+    "probability": "Wahrscheinlichkeit",
+    "riskScore": "Risiko-Score",
+    "residualRisk": "Restrisiko",
+    "noRisks": "Noch keine Risiken analysiert. Führen Sie die Analyse durch, um Risiken zu identifizieren.",
+    "noOpportunities": "Noch keine Chancen erkannt.",
+    "noControls": "Keine Kontrollen. Fügen Sie eine Kontrolle hinzu.",
+    "noMitigations": "Keine Maßnahmen. Fügen Sie eine Maßnahme hinzu.",
+    "noFmea": "Keine BPMN-Daten. Fügen Sie zuerst ein Diagramm hinzu.",
+    "needsTrend": "Mindestens 2 Audits für einen Trend erforderlich.",
+    "analyzing": "Wird analysiert...",
+    "analyzeError": "Analysefehler. Versuchen Sie es erneut.",
+    "exportReport": "Risikobericht exportieren",
+    "shareRisks": "Risiken teilen",
+    "critical": "Kritisch",
+    "high": "Hoch",
+    "medium": "Mittel",
+    "low": "Niedrig",
+    "addRisk": "Risiko hinzufügen",
+    "addMitigation": "Maßnahme hinzufügen",
+    "addControl": "Kontrolle hinzufügen",
+    "inherentRisk": "Inhärentes Risiko",
+    "riskTypes": {
+      "OPERATIONAL": "Operativ",
+      "COMPLIANCE": "Compliance",
+      "STRATEGIC": "Strategisch",
+      "FINANCIAL": "Finanziell",
+      "TECHNOLOGY": "Technologie",
+      "HUMAN_RESOURCE": "Personalwesen",
+      "REPUTATIONAL": "Reputation"
+    },
+    "saveDiagram": "Diagramm speichern",
+    "addChild": "Unterprozess hinzufügen",
+    "startDeepDive": "Deep Dive starten",
+    "continueLast": "Letzte Sitzung fortsetzen",
+    "description": "Beschreibung",
+    "goals": "Ziele",
+    "triggers": "Auslöser",
+    "outputs": "Ergebnisse",
+    "owner": "Verantwortlicher",
+    "status": "Status",
+    "noChildren": "Noch keine Unterprozesse",
+    "noSessions": "Noch keine Sitzungen für diesen Prozess",
+    "noDiagram": "Noch kein BPMN-Diagramm. Starten Sie eine Sitzung oder erstellen Sie eines manuell."
+  },
+  "sessions": {
+    "title": "Sitzungen",
+    "subtitle": "Ihre Prozesserhebungsmeetings",
+    "newSession": "Neue Sitzung",
+    "empty": {
+      "title": "Noch keine Sitzungen",
+      "description": "Erstellen Sie eine neue Sitzung, um bei Ihrem nächsten Anruf mit der Prozesskartierung zu beginnen."
+    },
+    "new": {
+      "title": "Neue Sitzung",
+      "subtitle": "Neues Prozesserhebungsmeeting einrichten",
+      "form": {
+        "meetingUrl": "Meeting-URL",
+        "meetingUrlPlaceholder": "https://zoom.us/j/... oder https://meet.google.com/...",
+        "meetingUrlHint": "Fügen Sie Ihren Zoom-, Google Meet- oder Teams-Meeting-Link ein",
+        "clientName": "Kundenname",
+        "clientNamePlaceholder": "Acme GmbH",
+        "clientHint": "Wählen oder erstellen Sie das Unternehmen, dessen Prozesse Sie kartieren",
+        "projectName": "Projektname",
+        "projectNamePlaceholder": "Prozessoptimierung Q1",
+        "projectHint": "Projekte gruppieren Ihre Sitzungen nach Abteilung oder Initiative",
+        "sessionType": "Sitzungstyp",
+        "sessionTypeHint": "Discovery kartiert den Geschäftsüberblick. Deep Dive fokussiert auf einen bestimmten Prozess.",
+        "typeDiscovery": "Discovery — Geschäftsüberblick",
+        "typeDeepDive": "Deep Dive — Bestimmter Prozess",
+        "typeDiscoveryDesc": "Prozessarchitektur des Unternehmens kartieren",
+        "typeDeepDiveDesc": "Tiefenanalyse eines bestimmten Prozesses",
+        "typeContinuationDesc": "Dort fortfahren, wo Sie in einer vorherigen Sitzung aufgehört haben",
+        "create": "Sitzung erstellen & Anruf beitreten",
+        "creating": "Wird verbunden..."
+      }
+    }
+  },
+  "common": {
+    "confirmation": {
+      "cancel": "Abbrechen",
+      "confirm": "Bestätigen"
+    },
+    "actions": "Aktionen",
+    "colorMode": {
+      "system": "System",
+      "light": "Hell",
+      "dark": "Dunkel"
+    },
+    "passwordCriteria": {
+      "minLength": "Min. 8 Zeichen",
+      "upperAndLowercase": "Groß- & Kleinbuchstaben",
+      "number": "Zahl",
+      "specialCharacter": "Sonderzeichen"
+    },
+    "save": "Speichern",
+    "saving": "Speichern...",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "create": "Erstellen",
+    "add": "Hinzufügen",
+    "view": "Anzeigen",
+    "close": "Schließen",
+    "back": "Zurück",
+    "retry": "Erneut versuchen",
+    "search": "Suchen",
+    "loading": "Laden...",
+    "noResults": "Keine Ergebnisse",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "errorGeneric": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+    "errorSaving": "Fehler beim Speichern",
+    "errorDeleting": "Fehler beim Löschen",
+    "errorLoading": "Fehler beim Laden",
+    "savedSuccess": "Erfolgreich gespeichert",
+    "deletedSuccess": "Erfolgreich gelöscht",
+    "copiedSuccess": "In die Zwischenablage kopiert",
+    "description": "Beschreibung",
+    "name": "Name",
+    "type": "Typ",
+    "status": "Status",
+    "date": "Datum",
+    "process": "Prozess",
+    "noDescription": "Keine Beschreibung",
+    "noNote": "Keine Notiz",
+    "exit": "Beenden",
+    "maximize": "Maximieren",
+    "coverage": "Abdeckung",
+    "severity": "Schweregrad",
+    "probability": "Wahrscheinlichkeit",
+    "size": "Größe"
+  },
+  "meeting": {
+    "topBar": {
+      "processNameTitle": "Klicken, um den Prozessnamen zu bearbeiten",
+      "newSession": "Neue Sitzung",
+      "endButton": "Beenden",
+      "aiNotInCall": "Live-KI aktivieren",
+      "aiAnalyzing": "KI analysiert",
+      "aiPaused": "KI pausiert",
+      "fontDecrease": "Text verkleinern",
+      "fontNormal": "Normale Größe",
+      "fontIncrease": "Text vergrößern",
+      "botDisconnected": "Bot getrennt",
+      "disconnected": "Getrennt",
+      "connecting": "Verbindung wird hergestellt...",
+      "reconnecting": "Neuverbindung...",
+      "inCall": "Im Anruf",
+      "analyzing": "Wird analysiert...",
+      "diagramming": "Diagramm wird erstellt...",
+      "suggesting": "Vorschläge...",
+      "local": "Lokal",
+      "activeConnection": "Aktive Verbindung",
+      "connectToCall": "Mit Anruf verbinden",
+      "statusFailed": "Bot konnte dem Anruf nicht beitreten",
+      "statusLostConnection": "Verbindung zum Bot verloren",
+      "statusConnected": "Bot verbunden und hört zu",
+      "statusReconnecting": "Neuverbindung zum Bot...",
+      "statusLocal": "Lokaler Modus — Sie können sich mit einem Anruf verbinden",
+      "reconnectSameLink": "Mit demselben Link neu verbinden",
+      "pasteCallLink": "Anruf-Link einfügen",
+      "changeCallLink": "Anruf-Link ändern",
+      "infoLocal": "Fügen Sie Ihren Videoanruf-Link ein, damit der Bot beitritt und in Echtzeit transkribiert.",
+      "infoConnected": "Sie können offline am Diagramm weiterarbeiten. Der Bot verbindet sich mit dem eingefügten Link.",
+      "cancelLocalMode": "Abbrechen und zum lokalen Modus zurückkehren",
+      "disconnectBot": "Bot trennen",
+      "sharing": "Wird geteilt",
+      "share": "Teilen",
+      "viewLink": "Ansichtslink",
+      "copy": "Kopieren",
+      "disabling": "Wird deaktiviert...",
+      "stopSharing": "Teilen beenden",
+      "shareDisableNote": "Der Link wird deaktiviert, wenn Sie das Teilen beenden oder die Sitzung beenden.",
+      "enabling": "Wird aktiviert...",
+      "enableShareLink": "Freigabelink aktivieren",
+      "shareNote": "Erstellen Sie einen schreibgeschützten Link, damit andere das Live-Diagramm sehen können.",
+      "export": "Exportieren",
+      "diagramSection": "Diagramm",
+      "pngLabel": "PNG (Bild)",
+      "svgLabel": "SVG (Vektor)",
+      "bpmnLabel": "BPMN (XML)",
+      "documentationSection": "Dokumentation",
+      "transcription": "Transkription",
+      "proceduresSops": "Verfahren (SOPs)",
+      "reportSection": "Bericht",
+      "sessionReport": "Sitzungsbericht (PDF)",
+      "cleanSection": "Bereinigen",
+      "cleanDiagram": "Diagramm bereinigen",
+      "cleanTranscription": "Transkription bereinigen",
+      "cleanAll": "Alles bereinigen",
+      "confirmCleanDiagram": "das Diagramm",
+      "confirmCleanTranscript": "die Transkription",
+      "confirmCleanAll": "die gesamte Sitzung",
+      "confirmCleanPrompt": "Sind Sie sicher, dass Sie {label} bereinigen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "exportSopHeader": "ARBEITSVERFAHREN (SOPs)",
+      "exportProcedure": "VERFAHREN",
+      "exportCode": "Code",
+      "exportResponsible": "Verantwortlich",
+      "exportFrequency": "Häufigkeit",
+      "exportObjective": "ZIEL",
+      "exportScope": "UMFANG",
+      "exportPrerequisites": "VORAUSSETZUNGEN",
+      "exportSteps": "SCHRITTE",
+      "exportSystems": "Systeme",
+      "exportInputs": "Eingaben",
+      "exportOutputs": "Ausgaben",
+      "exportPendingInfo": "AUSSTEHENDE INFORMATIONEN"
+    },
+    "toast": {
+      "botDisconnected": "Bot getrennt — lokaler Modus",
+      "disconnectError": "Fehler beim Trennen",
+      "connectionError": "Verbindungsfehler",
+      "reconnectNew": "Bot tritt neuem Anruf bei...",
+      "reconnecting": "Bot wird neu verbunden...",
+      "reconnectError": "Fehler bei der Neuverbindung",
+      "shareDisabled": "Freigabelink deaktiviert",
+      "linkCopied": "Link in die Zwischenablage kopiert",
+      "linkCopiedShort": "Link kopiert",
+      "shareError": "Fehler beim Ändern des Freigabestatus",
+      "cleaned": "{label} bereinigt",
+      "cleanError": "Fehler beim Bereinigen",
+      "noTranscription": "Keine Transkription",
+      "transcriptionDownloaded": "Transkription heruntergeladen",
+      "noProcedures": "Keine Verfahren generiert",
+      "sopsDownloaded": "{count} Verfahren heruntergeladen",
+      "sessionEndedFull": "Sitzung beendet. Ergebnisse werden generiert...",
+      "sessionEndedSave": "Sitzung beendet. Daten gespeichert.",
+      "sessionDiscarded": "Sitzung verworfen.",
+      "sessionEndError": "Fehler beim Beenden der Sitzung",
+      "diagramSaved": "Diagramm gespeichert",
+      "saveError": "Fehler beim Speichern",
+      "diagramReorganized": "Diagramm reorganisiert",
+      "noNodes": "Keine Knoten zum Reorganisieren gefunden",
+      "reorganizeError": "Fehler beim Reorganisieren. Diagramm wiederhergestellt.",
+      "reorganizeRetry": "Fehler beim Reorganisieren. Versuchen Sie es erneut.",
+      "relayoutDone": "Diagramm neu angeordnet",
+      "relayoutError": "Fehler beim Neuanordnen",
+      "labelsFixed": "{count} Bezeichnungen korrigiert",
+      "labelsCorrect": "Alle Bezeichnungen sind korrekt",
+      "labelsError": "Fehler beim Korrigieren der Bezeichnungen",
+      "complete": "{score}% vollständig",
+      "newQuestions": "{count} neue Fragen",
+      "answerError": "Fehler beim Senden der Antwort",
+      "modeChanging": "Wechsel zu {label}...",
+      "modeChanged": "Modus: {label} — Fragen neu generiert",
+      "modeError": "Fehler beim Moduswechsel",
+      "generateError": "Fehler beim Generieren",
+      "nodeDeleted": "Knoten gelöscht",
+      "deleteError": "Fehler beim Löschen des Knotens",
+      "nodeCreated": "Knoten erstellt",
+      "createError": "Fehler beim Erstellen des Knotens",
+      "connectionError2": "Fehler beim Aktualisieren der Verbindungen",
+      "labelSaveError": "Fehler beim Speichern der Bezeichnung",
+      "typeChangeError": "Fehler beim Ändern des Typs",
+      "renamed": "Umbenannt in \"{name}\"",
+      "convertedGateway": "In Gateway umgewandelt",
+      "reorganizingFlows": "Diagramm wird reorganisiert, um Flüsse zu korrigieren...",
+      "mergeCreated": "Zusammenführungs-Gateway erstellt",
+      "reorganizingBuilder": "Reorganisierung — Builder verbindet lose Knoten...",
+      "reorganizedReconnected": "Diagramm reorganisiert — Knoten neu verbunden",
+      "laneUnified": "Lane vereinheitlicht zu \"{name}\"",
+      "reorganizing": "Diagramm wird reorganisiert...",
+      "fixError": "Fehler beim Anwenden der Korrektur",
+      "noAuditNodes": "Keine Knoten zum Auditieren",
+      "auditScore": "BPMN-Diagramm korrekt — Score: {score}/100",
+      "auditObservations": "{count} Beobachtungen gefunden",
+      "connectNotAvailable": "Verbindungswerkzeug nicht verfügbar",
+      "savePropsError": "Fehler beim Speichern der Eigenschaften"
+    },
+    "leftPanel": {
+      "header": "BPMN-Elemente",
+      "catEvents": "Ereignisse",
+      "startEvent": "Start",
+      "startEventTip": "Wo der Prozess beginnt. Es sollte nur einen pro Hauptfluss geben.",
+      "endEvent": "Ende",
+      "endEventTip": "Wo der Prozess endet. Es kann mehrere geben, wenn verschiedene Pfade existieren.",
+      "intermediateEvent": "Zwischenereignis",
+      "intermediateEventTip": "Etwas, das mitten im Fluss passiert. Z.B.: Benachrichtigung senden, Fall eskalieren.",
+      "timerEvent": "Timer",
+      "timerEventTip": "Eine Wartezeit oder Frist. Z.B.: 24 Std. auf Genehmigung warten, Antwortfrist.",
+      "boundaryEvent": "Grenzereignis",
+      "boundaryEventTip": "Ereignis am Rand einer Aufgabe. Z.B.: SLA-Timeout, Fehler der die Aufgabe unterbricht.",
+      "catTasks": "Aufgaben",
+      "task": "Aufgabe",
+      "taskTip": "Generische Aktivität. Verwenden, wenn es egal ist ob manuell oder systembasiert.",
+      "userTask": "Benutzeraufgabe",
+      "userTaskTip": "Eine Person führt diese Aufgabe aus. Z.B.: Dokument prüfen, Anfrage genehmigen.",
+      "serviceTask": "Serviceaufgabe",
+      "serviceTaskTip": "Ein System erledigt es automatisch. Z.B.: E-Mail senden, API abfragen, Bericht generieren.",
+      "manualTask": "Manuelle Aufgabe",
+      "manualTaskTip": "Physische Arbeit ohne System. Z.B.: Paket liefern, Papierdokument unterschreiben.",
+      "businessRule": "Geschäftsregel",
+      "businessRuleTip": "Entscheidung basierend auf definierten Regeln. Z.B.: Rabatt nach Richtlinie berechnen, Kredit validieren.",
+      "scriptTask": "Skriptaufgabe",
+      "scriptTaskTip": "Automatische Codeausführung. Z.B.: Daten transformieren, Summen berechnen.",
+      "catGateways": "Gateways",
+      "exclusive": "Exklusiv",
+      "exclusiveTip": "Nur EIN Pfad wird ausgeführt. Z.B.: Wenn genehmigt → weiter, Wenn nicht → ablehnen.",
+      "parallel": "Parallel",
+      "parallelTip": "ALLE Pfade werden gleichzeitig ausgeführt. Z.B.: E-Mail senden UND System aktualisieren.",
+      "inclusive": "Inklusiv",
+      "inclusiveTip": "EIN ODER MEHRERE Pfade werden ausgeführt. Z.B.: Manager UND/ODER Direktor je nach Betrag benachrichtigen.",
+      "catSubprocesses": "Unterprozesse",
+      "subprocess": "Unterprozess",
+      "subprocessTip": "Ein Prozess innerhalb eines anderen. Gruppiert zusammengehörige Schritte. Z.B.: 'Dokumentenvalidierung'.",
+      "callActivity": "Aufrufaktivität",
+      "callActivityTip": "Ruft einen bereits definierten Prozess auf. Z.B.: Prozess 'Einkaufsgenehmigung' wiederverwenden.",
+      "catData": "Daten",
+      "dataObject": "Datenobjekt",
+      "dataObjectTip": "Ein Dokument oder Daten, das/die verwendet oder erzeugt wird/werden. Z.B.: Rechnung, Bestellung, Vertrag.",
+      "dataStore": "Datenspeicher",
+      "dataStoreTip": "Ein System, in dem Daten gespeichert werden. Z.B.: ERP, Datenbank, SharePoint.",
+      "annotation": "Anmerkung",
+      "annotationTip": "Erläuternde Notiz. Beeinflusst den Fluss nicht, nur zur Dokumentation. Z.B.: 'SLA: 48 Std.'.",
+      "group": "Gruppe",
+      "groupTip": "Visuelle Gruppierung. Beeinflusst den Fluss nicht, organisiert nur visuell. Z.B.: Prozessphasen markieren."
+    },
+    "rightPanel": {
+      "transcription": "Transkription",
+      "aiSuggestions": "KI-Vorschläge",
+      "documents": "Dokumente",
+      "gapRoles": "Rollen",
+      "gapSuppliers": "Lieferanten",
+      "gapInputs": "Eingaben",
+      "gapOutputs": "Ausgaben",
+      "gapCustomers": "Kunden",
+      "gapTriggers": "Auslöser",
+      "gapDecisions": "Entscheidungen",
+      "gapExceptions": "Ausnahmen",
+      "gapTimings": "Zeitabläufe",
+      "gapSystems": "Systeme",
+      "gapExploration": "Erkundung"
+    },
+    "teleprompter": {
+      "header": "KI-Vorschläge",
+      "gapRoles": "Rollen",
+      "gapSuppliers": "Lieferanten",
+      "gapInputs": "Eingaben",
+      "gapOutputs": "Ausgaben",
+      "gapCustomers": "Kunden",
+      "gapTriggers": "Auslöser",
+      "gapDecisions": "Entscheidungen",
+      "gapExceptions": "Ausnahmen",
+      "gapTimelines": "Zeitabläufe",
+      "gapSystems": "Systeme",
+      "gapExploration": "Erkundung",
+      "modeExplore": "Erkunden",
+      "modeExploreHint": "Alle SIPOC-Dimensionen abdecken",
+      "modeDeepen": "Vertiefen",
+      "modeDeepenHint": "Die schwächste Dimension detaillieren",
+      "modeValidate": "Validieren",
+      "modeValidateHint": "Jeden Knoten prüfen, Lücken schließen",
+      "sipocSuppliers": "Lieferanten",
+      "sipocInputs": "Eingaben",
+      "sipocProcess": "Prozess",
+      "sipocOutputs": "Ausgaben",
+      "sipocCustomers": "Kunden",
+      "processQuestions": "Prozessfragen",
+      "sipocQuestionsProgress": "SIPOC-Fragen ({answered}/{total} beantwortet)",
+      "sipocQuestionsInitial": "Initiale SIPOC-Fragen",
+      "allSipocAnswered": "Alle SIPOC-Fragen beantwortet. KI wird kontextuelle Fragen generieren.",
+      "answerPlaceholder": "Antwort eingeben...",
+      "q1": "Wer sind die Lieferanten oder Bereiche, die diesen Prozess initiieren?",
+      "q2": "Welche Informationen, Dokumente oder Materialien werden zum Start benötigt?",
+      "q3": "Was sind die Hauptschritte des Prozesses von Anfang bis Ende?",
+      "q4": "Welche Ergebnisse oder Liefergegenstände produziert dieser Prozess?",
+      "q5": "Wer sind die Kunden oder Bereiche, die das Ergebnis erhalten?",
+      "q6": "Welche Entscheidungen werden während des Prozesses getroffen und wer trifft sie?",
+      "q7": "Welche Ausnahmen oder alternativen Pfade gibt es?",
+      "q8": "Welche Systeme oder Werkzeuge werden verwendet?",
+      "answeredCount": "{count, plural, one {# Frage beantwortet} other {# Fragen beantwortet}}"
+    },
+    "canvas": {
+      "aiPhase1": "Aufgaben und Verbindungen werden analysiert",
+      "aiPhase2": "Rollen und Lanes werden identifiziert",
+      "aiPhase3": "Prozessfluss wird bewertet",
+      "aiPhase4": "Fehlende Elemente werden erkannt",
+      "aiPhase5": "Bezeichnungen werden korrigiert",
+      "aiPhase6": "Knoten werden reorganisiert",
+      "aiPhase7": "Layout wird optimiert",
+      "aiPhase8": "BPMN-Best-Practices werden angewandt",
+      "tabDiagram": "Diagramm",
+      "tabTree": "Baumansicht",
+      "openProcessProps": "Prozesseigenschaften öffnen",
+      "processDefault": "Prozess",
+      "breadcrumbRoot": "Hauptprozess",
+      "toggleShowElements": "Elemente anzeigen",
+      "toggleHideElements": "Elemente ausblenden",
+      "toggleShowPanels": "Panels anzeigen",
+      "toggleHidePanels": "Panels ausblenden",
+      "toolUndo": "Rückgängig",
+      "toolRedo": "Wiederholen",
+      "toolFit": "Einpassen",
+      "toolSave": "Speichern",
+      "toolSort": "Sortieren",
+      "toolSpelling": "Rechtschreibung",
+      "toolAiFull": "Voll-KI",
+      "fixingLabels": "Bezeichnungen werden korrigiert...",
+      "reorganizingLayout": "Layout wird reorganisiert...",
+      "shortcutSave": "Diagramm speichern",
+      "shortcutFit": "An Ansicht anpassen",
+      "shortcutRelayout": "Neu layouten (ELK)",
+      "shortcutFixLabels": "Bezeichnungen korrigieren (KI)",
+      "shortcutFullReorganize": "Voll reorganisieren (KI)"
+    },
+    "bottomBar": {
+      "toolSelect": "Auswählen",
+      "toolConnect": "Verbinden",
+      "toolText": "Text",
+      "auditBpmn": "BPMN auditieren",
+      "auditHeader": "BPMN-Audit",
+      "observations": "{count} Beobachtungen",
+      "diagramCorrect": "Das Diagramm entspricht den BPMN 2.0 Best Practices",
+      "suggestion": "Vorschlag",
+      "fix": "Korrigieren",
+      "aiElements": "KI-Elemente",
+      "layoutDefault": "Vollansicht",
+      "layoutChatFocus": "Chat-Fokus"
+    },
+    "layout": {
+      "sipocAnalysis": "SIPOC-Analyse"
+    },
+    "endDialog": {
+      "title": "Sitzung beenden",
+      "description": "Wählen Sie, wie Sie diese Sitzung beenden möchten.",
+      "processNameLabel": "Prozessname",
+      "processNamePlaceholder": "Z.B.: Einkaufsprozess",
+      "processNameHint": "Ein neuer Prozess wird mit den Diagrammknoten erstellt.",
+      "fullButton": "Beenden und Bericht generieren",
+      "fullDescription": "Speichert das Diagramm und generiert Zusammenfassung, RACI, Audit und Risiken.",
+      "saveOnlyButton": "Beenden ohne Bericht",
+      "saveOnlyDescription": "Speichert Diagramm und Daten, generiert aber keine Ergebnisse.",
+      "discardButton": "Sitzung verwerfen",
+      "discardDescription": "Bricht die Sitzung ab, ohne Diagrammdaten zu speichern.",
+      "backButton": "Zurück zur Sitzung"
+    },
+    "treeEditor": {
+      "noNodes": "Keine Knoten im Prozess",
+      "header": "Prozessstruktur",
+      "nodeCount": "{count} Knoten",
+      "doubleClickHint": "Doppelklick zum Bearbeiten",
+      "connectTo": "Verbinden mit...",
+      "noAvailableNodes": "Keine verfügbaren Knoten",
+      "connectionCount": "{count} Verbindung(en)",
+      "addConnection": "Verbindung hinzufügen",
+      "insertAfter": "Knoten danach einfügen",
+      "deleteNode": "Knoten löschen",
+      "confirmDelete": "Löschen von \"{label}\" bestätigen?",
+      "cancel": "Abbrechen",
+      "delete": "Löschen",
+      "newTask": "Neue Aufgabe"
+    },
+    "sop": {
+      "generating": "Verfahren wird generiert...",
+      "generatingContext": "Transkript und BPMN-Kontext werden analysiert",
+      "retry": "Erneut versuchen",
+      "noProcedure": "Kein Verfahren",
+      "noProcedureDescription": "Erstellen Sie ein vollständiges SOP-Dokument aus der Sitzungstranskription und dem BPMN-Diagrammkontext.",
+      "generateSop": "SOP mit KI generieren",
+      "procedureLabel": "Verfahren",
+      "regenerate": "Neu generieren",
+      "export": "Exportieren",
+      "codeField": "Code",
+      "responsibleField": "Verantwortlich",
+      "frequencyField": "Häufigkeit",
+      "confidenceLabel": "Konfidenz",
+      "objectiveSection": "Ziel",
+      "scopeSection": "Umfang",
+      "prerequisitesSection": "Voraussetzungen",
+      "stepsSection": "Verfahrensschritte",
+      "inputsLabel": "Eingaben",
+      "outputsLabel": "Ausgaben",
+      "exceptionPrefix": "Wenn: ",
+      "indicatorsSection": "Indikatoren",
+      "targetLabel": "Zielwert",
+      "pendingInfoSection": "Ausstehende Informationen",
+      "supportMaterialSection": "Begleitmaterial",
+      "addScreenshot": "Screenshot hinzufügen",
+      "screenshotHint": "System-Screenshot, Formular oder Bildschirm, der für dieses Verfahren relevant ist",
+      "addVideo": "Erklärvideo hinzufügen",
+      "videoHint": "YouTube-, Vimeo- oder Loom-Video, das zeigt, wie das Verfahren ausgeführt wird",
+      "clickToEdit": "Klicken zum Bearbeiten...",
+      "doneEditing": "Fertig",
+      "describeStep": "Beschreiben Sie diesen Schritt im Detail...",
+      "notesPlaceholder": "Notizen, Screenshots, Videos...",
+      "videoPrompt": "Video-URL (YouTube, Vimeo, Loom):"
+    },
+    "sopPanel": {
+      "selectTask": "Wählen Sie eine Aufgabe, um ihr Verfahren zu dokumentieren",
+      "headerSop": "SOP",
+      "newConversation": "Neues Gespräch",
+      "aiIntro": "KI stellt die richtigen Fragen, um diese Aufgabe zu dokumentieren. Antworten Sie und das Verfahren erstellt sich von selbst.",
+      "thinking": "Denkt nach...",
+      "generateFull": "Vollständiges SOP mit vorhandenen Informationen generieren",
+      "generatingFull": "Wird generiert...",
+      "inputPlaceholder": "Hier antworten...",
+      "errorMessage": "Fehler bei der Verarbeitung. Versuchen Sie es erneut."
+    },
+    "nodeProperties": {
+      "elementCount": "{count} Element(e)",
+      "documented": "dokumentiert",
+      "selectElement": "Prozesselement auswählen",
+      "selectElementSub": "um seine Eigenschaften zu dokumentieren",
+      "tabProperties": "Eigenschaften",
+      "tabSopComplete": "Vollständiges SOP",
+      "hasProcedure": "Hat Verfahren",
+      "attachments": "Anhänge",
+      "attachFile": "Datei anhängen (PDF, Word, PPT)",
+      "generateDraft": "Entwurf generieren",
+      "generating": "Wird generiert..."
+    },
+    "procedureEditor": {
+      "placeholder": "Beschreiben Sie das Verfahren Schritt für Schritt...",
+      "bold": "Fett",
+      "italic": "Kursiv",
+      "underline": "Unterstrichen",
+      "heading1": "Überschrift 1",
+      "heading2": "Überschrift 2",
+      "bulletList": "Liste",
+      "orderedList": "Nummerierte Liste",
+      "link": "Link",
+      "image": "Bild",
+      "video": "Video",
+      "videoPrompt": "Video-URL (YouTube, Vimeo, Loom):",
+      "urlPrompt": "URL:"
+    },
+    "diagramEditor": {
+      "title": "Diagramm bearbeiten",
+      "cancel": "Abbrechen",
+      "saving": "Wird gespeichert...",
+      "save": "Speichern",
+      "initError": "Der Diagramm-Editor konnte nicht geladen werden."
+    },
+    "shortcuts": {
+      "zenMode": "Zen-Modus (beide Panels umschalten)",
+      "leftPanel": "Linkes Panel umschalten",
+      "rightPanel": "Rechtes Panel umschalten"
+    },
+    "nodeConfig": {
+      "startEvent": "Start",
+      "endEvent": "Ende",
+      "task": "Aufgabe",
+      "userTask": "Benutzeraufgabe",
+      "serviceTask": "Serviceaufgabe",
+      "manualTask": "Manuelle Aufgabe",
+      "exclusiveGateway": "Gateway",
+      "parallelGateway": "Parallel",
+      "subprocess": "Unterprozess",
+      "defaultElement": "Element",
+      "stateConfirmed": "Bestätigt",
+      "stateForming": "In Bildung",
+      "stateRejected": "Abgelehnt"
+    },
+    "propFields": {
+      "description": "Beschreibung / Verfahren",
+      "descriptionTooltip": "Erklären Sie, worin diese Aktivität besteht, wie sie durchgeführt wird und wichtige Hinweise für die ausführende Person.",
+      "responsable": "Verantwortlich",
+      "responsableTooltip": "Die Rolle oder Position, die diese Aktivität ausführt. Nicht der Name der Person, sondern die Rolle.",
+      "sla": "SLA",
+      "slaTooltip": "Maximal zulässige Zeit zum Abschluss dieser Aktivität ab Beginn.",
+      "slaUnit": "SLA-Einheit",
+      "slaMinutes": "Minuten",
+      "slaHours": "Stunden",
+      "slaDays": "Tage",
+      "frequency": "Häufigkeit",
+      "frequencyTooltip": "Wie oft wird diese Aktivität ausgeführt?",
+      "frequencyDaily": "Täglich",
+      "frequencyWeekly": "Wöchentlich",
+      "frequencyMonthly": "Monatlich",
+      "frequencyPerEvent": "Pro Ereignis",
+      "frequencyCount": "Anzahl pro Zeitraum",
+      "frequencyCountTooltip": "Wie oft wiederholt es sich im gewählten Zeitraum?",
+      "estimatedDuration": "Geschätzte Dauer (Min.)",
+      "estimatedDurationTooltip": "Wie viele Minuten braucht eine erfahrene Person, um diese Aktivität abzuschließen?",
+      "systems": "Systeme",
+      "systemsPlaceholder": "SAP, CRM usw.",
+      "systemsTooltip": "Software, Anwendungen oder Werkzeuge, die zur Durchführung dieser Aktivität verwendet werden.",
+      "inputs": "Eingaben",
+      "inputsPlaceholder": "Bestellung, Lieferantendaten...",
+      "inputsTooltip": "Dokumente, Daten oder Informationen, die VOR Beginn dieser Aktivität benötigt werden.",
+      "outputs": "Ausgaben",
+      "outputsPlaceholder": "Geprüfte Rechnung, Bericht...",
+      "outputsTooltip": "Dokumente, Daten oder Ergebnisse, die BEI ABSCHLUSS dieser Aktivität erstellt werden.",
+      "costPerExecution": "Kosten pro Ausführung",
+      "costTooltip": "Ungefähre Kosten bei jeder Ausführung dieser Aktivität.",
+      "currency": "Währung",
+      "currencyPlaceholder": "EUR, USD",
+      "groupGeneral": "Allgemein",
+      "groupResources": "Ressourcen und Zeiten",
+      "groupInputsOutputs": "Eingaben / Ausgaben",
+      "groupCosts": "Kosten"
+    }
+  },
+  "scan": {
+    "title": "Geschäftsprozess-Scan",
+    "subtitle": "Entdecken Sie versteckte Risiken in Ihren Prozessen. Kostenlos. Ohne Registrierung.",
+    "urlPlaceholder": "https://ihrunternehmen.de",
+    "descriptionPlaceholder": "Beschreiben Sie Ihr Unternehmen: Was es tut, an wen es verkauft, seine Hauptaktivitäten...",
+    "noWebsite": "Ich habe keine Website — ich beschreibe mein Unternehmen",
+    "hasWebsite": "Ich habe eine Website — URL einfügen",
+    "generate": "Scan erstellen",
+    "generating": "Scan wird erstellt...",
+    "disclaimer": "Unter einer Minute. Ihre Daten werden nicht an Dritte weitergegeben.",
+    "readingWebsite": "Ihre Website wird gelesen...",
+    "loaderConnecting": "Verbindung zur Website...",
+    "loaderReading": "Seiten werden gelesen...",
+    "loaderExtracting": "Geschaftskontext wird extrahiert...",
+    "loaderPreparing": "Analyse wird vorbereitet...",
+    "loaderAnalyzing": "Analyse von",
+    "analyzingIndustry": "Ihre Branche wird analysiert...",
+    "mappingProcess": "Schlüsselprozess wird kartiert...",
+    "generatingDiagram": "Diagramm wird erstellt...",
+    "evaluatingRisks": "Risiken werden bewertet...",
+    "scanReady": "Scan fertig",
+    "sipocAnalysis": "SIPOC-Analyse",
+    "sipocDetailed": "Detaillierte SIPOC-Analyse",
+    "suppliers": "Lieferanten",
+    "inputs": "Eingaben",
+    "process": "Prozess",
+    "outputs": "Ausgaben",
+    "customers": "Kunden",
+    "risksIdentified": "Identifizierte Risiken",
+    "riskRegistry": "Risikoregister",
+    "totalScore": "Gesamtpunktzahl",
+    "critical": "Kritisch",
+    "high": "Hoch",
+    "medium": "Mittel",
+    "low": "Niedrig",
+    "highestRiskArea": "Bereich mit dem höchsten Risiko",
+    "firstScan": "Dies ist ein erster Scan",
+    "deepenCta": "Durch die Beantwortung einiger Fragen kann die KI spezifische Risiken IHRER Operation finden, nicht nur Ihrer Branche. In 5-10 Minuten haben Sie eine viel tiefere Analyse.",
+    "deepenButton": "Meinen Scan vertiefen",
+    "processCoverage": "Prozessabdeckung",
+    "readyForDiagram": "Bereit zur Diagrammerstellung",
+    "keepAnswering": "Antworten Sie weiter zur Verbesserung",
+    "viewDiagram": "Mein Prozessdiagramm anzeigen",
+    "skipToResults": "Zum Diagramm springen",
+    "buildingDiagram": "Ihre Prozesskarte wird erstellt...",
+    "yourProcessMap": "Ihre Prozesskarte",
+    "generatingDeepScan": "Ihr vollständiger Scan wird erstellt...",
+    "revealTitle": "Tiefenanalyse läuft",
+    "revealCorrelating": "Forschungsergebnisse werden korreliert...",
+    "revealMapping": "Prozessabläufe werden kartiert...",
+    "revealAnalyzing": "Tiefe Risikoanalyse wird durchgeführt...",
+    "revealGenerating": "BPMN-Diagramm wird erstellt...",
+    "completeScan": "Vollständiger Scan",
+    "additionalRisks": "Das Gespräch hat {count} zusätzliche Risiken aufgedeckt, die der erste Scan nicht erkannt hat.",
+    "initialVsDeep": "Erster Scan: {initial} Risiken. Tiefer Scan: {deep} Risiken.",
+    "suggestedMitigations": "Vorgeschlagene Maßnahmen",
+    "opportunity": "Chance",
+    "affectedStep": "Betroffener Schritt: {step}",
+    "saveScan": "Ihren Scan speichern",
+    "saveDescription": "{count} Risiken in \"{process}\" gefunden. Erstellen Sie Ihr Konto, um diese Analyse zu speichern und weitere Prozesse zu kartieren.",
+    "createAccount": "Konto erstellen und speichern",
+    "convertBullet1": "Vollständiges Risikoregister mit Maßnahmen",
+    "convertBullet2": "BPMN-Prozessdiagramm zum Bearbeiten",
+    "convertBullet3": "Verbesserungen über die Zeit verfolgen",
+    "creatingAccount": "Konto wird erstellt...",
+    "termsNotice": "Mit der Kontoerstellung akzeptieren Sie unsere Nutzungsbedingungen.",
+    "existingUserError": "Sie haben bereits ein Konto.",
+    "goToLogin": "Zur Anmeldung",
+    "name": "Name",
+    "namePlaceholder": "Ihr Name",
+    "email": "E-Mail",
+    "companyName": "Firmenname",
+    "optional": "(optional)",
+    "companyNamePlaceholder": "Meine Firma GmbH",
+    "writeResponse": "Schreiben Sie Ihre Antwort...",
+    "send": "Senden",
+    "connectionError": "Verbindungsfehler. Versuchen Sie es erneut.",
+    "couldNotReadWebsite": "Wir konnten Ihre Website nicht lesen. Beschreiben Sie Ihr Unternehmen manuell.",
+    "errorProcessing": "Fehler bei der Verarbeitung Ihrer Beschreibung.",
+    "errorGenerating": "Fehler beim Erstellen des Scans.",
+    "errorCreatingSession": "Fehler beim Erstellen der Sitzung. Versuchen Sie es erneut.",
+    "deepenIntro": "Vertiefen wir Ihren Prozess \"{process}\". Ich stelle Ihnen einige Fragen, um besser zu verstehen, wie Ihr Betrieb funktioniert. Antworten Sie mit dem, was Sie wissen — es gibt keine falschen Antworten.",
+    "riskTypes": {
+      "OPERATIONAL": "Operativ",
+      "COMPLIANCE": "Compliance",
+      "STRATEGIC": "Strategisch",
+      "FINANCIAL": "Finanziell",
+      "TECHNOLOGY": "Technologie",
+      "HUMAN_RESOURCE": "Personal",
+      "REPUTATIONAL": "Reputation"
+    },
+    "share": {
+      "shareResults": "Ergebnisse teilen",
+      "copyLink": "Link kopieren",
+      "copied": "Kopiert!",
+      "linkCopied": "Teilen-Link in die Zwischenablage kopiert",
+      "linkGenerated": "Teilen-Link generiert",
+      "sharedResult": "Geteiltes Scan-Ergebnis",
+      "notFound": "Scan nicht gefunden",
+      "notFoundDesc": "Dieses Scan-Ergebnis existiert nicht oder der Link ist ungültig. Starten Sie Ihren eigenen kostenlosen Scan.",
+      "expired": "Link abgelaufen",
+      "expiredDesc": "Dieser geteilte Link ist abgelaufen. Geteilte Links sind 7 Tage verfügbar.",
+      "retry": "Erneut versuchen",
+      "runYourOwn": "Starten Sie Ihren eigenen kostenlosen Scan",
+      "ctaTitle": "Möchten Sie die vollständige Diagnose für Ihr Unternehmen?",
+      "ctaDesc": "Dieser Scan ist nur der Anfang. Erstellen Sie ein kostenloses Konto, um Aktionspläne zu erhalten, Verbesserungen zu verfolgen und die Ausrichtung Ihres Teams zu bewerten."
+    }
+  },
+  "maturityRing": {
+    "label": "Risikoreife",
+    "noData": "Keine Daten",
+    "tooltip": "Zusammengesetzter Score basierend auf Dokumentationsabdeckung (30 %), Risikoanalyseabdeckung (30 %), Prozessreife (20 %) und Kontrolleffektivität (20 %)."
+  },
+  "emptyStates": {
+    "risks": {
+      "noFilter": "Keine Ergebnisse",
+      "noFilterDesc": "Keine Risiken entsprechen den ausgewählten Filtern.",
+      "noControls": "Keine Risiken zum Zuordnen",
+      "noControlsDesc": "Führen Sie eine Risikoanalyse durch, um die mit jeder Aktivität verbundenen Kontrollen zu identifizieren.",
+      "noFmea": "Keine FMEA-Daten",
+      "noFmeaDesc": "Die FMEA-Analyse identifiziert Fehlermodi, ihre Auswirkungen und die Risikoprioritätszahl (RPN) für jede Prozessaktivität.",
+      "noOpportunities": "Keine Chancen identifiziert",
+      "noOpportunitiesDesc": "Verbesserungsmöglichkeiten werden automatisch während der Prozessrisikoanalyse erkannt."
+    },
+    "processes": {
+      "noSubprocesses": "Keine Unterprozesse",
+      "noSubprocessesDesc": "Fügen Sie einen Unterprozess hinzu, um diesen Prozess zu zerlegen und zu detaillieren.",
+      "noSessions": "Keine Sitzungen",
+      "noSessionsDesc": "Starten Sie einen Deep Dive, um diesen Prozess im Detail abzubilden."
+    },
+    "deliverables": {
+      "noProcessCards": "Keine Prozesse registriert",
+      "noProcessCardsDesc": "Starten Sie eine Discovery-Sitzung, um Prozesse zu dokumentieren und Karten automatisch zu generieren."
+    },
+    "commandCenter": {
+      "title": "Kommandozentrale",
+      "description": "Planen Sie Ihre erste Erhebungssitzung, um mit der KI-gestützten Prozessabbildung zu beginnen.",
+      "cta": "Erste Sitzung planen"
+    }
+  },
+  "riskTab": {
+    "errorAnalyzing": "Analyse fehlgeschlagen. Bitte erneut versuchen.",
+    "noRisks": "Keine Risiken analysiert",
+    "noRisksDesc": "Führen Sie die Analyse durch, um Risiken, Chancen und Fehlermodi in diesem Prozess zu identifizieren.",
+    "analyzing": "Analyse läuft...",
+    "analyze": "Risiken analysieren",
+    "avgRisk": "Durchschnittliches Risiko:",
+    "critical": "Kritisch",
+    "high": "Hoch",
+    "opportunity": "Chance",
+    "tabs": {
+      "register": "Register",
+      "opportunities": "Chancen",
+      "controls": "Kontrollen",
+      "fmea": "FMEA"
+    },
+    "riskMatrix": "Risikomatrix",
+    "filterSeverity": "Filter: Schweregrad {sev}, Wahrscheinlichkeit {prob}",
+    "clearFilter": "Filter löschen",
+    "riskTrend": "Risikotrend",
+    "noControls": "Keine Kontrollen definiert. Fügen Sie Kontrollen hinzu, um das Risiko zu reduzieren.",
+    "addControl": "Kontrolle hinzufügen",
+    "noMitigations": "Keine Maßnahmen definiert.",
+    "mitigationPlaceholder": "Maßnahme zur Risikominderung..."
+  },
+  "commandCenter": {
+    "title": "Kommandozentrale",
+    "editLive": "Live bearbeiten",
+    "newSession": "Neue Sitzung",
+    "defaultProcess": "Allgemeine Sitzung",
+    "errorReschedule": "Fehler beim Umplanen",
+    "errorUpdate": "Fehler beim Aktualisieren",
+    "errorEditSession": "Fehler beim Starten der Bearbeitungssitzung",
+    "sessionUpdated": "Sitzung aktualisiert",
+    "intakeLinkGenerated": "Intake-Link generiert",
+    "noSessionsScheduled": "Keine Sitzungen geplant",
+    "noResponses": "Noch keine Antworten",
+    "scheduleSession": "Sitzung planen",
+    "wizard": {
+      "process": "Prozess",
+      "participants": "Teilnehmer",
+      "context": "Kontext",
+      "schedule": "Planen",
+      "invitation": "Einladung",
+      "searchProcess": "Prozess suchen oder neuen Namen eingeben...",
+      "loadingProcesses": "Prozesse laden...",
+      "noProcesses": "Keine Prozesse. Geben Sie einen Namen ein, um einen zu erstellen.",
+      "createNew": "Erstellen",
+      "newProcess": "Neuer Prozess",
+      "sessionType": "Sitzungstyp",
+      "noSelection": "Nicht ausgewählt",
+      "noParticipants": "Keine hinzugefügt",
+      "noContext": "Kein Kontext",
+      "noCall": "Kein Anruf",
+      "notScheduled": "Nicht geplant",
+      "contextPlaceholder": "Beschreiben Sie den Prozesskontext, Sitzungsziele, relevante Kundeninformationen...",
+      "coverPlaceholder": "Was in dieser Sitzung behandelt werden soll...",
+      "errorRaci": "Fehler beim Abrufen der RACI-Daten",
+      "noParticipantsEmpty": "Keine Teilnehmer",
+      "discoverWithAI": "Mit KI entdecken"
+    }
+  },
+  "processDetail": {
+    "deleteConfirm": "Prozess löschen",
+    "deleteMessage": "Alle zugehörigen Daten werden dauerhaft gelöscht: Unterprozesse, Sitzungen, RACI, Risiken und Versionen.",
+    "linkCopied": "Link kopiert",
+    "nameRequired": "Name ist erforderlich",
+    "subprocesses": "Unterprozesse",
+    "noSubprocesses": "Keine Unterprozesse",
+    "documents": "Dokumente",
+    "uploadDocs": "SOPs oder Handbücher hochladen",
+    "processDetails": "Prozessdetails",
+    "raciMatrix": "RACI-Matrix",
+    "notGenerated": "Nicht generiert",
+    "intelligence": "Intelligenz",
+    "analyzeProcess": "Prozess analysieren",
+    "risksQuality": "Risiken & Qualität",
+    "analyzeRisks": "Risiken analysieren",
+    "consolidation": "Konsolidierung",
+    "conflicts": "{count} Konflikte",
+    "consolidate": "Perspektiven konsolidieren",
+    "noDiagram": "Kein Diagramm. Erstellen Sie eines oder führen Sie eine Sitzung durch.",
+    "createDiagram": "Diagramm erstellen",
+    "regenerate": "Neu generieren",
+    "fixWithAi": "Mit KI reparieren",
+    "repairingDiagram": "Diagramm wird repariert...",
+    "detailsSaved": "Details gespeichert",
+    "errorSavingDetails": "Fehler beim Speichern der Details",
+    "descriptionLabel": "Beschreibung",
+    "ownerPlaceholder": "Abteilung oder verantwortliche Person...",
+    "goals": "Ziele",
+    "triggers": "Auslöser",
+    "outputs": "Ergebnisse",
+    "addGoalPlaceholder": "Ziel hinzufügen...",
+    "addTriggerPlaceholder": "Auslöser hinzufügen...",
+    "addOutputPlaceholder": "Ergebnis hinzufügen...",
+    "subprocess": "Unterprozess",
+    "task": "Aufgabe",
+    "procedure": "Verfahren",
+    "level": "Ebene",
+    "continueLastSession": "Letzte fortsetzen",
+    "nodes": "{count} Knoten",
+    "risks": "{count} Risiken",
+    "join": "Beitreten",
+    "onboardingTitle": "Beginnen Sie mit der Dokumentation Ihres Prozesses",
+    "onboardingDesc1": "Dieser Arbeitsbereich ermöglicht es Ihnen, Ihre Prozessdokumentation iterativ aufzubauen.",
+    "onboardingDesc2": "Starten Sie eine Discovery-Sitzung oder fügen Sie Details manuell hinzu.",
+    "noCategoryFilter": "Keine Prozesse in dieser Kategorie",
+    "noCategoryFilterDesc": "Prozesse manuell hinzufügen oder KI-Discovery verwenden",
+    "errorStatusChange": "Fehler beim Statuswechsel",
+    "noRaciAssignment": "Keine RACI-Zuordnung für diese Aktivität. Generieren Sie die RACI-Matrix im Analyse-Tab."
+  },
+  "meetingModule": {
+    "noSessions": "Keine Sitzungen",
+    "noSessionsDesc": "Erstellen Sie Ihre erste Sitzung, um mit der Prozessabbildung zu beginnen.",
+    "newSession": "Neue Sitzung",
+    "noProcess": "Kein Prozess",
+    "errorSendMessage": "Fehler beim Senden der Nachricht",
+    "errorEdit": "Fehler beim Bearbeiten",
+    "errorDelete": "Fehler beim Löschen",
+    "errorRetry": "Fehler beim erneuten Versuch",
+    "errorApplyPattern": "Fehler beim Anwenden des Musters",
+    "noDocuments": "Keine Dokumente",
+    "defaultProcessName": "Prozess",
+    "noNodesData": "Keine Knotendaten zum Regenerieren des Diagramms."
+  },
+  "intelligenceTab": {
+    "noOpenQuestions": "Keine offenen Fragen. Der Prozess ist vollständig oder benötigt ein Audit.",
+    "noQuestionsCategory": "Keine Fragen in dieser Kategorie."
+  },
+  "deliverables": {
+    "noOwner": "Kein Eigentümer",
+    "noDepartment": "Keine Abteilung"
+  },
+  "evaluaciones": {
+    "pageDescription": "Harvard-Fallbewertungen basierend auf Ihren realen Prozessen und Risiken.",
+    "tabs": {
+      "label": "Bewertungsnavigation",
+      "catalog": "Katalog",
+      "dashboard": "Risiko-Dashboard",
+      "progress": "Fortschritt"
+    },
+    "progress": {
+      "title": "Fortschritt & Verbesserung",
+      "description": "Verfolgen Sie, wie sich die Bewertungsergebnisse Ihres Teams im Laufe der Zeit verbessert haben.",
+      "overallProgress": "Gesamtfortschritt",
+      "firstEvaluations": "Erste Bewertungen",
+      "latestEvaluations": "Neueste Bewertungen",
+      "overMonths": "Über {count} Monate Daten",
+      "byProcess": "Fortschritt nach Prozess",
+      "byMember": "Fortschritt nach Teammitglied",
+      "process": "Prozess",
+      "member": "Mitglied",
+      "firstPeriod": "Erste Periode",
+      "latestPeriod": "Letzte Periode",
+      "firstScore": "Erste Punktzahl",
+      "latestScore": "Neueste Punktzahl",
+      "change": "Änderung",
+      "runs": "Durchläufe",
+      "from": "von",
+      "alignment": "Ausrichtung",
+      "riskLevel": "Risikoniveau",
+      "criterio": "Urteilsvermögen",
+      "dimensionTrends": "Dimensionstrends im Zeitverlauf",
+      "insufficientTitle": "Noch nicht genügend Daten",
+      "insufficientDescription": "Mindestens 2 abgeschlossene Bewertungen sind erforderlich, um Fortschritte anzuzeigen. Bitten Sie Ihr Team, mehr Bewertungen abzuschließen.",
+      "goToEvaluations": "Zu Bewertungen"
+    }
+  }
 }

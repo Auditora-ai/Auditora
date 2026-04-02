@@ -309,9 +309,32 @@
       "concernProcess": "¿Qué proceso te preocupa más?",
       "concernProcessPlaceholder": "Ej: Órdenes de compra, Control de calidad...",
       "concernProcessOptional": "Opcional — nos ayuda a sugerir por dónde empezar",
-			"industries": {"manufacturing": "Manufactura", "healthcare": "Salud", "finance": "Finanzas y Banca", "technology": "Tecnología", "retail": "Retail y E-commerce", "logistics": "Logística y Cadena de Suministro", "construction": "Construcción", "education": "Educación", "government": "Gobierno", "food": "Alimentos y Bebidas", "energy": "Energía y Servicios Públicos", "other": "Otro"},
-			"sizes": {"10-50": "10–50 empleados", "51-200": "51–200 empleados", "201-500": "201–500 empleados", "501-1000": "501–1000 empleados"},
-			"targets": {"5": "5 personas", "10-30": "10–30 personas", "31-100": "31–100 personas", "100+": "100+ personas"}
+      "industries": {
+        "manufacturing": "Manufactura",
+        "healthcare": "Salud",
+        "finance": "Finanzas y Banca",
+        "technology": "Tecnología",
+        "retail": "Retail y E-commerce",
+        "logistics": "Logística y Cadena de Suministro",
+        "construction": "Construcción",
+        "education": "Educación",
+        "government": "Gobierno",
+        "food": "Alimentos y Bebidas",
+        "energy": "Energía y Servicios Públicos",
+        "other": "Otro"
+      },
+      "sizes": {
+        "10-50": "10–50 empleados",
+        "51-200": "51–200 empleados",
+        "201-500": "201–500 empleados",
+        "501-1000": "501–1000 empleados"
+      },
+      "targets": {
+        "5": "5 personas",
+        "10-30": "10–30 personas",
+        "31-100": "31–100 personas",
+        "100+": "100+ personas"
+      }
     },
     "firstValue": {
       "title": "Empieza a obtener valor",
@@ -1902,8 +1925,35 @@
     "pageDescription": "Evaluaciones tipo caso Harvard generadas a partir de tus procesos y riesgos reales.",
     "tabs": {
       "label": "Navegación de evaluaciones",
-			"catalog": "Catálogo",
-      "dashboard": "Dashboard de Riesgo"
+      "catalog": "Catálogo",
+      "dashboard": "Dashboard de Riesgo",
+      "progress": "Progreso"
+    },
+    "progress": {
+      "title": "Progreso y Mejora",
+      "description": "Observa cómo han mejorado las puntuaciones de evaluación de tu equipo con el tiempo.",
+      "overallProgress": "Progreso General",
+      "firstEvaluations": "Primeras Evaluaciones",
+      "latestEvaluations": "Últimas Evaluaciones",
+      "overMonths": "Sobre {count} meses de datos",
+      "byProcess": "Progreso por Proceso",
+      "byMember": "Progreso por Miembro del Equipo",
+      "process": "Proceso",
+      "member": "Miembro",
+      "firstPeriod": "Periodo Inicial",
+      "latestPeriod": "Periodo Reciente",
+      "firstScore": "Puntaje Inicial",
+      "latestScore": "Puntaje Actual",
+      "change": "Cambio",
+      "runs": "Ejecuciones",
+      "from": "de",
+      "alignment": "Alineamiento",
+      "riskLevel": "Nivel de Riesgo",
+      "criterio": "Criterio",
+      "dimensionTrends": "Tendencias de Dimensiones en el Tiempo",
+      "insufficientTitle": "Datos insuficientes",
+      "insufficientDescription": "Se necesitan al menos 2 evaluaciones completadas para mostrar progreso. Invita a tu equipo a completar más evaluaciones.",
+      "goToEvaluations": "Ir a Evaluaciones"
     }
   }
 }

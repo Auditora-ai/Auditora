@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { EvaluacionHub } from "@evaluaciones/components/EvaluacionHub";
 import { EvaluacionesTabs } from "@evaluaciones/components/EvaluacionesTabs";
-import { fetchHumanRiskDashboardData } from "@evaluaciones/lib/dashboard-queries";
+import { fetchHumanRiskDashboardData, fetchProgressData } from "@evaluaciones/lib/dashboard-queries";
 
 export async function generateMetadata() {
 	const t = await getTranslations();
@@ -62,9 +62,15 @@ export default async function EvaluacionesPage({
 		take: 10,
 	});
 
-	const dashboardData = await fetchHumanRiskDashboardData(activeOrganization.id);
+	const [dashboardData, progressData] = await Promise.all([
+		fetchHumanRiskDashboardData(activeOrganization.id),
+		fetchProgressData(activeOrganization.id),
+	]);
 
-	const activeTab = tab === "dashboard" ? "dashboard" : "catalog";
+	const validTabs = ["dashboard", "progress"] as const;
+	const activeTab = validTabs.includes(tab as typeof validTabs[number])
+		? (tab as "dashboard" | "progress")
+		: "catalog";
 
 	return (
 		<div className="flex flex-col gap-6 p-6">
@@ -88,6 +94,7 @@ export default async function EvaluacionesPage({
 					/>
 				}
 				dashboardData={dashboardData}
+				progressData={progressData}
 			/>
 		</div>
 	);

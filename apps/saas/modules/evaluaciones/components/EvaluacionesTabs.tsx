@@ -1,23 +1,28 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { GraduationCapIcon, BarChart3Icon } from "lucide-react";
+import { GraduationCapIcon, BarChart3Icon, TrendingUpIcon } from "lucide-react";
 import { cn } from "@repo/ui";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 import { HumanRiskDashboard } from "./HumanRiskDashboard";
-import type { DashboardData } from "@evaluaciones/lib/dashboard-queries";
+import { ProgressDashboard } from "./ProgressDashboard";
+import type { DashboardData, ProgressData } from "@evaluaciones/lib/dashboard-queries";
+
+type TabId = "catalog" | "dashboard" | "progress";
 
 interface EvaluacionesTabsProps {
-	activeTab: "catalog" | "dashboard";
+	activeTab: TabId;
 	organizationSlug: string;
 	catalogContent: React.ReactNode;
 	dashboardData: DashboardData;
+	progressData: ProgressData;
 }
 
 const TABS = [
 	{ id: "catalog" as const, icon: GraduationCapIcon, labelKey: "evaluaciones.tabs.catalog" },
 	{ id: "dashboard" as const, icon: BarChart3Icon, labelKey: "evaluaciones.tabs.dashboard" },
+	{ id: "progress" as const, icon: TrendingUpIcon, labelKey: "evaluaciones.tabs.progress" },
 ];
 
 export function EvaluacionesTabs({
@@ -25,18 +30,19 @@ export function EvaluacionesTabs({
 	organizationSlug,
 	catalogContent,
 	dashboardData,
+	progressData,
 }: EvaluacionesTabsProps) {
 	const t = useTranslations();
 	const router = useRouter();
 	const searchParams = useSearchParams();
 
 	const handleTabChange = useCallback(
-		(tabId: "catalog" | "dashboard") => {
+		(tabId: TabId) => {
 			const params = new URLSearchParams(searchParams.toString());
-			if (tabId === "dashboard") {
-				params.set("tab", "dashboard");
-			} else {
+			if (tabId === "catalog") {
 				params.delete("tab");
+			} else {
+				params.set("tab", tabId);
 			}
 			router.replace(`/${organizationSlug}/evaluaciones?${params.toString()}`);
 		},
@@ -87,6 +93,12 @@ export function EvaluacionesTabs({
 				{activeTab === "dashboard" && (
 					<HumanRiskDashboard
 						data={dashboardData}
+						organizationSlug={organizationSlug}
+					/>
+				)}
+				{activeTab === "progress" && (
+					<ProgressDashboard
+						data={progressData}
 						organizationSlug={organizationSlug}
 					/>
 				)}

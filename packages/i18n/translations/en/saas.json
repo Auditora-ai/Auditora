@@ -309,9 +309,32 @@
       "concernProcess": "Which process worries you the most?",
       "concernProcessPlaceholder": "e.g., Purchase orders, Quality control...",
       "concernProcessOptional": "Optional — helps us suggest where to start",
-      "industries": {"manufacturing": "Manufacturing", "healthcare": "Healthcare", "finance": "Finance & Banking", "technology": "Technology", "retail": "Retail & E-commerce", "logistics": "Logistics & Supply Chain", "construction": "Construction", "education": "Education", "government": "Government", "food": "Food & Beverage", "energy": "Energy & Utilities", "other": "Other"},
-      "sizes": {"10-50": "10–50 employees", "51-200": "51–200 employees", "201-500": "201–500 employees", "501-1000": "501–1000 employees"},
-      "targets": {"5": "5 people", "10-30": "10–30 people", "31-100": "31–100 people", "100+": "100+ people"}
+      "industries": {
+        "manufacturing": "Manufacturing",
+        "healthcare": "Healthcare",
+        "finance": "Finance & Banking",
+        "technology": "Technology",
+        "retail": "Retail & E-commerce",
+        "logistics": "Logistics & Supply Chain",
+        "construction": "Construction",
+        "education": "Education",
+        "government": "Government",
+        "food": "Food & Beverage",
+        "energy": "Energy & Utilities",
+        "other": "Other"
+      },
+      "sizes": {
+        "10-50": "10–50 employees",
+        "51-200": "51–200 employees",
+        "201-500": "201–500 employees",
+        "501-1000": "501–1000 employees"
+      },
+      "targets": {
+        "5": "5 people",
+        "10-30": "10–30 people",
+        "31-100": "31–100 people",
+        "100+": "100+ people"
+      }
     },
     "firstValue": {
       "title": "Start getting value",
@@ -1903,7 +1926,34 @@
     "tabs": {
       "label": "Evaluations navigation",
       "catalog": "Catalog",
-      "dashboard": "Risk Dashboard"
+      "dashboard": "Risk Dashboard",
+      "progress": "Progress"
+    },
+    "progress": {
+      "title": "Progress & Improvement",
+      "description": "Track how your team's evaluation scores have improved over time.",
+      "overallProgress": "Overall Progress",
+      "firstEvaluations": "First Evaluations",
+      "latestEvaluations": "Latest Evaluations",
+      "overMonths": "Over {count} months of data",
+      "byProcess": "Progress by Process",
+      "byMember": "Progress by Team Member",
+      "process": "Process",
+      "member": "Member",
+      "firstPeriod": "First Period",
+      "latestPeriod": "Latest Period",
+      "firstScore": "First Score",
+      "latestScore": "Latest Score",
+      "change": "Change",
+      "runs": "Runs",
+      "from": "from",
+      "alignment": "Alignment",
+      "riskLevel": "Risk Level",
+      "criterio": "Judgment",
+      "dimensionTrends": "Dimension Trends Over Time",
+      "insufficientTitle": "Not enough data yet",
+      "insufficientDescription": "At least 2 completed evaluations are needed to show progress. Have your team complete more evaluations.",
+      "goToEvaluations": "Go to Evaluations"
     }
   }
 }
