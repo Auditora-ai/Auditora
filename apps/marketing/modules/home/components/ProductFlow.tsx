@@ -2,6 +2,7 @@
 
 import { cn } from "@repo/ui";
 import { useTranslations } from "next-intl";
+import { useScrollReveal } from "@shared/hooks/use-scroll-reveal";
 
 const steps = [
 	{ id: "step1", number: "01", titleKey: "title", descKey: "description" },
@@ -14,32 +15,35 @@ const steps = [
 
 export function ProductFlow() {
 	const t = useTranslations("home.productFlow");
+	const { ref, inView } = useScrollReveal();
 
 	return (
-		<section className="py-16 sm:py-20 lg:py-28 bg-[#0A1428]">
+		<section ref={ref} className="py-16 sm:py-20 lg:py-28 bg-[#0A1428]">
 			<div className="container max-w-6xl">
 				{/* Header */}
 				<div className="productflow-header mb-10 sm:mb-14 max-w-3xl mx-auto text-center">
-					<span className="anim-fade-up inline-flex items-center rounded-full bg-[#00E5C0]/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#00E5C0] mb-6">
+					<span className={cn("reveal-fade-up", inView && "is-visible", "badge-pulse inline-flex items-center rounded-full bg-[#00E5C0]/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#00E5C0] mb-6")}>
 						{t("badge")}
 					</span>
-					<h2 className="anim-fade-up anim-d1 font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-white">
+					<h2 className={cn("reveal-fade-up delay-100", inView && "is-visible", "font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-white")}>
 						{t("title")}
 					</h2>
-					<p className="anim-fade-up anim-d2 mt-4 text-[#94A3B8] text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+					<p className={cn("reveal-fade-up delay-200", inView && "is-visible", "mt-4 text-[#94A3B8] text-base sm:text-lg max-w-2xl mx-auto leading-relaxed")}>
 						{t("subtitle")}
 					</p>
 				</div>
 
 				{/* Steps Grid */}
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-					{steps.map((step, index) => (
+				<div className="stagger grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+					{steps.map((step) => (
 						<div
 							key={step.id}
 							className={cn(
-								`anim-fade-up anim-d${index + 1} productflow-card relative rounded-2xl border p-5 sm:p-6 lg:p-8 transition-all duration-300 hover:bg-white/[0.07]`,
+								"card-lift reveal-scale-up",
+								inView && "is-visible",
+								"productflow-card relative rounded-2xl border p-5 sm:p-6 lg:p-8 transition-all duration-300 hover:bg-white/[0.07]",
 								step.id === "step5"
-									? "border-[#00E5C0]/50 bg-[#00E5C0]/5 shadow-lg shadow-[#00E5C0]/5"
+									? "border-gradient-animated border-[#00E5C0]/50 bg-[#00E5C0]/5 shadow-lg shadow-[#00E5C0]/5"
 									: "border-white/10 bg-white/5 backdrop-blur-sm hover:border-[#00E5C0]/20",
 							)}
 						>
@@ -67,7 +71,7 @@ export function ProductFlow() {
 
 							{/* Star badge for Simulate */}
 							{step.id === "step5" && (
-								<span className="absolute top-4 right-4 inline-flex items-center gap-1 rounded-full bg-[#00E5C0]/20 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#00E5C0]">
+								<span className="absolute top-4 right-4 inline-flex items-center gap-1 rounded-full bg-[#00E5C0]/20 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#00E5C0] badge-pulse">
 									★ {t("starFeature")}
 								</span>
 							)}

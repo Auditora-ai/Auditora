@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { SplitWords } from "@shared/components/SplitWords";
 import { cn } from "@repo/ui";
+import { useScrollReveal } from "@shared/hooks/use-scroll-reveal";
 
 const steps = [
   {
@@ -24,27 +25,29 @@ const steps = [
 
 export function HowItWorks() {
   const t = useTranslations("home.howItWorks");
+  const { ref, inView } = useScrollReveal();
 
   return (
     <section
-      className="relative py-24 px-6"
+      ref={ref}
+      className="relative py-24 px-6 bg-grid-dense"
       id="how-it-works"
     >
       <div className="mx-auto max-w-5xl">
         {/* Header */}
         <div className="mb-16 text-center">
-          <span className="anim-fade-up mb-4 inline-block rounded-full border border-[#00E5C0]/20 bg-[#00E5C0]/5 px-4 py-1.5 text-xs font-medium text-[#00E5C0]">
+          <span className={cn("reveal-fade-up", inView && "is-visible", "mb-4 inline-block rounded-full border border-[#00E5C0]/20 bg-[#00E5C0]/5 px-4 py-1.5 text-xs font-medium text-[#00E5C0]")}>
             {t("badge")}
           </span>
-          <h2 className="anim-fade-up anim-d1 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+          <h2 className={cn("reveal-fade-up delay-100", inView && "is-visible", "text-3xl font-bold tracking-tight text-white sm:text-4xl")}>
             <SplitWords>{t("title")}</SplitWords>
           </h2>
         </div>
 
         {/* Steps */}
-        <div className="flex flex-col items-center gap-12 md:flex-row md:gap-0">
+        <div className="stagger flex flex-col items-center gap-12 md:flex-row md:gap-0">
           {steps.map((step, index) => (
-            <div key={step.number} className={`anim-fade-up anim-d${index + 1} flex items-center md:flex-1`}>
+            <div key={step.number} className={cn("reveal-fade-up", inView && "is-visible", "flex items-center md:flex-1")}>
               {/* Step card */}
               <div className="flex flex-col items-center text-center md:w-full">
                 {/* Number circle */}

@@ -35,17 +35,17 @@ export function HeroSection() {
 	}
 
 	return (
-		<section className="relative overflow-hidden">
-			{/* Background glows */}
+		<section className="bg-grid relative overflow-hidden">
+			{/* ── Background orbs ── */}
 			<div
 				className="pointer-events-none absolute inset-0"
 				aria-hidden="true"
 			>
-				<div className="absolute -top-40 -right-40 h-[600px] w-[600px] rounded-full bg-[#00E5C0]/20 blur-[120px]" />
-				<div className="absolute -bottom-40 -left-40 h-[400px] w-[400px] rounded-full bg-[#00E5C0]/10 blur-[100px]" />
+				<div className="orb absolute -top-40 -right-40 h-[600px] w-[600px] rounded-full bg-[#00E5C0]/20 blur-[120px]" />
+				<div className="orb-slow absolute -bottom-40 -left-40 h-[400px] w-[400px] rounded-full bg-[#00E5C0]/10 blur-[100px]" />
 			</div>
 
-			{/* Animated BPMN diagram background — hidden on mobile */}
+			{/* ── Animated BPMN diagram background — hidden on mobile ── */}
 			<div className="pointer-events-none hidden md:block" aria-hidden="true">
 				<BpmnHeroBackground />
 			</div>
@@ -55,10 +55,10 @@ export function HeroSection() {
 					{/* ── Left Column: Text Content ── */}
 					<div className="text-center lg:text-left">
 						{/* Badge pill */}
-						<div className="anim-fade-up mb-6 flex justify-center lg:justify-start">
+						<div className="mb-6 flex justify-center lg:justify-start">
 							<div
 								className={cn(
-									"inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-medium",
+									"badge-pulse inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-medium",
 									"border-[#00E5C0]/20 bg-[#00E5C0]/10 text-[#00E5C0]",
 								)}
 							>
@@ -66,7 +66,7 @@ export function HeroSection() {
 							</div>
 						</div>
 
-						{/* Headline */}
+						{/* Headline — 3D word-by-word reveal */}
 						<h1
 							className={cn(
 								"font-display text-4xl md:text-5xl lg:text-6xl leading-[1.08] text-white",
@@ -74,7 +74,7 @@ export function HeroSection() {
 							)}
 							style={{ perspective: "600px" }}
 						>
-							<SplitWords innerClassName="hero-word-inner">
+							<SplitWords innerClassName="hero-word-reveal">
 								{t("title")}
 							</SplitWords>
 						</h1>
@@ -82,7 +82,7 @@ export function HeroSection() {
 						{/* Subtitle */}
 						<p
 							className={cn(
-								"anim-fade-up anim-d2 mt-6 text-base sm:text-lg lg:text-xl max-w-xl",
+								"reveal-fade-up is-visible delay-200 mt-6 text-base sm:text-lg lg:text-xl max-w-xl",
 								"mx-auto lg:mx-0 leading-relaxed text-[#94A3B8]",
 							)}
 						>
@@ -90,7 +90,7 @@ export function HeroSection() {
 						</p>
 
 						{/* URL Input area */}
-						<div className="anim-fade-up anim-d3 mt-8 sm:mt-10 mx-auto lg:mx-0 max-w-xl">
+						<div className="reveal-fade-up is-visible delay-300 mt-8 sm:mt-10 mx-auto lg:mx-0 max-w-xl">
 							<div
 								className={cn(
 									"flex flex-col gap-2 rounded-xl border border-white/10 bg-white/5 p-2 backdrop-blur-sm",
@@ -147,10 +147,18 @@ export function HeroSection() {
 					</div>
 
 					{/* ── Right Column: Product Mockup ── */}
-					<div className="anim-scale-up anim-d4 hidden lg:block">
+					<div className="reveal-scale-up is-visible delay-500 hidden lg:block">
+						{/* Radial gradient glow behind mockup */}
+						<div
+							className="pointer-events-none absolute -inset-4 -z-10"
+							aria-hidden="true"
+						>
+							<div className="absolute inset-0 rounded-3xl bg-[radial-gradient(ellipse_at_center,rgba(0,229,192,0.12)_0%,transparent_70%)]" />
+						</div>
+
 						<div
 							className={cn(
-								"relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm",
+								"card-lift relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm",
 								"shadow-2xl shadow-[#00E5C0]/5",
 							)}
 						>

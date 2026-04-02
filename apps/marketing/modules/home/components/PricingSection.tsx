@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo } from "react";
+import { useScrollReveal } from "@shared/hooks/use-scroll-reveal";
 
 const PLAN_IDS = ["starter", "growth", "scale", "enterprise"] as const;
 
@@ -45,6 +46,7 @@ const PLAN_STYLES = {
 
 export function PricingSection() {
 	const t = useTranslations();
+	const { ref, inView } = useScrollReveal();
 
 	const signupUrl = useMemo(
 		() =>
@@ -54,26 +56,49 @@ export function PricingSection() {
 	);
 
 	return (
-		<section id="pricing" className="scroll-mt-16 py-16 sm:py-20 lg:py-28 bg-[#0A1428]">
-			<div className="container max-w-6xl">
+		<section
+			ref={ref}
+			id="pricing"
+			className="scroll-mt-16 py-16 sm:py-20 lg:py-28 bg-[#0A1428] relative overflow-hidden"
+		>
+			{/* Floating orbs for depth */}
+			<div className="pointer-events-none absolute -top-20 left-1/4 size-72 rounded-full bg-[#00E5C0]/[0.04] blur-3xl orb orb-slow" />
+			<div className="pointer-events-none absolute -bottom-32 right-1/4 size-96 rounded-full bg-[#00E5C0]/[0.03] blur-3xl orb" />
+
+			<div className="container relative max-w-6xl">
 				{/* Header */}
-				<div className="anim-fade-up mb-4 max-w-3xl mx-auto text-center">
-					<div className="inline-flex items-center gap-2 rounded-full border border-[#00E5C0]/30 bg-[#00E5C0]/10 px-4 py-1.5 mb-6">
+				<div className="text-center">
+					<div
+						className={cn(
+							"reveal-fade-up mb-4 inline-flex items-center gap-2 rounded-full border border-[#00E5C0]/30 bg-[#00E5C0]/10 px-4 py-1.5",
+							inView && "is-visible",
+						)}
+					>
 						<ZapIcon className="size-3.5 text-[#00E5C0]" strokeWidth={2} />
-						<span className="text-xs font-medium uppercase tracking-widest text-[#00E5C0]">
+						<span className="badge-pulse text-xs font-medium uppercase tracking-widest text-[#00E5C0]">
 							Pricing
 						</span>
 					</div>
+					<h2
+						className={cn(
+							"reveal-fade-up delay-100 font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-white max-w-3xl mx-auto text-center leading-tight",
+							inView && "is-visible",
+						)}
+					>
+						{t("pricing.title")}
+					</h2>
+					<p
+						className={cn(
+							"reveal-fade-up delay-200 mt-4 text-[#94A3B8] text-sm sm:text-base max-w-xl mx-auto text-center leading-relaxed",
+							inView && "is-visible",
+						)}
+					>
+						{t("pricing.subtitle")}
+					</p>
 				</div>
-				<h2 className="anim-fade-up anim-d1 font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-white max-w-3xl mx-auto text-center leading-tight">
-					{t("pricing.title")}
-				</h2>
-				<p className="anim-fade-up anim-d2 mt-4 text-[#94A3B8] text-sm sm:text-base max-w-xl mx-auto text-center leading-relaxed">
-					{t("pricing.subtitle")}
-				</p>
 
 				{/* Plans grid */}
-				<div className="mt-14 sm:mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 items-start">
+				<div className="stagger mt-14 sm:mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 items-start">
 					{PLAN_IDS.map((planId, index) => {
 						const metrics = PLAN_METRICS[planId];
 						const styles = PLAN_STYLES[planId];
@@ -89,19 +114,25 @@ export function PricingSection() {
 							<div
 								key={planId}
 								className={cn(
-									"anim-fade-up relative rounded-2xl border p-6 lg:p-7 transition-all",
+									"reveal-scale-up relative rounded-2xl border p-6 lg:p-7 transition-all card-lift",
 									styles.card,
 									isRecommended && "lg:-mt-3 lg:mb-3",
+									inView && "is-visible",
 								)}
 								style={{ animationDelay: `${(index + 3) * 80}ms` }}
 							>
+								{/* Animated gradient border for growth plan */}
+								{isRecommended && (
+									<div className="pointer-events-none absolute inset-0 rounded-2xl border-gradient-animated" />
+								)}
+
 								{isRecommended && (
 									<div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#00E5C0] px-3.5 py-1 text-xs font-semibold text-[#0A1428]">
 										{t("pricing.recommended")}
 									</div>
 								)}
 
-								<div className="flex flex-col h-full">
+								<div className="relative flex flex-col h-full">
 									{/* Plan name + description */}
 									<h3 className="text-lg font-semibold text-white">
 										{t(`pricing.products.${planId}.title`)}
@@ -112,7 +143,13 @@ export function PricingSection() {
 
 									{/* Key metrics row */}
 									<div className="mt-5 flex items-baseline gap-4">
-										<span className={cn("font-display text-3xl sm:text-4xl font-bold tracking-tight", styles.price)}>
+										<span
+											className={cn(
+												"font-display text-3xl sm:text-4xl font-bold tracking-tight",
+												styles.price,
+												isRecommended && "text-gradient-static",
+											)}
+										>
 											{t(`pricing.products.${planId}.price`)}
 										</span>
 										<span className="text-sm text-[#64748B]">

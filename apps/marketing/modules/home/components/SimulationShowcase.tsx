@@ -2,6 +2,7 @@
 
 import { cn } from "@repo/ui";
 import { SplitWords } from "@shared/components/SplitWords";
+import { useScrollReveal } from "@shared/hooks/use-scroll-reveal";
 import {
 	Brain,
 	MapPin,
@@ -29,30 +30,32 @@ const OPTIONS = ["A", "B", "C"] as const;
 export function SimulationShowcase() {
 	const t = useTranslations("home.simulation");
 	const [selectedOption, setSelectedOption] = useState<"A" | "B" | "C" | null>(null);
+	const { ref, inView } = useScrollReveal();
 
 	return (
 		<section
+			ref={ref}
 			id="simulation"
 			className="py-16 sm:py-20 lg:py-28 bg-[#0A1428] text-white"
 		>
 			<div className="container max-w-6xl">
 				{/* Header */}
 				<div className="sim-header mb-10 sm:mb-16 max-w-3xl mx-auto text-center">
-					<div className="anim-fade-up inline-flex items-center gap-2 rounded-full border border-[#00E5C0]/30 bg-[#00E5C0]/10 px-4 py-1.5 mb-6">
+					<div className={cn("reveal-fade-up", inView && "is-visible", "inline-flex items-center gap-2 rounded-full border border-[#00E5C0]/30 bg-[#00E5C0]/10 px-4 py-1.5 mb-6")}>
 						<Sparkles className="size-3.5 text-[#00E5C0]" strokeWidth={2} />
 						<span className="text-xs font-medium uppercase tracking-widest text-[#00E5C0]">
 							{t("badge")}
 						</span>
 					</div>
 					<h2
-						className="anim-fade-up anim-d1 font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-white text-balance"
+						className={cn("reveal-fade-up delay-100", inView && "is-visible", "font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-white text-balance")}
 						style={{ perspective: "600px" }}
 					>
 						<SplitWords innerClassName="sim-word-inner">
 							{t("title")}
 						</SplitWords>
 					</h2>
-					<p className="anim-fade-up anim-d2 mt-4 sm:mt-6 text-[#94A3B8] text-sm sm:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed">
+					<p className={cn("reveal-fade-up delay-200", inView && "is-visible", "mt-4 sm:mt-6 text-[#94A3B8] text-sm sm:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed")}>
 						{t("subtitle")}
 					</p>
 				</div>
@@ -60,7 +63,7 @@ export function SimulationShowcase() {
 				{/* Two-column layout */}
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
 					{/* LEFT: Interactive scenario mockup */}
-					<div className="anim-fade-up anim-d3 sim-scenario-card">
+					<div className={cn("reveal-slide-left delay-200", inView && "is-visible", "sim-scenario-card")}>
 						<div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm overflow-hidden">
 							{/* Top bar — progress indicator */}
 							<div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-3">
@@ -104,7 +107,7 @@ export function SimulationShowcase() {
 
 							{/* Options */}
 							<div className="px-5 sm:px-6 pb-6 pt-4 space-y-2.5">
-								{OPTIONS.map((letter, i) => (
+								{OPTIONS.map((letter) => (
 									<button
 										key={letter}
 										type="button"
@@ -144,13 +147,14 @@ export function SimulationShowcase() {
 					</div>
 
 					{/* RIGHT: Feature cards */}
-					<div className="space-y-4">
-						{features.map(({ id, icon: Icon }, index) => (
+					<div className="stagger space-y-4">
+						{features.map(({ id, icon: Icon }) => (
 							<div
 								key={id}
 								className={cn(
+									"reveal-slide-right card-lift",
+									inView && "is-visible",
 									"sim-feature-card group rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 sm:p-6 transition-all duration-300 hover:border-[#00E5C0]/20 hover:bg-[#00E5C0]/[0.02]",
-									`anim-fade-up anim-d${4 + index}`,
 								)}
 							>
 								<div className="flex items-start gap-4">
