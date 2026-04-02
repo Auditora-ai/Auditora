@@ -58,6 +58,47 @@
 	--muted-foreground: #64748B;
 }
 
+/* Landing scroll-triggered reveal animations */
+@keyframes landingFadeUp {
+	from { opacity: 0; transform: translateY(28px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes landingFadeIn {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+
+@keyframes landingScaleUp {
+	from { opacity: 0; transform: scale(0.85); }
+	to { opacity: 1; transform: scale(1); }
+}
+
+[data-landing] .anim-fade-up {
+	opacity: 0;
+	animation: landingFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+[data-landing] .anim-fade-in {
+	opacity: 0;
+	animation: landingFadeIn 0.6s ease-out forwards;
+}
+
+[data-landing] .anim-scale-up {
+	opacity: 0;
+	animation: landingScaleUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Stagger delays */
+[data-landing] .anim-d1 { animation-delay: 80ms; }
+[data-landing] .anim-d2 { animation-delay: 160ms; }
+[data-landing] .anim-d3 { animation-delay: 240ms; }
+[data-landing] .anim-d4 { animation-delay: 320ms; }
+[data-landing] .anim-d5 { animation-delay: 400ms; }
+[data-landing] .anim-d6 { animation-delay: 480ms; }
+[data-landing] .anim-d7 { animation-delay: 560ms; }
+[data-landing] .anim-d8 { animation-delay: 640ms; }
+
 /* Waveform animation for product demo */
 @keyframes waveform {
 	0%, 100% { transform: scaleY(0.3); }

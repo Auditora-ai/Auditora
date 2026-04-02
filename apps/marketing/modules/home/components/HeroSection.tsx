@@ -1,13 +1,11 @@
 "use client";
 
 import { config } from "@config";
-import { useGSAP } from "@gsap/react";
 import { Button, cn } from "@repo/ui";
 import { SplitWords } from "@shared/components/SplitWords";
-import gsap from "gsap";
 import { ArrowRightIcon, SearchIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { BpmnHeroBackground } from "./BpmnHeroBackground";
 
 const MOCKUP_STEPS = [
@@ -21,7 +19,6 @@ const MOCKUP_STEPS = [
 
 export function HeroSection() {
 	const t = useTranslations("home.hero");
-	const sectionRef = useRef<HTMLElement>(null);
 	const [url, setUrl] = useState("");
 
 	function handleSubmit() {
@@ -30,7 +27,6 @@ export function HeroSection() {
 			window.location.href = `${config.saasUrl}/scan?ref=hero`;
 			return;
 		}
-		// Strip any existing protocol to avoid duplication
 		finalUrl = finalUrl.replace(/^(https?:\/\/)+/i, "");
 		finalUrl = finalUrl.replace(/\/+$/, "");
 		finalUrl = `https://${finalUrl}`;
@@ -38,95 +34,8 @@ export function HeroSection() {
 		window.location.href = `${config.saasUrl}/scan?url=${encoded}&ref=hero`;
 	}
 
-	useGSAP(
-		() => {
-			if (!sectionRef.current) return;
-
-			const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
-
-			// 0s — Badge: clip-path horizontal wipe
-			tl.from(".hero-badge", {
-				clipPath: "inset(0 100% 0 0)",
-				duration: 0.6,
-				ease: "power2.inOut",
-			});
-
-			// 0.3s — Title words stagger in
-			tl.from(
-				".hero-word-inner",
-				{
-					y: "100%",
-					rotateX: 8,
-					duration: 1.0,
-					stagger: 0.04,
-				},
-				0.3,
-			);
-
-			// 0.8s — Subtitle blur-fade
-			tl.from(
-				".hero-subtitle",
-				{
-					opacity: 0,
-					filter: "blur(10px)",
-					duration: 0.8,
-					ease: "power3.out",
-				},
-				0.8,
-			);
-
-			// 1.1s — Input card slides up
-			tl.from(
-				".hero-input-group",
-				{
-					opacity: 0,
-					y: 30,
-					duration: 0.7,
-					ease: "back.out(1.2)",
-				},
-				1.1,
-			);
-
-			// 1.3s — Subtext fade
-			tl.from(
-				".hero-subtext",
-				{
-					opacity: 0,
-					duration: 0.5,
-					ease: "power2.out",
-				},
-				1.3,
-			);
-
-			// 1.4s — Secondary link fade
-			tl.from(
-				".hero-secondary-link",
-				{
-					opacity: 0,
-					duration: 0.4,
-					ease: "power2.out",
-				},
-				1.4,
-			);
-
-			// 0.5s — Mockup scales in (parallel with title)
-			tl.from(
-				".hero-mockup",
-				{
-					opacity: 0,
-					scale: 0.95,
-					y: 30,
-					duration: 0.9,
-					ease: "power3.out",
-				},
-				0.5,
-			);
-		},
-		{ scope: sectionRef },
-	);
-
 	return (
-		<section ref={sectionRef} className="relative overflow-hidden">
+		<section className="relative overflow-hidden">
 			{/* Background glows */}
 			<div
 				className="pointer-events-none absolute inset-0"
@@ -146,10 +55,7 @@ export function HeroSection() {
 					{/* ── Left Column: Text Content ── */}
 					<div className="text-center lg:text-left">
 						{/* Badge pill */}
-						<div
-							className="hero-badge mb-6 flex justify-center lg:justify-start"
-							style={{ clipPath: "inset(0 0% 0 0)" }}
-						>
+						<div className="anim-fade-up mb-6 flex justify-center lg:justify-start">
 							<div
 								className={cn(
 									"inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-medium",
@@ -176,7 +82,7 @@ export function HeroSection() {
 						{/* Subtitle */}
 						<p
 							className={cn(
-								"hero-subtitle mt-6 text-base sm:text-lg lg:text-xl max-w-xl",
+								"anim-fade-up anim-d2 mt-6 text-base sm:text-lg lg:text-xl max-w-xl",
 								"mx-auto lg:mx-0 leading-relaxed text-[#94A3B8]",
 							)}
 						>
@@ -184,7 +90,7 @@ export function HeroSection() {
 						</p>
 
 						{/* URL Input area */}
-						<div className="hero-input-group mt-8 sm:mt-10 mx-auto lg:mx-0 max-w-xl">
+						<div className="anim-fade-up anim-d3 mt-8 sm:mt-10 mx-auto lg:mx-0 max-w-xl">
 							<div
 								className={cn(
 									"flex flex-col gap-2 rounded-xl border border-white/10 bg-white/5 p-2 backdrop-blur-sm",
@@ -222,7 +128,7 @@ export function HeroSection() {
 							</div>
 
 							{/* Subtext */}
-							<p className="hero-subtext mt-3 text-sm text-white/50">
+							<p className="mt-3 text-sm text-white/50">
 								{t("subtext")}
 							</p>
 
@@ -230,7 +136,7 @@ export function HeroSection() {
 							<a
 								href={`${config.saasUrl}/scan?mode=text&ref=hero`}
 								className={cn(
-									"hero-secondary-link mt-2 inline-flex items-center gap-1 text-sm transition-colors",
+									"mt-2 inline-flex items-center gap-1 text-sm transition-colors",
 									"text-white/40 hover:text-[#00E5C0]/70",
 								)}
 							>
@@ -241,7 +147,7 @@ export function HeroSection() {
 					</div>
 
 					{/* ── Right Column: Product Mockup ── */}
-					<div className="hero-mockup hidden lg:block">
+					<div className="anim-scale-up anim-d4 hidden lg:block">
 						<div
 							className={cn(
 								"relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm",

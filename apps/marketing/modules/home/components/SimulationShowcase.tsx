@@ -1,23 +1,17 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
 import { cn } from "@repo/ui";
 import { SplitWords } from "@shared/components/SplitWords";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
 	Brain,
 	MapPin,
 	Users,
 	BarChart3,
 	Sparkles,
-	CircleDot,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useRef } from "react";
+import { useState } from "react";
 import type { LucideIcon } from "lucide-react";
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface Feature {
 	id: string;
@@ -34,81 +28,31 @@ const OPTIONS = ["A", "B", "C"] as const;
 
 export function SimulationShowcase() {
 	const t = useTranslations("home.simulation");
-	const sectionRef = useRef<HTMLElement>(null);
-
-	useGSAP(
-		() => {
-			if (!sectionRef.current) return;
-
-			const tl = gsap.timeline({
-				scrollTrigger: {
-					trigger: sectionRef.current,
-					start: "top 80%",
-					once: true,
-				},
-			});
-
-			// Header reveal
-			tl.from(".sim-header > *", {
-				opacity: 0,
-				y: 30,
-				stagger: 0.1,
-				duration: 0.7,
-				ease: "power3.out",
-			});
-
-			// Scenario card slides in from left
-			tl.from(
-				".sim-scenario-card",
-				{
-					opacity: 0,
-					x: -60,
-					duration: 0.9,
-					ease: "power3.out",
-				},
-				"-=0.3",
-			);
-
-			// Feature cards slide in from right
-			tl.from(
-				".sim-feature-card",
-				{
-					opacity: 0,
-					x: 60,
-					stagger: 0.15,
-					duration: 0.7,
-					ease: "power3.out",
-				},
-				"-=0.5",
-			);
-		},
-		{ scope: sectionRef },
-	);
+	const [selectedOption, setSelectedOption] = useState<"A" | "B" | "C" | null>(null);
 
 	return (
 		<section
-			ref={sectionRef}
 			id="simulation"
 			className="py-16 sm:py-20 lg:py-28 bg-[#0A1428] text-white"
 		>
 			<div className="container max-w-6xl">
 				{/* Header */}
 				<div className="sim-header mb-10 sm:mb-16 max-w-3xl mx-auto text-center">
-					<div className="inline-flex items-center gap-2 rounded-full border border-[#00E5C0]/30 bg-[#00E5C0]/10 px-4 py-1.5 mb-6">
+					<div className="anim-fade-up inline-flex items-center gap-2 rounded-full border border-[#00E5C0]/30 bg-[#00E5C0]/10 px-4 py-1.5 mb-6">
 						<Sparkles className="size-3.5 text-[#00E5C0]" strokeWidth={2} />
 						<span className="text-xs font-medium uppercase tracking-widest text-[#00E5C0]">
 							{t("badge")}
 						</span>
 					</div>
 					<h2
-						className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-white text-balance"
+						className="anim-fade-up anim-d1 font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-white text-balance"
 						style={{ perspective: "600px" }}
 					>
 						<SplitWords innerClassName="sim-word-inner">
 							{t("title")}
 						</SplitWords>
 					</h2>
-					<p className="mt-4 sm:mt-6 text-[#94A3B8] text-sm sm:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed">
+					<p className="anim-fade-up anim-d2 mt-4 sm:mt-6 text-[#94A3B8] text-sm sm:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed">
 						{t("subtitle")}
 					</p>
 				</div>
@@ -116,7 +60,7 @@ export function SimulationShowcase() {
 				{/* Two-column layout */}
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
 					{/* LEFT: Interactive scenario mockup */}
-					<div className="sim-scenario-card">
+					<div className="anim-fade-up anim-d3 sim-scenario-card">
 						<div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm overflow-hidden">
 							{/* Top bar — progress indicator */}
 							<div className="flex items-center justify-between border-b border-white/[0.06] px-5 py-3">
@@ -164,15 +108,21 @@ export function SimulationShowcase() {
 									<button
 										key={letter}
 										type="button"
+										onClick={() => setSelectedOption(letter)}
 										className={cn(
-											"group flex items-start gap-3 w-full rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3.5 text-left transition-all duration-200",
-											"hover:border-[#00E5C0]/30 hover:bg-[#00E5C0]/[0.04] cursor-pointer",
+											"group flex items-start gap-3 w-full rounded-xl border px-4 py-3.5 text-left transition-all duration-200",
+											selectedOption === letter
+												? "border-[#00E5C0]/50 bg-[#00E5C0]/10"
+												: "border-white/[0.06] bg-white/[0.02] hover:border-[#00E5C0]/30 hover:bg-[#00E5C0]/[0.04]",
+											"cursor-pointer",
 										)}
 									>
 										<span
 											className={cn(
 												"flex size-7 shrink-0 items-center justify-center rounded-lg border text-xs font-bold transition-colors duration-200",
-												"border-white/[0.1] bg-white/[0.05] text-[#94A3B8] group-hover:border-[#00E5C0]/40 group-hover:bg-[#00E5C0]/10 group-hover:text-[#00E5C0]",
+												selectedOption === letter
+													? "border-[#00E5C0] bg-[#00E5C0] text-[#0A1428]"
+													: "border-white/[0.1] bg-white/[0.05] text-[#94A3B8] group-hover:border-[#00E5C0]/40 group-hover:bg-[#00E5C0]/10 group-hover:text-[#00E5C0]",
 											)}
 										>
 											{letter}
@@ -182,16 +132,26 @@ export function SimulationShowcase() {
 										</span>
 									</button>
 								))}
+
+								{/* Feedback message */}
+								{selectedOption && (
+									<p className="text-xs text-[#00E5C0] pt-1 pl-1">
+										✓ Answer recorded — this is a demo preview
+									</p>
+								)}
 							</div>
 						</div>
 					</div>
 
 					{/* RIGHT: Feature cards */}
 					<div className="space-y-4">
-						{features.map(({ id, icon: Icon }) => (
+						{features.map(({ id, icon: Icon }, index) => (
 							<div
 								key={id}
-								className="sim-feature-card group rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 sm:p-6 transition-all duration-300 hover:border-[#00E5C0]/20 hover:bg-[#00E5C0]/[0.02]"
+								className={cn(
+									"sim-feature-card group rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 sm:p-6 transition-all duration-300 hover:border-[#00E5C0]/20 hover:bg-[#00E5C0]/[0.02]",
+									`anim-fade-up anim-d${4 + index}`,
+								)}
 							>
 								<div className="flex items-start gap-4">
 									<div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-[#00E5C0]/10 border border-[#00E5C0]/20">

@@ -1,50 +1,14 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { config } from "@config";
 import { useTranslations } from "next-intl";
-import { useGSAP } from "@gsap/react";
 import { SplitWords } from "@shared/components/SplitWords";
 import { Button, cn } from "@repo/ui";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 export function FinalCta() {
   const t = useTranslations("home.finalCta");
-  const containerRef = useRef<HTMLDivElement>(null);
   const [url, setUrl] = useState("");
-
-  useGSAP(() => {
-    if (!containerRef.current) return;
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top 80%",
-        once: true,
-      },
-    });
-
-    tl.from(".final-cta-inner", {
-      y: 50,
-      opacity: 0,
-      duration: 0.9,
-      ease: "power3.out",
-    });
-
-    tl.from(
-      ".final-cta-card",
-      {
-        y: 30,
-        opacity: 0,
-        duration: 0.7,
-        ease: "power3.out",
-      },
-      "-=0.5",
-    );
-  }, { scope: containerRef });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,7 +18,6 @@ export function FinalCta() {
 
   return (
     <section
-      ref={containerRef}
       className="relative overflow-hidden py-24 px-6"
       id="cta"
     >
@@ -63,18 +26,18 @@ export function FinalCta() {
 
       <div className="relative mx-auto max-w-2xl text-center">
         {/* Title */}
-        <div className="final-cta-inner">
-          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+        <div>
+          <h2 className="anim-fade-up anim-d1 text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
             <SplitWords>{t("title")}</SplitWords>
           </h2>
 
-          <p className="mx-auto mt-5 max-w-lg text-base leading-relaxed text-white/50">
+          <p className="anim-fade-up anim-d2 mx-auto mt-5 max-w-lg text-base leading-relaxed text-white/50">
             {t("subtitle")}
           </p>
         </div>
 
         {/* Glass card with input */}
-        <div className="final-cta-card mt-10">
+        <div className="anim-fade-up anim-d3 mt-10">
           <form
             onSubmit={handleSubmit}
             className={cn(
