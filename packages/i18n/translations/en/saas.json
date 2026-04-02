@@ -90,7 +90,8 @@
       "evaluaciones": "Evaluations",
       "evaluation": "Evaluation",
       "workflow": "Workflow",
-      "workspace": "Workspace"
+      "workspace": "Workspace",
+      "more": "More"
     },
     "greeting": {
       "morning": "Good morning",
