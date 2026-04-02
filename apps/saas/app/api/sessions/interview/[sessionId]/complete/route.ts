@@ -20,7 +20,7 @@ import type { KnowledgeSnapshot } from "@repo/ai";
 import { auth } from "@repo/auth";
 import { sendEmail } from "@repo/mail";
 import { headers } from "next/headers";
-import { buildBpmnXml } from "@meeting/lib/bpmn-builder";
+import { buildBpmnXml } from "@repo/process-engine";
 import type { DiagramNode } from "@meeting/types";
 import type { ChatMessage } from "@ai-interview/lib/interview-types";
 import { setInterviewProgress, type InterviewProgress } from "./progress";

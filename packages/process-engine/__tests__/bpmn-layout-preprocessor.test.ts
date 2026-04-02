@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
 import ELK from "elkjs/lib/elk.bundled.js";
-import { preprocessForElk, assignLaneYPositions } from "../bpmn-layout-preprocessor";
-import { ELK_BPMN_CONFIG } from "../layout-constants";
-import type { DiagramNode } from "../../types";
+import { preprocessForElk, assignLaneYPositions } from "../lib/bpmn-layout-preprocessor";
+import { ELK_BPMN_CONFIG } from "../lib/layout-constants";
+import type { DiagramNode } from "../types";
 
 function makeNode(overrides: Partial<DiagramNode> & { id: string }): DiagramNode {
 	return {

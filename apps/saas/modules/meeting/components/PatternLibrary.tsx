@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { ChevronDownIcon, ChevronRightIcon, ZapIcon, PlusIcon, Loader2Icon } from "lucide-react";
 import { toast } from "sonner";
-import type { DiagramNode } from "../types";
+import type { DiagramNode } from "@repo/process-engine";
 import { detectPatterns, type ProcessPattern } from "../lib/patterns";
 import { useTranslations } from "next-intl";
 import { useLiveSessionContext } from "../context/LiveSessionContext";

@@ -10,7 +10,7 @@
  * 4. Generate XML with Collaboration/Pool/Lanes + DI from ELK coordinates
  */
 
-import type { DiagramNode } from "../types";
+import type { DiagramNode } from "../types/index";
 import { escapeHtml as esc } from "./html-utils";
 import ELK from "elkjs/lib/elk.bundled.js";
 import { ELK_BPMN_CONFIG, LANE_H, bpmnTag, dims, bpmnType } from "./layout-constants";

@@ -11,7 +11,7 @@
  * Validated via spike tests (elk-port-spike.test.ts).
  */
 
-import type { DiagramNode } from "../types";
+import type { DiagramNode } from "../types/index";
 import { dims, bpmnTag } from "./layout-constants";
 
 // ─── Types ────────────────────────────────────────────────────────────

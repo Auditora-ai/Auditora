@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { buildBpmnXml, bpmnTag, dims, bpmnType } from "../bpmn-builder";
-import type { DiagramNode } from "../../types";
+import { buildBpmnXml, bpmnTag, dims, bpmnType } from "../lib/bpmn-builder";
+import type { DiagramNode } from "../types";
 
 // ─── Helper ───────────────────────────────────────────────────────────
 function makeNode(

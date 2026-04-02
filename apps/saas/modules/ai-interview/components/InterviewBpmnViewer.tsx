@@ -35,7 +35,7 @@ export function InterviewBpmnViewer({ bpmnXml, className }: InterviewBpmnViewerP
 
 				// Apply Bizagi-style colors
 				try {
-					const { applyBizagiColors } = await import("@meeting/lib/bpmn-colors");
+					const { applyBizagiColors } = await import("@repo/process-engine");
 					applyBizagiColors(viewer);
 				} catch {
 					// Colors are optional — diagram still shows without them

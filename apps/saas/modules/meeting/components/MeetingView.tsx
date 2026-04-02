@@ -8,7 +8,7 @@ import { useBpmnModeler } from "../hooks/useBpmnModeler";
 import { useLiveSession } from "../hooks/useLiveSession";
 import { useKeyboardShortcuts, type ShortcutDef } from "../hooks/useKeyboardShortcuts";
 import { LiveSessionProvider, type LiveSessionContextValue, type PropertyTab, type LayoutMode } from "../context/LiveSessionContext";
-import { exportSVG, exportPNG, exportXML } from "../lib/bpmn-export";
+import { exportSVG, exportPNG, exportXML } from "@repo/process-engine";
 import { TopBar } from "./TopBar";
 import { LeftPanel } from "./LeftPanel";
 import { CentralCanvas } from "./CentralCanvas";

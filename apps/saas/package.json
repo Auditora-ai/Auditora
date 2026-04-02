@@ -23,6 +23,7 @@
 		"@repo/logs": "workspace:*",
 		"@repo/mail": "workspace:*",
 		"@repo/payments": "workspace:*",
+		"@repo/process-engine": "workspace:*",
 		"@repo/rate-limit": "workspace:*",
 		"@repo/storage": "workspace:*",
 		"@repo/ui": "workspace:*",

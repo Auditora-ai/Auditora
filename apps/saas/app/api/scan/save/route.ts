@@ -114,7 +114,7 @@ export async function POST(request: NextRequest) {
 		let bpmnXml: string | null = null;
 		if (scanSession.diagramNodes) {
 			try {
-				const { buildBpmnXml } = await import("@meeting/lib/bpmn-builder");
+				const { buildBpmnXml } = await import("@repo/process-engine");
 				const nodesData = JSON.parse(scanSession.diagramNodes as string);
 				bpmnXml = await buildBpmnXml(nodesData);
 			} catch {

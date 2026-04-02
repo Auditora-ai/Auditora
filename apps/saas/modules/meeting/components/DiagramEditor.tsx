@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import type { DiagramNode } from "../types";
-import { buildBpmnXml } from "../lib/bpmn-builder";
-import { exportSVG, exportPNG } from "../lib/bpmn-export";
+import type { DiagramNode } from "@repo/process-engine";
+import { buildBpmnXml } from "@repo/process-engine";
+import { exportSVG, exportPNG } from "@repo/process-engine";
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-js.css";
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";

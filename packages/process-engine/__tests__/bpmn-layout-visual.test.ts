@@ -10,10 +10,10 @@ import { describe, it, expect } from "vitest";
 import { writeFileSync } from "fs";
 import { join } from "path";
 import ELK from "elkjs/lib/elk.bundled.js";
-import { preprocessForElk, assignLaneYPositions } from "../bpmn-layout-preprocessor";
-import { ELK_BPMN_CONFIG, LANE_H } from "../layout-constants";
-import { dims, bpmnTag } from "../bpmn-builder";
-import type { DiagramNode } from "../../types";
+import { preprocessForElk, assignLaneYPositions } from "../lib/bpmn-layout-preprocessor";
+import { ELK_BPMN_CONFIG, LANE_H } from "../lib/layout-constants";
+import { dims, bpmnTag } from "../lib/bpmn-builder";
+import type { DiagramNode } from "../types";
 
 function makeNode(overrides: Partial<DiagramNode> & { id: string }): DiagramNode {
 	return {

@@ -8,7 +8,7 @@ import {
 	KnowledgeSnapshotSchema,
 } from "@repo/ai";
 import { deleteSessionActivity, runPostSessionPipelines } from "../../../webhook/recall/route";
-import { buildBpmnXml, layoutBpmnXml } from "@meeting/lib/bpmn-builder";
+import { buildBpmnXml, layoutBpmnXml } from "@repo/process-engine";
 import type { DiagramNode } from "@meeting/types";
 import { requireSessionAuth, isAuthError } from "@/lib/auth-helpers";
 import { EXTERNAL_COST_RATES } from "@repo/ai";

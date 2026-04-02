@@ -21,7 +21,7 @@ import {
 	InfoIcon,
 } from "lucide-react";
 import { useLiveSessionContext } from "../context/LiveSessionContext";
-import type { DiagramNode, NodeProperties } from "../types";
+import type { DiagramNode, NodeProperties } from "@repo/process-engine";
 import { PROPERTY_FIELDS, PROPERTY_GROUPS } from "../lib/node-properties-schema";
 import { ProcedureEditor } from "./ProcedureEditor";
 import { SopDocumentView, pendingGenerations } from "./SopDocumentView";

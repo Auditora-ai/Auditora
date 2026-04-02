@@ -3,7 +3,7 @@
  * for the Process Tree Editor. Pure functions, no side effects.
  */
 
-import type { DiagramNode } from "../types";
+import type { DiagramNode } from "../types/index";
 import { bpmnTag } from "./layout-constants";
 
 // ─── Types ───────────────────────────────────────────────────────────

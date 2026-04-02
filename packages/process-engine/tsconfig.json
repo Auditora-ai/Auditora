@@ -1,0 +1,9 @@
+{
+	"extends": "@repo/tsconfig/react-library.json",
+	"compilerOptions": {
+		"target": "ES2015",
+		"downlevelIteration": true
+	},
+	"include": ["**/*.ts", "**/*.tsx"],
+	"exclude": ["dist", "build", "node_modules"]
+}

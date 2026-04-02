@@ -33,7 +33,7 @@ export function DiagramReveal({ bpmnXml, onRevealed }: DiagramRevealProps) {
 				canvas.zoom("fit-viewport", "auto");
 
 				try {
-					const { applyBizagiColors } = await import("@meeting/lib/bpmn-colors");
+					const { applyBizagiColors } = await import("@repo/process-engine");
 					applyBizagiColors(viewer);
 				} catch {
 					// Coloring is optional

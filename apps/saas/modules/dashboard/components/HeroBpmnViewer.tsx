@@ -5,7 +5,7 @@ import { Card } from "@repo/ui/components/card";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { ELEMENT_COLORS } from "@meeting/lib/bpmn-colors";
+import { ELEMENT_COLORS } from "@repo/process-engine";
 
 // Demo BPMN XML for empty state — a realistic "Proceso de Compras" example
 const DEMO_BPMN_XML = `<?xml version="1.0" encoding="UTF-8"?>

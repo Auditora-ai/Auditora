@@ -290,7 +290,7 @@ export function RadiografiaPage() {
 
 			// Build BPMN XML from nodes
 			try {
-				const { buildBpmnXml } = await import("@meeting/lib/bpmn-builder");
+				const { buildBpmnXml } = await import("@repo/process-engine");
 				const xml = await buildBpmnXml(data.nodes);
 				setBpmnXml(xml);
 			} catch {

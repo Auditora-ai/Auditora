@@ -28,9 +28,9 @@ import {
 	ArrowDownIcon,
 } from "lucide-react";
 import { useLiveSessionContext } from "../context/LiveSessionContext";
-import type { DiagramNode } from "../types";
+import type { DiagramNode } from "@repo/process-engine";
 import { getNodeConfig, STATE_BADGE, NODE_TYPES } from "../lib/node-display-config";
-import { bpmnType } from "../lib/layout-constants";
+import { bpmnType } from "@repo/process-engine";
 import {
 	buildFlowTree,
 	reorderNode,
@@ -40,7 +40,7 @@ import {
 	removeConnection,
 	type FlowTreeItem,
 	type ConnectionPatch,
-} from "../lib/flow-tree";
+} from "@repo/process-engine";
 
 // ─── API helpers ─────────────────────────────────────────────────────
 

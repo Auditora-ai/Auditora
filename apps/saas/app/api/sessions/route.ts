@@ -12,7 +12,7 @@ import { auth } from "@repo/auth";
 import { headers } from "next/headers";
 import { recordEvent } from "@meeting/lib/session-timeline";
 import { randomBytes } from "crypto";
-import { buildBpmnXml } from "@meeting/lib/bpmn-builder";
+import { buildBpmnXml } from "@repo/process-engine";
 import type { DiagramNode } from "@meeting/types";
 import { checkAndConsumeCredit } from "@repo/rate-limit";
 

@@ -6,16 +6,8 @@
  */
 
 import type { EnrichedSipocData } from "./sipoc-to-knowledge";
-
-export interface DiagramNode {
-	id: string;
-	type: string;
-	label: string;
-	state: "forming" | "confirmed" | "rejected";
-	lane?: string;
-	connections: string[];
-	connectionLabels?: string[];
-}
+import type { DiagramNode } from "@repo/process-engine";
+export type { DiagramNode };
 
 export function sipocToNodes(sipoc: EnrichedSipocData): DiagramNode[] {
 	const nodes: DiagramNode[] = [];

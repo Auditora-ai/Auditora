@@ -1,4 +1,4 @@
-import type { DiagramNode } from "../types";
+import type { DiagramNode } from "@repo/process-engine";
 
 export interface ProcessPattern {
 	id: string;

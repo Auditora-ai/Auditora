@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useCallback } from "react";
-import { buildBpmnXml } from "../lib/bpmn-builder";
+import type { DiagramNode as BpmnDiagramNode } from "@repo/process-engine";
+import { buildBpmnXml } from "@repo/process-engine";
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-js.css";
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";

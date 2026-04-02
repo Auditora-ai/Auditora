@@ -27,7 +27,7 @@ export async function GET(
 	}
 
 	// Dynamic import of bpmn-builder (server-side)
-	const { buildBpmnXml } = await import("@meeting/lib/bpmn-builder");
+	const { buildBpmnXml } = await import("@repo/process-engine");
 
 	const nodes = session.diagramNodes.map((n) => ({
 		id: n.id,

@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useCallback, useState } from "react";
-import type { DiagramNode } from "../types";
-import { buildBpmnXml, layoutBpmnXml, bpmnType, dims, bpmnTag } from "../lib/bpmn-builder";
-import { ELK_BPMN_CONFIG } from "../lib/layout-constants";
-import { preprocessForElk, assignLaneYPositions } from "../lib/bpmn-layout-preprocessor";
+import type { DiagramNode } from "@repo/process-engine";
+import { buildBpmnXml, layoutBpmnXml, bpmnType, dims, bpmnTag } from "@repo/process-engine";
+import { ELK_BPMN_CONFIG } from "@repo/process-engine";
+import { preprocessForElk, assignLaneYPositions } from "@repo/process-engine";
 
 /**
  * useBpmnModeler — Custom hook for bpmn-js Modeler lifecycle
@@ -67,8 +67,8 @@ interface ModelerAPI {
 	getNodeHierarchy: () => { id: string; type: string; label: string; parentId: string | null }[];
 }
 
-import { X_GAP, Y_PAD, LANE_H, CONTENT_X } from "../lib/layout-constants";
-import { applyBizagiColors } from "../lib/bpmn-colors";
+import { X_GAP, Y_PAD, LANE_H, CONTENT_X } from "@repo/process-engine";
+import { applyBizagiColors } from "@repo/process-engine";
 
 export function useBpmnModeler({
 	containerRef,

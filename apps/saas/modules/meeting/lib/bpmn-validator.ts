@@ -6,7 +6,7 @@
  * 2. Best Practices: BPMN 2.0 methodology (naming, gateways, lanes, flow conditions)
  */
 
-import type { DiagramNode } from "../types";
+import type { DiagramNode } from "@repo/process-engine";
 
 export interface DiagramWarning {
 	type:

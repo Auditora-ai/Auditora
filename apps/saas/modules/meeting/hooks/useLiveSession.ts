@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import type { DiagramNode, BotActivity, TranscriptEntry } from "../types";
+import type { DiagramNode } from "@repo/process-engine";
+import type { BotActivity, TranscriptEntry } from "../types";
 import type { DiagramHealth } from "../context/LiveSessionContext";
 
 export type ConnectionStatus = "connected" | "reconnecting" | "disconnected";

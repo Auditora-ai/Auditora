@@ -1,7 +1,8 @@
 "use client";
 
 import { createContext, useContext, type ReactNode } from "react";
-import type { DiagramNode, BotActivity, TranscriptEntry } from "../types";
+import type { DiagramNode } from "@repo/process-engine";
+import type { BotActivity, TranscriptEntry } from "../types";
 
 export type LayoutMode = "default" | "chat-focus";
 

@@ -9,7 +9,7 @@ import type { ProcessData } from "../types";
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-js.css";
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
-import "@meeting/styles/bpmn-editor.css";
+import "@repo/process-engine/styles/bpmn-editor.css";
 
 interface ProcessWorkspaceProps {
 	process: ProcessData;

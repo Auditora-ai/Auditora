@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { SparklesIcon, TelescopeIcon, MicroscopeIcon, ShieldCheckIcon } from "lucide-react";
 import { toast } from "sonner";
-import type { DiagramNode } from "../types";
+import type { DiagramNode } from "@repo/process-engine";
 import { useLiveSessionContext } from "../context/LiveSessionContext";
 
 const GAP_LABEL_KEYS: Record<string, string> = {

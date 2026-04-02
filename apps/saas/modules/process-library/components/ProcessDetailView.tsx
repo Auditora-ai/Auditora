@@ -80,8 +80,8 @@ import { ProcessHealthRing } from "./ProcessHealthRing";
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-js.css";
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
-import "@meeting/styles/bpmn-editor.css";
-import { applyBizagiColors } from "@meeting/lib/bpmn-colors";
+import "@repo/process-engine/styles/bpmn-editor.css";
+import { applyBizagiColors } from "@repo/process-engine";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
