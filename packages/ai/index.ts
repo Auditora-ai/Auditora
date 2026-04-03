@@ -133,7 +133,7 @@ export { parseLlmJson } from "./src/utils/parse-llm-json";
 export { estimateTokenCostUsd, EXTERNAL_COST_RATES } from "./src/utils/cost-estimator";
 
 // Model routing & instrumented AI calls
-export { getModelForOrg, preloadOrgTier, invalidateOrgTierCache } from "./src/utils/model-router";
+export { getModelForOrg, preloadOrgTier, invalidateOrgTierCache, getGlmModel } from "./src/utils/model-router";
 export type { AiTier } from "./src/utils/model-router";
 export { instrumentedGenerateText } from "./src/utils/instrumented-generate";
 export type { InstrumentedGenerateOptions } from "./src/utils/instrumented-generate";

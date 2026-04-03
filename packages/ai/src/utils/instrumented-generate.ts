@@ -6,15 +6,16 @@
  *   2. Token usage logging to AiUsageLog
  *   3. Duration tracking
  *   4. Error logging (logs failure before re-throwing)
- *   5. Circuit breaker: after one Anthropic failure, route directly to DeepSeek
+ *   5. Circuit breaker: after one Anthropic failure, route to GLM then DeepSeek
  *
+ * Fallback chain: Primary → GLM (Z.AI) → DeepSeek
  * Logging is fire-and-forget — never blocks the pipeline.
  */
 
 import { generateText } from "ai";
 import { createOpenAI } from "@ai-sdk/openai";
 import { db } from "@repo/database";
-import { getModelForOrg } from "./model-router";
+import { getModelForOrg, getGlmModel } from "./model-router";
 
 type GenerateTextParams = Parameters<typeof generateText>[0];
 
@@ -72,14 +73,15 @@ export async function instrumentedGenerateText(
 		modelName = resolved.modelName;
 	}
 
-	// If Anthropic circuit is open and we have DeepSeek, go straight to fallback
+	// If Anthropic circuit is open, go straight to fallback chain (GLM → DeepSeek)
 	const shouldSkipPrimary =
 		isAnthropicCircuitOpen() &&
-		process.env.DEEPSEEK_API_KEY &&
-		!modelName.includes("deepseek");
+		(process.env.GLM_API_KEY || process.env.DEEPSEEK_API_KEY) &&
+		!modelName.includes("deepseek") &&
+		!modelName.includes("glm");
 
 	if (shouldSkipPrimary) {
-		return executeWithDeepSeek(organizationId, pipeline, generateOpts);
+		return executeFallbackChain(organizationId, pipeline, generateOpts);
 	}
 
 	const startTime = Date.now();
@@ -130,16 +132,20 @@ export async function instrumentedGenerateText(
 			})
 			.catch(() => {});
 
-		// Fallback to DeepSeek if available and primary model wasn't already DeepSeek
-		if (process.env.DEEPSEEK_API_KEY && !modelName.includes("deepseek")) {
+		// Fallback chain: GLM → DeepSeek (if primary wasn't already one of them)
+		if (
+			(process.env.GLM_API_KEY || process.env.DEEPSEEK_API_KEY) &&
+			!modelName.includes("deepseek") &&
+			!modelName.includes("glm")
+		) {
 			// Open circuit breaker so subsequent calls skip Anthropic
 			openAnthropicCircuit();
 
 			try {
-				return await executeWithDeepSeek(organizationId, pipeline, generateOpts);
+				return await executeFallbackChain(organizationId, pipeline, generateOpts);
 			} catch (fallbackError) {
 				console.error(
-					`[ai] DeepSeek fallback also failed for ${pipeline}:`,
+					`[ai] All fallbacks failed for ${pipeline}:`,
 					fallbackError,
 				);
 			}
@@ -147,6 +153,67 @@ export async function instrumentedGenerateText(
 
 		throw error;
 	}
+}
+
+/**
+ * Fallback chain: tries GLM first, then DeepSeek.
+ * If GLM key is not set, goes straight to DeepSeek.
+ */
+async function executeFallbackChain(
+	organizationId: string,
+	pipeline: string,
+	generateOpts: Omit<GenerateTextParams, "model">,
+) {
+	// Try GLM first
+	if (process.env.GLM_API_KEY) {
+		try {
+			return await executeWithGlm(organizationId, pipeline, generateOpts);
+		} catch (glmError) {
+			console.warn(
+				`[ai] GLM fallback failed for ${pipeline}, trying DeepSeek:`,
+				glmError,
+			);
+		}
+	}
+
+	// Then DeepSeek
+	if (process.env.DEEPSEEK_API_KEY) {
+		return await executeWithDeepSeek(organizationId, pipeline, generateOpts);
+	}
+
+	throw new Error(`[ai] No fallback providers available for ${pipeline}`);
+}
+
+async function executeWithGlm(
+	organizationId: string,
+	pipeline: string,
+	generateOpts: Omit<GenerateTextParams, "model">,
+) {
+	const fallbackModel = getGlmModel();
+	const fallbackStart = Date.now();
+
+	const result = await generateText({
+		...generateOpts,
+		model: fallbackModel,
+	} as GenerateTextParams);
+
+	const fallbackDuration = Date.now() - fallbackStart;
+
+	db.aiUsageLog
+		.create({
+			data: {
+				organizationId,
+				pipeline,
+				model: "glm-5.1-fallback",
+				inputTokens: result.usage?.inputTokens ?? 0,
+				outputTokens: result.usage?.outputTokens ?? 0,
+				durationMs: fallbackDuration,
+				success: true,
+			},
+		})
+		.catch(() => {});
+
+	return result;
 }
 
 const DEEPSEEK_MAX_TOKENS = 8192;

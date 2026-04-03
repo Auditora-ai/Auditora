@@ -1,13 +1,27 @@
 /**
  * Business Analysis via LLM
  *
- * Single call to Claude Sonnet that takes crawled website text and returns
+ * Single call to an LLM that takes crawled website text and returns
  * a structured operational risk analysis (ScanAnalysis).
+ *
+ * Provider priority: GLM (Z.AI) → Anthropic Claude → error
  */
 
 import { generateText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
+import { getGlmModel } from "@repo/ai/src/utils/model-router";
+import type { LanguageModel } from "ai";
 import type { ScanAnalysis } from "./types";
+
+/** Resolve the best available model for scan analysis */
+function getScanModel(): LanguageModel {
+	// Prefer GLM if key is available
+	if (process.env.GLM_API_KEY) {
+		return getGlmModel();
+	}
+	// Fallback to Anthropic
+	return anthropic("claude-sonnet-4-20250514");
+}
 
 const SYSTEM_PROMPT = `You are an operational risk analyst. Based on this company's public website content, identify their industry, critical business processes, and operational vulnerabilities.
 
@@ -59,7 +73,7 @@ ${text}
 Analyze this company's operational risk profile and return the JSON analysis.`;
 
 	const { text: responseText } = await generateText({
-		model: anthropic("claude-sonnet-4-20250514"),
+		model: getScanModel(),
 		system: SYSTEM_PROMPT,
 		prompt: userPrompt,
 		temperature: 0.3,

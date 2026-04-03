@@ -9,10 +9,10 @@
  *
  * Tier mapping:
  *   "budget"   → DeepSeek Chat (via OpenAI-compatible API)
- *   "standard" → Claude Opus 4.6  (default)
+ *   "standard" → GLM-5.1 via Z.AI (OpenAI-compatible API)
  *   "premium"  → Claude Opus 4.6
  *
- * Fallback: If Anthropic fails, instrumentedGenerateText retries with DeepSeek.
+ * Fallback chain: Primary → GLM → DeepSeek
  */
 
 import { createAnthropic } from "@ai-sdk/anthropic";
@@ -23,6 +23,19 @@ import { db, decryptApiKey } from "@repo/database";
 
 export type AiTier = "budget" | "standard" | "premium";
 
+/** GLM (Z.AI) provider — OpenAI-compatible API */
+const GLM_BASE_URL =
+	process.env.GLM_BASE_URL ?? "https://api.z.ai/api/coding/paas/v4";
+const GLM_MODEL = process.env.GLM_MODEL ?? "glm-5.1";
+
+export function getGlmModel(): LanguageModel {
+	const glm = createOpenAI({
+		baseURL: GLM_BASE_URL,
+		apiKey: process.env.GLM_API_KEY,
+	});
+	return glm.chat(GLM_MODEL);
+}
+
 const TIER_MODEL_MAP: Record<AiTier, () => LanguageModel> = {
 	budget: () => {
 		const deepseek = createOpenAI({
@@ -31,13 +44,19 @@ const TIER_MODEL_MAP: Record<AiTier, () => LanguageModel> = {
 		});
 		return deepseek.chat("deepseek-chat");
 	},
-	standard: () => anthropic("claude-opus-4-6"),
+	standard: () => {
+		// Use GLM if key is available, otherwise fall back to Anthropic
+		if (process.env.GLM_API_KEY) {
+			return getGlmModel();
+		}
+		return anthropic("claude-opus-4-6");
+	},
 	premium: () => anthropic("claude-opus-4-6"),
 };
 
 const MODEL_DISPLAY_NAME: Record<AiTier, string> = {
 	budget: "deepseek-chat",
-	standard: "claude-opus-4-6",
+	standard: process.env.GLM_API_KEY ? GLM_MODEL : "claude-opus-4-6",
 	premium: "claude-opus-4-6",
 };
 
