@@ -16,15 +16,19 @@ export function PageHeader({
 	children?: React.ReactNode;
 }) {
 	return (
-		<div className={cn("mb-8", className)}>
-			<div className="flex items-center justify-between">
-				<div>
-					<h2 className="font-display text-2xl lg:text-3xl text-foreground">{title}</h2>
+		<div className={cn("mb-6 md:mb-8", className)}>
+			<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+				<div className="min-w-0">
+					<h2 className="font-display text-xl md:text-2xl lg:text-3xl text-foreground truncate">{title}</h2>
 					{subtitle && (
-						<p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
+						<p className="mt-0.5 text-xs md:text-sm text-muted-foreground line-clamp-2">{subtitle}</p>
 					)}
 				</div>
-				{actions && <div className="flex gap-2">{actions}</div>}
+				{actions && (
+					<div className="flex gap-2 shrink-0 overflow-x-auto no-scrollbar">
+						{actions}
+					</div>
+				)}
 			</div>
 			{children}
 		</div>

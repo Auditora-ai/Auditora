@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#0F2847"/>
+      <stop offset="100%" stop-color="#030810"/>
+    </radialGradient>
+    <linearGradient id="blue" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#00B4FF"/>
+      <stop offset="100%" stop-color="#0077CC"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softglow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Blueprint grid centered -->
+  <g transform="translate(600, 240)">
+    <g opacity="0.08" stroke="#00C4FF" stroke-width="0.5">
+      <line x1="0" y1="-120" x2="0" y2="120"/>
+      <line x1="-120" y1="0" x2="120" y2="0"/>
+      <circle cx="0" cy="0" r="100" fill="none"/>
+      <circle cx="0" cy="0" r="75" fill="none"/>
+      <line x1="-80" y1="-80" x2="80" y2="80"/>
+      <line x1="80" y1="-80" x2="-80" y2="80"/>
+    </g>
+    <circle cx="0" cy="0" r="95" fill="none" stroke="#00C4FF" stroke-width="0.6" opacity="0.2"/>
+    <g stroke="#00C4FF" stroke-width="1.2" opacity="0.35" fill="none">
+      <path d="M-70,-70 L-70,-80 L-60,-80"/>
+      <path d="M70,-70 L70,-80 L60,-80"/>
+      <path d="M-70,70 L-70,80 L-60,80"/>
+      <path d="M70,70 L70,80 L60,80"/>
+    </g>
+    <g filter="url(#glow)" stroke="url(#blue)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M0,-70 L-45,70"/>
+      <path d="M0,-70 L45,70"/>
+      <line x1="-25" y1="20" x2="25" y2="20"/>
+    </g>
+    <g filter="url(#glow)" transform="translate(0,-72)">
+      <line x1="0" y1="-15" x2="0" y2="15" stroke="#00B4FF" stroke-width="1.5"/>
+      <line x1="-15" y1="0" x2="15" y2="0" stroke="#00B4FF" stroke-width="1.5"/>
+      <line x1="-8" y1="-8" x2="8" y2="8" stroke="#00B4FF" stroke-width="0.8"/>
+      <line x1="8" y1="-8" x2="-8" y2="8" stroke="#00B4FF" stroke-width="0.8"/>
+    </g>
+    <circle cx="0" cy="-5" r="70" fill="#00C4FF" opacity="0.04" filter="url(#softglow)"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="600" y="430" text-anchor="middle" font-family="Oxanium, sans-serif" letter-spacing="-0.5">
+    <tspan fill="#00B4FF" font-size="60" font-weight="700">A</tspan><tspan fill="#F1F5F9" font-size="60" font-weight="700">uditora</tspan><tspan fill="#64748B" font-size="60" font-weight="300">.ai</tspan>
+  </text>
+
+  <!-- Tagline -->
+  <text x="600" y="475" text-anchor="middle" font-family="Oxanium, sans-serif" font-size="16" font-weight="300" fill="#94A3B8" letter-spacing="4">RISK INTELLIGENCE FOR STRATEGIC DECISIONS</text>
+</svg>

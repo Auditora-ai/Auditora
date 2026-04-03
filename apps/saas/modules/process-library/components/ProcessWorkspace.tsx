@@ -6,6 +6,8 @@ import { WorkspaceHeader } from "./workspace/WorkspaceHeader";
 import { DiagramCanvas } from "./workspace/DiagramCanvas";
 import { ContextSidebar } from "./workspace/ContextSidebar";
 import { CollaborationProvider } from "@collaboration/components/CollaborationProvider";
+import { useIsMobile } from "@shared/hooks/use-media-query";
+import { ProcessWorkspaceMobile } from "./ProcessWorkspaceMobile";
 import type { ProcessData } from "../types";
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-js.css";
@@ -19,6 +21,12 @@ interface ProcessWorkspaceProps {
 }
 
 export function ProcessWorkspace(props: ProcessWorkspaceProps) {
+	const isMobile = useIsMobile();
+
+	if (isMobile) {
+		return <ProcessWorkspaceMobile {...props} />;
+	}
+
 	return (
 		<ProcessWorkspaceProvider>
 			<CollaborationProvider processId={props.process.id}>

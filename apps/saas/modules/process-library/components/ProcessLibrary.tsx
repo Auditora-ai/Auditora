@@ -102,15 +102,16 @@ export function ProcessLibrary({
 
 	return (
 		<div className="space-y-4">
-			{/* Category tabs */}
-			<div className="flex items-center justify-between">
-				<div className="flex border-b">
+			{/* Category tabs + action buttons */}
+			<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+				{/* Horizontally scrollable category tabs */}
+				<div className="flex overflow-x-auto no-scrollbar border-b -mx-1 px-1">
 					{CATEGORY_TABS.map((tab) => (
 						<button
 							key={tab.key}
 							type="button"
 							onClick={() => setCategoryTab(tab.key)}
-							className={`border-b-2 px-4 py-2.5 text-sm font-medium transition-colors ${
+							className={`border-b-2 px-3 md:px-4 py-2.5 text-sm font-medium transition-colors whitespace-nowrap min-h-[44px] ${
 								categoryTab === tab.key
 									? "border-primary text-primary"
 									: "border-transparent text-muted-foreground hover:text-foreground"
@@ -126,12 +127,14 @@ export function ProcessLibrary({
 					))}
 				</div>
 
-				<div className="flex gap-2">
+				{/* Action buttons — horizontal scroll on mobile */}
+				<div className="flex gap-2 overflow-x-auto no-scrollbar shrink-0">
 					<ExportReportButton />
 					<Button
 						variant="outline"
 						size="sm"
 						onClick={() => setShowImport(true)}
+						className="shrink-0 min-h-[40px]"
 					>
 						<Upload className="mr-1.5 size-4" />
 						Importar
@@ -140,6 +143,7 @@ export function ProcessLibrary({
 						variant="outline"
 						size="sm"
 						onClick={() => setShowTemplates(true)}
+						className="shrink-0 min-h-[40px]"
 					>
 						<Layers className="mr-1.5 size-4" />
 						Templates
@@ -148,22 +152,23 @@ export function ProcessLibrary({
 						variant="outline"
 						size="sm"
 						onClick={() => setShowAddModal(true)}
+						className="shrink-0 min-h-[40px]"
 					>
 						<PlusIcon className="mr-1.5 size-4" />
 						Manual
-			</Button>
+					</Button>
+				</div>
 			</div>
-		</div>
 
-		<ProcessFilters
+			<ProcessFilters
 				filters={filters}
 				onFiltersChange={setFilters}
 			/>
 
 			{filteredProcesses.length === 0 ? (
-				<div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-12 text-center">
-					<FileTextIcon className="mb-4 size-12 text-muted-foreground/50" />
-					<h3 className="text-lg font-semibold">
+				<div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 md:p-12 text-center">
+					<FileTextIcon className="mb-4 size-10 md:size-12 text-muted-foreground/50" />
+					<h3 className="text-base md:text-lg font-semibold">
 						{processes.length === 0
 							? t("empty.title")
 							: td("noCategoryFilter")}
@@ -177,14 +182,15 @@ export function ProcessLibrary({
 						<Button
 							variant="outline"
 							onClick={() => setShowAddModal(true)}
+							className="min-h-[44px]"
 						>
 							<PlusIcon className="mr-2 size-4" />
 							Agregar manual
-					</Button>
+						</Button>
+					</div>
 				</div>
-			</div>
-		) : (
-				<div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+			) : (
+				<div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
 					{filteredProcesses.map((process) => (
 						<ProcessCard
 							key={process.id}
@@ -198,7 +204,7 @@ export function ProcessLibrary({
 					<button
 						type="button"
 						onClick={() => setShowAddModal(true)}
-						className="flex min-h-[160px] flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed p-5 text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+						className="flex min-h-[140px] md:min-h-[160px] flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed p-5 text-muted-foreground transition-colors hover:border-primary hover:text-primary active:bg-accent/30"
 					>
 						<PlusIcon className="size-7" />
 						<span className="text-sm font-medium">

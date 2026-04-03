@@ -92,7 +92,8 @@
       "evaluation": "Évaluation",
       "workflow": "Workflow",
       "workspace": "Espace",
-      "more": "Plus"
+      "more": "Plus",
+      "billing": "Facturation"
     },
     "greeting": {
       "morning": "Bonjour",

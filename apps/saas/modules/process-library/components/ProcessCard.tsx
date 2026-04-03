@@ -61,36 +61,36 @@ export function ProcessCard({
 	const tc = useTranslations("common");
 
 	return (
-		<Card className="transition-colors hover:bg-accent/30">
-			<CardContent className="p-4">
-				<div className="flex items-start justify-between">
+		<Card className="transition-colors hover:bg-accent/30 active:bg-accent/50">
+			<CardContent className="p-3 md:p-4">
+				<div className="flex items-start justify-between gap-2">
 					<div className="min-w-0 flex-1">
 						<a
 							href={`${basePath}/processes/${process.id}`}
-							className="truncate font-semibold text-sm hover:underline"
+							className="truncate font-semibold text-sm hover:underline block min-h-[44px] flex items-center"
 						>
 							{process.name}
 						</a>
 					</div>
-					<div className="flex items-center gap-1.5">
+					<div className="flex items-center gap-1.5 shrink-0">
 						<Badge status={statusBadge[process.processStatus] ?? "info"}>
 							{process.processStatus}
 						</Badge>
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
-								<Button variant="ghost" size="sm" className="h-9 w-9 p-0 sm:h-7 sm:w-7">
+								<Button variant="ghost" size="sm" className="h-9 w-9 p-0">
 									<MoreHorizontalIcon className="size-4" />
 								</Button>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent align="end">
-								<DropdownMenuItem asChild>
+								<DropdownMenuItem asChild className="min-h-[44px]">
 									<a href={`${basePath}/processes/${process.id}`}>
 										<EyeIcon className="mr-2 size-4" />
 										{t("view")}
 									</a>
 								</DropdownMenuItem>
 								{process.hasBpmn && (
-									<DropdownMenuItem onClick={() => onExport?.(process.id)}>
+									<DropdownMenuItem onClick={() => onExport?.(process.id)} className="min-h-[44px]">
 										<DownloadIcon className="mr-2 size-4" />
 										{t("export")}
 									</DropdownMenuItem>
@@ -99,7 +99,7 @@ export function ProcessCard({
 									<>
 										<DropdownMenuSeparator />
 										<DropdownMenuItem
-											className="text-destructive focus:text-destructive"
+											className="text-destructive focus:text-destructive min-h-[44px]"
 											onClick={() => onDelete(process.id)}
 										>
 											<TrashIcon className="mr-2 size-4" />
@@ -113,12 +113,12 @@ export function ProcessCard({
 				</div>
 
 				{process.description && (
-					<p className="mt-2 line-clamp-2 text-xs text-muted-foreground">
+					<p className="mt-1.5 line-clamp-2 text-xs text-muted-foreground">
 						{process.description}
 					</p>
 				)}
 
-				<div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
+				<div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground flex-wrap">
 					{(process.riskCount ?? 0) > 0 && (
 						<span className={`flex items-center gap-1 ${
 							(process.criticalRiskCount ?? 0) > 0 ? "text-red-500 dark:text-red-400 font-medium" : "text-amber-500 dark:text-amber-400"

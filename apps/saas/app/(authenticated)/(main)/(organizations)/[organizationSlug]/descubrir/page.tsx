@@ -11,7 +11,7 @@ export async function generateMetadata() {
 	return { title: "Descubrir" };
 }
 
-export default async function SessionsPage({
+export default async function DescubrirPage({
 	params,
 }: {
 	params: Promise<{ organizationSlug: string }>;

@@ -17,6 +17,8 @@ import { SopPanel } from "./SopPanel";
 import { BottomBar } from "./BottomBar";
 import { EndSessionDialog, type EndMode } from "./EndSessionDialog";
 import { ExpandedSipocChat } from "./ExpandedSipocChat";
+import { MeetingViewMobile } from "./MeetingViewMobile";
+import { useIsMobile } from "@shared/hooks/use-media-query";
 
 interface MeetingViewProps {
 	sessionId: string;
@@ -45,6 +47,7 @@ export function MeetingView({
 	const router = useRouter();
 	const t = useTranslations("meeting");
 	const tm = useTranslations("meetingModule");
+	const isMobile = useIsMobile();
 
 	// Accessibility: restore font scale from localStorage
 	useEffect(() => {
@@ -258,6 +261,23 @@ export function MeetingView({
 		setProcessId: setCurrentProcessId,
 		setLayoutMode,
 	};
+
+	// Mobile: render simplified mobile view
+	if (isMobile) {
+		return (
+			<LiveSessionProvider value={contextValue}>
+				<MeetingViewMobile />
+				<EndSessionDialog
+					open={showEndDialog}
+					onOpenChange={setShowEndDialog}
+					onConfirm={handleEndConfirm}
+					loading={endLoading}
+					hasProcess={!!currentProcessId}
+					defaultProcessName={processName}
+				/>
+			</LiveSessionProvider>
+		);
+	}
 
 	return (
 		<LiveSessionProvider value={contextValue}>

@@ -13,7 +13,15 @@ export const metadata: Metadata = {
 	description:
 		"Plataforma de elicitación de procesos con IA. Auditora.ai se une a tus videollamadas, guía la entrevista y diagrama procesos BPMN en tiempo real.",
 	icons: {
-		icon: "/icon.svg",
+		icon: [
+			{ url: "/icon.svg", type: "image/svg+xml" },
+			{ url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+			{ url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+		],
+		apple: "/apple-touch-icon.png",
+	},
+	openGraph: {
+		images: [{ url: "/images/og-image.png", width: 1200, height: 630 }],
 	},
 };
 

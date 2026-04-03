@@ -122,16 +122,16 @@ export function RiskDashboard({
 	return (
 		<div className="flex h-full flex-col overflow-auto">
 			{/* Header */}
-			<div className="flex flex-col gap-3 border-b border-border px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6">
+			<div className="flex flex-col gap-3 border-b border-border px-3 py-3 md:flex-row md:items-center md:justify-between md:px-6 md:py-4">
 				<div>
-					<h1 className="font-display text-2xl font-semibold text-foreground">
+					<h1 className="font-display text-xl md:text-2xl font-semibold text-foreground">
 						{t("title")}
 					</h1>
-					<p className="mt-0.5 text-sm text-muted-foreground">
+					<p className="mt-0.5 text-xs md:text-sm text-muted-foreground">
 						{organizationName}
 					</p>
 				</div>
-				<div className="flex items-center gap-2">
+				<div className="flex items-center gap-2 flex-wrap">
 					{hasActiveSession && (
 						<span className="flex items-center gap-1.5 rounded-full bg-red-500/10 px-3 py-1 text-xs font-medium text-red-500">
 							<span className="h-2 w-2 animate-pulse rounded-full bg-red-500" />
@@ -140,7 +140,7 @@ export function RiskDashboard({
 					)}
 					<Link
 						href={`${basePath}/evaluaciones`}
-						className="inline-flex min-h-[44px] w-full items-center justify-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 md:w-auto md:min-h-0"
+						className="inline-flex min-h-[44px] flex-1 sm:flex-none items-center justify-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 active:bg-primary/80 md:min-h-0"
 					>
 						<ClipboardCheckIcon className="size-4" />
 						{t("createEvaluation")}
@@ -148,7 +148,7 @@ export function RiskDashboard({
 					<button
 						type="button"
 						onClick={() => setShowWizard(true)}
-						className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent md:min-h-0 hidden md:inline-flex"
+						className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-accent active:bg-accent/80 md:min-h-0 hidden md:inline-flex"
 					>
 						<PlusIcon className="size-4" />
 						{t("newSession")}
@@ -156,7 +156,7 @@ export function RiskDashboard({
 				</div>
 			</div>
 
-			<div className="flex-1 overflow-auto p-4 pb-24 space-y-6 md:p-6 md:pb-6">
+			<div className="flex-1 overflow-auto p-3 space-y-5 md:p-6 md:pb-6">
 				{/* Empty state */}
 				{isEmpty ? (
 					<EmptyState
@@ -177,35 +177,36 @@ export function RiskDashboard({
 					/>
 				) : (
 					<>
-					{/* Hero Score + Stats row */}
-					<div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-						<div className="rounded-2xl border border-white/10 bg-card/80 backdrop-blur-sm shadow-sm p-6 bg-gradient-to-br from-primary/5 via-transparent to-blue-500/5 dark:border-white/5 dark:bg-card/60">
-							<div className="flex flex-col items-center gap-4 md:flex-row md:gap-8">
-								{/* Large maturity ring — hero element */}
-								<RiskMaturityRing
-									score={maturityScore}
-									size="lg"
-								/>
-								{/* Stats grid */}
-								<div className="flex-1 grid grid-cols-3 gap-4 text-center md:text-left">
-									<div>
-										<p className="text-2xl font-bold tabular-nums text-foreground">
+				{/* Hero Score + Stats row */}
+				<div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+					<div className="rounded-2xl border border-white/10 bg-card/80 backdrop-blur-sm shadow-sm p-4 md:p-6 bg-gradient-to-br from-primary/5 via-transparent to-blue-500/5 dark:border-white/5 dark:bg-card/60">
+						<div className="flex flex-col items-center gap-4 md:flex-row md:gap-8">
+							{/* Large maturity ring — hero element */}
+							<RiskMaturityRing
+								score={maturityScore}
+								size="lg"
+							/>
+							{/* Stats grid — horizontal scroll on tiny mobile */}
+							<div className="flex-1 w-full">
+								<div className="grid grid-cols-3 gap-3 text-center md:text-left">
+									<div className="rounded-xl bg-white/5 p-2.5 md:bg-transparent md:p-0">
+										<p className="text-xl md:text-2xl font-bold tabular-nums text-foreground">
 											{processCount}
 										</p>
-										<p className="text-xs text-muted-foreground">
+										<p className="text-[10px] md:text-xs text-muted-foreground">
 											{t("processes")}
 										</p>
 									</div>
-									<div>
-										<p className="text-2xl font-bold tabular-nums text-foreground">
+									<div className="rounded-xl bg-white/5 p-2.5 md:bg-transparent md:p-0">
+										<p className="text-xl md:text-2xl font-bold tabular-nums text-foreground">
 											{riskCount}
 										</p>
-										<p className="text-xs text-muted-foreground">
+										<p className="text-[10px] md:text-xs text-muted-foreground">
 											{t("risks")}
 										</p>
 									</div>
-									<div>
-										<p className="text-2xl font-bold tabular-nums text-foreground">
+									<div className="rounded-xl bg-white/5 p-2.5 md:bg-transparent md:p-0">
+										<p className="text-xl md:text-2xl font-bold tabular-nums text-foreground">
 											{processCount > 0
 												? Math.round(
 														(documentedCount /
@@ -214,31 +215,32 @@ export function RiskDashboard({
 													)
 												: 0}%
 										</p>
-										<p className="text-xs text-muted-foreground">
+										<p className="text-[10px] md:text-xs text-muted-foreground">
 											{t("coverage")}
 										</p>
 									</div>
 								</div>
-								{/* Quick Actions — vertical stack */}
-								<div className="flex gap-2 md:flex-col md:gap-2">
-									<Link
-										href={`${basePath}/processes`}
-										className="flex shrink-0 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs transition-colors hover:bg-accent/50 dark:border-white/5"
-									>
-										<WorkflowIcon className="size-3.5 text-blue-500" />
-										<span className="whitespace-nowrap text-foreground">{t("viewProcesses")}</span>
-									</Link>
-									<Link
-										href={`${basePath}/evaluaciones`}
-										className="flex shrink-0 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs transition-colors hover:bg-accent/50 dark:border-white/5"
-									>
-										<ClipboardCheckIcon className="size-3.5 text-primary" />
-										<span className="whitespace-nowrap text-foreground">{t("viewEvaluaciones")}</span>
-									</Link>
-								</div>
+							</div>
+							{/* Quick Actions — horizontal on mobile, vertical on desktop */}
+							<div className="flex w-full gap-2 md:flex-col md:w-auto md:gap-2">
+								<Link
+									href={`${basePath}/processes`}
+									className="flex flex-1 md:flex-none shrink-0 items-center justify-center md:justify-start gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-xs transition-colors hover:bg-accent/50 active:bg-accent/80 dark:border-white/5 min-h-[44px]"
+								>
+									<WorkflowIcon className="size-3.5 text-blue-500" />
+									<span className="whitespace-nowrap text-foreground">{t("viewProcesses")}</span>
+								</Link>
+								<Link
+									href={`${basePath}/evaluaciones`}
+									className="flex flex-1 md:flex-none shrink-0 items-center justify-center md:justify-start gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-xs transition-colors hover:bg-accent/50 active:bg-accent/80 dark:border-white/5 min-h-[44px]"
+								>
+									<ClipboardCheckIcon className="size-3.5 text-primary" />
+									<span className="whitespace-nowrap text-foreground">{t("viewEvaluaciones")}</span>
+								</Link>
 							</div>
 						</div>
 					</div>
+				</div>
 
 					{/* Two-column: Top Risks + Vulnerable Processes */}
 					<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -379,7 +381,7 @@ export function RiskDashboard({
 									{t("viewAll")}
 								</Link>
 							</div>
-							<div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+							<div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
 								{/* Org Score */}
 								<Link
 									href={`${basePath}/evaluaciones?tab=dashboard`}
@@ -544,8 +546,8 @@ export function RiskDashboard({
 								{t("nextStepsTitle")}
 							</span>
 						</h2>
-						<div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-							{nextSteps.map((step) => {
+					<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+						{nextSteps.map((step) => {
 								const iconMap = {
 									scan: <SearchIcon className="size-4 text-blue-400" />,
 									evaluate: <ClipboardCheckIcon className="size-4 text-primary" />,
