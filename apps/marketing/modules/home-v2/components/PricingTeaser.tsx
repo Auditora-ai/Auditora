@@ -103,13 +103,13 @@ export function PricingTeaser() {
               ))}
             </ul>
 
-            <button
-              type="button"
+            <a
+              href={`${process.env.NEXT_PUBLIC_SAAS_URL || "https://app.auditora.ai"}/signup?plan=pro`}
               className="mt-8 flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-cyan-400 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-cyan-500/25 transition-all hover:shadow-cyan-500/40 hover:brightness-110"
             >
               Start free trial
               <ArrowRight className="h-4 w-4" />
-            </button>
+            </a>
           </motion.div>
 
           {/* Enterprise card */}
@@ -134,13 +134,13 @@ export function PricingTeaser() {
               ))}
             </ul>
 
-            <button
-              type="button"
+            <a
+              href="/contact"
               className="mt-8 flex w-full items-center justify-center gap-2 rounded-lg border border-white/20 bg-transparent px-6 py-3 text-sm font-semibold text-white transition-all hover:border-white/40 hover:bg-white/5"
             >
               <Sparkles className="h-4 w-4" />
               Contact sales
-            </button>
+            </a>
           </motion.div>
         </div>
       </motion.div>

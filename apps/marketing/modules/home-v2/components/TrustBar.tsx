@@ -42,9 +42,9 @@ function AnimatedCounter({
 /* ------------------------------------------------------------------ */
 
 const counters = [
-  { value: 2847, label: "Processes Mapped" },
-  { value: 14200, label: "Hours Saved", suffix: "+" },
-  { value: 8500, label: "Risks Detected", suffix: "+" },
+  { value: 6, label: "Industries Served", suffix: "+" },
+  { value: 100, label: "Processes Documented", suffix: "+" },
+  { value: 99, label: "Uptime", suffix: ".9%" },
 ];
 
 const counterContainerVariants = {
@@ -89,12 +89,12 @@ export function TrustBar() {
           className="text-center"
         >
           <p className="text-xs uppercase tracking-widest text-white/30">
-            Deloitte{" "}
-            <span className="text-white/15 mx-1">·</span> McKinsey{" "}
-            <span className="text-white/15 mx-1">·</span> EY{" "}
-            <span className="text-white/15 mx-1">·</span> PwC{" "}
-            <span className="text-white/15 mx-1">·</span> KPMG{" "}
-            <span className="text-white/15 mx-1">·</span> Accenture
+            Manufacturing{" "}
+            <span className="text-white/15 mx-1">·</span> SaaS{" "}
+            <span className="text-white/15 mx-1">·</span> Healthcare{" "}
+            <span className="text-white/15 mx-1">·</span> Consulting{" "}
+            <span className="text-white/15 mx-1">·</span> Logistics{" "}
+            <span className="text-white/15 mx-1">·</span> Finance
           </p>
         </motion.div>
 
@@ -105,7 +105,7 @@ export function TrustBar() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-6 text-center text-sm text-white/60"
         >
-          Powering process intelligence for 500+ organizations
+          Trusted by process teams across industries
         </motion.p>
 
         {/* ---- Counters ---- */}

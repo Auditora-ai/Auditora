@@ -198,22 +198,22 @@ export function NavBar() {
 
 								{config.saasUrl && (
 									<>
-										<NextLink
-											href={config.saasUrl}
-											className="block px-3 py-3 text-base"
-											onClick={handleMobileMenuClose}
-											prefetch
-										>
-											{t("common.menu.login")}
-										</NextLink>
-										<NextLink
-											href={config.saasUrl}
-											className="mx-3 mt-3 flex items-center justify-center rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground"
-											onClick={handleMobileMenuClose}
-											prefetch
-										>
-											{t("common.menu.trial")}
-										</NextLink>
+							<NextLink
+									href={`${config.saasUrl}/login`}
+									className="block px-3 py-3 text-base"
+									onClick={handleMobileMenuClose}
+									prefetch
+								>
+									{t("common.menu.login")}
+								</NextLink>
+								<NextLink
+									href={`${config.saasUrl}/signup`}
+									className="mx-3 mt-3 flex items-center justify-center rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground"
+									onClick={handleMobileMenuClose}
+									prefetch
+								>
+									{t("common.menu.trial")}
+								</NextLink>
 									</>
 								)}
 							</div>
@@ -227,18 +227,18 @@ export function NavBar() {
 									asChild
 									variant="ghost"
 								>
-									<NextLink href={config.saasUrl} prefetch>
-										{t("common.menu.login")}
-									</NextLink>
-								</Button>
-								<Button
-									className="hidden lg:flex"
-									asChild
-									variant="primary"
-								>
-									<NextLink href={config.saasUrl} prefetch>
-										{t("common.menu.trial")}
-									</NextLink>
+							<NextLink href={`${config.saasUrl}/login`} prefetch>
+								{t("common.menu.login")}
+							</NextLink>
+						</Button>
+						<Button
+							className="hidden lg:flex"
+							asChild
+							variant="primary"
+						>
+							<NextLink href={`${config.saasUrl}/signup`} prefetch>
+								{t("common.menu.trial")}
+							</NextLink>
 								</Button>
 							</>
 						)}

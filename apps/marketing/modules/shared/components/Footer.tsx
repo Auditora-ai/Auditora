@@ -217,18 +217,26 @@ export function Footer() {
 									{t("common.footer.contact")}
 								</LocaleLink>
 							</li>
-							<li>
-								<LocaleLink
-									href="/careers"
-									className="text-sm text-white/60 hover:text-white transition-colors"
-								>
-									{t("common.footer.careers")}
-								</LocaleLink>
-							</li>
-						</ul>
-					</div>
+						<li>
+							<LocaleLink
+								href="/careers"
+								className="text-sm text-white/60 hover:text-white transition-colors"
+							>
+								{t("common.footer.careers")}
+							</LocaleLink>
+						</li>
+						<li>
+							<LocaleLink
+								href="/security"
+								className="text-sm text-white/60 hover:text-white transition-colors"
+							>
+								{t("common.footer.security")}
+							</LocaleLink>
+						</li>
+					</ul>
+				</div>
 
-					{/* Legal */}
+				{/* Legal */}
 					<div>
 						<h3 className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-4">
 							{t("common.footer.legalTitle")}
@@ -250,9 +258,17 @@ export function Footer() {
 									{t("common.footer.termsAndConditions")}
 								</LocaleLink>
 							</li>
-							<li>
-								<CookieSettingsButton />
-							</li>
+						<li>
+							<LocaleLink
+								href="/legal/cookie-policy"
+								className="text-sm text-white/60 hover:text-white transition-colors"
+							>
+								{t("common.footer.cookiePolicy")}
+							</LocaleLink>
+						</li>
+						<li>
+							<CookieSettingsButton />
+						</li>
 							<li>
 								<LocaleLink
 									href="/legal/privacy-policy#under-ccpa-california-usa"

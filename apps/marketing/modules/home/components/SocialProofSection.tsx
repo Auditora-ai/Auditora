@@ -12,9 +12,12 @@ gsap.registerPlugin(ScrollTrigger);
 const TESTIMONIAL_KEYS = ["testimonial1", "testimonial2", "testimonial3"] as const;
 
 const LOGO_PLACEHOLDERS = [
-	"Firmas Big4",
-	"Consultoras líderes",
-	"Empresas Fortune 500",
+	"Manufacturing",
+	"SaaS",
+	"Healthcare",
+	"Consulting",
+	"Logistics",
+	"Finance",
 ];
 
 export function SocialProofSection() {

@@ -18,7 +18,7 @@ const faqs = [
   {
     question: "Is my data secure?",
     answer:
-      "Absolutely. All data is encrypted at rest and in transit. We're SOC 2 Type II compliant and follow enterprise security standards. Your process data is never shared or used to train models. Enterprise plans include additional security controls.",
+      "Absolutely. All data is encrypted at rest and in transit. We follow SOC 2 practices and are working toward certification. Your process data is never shared or used to train models. Enterprise plans include additional security controls.",
   },
   {
     question: "Can I export BPMN diagrams?",

@@ -8,22 +8,22 @@ const testimonials = [
   {
     quote:
       "Reduced our process mapping from 6 weeks to 2 days. The AI discovery alone saved us hundreds of hours.",
-    name: "María García",
-    title: "Senior Consultant, Deloitte",
+    name: "Senior Consultant",
+    title: "Head of Operations — 200-person logistics company",
     stars: 5,
   },
   {
     quote:
       "Finally, a tool that makes FMEA accessible to my entire team. Our risk assessments went from quarterly to continuous.",
-    name: "Carlos Ruiz",
-    title: "Quality Director, Manufactura MX",
+    name: "Quality Director",
+    title: "VP Quality — Mid-size manufacturing firm",
     stars: 5,
   },
   {
     quote:
-      "The decision simulations revealed gaps we didn't know existed. We found 3 critical blind spots in our first week.",
-    name: "Ana Torres",
-    title: "COO, LogiTrack",
+      "The decision simulations revealed gaps we didn't know existed. We identified critical blind spots in our first week.",
+    name: "Operations Lead",
+    title: "COO — 150-person SaaS company",
     stars: 5,
   },
 ];
@@ -122,8 +122,8 @@ export function SocialProof() {
             transition={{ duration: 0.5, delay: 0.65 }}
             className="text-center"
           >
-            <Counter value={2847} suffix="+" format />
-            <p className="text-white/50 text-sm mt-2">processes documented</p>
+            <Counter value={6} suffix="+" />
+            <p className="text-white/50 text-sm mt-2">industries served</p>
           </motion.div>
 
           <motion.div
@@ -132,9 +132,9 @@ export function SocialProof() {
             transition={{ duration: 0.5, delay: 0.8 }}
             className="text-center"
           >
-            <Counter value={12000} suffix="+" format />
+            <span className="text-4xl font-bold text-cyan-400">99.9%</span>
             <p className="text-white/50 text-sm mt-2">
-              risk assessments completed
+              platform uptime
             </p>
           </motion.div>
         </div>

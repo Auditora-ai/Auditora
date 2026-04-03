@@ -531,3 +531,249 @@ Additionally, the evaluator should acknowledge when `proceduralReference` is `"[
 
 **AI-004 is a blocking bug — fix first.**  
 **AI-001 and AI-002 are the highest-impact quality improvements.**
+
+---
+
+# Cycle 2 Tasks — 2026-04-03
+
+**Written by:** AI Specialist Agent #06 (Cycle 2)  
+**Status:** Pending implementation — all Cycle 1 tasks (AI-001 to AI-005) still pending
+
+---
+
+## ⚠️ STATUS ALERT — ALL CYCLE 1 TASKS STILL PENDING
+
+Verified via `git log` and source inspection on 2026-04-03. None of AI-001 through AI-005 have been implemented yet. The blocking bug (AI-004) is still present at `packages/ai/src/pipelines/risk-audit.ts:223`:
+
+```typescript
+const maxTokens=*** === "full" ? 16384 : 8192; // ← CORRUPTED — MUST FIX FIRST
+```
+
+**🔴 AI-004 must be fixed before ANY risk-audit calls can succeed.** This is a TypeScript syntax error that will crash the entire `auditRisks()` function.
+
+**Priority Order for Implementation:**
+1. AI-004 (5 min, blocking bug)
+2. AI-001 (2h, +27 quality pts)  
+3. AI-002 (2h, +20 quality pts)
+4. AI-005 (45 min, +10 quality pts)
+5. AI-003 (1h, +8 quality pts)
+
+---
+
+## AI-006 — Replace teleprompter system prompt (v1 → v2) 🟠 P2
+
+**File:** `packages/ai/src/prompts/teleprompter.ts`  
+**Reference:** `docs/ai/prompt-library/teleprompter-v2.md`  
+**Impact:** Quality score +17 points (74 → 91/100). Non-repetition +48pts, language adaptation +62pts, progressive depth +55pts.
+
+### Step 1 — Replace the TELEPROMPTER_SYSTEM constant
+
+Replace the current `TELEPROMPTER_SYSTEM` export with the v2 version from `docs/ai/prompt-library/teleprompter-v2.md` (section "Improved Prompt (v2)").
+
+**Key changes vs v1:**
+- Stronger role priming (12-year BPM consultant, LATAM experience)
+- Question bank per SIPOC dimension with L1/L2/L3 depth levels
+- Explicit non-repetition rule with questionHistory check
+- Language detection (Spanish vs English based on transcript)
+- Empty diagram failsafe (always ask about trigger first)
+- New `urgency`, `depthLevel`, `language` fields in output schema
+
+### Step 2 — Add `questionHistory` parameter to TELEPROMPTER_USER
+
+```typescript
+// packages/ai/src/prompts/teleprompter.ts
+
+export const TELEPROMPTER_USER = (
+  sessionType: "DISCOVERY" | "DEEP_DIVE" | "CONTINUATION",
+  currentNodes: Array<{
+    id: string;
+    type: string;
+    label: string;
+    lane?: string;
+    connections: string[];
+  }>,
+  recentTranscript: string,
+  processName?: string,
+  context?: SessionContext,
+  questionHistory?: string[], // NEW — array of previously asked questions this session
+) => {
+  // ... existing nodesDescription, sipocHints code unchanged ...
+
+  // NEW: Question history block
+  const questionHistoryBlock =
+    questionHistory && questionHistory.length > 0
+      ? `\n\nPREGUNTAS ANTERIORES EN ESTA SESIÓN (NO REPETIR ESTOS TEMAS):\n${questionHistory
+          .slice(-10)
+          .map((q, i) => `${i + 1}. ${q}`)
+          .join("\n")}`
+      : "";
+
+  return `Session type: ${sessionType}${processName ? ` — Process: "${processName}"` : ""}
+
+${nodesDescription}
+${sipocHintsBlock}
+
+Recent transcript:
+${recentTranscript}
+${contextHint}
+${questionHistoryBlock}
+Analiza la cobertura SIPOC, identifica el gap más crítico y sugiere la siguiente pregunta.`;
+};
+```
+
+### Step 3 — Update Zod schema in teleprompter pipeline
+
+**File:** `packages/ai/src/pipelines/teleprompter.ts`
+
+Find the `TeleprompterResultSchema` (or equivalent) and add new optional fields:
+
+```typescript
+const TeleprompterResultSchema = z.object({
+  nextQuestion: z.string().min(1),
+  reasoning: z.string(),
+  gapType: z.enum([
+    "never_mapped",        // NEW — when diagram is empty
+    "missing_trigger",
+    "missing_decision",
+    "missing_exception",
+    "missing_role",
+    "missing_supplier",
+    "missing_input",
+    "missing_output",
+    "missing_customer",
+    "missing_sla",
+    "missing_system",
+    "general_exploration",
+  ]),
+  depthLevel: z.enum(["L1", "L2", "L3"]).optional().catch("L1"), // NEW
+  language: z.enum(["es", "en"]).optional().catch("es"),          // NEW
+  urgency: z.enum(["HIGH", "MEDIUM", "LOW"]).optional().catch("MEDIUM"), // NEW
+  completenessScore: z.number().min(0).max(100).catch(0),
+  sipocCoverage: z.object({
+    suppliers: z.number().min(0).max(100).catch(0),
+    inputs: z.number().min(0).max(100).catch(0),
+    process: z.number().min(0).max(100).catch(0),
+    outputs: z.number().min(0).max(100).catch(0),
+    customers: z.number().min(0).max(100).catch(0),
+  }).catch({ suppliers: 0, inputs: 0, process: 0, outputs: 0, customers: 0 }),
+});
+```
+
+### Step 4 — Update teleprompter pipeline caller signature
+
+Find where `TELEPROMPTER_USER` is called in the pipeline and add the optional `questionHistory` parameter. This should come from session state or be passed in from the meeting module.
+
+### Step 5 — Pass `urgency` and `depthLevel` back to caller
+
+If the pipeline returns `urgency: "HIGH"`, the meeting module UI should show a visual indicator. Add these to the `TeleprompterResult` interface:
+
+```typescript
+export interface TeleprompterResult {
+  nextQuestion: string;
+  reasoning: string;
+  gapType: string;
+  depthLevel?: "L1" | "L2" | "L3";   // NEW
+  language?: "es" | "en";              // NEW
+  urgency?: "HIGH" | "MEDIUM" | "LOW"; // NEW
+  completenessScore: number;
+  sipocCoverage: {
+    suppliers: number;
+    inputs: number;
+    process: number;
+    outputs: number;
+    customers: number;
+  };
+}
+```
+
+### Tests to add
+
+File: `packages/ai/src/prompts/__tests__/teleprompter.test.ts` (already created by Agent #06)
+
+Run: `pnpm test packages/ai/src/prompts/__tests__/teleprompter.test.ts`
+
+---
+
+## AI-007 — Add `flowCondition` validation to process-extraction pipeline 🟡 P3
+
+**File:** `packages/ai/src/pipelines/process-extraction.ts`  
+**Impact:** Prevents invalid diagrams where exclusiveGateway exits have no condition label.
+
+### Problem
+
+The prompt says `flowCondition` is REQUIRED for gateway exits, but `NewNodeSchema.flowCondition` is currently `z.string().nullable().optional()` — no enforcement. Invalid diagrams reach the frontend.
+
+### Fix
+
+Add a Zod `.superRefine()` check after schema parse:
+
+```typescript
+// In process-extraction.ts pipeline, after parsing:
+
+function validateGatewayFlowConditions(result: ExtractionResult): string[] {
+  const warnings: string[] = [];
+  
+  // Check if any newNode connects FROM a gateway but has no flowCondition
+  const gatewayIds = new Set(
+    result.newNodes
+      .filter(n => n.type.includes("Gateway"))
+      .map(n => n.id)
+  );
+  
+  for (const node of result.newNodes) {
+    if (
+      node.connectFrom &&
+      gatewayIds.has(node.connectFrom) &&
+      !node.flowCondition
+    ) {
+      warnings.push(
+        `Node "${node.label}" connects from gateway "${node.connectFrom}" but has no flowCondition`
+      );
+    }
+  }
+  
+  return warnings;
+}
+
+// After parseLlmJson:
+const warnings = validateGatewayFlowConditions(result);
+if (warnings.length > 0) {
+  console.warn("[ProcessExtraction] Gateway flow condition warnings:", warnings);
+  // Don't block — just warn. Consultant can fix in UI.
+}
+```
+
+This adds observability without breaking the pipeline.
+
+---
+
+## AI-008 — Add evaluation tests for all prompt files 🟡 P3
+
+**Written by:** Agent #06  
+**Files created:** (already written — Agent #04 just needs to verify they run)
+
+```bash
+# Run all new AI test files
+pnpm test packages/ai/src/prompts/__tests__/teleprompter.test.ts
+pnpm test packages/ai/src/prompts/__tests__/process-extraction-prompt.test.ts
+pnpm test packages/ai/src/prompts/__tests__/simulation-evaluator.test.ts
+pnpm test packages/ai/src/prompts/__tests__/simulation-generator.test.ts  # from Cycle 1
+pnpm test packages/ai/src/prompts/__tests__/risk-audit.test.ts             # from Cycle 1
+```
+
+If any test file fails to import (missing export), check that the prompt file exports the function by that exact name. The most likely issue: `buildEvaluationPrompt` must be exported from `simulation-evaluator.ts`.
+
+---
+
+## Updated Summary Table (Cycle 1 + Cycle 2)
+
+| Task | File | Priority | Effort | Impact | Status |
+|------|------|----------|--------|--------|--------|
+| AI-004 | risk-audit pipeline syntax fix | 🔴 P1 | 5min | BUG FIX blocking | ⚠️ NOT DONE |
+| AI-001 | simulation-generator.ts + pipeline | 🔴 P1 | 2h | +27 quality pts | ⚠️ NOT DONE |
+| AI-002 | risk-audit.ts + pipeline | 🔴 P1 | 2h | +20 quality pts | ⚠️ NOT DONE |
+| AI-005 | simulation-evaluator.ts | 🟠 P2 | 45min | +10 quality pts | ⚠️ NOT DONE |
+| AI-003 | process-extraction.ts + test | 🟠 P2 | 1h | +8 quality pts | ⚠️ NOT DONE |
+| AI-006 | teleprompter.ts + pipeline | 🟠 P2 | 2h | +17 quality pts | 🆕 NEW |
+| AI-007 | process-extraction pipeline validation | 🟡 P3 | 30min | Diagram integrity | 🆕 NEW |
+| AI-008 | Run new test files | 🟡 P3 | 15min | Test coverage | 🆕 NEW |

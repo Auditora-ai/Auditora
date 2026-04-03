@@ -65,10 +65,15 @@ const cardVariants = {
 export function PricingSection() {
 	const t = useTranslations();
 
-	const signupUrl = useMemo(
-		() => config.saasUrl && `${String(config.saasUrl).replace(/\/$/, "")}/signup`,
+	const baseSignupUrl = useMemo(
+		() => config.saasUrl ? `${String(config.saasUrl).replace(/\/$/, "")}/signup` : "/contact",
 		[],
 	);
+
+	const getSignupUrl = (planId: string) => {
+		if (planId === "starter") return baseSignupUrl;
+		return `${baseSignupUrl}?plan=${planId}`;
+	};
 
 	return (
 		<section id="pricing" className="scroll-mt-16 py-16 sm:py-20 lg:py-28 bg-[#0A1428] relative overflow-hidden">
@@ -210,7 +215,7 @@ export function PricingSection() {
 									<div className="mt-6">
 										{isEnterprise ? (
 											<Button variant="secondary" className={cn("w-full", styles.cta)} asChild>
-												<a href="mailto:sales@auditora.ai?subject=Auditora.ai Enterprise">
+												<a href="/contact">
 													{t("pricing.contactSales")}
 													<ArrowRightIcon className="ml-2 size-4" />
 												</a>
@@ -221,7 +226,7 @@ export function PricingSection() {
 												className={cn("w-full", styles.cta)}
 												asChild
 											>
-												<a href={signupUrl ?? "#"}>
+												<a href={getSignupUrl(planId)}>
 													{t("pricing.getStarted")}
 													<ArrowRightIcon className="ml-2 size-4" />
 												</a>

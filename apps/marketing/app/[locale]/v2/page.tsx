@@ -7,7 +7,7 @@ const SITE_URL = "https://auditora.ai";
 export const metadata: Metadata = {
 	title: "Auditora.ai — AI-Powered Process Mapping & Risk Assessment Platform",
 	description:
-		"Scan any company, generate SIPOC maps, BPMN diagrams, FMEA assessments, and Harvard-style decision simulations in minutes. Trusted by 500+ organizations.",
+		"Scan any company, generate SIPOC maps, BPMN diagrams, FMEA assessments, and Harvard-style decision simulations in minutes.",
 	keywords: [
 		"process mapping",
 		"BPMN generator",
@@ -81,11 +81,7 @@ function StructuredData() {
 					"Full department coverage with 15 processes, 50 evaluations/month",
 			},
 		],
-		aggregateRating: {
-			"@type": "AggregateRating",
-			ratingValue: "4.9",
-			ratingCount: "127",
-		},
+
 	};
 
 	return (

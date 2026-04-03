@@ -352,7 +352,7 @@ export function Hero() {
 
             {/* Secondary CTA */}
             <Link
-              href="#pricing"
+              href="/contact"
               className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-6 py-3.5 text-sm font-medium text-white/80 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
             >
               <Play className="h-4 w-4" />
