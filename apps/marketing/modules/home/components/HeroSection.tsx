@@ -35,7 +35,7 @@ export function HeroSection() {
 	}, [url]);
 
 	return (
-		<section className="relative min-h-[100svh] flex items-center overflow-hidden bg-[#0A1428]">
+		<section className="relative min-h-[100svh] flex items-center overflow-hidden bg-transparent">
 			{/* Single subtle gradient line across the top */}
 			<div
 				className="pointer-events-none absolute top-0 left-0 right-0 h-px"

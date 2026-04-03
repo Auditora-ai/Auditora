@@ -73,7 +73,7 @@
 	}
 
 	.dark {
-		--background: #0A1428;
+		--background: #050A15;
 		--foreground: #F1F5F9;
 		--card: #111827;
 		--card-foreground: #F1F5F9;
@@ -101,7 +101,7 @@
 /* Available globally so any component can use chrome-* classes.
    [data-chrome] can still be used for scoping overrides if needed. */
 :root {
-	--chrome-base: #0A1428;
+	--chrome-base: #050A15;
 	--chrome-raised: #111827;
 	--chrome-hover: #1E293B;
 	--chrome-subtle: #334155;

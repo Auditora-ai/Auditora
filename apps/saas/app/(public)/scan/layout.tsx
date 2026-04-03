@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function ScanLayout({ children }: PropsWithChildren) {
   return (
-    <div className="min-h-screen bg-[#0A1428] text-white">
+    <div className="min-h-screen bg-gradient-to-b from-[#050A15] via-[#0A1428] to-[#0F2847] text-white">
       {/* Minimal header */}
       <header className="relative z-50 flex items-center justify-between px-6 py-4 lg:px-10">
         <Link

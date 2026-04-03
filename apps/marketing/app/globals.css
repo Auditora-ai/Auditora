@@ -49,8 +49,8 @@
    ═══════════════════════════════════════════════ */
 
 [data-landing] {
-	--landing-deep: #0A1428;
-	--landing-deep-light: #111827;
+	--landing-deep: #050A15;
+	--landing-deep-light: #0F2847;
 	--landing-teal: #3B8FE8;
 	--landing-electric: #3B8FE8;
 	--primary: #3B8FE8;
@@ -255,7 +255,7 @@
 	left: 0;
 	right: 0;
 	height: 120px;
-	background: linear-gradient(to bottom, #0A1428, transparent);
+	background: linear-gradient(to bottom, #050A15, transparent);
 	pointer-events: none;
 	z-index: 1;
 }
@@ -267,7 +267,7 @@
 	left: 0;
 	right: 0;
 	height: 120px;
-	background: linear-gradient(to top, #0A1428, transparent);
+	background: linear-gradient(to top, #050A15, transparent);
 	pointer-events: none;
 	z-index: 1;
 }

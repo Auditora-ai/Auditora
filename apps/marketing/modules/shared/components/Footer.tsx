@@ -69,7 +69,7 @@ export function Footer() {
 	const t = useTranslations();
 
 	return (
-		<footer className="bg-[#0A1428] border-t border-white/10 text-white/70">
+		<footer className="bg-[#050A15] border-t border-white/10 text-white/70">
 			{/* Main footer content */}
 			<div className="container py-16">
 				{/* Top row: Logo + tagline + social */}

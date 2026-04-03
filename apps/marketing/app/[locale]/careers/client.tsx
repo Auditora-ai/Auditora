@@ -26,7 +26,7 @@ export function CareersClient() {
 	const t = useTranslations("careers");
 
 	return (
-		<div data-landing className="dark bg-[#0A1428] text-slate-50">
+		<div data-landing className="dark bg-gradient-to-b from-[#050A15] via-[#0A1428] to-[#0F2847] text-slate-50">
 			{/* Hero */}
 			<section className="relative overflow-hidden py-24 sm:py-32 lg:py-40">
 				<div className="absolute inset-0 bg-gradient-to-b from-[#3B8FE8]/5 to-transparent" />

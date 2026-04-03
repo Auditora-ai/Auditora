@@ -55,7 +55,7 @@ export function ToolsHubClient({ tools, locale }: ToolsHubClientProps) {
 	const t = useTranslations("tools");
 
 	return (
-		<div className="dark bg-[#0A1428] text-slate-50 min-h-screen">
+		<div className="dark bg-gradient-to-b from-[#050A15] via-[#0A1428] to-[#0F2847] text-slate-50 min-h-screen">
 			{/* Hero */}
 			<section className="relative py-16 sm:py-20 lg:py-28 overflow-hidden">
 				{/* Background orbs */}
