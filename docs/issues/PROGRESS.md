@@ -164,7 +164,7 @@
 | Priority | Issue | Feature | Status | Fecha | Notas |
 |----------|-------|---------|--------|-------|-------|
 | 1 | #20 | F3-02: Notificaciones y gestión del cambio | **DONE** ✅ | 2026-04-03 | Full notification infra: 4 Prisma models (Notification, ChangeConfirmation, ChangeConfirmationResponse, NotificationPreference) + 4 enums. API: notifications module (list, countUnread, markRead, markAllRead, archive, preferences) + change-management module (create, listPending, confirm, getStatus). Frontend: NotificationBell (sidebar badge + dropdown, 30s polling), NotificationItem, NotificationDropdown, ChangeConfirmationCard, ChangeStatusTracker, PendingChangesPanel. Hooks: useUnreadCount, useNotifications, usePendingChanges. Integrated into NavBar bottom section. 28 files, 1741 LOC. |
-| 2 | #19 | F3-01: Colaboración multi-usuario | **UP NEXT** 🔵 | — | Presence, edit locking, comments/mentions, activity log. Depends on #20 ✅. |
+| 2 | #19 | F3-01: Colaboración multi-usuario | **IN PROGRESS** 🔵 | 2026-04-03 | Phase 1: Backend API + data model ✅. Frontend: hooks ✅, 6 UI components (fixed 3 corrupted, added 4 new). Wired into ProcessWorkspace (CollaborationProvider + PresenceAvatars + Activity tab). **Remaining:** CommentSidebar integration into ContextSidebar, EditLockBanner on BPMN edit, MentionInput wired. |
 | 3 | #22 | F3-04: Onboarding basado en evaluaciones | PENDING | — | OnboardingPlan model, manager assigns processes, employee evaluation flows. |
 | 4 | #23 | F3-05: Programa de certificación | PENDING | — | Certification/CertificationGrant models, auto-certify after evals, expiry/renewal. |
 || 5 | #21 | F3-03: Integraciones (Slack/Teams/GWS) | PENDING | — | Webhook notifications, OAuth, channel mapping. Last — depends on #20 infra. |
@@ -178,8 +178,8 @@
 | # | Module | Spec File | Status | Date | Key Findings |
 |---|--------|-----------|--------|------|-------------|
 | 1 | PANORAMA | `MODULE-PERFECTION-PANORAMA.md` | ✅ ALL 14 FIXES DONE | 2026-04-03 | 14/14 fixes complete. Batch 1-3: P1 critical bugs + P2 maturity calc + P3 polish. **Batch 4:** Fix#6 hero score (lg ring with score inside), Fix#4 vulnerable processes (heatmap data, red/amber/green bars), Fix#5 next steps AI (smart data-driven recommendations), Fix#10 enriched activity (evaluations+sessions merged), Fix#14 Descubrir added to NavBar+MobileBottomBar (4 flow steps). |
-| 2 | PROCESOS | — | 🔵 UP NEXT | — | — |
-| 3 | EVALUACIONES | — | PENDING | — | — |
+| 2 | PROCESOS | `MODULE-PERFECTION-PROCESOS.md` | 📝 SPEC READY | 2026-04-03 | 44 fixes across 6 batches (~33h). ~12,188 LOC, ~55 components. 1,499-line dead code (ProcessDetailView). 40+ hardcoded colors breaking dark mode. 12+ touch targets below 44px. Zero responsive breakpoints on workspace/canvas/sidebar. STATUS_MAP inconsistency. AddProcessModal no a11y. 120+ untranslated strings. Vision 90% complete (missing Visual Map). |
+| 3 | EVALUACIONES | — | 🔵 UP NEXT | — | — |
 | 4 | DESCUBRIR | — | PENDING | — | — |
 | 5 | SCAN | — | PENDING | — | — |
 | 6 | SETTINGS | — | PENDING | — | — |
