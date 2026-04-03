@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Skeleton } from "@repo/ui/components/skeleton";
-import { toast } from "sonner";
+import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { useTranslations } from "next-intl";
 import {
 	CalendarIcon,
@@ -71,7 +71,7 @@ export function ProjectGantt({
 				});
 				if (!res.ok) throw new Error(`HTTP ${res.status}`);
 			} catch {
-				toast.error(tc("errorSaving"));
+				toastError({ title: tc("errorSaving") });
 			} finally {
 				setSaving(false);
 			}
@@ -83,7 +83,7 @@ export function ProjectGantt({
 		const generated = generateAutoSchedule(processes);
 		setPlan(generated);
 		savePlan(generated);
-		toast.success("Plan regenerado");
+		toastSuccess({ title: "Plan regenerado" });
 	}, [processes, savePlan]);
 
 	const handleToggleScope = useCallback(
@@ -285,7 +285,7 @@ export function ProjectGantt({
 					headerHeight={50}
 					rowHeight={42}
 					todayColor="rgba(37, 99, 235, 0.06)"
-					arrowColor="#94A3B8"
+					arrowColor="var(--muted-foreground, #94A3B8)"
 					arrowIndent={20}
 				/>
 			</div>

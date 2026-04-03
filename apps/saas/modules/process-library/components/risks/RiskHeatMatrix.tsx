@@ -129,7 +129,7 @@ export function RiskHeatMatrix({
         <text
           x={14}
           y={PADDING_TOP + GRID_H / 2}
-          fill="#94A3B8"
+          style={{ fill: "var(--muted-foreground, #94A3B8)" }}
           fontSize={11}
           textAnchor="middle"
           transform={`rotate(-90, 14, ${PADDING_TOP + GRID_H / 2})`}
@@ -141,7 +141,7 @@ export function RiskHeatMatrix({
         <text
           x={PADDING_LEFT + GRID_W / 2}
           y={SVG_H - 6}
-          fill="#94A3B8"
+          style={{ fill: "var(--muted-foreground, #94A3B8)" }}
           fontSize={11}
           textAnchor="middle"
         >
@@ -156,7 +156,7 @@ export function RiskHeatMatrix({
               key={`sev-${i}`}
               x={PADDING_LEFT - 6}
               y={y + 4}
-              fill="#94A3B8"
+              style={{ fill: "var(--muted-foreground, #94A3B8)" }}
               fontSize={9}
               textAnchor="end"
             >
@@ -173,7 +173,7 @@ export function RiskHeatMatrix({
               key={`prob-${i}`}
               x={x}
               y={PADDING_TOP + GRID_H + 16}
-              fill="#94A3B8"
+              style={{ fill: "var(--muted-foreground, #94A3B8)" }}
               fontSize={9}
               textAnchor="middle"
             >
@@ -212,7 +212,12 @@ export function RiskHeatMatrix({
                   height={CELL_SIZE}
                   fill={count > 0 ? getScoreColorFill(score) : "transparent"}
                   stroke={
-                    isActive || isFocused ? "#3B8FE8" : "#334155"
+                    isActive || isFocused ? "#3B8FE8" : undefined
+                  }
+                  style={
+                    !(isActive || isFocused)
+                      ? { stroke: "var(--border, #334155)" }
+                      : undefined
                   }
                   strokeWidth={isActive || isFocused ? 3 : 1}
                   rx={4}
@@ -233,7 +238,12 @@ export function RiskHeatMatrix({
                 <text
                   x={x + CELL_SIZE - 6}
                   y={y + 14}
-                  fill={count > 0 ? "#F1F5F9" : "#475569"}
+                  fill={count > 0 ? "#F1F5F9" : undefined}
+                  style={
+                    count === 0
+                      ? { fill: "var(--muted-foreground, #64748B)" }
+                      : undefined
+                  }
                   fontSize={8}
                   textAnchor="end"
                   opacity={0.7}

@@ -8,10 +8,6 @@ import {
 	XIcon,
 	CheckCircleIcon,
 	AlertCircleIcon,
-	BoxIcon,
-	GitBranchIcon,
-	CircleIcon,
-	ArrowRightIcon,
 	BarChart3Icon,
 } from "lucide-react";
 import { useProcessWorkspace } from "../../context/ProcessWorkspaceContext";
@@ -163,23 +159,25 @@ export function NodeContextPanel({ element, processId, raciEntries, evalFeedback
 							{/* Failure rate bar */}
 							<div className="flex items-center justify-between text-xs">
 								<span className="text-muted-foreground">Failure Rate</span>
-								<span
-									className="font-bold tabular-nums"
-									style={{
-										color: matchedEval.failureRate > 50 ? "#DC2626" : matchedEval.failureRate > 20 ? "#EAB308" : "#16A34A",
-									}}
-								>
-									{matchedEval.failureRate}%
-								</span>
+							<span
+								className={`font-bold tabular-nums ${
+									matchedEval.failureRate > 50 ? "text-red-600 dark:text-red-400"
+									: matchedEval.failureRate > 20 ? "text-yellow-600 dark:text-yellow-400"
+									: "text-green-600 dark:text-green-400"
+								}`}
+							>
+								{matchedEval.failureRate}%
+							</span>
 							</div>
 							<div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
-								<div
-									className="h-full rounded-full"
-									style={{
-										width: `${matchedEval.failureRate}%`,
-										background: matchedEval.failureRate > 50 ? "#DC2626" : matchedEval.failureRate > 20 ? "#EAB308" : "#16A34A",
-									}}
-								/>
+							<div
+								className={`h-full rounded-full ${
+									matchedEval.failureRate > 50 ? "bg-red-500"
+									: matchedEval.failureRate > 20 ? "bg-yellow-500"
+									: "bg-green-500"
+								}`}
+								style={{ width: `${matchedEval.failureRate}%` }}
+							/>
 							</div>
 							<div className="grid grid-cols-2 gap-2 text-xs">
 								<div>
@@ -218,8 +216,8 @@ export function NodeContextPanel({ element, processId, raciEntries, evalFeedback
 
 				{/* Gateway info */}
 				{element.type.includes("Gateway") && (
-					<div className="rounded-lg border border-yellow-500/30 bg-yellow-50 p-3">
-						<p className="text-xs text-yellow-800">
+					<div className="rounded-lg border border-yellow-500/30 bg-yellow-50 dark:bg-yellow-900/20 p-3">
+						<p className="text-xs text-yellow-800 dark:text-yellow-300">
 							Los gateways controlan el flujo del proceso. Haz click en los flujos de salida para ver las condiciones.
 						</p>
 					</div>
@@ -227,8 +225,8 @@ export function NodeContextPanel({ element, processId, raciEntries, evalFeedback
 
 				{/* Event info */}
 				{(element.type.includes("Event")) && (
-					<div className="rounded-lg border border-success/30 bg-green-50 p-3">
-						<p className="text-xs text-green-800">
+					<div className="rounded-lg border border-success/30 bg-green-50 dark:bg-green-900/20 p-3">
+						<p className="text-xs text-green-800 dark:text-green-300">
 							{element.type.includes("Start") && "Este evento inicia el proceso."}
 							{element.type.includes("End") && "Este evento finaliza el proceso."}
 							{element.type.includes("Intermediate") && "Evento intermedio en el flujo."}

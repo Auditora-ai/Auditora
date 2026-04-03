@@ -121,7 +121,7 @@ export function ProcessCard({
 				<div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
 					{(process.riskCount ?? 0) > 0 && (
 						<span className={`flex items-center gap-1 ${
-							(process.criticalRiskCount ?? 0) > 0 ? "text-red-400 font-medium" : "text-amber-400"
+							(process.criticalRiskCount ?? 0) > 0 ? "text-red-500 dark:text-red-400 font-medium" : "text-amber-500 dark:text-amber-400"
 						}`}>
 							<ShieldAlertIcon className="size-3" />
 							{process.riskCount} {process.riskCount === 1 ? "riesgo" : "riesgos"}

@@ -14,9 +14,13 @@ export function ProcessHealthRing({
 	const pct = Math.round(Math.max(0, Math.min(100, score)));
 	const offset = circumference - (pct / 100) * circumference;
 
-	// Semantic color based on score
+	// Semantic color based on score — uses CSS custom properties for dark mode support
 	const strokeColor =
-		pct >= 80 ? "#16A34A" : pct >= 40 ? "#D97706" : "#DC2626";
+		pct >= 80
+			? "var(--success, #16A34A)"
+			: pct >= 40
+				? "#D97706"
+				: "var(--destructive, #DC2626)";
 
 	return (
 		<div
@@ -30,7 +34,7 @@ export function ProcessHealthRing({
 					cy={size / 2}
 					r={radius}
 					fill="none"
-					stroke="#E2E8F0"
+					style={{ stroke: "var(--border, #E2E8F0)" }}
 					strokeWidth={3}
 				/>
 				{/* Progress */}
@@ -39,7 +43,7 @@ export function ProcessHealthRing({
 					cy={size / 2}
 					r={radius}
 					fill="none"
-					stroke={strokeColor}
+					style={{ stroke: strokeColor }}
 					strokeWidth={3}
 					strokeDasharray={circumference}
 					strokeDashoffset={offset}

@@ -59,6 +59,16 @@ const PHASES = [
 	{ key: "analisis", label: "Análisis", color: "#16A34A", progressColor: "#15803D" },
 ] as const;
 
+// Colors that adapt to dark/light theme via CSS custom properties
+const GANTT_COLORS = {
+	milestoneBg: "var(--secondary, #1E293B)",
+	milestoneProgress: "var(--border, #334155)",
+	processBg: "var(--card, #111827)",
+	processProgress: "var(--border, #1E293B)",
+	outOfScopeBg: "var(--muted, #E2E8F0)",
+	outOfScopeProgress: "var(--muted-foreground, #CBD5E1)",
+} as const;
+
 // ─── Phase progress calculation (matches ProcessPhaseDashboard) ──────
 
 function calcPhaseProgress(process: ProcessForGantt, phase: string): number {
@@ -172,7 +182,7 @@ export function transformToGanttTasks(
 			end: new Date(startTask.endDate),
 			progress: startTask.progress,
 			displayOrder: order++,
-			styles: { backgroundColor: "#0A1428", progressColor: "#1E293B" },
+			styles: { backgroundColor: GANTT_COLORS.milestoneBg, progressColor: GANTT_COLORS.milestoneProgress },
 		});
 	}
 
@@ -208,9 +218,9 @@ export function transformToGanttTasks(
 			displayOrder: order++,
 			hideChildren: false,
 			isDisabled: isOutOfScope,
-			styles: isOutOfScope
-				? { backgroundColor: "#E2E8F0", progressColor: "#CBD5E1" }
-				: { backgroundColor: "#111827", progressColor: "#1E293B" },
+styles: isOutOfScope
+			? { backgroundColor: GANTT_COLORS.outOfScopeBg, progressColor: GANTT_COLORS.outOfScopeProgress }
+			: { backgroundColor: GANTT_COLORS.processBg, progressColor: GANTT_COLORS.processProgress },
 		});
 
 		// Phase tasks
@@ -258,7 +268,7 @@ export function transformToGanttTasks(
 			end: new Date(closeTask.endDate),
 			progress: closeTask.progress,
 			displayOrder: order++,
-			styles: { backgroundColor: "#0A1428", progressColor: "#1E293B" },
+			styles: { backgroundColor: GANTT_COLORS.milestoneBg, progressColor: GANTT_COLORS.milestoneProgress },
 		});
 	}
 

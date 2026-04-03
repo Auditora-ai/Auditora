@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@repo/ui";
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeftIcon, ShieldAlertIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

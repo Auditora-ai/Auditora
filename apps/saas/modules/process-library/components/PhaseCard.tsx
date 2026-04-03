@@ -61,12 +61,12 @@ export function PhaseCard({ phase, isExpanded, onClick }: PhaseCardProps) {
 					</div>
 					<span
 						className={`text-xs font-medium tabular-nums ${
-							pct >= 100
-								? "text-emerald-600"
-								: pct > 0
-									? "text-foreground"
-									: "text-muted-foreground"
-						}`}
+								pct >= 100
+									? "text-emerald-600 dark:text-emerald-400"
+									: pct > 0
+										? "text-foreground"
+										: "text-muted-foreground"
+							}`}
 					>
 						{pct}%
 					</span>
