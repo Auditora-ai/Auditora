@@ -32,12 +32,12 @@ export function LoginShowcasePanel({
 		{
 			icon: BrainCircuitIcon,
 			label: t("auth.showcase.feature.ai"),
-			color: "text-[#00E5C0]",
+			color: "text-[#3B8FE8]",
 		},
 		{
 			icon: GitBranchIcon,
 			label: t("auth.showcase.feature.bpmn"),
-			color: "text-[#00E5C0]",
+			color: "text-[#3B8FE8]",
 		},
 		{
 			icon: ShieldAlertIcon,
@@ -176,7 +176,7 @@ export function LoginShowcasePanel({
 				className="pointer-events-none absolute inset-0"
 				style={{
 					background:
-						"radial-gradient(ellipse at top right, rgba(0,229,192,0.06), transparent 60%)",
+						"radial-gradient(ellipse at top right, rgba(59,143,232,0.06), transparent 60%)",
 				}}
 			/>
 			<div
@@ -193,7 +193,7 @@ export function LoginShowcasePanel({
 				<div className="showcase-logo">
 					<Logo
 						withLabel
-						className="text-[#F1F5F9] [&_svg]:text-[#00E5C0] [&_.text-muted-foreground]:text-[#94A3B8]"
+						className="text-[#F1F5F9] [&_svg]:text-[#3B8FE8] [&_.text-muted-foreground]:text-[#94A3B8]"
 					/>
 				</div>
 
@@ -204,7 +204,7 @@ export function LoginShowcasePanel({
 						className="showcase-badge mb-6"
 						style={{ clipPath: "inset(0 0% 0 0)" }}
 					>
-						<span className="inline-flex items-center rounded-full border border-[#00E5C0]/20 bg-[#00E5C0]/10 px-3 py-1 text-xs font-medium text-[#6EE7C4]">
+						<span className="inline-flex items-center rounded-full border border-[#3B8FE8]/20 bg-[#3B8FE8]/10 px-3 py-1 text-xs font-medium text-[#6EE7C4]">
 							{t("auth.showcase.badge")}
 						</span>
 					</div>

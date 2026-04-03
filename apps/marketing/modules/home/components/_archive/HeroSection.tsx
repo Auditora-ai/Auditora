@@ -27,7 +27,7 @@ const SIPOC_COLUMNS = [
 	{
 		key: "P",
 		label: "Process",
-		color: "#00E5C0",
+		color: "#3B8FE8",
 		items: ["Receive Order", "Quality Check", "Assembly Line"],
 	},
 	{
@@ -68,12 +68,12 @@ export function HeroSection() {
 				<motion.div
 					animate={{ x: [0, 15, -10, 0], y: [0, -25, -15, 0], scale: [1, 1.05, 0.98, 1] }}
 					transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-					className="absolute -top-40 -right-40 h-[600px] w-[600px] rounded-full bg-[#00E5C0]/20 blur-[120px]"
+					className="absolute -top-40 -right-40 h-[600px] w-[600px] rounded-full bg-[#3B8FE8]/20 blur-[120px]"
 				/>
 				<motion.div
 					animate={{ x: [0, -20, 15, 0], y: [0, 12, -10, 0], scale: [1, 0.95, 1.08, 1] }}
 					transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-					className="absolute -bottom-40 -left-40 h-[400px] w-[400px] rounded-full bg-[#00E5C0]/10 blur-[100px]"
+					className="absolute -bottom-40 -left-40 h-[400px] w-[400px] rounded-full bg-[#3B8FE8]/10 blur-[100px]"
 				/>
 			</div>
 
@@ -100,7 +100,7 @@ export function HeroSection() {
 						>
 							<div className={cn(
 								"badge-pulse inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-medium",
-								"border-[#00E5C0]/20 bg-[#00E5C0]/10 text-[#00E5C0]",
+								"border-[#3B8FE8]/20 bg-[#3B8FE8]/10 text-[#3B8FE8]",
 							)}>
 								{t("badge")}
 							</div>
@@ -166,7 +166,7 @@ export function HeroSection() {
 									onClick={handleSubmit}
 									className={cn(
 										"w-full shrink-0 sm:w-auto",
-										"bg-[#00E5C0] hover:bg-[#00C4A3] text-[#0A1428] font-semibold",
+										"bg-[#3B8FE8] hover:bg-[#2E7FD6] text-[#0A1428] font-semibold",
 									)}
 								>
 									{t("cta")}
@@ -192,7 +192,7 @@ export function HeroSection() {
 								href={`${config.saasUrl}/scan?mode=text&ref=hero`}
 								className={cn(
 									"mt-2 inline-flex items-center gap-1 text-sm transition-colors",
-									"text-white/40 hover:text-[#00E5C0]/70",
+									"text-white/40 hover:text-[#3B8FE8]/70",
 								)}
 							>
 								{t("ctaSecondary")}
@@ -209,14 +209,14 @@ export function HeroSection() {
 						className="hidden lg:block"
 					>
 						<div className="pointer-events-none absolute -inset-4 -z-10" aria-hidden="true">
-							<div className="absolute inset-0 rounded-3xl bg-[radial-gradient(ellipse_at_center,rgba(0,229,192,0.12)_0%,transparent_70%)]" />
+							<div className="absolute inset-0 rounded-3xl bg-[radial-gradient(ellipse_at_center,rgba(59,143,232,0.12)_0%,transparent_70%)]" />
 						</div>
 						<motion.div
-							whileHover={{ y: -8, boxShadow: "0 30px 60px -12px rgba(0,229,192,0.15), 0 0 0 1px rgba(0,229,192,0.08)" }}
+							whileHover={{ y: -8, boxShadow: "0 30px 60px -12px rgba(59,143,232,0.15), 0 0 0 1px rgba(59,143,232,0.08)" }}
 							transition={{ type: "spring", stiffness: 300, damping: 20 }}
 							className={cn(
 								"relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm",
-								"shadow-2xl shadow-[#00E5C0]/5",
+								"shadow-2xl shadow-[#3B8FE8]/5",
 							)}
 						>
 							{/* Browser chrome */}
@@ -236,13 +236,13 @@ export function HeroSection() {
 							{/* App toolbar */}
 							<div className="flex items-center justify-between border-b border-white/[0.06] bg-white/[0.02] px-5 py-2.5">
 								<div className="flex items-center gap-2">
-									<div className="size-2 rounded-full bg-[#00E5C0] shadow-[0_0_6px_rgba(0,229,192,0.8)]" />
+									<div className="size-2 rounded-full bg-[#3B8FE8] shadow-[0_0_6px_rgba(59,143,232,0.8)]" />
 									<span className="text-xs font-medium text-white/60">SIPOC Diagram</span>
 									<span className="text-[10px] text-white/25">—</span>
 									<span className="text-[10px] text-white/30">Manufacturing Process</span>
 								</div>
 								<div className="flex items-center gap-2">
-									<span className="rounded bg-[#00E5C0]/10 px-2 py-0.5 text-[10px] font-medium text-[#00E5C0]">Complete</span>
+									<span className="rounded bg-[#3B8FE8]/10 px-2 py-0.5 text-[10px] font-medium text-[#3B8FE8]">Complete</span>
 								</div>
 							</div>
 
@@ -337,17 +337,17 @@ export function HeroSection() {
 									initial={{ opacity: 0, scale: 0.9 }}
 									animate={{ opacity: 1, scale: 1 }}
 									transition={{ delay: 2.6, duration: 0.4 }}
-									className="flex items-center gap-1.5 rounded-full bg-[#00E5C0]/10 px-2.5 py-0.5"
+									className="flex items-center gap-1.5 rounded-full bg-[#3B8FE8]/10 px-2.5 py-0.5"
 								>
-									<div className="size-1.5 rounded-full bg-[#00E5C0]" />
-									<span className="text-[10px] font-medium text-[#00E5C0]">Analysis ready</span>
+									<div className="size-1.5 rounded-full bg-[#3B8FE8]" />
+									<span className="text-[10px] font-medium text-[#3B8FE8]">Analysis ready</span>
 								</motion.div>
 							</div>
 
 							{/* Ambient glow */}
 							<div
 								className="pointer-events-none absolute inset-0 rounded-2xl"
-								style={{ background: "radial-gradient(ellipse at 50% 40%, rgba(0,229,192,0.04) 0%, transparent 70%)" }}
+								style={{ background: "radial-gradient(ellipse at 50% 40%, rgba(59,143,232,0.04) 0%, transparent 70%)" }}
 							/>
 						</motion.div>
 					</motion.div>

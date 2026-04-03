@@ -337,7 +337,7 @@ export function EvaluacionResults({
             color: "#94A3B8",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = "rgba(0,229,192,0.3)";
+            e.currentTarget.style.borderColor = "rgba(59,143,232,0.3)";
             e.currentTarget.style.color = "#F1F5F9";
           }}
           onMouseLeave={(e) => {

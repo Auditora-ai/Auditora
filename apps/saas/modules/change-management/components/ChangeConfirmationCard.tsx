@@ -110,7 +110,7 @@ export function ChangeConfirmationCard({
 					size="sm"
 					onClick={() => onConfirm(change.id)}
 					disabled={isConfirming}
-					className="bg-[#00E5C0] text-slate-900 hover:bg-[#00E5C0]/80 text-xs h-7"
+					className="bg-[#3B8FE8] text-slate-900 hover:bg-[#3B8FE8]/80 text-xs h-7"
 				>
 					{isConfirming ? "Confirmando..." : "Confirmar lectura"}
 				</Button>

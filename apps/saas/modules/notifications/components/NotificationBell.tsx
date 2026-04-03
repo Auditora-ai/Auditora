@@ -55,7 +55,7 @@ export function NotificationBell({
 				<div className="relative">
 					<BellIcon className="size-4" />
 					{unreadCount > 0 && (
-						<span className="absolute -right-1.5 -top-1.5 flex size-4 items-center justify-center rounded-full bg-[#00E5C0] text-[10px] font-bold text-slate-900">
+						<span className="absolute -right-1.5 -top-1.5 flex size-4 items-center justify-center rounded-full bg-[#3B8FE8] text-[10px] font-bold text-slate-900">
 							{unreadCount > 9 ? "9+" : unreadCount}
 						</span>
 					)}

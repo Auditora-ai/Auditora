@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 const NODE_COUNT = 18;
 const CONNECTION_DISTANCE = 120;
-const COLORS = ["#00E5C0", "#38BDF8", "#A78BFA"] as const;
+const COLORS = ["#3B8FE8", "#38BDF8", "#A78BFA"] as const;
 
 interface Node {
 	x: number;
@@ -78,7 +78,7 @@ export function ParticleNetwork({
 				"http://www.w3.org/2000/svg",
 				"line",
 			);
-			line.setAttribute("stroke", "#00E5C0");
+			line.setAttribute("stroke", "#3B8FE8");
 			line.setAttribute("stroke-width", "0.5");
 			line.setAttribute("opacity", "0");
 			lineGroup.appendChild(line);
@@ -92,7 +92,7 @@ export function ParticleNetwork({
 				"circle",
 			);
 			circle.setAttribute("r", "2");
-			circle.setAttribute("fill", nodesRef.current[i]?.color ?? "#00E5C0");
+			circle.setAttribute("fill", nodesRef.current[i]?.color ?? "#3B8FE8");
 			circle.setAttribute("opacity", "0.4");
 			dotGroup.appendChild(circle);
 			dots.push(circle);

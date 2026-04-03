@@ -13,11 +13,11 @@ interface ProcessDiscoveryFlowProps {
 const EXAMPLE_URL = "empresa.com/procesos";
 
 const NODES = [
-	{ id: "supplier", x: 60, y: 80, label: "Suppliers", color: "#00E5C0" },
+	{ id: "supplier", x: 60, y: 80, label: "Suppliers", color: "#3B8FE8" },
 	{ id: "input", x: 180, y: 80, label: "Inputs", color: "#38BDF8" },
 	{ id: "process", x: 300, y: 80, label: "Process", color: "#A78BFA" },
 	{ id: "output", x: 420, y: 80, label: "Outputs", color: "#38BDF8" },
-	{ id: "customer", x: 540, y: 80, label: "Customers", color: "#00E5C0" },
+	{ id: "customer", x: 540, y: 80, label: "Customers", color: "#3B8FE8" },
 ] as const;
 
 const CONNECTIONS = [
@@ -28,13 +28,13 @@ const CONNECTIONS = [
 ] as const;
 
 const SUB_NODES = [
-	{ x: 60, y: 160, label: "Proveedor A", color: "#00E5C0" },
-	{ x: 60, y: 190, label: "Proveedor B", color: "#00E5C0" },
+	{ x: 60, y: 160, label: "Proveedor A", color: "#3B8FE8" },
+	{ x: 60, y: 190, label: "Proveedor B", color: "#3B8FE8" },
 	{ x: 300, y: 145, label: "Validar", color: "#A78BFA" },
 	{ x: 300, y: 175, label: "Aprobar", color: "#A78BFA" },
 	{ x: 300, y: 205, label: "Archivar", color: "#A78BFA" },
-	{ x: 540, y: 160, label: "Cliente A", color: "#00E5C0" },
-	{ x: 540, y: 190, label: "Cliente B", color: "#00E5C0" },
+	{ x: 540, y: 160, label: "Cliente A", color: "#3B8FE8" },
+	{ x: 540, y: 190, label: "Cliente B", color: "#3B8FE8" },
 ] as const;
 
 // Phase timing (ms)
@@ -158,7 +158,7 @@ export function ProcessDiscoveryFlow({ className, loopMs = 7500 }: ProcessDiscov
 				</div>
 				{/* URL bar with typing animation */}
 				<div className="mx-3 flex flex-1 items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.05] px-3 py-1.5">
-					<div className="size-3 rounded-full border border-[#00E5C0]/50 bg-[#00E5C0]/10" />
+					<div className="size-3 rounded-full border border-[#3B8FE8]/50 bg-[#3B8FE8]/10" />
 					<span className="font-mono text-xs text-white/70 tracking-wide">
 						{typedUrl}
 						<AnimatePresence>
@@ -167,7 +167,7 @@ export function ProcessDiscoveryFlow({ className, loopMs = 7500 }: ProcessDiscov
 									initial={{ opacity: 1 }}
 									animate={{ opacity: [1, 0, 1] }}
 									transition={{ duration: 0.8, repeat: Infinity }}
-									className="inline-block w-[2px] h-3 bg-[#00E5C0] ml-0.5 align-middle"
+									className="inline-block w-[2px] h-3 bg-[#3B8FE8] ml-0.5 align-middle"
 								/>
 							)}
 						</AnimatePresence>
@@ -176,7 +176,7 @@ export function ProcessDiscoveryFlow({ className, loopMs = 7500 }: ProcessDiscov
 						<motion.span
 							initial={{ opacity: 0 }}
 							animate={{ opacity: 1 }}
-							className="ml-auto text-[10px] font-medium text-[#00E5C0]"
+							className="ml-auto text-[10px] font-medium text-[#3B8FE8]"
 						>
 							Analizando…
 						</motion.span>
@@ -185,7 +185,7 @@ export function ProcessDiscoveryFlow({ className, loopMs = 7500 }: ProcessDiscov
 						<motion.span
 							initial={{ opacity: 0 }}
 							animate={{ opacity: 1 }}
-							className="ml-auto text-[10px] font-medium text-[#00E5C0]"
+							className="ml-auto text-[10px] font-medium text-[#3B8FE8]"
 						>
 							✓ SIPOC generado
 						</motion.span>
@@ -203,7 +203,7 @@ export function ProcessDiscoveryFlow({ className, loopMs = 7500 }: ProcessDiscov
 						className="relative overflow-hidden bg-white/[0.02] px-6 py-4"
 					>
 						<div className="mb-2 flex items-center justify-between">
-							<span className="text-[11px] font-medium uppercase tracking-widest text-[#00E5C0]/70">
+							<span className="text-[11px] font-medium uppercase tracking-widest text-[#3B8FE8]/70">
 								Escaneando procesos
 							</span>
 							<span className="font-mono text-xs text-white/40">{scanPct}%</span>
@@ -211,7 +211,7 @@ export function ProcessDiscoveryFlow({ className, loopMs = 7500 }: ProcessDiscov
 						<div className="h-1 w-full overflow-hidden rounded-full bg-white/10">
 							<motion.div
 								style={{ width: `${scanPct}%` }}
-								className="h-full rounded-full bg-gradient-to-r from-[#00E5C0] to-[#38BDF8]"
+								className="h-full rounded-full bg-gradient-to-r from-[#3B8FE8] to-[#38BDF8]"
 							/>
 						</div>
 						{/* Scan lines effect */}
@@ -241,7 +241,7 @@ export function ProcessDiscoveryFlow({ className, loopMs = 7500 }: ProcessDiscov
 						animate={{ opacity: 1 }}
 						className="px-4 pt-3 pb-4"
 					>
-						<div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#00E5C0]/60">
+						<div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-[#3B8FE8]/60">
 							SIPOC — Mapa de Proceso
 						</div>
 						<svg
@@ -379,10 +379,10 @@ export function ProcessDiscoveryFlow({ className, loopMs = 7500 }: ProcessDiscov
 									animate={{ opacity: 1, y: 0, scale: 1 }}
 									exit={{ opacity: 0 }}
 									transition={{ type: "spring", stiffness: 400, damping: 25 }}
-									className="mt-2 flex items-center gap-2 rounded-lg border border-[#00E5C0]/20 bg-[#00E5C0]/10 px-3 py-2"
+									className="mt-2 flex items-center gap-2 rounded-lg border border-[#3B8FE8]/20 bg-[#3B8FE8]/10 px-3 py-2"
 								>
-									<div className="size-1.5 rounded-full bg-[#00E5C0] shadow-[0_0_6px_rgba(0,229,192,0.8)]" />
-									<span className="text-[11px] font-medium text-[#00E5C0]">
+									<div className="size-1.5 rounded-full bg-[#3B8FE8] shadow-[0_0_6px_rgba(59,143,232,0.8)]" />
+									<span className="text-[11px] font-medium text-[#3B8FE8]">
 										5 áreas identificadas · 3 riesgos detectados · SIPOC listo
 									</span>
 								</motion.div>
@@ -394,7 +394,7 @@ export function ProcessDiscoveryFlow({ className, loopMs = 7500 }: ProcessDiscov
 
 			{/* Glow overlay */}
 			<div className="pointer-events-none absolute inset-0 rounded-2xl" style={{
-				background: "radial-gradient(ellipse at 50% 0%, rgba(0,229,192,0.04) 0%, transparent 60%)",
+				background: "radial-gradient(ellipse at 50% 0%, rgba(59,143,232,0.04) 0%, transparent 60%)",
 			}} />
 		</div>
 	);

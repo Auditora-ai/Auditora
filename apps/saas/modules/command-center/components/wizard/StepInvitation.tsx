@@ -127,9 +127,9 @@ export function StepInvitation({
 			.join("");
 		const intakeBlock = intakeUrl
 			? `<div style="margin-top:20px;padding:16px;background:#ECFDF5;border-radius:8px;border:1px solid #6EE7C4">
-<p style="margin:0 0 8px;font-weight:600;color:#00C4A3;font-size:14px">📋 Formulario de preparación</p>
+<p style="margin:0 0 8px;font-weight:600;color:#2E7FD6;font-size:14px">📋 Formulario de preparación</p>
 <p style="margin:0 0 8px;color:#334155;font-size:13px">Completa este formulario antes de la sesión para que podamos aprovechar mejor el tiempo:</p>
-<a href="${intakeUrl}" style="display:inline-block;padding:10px 20px;background:#00E5C0;color:#0A1428;text-decoration:none;border-radius:6px;font-weight:500;font-size:14px">Completar formulario</a>
+<a href="${intakeUrl}" style="display:inline-block;padding:10px 20px;background:#3B8FE8;color:#0A1428;text-decoration:none;border-radius:6px;font-weight:500;font-size:14px">Completar formulario</a>
 </div>`
 			: "";
 		return `<div style="font-family:'Geist Sans',system-ui,sans-serif;max-width:600px">

@@ -37,7 +37,7 @@ export function LogoBar() {
 			key={labelKey}
 			className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-white/80 backdrop-blur-sm transition-colors hover:bg-white/10 hover:text-white"
 		>
-			<Icon className="size-4 text-[#00E5C0]" />
+			<Icon className="size-4 text-[#3B8FE8]" />
 			{t(`logos.categories.${labelKey}`)}
 		</span>
 	));
@@ -49,7 +49,7 @@ export function LogoBar() {
 			<div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-[#0A1428] to-transparent" />
 
 			{/* Title */}
-			<p className="mb-6 text-center text-xs font-medium uppercase tracking-widest text-[#00E5C0]">
+			<p className="mb-6 text-center text-xs font-medium uppercase tracking-widest text-[#3B8FE8]">
 				{t('logos.title')}
 			</p>
 

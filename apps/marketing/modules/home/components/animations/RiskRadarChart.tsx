@@ -111,7 +111,7 @@ export function RiskRadarChart({ className }: RiskRadarChartProps) {
 			{/* Header */}
 			<div className="flex items-center justify-between border-b border-white/[0.08] bg-white/[0.02] px-4 py-3">
 				<div className="flex items-center gap-2">
-					<div className="size-2 rounded-full bg-[#00E5C0] shadow-[0_0_6px_rgba(0,229,192,0.8)]" />
+					<div className="size-2 rounded-full bg-[#3B8FE8] shadow-[0_0_6px_rgba(59,143,232,0.8)]" />
 					<span className="text-xs font-medium text-white/60">Mapa de Riesgo — Pentagonal</span>
 				</div>
 				<div className="flex items-center gap-3 text-[10px]">
@@ -120,7 +120,7 @@ export function RiskRadarChart({ className }: RiskRadarChartProps) {
 						<span className="text-white/40">Antes</span>
 					</div>
 					<div className="flex items-center gap-1.5">
-						<div className="size-2 rounded-full bg-[#00E5C0]" />
+						<div className="size-2 rounded-full bg-[#3B8FE8]" />
 						<span className="text-white/40">Con Auditora</span>
 					</div>
 				</div>
@@ -196,7 +196,7 @@ export function RiskRadarChart({ className }: RiskRadarChartProps) {
 					{/* Data fill — AFTER (teal) */}
 					<motion.path
 						d={buildPolygonPath(DATASET_AFTER)}
-						fill="rgba(0,229,192,0.12)"
+						fill="rgba(59,143,232,0.12)"
 						stroke="none"
 						custom={1.8}
 						variants={fillVariants}
@@ -206,7 +206,7 @@ export function RiskRadarChart({ className }: RiskRadarChartProps) {
 					/>
 					<motion.path
 						d={buildPolygonPath(DATASET_AFTER)}
-						stroke="#00E5C0"
+						stroke="#3B8FE8"
 						strokeWidth={2}
 						fill="none"
 						custom={1.8}
@@ -225,7 +225,7 @@ export function RiskRadarChart({ className }: RiskRadarChartProps) {
 								cx={pt.x}
 								cy={pt.y}
 								r={3.5}
-								fill="#00E5C0"
+								fill="#3B8FE8"
 								stroke="#0A1428"
 								strokeWidth={1.5}
 								initial={{ scale: 0, opacity: 0 }}
@@ -274,16 +274,16 @@ export function RiskRadarChart({ className }: RiskRadarChartProps) {
 				initial={{ opacity: 0, y: 6 }}
 				animate={isInView ? { opacity: 1, y: 0 } : {}}
 				transition={{ delay: 2.5, duration: 0.5 }}
-				className="mx-4 mb-4 flex items-center justify-center gap-3 rounded-xl border border-[#00E5C0]/15 bg-[#00E5C0]/[0.05] px-4 py-2.5"
+				className="mx-4 mb-4 flex items-center justify-center gap-3 rounded-xl border border-[#3B8FE8]/15 bg-[#3B8FE8]/[0.05] px-4 py-2.5"
 			>
-				<span className="text-[11px] font-semibold text-[#00E5C0]">↓ 65%</span>
+				<span className="text-[11px] font-semibold text-[#3B8FE8]">↓ 65%</span>
 				<span className="text-[10px] text-white/40">reducción promedio de riesgo operacional</span>
 			</motion.div>
 
 			{/* Ambient glow */}
 			<div
 				className="pointer-events-none absolute inset-0 rounded-2xl"
-				style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(0,229,192,0.03) 0%, transparent 70%)" }}
+				style={{ background: "radial-gradient(ellipse at 50% 50%, rgba(59,143,232,0.03) 0%, transparent 70%)" }}
 			/>
 		</div>
 	);

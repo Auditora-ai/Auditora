@@ -16,7 +16,7 @@ interface Particle {
   opacity: number;
 }
 
-const COLORS = ["#00E5C0", "#FFFFFF", "#00C4A3", "#F1F5F9"];
+const COLORS = ["#3B8FE8", "#FFFFFF", "#2E7FD6", "#F1F5F9"];
 
 export function launchConfetti({
   particleCount = 50,

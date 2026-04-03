@@ -266,7 +266,7 @@ export function EvaluacionRunner({
             style={{
               width: `${progressPercent}%`,
               background:
-                "linear-gradient(90deg, #00E5C0, rgba(0,229,192,0.8))",
+                "linear-gradient(90deg, #3B8FE8, rgba(59,143,232,0.8))",
             }}
           />
         </div>
@@ -287,11 +287,11 @@ export function EvaluacionRunner({
               <div
                 className="mt-4 rounded-lg border px-4 py-3"
                 style={{
-                  borderColor: "rgba(0,229,192,0.15)",
-                  backgroundColor: "rgba(0,229,192,0.05)",
+                  borderColor: "rgba(59,143,232,0.15)",
+                  backgroundColor: "rgba(59,143,232,0.05)",
                 }}
               >
-                <p className="text-[10px] font-medium uppercase tracking-wider" style={{ color: "#00E5C0" }}>
+                <p className="text-[10px] font-medium uppercase tracking-wider" style={{ color: "#3B8FE8" }}>
                   Referencia procedimental
                 </p>
                 <p className="mt-1 text-xs leading-relaxed" style={{ color: "#94A3B8" }}>
@@ -316,9 +316,9 @@ export function EvaluacionRunner({
                   borderColor: "#1E293B",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "rgba(0,229,192,0.5)";
+                  e.currentTarget.style.borderColor = "rgba(59,143,232,0.5)";
                   e.currentTarget.style.boxShadow =
-                    "0 0 20px rgba(0,229,192,0.1)";
+                    "0 0 20px rgba(59,143,232,0.1)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.borderColor = "#1E293B";

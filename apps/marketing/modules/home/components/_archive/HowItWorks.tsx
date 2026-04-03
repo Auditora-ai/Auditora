@@ -34,7 +34,7 @@ export function HowItWorks() {
 					transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
 					className="mb-12 text-center"
 				>
-					<span className="mb-4 inline-block rounded-full border border-[#00E5C0]/20 bg-[#00E5C0]/5 px-4 py-1.5 text-xs font-medium text-[#00E5C0]">
+					<span className="mb-4 inline-block rounded-full border border-[#3B8FE8]/20 bg-[#3B8FE8]/5 px-4 py-1.5 text-xs font-medium text-[#3B8FE8]">
 						{t("badge")}
 					</span>
 					<h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
@@ -65,9 +65,9 @@ export function HowItWorks() {
 						<motion.div key={step.number} custom={index} variants={stepVariants} className="flex items-center md:flex-1">
 							<div className="flex flex-col items-center text-center md:w-full">
 								<motion.div
-									whileHover={{ scale: 1.1, borderColor: "rgba(0,229,192,0.5)" }}
+									whileHover={{ scale: 1.1, borderColor: "rgba(59,143,232,0.5)" }}
 									transition={{ type: "spring", stiffness: 400, damping: 20 }}
-									className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#00E5C0]/30 bg-[#00E5C0]/10 text-lg font-bold text-[#00E5C0]"
+									className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#3B8FE8]/30 bg-[#3B8FE8]/10 text-lg font-bold text-[#3B8FE8]"
 								>
 									{step.number}
 								</motion.div>

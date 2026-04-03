@@ -118,13 +118,13 @@ export function BpmnRealTimeBuilder({ className, loopMs = 8000 }: BpmnRealTimeBu
 			{/* Header bar */}
 			<div className="flex items-center justify-between border-b border-white/[0.08] bg-white/[0.02] px-4 py-3">
 				<div className="flex items-center gap-2">
-					<div className="size-2 rounded-full bg-[#00E5C0] shadow-[0_0_6px_rgba(0,229,192,0.8)]" />
+					<div className="size-2 rounded-full bg-[#3B8FE8] shadow-[0_0_6px_rgba(59,143,232,0.8)]" />
 					<span className="text-xs font-medium text-white/60">Generando diagrama BPMN 2.0…</span>
 				</div>
 				<div className="flex items-center gap-2">
 					<span className="text-[10px] text-white/30">ISO 19510</span>
 					<div className="h-3.5 w-px bg-white/10" />
-					<span className="text-[10px] text-[#00E5C0]/70">Auto-generando</span>
+					<span className="text-[10px] text-[#3B8FE8]/70">Auto-generando</span>
 				</div>
 			</div>
 
@@ -145,7 +145,7 @@ export function BpmnRealTimeBuilder({ className, loopMs = 8000 }: BpmnRealTimeBu
 									rx={4}
 									stroke="rgba(255,255,255,0.06)"
 									strokeWidth={1}
-									fill={idx === 0 ? "rgba(0,229,192,0.03)" : "rgba(255,255,255,0.015)"}
+									fill={idx === 0 ? "rgba(59,143,232,0.03)" : "rgba(255,255,255,0.015)"}
 									initial={{ opacity: 0, scaleX: 0 }}
 									animate={visible(idx) ? { opacity: 1, scaleX: 1 } : { opacity: 0, scaleX: 0 }}
 									style={{ transformOrigin: `${el.x}px ${el.y + el.h / 2}px` }}
@@ -176,9 +176,9 @@ export function BpmnRealTimeBuilder({ className, loopMs = 8000 }: BpmnRealTimeBu
 								cx={BPMN_ELEMENTS[3].x}
 								cy={BPMN_ELEMENTS[3].y}
 								r={BPMN_ELEMENTS[3].r}
-								stroke="#00E5C0"
+								stroke="#3B8FE8"
 								strokeWidth={2}
-								fill="rgba(0,229,192,0.12)"
+								fill="rgba(59,143,232,0.12)"
 								initial={{ scale: 0, opacity: 0 }}
 								animate={{ scale: 1, opacity: 1 }}
 								style={{ transformOrigin: `${BPMN_ELEMENTS[3].x}px ${BPMN_ELEMENTS[3].y}px` }}
@@ -188,7 +188,7 @@ export function BpmnRealTimeBuilder({ className, loopMs = 8000 }: BpmnRealTimeBu
 								x={BPMN_ELEMENTS[3].x}
 								y={BPMN_ELEMENTS[3].y + 24}
 								textAnchor="middle"
-								fill="rgba(0,229,192,0.6)"
+								fill="rgba(59,143,232,0.6)"
 								fontSize="6"
 								fontFamily="system-ui"
 								initial={{ opacity: 0 }}
@@ -300,9 +300,9 @@ export function BpmnRealTimeBuilder({ className, loopMs = 8000 }: BpmnRealTimeBu
 								cx={BPMN_ELEMENTS[9].x}
 								cy={BPMN_ELEMENTS[9].y}
 								r={BPMN_ELEMENTS[9].r}
-								stroke="#00E5C0"
+								stroke="#3B8FE8"
 								strokeWidth={3}
-								fill="rgba(0,229,192,0.12)"
+								fill="rgba(59,143,232,0.12)"
 								initial={{ scale: 0, opacity: 0 }}
 								animate={{ scale: 1, opacity: 1 }}
 								style={{ transformOrigin: `${BPMN_ELEMENTS[9].x}px ${BPMN_ELEMENTS[9].y}px` }}
@@ -312,7 +312,7 @@ export function BpmnRealTimeBuilder({ className, loopMs = 8000 }: BpmnRealTimeBu
 								x={BPMN_ELEMENTS[9].x}
 								y={BPMN_ELEMENTS[9].y + 24}
 								textAnchor="middle"
-								fill="rgba(0,229,192,0.6)"
+								fill="rgba(59,143,232,0.6)"
 								fontSize="6"
 								fontFamily="system-ui"
 								initial={{ opacity: 0 }}
@@ -328,7 +328,7 @@ export function BpmnRealTimeBuilder({ className, loopMs = 8000 }: BpmnRealTimeBu
 					{visible(10) && (
 						<motion.line
 							x1={84} y1={110} x2={150} y2={110}
-							stroke="rgba(0,229,192,0.4)" strokeWidth={1.5}
+							stroke="rgba(59,143,232,0.4)" strokeWidth={1.5}
 							strokeDasharray="1 0"
 							initial={{ pathLength: 0 }}
 							animate={{ pathLength: 1 }}
@@ -338,7 +338,7 @@ export function BpmnRealTimeBuilder({ className, loopMs = 8000 }: BpmnRealTimeBu
 					{visible(11) && (
 						<motion.line
 							x1={230} y1={110} x2={270} y2={110}
-							stroke="rgba(0,229,192,0.4)" strokeWidth={1.5}
+							stroke="rgba(59,143,232,0.4)" strokeWidth={1.5}
 							initial={{ pathLength: 0 }}
 							animate={{ pathLength: 1 }}
 							transition={{ duration: 0.3 }}
@@ -391,7 +391,7 @@ export function BpmnRealTimeBuilder({ className, loopMs = 8000 }: BpmnRealTimeBu
 					{visible(16) && (
 						<motion.line
 							x1={520} y1={110} x2={536} y2={110}
-							stroke="rgba(0,229,192,0.4)" strokeWidth={1.5}
+							stroke="rgba(59,143,232,0.4)" strokeWidth={1.5}
 							initial={{ pathLength: 0 }}
 							animate={{ pathLength: 1 }}
 							transition={{ duration: 0.3 }}
@@ -413,10 +413,10 @@ export function BpmnRealTimeBuilder({ className, loopMs = 8000 }: BpmnRealTimeBu
 							initial={{ opacity: 0, scale: 0.9 }}
 							animate={{ opacity: 1, scale: 1 }}
 							exit={{ opacity: 0 }}
-							className="flex items-center gap-1.5 rounded-full bg-[#00E5C0]/10 px-2.5 py-0.5"
+							className="flex items-center gap-1.5 rounded-full bg-[#3B8FE8]/10 px-2.5 py-0.5"
 						>
-							<div className="size-1.5 rounded-full bg-[#00E5C0]" />
-							<span className="text-[10px] font-medium text-[#00E5C0]">Diagrama completo</span>
+							<div className="size-1.5 rounded-full bg-[#3B8FE8]" />
+							<span className="text-[10px] font-medium text-[#3B8FE8]">Diagrama completo</span>
 						</motion.div>
 					)}
 				</AnimatePresence>

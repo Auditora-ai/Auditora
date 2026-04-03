@@ -16,7 +16,7 @@ const OPTIONS = [
 	{
 		id: "A",
 		label: "Falta de automatización en validaciones",
-		color: "#00E5C0",
+		color: "#3B8FE8",
 		outcome: "Implementar workflow automatizado",
 		outcomeSeverity: "low",
 		score: 87,

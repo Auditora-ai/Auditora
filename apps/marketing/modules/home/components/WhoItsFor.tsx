@@ -18,7 +18,7 @@ const profiles: Profile[] = [
 	{
 		id: "ceo",
 		icon: Crown,
-		accentColor: "#00E5C0",
+		accentColor: "#3B8FE8",
 	},
 	{
 		id: "ops",
@@ -129,7 +129,7 @@ export function WhoItsFor() {
 					transition={{ duration: 0.6, ease: EASE }}
 					className="text-center mb-16"
 				>
-					<p className="text-[#00E5C0] text-sm font-semibold uppercase tracking-widest mb-4">
+					<p className="text-[#3B8FE8] text-sm font-semibold uppercase tracking-widest mb-4">
 						{t("label")}
 					</p>
 					<h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white max-w-2xl mx-auto leading-tight">

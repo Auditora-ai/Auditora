@@ -119,14 +119,14 @@ export function LoginPageLayout({
 					className="pointer-events-none absolute inset-0"
 					style={{
 						background:
-							"radial-gradient(ellipse at top right, rgba(0,229,192,0.06), transparent 60%)",
+							"radial-gradient(ellipse at top right, rgba(59,143,232,0.06), transparent 60%)",
 					}}
 				/>
 
 				<div className="relative z-10 px-6 pt-8 pb-6 text-center">
 					<Logo
 						withLabel
-						className="justify-center text-[#F1F5F9] [&_svg]:text-[#00E5C0] [&_.text-muted-foreground]:text-[#94A3B8] [&_span.hidden]:!block"
+						className="justify-center text-[#F1F5F9] [&_svg]:text-[#3B8FE8] [&_.text-muted-foreground]:text-[#94A3B8] [&_span.hidden]:!block"
 					/>
 					<h2
 						className="mt-4 text-xl tracking-tight"

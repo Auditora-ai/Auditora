@@ -201,10 +201,10 @@ export function ProductDemoSection() {
 											<line x1="40" y1="75" x2="80" y2="75" stroke="#64748B" strokeWidth="1" />
 											<line x1="160" y1="75" x2="200" y2="75" stroke="#64748B" strokeWidth="1" />
 											<circle cx="25" cy="75" r="12" stroke="#16A34A" strokeWidth="1.5" fill="#F0FDF4" />
-											<rect x="80" y="55" width="80" height="40" rx="4" stroke="#00E5C0" strokeWidth="1.5" fill="#ECFDF5" />
-											<text x="120" y="79" textAnchor="middle" className="text-[8px]" fill="#00E5C0" fontFamily="system-ui">{t("home.demo.scene4.nodeMgr")}</text>
-											<rect x="200" y="55" width="80" height="40" rx="4" stroke="#00E5C0" strokeWidth="1.5" fill="#ECFDF5" strokeDasharray="4 3" />
-											<text x="240" y="79" textAnchor="middle" className="text-[8px]" fill="#00E5C0" fontFamily="system-ui">{t("home.demo.scene4.nodeVp")}</text>
+											<rect x="80" y="55" width="80" height="40" rx="4" stroke="#3B8FE8" strokeWidth="1.5" fill="#ECFDF5" />
+											<text x="120" y="79" textAnchor="middle" className="text-[8px]" fill="#3B8FE8" fontFamily="system-ui">{t("home.demo.scene4.nodeMgr")}</text>
+											<rect x="200" y="55" width="80" height="40" rx="4" stroke="#3B8FE8" strokeWidth="1.5" fill="#ECFDF5" strokeDasharray="4 3" />
+											<text x="240" y="79" textAnchor="middle" className="text-[8px]" fill="#3B8FE8" fontFamily="system-ui">{t("home.demo.scene4.nodeVp")}</text>
 										</svg>
 									</div>
 
@@ -215,7 +215,7 @@ export function ProductDemoSection() {
 										</p>
 										<div className="space-y-2">
 											<div className="scene-animate">
-												<p className="text-[10px] text-[#00E5C0] mb-0.5">{t("home.demo.scene3.consultantLabel")}</p>
+												<p className="text-[10px] text-[#3B8FE8] mb-0.5">{t("home.demo.scene3.consultantLabel")}</p>
 												<p className="text-xs text-[#94A3B8]">{t("home.demo.scene3.t1")}</p>
 											</div>
 											<div className="scene-animate">
@@ -262,13 +262,13 @@ export function ProductDemoSection() {
 										<line x1="500" y1="90" x2="540" y2="90" stroke="#64748B" strokeWidth="1.5" />
 
 										<circle cx="40" cy="90" r="14" stroke="#16A34A" strokeWidth="2" fill="#F0FDF4" />
-										<rect x="100" y="65" width="120" height="50" rx="6" stroke="#00E5C0" strokeWidth="1.5" fill="#ECFDF5" />
-										<text x="160" y="94" textAnchor="middle" className="text-[10px]" fill="#00E5C0" fontFamily="system-ui">{t("home.demo.scene4.nodeSubmit")}</text>
+										<rect x="100" y="65" width="120" height="50" rx="6" stroke="#3B8FE8" strokeWidth="1.5" fill="#ECFDF5" />
+										<text x="160" y="94" textAnchor="middle" className="text-[10px]" fill="#3B8FE8" fontFamily="system-ui">{t("home.demo.scene4.nodeSubmit")}</text>
 										<rect x="245" y="75" width="30" height="30" rx="3" transform="rotate(45 260 90)" stroke="#EF4444" strokeWidth="1.5" fill="#FEF2F2" />
-										<rect x="320" y="25" width="120" height="50" rx="6" stroke="#00E5C0" strokeWidth="1.5" fill="#ECFDF5" />
-										<text x="380" y="54" textAnchor="middle" className="text-[10px]" fill="#00E5C0" fontFamily="system-ui">{t("home.demo.scene4.nodeMgr")}</text>
-										<rect x="320" y="105" width="120" height="50" rx="6" stroke="#00E5C0" strokeWidth="1.5" fill="#ECFDF5" />
-										<text x="380" y="134" textAnchor="middle" className="text-[10px]" fill="#00E5C0" fontFamily="system-ui">{t("home.demo.scene4.nodeVp")}</text>
+										<rect x="320" y="25" width="120" height="50" rx="6" stroke="#3B8FE8" strokeWidth="1.5" fill="#ECFDF5" />
+										<text x="380" y="54" textAnchor="middle" className="text-[10px]" fill="#3B8FE8" fontFamily="system-ui">{t("home.demo.scene4.nodeMgr")}</text>
+										<rect x="320" y="105" width="120" height="50" rx="6" stroke="#3B8FE8" strokeWidth="1.5" fill="#ECFDF5" />
+										<text x="380" y="134" textAnchor="middle" className="text-[10px]" fill="#3B8FE8" fontFamily="system-ui">{t("home.demo.scene4.nodeVp")}</text>
 										<rect x="465" y="75" width="30" height="30" rx="3" transform="rotate(45 480 90)" stroke="#EF4444" strokeWidth="1.5" fill="#FEF2F2" />
 										<circle cx="555" cy="90" r="14" stroke="#DC2626" strokeWidth="2.5" fill="#FEF2F2" />
 										<text x="285" y="48" className="text-[8px]" fill="#64748B" fontFamily="system-ui">{t("home.demo.scene4.labelLt")}</text>

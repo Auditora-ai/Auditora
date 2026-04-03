@@ -91,7 +91,7 @@ export function EvaluacionIntro({
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at top right, rgba(0,229,192,0.08), transparent 60%)",
+            "radial-gradient(ellipse at top right, rgba(59,143,232,0.08), transparent 60%)",
         }}
       />
       <div
@@ -106,7 +106,7 @@ export function EvaluacionIntro({
         {/* Label */}
         <p
           className="sim-intro-label mb-6 text-xs font-medium uppercase tracking-[0.2em]"
-          style={{ color: "#00E5C0" }}
+          style={{ color: "#3B8FE8" }}
         >
           Evaluación
         </p>
@@ -134,7 +134,7 @@ export function EvaluacionIntro({
           onClick={onStart}
           className="sim-intro-btn inline-flex min-h-[48px] items-center rounded-full px-10 py-3.5 text-base font-semibold transition-colors hover:opacity-90"
           style={{
-            backgroundColor: "#00E5C0",
+            backgroundColor: "#3B8FE8",
             color: "#0A1428",
           }}
         >

@@ -22,7 +22,7 @@ interface DimensionTrendChartProps {
 }
 
 const chartConfig = {
-  alignment: { label: "Alignment", color: "#00E5C0" },
+  alignment: { label: "Alignment", color: "#3B8FE8" },
   riskLevel: { label: "Risk Level", color: "#f87171" },
   criterio: { label: "Criterio", color: "#818cf8" },
 } satisfies ChartConfig;
@@ -75,9 +75,9 @@ export function DimensionTrendChart({
             dataKey="alignment"
             name={t("alignment")}
             type="monotone"
-            stroke="#00E5C0"
+            stroke="#3B8FE8"
             strokeWidth={2}
-            dot={{ r: 3, fill: "#00E5C0" }}
+            dot={{ r: 3, fill: "#3B8FE8" }}
             activeDot={{ r: 5 }}
           />
           <Line

@@ -18,7 +18,7 @@ import { WorkflowEndToEnd } from "./animations/WorkflowEndToEnd";
 gsap.registerPlugin(ScrollTrigger);
 
 const STEPS = [
-	{ id: "scan", icon: Globe, num: "01", color: "#00E5C0" },
+	{ id: "scan", icon: Globe, num: "01", color: "#3B8FE8" },
 	{ id: "discover", icon: Search, num: "02", color: "#38BDF8" },
 	{ id: "analyze", icon: ShieldCheck, num: "03", color: "#A78BFA" },
 	{ id: "document", icon: FileText, num: "04", color: "#FB923C" },
@@ -85,7 +85,7 @@ export function WorkflowSection() {
 		>
 			<div className="container max-w-6xl">
 				<div className="wf-header mb-12 sm:mb-16 max-w-3xl mx-auto text-center">
-					<small className="font-medium text-xs uppercase tracking-widest text-[#00E5C0] mb-4 block">
+					<small className="font-medium text-xs uppercase tracking-widest text-[#3B8FE8] mb-4 block">
 						{t("home.workflow.badge")}
 					</small>
 					<h2 className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-white">

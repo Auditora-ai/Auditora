@@ -101,7 +101,7 @@ export function InterviewChat({
 							<button
 								onClick={onReveal}
 								className="rounded-md px-4 py-2 text-sm font-medium text-white transition-colors hover:opacity-90"
-								style={{ backgroundColor: "#00E5C0" }}
+								style={{ backgroundColor: "#3B8FE8" }}
 							>
 								Ver Diagrama
 							</button>
@@ -150,7 +150,7 @@ export function InterviewChat({
 								className="max-w-[80%] rounded-lg px-4 py-3 text-sm leading-relaxed"
 								style={
 									msg.role === "user"
-										? { backgroundColor: "#00E5C0", color: "#0A1428" }
+										? { backgroundColor: "#3B8FE8", color: "#0A1428" }
 										: { backgroundColor: "#F1F5F9", border: "1px solid #E2E8F0", color: "#0A1428" }
 								}
 							>
@@ -215,7 +215,7 @@ export function InterviewChat({
 							minHeight: "44px",
 						}}
 						onFocus={(e) => {
-							e.currentTarget.style.borderColor = "#00E5C0";
+							e.currentTarget.style.borderColor = "#3B8FE8";
 							e.currentTarget.style.backgroundColor = "#ECFDF5";
 						}}
 						onBlur={(e) => {
@@ -227,7 +227,7 @@ export function InterviewChat({
 						onClick={handleSend}
 						disabled={!input.trim() || sending}
 						className="flex items-center justify-center rounded-lg px-5 text-white transition-colors disabled:opacity-50"
-						style={{ backgroundColor: "#00E5C0", minHeight: "44px" }}
+						style={{ backgroundColor: "#3B8FE8", minHeight: "44px" }}
 					>
 						<SendIcon className="size-4" />
 					</button>

@@ -59,13 +59,13 @@ export default function IntakeSimulationPage() {
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse at top right, rgba(0,229,192,0.08), transparent 60%)",
+              "radial-gradient(ellipse at top right, rgba(59,143,232,0.08), transparent 60%)",
           }}
         />
         <div className="relative z-10 text-center">
           <Loader2Icon
             className="mx-auto mb-4 h-8 w-8 animate-spin"
-            style={{ color: "#00E5C0" }}
+            style={{ color: "#3B8FE8" }}
           />
           <p className="text-sm" style={{ color: "#64748B" }}>
             Cargando evaluación...
@@ -86,7 +86,7 @@ export default function IntakeSimulationPage() {
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse at top right, rgba(0,229,192,0.08), transparent 60%)",
+              "radial-gradient(ellipse at top right, rgba(59,143,232,0.08), transparent 60%)",
           }}
         />
         <div className="relative z-10 max-w-md text-center">

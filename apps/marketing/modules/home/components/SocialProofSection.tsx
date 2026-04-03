@@ -74,7 +74,7 @@ export function SocialProofSection() {
 		<section ref={sectionRef} id="cases" className="py-16 sm:py-20 lg:py-28 bg-white">
 			<div className="container max-w-5xl">
 				<div className="sp-header mb-10 sm:mb-14 max-w-3xl mx-auto text-center">
-					<small className="font-medium text-xs uppercase tracking-widest text-[#00E5C0] mb-4 block">
+					<small className="font-medium text-xs uppercase tracking-widest text-[#3B8FE8] mb-4 block">
 						{t("home.socialProof.badge")}
 					</small>
 					<h2 className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-[#0A1428]">
@@ -94,7 +94,7 @@ export function SocialProofSection() {
 								{Array.from({ length: 5 }).map((_, i) => (
 									<StarIcon
 										key={i}
-										className="size-4 fill-[#00E5C0] text-[#00E5C0]"
+										className="size-4 fill-[#3B8FE8] text-[#3B8FE8]"
 									/>
 								))}
 							</div>
@@ -106,7 +106,7 @@ export function SocialProofSection() {
 
 							{/* Author */}
 							<div className="flex items-center gap-3 pt-4 border-t border-[#E2E8F0]">
-								<div className="w-10 h-10 rounded-full bg-[#00E5C0]/15 flex items-center justify-center text-[#00E5C0] font-semibold text-sm">
+								<div className="w-10 h-10 rounded-full bg-[#3B8FE8]/15 flex items-center justify-center text-[#3B8FE8] font-semibold text-sm">
 									{t(`home.socialProof.${key}.name`).split(" ").map(n => n[0]).join("")}
 								</div>
 								<div>

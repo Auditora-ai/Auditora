@@ -20,7 +20,7 @@ interface ScoreTrendChartProps {
 }
 
 const chartConfig = {
-  score: { label: "Puntaje Promedio", color: "#00E5C0" },
+  score: { label: "Puntaje Promedio", color: "#3B8FE8" },
 } satisfies ChartConfig;
 
 export function ScoreTrendChart({ scoreTrend }: ScoreTrendChartProps) {
@@ -45,8 +45,8 @@ export function ScoreTrendChart({ scoreTrend }: ScoreTrendChartProps) {
           >
             <defs>
               <linearGradient id="scoreFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#00E5C0" stopOpacity={0.3} />
-                <stop offset="100%" stopColor="#00E5C0" stopOpacity={0} />
+                <stop offset="0%" stopColor="#3B8FE8" stopOpacity={0.3} />
+                <stop offset="100%" stopColor="#3B8FE8" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid vertical={false} stroke="#1e293b" />
@@ -91,7 +91,7 @@ export function ScoreTrendChart({ scoreTrend }: ScoreTrendChartProps) {
               dataKey="score"
               type="monotone"
               fill="url(#scoreFill)"
-              stroke="#00E5C0"
+              stroke="#3B8FE8"
               strokeWidth={2}
             />
           </AreaChart>

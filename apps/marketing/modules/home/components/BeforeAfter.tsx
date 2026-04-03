@@ -35,7 +35,7 @@ export function BeforeAfter() {
 	return (
 		<section className="relative py-24 lg:py-32 overflow-hidden">
 			{/* Background glow */}
-			<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_50%,rgba(0,229,192,0.04),transparent)]" />
+			<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_50%,rgba(59,143,232,0.04),transparent)]" />
 
 			<div className="max-w-6xl mx-auto px-6">
 				{/* Story intro */}
@@ -48,7 +48,7 @@ export function BeforeAfter() {
 					<motion.p
 						custom={0}
 						variants={fadeUp}
-						className="text-[#00E5C0] text-sm font-semibold uppercase tracking-widest mb-4"
+						className="text-[#3B8FE8] text-sm font-semibold uppercase tracking-widest mb-4"
 					>
 						{t("label")}
 					</motion.p>
@@ -125,14 +125,14 @@ export function BeforeAfter() {
 						transition={{ duration: 0.7, ease: EASE }}
 						className={cn(
 							"relative rounded-2xl border p-8",
-							"bg-[#00E5C0]/[0.03] border-[#00E5C0]/20",
+							"bg-[#3B8FE8]/[0.03] border-[#3B8FE8]/20",
 							"backdrop-blur-sm"
 						)}
 					>
-						<div className="absolute inset-0 rounded-2xl bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(0,229,192,0.06),transparent)] pointer-events-none" />
+						<div className="absolute inset-0 rounded-2xl bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(59,143,232,0.06),transparent)] pointer-events-none" />
 						<div className="flex items-center gap-2 mb-8">
-							<div className="size-3 rounded-full bg-[#00E5C0]/80" />
-							<span className="text-xs font-semibold uppercase tracking-widest text-[#00E5C0]">
+							<div className="size-3 rounded-full bg-[#3B8FE8]/80" />
+							<span className="text-xs font-semibold uppercase tracking-widest text-[#3B8FE8]">
 								{t("afterLabel")}
 							</span>
 						</div>
@@ -149,11 +149,11 @@ export function BeforeAfter() {
 										viewport={{ once: true }}
 										className="flex items-center gap-4"
 									>
-										<div className="flex-shrink-0 size-12 rounded-xl bg-[#00E5C0]/10 border border-[#00E5C0]/20 flex items-center justify-center">
-											<Icon className="size-5 text-[#00E5C0]" />
+										<div className="flex-shrink-0 size-12 rounded-xl bg-[#3B8FE8]/10 border border-[#3B8FE8]/20 flex items-center justify-center">
+											<Icon className="size-5 text-[#3B8FE8]" />
 										</div>
 										<div>
-											<span className="text-2xl font-bold text-[#00E5C0]">
+											<span className="text-2xl font-bold text-[#3B8FE8]">
 												<AnimatedCounter target={item.metric} suffix={item.suffix} />
 											</span>
 											<p className="text-sm text-white/50">{t(`after.${i}`)}</p>
@@ -173,8 +173,8 @@ export function BeforeAfter() {
 					transition={{ duration: 0.6, delay: 0.3, ease: EASE }}
 					className="mt-10 text-center"
 				>
-					<div className="inline-flex items-center gap-3 rounded-full bg-[#00E5C0]/10 border border-[#00E5C0]/20 px-6 py-3">
-						<span className="text-3xl font-bold text-[#00E5C0]">
+					<div className="inline-flex items-center gap-3 rounded-full bg-[#3B8FE8]/10 border border-[#3B8FE8]/20 px-6 py-3">
+						<span className="text-3xl font-bold text-[#3B8FE8]">
 							<AnimatedCounter target={200} prefix="$" suffix="K" />
 						</span>
 						<span className="text-sm text-white/70">{t("savings")}</span>

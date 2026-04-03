@@ -32,7 +32,7 @@ export function NotificationDropdown({
 					<button
 						type="button"
 						onClick={() => markAllRead()}
-						className="flex items-center gap-1 text-xs text-[#00E5C0] hover:text-[#00E5C0]/80 transition-colors"
+						className="flex items-center gap-1 text-xs text-[#3B8FE8] hover:text-[#3B8FE8]/80 transition-colors"
 					>
 						<CheckCheckIcon className="size-3.5" />
 						Marcar todo como leído
@@ -44,7 +44,7 @@ export function NotificationDropdown({
 			<div className="flex-1 overflow-y-auto">
 				{isLoading ? (
 					<div className="flex items-center justify-center py-12">
-						<div className="size-5 animate-spin rounded-full border-2 border-slate-600 border-t-[#00E5C0]" />
+						<div className="size-5 animate-spin rounded-full border-2 border-slate-600 border-t-[#3B8FE8]" />
 					</div>
 				) : notifications.length === 0 ? (
 					<div className="flex flex-col items-center justify-center py-12 text-slate-500">

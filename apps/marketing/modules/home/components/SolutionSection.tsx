@@ -58,7 +58,7 @@ export function SolutionSection() {
 		<section ref={sectionRef} id="solution" className="py-16 sm:py-20 lg:py-28 bg-white">
 			<div className="container max-w-6xl">
 				<div className="solution-header mb-10 sm:mb-16 max-w-3xl mx-auto text-center">
-					<small className="font-medium text-xs uppercase tracking-widest text-[#00E5C0] mb-4 block">
+					<small className="font-medium text-xs uppercase tracking-widest text-[#3B8FE8] mb-4 block">
 						{t("home.solution.badge")}
 					</small>
 					<h2 className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-[#0A1428]">
@@ -78,9 +78,9 @@ export function SolutionSection() {
 								<div
 									key={diff.id}
 									className="solution-card flex gap-4 sm:gap-5 rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] p-4 sm:p-6 lg:p-7 transition-all duration-200 hover:scale-[1.02] hover:shadow-lg"
-									style={{ borderLeftWidth: "3px", borderLeftColor: "#00E5C0" }}
+									style={{ borderLeftWidth: "3px", borderLeftColor: "#3B8FE8" }}
 								>
-									<div className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#00E5C0]/10 text-[#00E5C0] shrink-0 mt-0.5">
+									<div className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#3B8FE8]/10 text-[#3B8FE8] shrink-0 mt-0.5">
 										<Icon className="size-5" strokeWidth={1.5} />
 									</div>
 									<div>
@@ -115,7 +115,7 @@ export function SolutionSection() {
 								{/* SIPOC table mockup */}
 								<div className="grid grid-cols-5 gap-1 text-[10px] font-medium">
 									{["S", "I", "P", "O", "C"].map((label) => (
-										<div key={label} className="bg-[#00E5C0]/10 text-[#00E5C0] rounded px-2 py-1.5 text-center font-semibold">
+										<div key={label} className="bg-[#3B8FE8]/10 text-[#3B8FE8] rounded px-2 py-1.5 text-center font-semibold">
 											{label}
 										</div>
 									))}
@@ -127,15 +127,15 @@ export function SolutionSection() {
 								</div>
 								{/* Mini BPMN */}
 								<svg viewBox="0 0 400 80" className="w-full opacity-70" fill="none">
-									<circle cx="30" cy="40" r="12" stroke="#00E5C0" strokeWidth="2" fill="#00E5C0" fillOpacity="0.1" />
-									<line x1="42" y1="40" x2="80" y2="40" stroke="#00E5C0" strokeWidth="1.5" />
-									<rect x="80" y="22" width="70" height="36" rx="6" stroke="#00E5C0" strokeWidth="1.5" fill="#00E5C0" fillOpacity="0.06" />
-									<line x1="150" y1="40" x2="185" y2="40" stroke="#00E5C0" strokeWidth="1.5" />
-									<rect x="178" y="33" width="14" height="14" rx="2" transform="rotate(45 185 40)" stroke="#00E5C0" strokeWidth="1.5" fill="#00E5C0" fillOpacity="0.06" />
-									<line x1="199" y1="40" x2="235" y2="40" stroke="#00E5C0" strokeWidth="1.5" />
-									<rect x="235" y="22" width="70" height="36" rx="6" stroke="#00E5C0" strokeWidth="1.5" fill="#00E5C0" fillOpacity="0.06" />
-									<line x1="305" y1="40" x2="340" y2="40" stroke="#00E5C0" strokeWidth="1.5" />
-									<circle cx="355" cy="40" r="12" stroke="#00E5C0" strokeWidth="3" fill="#00E5C0" fillOpacity="0.1" />
+									<circle cx="30" cy="40" r="12" stroke="#3B8FE8" strokeWidth="2" fill="#3B8FE8" fillOpacity="0.1" />
+									<line x1="42" y1="40" x2="80" y2="40" stroke="#3B8FE8" strokeWidth="1.5" />
+									<rect x="80" y="22" width="70" height="36" rx="6" stroke="#3B8FE8" strokeWidth="1.5" fill="#3B8FE8" fillOpacity="0.06" />
+									<line x1="150" y1="40" x2="185" y2="40" stroke="#3B8FE8" strokeWidth="1.5" />
+									<rect x="178" y="33" width="14" height="14" rx="2" transform="rotate(45 185 40)" stroke="#3B8FE8" strokeWidth="1.5" fill="#3B8FE8" fillOpacity="0.06" />
+									<line x1="199" y1="40" x2="235" y2="40" stroke="#3B8FE8" strokeWidth="1.5" />
+									<rect x="235" y="22" width="70" height="36" rx="6" stroke="#3B8FE8" strokeWidth="1.5" fill="#3B8FE8" fillOpacity="0.06" />
+									<line x1="305" y1="40" x2="340" y2="40" stroke="#3B8FE8" strokeWidth="1.5" />
+									<circle cx="355" cy="40" r="12" stroke="#3B8FE8" strokeWidth="3" fill="#3B8FE8" fillOpacity="0.1" />
 								</svg>
 							</div>
 						</div>

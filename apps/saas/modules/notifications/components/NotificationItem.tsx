@@ -50,7 +50,7 @@ export function NotificationItem({
 		<div
 			className={cn(
 				"group flex items-start gap-3 px-4 py-3 cursor-pointer transition-colors hover:bg-slate-800/50",
-				!notification.read && "bg-slate-800/30 border-l-2 border-[#00E5C0]",
+				!notification.read && "bg-slate-800/30 border-l-2 border-[#3B8FE8]",
 			)}
 			onClick={handleClick}
 			onKeyDown={(e) => e.key === "Enter" && handleClick()}

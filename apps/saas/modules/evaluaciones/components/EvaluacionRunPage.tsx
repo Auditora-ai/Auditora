@@ -107,7 +107,7 @@ export function EvaluacionRunPage({
           <div className="mx-auto mb-8 max-w-3xl px-4">
             <p
               className="text-xs font-medium uppercase tracking-[0.2em]"
-              style={{ color: "#00E5C0" }}
+              style={{ color: "#3B8FE8" }}
             >
               Evaluación
             </p>
@@ -134,14 +134,14 @@ export function EvaluacionRunPage({
             className="pointer-events-none absolute inset-0"
             style={{
               background:
-                "radial-gradient(ellipse at top right, rgba(0,229,192,0.08), transparent 60%)",
+                "radial-gradient(ellipse at top right, rgba(59,143,232,0.08), transparent 60%)",
             }}
           />
 
           <div className="relative z-10 text-center">
             <Loader2Icon
               className="mx-auto mb-6 h-8 w-8 animate-spin"
-              style={{ color: "#00E5C0" }}
+              style={{ color: "#3B8FE8" }}
             />
             <p
               className="font-display text-xl"
@@ -165,7 +165,7 @@ export function EvaluacionRunPage({
           <div className="mx-auto mb-10 max-w-2xl px-4 text-center">
             <p
               className="text-xs font-medium uppercase tracking-[0.2em]"
-              style={{ color: "#00E5C0" }}
+              style={{ color: "#3B8FE8" }}
             >
               Resultados
             </p>

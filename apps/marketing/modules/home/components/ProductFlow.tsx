@@ -38,7 +38,7 @@ export function ProductFlow() {
 						viewport={{ once: true, margin: "-60px" }}
 						transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
 						className={cn(
-							"badge-pulse inline-flex items-center rounded-full bg-[#00E5C0]/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#00E5C0] mb-6",
+							"badge-pulse inline-flex items-center rounded-full bg-[#3B8FE8]/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#3B8FE8] mb-6",
 						)}
 					>
 						{t("badge")}
@@ -89,19 +89,19 @@ export function ProductFlow() {
 							variants={cardVariants}
 							whileHover={{
 								y: -6,
-								borderColor: step.id === "step5" ? "rgba(0,229,192,0.6)" : "rgba(0,229,192,0.25)",
+								borderColor: step.id === "step5" ? "rgba(59,143,232,0.6)" : "rgba(59,143,232,0.25)",
 								transition: { type: "spring", stiffness: 300, damping: 20 },
 							}}
 							className={cn(
 								"relative rounded-2xl border p-5 sm:p-6 lg:p-8 transition-colors duration-300",
 								step.id === "step5"
-									? "border-glow border-[#00E5C0]/50 bg-[#00E5C0]/5 shadow-lg shadow-[#00E5C0]/5"
+									? "border-glow border-[#3B8FE8]/50 bg-[#3B8FE8]/5 shadow-lg shadow-[#3B8FE8]/5"
 									: "border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/[0.07]",
 							)}
 						>
 							<span className={cn(
 								"font-display text-4xl sm:text-5xl font-bold leading-none",
-								step.id === "step5" ? "text-[#00E5C0]" : "text-white/10",
+								step.id === "step5" ? "text-[#3B8FE8]" : "text-white/10",
 							)}>
 								{step.number}
 							</span>
@@ -112,7 +112,7 @@ export function ProductFlow() {
 								{t(`${step.id}.${step.descKey}`)}
 							</p>
 							{step.id === "step5" && (
-								<span className="absolute top-4 right-4 inline-flex items-center gap-1 rounded-full bg-[#00E5C0]/20 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#00E5C0] badge-pulse">
+								<span className="absolute top-4 right-4 inline-flex items-center gap-1 rounded-full bg-[#3B8FE8]/20 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#3B8FE8] badge-pulse">
 									★ {t("starFeature")}
 								</span>
 							)}

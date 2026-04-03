@@ -69,7 +69,7 @@ export function ChangeStatusTracker({
 							? "bg-emerald-400"
 							: status === "OVERDUE"
 								? "bg-red-400"
-								: "bg-[#00E5C0]",
+								: "bg-[#3B8FE8]",
 					)}
 					style={{ width: `${percentage}%` }}
 				/>

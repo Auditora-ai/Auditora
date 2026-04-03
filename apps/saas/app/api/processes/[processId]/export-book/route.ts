@@ -89,7 +89,7 @@ export async function POST(
   .page { max-width: 900px; margin: 0 auto; padding: 40px; }
 
   /* Cover */
-  .cover { text-align: center; padding: 80px 40px; border-bottom: 3px solid #00E5C0; margin-bottom: 40px; }
+  .cover { text-align: center; padding: 80px 40px; border-bottom: 3px solid #3B8FE8; margin-bottom: 40px; }
   .cover h1 { font-size: 32px; font-weight: 700; color: #0F172A; margin-bottom: 8px; }
   .cover .org { font-size: 18px; color: #64748B; margin-bottom: 24px; }
   .cover .meta { font-size: 14px; color: #94A3B8; }
@@ -103,7 +103,7 @@ export async function POST(
   .context-item { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px; }
   .context-item label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #64748B; }
   .context-item .value { font-size: 14px; margin-top: 4px; }
-  .tag { display: inline-block; background: #ECFDF5; color: #00E5C0; font-size: 12px; padding: 2px 8px; border-radius: 4px; margin: 2px; }
+  .tag { display: inline-block; background: #ECFDF5; color: #3B8FE8; font-size: 12px; padding: 2px 8px; border-radius: 4px; margin: 2px; }
 
   /* Diagram */
   .diagram-container { text-align: center; margin: 16px 0; border: 1px solid #E2E8F0; border-radius: 8px; padding: 16px; background: #fff; }
@@ -116,7 +116,7 @@ export async function POST(
   td { padding: 8px; border-bottom: 1px solid #E2E8F0; vertical-align: top; }
   .raci-cell { text-align: center; font-weight: 700; font-size: 14px; }
   .raci-R { color: #16A34A; }
-  .raci-A { color: #00E5C0; }
+  .raci-A { color: #3B8FE8; }
   .raci-C { color: #D97706; }
   .raci-I { color: #9333EA; }
 
@@ -126,7 +126,7 @@ export async function POST(
   .badge-high { background: #FEF3C7; color: #D97706; }
   .badge-medium { background: #FEF9C3; color: #CA8A04; }
   .badge-low { background: #DCFCE7; color: #16A34A; }
-  .badge-info { background: #ECFDF5; color: #00E5C0; }
+  .badge-info { background: #ECFDF5; color: #3B8FE8; }
 
   /* Intelligence */
   .score-ring { display: inline-flex; align-items: center; gap: 8px; font-size: 24px; font-weight: 700; }

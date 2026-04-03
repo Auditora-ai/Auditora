@@ -54,7 +54,7 @@ export function FeaturesBento() {
 						whileInView={{ opacity: 1, y: 0 }}
 						viewport={{ once: true, margin: "-60px" }}
 						transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
-						className="inline-flex items-center rounded-full bg-[#00E5C0]/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#00E5C0] mb-6"
+						className="inline-flex items-center rounded-full bg-[#3B8FE8]/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#3B8FE8] mb-6"
 					>
 						{t("badge")}
 					</motion.span>
@@ -94,23 +94,23 @@ export function FeaturesBento() {
 								variants={cardVariants}
 								whileHover={{
 									y: -6,
-									borderColor: feature.highlighted ? "rgba(0,229,192,0.7)" : "rgba(0,229,192,0.3)",
+									borderColor: feature.highlighted ? "rgba(59,143,232,0.7)" : "rgba(59,143,232,0.3)",
 									transition: { type: "spring", stiffness: 300, damping: 20 },
 								}}
 								className={cn(
 									"rounded-2xl border p-5 sm:p-6 lg:p-8 transition-colors duration-300",
 									feature.span,
 									feature.highlighted
-										? "border-glow border-[#00E5C0]/50 bg-[#00E5C0]/5 backdrop-blur-sm shadow-lg shadow-[#00E5C0]/5"
+										? "border-glow border-[#3B8FE8]/50 bg-[#3B8FE8]/5 backdrop-blur-sm shadow-lg shadow-[#3B8FE8]/5"
 										: "border-white/10 bg-white/5 backdrop-blur-sm hover:bg-white/[0.07]",
 								)}
 							>
 								<div className="flex items-center gap-3 mb-3">
 									<div className={cn(
 										"flex h-10 w-10 items-center justify-center rounded-xl shrink-0",
-										feature.highlighted ? "bg-[#00E5C0]/20" : "bg-[#00E5C0]/15",
+										feature.highlighted ? "bg-[#3B8FE8]/20" : "bg-[#3B8FE8]/15",
 									)}>
-										<Icon className="size-5 text-[#00E5C0]" strokeWidth={1.5} />
+										<Icon className="size-5 text-[#3B8FE8]" strokeWidth={1.5} />
 									</div>
 									<h3 className="font-display text-base sm:text-lg font-semibold text-white">
 										{t(`${feature.id}.title`)}

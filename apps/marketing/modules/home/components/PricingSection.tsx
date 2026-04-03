@@ -36,9 +36,9 @@ const PLAN_STYLES = {
 		cta: "border-white/10 text-white hover:bg-white/5",
 	},
 	growth: {
-		card: "border-[#00E5C0]/40 bg-[#00E5C0]/[0.04] ring-1 ring-[#00E5C0]/20",
+		card: "border-[#3B8FE8]/40 bg-[#3B8FE8]/[0.04] ring-1 ring-[#3B8FE8]/20",
 		price: "text-gradient-teal",
-		cta: "bg-[#00E5C0] hover:bg-[#00C4A3] text-[#0A1428]",
+		cta: "bg-[#3B8FE8] hover:bg-[#2E7FD6] text-[#0A1428]",
 	},
 	scale: {
 		card: "border-white/[0.08] bg-white/[0.03]",
@@ -81,12 +81,12 @@ export function PricingSection() {
 			<motion.div
 				animate={{ x: [0, -15, 10, 0], y: [0, 12, -8, 0] }}
 				transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-				className="pointer-events-none absolute -top-20 left-1/4 size-72 rounded-full bg-[#00E5C0]/[0.04] blur-3xl"
+				className="pointer-events-none absolute -top-20 left-1/4 size-72 rounded-full bg-[#3B8FE8]/[0.04] blur-3xl"
 			/>
 			<motion.div
 				animate={{ x: [0, 10, -15, 0], y: [0, -10, 15, 0] }}
 				transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-				className="pointer-events-none absolute -bottom-32 right-1/4 size-96 rounded-full bg-[#00E5C0]/[0.03] blur-3xl"
+				className="pointer-events-none absolute -bottom-32 right-1/4 size-96 rounded-full bg-[#3B8FE8]/[0.03] blur-3xl"
 			/>
 
 			<div className="container relative max-w-6xl">
@@ -98,9 +98,9 @@ export function PricingSection() {
 					transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
 					className="text-center"
 				>
-					<div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#00E5C0]/30 bg-[#00E5C0]/10 px-4 py-1.5">
-						<ZapIcon className="size-3.5 text-[#00E5C0]" strokeWidth={2} />
-						<span className="badge-pulse text-xs font-medium uppercase tracking-widest text-[#00E5C0]">{t("pricing.badge")}</span>
+					<div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#3B8FE8]/30 bg-[#3B8FE8]/10 px-4 py-1.5">
+						<ZapIcon className="size-3.5 text-[#3B8FE8]" strokeWidth={2} />
+						<span className="badge-pulse text-xs font-medium uppercase tracking-widest text-[#3B8FE8]">{t("pricing.badge")}</span>
 					</div>
 					<h2 className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-white max-w-3xl mx-auto text-center leading-tight">
 						{t("pricing.title")}
@@ -148,9 +148,9 @@ export function PricingSection() {
 										<motion.div
 											animate={{
 												boxShadow: [
-													"0 0 15px 2px rgba(0, 229, 192, 0.15)",
-													"0 0 25px 6px rgba(0, 229, 192, 0.25)",
-													"0 0 15px 2px rgba(0, 229, 192, 0.15)",
+													"0 0 15px 2px rgba(59, 143, 232, 0.15)",
+													"0 0 25px 6px rgba(59, 143, 232, 0.25)",
+													"0 0 15px 2px rgba(59, 143, 232, 0.15)",
 												],
 											}}
 											transition={{
@@ -169,7 +169,7 @@ export function PricingSection() {
 										whileInView={{ opacity: 1, y: 0, scale: 1 }}
 										viewport={{ once: true }}
 										transition={{ duration: 0.4, delay: 0.5 }}
-										className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#00E5C0] px-3.5 py-1 text-xs font-semibold text-[#0A1428]"
+										className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-[#3B8FE8] px-3.5 py-1 text-xs font-semibold text-[#0A1428]"
 									>
 										{t("pricing.recommended")}
 									</motion.div>
@@ -206,7 +206,7 @@ export function PricingSection() {
 									<ul className="mt-6 flex-1 space-y-2.5">
 										{featureList.map((feature, idx) => (
 											<li key={idx} className="flex items-start gap-2.5 text-sm">
-												<CheckIcon className="mt-0.5 size-4 shrink-0 text-[#00E5C0]" />
+												<CheckIcon className="mt-0.5 size-4 shrink-0 text-[#3B8FE8]" />
 												<span className="text-white/70 leading-snug">{feature}</span>
 											</li>
 										))}

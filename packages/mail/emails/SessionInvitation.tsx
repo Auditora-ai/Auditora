@@ -202,7 +202,7 @@ export function SessionInvitation({
 					/>
 					<Text style={{ color: "#78716C", fontSize: "14px" }}>
 						{t("meetingLinkLabel")}:{" "}
-						<Link href={meetingUrl} style={{ color: "#00E5C0" }}>
+						<Link href={meetingUrl} style={{ color: "#3B8FE8" }}>
 							{meetingUrl}
 						</Link>
 					</Text>

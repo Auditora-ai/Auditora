@@ -152,7 +152,7 @@ export function AnalyzingPhase({
       </div>
 
       {/* Progress card */}
-      <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8 shadow-[0_0_30px_rgba(0,229,192,0.05)]">
+      <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8 shadow-[0_0_30px_rgba(59,143,232,0.05)]">
         <div className="space-y-4">
           {STEPS.map((step, i) => {
             const Icon = step.icon;
@@ -169,7 +169,7 @@ export function AnalyzingPhase({
                 animate="visible"
                 className={`flex items-center gap-4 rounded-xl px-4 py-3 transition-colors duration-500 ${
                   isActive
-                    ? "bg-[#00E5C0]/5 border border-[#00E5C0]/20"
+                    ? "bg-[#3B8FE8]/5 border border-[#3B8FE8]/20"
                     : isCompleted
                       ? "bg-white/[0.02] border border-white/5"
                       : "border border-transparent"
@@ -179,9 +179,9 @@ export function AnalyzingPhase({
                 <div
                   className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all duration-500 ${
                     isCompleted
-                      ? "bg-[#00E5C0]/15"
+                      ? "bg-[#3B8FE8]/15"
                       : isActive
-                        ? "bg-[#00E5C0]/10"
+                        ? "bg-[#3B8FE8]/10"
                         : "bg-white/[0.03]"
                   }`}
                 >
@@ -197,7 +197,7 @@ export function AnalyzingPhase({
                           damping: 15,
                         }}
                       >
-                        <Check className="h-5 w-5 text-[#00E5C0]" />
+                        <Check className="h-5 w-5 text-[#3B8FE8]" />
                       </motion.div>
                     ) : isActive ? (
                       <motion.div
@@ -205,7 +205,7 @@ export function AnalyzingPhase({
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                       >
-                        <Loader2 className="h-5 w-5 text-[#00E5C0] animate-spin" />
+                        <Loader2 className="h-5 w-5 text-[#3B8FE8] animate-spin" />
                       </motion.div>
                     ) : (
                       <motion.div
@@ -225,7 +225,7 @@ export function AnalyzingPhase({
                 <span
                   className={`text-sm font-medium transition-colors duration-500 ${
                     isCompleted
-                      ? "text-[#00E5C0]"
+                      ? "text-[#3B8FE8]"
                       : isActive
                         ? "text-white"
                         : "text-white/30"
@@ -239,7 +239,7 @@ export function AnalyzingPhase({
                   <motion.span
                     initial={{ opacity: 0, x: -8 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="ml-auto text-xs text-[#00E5C0]/60"
+                    className="ml-auto text-xs text-[#3B8FE8]/60"
                   >
                     Done
                   </motion.span>
@@ -253,7 +253,7 @@ export function AnalyzingPhase({
         <div className="mt-6">
           <div className="h-1 w-full rounded-full bg-white/[0.06] overflow-hidden">
             <motion.div
-              className="h-full rounded-full bg-gradient-to-r from-[#00E5C0] to-cyan-400"
+              className="h-full rounded-full bg-gradient-to-r from-[#3B8FE8] to-cyan-400"
               initial={{ width: "0%" }}
               animate={{
                 width: `${Math.min(((completedSteps.size + (currentStep < 4 ? 0.5 : 0)) / 4) * 100, 100)}%`,

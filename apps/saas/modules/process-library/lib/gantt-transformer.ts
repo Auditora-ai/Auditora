@@ -54,7 +54,7 @@ export interface ProcessForGantt {
 
 const PHASES = [
 	{ key: "contexto", label: "Contexto", color: "#7C3AED", progressColor: "#6D28D9" },
-	{ key: "captura", label: "Captura", color: "#00E5C0", progressColor: "#00C4A3" },
+	{ key: "captura", label: "Captura", color: "#3B8FE8", progressColor: "#2E7FD6" },
 	{ key: "modelo", label: "Modelo", color: "#0EA5E9", progressColor: "#0284C7" },
 	{ key: "analisis", label: "Análisis", color: "#16A34A", progressColor: "#15803D" },
 ] as const;

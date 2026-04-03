@@ -87,50 +87,50 @@ export function BpmnHeroBackground() {
 				xmlns="http://www.w3.org/2000/svg"
 			>
 				{/* Connection paths — teal/electric blue palette */}
-				<line className="bpmn-path" x1="180" y1="250" x2="300" y2="250" stroke="#00E5C0" strokeWidth="2" />
-				<line className="bpmn-path" x1="460" y1="250" x2="560" y2="250" stroke="#00E5C0" strokeWidth="2" />
-				<line className="bpmn-path" x1="560" y1="250" x2="660" y2="180" stroke="#00E5C0" strokeWidth="2" />
-				<line className="bpmn-path" x1="560" y1="250" x2="660" y2="320" stroke="#00E5C0" strokeWidth="2" />
-				<line className="bpmn-path" x1="820" y1="180" x2="920" y2="250" stroke="#00E5C0" strokeWidth="2" />
-				<line className="bpmn-path" x1="820" y1="320" x2="920" y2="250" stroke="#00E5C0" strokeWidth="2" />
-				<line className="bpmn-path" x1="980" y1="250" x2="1060" y2="250" stroke="#00E5C0" strokeWidth="2" />
+				<line className="bpmn-path" x1="180" y1="250" x2="300" y2="250" stroke="#3B8FE8" strokeWidth="2" />
+				<line className="bpmn-path" x1="460" y1="250" x2="560" y2="250" stroke="#3B8FE8" strokeWidth="2" />
+				<line className="bpmn-path" x1="560" y1="250" x2="660" y2="180" stroke="#3B8FE8" strokeWidth="2" />
+				<line className="bpmn-path" x1="560" y1="250" x2="660" y2="320" stroke="#3B8FE8" strokeWidth="2" />
+				<line className="bpmn-path" x1="820" y1="180" x2="920" y2="250" stroke="#3B8FE8" strokeWidth="2" />
+				<line className="bpmn-path" x1="820" y1="320" x2="920" y2="250" stroke="#3B8FE8" strokeWidth="2" />
+				<line className="bpmn-path" x1="980" y1="250" x2="1060" y2="250" stroke="#3B8FE8" strokeWidth="2" />
 
 				{/* Start Event */}
 				<g className="bpmn-node" transform="translate(150, 250)">
-					<circle className="node-border" r="25" stroke="#00E5C0" strokeWidth="2.5" fill="rgba(0,229,192,0.1)" />
+					<circle className="node-border" r="25" stroke="#3B8FE8" strokeWidth="2.5" fill="rgba(59,143,232,0.1)" />
 				</g>
 
 				{/* Task: Receive Request */}
 				<g className="bpmn-node" transform="translate(380, 250)">
-					<rect className="node-border" x="-80" y="-30" width="160" height="60" rx="8" stroke="#00E5C0" strokeWidth="2" fill="rgba(0,229,192,0.08)" />
-					<text x="0" y="5" textAnchor="middle" className="text-[13px]" fill="#00E5C0" fontFamily="system-ui">Receive Request</text>
+					<rect className="node-border" x="-80" y="-30" width="160" height="60" rx="8" stroke="#3B8FE8" strokeWidth="2" fill="rgba(59,143,232,0.08)" />
+					<text x="0" y="5" textAnchor="middle" className="text-[13px]" fill="#3B8FE8" fontFamily="system-ui">Receive Request</text>
 				</g>
 
 				{/* Gateway */}
 				<g className="bpmn-node" transform="translate(560, 250)">
-					<rect className="node-border" x="-22" y="-22" width="44" height="44" rx="4" transform="rotate(45)" stroke="#00E5C0" strokeWidth="2" fill="rgba(0,229,192,0.08)" />
+					<rect className="node-border" x="-22" y="-22" width="44" height="44" rx="4" transform="rotate(45)" stroke="#3B8FE8" strokeWidth="2" fill="rgba(59,143,232,0.08)" />
 				</g>
 
 				{/* Task: Manager Approval */}
 				<g className="bpmn-node" transform="translate(740, 180)">
-					<rect className="node-border" x="-80" y="-30" width="160" height="60" rx="8" stroke="#00E5C0" strokeWidth="2" fill="rgba(0,229,192,0.08)" />
-					<text x="0" y="5" textAnchor="middle" className="text-[13px]" fill="#00E5C0" fontFamily="system-ui">Mgr Approval</text>
+					<rect className="node-border" x="-80" y="-30" width="160" height="60" rx="8" stroke="#3B8FE8" strokeWidth="2" fill="rgba(59,143,232,0.08)" />
+					<text x="0" y="5" textAnchor="middle" className="text-[13px]" fill="#3B8FE8" fontFamily="system-ui">Mgr Approval</text>
 				</g>
 
 				{/* Task: VP Approval */}
 				<g className="bpmn-node" transform="translate(740, 320)">
-					<rect className="node-border" x="-80" y="-30" width="160" height="60" rx="8" stroke="#00E5C0" strokeWidth="2" fill="rgba(0,229,192,0.08)" />
-					<text x="0" y="5" textAnchor="middle" className="text-[13px]" fill="#00E5C0" fontFamily="system-ui">VP Approval</text>
+					<rect className="node-border" x="-80" y="-30" width="160" height="60" rx="8" stroke="#3B8FE8" strokeWidth="2" fill="rgba(59,143,232,0.08)" />
+					<text x="0" y="5" textAnchor="middle" className="text-[13px]" fill="#3B8FE8" fontFamily="system-ui">VP Approval</text>
 				</g>
 
 				{/* Merge Gateway */}
 				<g className="bpmn-node" transform="translate(950, 250)">
-					<rect className="node-border" x="-22" y="-22" width="44" height="44" rx="4" transform="rotate(45)" stroke="#00E5C0" strokeWidth="2" fill="rgba(0,229,192,0.08)" />
+					<rect className="node-border" x="-22" y="-22" width="44" height="44" rx="4" transform="rotate(45)" stroke="#3B8FE8" strokeWidth="2" fill="rgba(59,143,232,0.08)" />
 				</g>
 
 				{/* End Event */}
 				<g className="bpmn-node" transform="translate(1080, 250)">
-					<circle className="node-border" r="25" stroke="#00E5C0" strokeWidth="3" fill="rgba(0,229,192,0.1)" />
+					<circle className="node-border" r="25" stroke="#3B8FE8" strokeWidth="3" fill="rgba(59,143,232,0.1)" />
 				</g>
 
 				{/* Gateway labels */}

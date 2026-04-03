@@ -68,7 +68,7 @@ export function TrustBar() {
 			{/* Subtle gradient glow behind metrics */}
 			<div
 				aria-hidden
-				className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(0,229,192,0.06),transparent)]"
+				className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-10%,rgba(59,143,232,0.06),transparent)]"
 			/>
 
 			<div className="relative mx-auto max-w-5xl">
@@ -91,7 +91,7 @@ export function TrustBar() {
 								target={metric.target}
 								suffix={metric.suffix}
 								duration={2.2}
-								className="text-3xl font-bold tracking-tight text-[#00E5C0] sm:text-4xl"
+								className="text-3xl font-bold tracking-tight text-[#3B8FE8] sm:text-4xl"
 							/>
 							<span className="mt-2 text-sm leading-snug text-white/60">
 								{t(metric.labelKey)}
@@ -123,7 +123,7 @@ export function TrustBar() {
 							custom={i}
 							whileHover={{
 								scale: 1.04,
-								borderColor: "rgba(0,229,192,0.25)",
+								borderColor: "rgba(59,143,232,0.25)",
 							}}
 							transition={{ type: "spring", stiffness: 400, damping: 25 }}
 							className="flex flex-col items-center rounded-full border border-white/10 bg-white/5 px-5 py-3 backdrop-blur-sm cursor-default"

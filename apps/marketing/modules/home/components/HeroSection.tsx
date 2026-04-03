@@ -42,7 +42,7 @@ export function HeroSection() {
 				aria-hidden="true"
 				style={{
 					background:
-						"linear-gradient(90deg, transparent 0%, #00E5C0 50%, transparent 100%)",
+						"linear-gradient(90deg, transparent 0%, #3B8FE8 50%, transparent 100%)",
 					opacity: 0.3,
 				}}
 			/>
@@ -90,12 +90,12 @@ export function HeroSection() {
 							"relative rounded-2xl p-[1px]",
 							"transition-all duration-500",
 							isFocused
-								? "shadow-[0_0_30px_rgba(0,229,192,0.15)]"
+								? "shadow-[0_0_30px_rgba(59,143,232,0.15)]"
 								: "shadow-none",
 						)}
 						style={{
 							background: isFocused
-								? "linear-gradient(135deg, #00E5C0 0%, #00E5C080 50%, #00E5C0 100%)"
+								? "linear-gradient(135deg, #3B8FE8 0%, #3B8FE880 50%, #3B8FE8 100%)"
 								: "linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%)",
 						}}
 					>
@@ -108,7 +108,7 @@ export function HeroSection() {
 							aria-hidden="true"
 							style={{
 								background:
-									"conic-gradient(from var(--glow-angle, 0deg), transparent 0%, #00E5C0 10%, transparent 20%)",
+									"conic-gradient(from var(--glow-angle, 0deg), transparent 0%, #3B8FE8 10%, transparent 20%)",
 								animation: isFocused
 									? "hero-glow-spin 3s linear infinite"
 									: "none",
@@ -141,10 +141,10 @@ export function HeroSection() {
 								onClick={handleSubmit}
 								className={cn(
 									"w-full shrink-0 sm:w-auto min-h-[52px] sm:min-h-[56px] rounded-xl px-8",
-									"bg-[#00E5C0] hover:bg-[#00CCA9] active:bg-[#00B896]",
+									"bg-[#3B8FE8] hover:bg-[#2E7FD6] active:bg-[#2566B0]",
 									"text-[#0A1428] font-bold text-base",
 									"transition-all duration-200",
-									"hover:shadow-[0_0_20px_rgba(0,229,192,0.3)]",
+									"hover:shadow-[0_0_20px_rgba(59,143,232,0.3)]",
 								)}
 							>
 								{t("cta")}

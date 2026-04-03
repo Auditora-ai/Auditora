@@ -833,7 +833,14 @@
       "alignment": "Procedural alignment",
       "controlLevel": "Control level",
       "criterio": "Decision criteria",
-      "scoreTrend": "Score trend"
+      "scoreTrend": "Score trend",
+      "viewEvaluaciones": "View evaluations",
+      "dateToday": "Today",
+      "dateYesterday": "Yesterday",
+      "dateDaysAgo": "{count} days ago",
+      "activitySessionCompleted": "Session \"{process}\" completed",
+      "activityNodesExtracted": "{count} nodes extracted",
+      "createEvaluation": "Create Evaluation"
     }
   },
   "processLibrary": {

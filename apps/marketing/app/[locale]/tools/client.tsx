@@ -67,7 +67,7 @@ export function ToolsHubClient({ tools, locale }: ToolsHubClientProps) {
 							scale: [1, 1.05, 0.98, 1],
 						}}
 						transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-						className="absolute -top-40 right-1/4 h-[400px] w-[400px] rounded-full bg-[#00E5C0]/10 blur-[100px]"
+						className="absolute -top-40 right-1/4 h-[400px] w-[400px] rounded-full bg-[#3B8FE8]/10 blur-[100px]"
 					/>
 				</div>
 
@@ -85,7 +85,7 @@ export function ToolsHubClient({ tools, locale }: ToolsHubClientProps) {
 						<div
 							className={cn(
 								"badge-pulse inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-medium",
-								"border-[#00E5C0]/20 bg-[#00E5C0]/10 text-[#00E5C0]",
+								"border-[#3B8FE8]/20 bg-[#3B8FE8]/10 text-[#3B8FE8]",
 							)}
 						>
 							<SparklesIcon className="size-3.5" strokeWidth={2} />
@@ -139,7 +139,7 @@ export function ToolsHubClient({ tools, locale }: ToolsHubClientProps) {
 									variants={cardVariants}
 									whileHover={{
 										y: -6,
-										borderColor: "rgba(0,229,192,0.3)",
+										borderColor: "rgba(59,143,232,0.3)",
 										transition: {
 											type: "spring",
 											stiffness: 300,
@@ -157,16 +157,16 @@ export function ToolsHubClient({ tools, locale }: ToolsHubClientProps) {
 										<div
 											className={cn(
 												"flex size-10 shrink-0 items-center justify-center rounded-xl",
-												"bg-[#00E5C0]/15 border border-[#00E5C0]/20",
+												"bg-[#3B8FE8]/15 border border-[#3B8FE8]/20",
 											)}
 										>
 											<Icon
-												className="size-5 text-[#00E5C0]"
+												className="size-5 text-[#3B8FE8]"
 												strokeWidth={1.5}
 											/>
 										</div>
 										<div className="min-w-0 flex-1">
-											<h3 className="text-base font-semibold text-white group-hover:text-[#00E5C0] transition-colors duration-200">
+											<h3 className="text-base font-semibold text-white group-hover:text-[#3B8FE8] transition-colors duration-200">
 												{locale === "es" ? tool.nameEs : tool.name}
 											</h3>
 											<p className="mt-1.5 text-sm text-[#94A3B8] leading-relaxed line-clamp-2">
@@ -177,7 +177,7 @@ export function ToolsHubClient({ tools, locale }: ToolsHubClientProps) {
 											<span
 												className={cn(
 													"mt-3 inline-flex items-center gap-1.5 text-sm font-medium",
-													"text-[#00E5C0]/70 group-hover:text-[#00E5C0] transition-colors duration-200",
+													"text-[#3B8FE8]/70 group-hover:text-[#3B8FE8] transition-colors duration-200",
 												)}
 											>
 												{t("useFree")}
@@ -194,7 +194,7 @@ export function ToolsHubClient({ tools, locale }: ToolsHubClientProps) {
 
 			{/* CTA Section */}
 			<section className="relative overflow-hidden border-t border-white/[0.06] py-16 sm:py-20 lg:py-28">
-				<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_60%,rgba(0,229,192,0.06),transparent_70%)]" />
+				<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_60%,rgba(59,143,232,0.06),transparent_70%)]" />
 				<motion.div
 					initial={{ opacity: 0, y: 24 }}
 					whileInView={{ opacity: 1, y: 0 }}
@@ -213,7 +213,7 @@ export function ToolsHubClient({ tools, locale }: ToolsHubClientProps) {
 					</p>
 					<Button
 						size="lg"
-						className="gap-2 bg-[#00E5C0] hover:bg-[#00C4A3] text-[#0A1428] font-semibold"
+						className="gap-2 bg-[#3B8FE8] hover:bg-[#2E7FD6] text-[#0A1428] font-semibold"
 						asChild
 					>
 						<a href={`${config.saasUrl}/signup?ref=tools`}>

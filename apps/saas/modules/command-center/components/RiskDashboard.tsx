@@ -115,10 +115,17 @@ export function RiskDashboard({
 							{t("live")}
 						</span>
 					)}
+					<Link
+						href={`${basePath}/evaluaciones`}
+						className="inline-flex min-h-[44px] w-full items-center justify-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 md:w-auto md:min-h-0"
+					>
+						<ClipboardCheckIcon className="size-4" />
+						{t("createEvaluation")}
+					</Link>
 					<button
 						type="button"
 						onClick={() => setShowWizard(true)}
-						className="inline-flex min-h-[44px] w-full items-center justify-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 md:w-auto md:min-h-0"
+						className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg border border-border px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent md:min-h-0 hidden md:inline-flex"
 					>
 						<PlusIcon className="size-4" />
 						{t("newSession")}
@@ -161,7 +168,7 @@ export function RiskDashboard({
 											<p className="text-lg font-semibold tabular-nums text-foreground">
 												{riskCount}
 											</p>
-											<p className="text-[10px] text-muted-foreground">
+											<p className="text-[11px] text-muted-foreground">
 												{t("risks")}
 											</p>
 										</div>
@@ -169,7 +176,7 @@ export function RiskDashboard({
 											<p className="text-lg font-semibold tabular-nums text-foreground">
 												{processCount}
 											</p>
-											<p className="text-[10px] text-muted-foreground">
+											<p className="text-[11px] text-muted-foreground">
 												{t("processes")}
 											</p>
 										</div>
@@ -184,7 +191,7 @@ export function RiskDashboard({
 													: 0}
 												%
 											</p>
-											<p className="text-[10px] text-muted-foreground">
+											<p className="text-[11px] text-muted-foreground">
 												{t("coverage")}
 											</p>
 										</div>
@@ -194,7 +201,7 @@ export function RiskDashboard({
 								{/* Quick Actions — horizontal scroll on mobile, vertical on desktop */}
 								<div className="flex gap-2 overflow-x-auto pb-2 md:flex-col md:space-y-2 md:gap-0 md:overflow-visible md:pb-0">
 									<Link
-										href={`${basePath}/deliverables/risks`}
+										href={`${basePath}/processes`}
 										className="flex shrink-0 items-center gap-3 rounded-lg border border-border bg-background p-3 text-sm transition-colors hover:bg-accent/50"
 									>
 										<ShieldAlertIcon className="size-4 text-amber-500" />
@@ -212,12 +219,12 @@ export function RiskDashboard({
 										</span>
 									</Link>
 									<Link
-										href={`${basePath}/deliverables`}
+										href={`${basePath}/evaluaciones`}
 										className="flex shrink-0 items-center gap-3 rounded-lg border border-border bg-background p-3 text-sm transition-colors hover:bg-accent/50"
 									>
-										<TrendingUpIcon className="size-4 text-green-500" />
+										<ClipboardCheckIcon className="size-4 text-primary" />
 										<span className="whitespace-nowrap text-foreground">
-											{t("viewDeliverables")}
+											{t("viewEvaluaciones")}
 										</span>
 									</Link>
 								</div>
@@ -239,12 +246,12 @@ export function RiskDashboard({
 										{topRisks.map((risk) => (
 											<Link
 												key={risk.id}
-												href={`${basePath}/deliverables/risks`}
+												href={`${basePath}/processes`}
 												className={`block rounded-xl border bg-background p-4 transition-all duration-300 hover:shadow-sm border-l-4 ${
 											risk.riskScore >= 16
-												? "border-l-[#DC2626] border-red-100"
+												? "border-l-[#DC2626] border-red-100 dark:border-red-900/30"
 												: risk.riskScore >= 12
-													? "border-l-[#D97706] border-amber-100"
+													? "border-l-[#D97706] border-amber-100 dark:border-amber-900/30"
 													: "border-l-[#0EA5E9] border-border"
 										}`}
 											>
@@ -255,11 +262,11 @@ export function RiskDashboard({
 																className={`inline-flex h-6 min-w-[24px] items-center justify-center rounded text-xs font-semibold ${
 																	risk.riskScore >=
 																	16
-																		? "bg-red-100 text-red-800"
+																		? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
 																		: risk.riskScore >=
 																			  12
-																			? "bg-amber-100 text-amber-800"
-																			: "bg-yellow-100 text-yellow-800"
+																			? "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
+																			: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
 																}`}
 															>
 																{risk.riskScore}
@@ -448,10 +455,10 @@ export function RiskDashboard({
 											})}
 										</div>
 										<div className="flex justify-between mt-1">
-											<span className="text-[9px] text-muted-foreground">
+											<span className="text-[11px] text-muted-foreground">
 												{evaluaciones.scoreTrend.slice(-6)[0]?.month}
 											</span>
-											<span className="text-[9px] text-muted-foreground">
+											<span className="text-[11px] text-muted-foreground">
 												{evaluaciones.scoreTrend.slice(-1)[0]?.month}
 											</span>
 										</div>
@@ -466,7 +473,7 @@ export function RiskDashboard({
 						<div className="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-200 rounded-xl border border-border bg-background p-4">
 
 								<div className="flex items-center gap-3">
-									<div className="flex size-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+									<div className="flex size-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
 										<MicIcon className="size-5" />
 									</div>
 									<div className="flex-1">
@@ -490,7 +497,7 @@ export function RiskDashboard({
 									</div>
 									<Link
 										href={`${basePath}/session/${nextSession.id}`}
-										className="rounded-lg border border-border px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-accent"
+										className="rounded-lg border border-border px-4 py-2.5 min-h-[44px] inline-flex items-center text-xs font-medium text-foreground transition-colors hover:bg-accent"
 									>
 										{t("viewDetails")}
 									</Link>

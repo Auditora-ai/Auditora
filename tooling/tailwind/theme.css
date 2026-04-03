@@ -27,11 +27,11 @@
 	--palette-cool-white: #F8FAFC;
 	--palette-cool-surface: #F1F5F9;
 
-	/* Action accent (teal) */
-	--palette-action: #00E5C0;
-	--palette-action-hover: #00C4A3;
-	--palette-action-subtle: #ECFDF5;
-	--palette-action-light: #A7F3D0;
+	/* Action accent (Gemma-inspired blue) */
+	--palette-action: #3B8FE8;
+	--palette-action-hover: #2E7FD6;
+	--palette-action-subtle: #EFF6FF;
+	--palette-action-light: #93C5FD;
 
 	/* Orientation accent (amber) */
 	--palette-orientation: #D97706;
@@ -110,8 +110,8 @@
 	--chrome-text-muted: #64748B;
 	--chrome-border: #1E293B;
 	--chrome-border-subtle: #111827;
-	--chrome-orientation: #00E5C0;
-	--chrome-orientation-glow: rgba(0, 229, 192, 0.08);
+	--chrome-orientation: #3B8FE8;
+	--chrome-orientation-glow: rgba(59, 143, 232, 0.08);
 }
 
 /* ── Layer 3: Canvas Tokens (light surfaces, diagram area) ── */

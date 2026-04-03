@@ -106,16 +106,16 @@ export function generateReportHtml(data: PdfProjectData): string {
 
   /* Cover page */
   .cover { text-align: center; padding-top: 160px; page-break-after: always; background: linear-gradient(180deg, #0A1428 0%, #111827 100%); margin: -2cm; padding-left: 2cm; padding-right: 2cm; padding-bottom: 2cm; min-height: 100vh; box-sizing: border-box; }
-  .cover .brand-mark { display: inline-block; width: 48px; height: 48px; border-radius: 12px; background: #00E5C0; margin-bottom: 32px; }
+  .cover .brand-mark { display: inline-block; width: 48px; height: 48px; border-radius: 12px; background: #3B8FE8; margin-bottom: 32px; }
   .cover h1 { font-family: 'Instrument Serif', Georgia, serif; font-size: 40px; margin-bottom: 8px; color: #F1F5F9; letter-spacing: -0.02em; }
   .cover .client { font-size: 22px; color: #94A3B8; margin-bottom: 48px; font-weight: 300; }
   .cover .org { font-size: 14px; color: #64748B; }
   .cover .date { font-size: 13px; color: #64748B; margin-top: 48px; }
   .cover .powered-by { color: #475569; font-size: 11px; margin-top: 80px; }
-  .cover .accent-line { width: 60px; height: 3px; background: #00E5C0; margin: 24px auto; border-radius: 2px; }
+  .cover .accent-line { width: 60px; height: 3px; background: #3B8FE8; margin: 24px auto; border-radius: 2px; }
 
   /* Typography */
-  h2 { font-family: 'Instrument Serif', Georgia, serif; font-size: 24px; border-bottom: 2px solid #00E5C0; padding-bottom: 8px; color: #0F172A; letter-spacing: -0.01em; }
+  h2 { font-family: 'Instrument Serif', Georgia, serif; font-size: 24px; border-bottom: 2px solid #3B8FE8; padding-bottom: 8px; color: #0F172A; letter-spacing: -0.01em; }
   h4 { color: #0A1428; margin-bottom: 4px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; }
 
   /* Diagrams */
@@ -129,7 +129,7 @@ export function generateReportHtml(data: PdfProjectData): string {
   .detail-section ul { margin: 4px 0; padding-left: 20px; font-size: 13px; }
 
   /* Comments */
-  .comments { background: #F1F5F9; padding: 12px 16px; border-radius: 8px; margin-top: 12px; border-left: 3px solid #00E5C0; }
+  .comments { background: #F1F5F9; padding: 12px 16px; border-radius: 8px; margin-top: 12px; border-left: 3px solid #3B8FE8; }
   .comment { font-size: 13px; margin: 4px 0; }
 
   /* Tables */

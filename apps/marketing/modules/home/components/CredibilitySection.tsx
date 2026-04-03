@@ -34,7 +34,7 @@ export function CredibilitySection() {
 					transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
 					className="mb-10 sm:mb-14 max-w-3xl mx-auto text-center"
 				>
-					<small className="font-medium text-xs uppercase tracking-widest text-[#00E5C0] mb-4 block">
+					<small className="font-medium text-xs uppercase tracking-widest text-[#3B8FE8] mb-4 block">
 						{t("home.credibility.badge")}
 					</small>
 					<h2 className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-white">
@@ -59,12 +59,12 @@ export function CredibilitySection() {
 									custom={i}
 									variants={cardVariants}
 									whileHover={{ x: 4, transition: { type: "spring", stiffness: 300, damping: 20 } }}
-									className="flex items-start gap-4 rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 sm:p-6 transition-colors duration-300 hover:border-[#00E5C0]/20"
+									className="flex items-start gap-4 rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 sm:p-6 transition-colors duration-300 hover:border-[#3B8FE8]/20"
 								>
 									<motion.div
 										whileHover={{ scale: 1.1, rotate: 5 }}
 										transition={{ type: "spring", stiffness: 400, damping: 20 }}
-										className="flex items-center justify-center w-11 h-11 shrink-0 rounded-xl bg-[#00E5C0]/15 text-[#00E5C0]"
+										className="flex items-center justify-center w-11 h-11 shrink-0 rounded-xl bg-[#3B8FE8]/15 text-[#3B8FE8]"
 									>
 										<Icon className="size-5" strokeWidth={1.5} />
 									</motion.div>

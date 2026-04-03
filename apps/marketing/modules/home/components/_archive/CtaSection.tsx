@@ -113,8 +113,8 @@ export function CtaSection() {
 				</p>
 
 				<div className="cta-button mt-8 sm:mt-10 relative inline-block">
-					<div className="cta-glow absolute inset-0 rounded-full bg-[#00E5C0]/30 blur-xl opacity-30 scale-100" />
-					<Button size="lg" variant="primary" asChild className="relative bg-[#00E5C0] hover:bg-[#00C4A3] text-[#0A1428]">
+					<div className="cta-glow absolute inset-0 rounded-full bg-[#3B8FE8]/30 blur-xl opacity-30 scale-100" />
+					<Button size="lg" variant="primary" asChild className="relative bg-[#3B8FE8] hover:bg-[#2E7FD6] text-[#0A1428]">
 						<a href={`${config.saasUrl}/scan`}>
 							{t("cta.button")}
 							<ArrowRightIcon className="ml-2 size-4" />

@@ -82,7 +82,7 @@ export function MobileBottomBar() {
 						className={cn(
 							"relative flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px]",
 							tab.isActive
-								? "text-[#00E5C0] font-medium"
+								? "text-[#3B8FE8] font-medium"
 								: "text-slate-500",
 						)}
 					>

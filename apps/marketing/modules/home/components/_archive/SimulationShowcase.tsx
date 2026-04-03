@@ -45,10 +45,10 @@ export function SimulationShowcase() {
 						whileInView={{ opacity: 1, y: 0 }}
 						viewport={{ once: true, margin: "-60px" }}
 						transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
-						className="inline-flex items-center gap-2 rounded-full border border-[#00E5C0]/30 bg-[#00E5C0]/10 px-4 py-1.5 mb-6"
+						className="inline-flex items-center gap-2 rounded-full border border-[#3B8FE8]/30 bg-[#3B8FE8]/10 px-4 py-1.5 mb-6"
 					>
-						<Sparkles className="size-3.5 text-[#00E5C0]" strokeWidth={2} />
-						<span className="text-xs font-medium uppercase tracking-widest text-[#00E5C0]">
+						<Sparkles className="size-3.5 text-[#3B8FE8]" strokeWidth={2} />
+						<span className="text-xs font-medium uppercase tracking-widest text-[#3B8FE8]">
 							{t("badge")}
 						</span>
 					</motion.div>
@@ -98,15 +98,15 @@ export function SimulationShowcase() {
 								variants={featureVariants}
 								whileHover={{
 									x: 4,
-									borderColor: "rgba(0,229,192,0.25)",
-									backgroundColor: "rgba(0,229,192,0.03)",
+									borderColor: "rgba(59,143,232,0.25)",
+									backgroundColor: "rgba(59,143,232,0.03)",
 									transition: { type: "spring", stiffness: 300, damping: 20 },
 								}}
 								className="sim-feature-card group rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 sm:p-6 transition-colors duration-300"
 							>
 								<div className="flex items-start gap-4">
-									<div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-[#00E5C0]/10 border border-[#00E5C0]/20">
-										<Icon className="size-5 text-[#00E5C0]" strokeWidth={1.5} />
+									<div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-[#3B8FE8]/10 border border-[#3B8FE8]/20">
+										<Icon className="size-5 text-[#3B8FE8]" strokeWidth={1.5} />
 									</div>
 									<div className="min-w-0">
 										<h3 className="text-sm sm:text-base font-semibold text-white mb-1">

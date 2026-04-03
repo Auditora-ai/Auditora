@@ -111,18 +111,18 @@ function generateReportHtml(data: ReportInput): string {
 
 	/* Cover */
 	.cover { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 90vh; text-align: center; page-break-after: always; }
-	.cover-badge { display: inline-flex; align-items: center; gap: 6px; background: #ECFDF5; color: #00E5C0; padding: 6px 16px; border-radius: 100px; font-size: 12px; font-weight: 600; margin-bottom: 32px; }
+	.cover-badge { display: inline-flex; align-items: center; gap: 6px; background: #ECFDF5; color: #3B8FE8; padding: 6px 16px; border-radius: 100px; font-size: 12px; font-weight: 600; margin-bottom: 32px; }
 	.cover h1 { font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px; }
 	.cover .org { font-size: 16px; color: #64748B; margin-bottom: 40px; }
 	.cover-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 480px; }
 	.cover-stat { text-align: center; }
-	.cover-stat .num { font-size: 28px; font-weight: 700; color: #00E5C0; }
+	.cover-stat .num { font-size: 28px; font-weight: 700; color: #3B8FE8; }
 	.cover-stat .lbl { font-size: 11px; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.05em; }
 	.cover-footer { margin-top: 60px; font-size: 11px; color: #CBD5E1; }
 
 	/* Section headers */
 	.section { margin-bottom: 32px; }
-	h2 { font-size: 18px; font-weight: 700; color: #0F172A; padding-bottom: 8px; border-bottom: 2px solid #00E5C0; margin-bottom: 16px; }
+	h2 { font-size: 18px; font-weight: 700; color: #0F172A; padding-bottom: 8px; border-bottom: 2px solid #3B8FE8; margin-bottom: 16px; }
 	h3 { font-size: 14px; font-weight: 600; color: #334155; margin: 16px 0 8px; }
 
 	/* Cards */
@@ -135,14 +135,14 @@ function generateReportHtml(data: ReportInput): string {
 
 	/* Tags */
 	.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; margin: 2px; }
-	.tag-blue { background: #ECFDF5; color: #00E5C0; }
+	.tag-blue { background: #ECFDF5; color: #3B8FE8; }
 	.tag-green { background: #F0FDF4; color: #16A34A; }
 	.tag-amber { background: #FFFBEB; color: #D97706; }
 	.tag-gray { background: #F1F5F9; color: #475569; }
 
 	/* SOP */
 	.sop-step { display: flex; gap: 12px; margin: 8px 0; padding: 10px; background: white; border: 1px solid #E2E8F0; border-radius: 6px; }
-	.step-num { width: 24px; height: 24px; border-radius: 50%; background: #00E5C0; color: #0A1428; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+	.step-num { width: 24px; height: 24px; border-radius: 50%; background: #3B8FE8; color: #0A1428; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
 	.step-body { flex: 1; }
 	.step-action { font-size: 13px; font-weight: 600; color: #0F172A; }
 	.step-desc { font-size: 12px; color: #64748B; margin-top: 2px; }
@@ -213,7 +213,7 @@ ${data.summary ? `
 				const typeLabel = n.nodeType.replace(/_/g, " ").toLowerCase();
 				return `<div class="card">
 				<div class="card-header">
-					<div class="card-icon" style="background:${n.nodeType.includes("GATEWAY") ? "#EAB308" : n.nodeType === "START_EVENT" ? "#16A34A" : n.nodeType === "END_EVENT" ? "#DC2626" : "#00E5C0"}">${n.label?.charAt(0) || "?"}</div>
+					<div class="card-icon" style="background:${n.nodeType.includes("GATEWAY") ? "#EAB308" : n.nodeType === "START_EVENT" ? "#16A34A" : n.nodeType === "END_EVENT" ? "#DC2626" : "#3B8FE8"}">${n.label?.charAt(0) || "?"}</div>
 					<div>
 						<div class="card-title">${esc(n.label)}</div>
 						<div class="card-subtitle">${esc(typeLabel)}${n.state === "CONFIRMED" ? " · Confirmado" : n.state === "FORMING" ? " · En formación" : ""}</div>

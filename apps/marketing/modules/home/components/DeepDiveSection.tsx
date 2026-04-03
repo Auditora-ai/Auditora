@@ -91,7 +91,7 @@ export function DeepDiveSection() {
 		<section ref={sectionRef} className="py-16 sm:py-20 lg:py-28 bg-white">
 			<div className="container max-w-6xl">
 				<div className="dd-header mb-10 sm:mb-16 max-w-3xl mx-auto text-center">
-					<small className="font-medium text-xs uppercase tracking-widest text-[#00E5C0] mb-4 block">
+					<small className="font-medium text-xs uppercase tracking-widest text-[#3B8FE8] mb-4 block">
 						{t("home.deepDive.badge")}
 					</small>
 					<h2 className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-[#0A1428]">
@@ -117,10 +117,10 @@ export function DeepDiveSection() {
 								<div
 									key={q}
 									className="dd-question flex gap-3 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-3 sm:p-4"
-									style={{ borderLeftWidth: "3px", borderLeftColor: "#00E5C0" }}
+									style={{ borderLeftWidth: "3px", borderLeftColor: "#3B8FE8" }}
 								>
 									<MessageSquareQuoteIcon
-										className="size-5 text-[#00E5C0] shrink-0 mt-0.5"
+										className="size-5 text-[#3B8FE8] shrink-0 mt-0.5"
 										strokeWidth={1.5}
 									/>
 									<p className="text-sm text-[#0A1428]/80 italic leading-relaxed">
@@ -148,7 +148,7 @@ export function DeepDiveSection() {
 									<div className="p-3 sm:p-4 bg-[#F8FAFC] text-[#64748B]">
 										{t("home.deepDive.instant.label")}
 									</div>
-									<div className="p-3 sm:p-4 bg-[#00E5C0] text-[#0A1428]">
+									<div className="p-3 sm:p-4 bg-[#3B8FE8] text-[#0A1428]">
 										{t("home.deepDive.guided.label")}
 									</div>
 								</div>
@@ -171,7 +171,7 @@ export function DeepDiveSection() {
 
 						{/* FMEA table example */}
 						<div className="dd-fmea">
-							<p className="text-xs uppercase tracking-widest text-[#00E5C0] font-medium mb-3">
+							<p className="text-xs uppercase tracking-widest text-[#3B8FE8] font-medium mb-3">
 								Ejemplo de Matriz FMEA
 							</p>
 							<FmeaTableMock />

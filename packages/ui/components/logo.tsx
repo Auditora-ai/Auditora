@@ -14,7 +14,7 @@ export function Logo({
 		return (
 			<span
 				className={cn(
-					"flex items-center justify-center font-display text-2xl font-black tracking-tighter text-[#00E5C0]",
+					"flex items-center justify-center font-display text-2xl font-black tracking-tighter text-[#3B8FE8]",
 					className,
 				)}
 			>
@@ -34,7 +34,7 @@ export function Logo({
 			<span className="text-xl tracking-tight">
 				<span className="font-black text-foreground">Audit</span>
 				<span className="font-light text-foreground/70">ora</span>
-				<span className="font-light text-[#00E5C0]">.ai</span>
+				<span className="font-light text-[#3B8FE8]">.ai</span>
 			</span>
 		</span>
 	);

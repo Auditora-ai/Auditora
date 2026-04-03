@@ -624,7 +624,7 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 						.ai-aura-border {
 							position: absolute; inset: 0; z-index: 30; pointer-events: none;
 							border: 2px solid rgba(37, 99, 235, 0.3);
-							border-image: linear-gradient(90deg, #00E5C0, #0EA5E9, #7C3AED, #00E5C0, #0EA5E9) 1;
+							border-image: linear-gradient(90deg, #3B8FE8, #0EA5E9, #7C3AED, #3B8FE8, #0EA5E9) 1;
 							animation: auraSweep 2s linear infinite;
 							background: transparent;
 						}

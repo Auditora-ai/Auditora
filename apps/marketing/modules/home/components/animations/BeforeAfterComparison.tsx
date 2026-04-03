@@ -21,12 +21,12 @@ const BEFORE_ITEMS = [
 
 // After: structured, clean, automated
 const AFTER_ITEMS = [
-	{ id: "a1", label: "SIPOC Generado", icon: "✅", x: 8, y: 10, w: 38, color: "#00E5C0", delay: 0.1 },
+	{ id: "a1", label: "SIPOC Generado", icon: "✅", x: 8, y: 10, w: 38, color: "#3B8FE8", delay: 0.1 },
 	{ id: "a2", label: "BPMN 2.0 Validado", icon: "🗺️", x: 54, y: 6, w: 40, color: "#38BDF8", delay: 0.2 },
-	{ id: "a3", label: "Dueño: Ana García", icon: "👤", x: 10, y: 42, w: 36, color: "#00E5C0", delay: 0.3 },
+	{ id: "a3", label: "Dueño: Ana García", icon: "👤", x: 10, y: 42, w: 36, color: "#3B8FE8", delay: 0.3 },
 	{ id: "a4", label: "FMEA: RPN 24", icon: "📋", x: 52, y: 38, w: 40, color: "#A78BFA", delay: 0.15 },
-	{ id: "a5", label: "SOP Documentado", icon: "📝", x: 14, y: 68, w: 38, color: "#00E5C0", delay: 0.25 },
-	{ id: "a6", label: "Riesgo: Controlado", icon: "🟢", x: 56, y: 64, w: 40, color: "#00E5C0", delay: 0.35 },
+	{ id: "a5", label: "SOP Documentado", icon: "📝", x: 14, y: 68, w: 38, color: "#3B8FE8", delay: 0.25 },
+	{ id: "a6", label: "Riesgo: Controlado", icon: "🟢", x: 56, y: 64, w: 40, color: "#3B8FE8", delay: 0.35 },
 ] as const;
 
 function PanelCard({
@@ -118,8 +118,8 @@ export function BeforeAfterComparison({ className }: BeforeAfterComparisonProps)
 							</div>
 						))}
 					</div>
-					<div className="relative h-44 rounded-xl bg-[#00E5C0]/5 border border-[#00E5C0]/20 p-2">
-						<p className="text-xs text-[#00E5C0] font-semibold mb-1 text-center">Con Auditora</p>
+					<div className="relative h-44 rounded-xl bg-[#3B8FE8]/5 border border-[#3B8FE8]/20 p-2">
+						<p className="text-xs text-[#3B8FE8] font-semibold mb-1 text-center">Con Auditora</p>
 						{AFTER_ITEMS.map(item => (
 							<div key={item.id} className="absolute flex items-center gap-1 rounded px-1.5 py-1" style={{ left: `${item.x}%`, top: `${item.y + 12}%`, borderColor: `${item.color}30`, backgroundColor: `${item.color}10`, border: "1px solid" }}>
 								<span className="text-[8px]">{item.icon}</span>
@@ -194,8 +194,8 @@ export function BeforeAfterComparison({ className }: BeforeAfterComparisonProps)
 				<motion.div
 					className="relative overflow-hidden rounded-xl border bg-white/[0.03] backdrop-blur-sm"
 					animate={{
-						borderColor: showAfter ? "rgba(0,229,192,0.35)" : "rgba(0,229,192,0.08)",
-						boxShadow: showAfter ? "0 0 24px rgba(0,229,192,0.1)" : "none",
+						borderColor: showAfter ? "rgba(59,143,232,0.35)" : "rgba(59,143,232,0.08)",
+						boxShadow: showAfter ? "0 0 24px rgba(59,143,232,0.1)" : "none",
 					}}
 					transition={{ duration: 0.6, ease: EASE }}
 					style={{ minHeight: "200px" }}
@@ -204,7 +204,7 @@ export function BeforeAfterComparison({ className }: BeforeAfterComparisonProps)
 					<div className="flex items-center gap-2 px-3 py-2 border-b border-white/10">
 						<motion.div
 							className="size-2 rounded-full"
-							animate={{ backgroundColor: showAfter ? "#00E5C0" : "rgba(0,229,192,0.3)" }}
+							animate={{ backgroundColor: showAfter ? "#3B8FE8" : "rgba(59,143,232,0.3)" }}
 							transition={{ duration: 0.4 }}
 						/>
 						<span className="text-[10px] font-semibold uppercase tracking-widest text-white/40">
@@ -230,7 +230,7 @@ export function BeforeAfterComparison({ className }: BeforeAfterComparisonProps)
 									animate={{ opacity: 1 }}
 									exit={{ opacity: 0 }}
 									transition={{ duration: 0.5 }}
-									className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_50%,rgba(0,229,192,0.05),transparent)]"
+									className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_50%,rgba(59,143,232,0.05),transparent)]"
 								/>
 							)}
 						</AnimatePresence>
@@ -238,8 +238,8 @@ export function BeforeAfterComparison({ className }: BeforeAfterComparisonProps)
 
 					{/* Bottom metric */}
 					<div className="px-3 pb-3">
-						<div className="rounded-lg bg-[#00E5C0]/10 px-3 py-2 border border-[#00E5C0]/20">
-							<span className="text-[10px] text-[#00E5C0] font-medium">100% trazabilidad en tiempo real</span>
+						<div className="rounded-lg bg-[#3B8FE8]/10 px-3 py-2 border border-[#3B8FE8]/20">
+							<span className="text-[10px] text-[#3B8FE8] font-medium">100% trazabilidad en tiempo real</span>
 						</div>
 					</div>
 				</motion.div>
@@ -255,7 +255,7 @@ export function BeforeAfterComparison({ className }: BeforeAfterComparisonProps)
 						transition={{ duration: 0.3, ease: EASE }}
 						className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
 					>
-						<div className="flex items-center justify-center size-10 rounded-full bg-[#00E5C0] shadow-lg shadow-[#00E5C0]/30">
+						<div className="flex items-center justify-center size-10 rounded-full bg-[#3B8FE8] shadow-lg shadow-[#3B8FE8]/30">
 							<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
 								<path d="M3 8h10M9 4l4 4-4 4" stroke="#0A1428" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
 							</svg>
@@ -276,7 +276,7 @@ export function BeforeAfterComparison({ className }: BeforeAfterComparisonProps)
 							backgroundColor:
 								p === "before"
 									? (showBefore ? "#EF4444" : "rgba(255,255,255,0.15)")
-									: (showAfter ? "#00E5C0" : "rgba(255,255,255,0.15)"),
+									: (showAfter ? "#3B8FE8" : "rgba(255,255,255,0.15)"),
 						}}
 						transition={{ duration: 0.35, ease: EASE }}
 					/>

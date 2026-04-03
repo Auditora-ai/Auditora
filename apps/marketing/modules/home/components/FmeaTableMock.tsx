@@ -17,7 +17,7 @@ export function FmeaTableMock() {
 		<div className="overflow-x-auto rounded-xl border border-[#E2E8F0]">
 			<table className="w-full text-xs sm:text-sm">
 				<thead>
-					<tr className="bg-[#00E5C0]/10 text-[#00E5C0]">
+					<tr className="bg-[#3B8FE8]/10 text-[#3B8FE8]">
 						<th className="px-3 py-2.5 text-left font-semibold">Actividad</th>
 						<th className="px-3 py-2.5 text-left font-semibold">Modo de Falla</th>
 						<th className="px-3 py-2.5 text-center font-semibold">S</th>

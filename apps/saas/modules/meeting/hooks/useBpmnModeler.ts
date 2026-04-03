@@ -1361,7 +1361,7 @@ const STATE_COLORS: Record<
 > = {
 	forming: { stroke: "#EAB308", fill: "#FEF9C3", dash: "5,5" },
 	confirmed: { stroke: "", fill: "" }, // Use type colors
-	active: { stroke: "#00E5C0", fill: "#A7F3D0" },
+	active: { stroke: "#3B8FE8", fill: "#A7F3D0" },
 };
 
 function applyTypeColors(gfx: any, node: DiagramNode, element: any) {

@@ -90,7 +90,7 @@ export function BpmnViewerPanel({ bpmnXml }: BpmnViewerPanelProps) {
 			{/* Custom CSS for DESIGN.md colors */}
 			<style jsx global>{`
 				/* Task nodes: blue */
-				.djs-shape .djs-visual > rect { stroke: #00E5C0 !important; fill: #ECFDF5 !important; }
+				.djs-shape .djs-visual > rect { stroke: #3B8FE8 !important; fill: #ECFDF5 !important; }
 				/* Start event: green */
 				.djs-shape[data-element-id^="StartEvent"] .djs-visual > circle { stroke: #16A34A !important; fill: #F0FDF4 !important; }
 				/* End event: red */

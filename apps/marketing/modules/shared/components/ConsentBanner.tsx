@@ -27,8 +27,8 @@ function Toggle({
 			aria-checked={checked}
 			disabled={disabled}
 			onClick={() => onChange?.(!checked)}
-			className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00E5C0]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A1428] disabled:cursor-not-allowed disabled:opacity-50 ${
-				checked ? "bg-[#00E5C0]" : "bg-white/20"
+			className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3B8FE8]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A1428] disabled:cursor-not-allowed disabled:opacity-50 ${
+				checked ? "bg-[#3B8FE8]" : "bg-white/20"
 			}`}
 		>
 			<span
@@ -181,7 +181,7 @@ export function ConsentBanner() {
 										<Button
 											size="sm"
 											onClick={handleSaveCustom}
-											className="bg-[#00E5C0] text-[#0A1428] hover:bg-[#00E5C0]/90"
+											className="bg-[#3B8FE8] text-[#0A1428] hover:bg-[#3B8FE8]/90"
 										>
 											{t("savePreferences")}
 										</Button>
@@ -203,7 +203,7 @@ export function ConsentBanner() {
 									<button
 										type="button"
 										onClick={() => setShowCustomize(true)}
-										className="inline-flex shrink-0 items-center gap-1 text-xs text-[#00E5C0] transition-colors hover:text-[#00E5C0]/80"
+										className="inline-flex shrink-0 items-center gap-1 text-xs text-[#3B8FE8] transition-colors hover:text-[#3B8FE8]/80"
 									>
 										<Settings2Icon className="size-3" />
 										<span className="hidden sm:inline">
@@ -226,7 +226,7 @@ export function ConsentBanner() {
 								<Button
 									size="sm"
 									onClick={acceptAll}
-									className="h-8 bg-[#00E5C0] text-xs text-[#0A1428] hover:bg-[#00E5C0]/90"
+									className="h-8 bg-[#3B8FE8] text-xs text-[#0A1428] hover:bg-[#3B8FE8]/90"
 								>
 									{t("acceptAll")}
 								</Button>

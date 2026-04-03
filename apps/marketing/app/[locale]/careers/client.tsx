@@ -29,13 +29,13 @@ export function CareersClient() {
 		<div data-landing className="dark bg-[#0A1428] text-slate-50">
 			{/* Hero */}
 			<section className="relative overflow-hidden py-24 sm:py-32 lg:py-40">
-				<div className="absolute inset-0 bg-gradient-to-b from-[#00E5C0]/5 to-transparent" />
+				<div className="absolute inset-0 bg-gradient-to-b from-[#3B8FE8]/5 to-transparent" />
 				<div className="container relative max-w-4xl text-center">
 					<motion.span
 						initial={{ opacity: 0, y: -12 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.5, ease }}
-						className="inline-flex items-center rounded-full bg-[#00E5C0]/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#00E5C0] mb-6"
+						className="inline-flex items-center rounded-full bg-[#3B8FE8]/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#3B8FE8] mb-6"
 					>
 						{t("heroLabel")}
 					</motion.span>
@@ -98,9 +98,9 @@ export function CareersClient() {
 									key={perk.id}
 									custom={i}
 									variants={cardVariants}
-									className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm p-6 sm:p-8 hover:border-[#00E5C0]/30 transition-colors"
+									className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm p-6 sm:p-8 hover:border-[#3B8FE8]/30 transition-colors"
 								>
-									<div className="flex items-center justify-center w-12 h-12 rounded-xl bg-[#00E5C0]/10 text-[#00E5C0] mb-4">
+									<div className="flex items-center justify-center w-12 h-12 rounded-xl bg-[#3B8FE8]/10 text-[#3B8FE8] mb-4">
 										<Icon className="w-6 h-6" />
 									</div>
 									<h3 className="font-display text-lg font-semibold mb-2">
@@ -163,7 +163,7 @@ export function CareersClient() {
 					>
 						<a
 							href={`mailto:${t("ctaEmail")}`}
-							className="inline-flex items-center justify-center rounded-full bg-[#00E5C0] px-8 py-3.5 text-sm font-semibold text-[#0A1428] hover:bg-[#00E5C0]/90 transition-colors"
+							className="inline-flex items-center justify-center rounded-full bg-[#3B8FE8] px-8 py-3.5 text-sm font-semibold text-[#0A1428] hover:bg-[#3B8FE8]/90 transition-colors"
 						>
 							{t("ctaButton")}
 						</a>

@@ -62,7 +62,7 @@ function SipocVisual() {
 	return (
 		<div className="mt-4 flex flex-col gap-1.5">
 			{[
-				{ label: "S", color: "#00E5C0", items: ["Supplier A", "Supplier B"] },
+				{ label: "S", color: "#3B8FE8", items: ["Supplier A", "Supplier B"] },
 				{ label: "I", color: "#38BDF8", items: ["Data", "Materials"] },
 				{ label: "P", color: "#A78BFA", items: ["Process A", "Process B", "Process C"] },
 				{ label: "O", color: "#FB923C", items: ["Reports", "Products"] },
@@ -94,22 +94,22 @@ function SipocVisual() {
 function BpmnVisual() {
 	return (
 		<svg viewBox="0 0 400 120" className="mt-4 w-full" fill="none">
-			<circle cx="20" cy="60" r="12" stroke="#00E5C0" strokeWidth="2" fill="rgba(0,229,192,0.15)" />
-			<line x1="32" y1="60" x2="70" y2="60" stroke="#00E5C0" strokeWidth="1.5" />
-			<rect x="70" y="42" width="70" height="36" rx="6" stroke="#00E5C0" strokeWidth="1.5" fill="rgba(0,229,192,0.08)" />
-			<text x="105" y="65" textAnchor="middle" fill="#00E5C0" fontSize="10" fontFamily="monospace">Task</text>
-			<line x1="140" y1="60" x2="165" y2="60" stroke="#00E5C0" strokeWidth="1.5" />
-			<rect x="160" y="48" width="18" height="18" rx="3" transform="rotate(45 169 57)" stroke="#00E5C0" strokeWidth="1.5" fill="rgba(0,229,192,0.08)" />
-			<line x1="182" y1="48" x2="220" y2="30" stroke="#00E5C0" strokeWidth="1.5" />
-			<line x1="182" y1="68" x2="220" y2="90" stroke="#00E5C0" strokeWidth="1.5" />
+			<circle cx="20" cy="60" r="12" stroke="#3B8FE8" strokeWidth="2" fill="rgba(59,143,232,0.15)" />
+			<line x1="32" y1="60" x2="70" y2="60" stroke="#3B8FE8" strokeWidth="1.5" />
+			<rect x="70" y="42" width="70" height="36" rx="6" stroke="#3B8FE8" strokeWidth="1.5" fill="rgba(59,143,232,0.08)" />
+			<text x="105" y="65" textAnchor="middle" fill="#3B8FE8" fontSize="10" fontFamily="monospace">Task</text>
+			<line x1="140" y1="60" x2="165" y2="60" stroke="#3B8FE8" strokeWidth="1.5" />
+			<rect x="160" y="48" width="18" height="18" rx="3" transform="rotate(45 169 57)" stroke="#3B8FE8" strokeWidth="1.5" fill="rgba(59,143,232,0.08)" />
+			<line x1="182" y1="48" x2="220" y2="30" stroke="#3B8FE8" strokeWidth="1.5" />
+			<line x1="182" y1="68" x2="220" y2="90" stroke="#3B8FE8" strokeWidth="1.5" />
 			<rect x="220" y="14" width="70" height="32" rx="6" stroke="#38BDF8" strokeWidth="1.5" fill="rgba(56,189,248,0.08)" />
 			<text x="255" y="35" textAnchor="middle" fill="#38BDF8" fontSize="9" fontFamily="monospace">Path A</text>
 			<rect x="220" y="74" width="70" height="32" rx="6" stroke="#A78BFA" strokeWidth="1.5" fill="rgba(167,139,250,0.08)" />
 			<text x="255" y="95" textAnchor="middle" fill="#A78BFA" fontSize="9" fontFamily="monospace">Path B</text>
 			<line x1="290" y1="30" x2="330" y2="60" stroke="#38BDF8" strokeWidth="1.5" />
 			<line x1="290" y1="90" x2="330" y2="60" stroke="#A78BFA" strokeWidth="1.5" />
-			<circle cx="345" cy="60" r="12" stroke="#00E5C0" strokeWidth="3" fill="rgba(0,229,192,0.15)" />
-			<line x1="357" y1="60" x2="380" y2="60" stroke="#00E5C0" strokeWidth="1.5" />
+			<circle cx="345" cy="60" r="12" stroke="#3B8FE8" strokeWidth="3" fill="rgba(59,143,232,0.15)" />
+			<line x1="357" y1="60" x2="380" y2="60" stroke="#3B8FE8" strokeWidth="1.5" />
 			<rect x="360" y="42" width="35" height="36" rx="4" stroke="#FB923C" strokeWidth="1.5" fill="rgba(251,146,60,0.08)" />
 			<text x="377" y="64" textAnchor="middle" fill="#FB923C" fontSize="7" fontFamily="monospace">End</text>
 		</svg>
@@ -148,7 +148,7 @@ function ChatVisual() {
 	return (
 		<div className="mt-4 space-y-2">
 			<div className="flex justify-end">
-				<div className="rounded-xl rounded-tr-sm bg-[#00E5C0]/20 px-3 py-1.5 text-xs text-[#00E5C0]">
+				<div className="rounded-xl rounded-tr-sm bg-[#3B8FE8]/20 px-3 py-1.5 text-xs text-[#3B8FE8]">
 					"Analiza el proceso de onboarding"
 				</div>
 			</div>
@@ -158,7 +158,7 @@ function ChatVisual() {
 				</div>
 			</div>
 			<div className="flex justify-end">
-				<div className="rounded-xl rounded-tr-sm bg-[#00E5C0]/20 px-3 py-1.5 text-xs text-[#00E5C0]">
+				<div className="rounded-xl rounded-tr-sm bg-[#3B8FE8]/20 px-3 py-1.5 text-xs text-[#3B8FE8]">
 					"Recursos humanos y el sistema ERP"
 				</div>
 			</div>
@@ -173,7 +173,7 @@ function ChatVisual() {
 
 function FormatsVisual() {
 	const formats = [
-		{ label: "BPMN XML", color: "#00E5C0" },
+		{ label: "BPMN XML", color: "#3B8FE8" },
 		{ label: "PDF", color: "#38BDF8" },
 		{ label: "PNG", color: "#A78BFA" },
 		{ label: "HTML Report", color: "#FB923C" },
@@ -251,7 +251,7 @@ export function BentoFeatureSection() {
 		>
 			<div className="container max-w-6xl">
 				<div className="bento-header mb-10 sm:mb-14 max-w-3xl mx-auto text-center">
-					<small className="font-medium text-xs uppercase tracking-widest text-[#00E5C0] mb-4 block">
+					<small className="font-medium text-xs uppercase tracking-widest text-[#3B8FE8] mb-4 block">
 						{t("home.bento.badge")}
 					</small>
 					<h2 className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-white">
@@ -269,11 +269,11 @@ export function BentoFeatureSection() {
 						return (
 							<div
 								key={feature.id}
-								className={`bento-card rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 sm:p-6 transition-all duration-300 hover:border-[#00E5C0]/30 hover:bg-white/[0.07] ${feature.span}`}
+								className={`bento-card rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 sm:p-6 transition-all duration-300 hover:border-[#3B8FE8]/30 hover:bg-white/[0.07] ${feature.span}`}
 							>
 								<div className="flex items-center gap-3 mb-3">
-									<div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#00E5C0]/15">
-										<Icon className="size-4.5 text-[#00E5C0]" strokeWidth={1.5} />
+									<div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#3B8FE8]/15">
+										<Icon className="size-4.5 text-[#3B8FE8]" strokeWidth={1.5} />
 									</div>
 									<h3 className="font-display text-base sm:text-lg font-semibold text-white">
 										{t(`home.${feature.titleKey}`)}

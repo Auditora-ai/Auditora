@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { motion, useInView, useAnimation } from "framer-motion";
 
 const STEPS = [
-	{ label: "Discover", color: "#00E5C0" },
+	{ label: "Discover", color: "#3B8FE8" },
 	{ label: "Map", color: "#38BDF8" },
 	{ label: "Assess", color: "#A78BFA" },
 	{ label: "Document", color: "#FB923C" },

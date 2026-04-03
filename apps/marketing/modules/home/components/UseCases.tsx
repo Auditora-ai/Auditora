@@ -38,8 +38,8 @@ export function UseCases() {
 					transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
 					className="text-center"
 				>
-					<div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#00E5C0]/30 bg-[#00E5C0]/10 px-4 py-1.5">
-						<span className="text-xs font-medium uppercase tracking-widest text-[#00E5C0]">
+					<div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#3B8FE8]/30 bg-[#3B8FE8]/10 px-4 py-1.5">
+						<span className="text-xs font-medium uppercase tracking-widest text-[#3B8FE8]">
 							{t("badge")}
 						</span>
 					</div>
@@ -62,7 +62,7 @@ export function UseCases() {
 							type="button"
 							onClick={() => handleTabChange(id)}
 							className="relative flex items-center gap-2 px-4 sm:px-6 py-3 text-sm font-medium transition-colors duration-200 cursor-pointer"
-							style={{ color: activeTab === id ? "#00E5C0" : "#64748B" }}
+							style={{ color: activeTab === id ? "#3B8FE8" : "#64748B" }}
 							onMouseEnter={(e) => { if (activeTab !== id) (e.currentTarget as HTMLElement).style.color = "#94A3B8"; }}
 							onMouseLeave={(e) => { if (activeTab !== id) (e.currentTarget as HTMLElement).style.color = "#64748B"; }}
 						>
@@ -70,7 +70,7 @@ export function UseCases() {
 							<span>{t(`${id}.label`)}</span>
 							<motion.span
 								layoutId="usecase-tab-indicator"
-								className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00E5C0] rounded-full"
+								className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#3B8FE8] rounded-full"
 								transition={{ type: "spring", stiffness: 400, damping: 30 }}
 							/>
 						</button>
@@ -85,7 +85,7 @@ export function UseCases() {
 						animate={{ opacity: 1, y: 0 }}
 						exit={{ opacity: 0, y: -12 }}
 						transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-						whileHover={{ borderColor: "rgba(0,229,192,0.15)" }}
+						whileHover={{ borderColor: "rgba(59,143,232,0.15)" }}
 						className="text-center max-w-2xl mx-auto rounded-2xl border border-white/[0.06] bg-white/[0.02] p-8 sm:p-10 transition-colors duration-300"
 					>
 						<h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-white mb-3">

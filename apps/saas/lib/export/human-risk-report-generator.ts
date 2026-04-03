@@ -95,7 +95,7 @@ export function generateHumanRiskReportHtml(input: HumanRiskReportInput): string
     .cover .accent-line {
       width: 60px;
       height: 4px;
-      background: #00E5C0;
+      background: #3B8FE8;
       margin-bottom: 40px;
     }
     .cover h1 {
@@ -118,7 +118,7 @@ export function generateHumanRiskReportHtml(input: HumanRiskReportInput): string
       font-size: 13px;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      color: #00E5C0;
+      color: #3B8FE8;
     }
 
     .content {
@@ -775,8 +775,8 @@ function renderScoreTrendSvg(scoreTrend: Array<{ month: string; score: number }>
     <svg width="100%" viewBox="0 0 ${W} ${H}" style="max-width: 750px; font-family: Inter, sans-serif;">
       <defs>
         <linearGradient id="trendFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#00E5C0" stop-opacity="0.3"/>
-          <stop offset="100%" stop-color="#00E5C0" stop-opacity="0"/>
+          <stop offset="0%" stop-color="#3B8FE8" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="#3B8FE8" stop-opacity="0"/>
         </linearGradient>
       </defs>
 
@@ -794,11 +794,11 @@ function renderScoreTrendSvg(scoreTrend: Array<{ month: string; score: number }>
       <path d="${areaPath}" fill="url(#trendFill)"/>
 
       <!-- Line -->
-      <path d="${linePath}" fill="none" stroke="#00E5C0" stroke-width="2"/>
+      <path d="${linePath}" fill="none" stroke="#3B8FE8" stroke-width="2"/>
 
       <!-- Dots + labels -->
       ${points.map((p) => `
-        <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4" fill="#00E5C0"/>
+        <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4" fill="#3B8FE8"/>
         <text x="${p.x.toFixed(1)}" y="${(PAD_T + chartH + 20).toFixed(1)}" fill="#64748b" font-size="9" text-anchor="middle">${escHtml(p.month)}</text>
         <text x="${p.x.toFixed(1)}" y="${(p.y - 10).toFixed(1)}" fill="#f1f5f9" font-size="10" text-anchor="middle" font-weight="600">${p.score}</text>
       `).join("")}

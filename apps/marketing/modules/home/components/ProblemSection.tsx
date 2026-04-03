@@ -101,7 +101,7 @@ function PainCard({
 			onHoverEnd={() => setIsHovered(false)}
 			whileHover={{
 				y: -6,
-				borderColor: "rgba(0,229,192,0.25)",
+				borderColor: "rgba(59,143,232,0.25)",
 				transition: { type: "spring", stiffness: 300, damping: 20 },
 			}}
 			className="group relative rounded-2xl p-5 sm:p-6 lg:p-8 border border-white/10 bg-white/[0.04] backdrop-blur-sm transition-colors duration-300 hover:bg-white/[0.07]"
@@ -111,8 +111,8 @@ function PainCard({
 				className="pointer-events-none absolute inset-0 rounded-2xl"
 				animate={{
 					boxShadow: isHovered
-						? "inset 0 1px 0 0 rgba(0,229,192,0.1), 0 0 20px rgba(0,229,192,0.04)"
-						: "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 0 0 rgba(0,229,192,0)",
+						? "inset 0 1px 0 0 rgba(59,143,232,0.1), 0 0 20px rgba(59,143,232,0.04)"
+						: "inset 0 1px 0 0 rgba(255,255,255,0.05), 0 0 0 rgba(59,143,232,0)",
 				}}
 				transition={{ duration: 0.3 }}
 			/>
@@ -122,14 +122,14 @@ function PainCard({
 					className="w-10 h-10 rounded-xl flex items-center justify-center mb-5"
 					animate={{
 						backgroundColor: isHovered
-							? "rgba(0,229,192,0.2)"
-							: "rgba(0,229,192,0.1)",
+							? "rgba(59,143,232,0.2)"
+							: "rgba(59,143,232,0.1)",
 					}}
 					transition={{ duration: 0.3 }}
 				>
 					<motion.div
 						animate={{
-							color: isHovered ? "#5EFFE0" : "#00E5C0",
+							color: isHovered ? "#5EFFE0" : "#3B8FE8",
 							scale: isHovered ? 1.1 : 1,
 						}}
 						transition={{ duration: 0.25, ease: "easeOut" }}
@@ -154,7 +154,7 @@ export function ProblemSection() {
 	return (
 		<section className="py-16 sm:py-20 lg:py-28 bg-[#111827] relative overflow-hidden">
 			{/* Subtle background gradient */}
-			<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(0,229,192,0.04),transparent)]" />
+			<div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_0%,rgba(59,143,232,0.04),transparent)]" />
 
 			<div className="container relative max-w-6xl">
 				{/* Header */}
@@ -165,7 +165,7 @@ export function ProblemSection() {
 						viewport={{ once: true, margin: "-60px" }}
 						transition={{ duration: 0.5, ease: EASE }}
 						className={cn(
-							"badge-pulse inline-flex items-center rounded-full bg-[#00E5C0]/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#00E5C0] mb-6",
+							"badge-pulse inline-flex items-center rounded-full bg-[#3B8FE8]/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#3B8FE8] mb-6",
 						)}
 					>
 						{t("home.problem.badge")}
@@ -188,7 +188,7 @@ export function ProblemSection() {
 						whileInView={{ opacity: 1, scale: 1 }}
 						viewport={{ once: true, margin: "-60px" }}
 						transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
-						className="font-display text-6xl sm:text-7xl lg:text-8xl font-bold text-[#00E5C0] leading-none"
+						className="font-display text-6xl sm:text-7xl lg:text-8xl font-bold text-[#3B8FE8] leading-none"
 					>
 						<AnimatedCounter target={73} />
 					</motion.div>
@@ -221,7 +221,7 @@ export function ProblemSection() {
 					className="mx-auto mb-12 sm:mb-16 h-px max-w-md"
 					style={{
 						background:
-							"linear-gradient(90deg, transparent, rgba(0,229,192,0.3) 30%, rgba(0,229,192,0.5) 50%, rgba(0,229,192,0.3) 70%, transparent)",
+							"linear-gradient(90deg, transparent, rgba(59,143,232,0.3) 30%, rgba(59,143,232,0.5) 50%, rgba(59,143,232,0.3) 70%, transparent)",
 					}}
 				/>
 

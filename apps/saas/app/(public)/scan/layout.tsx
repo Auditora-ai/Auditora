@@ -21,7 +21,7 @@ export default function ScanLayout({ children }: PropsWithChildren) {
           <span className="text-xl tracking-tight leading-none">
             <span className="font-black text-white">Audit</span>
             <span className="font-light text-white/70">ora</span>
-            <span className="font-light text-[#00E5C0]">.ai</span>
+            <span className="font-light text-[#3B8FE8]">.ai</span>
           </span>
         </Link>
       </header>

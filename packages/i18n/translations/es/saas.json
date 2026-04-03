@@ -833,7 +833,14 @@
       "alignment": "Alineación procedimental",
       "controlLevel": "Nivel de control",
       "criterio": "Criterio de decisión",
-      "scoreTrend": "Tendencia de puntaje"
+      "scoreTrend": "Tendencia de puntaje",
+      "viewEvaluaciones": "Ver evaluaciones",
+      "dateToday": "Hoy",
+      "dateYesterday": "Ayer",
+      "dateDaysAgo": "Hace {count} días",
+      "activitySessionCompleted": "Sesión \"{process}\" completada",
+      "activityNodesExtracted": "{count} nodos extraídos",
+      "createEvaluation": "Crear Evaluación"
     }
   },
   "processLibrary": {

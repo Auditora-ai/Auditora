@@ -34,11 +34,11 @@ export default function Wrapper({
 						colors: {
 							border: "#E7E5E4",
 							input: "#E7E5E4",
-							ring: "#00E5C0",
+							ring: "#3B8FE8",
 							background: "#FFFBF5",
 							foreground: "#0A1428",
 							primary: {
-								DEFAULT: "#00E5C0",
+								DEFAULT: "#3B8FE8",
 								foreground: "#0A1428",
 							},
 							secondary: {
@@ -58,7 +58,7 @@ export default function Wrapper({
 								foreground: "#64748B",
 							},
 							accent: {
-								DEFAULT: "#00E5C0",
+								DEFAULT: "#3B8FE8",
 								foreground: "#0A1428",
 							},
 							popover: {

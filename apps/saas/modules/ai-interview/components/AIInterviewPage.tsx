@@ -215,7 +215,7 @@ export function AIInterviewPage({
 											);
 										}}
 										className="flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium transition-colors hover:opacity-80"
-										style={{ borderColor: "#E2E8F0", color: "#00E5C0" }}
+										style={{ borderColor: "#E2E8F0", color: "#3B8FE8" }}
 									>
 										<ShareIcon className="size-4" />
 										Compartir
@@ -224,7 +224,7 @@ export function AIInterviewPage({
 								<Link
 									href={`/${organizationSlug}/sessions`}
 									className="flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium text-white"
-									style={{ backgroundColor: "#00E5C0" }}
+									style={{ backgroundColor: "#3B8FE8" }}
 								>
 									Volver a Sesiones
 								</Link>

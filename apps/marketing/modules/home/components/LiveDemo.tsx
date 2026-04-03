@@ -126,7 +126,7 @@ export function LiveDemo() {
 			className="relative py-20 sm:py-28 lg:py-36 bg-[#0A1428] overflow-hidden"
 		>
 			{/* Background ambient glows */}
-			<div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] bg-[#00E5C0]/[0.04] rounded-full blur-[140px] pointer-events-none" />
+			<div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] bg-[#3B8FE8]/[0.04] rounded-full blur-[140px] pointer-events-none" />
 			<div className="absolute bottom-0 right-0 w-[500px] h-[400px] bg-blue-600/[0.03] rounded-full blur-[100px] pointer-events-none" />
 
 			<motion.div
@@ -138,9 +138,9 @@ export function LiveDemo() {
 			>
 				{/* ─── Header ─── */}
 				<motion.div variants={headerVariants} className="text-center mb-14 sm:mb-18">
-					<div className="inline-flex items-center gap-2 rounded-full border border-[#00E5C0]/20 bg-[#00E5C0]/[0.08] px-4 py-1.5 mb-6">
-						<BrainIcon className="size-3.5 text-[#00E5C0]" />
-						<span className="text-xs font-semibold text-[#00E5C0] uppercase tracking-widest">
+					<div className="inline-flex items-center gap-2 rounded-full border border-[#3B8FE8]/20 bg-[#3B8FE8]/[0.08] px-4 py-1.5 mb-6">
+						<BrainIcon className="size-3.5 text-[#3B8FE8]" />
+						<span className="text-xs font-semibold text-[#3B8FE8] uppercase tracking-widest">
 							{t("badge")}
 						</span>
 					</div>
@@ -155,15 +155,15 @@ export function LiveDemo() {
 				{/* ─── Scenario Card ─── */}
 				<motion.div variants={cardVariants} className="relative">
 					{/* Glow behind card */}
-					<div className="absolute -inset-3 bg-gradient-to-br from-[#00E5C0]/[0.08] via-blue-500/[0.04] to-transparent rounded-3xl blur-2xl pointer-events-none" />
+					<div className="absolute -inset-3 bg-gradient-to-br from-[#3B8FE8]/[0.08] via-blue-500/[0.04] to-transparent rounded-3xl blur-2xl pointer-events-none" />
 
 					<div className="relative bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-2xl shadow-2xl shadow-black/30 overflow-hidden">
 						{/* Card header bar */}
 						<div className="flex items-center justify-between border-b border-white/[0.06] px-6 sm:px-8 py-4">
 							<div className="flex items-center gap-2.5">
-								<div className="flex items-center gap-2 bg-[#00E5C0]/[0.12] border border-[#00E5C0]/20 rounded-full px-3.5 py-1">
-									<ShieldAlertIcon className="size-3.5 text-[#00E5C0]" />
-									<span className="text-[11px] font-semibold text-[#00E5C0] uppercase tracking-wide">
+								<div className="flex items-center gap-2 bg-[#3B8FE8]/[0.12] border border-[#3B8FE8]/20 rounded-full px-3.5 py-1">
+									<ShieldAlertIcon className="size-3.5 text-[#3B8FE8]" />
+									<span className="text-[11px] font-semibold text-[#3B8FE8] uppercase tracking-wide">
 										{t("cardBadge")}
 									</span>
 								</div>
@@ -179,14 +179,14 @@ export function LiveDemo() {
 						<div className="px-6 sm:px-8 py-6 sm:py-8">
 							{/* Scenario question */}
 							<div className="relative bg-white/[0.03] border border-white/[0.06] rounded-xl p-5 sm:p-6 mb-7">
-								<div className="absolute top-0 left-6 w-px h-3 bg-[#00E5C0]/50" />
+								<div className="absolute top-0 left-6 w-px h-3 bg-[#3B8FE8]/50" />
 								<p className="text-sm sm:text-[15px] leading-relaxed text-white/85">
 									{t.rich("scenario", {
 										danger: (chunks) => (
 											<span className="text-red-400/90 font-semibold">{chunks}</span>
 										),
 										role: (chunks) => (
-											<span className="text-[#00E5C0] font-semibold">{chunks}</span>
+											<span className="text-[#3B8FE8] font-semibold">{chunks}</span>
 										),
 									})}
 								</p>
@@ -274,12 +274,12 @@ export function LiveDemo() {
 										</div>
 
 										{/* Correct answer reveal + insight */}
-										<div className="relative rounded-xl border border-[#00E5C0]/20 bg-[#00E5C0]/[0.06] p-5 sm:p-6">
-											<div className="absolute top-0 left-6 w-8 h-[2px] bg-[#00E5C0]/50" />
+										<div className="relative rounded-xl border border-[#3B8FE8]/20 bg-[#3B8FE8]/[0.06] p-5 sm:p-6">
+											<div className="absolute top-0 left-6 w-8 h-[2px] bg-[#3B8FE8]/50" />
 											<p className="text-sm sm:text-[15px] leading-relaxed text-white/85 mb-3">
 												{t("resultExplanation")}
 											</p>
-											<p className="text-xs sm:text-sm text-[#00E5C0]/80 font-medium">
+											<p className="text-xs sm:text-sm text-[#3B8FE8]/80 font-medium">
 												{t("resultStat")}
 											</p>
 										</div>
@@ -290,7 +290,7 @@ export function LiveDemo() {
 												size="lg"
 												variant="primary"
 												asChild
-												className="bg-[#00E5C0] hover:bg-[#00C4A3] text-[#0A1428] font-semibold w-full sm:w-auto"
+												className="bg-[#3B8FE8] hover:bg-[#2E7FD6] text-[#0A1428] font-semibold w-full sm:w-auto"
 											>
 												<a href={`${config.saasUrl}/scan`}>
 													{t("cta")}

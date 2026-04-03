@@ -212,7 +212,7 @@ export function RiskHeatMatrix({
                   height={CELL_SIZE}
                   fill={count > 0 ? getScoreColorFill(score) : "transparent"}
                   stroke={
-                    isActive || isFocused ? "#00E5C0" : "#334155"
+                    isActive || isFocused ? "#3B8FE8" : "#334155"
                   }
                   strokeWidth={isActive || isFocused ? 3 : 1}
                   rx={4}

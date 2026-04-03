@@ -45,7 +45,7 @@ export function ToolResult({
 				{t("didYouKnow")}
 			</Text>
 
-			<Link href={baseUrl} style={{ color: "#00E5C0", fontSize: "14px" }}>
+			<Link href={baseUrl} style={{ color: "#3B8FE8", fontSize: "14px" }}>
 				{t("learnMore")} →
 			</Link>
 		</Wrapper>

@@ -56,7 +56,7 @@ export function InputPhase({ defaultUrl, error, onSubmit }: InputPhaseProps) {
     >
       {/* Badge */}
       <motion.div variants={itemVariants} className="mb-6 flex justify-center">
-        <span className="inline-flex items-center gap-2 bg-[#00E5C0]/15 text-[#00E5C0] rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest">
+        <span className="inline-flex items-center gap-2 bg-[#3B8FE8]/15 text-[#3B8FE8] rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest">
           <Globe className="h-3.5 w-3.5" />
           Free scan
         </span>
@@ -68,7 +68,7 @@ export function InputPhase({ defaultUrl, error, onSubmit }: InputPhaseProps) {
         className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl"
       >
         Scan your{" "}
-        <span className="bg-gradient-to-r from-[#00E5C0] to-cyan-400 bg-clip-text text-transparent">
+        <span className="bg-gradient-to-r from-[#3B8FE8] to-cyan-400 bg-clip-text text-transparent">
           operations
         </span>
       </motion.h1>
@@ -109,7 +109,7 @@ export function InputPhase({ defaultUrl, error, onSubmit }: InputPhaseProps) {
             }`}
             style={{
               background:
-                "conic-gradient(from 0deg, #00E5C0, #06B6D4, #3B82F6, #8B5CF6, #00E5C0)",
+                "conic-gradient(from 0deg, #3B8FE8, #06B6D4, #3B82F6, #8B5CF6, #3B8FE8)",
               filter: "blur(8px)",
             }}
           />
@@ -121,7 +121,7 @@ export function InputPhase({ defaultUrl, error, onSubmit }: InputPhaseProps) {
             }`}
             style={{
               background:
-                "conic-gradient(from 0deg, #00E5C0, #06B6D4, #3B82F6, #8B5CF6, #00E5C0)",
+                "conic-gradient(from 0deg, #3B8FE8, #06B6D4, #3B82F6, #8B5CF6, #3B8FE8)",
             }}
           />
 
@@ -145,7 +145,7 @@ export function InputPhase({ defaultUrl, error, onSubmit }: InputPhaseProps) {
               type="submit"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="shrink-0 inline-flex items-center gap-2 rounded-xl bg-[#00E5C0] px-5 py-3 text-sm font-bold text-[#0A1428] shadow-[0_0_30px_rgba(0,229,192,0.15)] transition-colors hover:bg-[#00CCA9]"
+              className="shrink-0 inline-flex items-center gap-2 rounded-xl bg-[#3B8FE8] px-5 py-3 text-sm font-bold text-[#0A1428] shadow-[0_0_30px_rgba(59,143,232,0.15)] transition-colors hover:bg-[#2E7FD6]"
             >
               Scan
               <ArrowRight className="h-4 w-4" />

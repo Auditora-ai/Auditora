@@ -89,7 +89,7 @@ export function MetricsSection() {
 		<section ref={sectionRef} className="py-16 sm:py-20 lg:py-28 bg-white">
 			<div className="container max-w-5xl">
 				<div className="metrics-header mb-10 sm:mb-14 max-w-3xl mx-auto text-center">
-					<small className="font-medium text-xs uppercase tracking-widest text-[#00E5C0] mb-4 block">
+					<small className="font-medium text-xs uppercase tracking-widest text-[#3B8FE8] mb-4 block">
 						{t("home.metrics.badge")}
 					</small>
 					<h2 className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-[#0A1428]">
@@ -101,7 +101,7 @@ export function MetricsSection() {
 					{METRICS.map((metric, i) => (
 						<div
 							key={metric.id}
-							className="metric-card rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] p-5 sm:p-6 flex flex-col items-center text-center border-t-[3px] border-t-[#00E5C0]"
+							className="metric-card rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] p-5 sm:p-6 flex flex-col items-center text-center border-t-[3px] border-t-[#3B8FE8]"
 						>
 							<div className="flex items-baseline gap-0.5 mb-2">
 								<span
@@ -112,7 +112,7 @@ export function MetricsSection() {
 								>
 									{metric.prefix ?? ""}0
 								</span>
-								<span className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-[#00E5C0]">
+								<span className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-[#3B8FE8]">
 									{metric.suffix}
 								</span>
 							</div>

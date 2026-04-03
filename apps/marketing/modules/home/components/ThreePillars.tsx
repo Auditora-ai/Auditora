@@ -20,8 +20,8 @@ const pillars: Pillar[] = [
 	{
 		id: "capture",
 		icon: Mic,
-		accentColor: "#00E5C0",
-		glowColor: "rgba(0,229,192,0.08)",
+		accentColor: "#3B8FE8",
+		glowColor: "rgba(59,143,232,0.08)",
 		number: "01",
 	},
 	{
@@ -131,7 +131,7 @@ export function ThreePillars() {
 					transition={{ duration: 0.6, ease: EASE }}
 					className="text-center mb-16"
 				>
-					<p className="text-[#00E5C0] text-sm font-semibold uppercase tracking-widest mb-4">
+					<p className="text-[#3B8FE8] text-sm font-semibold uppercase tracking-widest mb-4">
 						{t("label")}
 					</p>
 					<h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white max-w-2xl mx-auto leading-tight">

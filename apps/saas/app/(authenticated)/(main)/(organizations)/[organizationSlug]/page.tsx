@@ -3,6 +3,7 @@ import { RiskDashboard, type TopRisk, type ActivityItem } from "@command-center/
 import { db } from "@repo/database";
 import { fetchHumanRiskDashboardData } from "@evaluaciones/lib/dashboard-queries";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
 export const dynamic = "force-dynamic";
 
@@ -125,7 +126,7 @@ export default async function OrganizationPage({
 			})
 		: 0;
 
-	// Maturity score calculation (mirrors getNavSummary)
+	// Maturity score: 25% documentation + 25% risk coverage + 50% evaluations
 	const processesWithRisks = processes.filter(
 		(p) => p.risks.length > 0,
 	).length;
@@ -133,8 +134,12 @@ export default async function OrganizationPage({
 		totalProcesses > 0 ? documentedProcesses / totalProcesses : 0;
 	const riskCoverage =
 		totalProcesses > 0 ? processesWithRisks / totalProcesses : 0;
+	const evaluationScore =
+		evaluacionesData && !evaluacionesData.insufficientData
+			? evaluacionesData.orgAvgScore / 100
+			: 0;
 	const maturityScore = Math.round(
-		(processDocumentation * 0.3 + riskCoverage * 0.3) * 100,
+		(processDocumentation * 0.25 + riskCoverage * 0.25 + evaluationScore * 0.5) * 100,
 	);
 
 	const topRisks: TopRisk[] = topRisksRaw.map((r) => ({
@@ -147,11 +152,13 @@ export default async function OrganizationPage({
 		riskScore: r.riskScore,
 	}));
 
+	const t = await getTranslations("dashboard.riskDashboard");
+
 	const recentActivity: ActivityItem[] = recentSessions.map((s) => ({
 		type: "session_ended" as const,
-		title: `Sesión "${s.processDefinition?.name ?? "Sin proceso"}" completada`,
-		subtitle: `${s._count.diagramNodes} nodos extraídos`,
-		date: formatRelativeDate(s.updatedAt),
+		title: t("activitySessionCompleted", { process: s.processDefinition?.name ?? t("noProcess") }),
+		subtitle: t("activityNodesExtracted", { count: s._count.diagramNodes }),
+		date: formatRelativeDate(s.updatedAt, t),
 	}));
 
 	return (
@@ -196,13 +203,13 @@ export default async function OrganizationPage({
 	);
 }
 
-function formatRelativeDate(date: Date): string {
+function formatRelativeDate(date: Date, t: (key: string, values?: Record<string, unknown>) => string): string {
 	const now = new Date();
 	const diffMs = now.getTime() - date.getTime();
 	const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-	if (diffDays === 0) return "Hoy";
-	if (diffDays === 1) return "Ayer";
-	if (diffDays < 7) return `Hace ${diffDays} días`;
-	return date.toLocaleDateString("es", { day: "numeric", month: "short" });
+	if (diffDays === 0) return t("dateToday");
+	if (diffDays === 1) return t("dateYesterday");
+	if (diffDays < 7) return t("dateDaysAgo", { count: diffDays });
+	return date.toLocaleDateString(undefined, { day: "numeric", month: "short" });
 }

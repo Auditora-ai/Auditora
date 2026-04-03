@@ -107,13 +107,13 @@ export function SopGeneration({ className, loopMs = 6000 }: SopGenerationProps) 
 								initial={{ scale: 0, opacity: 0 }}
 								animate={{ scale: 1, opacity: 1 }}
 								transition={{ type: "spring", stiffness: 350, damping: 22 }}
-								className="flex size-6 items-center justify-center rounded-md bg-[#00E5C0]/15 border border-[#00E5C0]/25"
+								className="flex size-6 items-center justify-center rounded-md bg-[#3B8FE8]/15 border border-[#3B8FE8]/25"
 							>
 								<svg width="12" height="14" viewBox="0 0 12 14" fill="none">
-									<rect x="1" y="1" width="10" height="12" rx="1.5" stroke="#00E5C0" strokeWidth="1.2" />
-									<line x1="3" y1="4.5" x2="9" y2="4.5" stroke="#00E5C0" strokeWidth="1" strokeOpacity="0.6" />
-									<line x1="3" y1="7" x2="9" y2="7" stroke="#00E5C0" strokeWidth="1" strokeOpacity="0.6" />
-									<line x1="3" y1="9.5" x2="6.5" y2="9.5" stroke="#00E5C0" strokeWidth="1" strokeOpacity="0.6" />
+									<rect x="1" y="1" width="10" height="12" rx="1.5" stroke="#3B8FE8" strokeWidth="1.2" />
+									<line x1="3" y1="4.5" x2="9" y2="4.5" stroke="#3B8FE8" strokeWidth="1" strokeOpacity="0.6" />
+									<line x1="3" y1="7" x2="9" y2="7" stroke="#3B8FE8" strokeWidth="1" strokeOpacity="0.6" />
+									<line x1="3" y1="9.5" x2="6.5" y2="9.5" stroke="#3B8FE8" strokeWidth="1" strokeOpacity="0.6" />
 								</svg>
 							</motion.div>
 						)}
@@ -127,10 +127,10 @@ export function SopGeneration({ className, loopMs = 6000 }: SopGenerationProps) 
 						<motion.div
 							initial={{ opacity: 0 }}
 							animate={{ opacity: 1 }}
-							className="flex items-center gap-1 rounded-full bg-[#00E5C0]/10 px-2 py-0.5"
+							className="flex items-center gap-1 rounded-full bg-[#3B8FE8]/10 px-2 py-0.5"
 						>
-							<div className="size-1 rounded-full bg-[#00E5C0]" />
-							<span className="text-[9px] font-medium text-[#00E5C0]">IA</span>
+							<div className="size-1 rounded-full bg-[#3B8FE8]" />
+							<span className="text-[9px] font-medium text-[#3B8FE8]">IA</span>
 						</motion.div>
 					)}
 				</div>
@@ -143,7 +143,7 @@ export function SopGeneration({ className, loopMs = 6000 }: SopGenerationProps) 
 
 					const colorMap = {
 						h1: "text-white font-bold text-[13px]",
-						h2: "text-[#00E5C0] font-semibold text-[11px] mt-2",
+						h2: "text-[#3B8FE8] font-semibold text-[11px] mt-2",
 						meta: "text-white/30 text-[10px]",
 						body: "text-white/55",
 						step: "text-white/65 pl-2",
@@ -167,7 +167,7 @@ export function SopGeneration({ className, loopMs = 6000 }: SopGenerationProps) 
 								<motion.span
 									animate={{ opacity: [1, 0, 1] }}
 									transition={{ duration: 0.7, repeat: Infinity }}
-									className="inline-block w-[6px] h-[11px] bg-[#00E5C0]/70 ml-0.5 align-middle"
+									className="inline-block w-[6px] h-[11px] bg-[#3B8FE8]/70 ml-0.5 align-middle"
 								/>
 							)}
 						</motion.div>
@@ -179,7 +179,7 @@ export function SopGeneration({ className, loopMs = 6000 }: SopGenerationProps) 
 					<motion.div
 						animate={{ opacity: [1, 0, 1] }}
 						transition={{ duration: 0.7, repeat: Infinity }}
-						className="inline-block w-[6px] h-[13px] bg-[#00E5C0]/70 align-middle"
+						className="inline-block w-[6px] h-[13px] bg-[#3B8FE8]/70 align-middle"
 					/>
 				)}
 			</div>
@@ -193,7 +193,7 @@ export function SopGeneration({ className, loopMs = 6000 }: SopGenerationProps) 
 					<motion.span
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
-						className="text-[10px] font-medium text-[#00E5C0]"
+						className="text-[10px] font-medium text-[#3B8FE8]"
 					>
 						✓ Listo para revisión
 					</motion.span>
@@ -203,7 +203,7 @@ export function SopGeneration({ className, loopMs = 6000 }: SopGenerationProps) 
 			{/* Ambient glow */}
 			<div
 				className="pointer-events-none absolute inset-0 rounded-2xl"
-				style={{ background: "radial-gradient(ellipse at 0% 50%, rgba(0,229,192,0.04) 0%, transparent 60%)" }}
+				style={{ background: "radial-gradient(ellipse at 0% 50%, rgba(59,143,232,0.04) 0%, transparent 60%)" }}
 			/>
 		</div>
 	);

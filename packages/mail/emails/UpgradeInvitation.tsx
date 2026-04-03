@@ -61,7 +61,7 @@ export function UpgradeInvitation({
 				}}
 			>
 				{t("currentPlanLabel", { currentPlan })}{"\n"}
-				<strong style={{ color: "#00E5C0" }}>{t("suggestedPlanLabel", { suggestedPlan })}</strong>
+				<strong style={{ color: "#3B8FE8" }}>{t("suggestedPlanLabel", { suggestedPlan })}</strong>
 			</Text>
 
 			<PrimaryButton href={upgradeUrl}>

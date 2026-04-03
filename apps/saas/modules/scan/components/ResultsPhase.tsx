@@ -66,9 +66,9 @@ function riskLevelBorder(level: string) {
     critical: "border-l-red-500",
     high: "border-l-orange-500",
     medium: "border-l-yellow-500",
-    low: "border-l-[#00E5C0]",
+    low: "border-l-[#3B8FE8]",
   };
-  return map[level] ?? "border-l-[#00E5C0]";
+  return map[level] ?? "border-l-[#3B8FE8]";
 }
 
 /* ------------------------------------------------------------------ */
@@ -152,7 +152,7 @@ export function ResultsPhase({ url, result, onReset }: ResultsPhaseProps) {
           {result.companyName}
         </h1>
         <div className="mt-3 flex items-center justify-center gap-3">
-          <span className="bg-[#00E5C0]/15 text-[#00E5C0] rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest">
+          <span className="bg-[#3B8FE8]/15 text-[#3B8FE8] rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest">
             {result.industry}
           </span>
         </div>
@@ -167,7 +167,7 @@ export function ResultsPhase({ url, result, onReset }: ResultsPhaseProps) {
       {/* ---- Vulnerability Score Card ---- */}
       <motion.div
         variants={fadeUp}
-        className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-8 text-center shadow-[0_0_30px_rgba(0,229,192,0.05)]"
+        className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-8 text-center shadow-[0_0_30px_rgba(59,143,232,0.05)]"
       >
         <p className="text-sm font-semibold uppercase tracking-widest text-[#94A3B8] mb-4">
           Vulnerability Score
@@ -261,7 +261,7 @@ export function ResultsPhase({ url, result, onReset }: ResultsPhaseProps) {
         <h2 className="text-xl font-bold tracking-tight text-white mb-4">
           Highest Risk Process
         </h2>
-        <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8 shadow-[0_0_30px_rgba(0,229,192,0.05)]">
+        <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8 shadow-[0_0_30px_rgba(59,143,232,0.05)]">
           <div className="flex items-center gap-3 mb-5">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/10">
               <ShieldAlert className="h-5 w-5 text-red-400" />
@@ -327,7 +327,7 @@ export function ResultsPhase({ url, result, onReset }: ResultsPhaseProps) {
         {/* Primary CTA */}
         <Link
           href="/signup"
-          className="group relative inline-flex items-center justify-center gap-2 rounded-xl bg-[#00E5C0] px-7 py-3.5 text-sm font-bold text-[#0A1428] shadow-[0_0_30px_rgba(0,229,192,0.15)] transition-all duration-300 hover:bg-[#00CCA9] hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(0,229,192,0.25)]"
+          className="group relative inline-flex items-center justify-center gap-2 rounded-xl bg-[#3B8FE8] px-7 py-3.5 text-sm font-bold text-[#0A1428] shadow-[0_0_30px_rgba(59,143,232,0.15)] transition-all duration-300 hover:bg-[#2E7FD6] hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(59,143,232,0.25)]"
         >
           Get the full diagnosis
           <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />

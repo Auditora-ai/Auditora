@@ -69,7 +69,7 @@ export function PlatformFeaturesSection() {
 		<section ref={sectionRef} className="pt-16 sm:pt-20 lg:pt-28 pb-12 sm:pb-14 lg:pb-20 bg-[#F8FAFC]">
 			<div className="container max-w-5xl">
 				<div className="pf-header mb-10 sm:mb-16 max-w-3xl mx-auto text-center">
-					<small className="font-medium text-xs uppercase tracking-widest text-[#00E5C0] mb-4 block">
+					<small className="font-medium text-xs uppercase tracking-widest text-[#3B8FE8] mb-4 block">
 						{t("home.platform.badge")}
 					</small>
 					<h2 className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-[#0A1428]">
@@ -86,9 +86,9 @@ export function PlatformFeaturesSection() {
 						return (
 							<div
 								key={feature.id}
-								className="pf-card rounded-2xl border border-[#E2E8F0] bg-white p-5 sm:p-6 transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:border-[#00E5C0]/30"
+								className="pf-card rounded-2xl border border-[#E2E8F0] bg-white p-5 sm:p-6 transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:border-[#3B8FE8]/30"
 							>
-								<div className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#00E5C0]/10 text-[#00E5C0] mb-4">
+								<div className="flex items-center justify-center w-10 h-10 rounded-xl bg-[#3B8FE8]/10 text-[#3B8FE8] mb-4">
 									<Icon className="size-5" strokeWidth={1.5} />
 								</div>
 								<h3 className="text-base font-semibold text-[#0A1428] mb-2">
@@ -103,7 +103,7 @@ export function PlatformFeaturesSection() {
 				</div>
 
 				<div className="pf-cta mt-10 sm:mt-12 text-center">
-					<Button size="lg" variant="primary" asChild className="bg-[#00E5C0] hover:bg-[#00C4A3] text-[#0A1428]">
+					<Button size="lg" variant="primary" asChild className="bg-[#3B8FE8] hover:bg-[#2E7FD6] text-[#0A1428]">
 						<a href={`${config.saasUrl}/sign-up`}>
 							{t("home.platform.cta")}
 							<ArrowRightIcon className="ml-2 size-4" />

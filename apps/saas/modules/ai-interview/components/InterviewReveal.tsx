@@ -67,7 +67,7 @@ export function InterviewReveal({ sessionId, shareToken, onComplete }: Interview
 						}).catch(() => {});
 					}}
 					className="rounded-md px-4 py-2 text-sm font-medium text-white"
-					style={{ backgroundColor: "#00E5C0" }}
+					style={{ backgroundColor: "#3B8FE8" }}
 				>
 					Reintentar
 				</button>

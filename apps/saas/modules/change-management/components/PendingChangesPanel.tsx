@@ -17,7 +17,7 @@ export function PendingChangesPanel({
 	if (isLoading) {
 		return (
 			<div className="flex items-center justify-center py-8">
-				<div className="size-5 animate-spin rounded-full border-2 border-slate-600 border-t-[#00E5C0]" />
+				<div className="size-5 animate-spin rounded-full border-2 border-slate-600 border-t-[#3B8FE8]" />
 			</div>
 		);
 	}

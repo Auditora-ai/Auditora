@@ -272,7 +272,7 @@ export function NavBar() {
 						? "justify-center px-2"
 						: "px-3",
 					item.isActive
-						? "bg-[#00E5C0]/[0.08] text-slate-50 font-medium"
+						? "bg-[#3B8FE8]/[0.08] text-slate-50 font-medium"
 						: completed
 							? "text-slate-300 hover:bg-slate-800/50 hover:text-slate-100"
 							: "text-slate-500 hover:bg-slate-800/50 hover:text-slate-300",
@@ -283,9 +283,9 @@ export function NavBar() {
 					className={cn(
 						"relative z-10 flex size-5 items-center justify-center rounded-full text-[10px] font-bold shrink-0 transition-colors duration-150",
 						item.isActive
-							? "bg-[#00E5C0] text-slate-900"
+							? "bg-[#3B8FE8] text-slate-900"
 							: completed
-								? "bg-[#00E5C0]/20 text-[#00E5C0] ring-1 ring-[#00E5C0]/30"
+								? "bg-[#3B8FE8]/20 text-[#3B8FE8] ring-1 ring-[#3B8FE8]/30"
 								: "bg-slate-800 text-slate-500 ring-1 ring-slate-700",
 					)}
 				>
@@ -341,7 +341,7 @@ export function NavBar() {
 					<div
 						className={cn(
 							"absolute left-[21px] top-[32px] w-px h-[calc(100%-20px)] pointer-events-none transition-colors duration-150",
-							completed ? "bg-[#00E5C0]/30" : "bg-slate-700/60",
+							completed ? "bg-[#3B8FE8]/30" : "bg-slate-700/60",
 						)}
 					/>
 				)}
@@ -349,7 +349,7 @@ export function NavBar() {
 					<div
 						className={cn(
 							"absolute left-1/2 -translate-x-px top-[32px] w-px h-[calc(100%-20px)] pointer-events-none transition-colors duration-150",
-							completed ? "bg-[#00E5C0]/30" : "bg-slate-700/60",
+							completed ? "bg-[#3B8FE8]/30" : "bg-slate-700/60",
 						)}
 					/>
 				)}
@@ -364,7 +364,7 @@ export function NavBar() {
 						<div
 							className={cn(
 								"absolute left-1/2 -translate-x-px top-[32px] w-px h-[calc(100%-20px)] pointer-events-none transition-colors duration-150",
-								completed ? "bg-[#00E5C0]/30" : "bg-slate-700/60",
+								completed ? "bg-[#3B8FE8]/30" : "bg-slate-700/60",
 							)}
 						/>
 					)}
@@ -377,9 +377,9 @@ export function NavBar() {
 								<span className={cn(
 									"flex size-4 items-center justify-center rounded-full text-[9px] font-bold",
 									item.isActive
-										? "bg-[#00E5C0] text-slate-900"
+										? "bg-[#3B8FE8] text-slate-900"
 										: completed
-											? "bg-[#00E5C0]/20 text-[#00E5C0]"
+											? "bg-[#3B8FE8]/20 text-[#3B8FE8]"
 											: "bg-slate-700 text-slate-400",
 								)}>
 									{step}

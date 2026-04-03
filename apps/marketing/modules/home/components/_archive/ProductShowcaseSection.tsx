@@ -30,7 +30,7 @@ function DiscoverMockup() {
 			<div className="flex w-full max-w-sm items-center gap-2 rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2">
 				<Globe className="size-4 text-[#94A3B8]" />
 				<span className="text-sm text-[#64748B]">https://acme-corp.com</span>
-				<div className="ml-auto rounded bg-[#00E5C0] px-2 py-0.5 text-xs font-medium text-[#0A1428]">
+				<div className="ml-auto rounded bg-[#3B8FE8] px-2 py-0.5 text-xs font-medium text-[#0A1428]">
 					Scanning...
 				</div>
 			</div>
@@ -42,7 +42,7 @@ function DiscoverMockup() {
 							className="rounded-lg border border-[#E2E8F0] bg-white px-4 py-3 shadow-sm"
 						>
 							<div className="flex items-center gap-2">
-								<div className="h-2 w-2 rounded-full bg-[#00E5C0]" />
+								<div className="h-2 w-2 rounded-full bg-[#3B8FE8]" />
 								<span className="text-xs font-medium text-[#0A1428]">{proc}</span>
 							</div>
 							<p className="mt-1 text-[10px] text-[#94A3B8]">5 activities · 3 risks</p>
@@ -58,23 +58,23 @@ function AnalyzeMockup() {
 	return (
 		<div className="flex flex-col items-center gap-3 py-6">
 			<svg viewBox="0 0 320 160" className="w-full max-w-md" fill="none">
-				<circle cx="20" cy="80" r="10" stroke="#00E5C0" strokeWidth="2" fill="rgba(0,229,192,0.15)" />
-				<line x1="30" y1="80" x2="60" y2="80" stroke="#00E5C0" strokeWidth="1.5" />
-				<rect x="60" y="65" width="55" height="30" rx="5" stroke="#00E5C0" strokeWidth="1.5" fill="rgba(0,229,192,0.08)" />
-				<line x1="115" y1="80" x2="140" y2="80" stroke="#00E5C0" strokeWidth="1.5" />
-				<rect x="135" y="70" width="14" height="14" rx="2" transform="rotate(45 142 77)" stroke="#00E5C0" strokeWidth="1.5" fill="rgba(0,229,192,0.08)" />
-				<line x1="154" y1="70" x2="185" y2="45" stroke="#00E5C0" strokeWidth="1.5" />
-				<line x1="154" y1="88" x2="185" y2="115" stroke="#00E5C0" strokeWidth="1.5" />
+				<circle cx="20" cy="80" r="10" stroke="#3B8FE8" strokeWidth="2" fill="rgba(59,143,232,0.15)" />
+				<line x1="30" y1="80" x2="60" y2="80" stroke="#3B8FE8" strokeWidth="1.5" />
+				<rect x="60" y="65" width="55" height="30" rx="5" stroke="#3B8FE8" strokeWidth="1.5" fill="rgba(59,143,232,0.08)" />
+				<line x1="115" y1="80" x2="140" y2="80" stroke="#3B8FE8" strokeWidth="1.5" />
+				<rect x="135" y="70" width="14" height="14" rx="2" transform="rotate(45 142 77)" stroke="#3B8FE8" strokeWidth="1.5" fill="rgba(59,143,232,0.08)" />
+				<line x1="154" y1="70" x2="185" y2="45" stroke="#3B8FE8" strokeWidth="1.5" />
+				<line x1="154" y1="88" x2="185" y2="115" stroke="#3B8FE8" strokeWidth="1.5" />
 				<rect x="185" y="30" width="55" height="30" rx="5" stroke="#EAB308" strokeWidth="2" fill="rgba(234,179,8,0.12)" />
 				<text x="212" y="50" textAnchor="middle" fill="#EAB308" fontSize="8" fontFamily="sans-serif">⚠ Risk</text>
-				<rect x="185" y="100" width="55" height="30" rx="5" stroke="#00E5C0" strokeWidth="1.5" fill="rgba(0,229,192,0.08)" />
+				<rect x="185" y="100" width="55" height="30" rx="5" stroke="#3B8FE8" strokeWidth="1.5" fill="rgba(59,143,232,0.08)" />
 				<line x1="240" y1="45" x2="270" y2="80" stroke="#EAB308" strokeWidth="1.5" strokeDasharray="4" />
-				<line x1="240" y1="115" x2="270" y2="80" stroke="#00E5C0" strokeWidth="1.5" />
-				<circle cx="285" cy="80" r="10" stroke="#00E5C0" strokeWidth="3" fill="rgba(0,229,192,0.15)" />
+				<line x1="240" y1="115" x2="270" y2="80" stroke="#3B8FE8" strokeWidth="1.5" />
+				<circle cx="285" cy="80" r="10" stroke="#3B8FE8" strokeWidth="3" fill="rgba(59,143,232,0.15)" />
 			</svg>
 			<div className="flex gap-4 text-xs">
 				<span className="flex items-center gap-1 text-[#EAB308]"><span className="inline-block h-2 w-2 rounded-full bg-[#EAB308]" /> High risk</span>
-				<span className="flex items-center gap-1 text-[#00E5C0]"><span className="inline-block h-2 w-2 rounded-full bg-[#00E5C0]" /> Normal</span>
+				<span className="flex items-center gap-1 text-[#3B8FE8]"><span className="inline-block h-2 w-2 rounded-full bg-[#3B8FE8]" /> Normal</span>
 			</div>
 		</div>
 	);
@@ -84,7 +84,7 @@ function DocumentMockup() {
 	return (
 		<div className="flex flex-col gap-4 py-6">
 			<div className="rounded-lg border border-[#E2E8F0] bg-white overflow-hidden">
-				<div className="bg-[#00E5C0]/10 px-4 py-2 text-xs font-semibold text-[#0A1428]">SIPOC — Order Management</div>
+				<div className="bg-[#3B8FE8]/10 px-4 py-2 text-xs font-semibold text-[#0A1428]">SIPOC — Order Management</div>
 				<div className="grid grid-cols-5 text-[10px]">
 					{[
 						{ header: "Suppliers", items: ["Vendor DB", "Customer Portal", "ERP System"] },
@@ -129,7 +129,7 @@ function MonitorMockup() {
 				{[
 					{ label: "Total Risks", value: "24", change: "+3", color: "#EF4444" },
 					{ label: "Mitigated", value: "18", change: "+5", color: "#22C55E" },
-					{ label: "Coverage", value: "92%", change: "+7%", color: "#00E5C0" },
+					{ label: "Coverage", value: "92%", change: "+7%", color: "#3B8FE8" },
 				].map((stat) => (
 					<div key={stat.label} className="rounded-lg border border-[#E2E8F0] bg-white p-3 text-center">
 						<p className="text-[10px] text-[#94A3B8]">{stat.label}</p>
@@ -141,7 +141,7 @@ function MonitorMockup() {
 			<div className="rounded-lg border border-[#E2E8F0] bg-white p-3">
 				<p className="text-[10px] font-semibold text-[#0A1428] mb-2">Risk Trend (Last 6 months)</p>
 				<svg viewBox="0 0 280 60" className="w-full">
-					<polyline points="0,50 47,42 94,38 141,30 188,22 235,18 280,12" stroke="#00E5C0" strokeWidth="2" fill="none" />
+					<polyline points="0,50 47,42 94,38 141,30 188,22 235,18 280,12" stroke="#3B8FE8" strokeWidth="2" fill="none" />
 					<polyline points="0,55 47,48 94,45 141,40 188,35 235,30 280,25" stroke="#EAB308" strokeWidth="1.5" fill="none" strokeDasharray="4" />
 					<polyline points="0,10 47,15 94,12 141,18 188,14 235,10 280,8" stroke="#94A3B8" strokeWidth="1" fill="none" strokeDasharray="2" />
 				</svg>
@@ -203,7 +203,7 @@ export function ProductShowcaseSection() {
 		<section ref={sectionRef} className="py-16 sm:py-20 lg:py-28 bg-white">
 			<div className="container max-w-5xl">
 				<div className="showcase-header mb-10 sm:mb-14 text-center">
-					<small className="font-medium text-xs uppercase tracking-widest text-[#00E5C0] mb-4 block">
+					<small className="font-medium text-xs uppercase tracking-widest text-[#3B8FE8] mb-4 block">
 						{t("home.showcase.badge")}
 					</small>
 					<h2 className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-[#0A1428]">
@@ -265,7 +265,7 @@ export function ProductShowcaseSection() {
 
 				{/* CTA */}
 				<div className="mt-10 text-center">
-					<Button size="lg" variant="primary" asChild className="bg-[#00E5C0] hover:bg-[#00C4A3] text-[#0A1428]">
+					<Button size="lg" variant="primary" asChild className="bg-[#3B8FE8] hover:bg-[#2E7FD6] text-[#0A1428]">
 						<a href={`${config.saasUrl}/scan`}>
 							{t("home.showcase.cta")}
 							<ArrowRightIcon className="ml-2 size-4" />
