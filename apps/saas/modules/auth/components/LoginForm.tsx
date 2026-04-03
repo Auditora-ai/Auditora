@@ -154,12 +154,12 @@ export function LoginForm() {
 
 	return (
 		<div>
-			<h1 className="auth-title font-display text-3xl tracking-tight md:text-4xl">
-				{t("auth.login.title")}
-			</h1>
-			<p className="auth-subtitle mt-2 mb-8 text-base text-foreground/60">
-				{t("auth.login.subtitle")}
-			</p>
+		<h1 className="auth-title font-display text-2xl md:text-3xl lg:text-4xl tracking-tight">
+			{t("auth.login.title")}
+		</h1>
+		<p className="auth-subtitle mt-1.5 mb-6 md:mt-2 md:mb-8 text-sm md:text-base text-foreground/60">
+			{t("auth.login.subtitle")}
+		</p>
 
 			{form.formState.isSubmitSuccessful &&
 			signinMode === "magic-link" ? (
@@ -335,7 +335,7 @@ export function LoginForm() {
 								</p>
 							</div>
 
-							<div className="grid grid-cols-1 items-stretch gap-2 sm:grid-cols-2">
+							<div className="grid grid-cols-1 items-stretch gap-2.5">
 								{authConfig.enableSignup &&
 									authConfig.enableSocialLogin &&
 									Object.keys(oAuthProviders).map(
@@ -350,10 +350,10 @@ export function LoginForm() {
 									)}
 
 								{authConfig.enablePasskeys && (
-									<Button
-										variant="secondary"
-										className="w-full sm:col-span-2"
-										onClick={() => signInWithPasskey()}
+							<Button
+								variant="secondary"
+								className="w-full min-h-[44px]"
+								onClick={() => signInWithPasskey()}
 									>
 										<KeyIcon className="mr-1.5 size-4 text-primary" />
 										{t("auth.login.loginWithPasskey")}

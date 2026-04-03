@@ -93,7 +93,15 @@
       "workflow": "Flujo",
       "workspace": "Espacio",
       "more": "Más",
-      "billing": "Facturación"
+      "billing": "Facturación",
+      "members": "Miembros",
+      "notifications": "Notificaciones"
+    },
+    "sections": {
+      "capture": "Capturar",
+      "document": "Documentar",
+      "evaluate": "Evaluar",
+      "view": "Ver"
     },
     "greeting": {
       "morning": "Buenos días",
@@ -891,13 +899,18 @@
     }
   },
   "commandPalette": {
-    "placeholder": "Buscar clientes, procesos, sesiones...",
+    "placeholder": "Buscar procesos, evaluaciones, sesiones...",
     "newSession": "Nueva Sesión",
     "newClient": "Nuevo Cliente",
     "noResults": "Sin resultados",
+    "toggle": "para abrir/cerrar",
     "sections": {
       "actions": "Acciones",
       "navigation": "Navegar",
+      "discover": "Capturar",
+      "document": "Documentar",
+      "evaluate": "Evaluar",
+      "view": "Ver",
       "clients": "Clientes",
       "processes": "Procesos",
       "sessions": "Sesiones"

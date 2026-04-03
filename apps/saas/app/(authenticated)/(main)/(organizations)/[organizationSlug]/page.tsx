@@ -231,7 +231,7 @@ export default async function OrganizationPage({
 	});
 
 	return (
-		<div className="h-[calc(100vh-64px)]">
+		<div className="h-[calc(100vh-56px)] md:h-[calc(100vh-64px)]">
 			<RiskDashboard
 				organizationId={orgId}
 				organizationName={activeOrganization.name}
@@ -307,7 +307,7 @@ function computeNextSteps({ processCount, evaluacionesData, vulnerableProcesses,
 		steps.push({
 			id: "capture-first",
 			message: t("nextStepCapture"),
-			href: `${basePath}/sessions`,
+			href: `${basePath}/descubrir`,
 			icon: "scan",
 		});
 		return steps;

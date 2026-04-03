@@ -51,11 +51,11 @@ export function EvaluacionesTabs({
 
 	return (
 		<div>
-			{/* Tab bar */}
+			{/* Tab bar — horizontally scrollable on mobile */}
 			<div
 				role="tablist"
 				aria-label={t("evaluaciones.tabs.label")}
-				className="flex items-center gap-1 rounded-lg border border-border/50 bg-muted/30 p-1"
+				className="flex items-center gap-1 rounded-lg border border-border/50 bg-muted/30 p-1 overflow-x-auto no-scrollbar"
 			>
 				{TABS.map((tab) => {
 					const isActive = activeTab === tab.id;
@@ -69,13 +69,13 @@ export function EvaluacionesTabs({
 							id={`tab-${tab.id}`}
 							onClick={() => handleTabChange(tab.id)}
 							className={cn(
-								"flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+								"flex items-center gap-1.5 md:gap-2 rounded-md px-3 py-2.5 text-xs md:text-sm font-medium transition-colors whitespace-nowrap min-h-[40px] flex-1 justify-center md:flex-none",
 								isActive
 									? "bg-background text-foreground shadow-sm"
 									: "text-muted-foreground hover:text-foreground",
 							)}
 						>
-							<tab.icon className="size-4" />
+							<tab.icon className="size-4 shrink-0" />
 							{t(tab.labelKey)}
 						</button>
 					);
@@ -87,7 +87,7 @@ export function EvaluacionesTabs({
 				role="tabpanel"
 				id={`tabpanel-${activeTab}`}
 				aria-labelledby={`tab-${activeTab}`}
-				className="mt-6"
+				className="mt-4 md:mt-6"
 			>
 				{activeTab === "catalog" && catalogContent}
 				{activeTab === "dashboard" && (

@@ -127,7 +127,7 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 
 	return (
 		<div>
-			<h1 className="auth-title font-display text-3xl tracking-tight md:text-4xl">
+			<h1 className="auth-title font-display text-2xl md:text-3xl lg:text-4xl tracking-tight">
 				{t("auth.signup.title")}
 			</h1>
 			<p className="auth-subtitle mt-2 mb-8 text-base text-foreground/60">

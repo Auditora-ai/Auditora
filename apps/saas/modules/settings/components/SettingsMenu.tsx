@@ -29,7 +29,7 @@ export function SettingsMenu({
 
 	return (
 		<div className={cn("relative border-b", className)}>
-			<nav className="flex gap-0">
+			<nav className="flex gap-0 overflow-x-auto no-scrollbar -mx-1 px-1">
 				{allItems.map((item, index) => {
 					const isActive = isActiveMenuItem(item.href);
 					return (
@@ -37,12 +37,15 @@ export function SettingsMenu({
 							key={index}
 							href={item.href}
 							className={cn(
-								"relative border-b-2 px-4 py-2 text-sm transition-colors",
+								"relative border-b-2 px-3 md:px-4 py-2.5 text-xs md:text-sm transition-colors whitespace-nowrap min-h-[44px] inline-flex items-center shrink-0",
 								isActive
 									? "border-primary font-semibold text-primary"
 									: "border-transparent font-medium text-foreground/60",
 							)}
 						>
+							{item.icon && (
+								<span className="mr-1.5 md:hidden">{item.icon}</span>
+							)}
 							{item.title}
 						</Link>
 					);

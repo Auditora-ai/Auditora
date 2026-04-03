@@ -292,7 +292,7 @@ function MobileWorkspaceInner({
 			</main>
 
 			{/* ── Floating Action Button ── */}
-			<div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-2">
+			<div className="fixed z-40 flex flex-col items-end gap-2" style={{ bottom: "calc(1.5rem + var(--safe-area-inset-bottom))", right: "1.5rem" }}>
 				{/* FAB options (shown when open) */}
 				{fabOpen && (
 					<div className="mb-2 flex flex-col items-end gap-2 animate-in fade-in slide-in-from-bottom-2 duration-200">

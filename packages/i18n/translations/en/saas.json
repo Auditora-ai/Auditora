@@ -93,7 +93,15 @@
       "workflow": "Workflow",
       "workspace": "Workspace",
       "more": "More",
-      "billing": "Billing"
+      "billing": "Billing",
+      "members": "Members",
+      "notifications": "Notifications"
+    },
+    "sections": {
+      "capture": "Capture",
+      "document": "Document",
+      "evaluate": "Evaluate",
+      "view": "View"
     },
     "greeting": {
       "morning": "Good morning",
@@ -891,13 +899,18 @@
     }
   },
   "commandPalette": {
-    "placeholder": "Search clients, processes, sessions...",
+    "placeholder": "Search processes, evaluations, sessions...",
     "newSession": "New Session",
     "newClient": "New Client",
     "noResults": "No results found",
+    "toggle": "to toggle",
     "sections": {
       "actions": "Actions",
       "navigation": "Navigate",
+      "discover": "Capture",
+      "document": "Document",
+      "evaluate": "Evaluate",
+      "view": "View",
       "clients": "Clients",
       "processes": "Processes",
       "sessions": "Sessions"

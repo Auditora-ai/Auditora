@@ -54,6 +54,7 @@ interface NavItem {
 	section?: "flow" | "main" | "tools" | "bottom";
 	flowStep?: number;
 	flowCompleted?: boolean;
+	sectionHeader?: string;
 }
 
 function getGreetingKey(): "morning" | "afternoon" | "evening" {
@@ -102,7 +103,7 @@ export function NavBar() {
 	const hasEvaluation = !!navData && navData.maturityScore >= 40;
 
 	const menuItems: NavItem[] = [
-		// ─── FLOW (consulting workflow: Descubrir → Procesos → Evaluaciones → Panorama) ───
+		// ─── CAPTURAR ───
 		{
 			id: "descubrir",
 			label: t("app.menu.discover"),
@@ -113,13 +114,15 @@ export function NavBar() {
 			section: "flow",
 			flowStep: 1,
 			flowCompleted: hasArchitecture,
+			sectionHeader: t("app.sections.capture"),
 		},
+		// ─── DOCUMENTAR ───
 		{
 			id: "processes",
 			label: t("app.menu.processes"),
 			href: `${basePath}/processes`,
 			icon: WorkflowIcon,
-			isActive: pathname.startsWith(`${basePath}/processes`),
+			isActive: pathname.startsWith(`${basePath}/processes`) || pathname.startsWith(`${basePath}/procesos`),
 			hidden: !hasOrg,
 			section: "flow",
 			badge: processBadge,
@@ -129,7 +132,9 @@ export function NavBar() {
 			},
 			flowStep: 2,
 			flowCompleted: hasProcesses,
+			sectionHeader: t("app.sections.document"),
 		},
+		// ─── EVALUAR ───
 		{
 			id: "evaluaciones",
 			label: t("app.menu.evaluaciones"),
@@ -140,7 +145,9 @@ export function NavBar() {
 			section: "flow",
 			flowStep: 3,
 			flowCompleted: false,
+			sectionHeader: t("app.sections.evaluate"),
 		},
+		// ─── VER ───
 		{
 			id: "panorama",
 			label: t("app.menu.dashboard"),
@@ -150,8 +157,9 @@ export function NavBar() {
 			section: "flow",
 			flowStep: 4,
 			flowCompleted: hasEvaluation,
+			sectionHeader: t("app.sections.view"),
 		},
-		// ─── BOTTOM ───
+		// ─── CONFIGURAR ───
 		{
 			id: "settings",
 			label: t("app.menu.organizationSettings"),
@@ -273,6 +281,7 @@ export function NavBar() {
 		const isLast = index === items.length - 1;
 		const step = item.flowStep ?? index + 1;
 		const completed = item.flowCompleted ?? false;
+		const sectionLabel = item.sectionHeader;
 
 		const flowLink = (
 			<Link
@@ -348,11 +357,20 @@ export function NavBar() {
 
 		const content = (
 			<li key={item.id} className="relative">
+				{/* Section header label (CAPTURAR, DOCUMENTAR, etc.) */}
+				{sectionLabel && !isCollapsedEffective && (
+					<div className="mx-3 mb-1 mt-3 first:mt-0">
+						<span className="text-[9px] font-semibold uppercase tracking-[0.12em] text-slate-600">
+							{sectionLabel}
+						</span>
+					</div>
+				)}
 				{/* Connector line to next step */}
 				{!isLast && !isCollapsedEffective && (
 					<div
 						className={cn(
-							"absolute left-[21px] top-[32px] w-px h-[calc(100%-20px)] pointer-events-none transition-colors duration-150",
+							"absolute left-[21px] w-px h-[calc(100%-20px)] pointer-events-none transition-colors duration-150",
+							sectionLabel ? "top-[52px]" : "top-[32px]",
 							completed ? "bg-[#3B8FE8]/30" : "bg-slate-700/60",
 						)}
 					/>
@@ -385,6 +403,11 @@ export function NavBar() {
 							{withQuickAction}
 						</TooltipTrigger>
 						<TooltipContent side="right" className="flex flex-col gap-0.5">
+							{sectionLabel && (
+								<span className="text-[9px] font-semibold uppercase tracking-wider text-muted-foreground/60">
+									{sectionLabel}
+								</span>
+							)}
 							<span className="flex items-center gap-1.5">
 								<span className={cn(
 									"flex size-4 items-center justify-center rounded-full text-[9px] font-bold",
@@ -481,20 +504,11 @@ export function NavBar() {
 
 				{/* Flow section — consulting workflow */}
 				<TooltipProvider delayDuration={0}>
-					{flowItems.length > 0 && (
-						<>
-							{!isCollapsedEffective && (
-								<div className="mx-3 mb-2">
-									<span className="text-[10px] font-medium uppercase tracking-wider text-slate-600">
-										{t("app.menu.workflow")}
-									</span>
-								</div>
-							)}
-							<ul className="flex flex-col gap-0.5">
-								{flowItems.map((item, i, arr) => renderFlowItem(item, i, arr))}
-							</ul>
-						</>
-					)}
+				{flowItems.length > 0 && (
+					<ul className="flex flex-col gap-0.5">
+						{flowItems.map((item, i, arr) => renderFlowItem(item, i, arr))}
+					</ul>
+				)}
 
 			</TooltipProvider>
 

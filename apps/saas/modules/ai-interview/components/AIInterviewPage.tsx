@@ -59,7 +59,7 @@ export function AIInterviewPage({
 				style={{ backgroundColor: "#0A1428", borderColor: "#1E293B" }}
 			>
 				<Link
-					href={`/${organizationSlug}/sessions`}
+					href={`/${organizationSlug}/descubrir`}
 					className="flex items-center gap-1 text-sm transition-colors hover:opacity-80"
 					style={{ color: "#94A3B8" }}
 				>
@@ -222,7 +222,7 @@ export function AIInterviewPage({
 									</button>
 								)}
 								<Link
-									href={`/${organizationSlug}/sessions`}
+									href={`/${organizationSlug}/descubrir`}
 									className="flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium text-white"
 									style={{ backgroundColor: "#3B8FE8" }}
 								>

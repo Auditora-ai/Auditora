@@ -200,8 +200,8 @@ export function MobileBottomBar() {
 								href={`${basePath}/settings/members`}
 								className="flex items-center gap-3 rounded-lg px-3 py-3.5 text-sm text-muted-foreground hover:bg-accent hover:text-foreground min-h-[48px] active:bg-accent/80"
 							>
-								<UsersIcon className="size-5 shrink-0" />
-								<span>Miembros</span>
+						<UsersIcon className="size-5 shrink-0" />
+						<span>{t("app.menu.members")}</span>
 							</Link>
 
 							{/* Billing */}
@@ -253,7 +253,7 @@ function MoreSheetNotificationItem({ organizationId }: { organizationId: string 
 					<span className="absolute -right-1 -top-1 size-2.5 rounded-full bg-primary" />
 				)}
 			</div>
-			<span>Notificaciones</span>
+			<span>{t("app.menu.notifications")}</span>
 			{unreadCount > 0 && (
 				<span className="ml-auto flex size-6 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
 					{unreadCount > 9 ? "9+" : unreadCount}

@@ -6,13 +6,12 @@ import {
 } from "@repo/ui/components/dialog";
 import { Input } from "@repo/ui/components/input";
 import {
-	FileTextIcon,
-	FolderOpenIcon,
+	CompassIcon,
+	GraduationCapIcon,
 	LayoutDashboardIcon,
-	MicIcon,
 	PlusIcon,
 	SearchIcon,
-	ShieldAlertIcon,
+	SettingsIcon,
 	WorkflowIcon,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -34,6 +33,7 @@ export function CommandPalette() {
 	const [selectedIndex, setSelectedIndex] = useState(0);
 	const router = useRouter();
 	const t = useTranslations("commandPalette");
+	const tApp = useTranslations("app");
 	const { activeOrganization } = useActiveOrganization();
 
 	const basePath = activeOrganization
@@ -48,60 +48,58 @@ export function CommandPalette() {
 				section: t("sections.actions"),
 				icon: PlusIcon,
 				action: () => {
-					if (basePath) router.push(`${basePath}/sessions/new`);
+					if (basePath) router.push(`${basePath}/descubrir/new`);
 				},
 			},
 		];
 
 		if (basePath) {
 			actions.push(
+				// CAPTURAR
 				{
-					id: "go-panorama",
-					label: "Panorama",
-					section: t("sections.navigation"),
-					icon: LayoutDashboardIcon,
-					action: () => router.push(basePath),
+					id: "go-descubrir",
+					label: tApp("menu.discover"),
+					section: t("sections.discover"),
+					icon: CompassIcon,
+					action: () => router.push(`${basePath}/descubrir`),
 				},
-				{
-					id: "go-risks",
-					label: "Riesgos",
-					section: t("sections.navigation"),
-					icon: ShieldAlertIcon,
-					action: () => router.push(`${basePath}/deliverables/risks`),
-				},
-				{
-					id: "go-sessions",
-					label: "Sesiones",
-					section: t("sections.navigation"),
-					icon: MicIcon,
-					action: () => router.push(`${basePath}/sessions`),
-				},
+				// DOCUMENTAR
 				{
 					id: "go-processes",
-					label: t("sections.processes"),
-					section: t("sections.navigation"),
+					label: tApp("menu.processes"),
+					section: t("sections.document"),
 					icon: WorkflowIcon,
 					action: () => router.push(`${basePath}/processes`),
 				},
+				// EVALUAR
 				{
-					id: "go-deliverables",
-					label: "Entregables",
-					section: t("sections.navigation"),
-					icon: FileTextIcon,
-					action: () => router.push(`${basePath}/deliverables`),
+					id: "go-evaluaciones",
+					label: tApp("menu.evaluaciones"),
+					section: t("sections.evaluate"),
+					icon: GraduationCapIcon,
+					action: () => router.push(`${basePath}/evaluaciones`),
 				},
+				// VER
 				{
-					id: "go-documents",
-					label: "Documentos",
-					section: t("sections.navigation"),
-					icon: FolderOpenIcon,
-					action: () => router.push(`${basePath}/documents`),
+					id: "go-panorama",
+					label: tApp("menu.dashboard"),
+					section: t("sections.view"),
+					icon: LayoutDashboardIcon,
+					action: () => router.push(basePath),
 				},
-				);
+				// CONFIGURAR
+				{
+					id: "go-settings",
+					label: tApp("menu.organizationSettings"),
+					section: t("sections.navigation"),
+					icon: SettingsIcon,
+					action: () => router.push(`${basePath}/settings`),
+				},
+			);
 		}
 
 		return actions;
-	}, [basePath, router, t]);
+	}, [basePath, router, t, tApp]);
 
 	const filtered = useMemo(() => {
 		if (!search) return items;
@@ -206,10 +204,10 @@ export function CommandPalette() {
 
 				<div className="border-t px-3 py-2">
 					<p className="text-xs text-muted-foreground">
-						<kbd className="rounded border bg-muted px-1.5 py-0.5 font-mono text-[10px]">
-							⌘K
-						</kbd>{" "}
-						to toggle
+					<kbd className="rounded border bg-muted px-1.5 py-0.5 font-mono text-[10px]">
+						⌘K
+					</kbd>{" "}
+					{t("toggle")}
 					</p>
 				</div>
 			</DialogContent>

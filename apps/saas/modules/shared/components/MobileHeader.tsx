@@ -11,10 +11,10 @@ function useSectionTitle(): string {
 	const pathname = usePathname();
 	const t = useTranslations();
 
-	if (pathname.includes("/sessions") || pathname.includes("/session/")) {
+	if (pathname.includes("/descubrir") || pathname.includes("/sessions") || pathname.includes("/session/")) {
 		return t("app.menu.discover");
 	}
-	if (pathname.includes("/processes")) {
+	if (pathname.includes("/processes") || pathname.includes("/procesos")) {
 		return t("app.menu.processes");
 	}
 	if (pathname.includes("/evaluaciones")) {
@@ -22,6 +22,9 @@ function useSectionTitle(): string {
 	}
 	if (pathname.includes("/settings")) {
 		return t("app.menu.organizationSettings");
+	}
+	if (pathname.includes("/panorama")) {
+		return t("app.menu.dashboard");
 	}
 	return t("app.menu.dashboard");
 }

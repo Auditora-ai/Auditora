@@ -93,7 +93,15 @@
       "workflow": "Workflow",
       "workspace": "Arbeitsbereich",
       "more": "Mehr",
-      "billing": "Abrechnung"
+      "billing": "Abrechnung",
+      "members": "Mitglieder",
+      "notifications": "Benachrichtigungen"
+    },
+    "sections": {
+      "capture": "Erfassen",
+      "document": "Dokumentieren",
+      "evaluate": "Bewerten",
+      "view": "Ansehen"
     },
     "greeting": {
       "morning": "Guten Morgen",
@@ -889,13 +897,18 @@
     }
   },
   "commandPalette": {
-    "placeholder": "Kunden, Prozesse, Sitzungen suchen...",
+    "placeholder": "Prozesse, Bewertungen, Sitzungen suchen...",
     "newSession": "Neue Sitzung",
     "newClient": "Neuer Kunde",
     "noResults": "Keine Ergebnisse gefunden",
+    "toggle": "zum Umschalten",
     "sections": {
       "actions": "Aktionen",
       "navigation": "Navigieren",
+      "discover": "Erfassen",
+      "document": "Dokumentieren",
+      "evaluate": "Bewerten",
+      "view": "Ansehen",
       "clients": "Kunden",
       "processes": "Prozesse",
       "sessions": "Sitzungen"

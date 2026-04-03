@@ -75,7 +75,7 @@ export function Footer() {
 				{/* Top row: Logo + tagline + social */}
 				<div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 pb-12 border-b border-white/10">
 					<div className="max-w-sm">
-						<Logo className="brightness-200" />
+						<Logo variant="dark" />
 						<p className="mt-4 text-sm leading-relaxed text-white/50">
 							{t("common.footer.tagline")}
 						</p>

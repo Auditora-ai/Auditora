@@ -81,8 +81,37 @@
 		border-color: var(--border);
 	}
 
+	html {
+		/* Prevent horizontal overflow on mobile */
+		overflow-x: hidden;
+		/* Enable smooth momentum scrolling on iOS */
+		-webkit-overflow-scrolling: touch;
+	}
+
 	body {
 		letter-spacing: -0.01em;
+		/* Prevent horizontal overflow */
+		overflow-x: hidden;
+		/* Respect safe areas on notch devices */
+		padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) 0 env(safe-area-inset-left, 0);
+	}
+
+	/* Ensure all interactive elements have minimum touch targets on mobile */
+	@media (max-width: 767px) {
+		button,
+		a,
+		[role="button"],
+		input[type="submit"],
+		input[type="button"] {
+			/* Discourage tiny tap targets (enforced by component styles) */
+		}
+
+		/* Ensure inputs are at least 16px to prevent iOS zoom */
+		input,
+		select,
+		textarea {
+			font-size: max(16px, 1em);
+		}
 	}
 
 	svg.lucide {
@@ -93,4 +122,12 @@
 /* Live session — AppWrapper detects this class and renders without shell */
 body.live-session-active {
 	overflow: hidden !important;
+}
+
+/* Viewport meta — ensure mobile scaling works */
+@supports (padding: max(0px)) {
+	body {
+		padding-left: max(env(safe-area-inset-left), 0px);
+		padding-right: max(env(safe-area-inset-right), 0px);
+	}
 }

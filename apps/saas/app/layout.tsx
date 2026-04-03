@@ -1,6 +1,6 @@
 import { cn, Toaster } from "@repo/ui";
 import { ApiClientProvider } from "@shared/components/ApiClientProvider";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
@@ -30,6 +30,18 @@ const monoFont = Geist_Mono({
 	subsets: ["latin"],
 	variable: "--font-mono",
 });
+
+export const viewport: Viewport = {
+	width: "device-width",
+	initialScale: 1,
+	maximumScale: 1,
+	userScalable: false,
+	viewportFit: "cover",
+	themeColor: [
+		{ media: "(prefers-color-scheme: light)", color: "#ffffff" },
+		{ media: "(prefers-color-scheme: dark)", color: "#0a0a0b" },
+	],
+};
 
 export const metadata: Metadata = {
 	title: {
