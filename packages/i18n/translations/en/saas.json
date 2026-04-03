@@ -1007,6 +1007,29 @@
     "noSessions": "No sessions yet for this process",
     "noDiagram": "No BPMN diagram yet. Start a session or create one manually."
   },
+  "discover": {
+    "title": "Discover",
+    "subtitle": "Three ways to capture and document your business processes",
+    "pastSessions": "Past sessions",
+    "scan": {
+      "title": "Quick Scan",
+      "description": "Paste a URL and in 60 seconds we detect processes and risks",
+      "cta": "Start Scan",
+      "badge": "Free"
+    },
+    "interview": {
+      "title": "AI Interview",
+      "description": "An assistant guides you step by step to document your process via chat",
+      "cta": "Start Interview",
+      "badge": "Recommended"
+    },
+    "live": {
+      "title": "Live Session",
+      "description": "A bot joins your video call and generates the BPMN diagram in real time",
+      "cta": "New Session",
+      "badge": "Premium"
+    }
+  },
   "sessions": {
     "title": "Sessions",
     "subtitle": "Your process elicitation meetings",

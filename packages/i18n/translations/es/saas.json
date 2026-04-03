@@ -1007,6 +1007,29 @@
     "noSessions": "Sin sesiones aun para este proceso",
     "noDiagram": "Sin diagrama BPMN aun. Inicia una sesion o crea uno manualmente."
   },
+  "discover": {
+    "title": "Descubrir",
+    "subtitle": "Tres formas de capturar y documentar tus procesos de negocio",
+    "pastSessions": "Sesiones anteriores",
+    "scan": {
+      "title": "Scan Rápido",
+      "description": "Pega una URL y en 60s detectamos procesos y riesgos",
+      "cta": "Iniciar Scan",
+      "badge": "Gratis"
+    },
+    "interview": {
+      "title": "Entrevista IA",
+      "description": "Un asistente te guía paso a paso para documentar tu proceso por chat",
+      "cta": "Iniciar Entrevista",
+      "badge": "Recomendado"
+    },
+    "live": {
+      "title": "Sesión en Vivo",
+      "description": "Un bot se une a tu videollamada y genera el diagrama BPMN en tiempo real",
+      "cta": "Nueva Sesión",
+      "badge": "Premium"
+    }
+  },
   "sessions": {
     "title": "Sesiones",
     "subtitle": "Tus reuniones de levantamiento de procesos",

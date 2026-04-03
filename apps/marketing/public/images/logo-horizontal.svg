@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 80" width="350" height="80">
+  <defs>
+    <linearGradient id="blue" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#00B4FF"/>
+      <stop offset="100%" stop-color="#0077CC"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  
+  <g transform="matrix(0.25 0 0 0.25 -10 -5)">
+    <g opacity="0.15" stroke="#00C4FF" stroke-width="1">
+      <circle cx="200" cy="180" r="100" fill="none"/>
+      <circle cx="200" cy="180" r="75" fill="none"/>
+    </g>
+    <g filter="url(#glow)" stroke="url(#blue)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M200,110 L155,250"/>
+      <path d="M200,110 L245,250"/>
+      <line x1="165" y1="200" x2="235" y2="200"/>
+    </g>
+    <g filter="url(#glow)" transform="translate(200,108) scale(1.5)">
+      <line x1="0" y1="-15" x2="0" y2="15" stroke="#00B4FF" stroke-width="2"/>
+      <line x1="-15" y1="0" x2="15" y2="0" stroke="#00B4FF" stroke-width="2"/>
+    </g>
+  </g>
+
+  <text x="85" y="48" text-anchor="start" font-family="Oxanium, sans-serif" letter-spacing="-0.5">
+    <tspan fill="#00B4FF" font-size="34" font-weight="700">A</tspan><tspan fill="#F1F5F9" font-size="34" font-weight="700">uditora</tspan><tspan fill="#64748B" font-size="34" font-weight="300">.ai</tspan>
+  </text>
+</svg>
