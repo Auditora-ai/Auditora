@@ -7,7 +7,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@repo/ui/components/card";
-import { BarChart3Icon, FileTextIcon } from "lucide-react";
+import { BarChart3Icon, FileTextIcon, MessageSquareIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@shared/hooks/router";
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
@@ -18,16 +18,23 @@ interface OnboardingFirstValueStepProps {
 
 const ACTION_CARDS = [
 	{
+		key: "chatInterview",
+		icon: MessageSquareIcon,
+		path: "/descubrir/interview",
+		color: "text-blue-500",
+		bgColor: "bg-blue-500/10",
+	},
+	{
 		key: "exploreDashboard",
 		icon: BarChart3Icon,
-		path: "/",
+		path: "/panorama",
 		color: "text-emerald-500",
 		bgColor: "bg-emerald-500/10",
 	},
 	{
 		key: "documentProcess",
 		icon: FileTextIcon,
-		path: "/processes",
+		path: "/descubrir/new",
 		color: "text-purple-500",
 		bgColor: "bg-purple-500/10",
 	},
@@ -50,16 +57,19 @@ export function OnboardingFirstValueStep({
 	return (
 		<div className="flex flex-col items-center gap-8">
 			<div className="text-center space-y-2">
+				<h2 className="text-lg font-semibold">
+					{t("onboarding.firstValue.title")}
+				</h2>
 				<p className="text-sm text-muted-foreground max-w-md">
 					{t("onboarding.firstValue.recommendation")}
 				</p>
 			</div>
 
-			<div className="grid w-full max-w-2xl gap-4 sm:grid-cols-3">
+			<div className="grid w-full max-w-2xl gap-4 grid-cols-1 sm:grid-cols-3">
 				{ACTION_CARDS.map(({ key, icon: Icon, path, color, bgColor }) => (
 					<Card
 						key={key}
-						className="cursor-pointer transition-all hover:shadow-md hover:-translate-y-0.5"
+						className="cursor-pointer transition-all hover:shadow-md hover:-translate-y-0.5 active:scale-[0.98]"
 						onClick={() => handleCardClick(path)}
 					>
 						<CardHeader>

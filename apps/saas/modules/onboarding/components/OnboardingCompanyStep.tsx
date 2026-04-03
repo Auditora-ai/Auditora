@@ -88,9 +88,9 @@ export function OnboardingCompanyStep({
 			const res = await fetch("/api/organization/profile", {
 				method: "PUT",
 				headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({
-				companyName: data.companyName,
-				industry: data.industry,
+				body: JSON.stringify({
+					companyName: data.companyName,
+					industry: data.industry,
 					employeeCount: data.companySize,
 					operationsProfile: data.evaluationTarget,
 					notes: data.concernProcess || null,
@@ -112,6 +112,15 @@ export function OnboardingCompanyStep({
 
 	return (
 		<div>
+			<div className="mb-6 space-y-1">
+				<h2 className="text-lg font-semibold">
+					{t("onboarding.company.title")}
+				</h2>
+				<p className="text-sm text-muted-foreground">
+					{t("onboarding.company.subtitle")}
+				</p>
+			</div>
+
 			<Form {...form}>
 				<form
 					className="flex flex-col items-stretch gap-6"
@@ -163,13 +172,13 @@ export function OnboardingCompanyStep({
 										</SelectTrigger>
 									</FormControl>
 									<SelectContent>
-					{INDUSTRIES.map((value) => (
-						<SelectItem
-							key={value}
-							value={value}
-						>
-							{t(`onboarding.company.industries.${value}`)}
-						</SelectItem>
+										{INDUSTRIES.map((value) => (
+											<SelectItem
+												key={value}
+												value={value}
+											>
+												{t(`onboarding.company.industries.${value}`)}
+											</SelectItem>
 										))}
 									</SelectContent>
 								</Select>
@@ -200,13 +209,13 @@ export function OnboardingCompanyStep({
 										</SelectTrigger>
 									</FormControl>
 									<SelectContent>
-					{COMPANY_SIZES.map((value) => (
-						<SelectItem
-							key={value}
-							value={value}
-						>
-							{t(`onboarding.company.sizes.${value}`)}
-						</SelectItem>
+										{COMPANY_SIZES.map((value) => (
+											<SelectItem
+												key={value}
+												value={value}
+											>
+												{t(`onboarding.company.sizes.${value}`)}
+											</SelectItem>
 										))}
 									</SelectContent>
 								</Select>
@@ -237,13 +246,13 @@ export function OnboardingCompanyStep({
 										</SelectTrigger>
 									</FormControl>
 									<SelectContent>
-					{EVALUATION_TARGETS.map((value) => (
-						<SelectItem
-							key={value}
-							value={value}
-						>
-							{t(`onboarding.company.targets.${value}`)}
-						</SelectItem>
+										{EVALUATION_TARGETS.map((value) => (
+											<SelectItem
+												key={value}
+												value={value}
+											>
+												{t(`onboarding.company.targets.${value}`)}
+											</SelectItem>
 										))}
 									</SelectContent>
 								</Select>
@@ -280,7 +289,8 @@ export function OnboardingCompanyStep({
 					<Button
 						type="submit"
 						loading={form.formState.isSubmitting}
-						className="mt-2"
+						className="mt-2 w-full sm:w-auto"
+						size="lg"
 					>
 						{t("onboarding.continue")}
 						<ArrowRightIcon className="ml-2 size-4" />

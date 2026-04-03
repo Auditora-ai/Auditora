@@ -278,14 +278,14 @@
   "onboarding": {
     "welcome": {
       "title": "Bienvenido a Auditora.ai",
-      "subtitle": "Tu plataforma de elicitación de procesos con IA",
-      "step1": "Crea un cliente",
-      "step1Desc": "La empresa cuyos procesos vas a mapear",
-      "step2": "Inicia una sesión",
-      "step2Desc": "Únete a una videollamada y deja que la IA te guíe",
-      "step3": "Obtén tu diagrama",
-      "step3Desc": "El proceso se diagrama automáticamente en BPMN",
-      "cta": "Iniciar tu primera sesión",
+      "subtitle": "Tu plataforma de evaluación de procesos con IA",
+      "step1": "Documenta un proceso",
+      "step1Desc": "Captura tu proceso más crítico con entrevista IA",
+      "step2": "Ejecuta una evaluación",
+      "step2Desc": "Deja que la IA evalúe el cumplimiento del proceso documentado",
+      "step3": "Obtén tus insights",
+      "step3Desc": "Visualiza riesgos, brechas y puntajes de cumplimiento automáticamente",
+      "cta": "Iniciar entrevista IA",
       "explore": "Explorar el dashboard primero"
     },
     "account": {
@@ -861,7 +861,26 @@
       "nextStepFirstEval": "Tienes procesos documentados — crea tu primera evaluación para evaluar a tu equipo",
       "nextStepImproveWeakest": "La alineación de tu equipo es baja en \"{process}\". Enfoca evaluaciones ahí.",
       "nextStepBoostCompletion": "Solo el {rate}% de las evaluaciones están completadas. Envía recordatorios a tu equipo.",
-      "nextStepGrow": "¡Tu equipo está funcionando bien! Considera agregar nuevos procesos para evaluar."
+      "nextStepGrow": "¡Tu equipo está funcionando bien! Considera agregar nuevos procesos para evaluar.",
+      "documented": "Documentados",
+      "documentedOf": "{documented} de {total}",
+      "evaluationsThisMonth": "Evaluaciones",
+      "activeEvaluators": "Evaluadores",
+      "quickActionsTitle": "Acciones Rápidas",
+      "quickActionCapture": "Capturar Proceso",
+      "quickActionCaptureDesc": "Descubre y documenta un nuevo proceso",
+      "quickActionEvaluate": "Correr Evaluación",
+      "quickActionEvaluateDesc": "Evalúa la alineación procedimental de tu equipo",
+      "quickActionInvite": "Invitar Equipo",
+      "quickActionInviteDesc": "Agrega miembros a tu organización",
+      "emptyWelcomeTitle": "Bienvenido a Auditora.ai",
+      "emptyWelcomeDesc": "Comienza capturando tu primer proceso de negocio. Nuestra IA te ayudará a documentarlo y evaluarlo.",
+      "emptyCtaCapture": "Captura Tu Primer Proceso",
+      "emptyCtaExplore": "Explora la Plataforma",
+      "onboardingStep1": "Captura un proceso",
+      "onboardingStep2": "Corre tu primera evaluación",
+      "onboardingStep3": "Invita a tu equipo",
+      "heroLabel": "Alineación del Equipo"
     }
   },
   "processLibrary": {

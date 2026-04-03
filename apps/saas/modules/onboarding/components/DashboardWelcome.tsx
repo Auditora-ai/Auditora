@@ -4,16 +4,16 @@ import { Button } from "@repo/ui/components/button";
 import { Card } from "@repo/ui/components/card";
 import {
 	ArrowRightIcon,
-	Building2Icon,
-	PlayIcon,
+	FileTextIcon,
+	MessageSquareIcon,
 	GitBranchIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
 const steps = [
-	{ key: "step1", icon: Building2Icon },
-	{ key: "step2", icon: PlayIcon },
+	{ key: "step1", icon: FileTextIcon },
+	{ key: "step2", icon: MessageSquareIcon },
 	{ key: "step3", icon: GitBranchIcon },
 ] as const;
 
@@ -33,7 +33,7 @@ export function DashboardWelcome({
 			</h1>
 			<p className="mt-2 text-muted-foreground">{t("subtitle")}</p>
 
-			<div className="mt-10 grid w-full max-w-2xl gap-4 sm:grid-cols-3">
+			<div className="mt-10 grid w-full max-w-2xl gap-4 grid-cols-1 sm:grid-cols-3">
 				{steps.map(({ key, icon: Icon }, i) => (
 					<Card key={key} className="relative p-5">
 						<div className="mb-3 flex items-center gap-2">
@@ -55,8 +55,8 @@ export function DashboardWelcome({
 
 			<div className="mt-8 flex flex-col items-center gap-3">
 				<Button asChild size="lg">
-					<Link href={`${basePath}/sessions/new`}>
-						<PlayIcon className="mr-2 size-4" />
+					<Link href={`${basePath}/descubrir/interview`}>
+						<MessageSquareIcon className="mr-2 size-4" />
 						{t("cta")}
 					</Link>
 				</Button>

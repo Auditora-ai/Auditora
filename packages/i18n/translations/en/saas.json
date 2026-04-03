@@ -278,14 +278,14 @@
   "onboarding": {
     "welcome": {
       "title": "Welcome to Auditora.ai",
-      "subtitle": "Your AI-powered process elicitation platform",
-      "step1": "Create a client",
-      "step1Desc": "The company whose processes you'll map",
-      "step2": "Start a session",
-      "step2Desc": "Join a video call and let AI guide you",
-      "step3": "Get your diagram",
-      "step3Desc": "The process is diagrammed automatically in BPMN",
-      "cta": "Start your first session",
+      "subtitle": "Your AI-powered process evaluation platform",
+      "step1": "Document a process",
+      "step1Desc": "Capture your most critical process via AI interview",
+      "step2": "Run an evaluation",
+      "step2Desc": "Let AI assess compliance against the documented process",
+      "step3": "Get your insights",
+      "step3Desc": "View risks, gaps, and compliance scores automatically",
+      "cta": "Start AI interview",
       "explore": "Explore the dashboard first"
     },
     "account": {
@@ -861,7 +861,26 @@
       "nextStepFirstEval": "You have processes documented — create your first evaluation to test your team",
       "nextStepImproveWeakest": "Your team alignment is low on \"{process}\". Focus evaluations there.",
       "nextStepBoostCompletion": "Only {rate}% of evaluations are completed. Send reminders to your team.",
-      "nextStepGrow": "Your team is performing well! Consider adding new processes to evaluate."
+      "nextStepGrow": "Your team is performing well! Consider adding new processes to evaluate.",
+      "documented": "Documented",
+      "documentedOf": "{documented} of {total}",
+      "evaluationsThisMonth": "Evaluations",
+      "activeEvaluators": "Evaluators",
+      "quickActionsTitle": "Quick Actions",
+      "quickActionCapture": "Capture Process",
+      "quickActionCaptureDesc": "Discover and document a new process",
+      "quickActionEvaluate": "Run Evaluation",
+      "quickActionEvaluateDesc": "Test your team's procedural alignment",
+      "quickActionInvite": "Invite Team",
+      "quickActionInviteDesc": "Add team members to your organization",
+      "emptyWelcomeTitle": "Welcome to Auditora.ai",
+      "emptyWelcomeDesc": "Start by capturing your first business process. Our AI will help you document and evaluate it.",
+      "emptyCtaCapture": "Capture Your First Process",
+      "emptyCtaExplore": "Explore the Platform",
+      "onboardingStep1": "Capture a process",
+      "onboardingStep2": "Run your first evaluation",
+      "onboardingStep3": "Invite your team",
+      "heroLabel": "Team Alignment"
     }
   },
   "processLibrary": {

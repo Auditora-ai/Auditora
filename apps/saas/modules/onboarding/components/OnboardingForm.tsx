@@ -1,10 +1,12 @@
 "use client";
 import { authClient } from "@repo/auth/client";
 import { Progress } from "@repo/ui/components/progress";
+import { Button } from "@repo/ui/components/button";
 import { useRouter } from "@shared/hooks/router";
 import { clearCache } from "@shared/lib/cache";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { ArrowLeftIcon } from "lucide-react";
 import { useCallback, useMemo } from "react";
 import { withQuery } from "ufo";
 import { OnboardingAccountStep } from "./OnboardingAccountStep";
@@ -56,6 +58,12 @@ export function OnboardingForm() {
 		setStep(4);
 	}, []);
 
+	const handleBack = useCallback(() => {
+		if (onboardingStep > 1) {
+			setStep(onboardingStep - 1);
+		}
+	}, [onboardingStep]);
+
 	const steps = useMemo(() => {
 		const allSteps: { component: React.ReactNode }[] = [
 			{
@@ -101,6 +109,17 @@ export function OnboardingForm() {
 
 			{steps.length > 1 && (
 				<div className="mb-6 flex items-center gap-3">
+					{onboardingStep > 1 && (
+						<Button
+							variant="ghost"
+							size="icon"
+							onClick={handleBack}
+							className="shrink-0 size-8"
+							aria-label={t("common.back")}
+						>
+							<ArrowLeftIcon className="size-4" />
+						</Button>
+					)}
 					<Progress
 						value={(onboardingStep / steps.length) * 100}
 						className="h-2"
