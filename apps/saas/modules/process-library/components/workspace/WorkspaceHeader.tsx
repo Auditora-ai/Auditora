@@ -35,6 +35,8 @@ import {
 import { GenerateEvaluationDialog } from "../GenerateEvaluationDialog";
 import { useProcessWorkspace } from "../../context/ProcessWorkspaceContext";
 import { MaturityFlow } from "./MaturityFlow";
+import { PresenceAvatars } from "@collaboration/components/PresenceAvatars";
+import { usePresence } from "@collaboration/hooks/use-presence";
 import type { ProcessData } from "../../types";
 
 interface WorkspaceHeaderProps {
@@ -57,6 +59,7 @@ export function WorkspaceHeader({
 	const { sidebarCollapsed, toggleSidebar } = useProcessWorkspace();
 	const [exporting, setExporting] = useState(false);
 	const [editingField, setEditingField] = useState<string | null>(null);
+	const { onlineUsers } = usePresence(process.id);
 	const [editName, setEditName] = useState(process.name);
 	const [editDescription, setEditDescription] = useState(process.description || "");
 
@@ -208,10 +211,17 @@ export function WorkspaceHeader({
 					/>
 				</div>
 
-				<ProcessHealthRing score={healthScore} size={28} />
-			</div>
+			<ProcessHealthRing score={healthScore} size={28} />
 
-			{/* Right: Actions */}
+			{/* Presence indicators */}
+			{onlineUsers.length > 0 && (
+				<div className="hidden sm:flex items-center ml-1">
+					<PresenceAvatars users={onlineUsers} max={4} />
+				</div>
+			)}
+		</div>
+
+		{/* Right: Actions */}
 			<div className="flex items-center gap-1.5 shrink-0">
 			<Button
 				variant="outline"

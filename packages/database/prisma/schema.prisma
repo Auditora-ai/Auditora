@@ -49,6 +49,13 @@ model User {
   changeResponses          ChangeConfirmationResponse[]
   notificationPreferences  NotificationPreference[]
 
+  // Collaboration (F3-01)
+  processPresences         ProcessPresence[]
+  processLocks             ProcessLock[]
+  commentsAuthored         ProcessComment[]
+  commentsResolved         ProcessComment[]      @relation("CommentResolver")
+  activityLogs             ProcessActivityLog[]
+
   @@unique([email])
   @@unique([username])
   @@map("user")
@@ -390,6 +397,11 @@ model ProcessDefinition {
   simulationTemplates SimulationTemplate[]
   procedures          Procedure[]
   changeConfirmations ChangeConfirmation[]
+  // Collaboration (F3-01)
+  presences           ProcessPresence[]
+  locks               ProcessLock[]
+  comments            ProcessComment[]
+  activityLog         ProcessActivityLog[]
   createdAt        DateTime            @default(now())
 
   @@index([architectureId])
@@ -1703,5 +1715,96 @@ model NotificationPreference {
 
   @@unique([userId, organizationId])
   @@map("notification_preference")
+}
+
+// ============================================
+// Collaboration (F3-01: Multi-user process collaboration)
+// ============================================
+
+model ProcessPresence {
+  id              String             @id @default(cuid())
+  processId       String
+  process         ProcessDefinition  @relation(fields: [processId], references: [id], onDelete: Cascade)
+  userId          String
+  user            User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  activeSection   String?            // "bpmn" | "procedure" | "raci" | "risks"
+  activeNodeId    String?
+
+  cursorX         Float?
+  cursorY         Float?
+  viewportJson    String?
+
+  lastSeen        DateTime           @default(now())
+
+  @@unique([processId, userId])
+  @@index([processId, lastSeen])
+  @@map("process_presence")
+}
+
+model ProcessLock {
+  id              String             @id @default(cuid())
+  processId       String
+  process         ProcessDefinition  @relation(fields: [processId], references: [id], onDelete: Cascade)
+
+  section         String             // "bpmn" | "procedure" | "raci" | "risks" | "node:{nodeId}"
+
+  lockedById      String
+  lockedBy        User               @relation(fields: [lockedById], references: [id])
+
+  lockedAt        DateTime           @default(now())
+  expiresAt       DateTime
+
+  @@unique([processId, section])
+  @@index([expiresAt])
+  @@map("process_lock")
+}
+
+model ProcessComment {
+  id              String             @id @default(cuid())
+  processId       String
+  process         ProcessDefinition  @relation(fields: [processId], references: [id], onDelete: Cascade)
+  authorId        String
+  author          User               @relation(fields: [authorId], references: [id])
+
+  section         String             // "bpmn" | "procedure" | "raci" | "risks" | "general"
+  nodeId          String?
+  procedureStepId String?
+
+  body            String             @db.Text
+  mentions        String[]           @default([])
+
+  parentId        String?
+  parent          ProcessComment?    @relation("CommentThread", fields: [parentId], references: [id])
+  replies         ProcessComment[]   @relation("CommentThread")
+
+  resolved        Boolean            @default(false)
+  resolvedById    String?
+  resolvedBy      User?              @relation("CommentResolver", fields: [resolvedById], references: [id])
+  resolvedAt      DateTime?
+
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  @@index([processId, section, createdAt])
+  @@index([processId, resolved])
+  @@map("process_comment")
+}
+
+model ProcessActivityLog {
+  id              String             @id @default(cuid())
+  processId       String
+  process         ProcessDefinition  @relation(fields: [processId], references: [id], onDelete: Cascade)
+  userId          String
+  user            User               @relation(fields: [userId], references: [id])
+
+  action          String             // "edited_bpmn" | "edited_procedure" | "added_risk" | "updated_raci" | "commented" | "resolved_comment"
+  section         String
+  details         Json?
+
+  createdAt       DateTime           @default(now())
+
+  @@index([processId, createdAt])
+  @@map("process_activity_log")
 }
 

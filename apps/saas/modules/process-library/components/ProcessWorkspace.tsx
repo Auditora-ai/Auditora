@@ -5,6 +5,7 @@ import { ProcessWorkspaceProvider, useProcessWorkspace } from "../context/Proces
 import { WorkspaceHeader } from "./workspace/WorkspaceHeader";
 import { DiagramCanvas } from "./workspace/DiagramCanvas";
 import { ContextSidebar } from "./workspace/ContextSidebar";
+import { CollaborationProvider } from "@collaboration/components/CollaborationProvider";
 import type { ProcessData } from "../types";
 import "bpmn-js/dist/assets/diagram-js.css";
 import "bpmn-js/dist/assets/bpmn-js.css";
@@ -20,7 +21,9 @@ interface ProcessWorkspaceProps {
 export function ProcessWorkspace(props: ProcessWorkspaceProps) {
 	return (
 		<ProcessWorkspaceProvider>
-			<WorkspaceInner {...props} />
+			<CollaborationProvider processId={props.process.id}>
+				<WorkspaceInner {...props} />
+			</CollaborationProvider>
 		</ProcessWorkspaceProvider>
 	);
 }

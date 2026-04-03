@@ -2,6 +2,7 @@ import type { RouterClient } from "@orpc/server";
 import { adminRouter } from "../modules/admin/router";
 import { aiRouter } from "../modules/ai/router";
 import { changeManagementRouter } from "../modules/change-management/router";
+import { collaborationRouter } from "../modules/collaboration/router";
 import { documentsRouter } from "../modules/documents/router";
 import { notificationsRouter } from "../modules/notifications/router";
 import { organizationsRouter } from "../modules/organizations/router";
@@ -20,6 +21,7 @@ export const router = publicProcedure.router({
 	processes: processesRouter,
 	notifications: notificationsRouter,
 	changes: changeManagementRouter,
+	collaboration: collaborationRouter,
 });
 
 export type ApiRouterClient = RouterClient<typeof router>;

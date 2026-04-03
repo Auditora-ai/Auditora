@@ -28,7 +28,8 @@
 			"@evaluaciones/*": ["./modules/evaluaciones/*"],
 			"@scan/*": ["./modules/scan/*"],
 			"@notifications/*": ["./modules/notifications/*"],
-			"@change-management/*": ["./modules/change-management/*"]
+			"@change-management/*": ["./modules/change-management/*"],
+			"@collaboration/*": ["./modules/collaboration/*"]
 		}
 	},
 	"include": [

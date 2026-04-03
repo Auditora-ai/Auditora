@@ -9,6 +9,7 @@ import {
 	ClockIcon,
 	VideoIcon,
 	BarChart3Icon,
+	ActivityIcon,
 } from "lucide-react";
 import { useProcessWorkspace } from "../../context/ProcessWorkspaceContext";
 import { NodeContextPanel } from "./NodeContextPanel";
@@ -19,6 +20,7 @@ import { SidebarRiskTab } from "../sidebar-tabs/SidebarRiskTab";
 import { EvalFeedbackTab } from "../sidebar-tabs/EvalFeedbackTab";
 import { VersionesTab } from "../sidebar-tabs/VersionesTab";
 import { SessionesTab } from "../sidebar-tabs/SessionesTab";
+import { ActivityTimeline } from "@collaboration/components/ActivityTimeline";
 import type { ProcessData } from "../../types";
 
 const TABS = [
@@ -29,6 +31,7 @@ const TABS = [
 	{ key: "evalFeedback", label: "Eval", icon: BarChart3Icon },
 	{ key: "versiones", label: "Versiones", icon: ClockIcon },
 	{ key: "sesiones", label: "Sesiones", icon: VideoIcon },
+	{ key: "actividad", label: "Actividad", icon: ActivityIcon },
 ] as const;
 
 type TabKey = (typeof TABS)[number]["key"];
@@ -104,6 +107,7 @@ export function ContextSidebar({ process, organizationSlug, processesPath, onUpd
 						processId={process.id}
 					/>
 				)}
+				{activeTab === "actividad" && <ActivityTimeline processId={process.id} />}
 			</div>
 		</div>
 	);

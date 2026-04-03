@@ -382,6 +382,30 @@ export const NotificationPreferenceScalarFieldEnumSchema = z.enum(['id', 'userId
 
 export type NotificationPreferenceScalarFieldEnum = z.infer<typeof NotificationPreferenceScalarFieldEnumSchema>;
 
+// File: ProcessPresenceScalarFieldEnum.schema.ts
+
+export const ProcessPresenceScalarFieldEnumSchema = z.enum(['id', 'processId', 'userId', 'activeSection', 'activeNodeId', 'cursorX', 'cursorY', 'viewportJson', 'lastSeen'])
+
+export type ProcessPresenceScalarFieldEnum = z.infer<typeof ProcessPresenceScalarFieldEnumSchema>;
+
+// File: ProcessLockScalarFieldEnum.schema.ts
+
+export const ProcessLockScalarFieldEnumSchema = z.enum(['id', 'processId', 'section', 'lockedById', 'lockedAt', 'expiresAt'])
+
+export type ProcessLockScalarFieldEnum = z.infer<typeof ProcessLockScalarFieldEnumSchema>;
+
+// File: ProcessCommentScalarFieldEnum.schema.ts
+
+export const ProcessCommentScalarFieldEnumSchema = z.enum(['id', 'processId', 'authorId', 'section', 'nodeId', 'procedureStepId', 'body', 'mentions', 'parentId', 'resolved', 'resolvedById', 'resolvedAt', 'createdAt', 'updatedAt'])
+
+export type ProcessCommentScalarFieldEnum = z.infer<typeof ProcessCommentScalarFieldEnumSchema>;
+
+// File: ProcessActivityLogScalarFieldEnum.schema.ts
+
+export const ProcessActivityLogScalarFieldEnumSchema = z.enum(['id', 'processId', 'userId', 'action', 'section', 'details', 'createdAt'])
+
+export type ProcessActivityLogScalarFieldEnum = z.infer<typeof ProcessActivityLogScalarFieldEnumSchema>;
+
 // File: SortOrder.schema.ts
 
 export const SortOrderSchema = z.enum(['asc', 'desc'])
@@ -1744,4 +1768,72 @@ export const NotificationPreferenceSchema = z.object({
 });
 
 export type NotificationPreferenceType = z.infer<typeof NotificationPreferenceSchema>;
+
+
+// File: ProcessPresence.schema.ts
+
+export const ProcessPresenceSchema = z.object({
+  id: z.string(),
+  processId: z.string(),
+  userId: z.string(),
+  activeSection: z.string().nullish(),
+  activeNodeId: z.string().nullish(),
+  cursorX: z.number().nullish(),
+  cursorY: z.number().nullish(),
+  viewportJson: z.string().nullish(),
+  lastSeen: z.date(),
+});
+
+export type ProcessPresenceType = z.infer<typeof ProcessPresenceSchema>;
+
+
+// File: ProcessLock.schema.ts
+
+export const ProcessLockSchema = z.object({
+  id: z.string(),
+  processId: z.string(),
+  section: z.string(),
+  lockedById: z.string(),
+  lockedAt: z.date(),
+  expiresAt: z.date(),
+});
+
+export type ProcessLockType = z.infer<typeof ProcessLockSchema>;
+
+
+// File: ProcessComment.schema.ts
+
+export const ProcessCommentSchema = z.object({
+  id: z.string(),
+  processId: z.string(),
+  authorId: z.string(),
+  section: z.string(),
+  nodeId: z.string().nullish(),
+  procedureStepId: z.string().nullish(),
+  body: z.string(),
+  mentions: z.array(z.string()),
+  parentId: z.string().nullish(),
+  resolved: z.boolean(),
+  resolvedById: z.string().nullish(),
+  resolvedAt: z.date().nullish(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type ProcessCommentType = z.infer<typeof ProcessCommentSchema>;
+
+
+// File: ProcessActivityLog.schema.ts
+
+export const ProcessActivityLogSchema = z.object({
+  id: z.string(),
+  processId: z.string(),
+  userId: z.string(),
+  action: z.string(),
+  section: z.string(),
+  details: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
+  createdAt: z.date(),
+});
+
+export type ProcessActivityLogType = z.infer<typeof ProcessActivityLogSchema>;
 

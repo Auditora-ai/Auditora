@@ -82,8 +82,8 @@
 |---|----------|-----------|---------|--------|
 | BUG-022 | 🟠 High | `api/organization/profile/route.ts:66` | TS error: `name: null` incompatible with Prisma `String` | ✅ FIXED (2026-04-03) |
 | BUG-023 | 🟠 High | `modules/auth/components/LoginForm.tsx:77` | TS error: `mode: "***"` not in Zod schema (should be `"magic-link"`) | ✅ FIXED (2026-04-03) |
-| BUG-024 | 🟡 Medium | `modules/radiografia/lib/sipoc-to-nodes.ts:27,82` | Hardcoded Spanish `"Inicio"`/`"Fin"` fallbacks in scan/BPMN pipeline | 🔴 OPEN |
-| BUG-025 | 🟢 Low | `meeting/lib/node-display-config.ts` + `NodeContextPanel.tsx` | Hardcoded Spanish labels in BPMN node workspace UI | 🔴 OPEN |
+| BUG-024 | 🟡 Medium | `modules/radiografia/lib/sipoc-to-nodes.ts:27,82` | Hardcoded Spanish `"Inicio"`/`"Fin"` fallbacks in scan/BPMN pipeline | ✅ RESOLVED (files deleted in Phase 1 cleanup — radiografia module removed) |
+| BUG-025 | 🟢 Low | `meeting/lib/node-display-config.ts` + `NodeContextPanel.tsx` | Hardcoded Spanish labels in BPMN node workspace UI | ✅ RESOLVED (files deleted in Phase 1 cleanup — node-display-config removed) |
 
 ### Bugs from Cycle 1 (21 total) → 21 FIXED ✅
 | Severity | Total | Fixed | Key Issues |
