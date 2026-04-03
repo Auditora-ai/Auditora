@@ -32,6 +32,7 @@ import {
 	calculatePhaseCompleteness,
 	calculateOverallHealth,
 } from "../ProcessPhaseDashboard";
+import { GenerateEvaluationDialog } from "../GenerateEvaluationDialog";
 import { useProcessWorkspace } from "../../context/ProcessWorkspaceContext";
 import { MaturityFlow } from "./MaturityFlow";
 import type { ProcessData } from "../../types";
@@ -212,23 +213,33 @@ export function WorkspaceHeader({
 
 			{/* Right: Actions */}
 			<div className="flex items-center gap-1.5 shrink-0">
-				<Button
-					variant="outline"
-					size="sm"
-					onClick={handleExportReport}
-					loading={exporting}
-					className="hidden sm:inline-flex"
-				>
-					<FileText className="mr-1.5 h-3.5 w-3.5" />
-					Exportar
-				</Button>
+			<Button
+				variant="outline"
+				size="sm"
+				onClick={handleExportReport}
+				loading={exporting}
+				className="hidden sm:inline-flex"
+			>
+				<FileText className="mr-1.5 h-3.5 w-3.5" />
+				Exportar
+			</Button>
 
-				<Button size="sm" asChild>
-					<Link href={`/${organizationSlug}/sessions/new?processId=${process.id}&type=DEEP_DIVE`}>
-						<PlayIcon className="mr-1.5 h-3.5 w-3.5" />
-						Deep Dive
-					</Link>
-				</Button>
+			{(process.risksCount ?? 0) > 0 && (
+				<div className="hidden sm:block">
+					<GenerateEvaluationDialog
+						processId={process.id}
+						processName={process.name}
+						organizationSlug={organizationSlug}
+					/>
+				</div>
+			)}
+
+			<Button size="sm" asChild>
+				<Link href={`/${organizationSlug}/sessions/new?processId=${process.id}&type=DEEP_DIVE`}>
+					<PlayIcon className="mr-1.5 h-3.5 w-3.5" />
+					Deep Dive
+				</Link>
+			</Button>
 
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
