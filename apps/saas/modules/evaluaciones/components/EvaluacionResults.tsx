@@ -5,6 +5,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ArrowLeftIcon, ChevronDownIcon } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { launchConfetti } from "../utils/confetti";
 
 interface EvaluacionResultsProps {
@@ -43,6 +44,7 @@ export function EvaluacionResults({
   aiFeedback,
   backHref,
 }: EvaluacionResultsProps) {
+  const t = useTranslations('evaluaciones.results');
   const containerRef = useRef<HTMLDivElement>(null);
   const scoreCounterRef = useRef<{ value: number }>({ value: 0 });
   const [displayedScore, setDisplayedScore] = useState(0);
@@ -51,17 +53,17 @@ export function EvaluacionResults({
 
   const dimensions = [
     {
-      label: "Alineamiento con procedimiento",
+      label: t('alignmentLabel'),
       value: scores.alignment,
       key: "alignment",
     },
     {
-      label: "Gestión de riesgo",
+      label: t('riskManagementLabel'),
       value: 100 - scores.riskLevel,
       key: "riskLevel",
     },
     {
-      label: "Criterio de decisión",
+      label: t('criterioLabel'),
       value: scores.criterio,
       key: "criterio",
     },
@@ -215,7 +217,7 @@ export function EvaluacionResults({
               className="mt-1 text-xs font-medium uppercase tracking-wider"
               style={{ color: "#64748B" }}
             >
-              Score general
+              {t('overallScore')}
             </p>
           </div>
         </div>
@@ -260,7 +262,7 @@ export function EvaluacionResults({
             className="mb-3 text-xs font-medium uppercase tracking-wider"
             style={{ color: "#64748B" }}
           >
-            Patrones de error detectados
+            {t('errorPatterns')}
           </h3>
           <div className="flex flex-wrap gap-2">
             {errorPatterns.map((pattern, idx) => (
@@ -291,14 +293,15 @@ export function EvaluacionResults({
           }}
         >
           <button
+            type="button"
             onClick={toggleFeedback}
             className="flex w-full items-center justify-between px-5 py-4 text-left transition-colors"
             style={{ color: "#F1F5F9" }}
           >
             <span className="text-sm font-medium">
               {feedbackOpen
-                ? "Ocultar retroalimentación"
-                : "Ver retroalimentación detallada"}
+                ? t('hideFeedback')
+                : t('showFeedback')}
             </span>
             <ChevronDownIcon
               className="h-4 w-4 transition-transform"
@@ -346,7 +349,7 @@ export function EvaluacionResults({
           }}
         >
           <ArrowLeftIcon className="h-4 w-4" />
-          Volver al catálogo
+          {t('backToCatalog')}
         </Link>
       </div>
     </div>

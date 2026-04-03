@@ -407,8 +407,10 @@
       "deleteOrganization": {
         "confirmation": "¿Estás seguro de que deseas eliminar tu organización?",
         "description": "Eliminar permanentemente tu organización. Una vez eliminada, no hay vuelta atrás. Para confirmar, introduce tu contraseña a continuación:",
+        "irreversibleWarning": "Esta acción es permanente y no se puede deshacer. Todos los datos, procesos, evaluaciones y accesos de miembros serán eliminados permanentemente.",
         "submit": "Eliminar organización",
-        "title": "Eliminar organización"
+        "title": "Eliminar organización",
+        "typeToConfirm": "Escribe \"{name}\" para confirmar"
       },
       "logo": {
         "description": "Sube un logo para tu organización.",
@@ -2014,11 +2016,96 @@
   },
   "evaluaciones": {
     "pageDescription": "Evaluaciones tipo caso Harvard generadas a partir de tus procesos y riesgos reales.",
+    "metaTitleRunning": "Evaluación en curso",
     "tabs": {
       "label": "Navegación de evaluaciones",
       "catalog": "Catálogo",
       "dashboard": "Dashboard de Riesgo",
       "progress": "Progreso"
+    },
+    "hub": {
+      "emptyTitle": "Sin evaluaciones creadas",
+      "emptyDescription": "Las evaluaciones se generan a partir de tus procesos y riesgos documentados. Primero mapea un proceso y detecta sus riesgos.",
+      "goToProcesses": "Ir a Procesos",
+      "evaluations": "Evaluaciones",
+      "completed": "Completadas",
+      "avgScore": "Score prom.",
+      "catalog": "Catálogo de evaluaciones",
+      "customRole": "Personalizado",
+      "evalCount": "{count} eval.",
+      "statusActive": "Activa",
+      "statusDraft": "Borrador",
+      "recentRuns": "Evaluaciones recientes",
+      "statusCompleted": "Ok",
+      "statusInProgress": "En curso",
+      "roleLabels": {
+        "DIRECTOR_OPERACIONES": "Dir. Operaciones",
+        "DIRECTOR_COMPRAS": "Dir. Compras",
+        "DIRECTOR_CALIDAD": "Dir. Calidad",
+        "DIRECTOR_FINANZAS": "Dir. Finanzas",
+        "DIRECTOR_LOGISTICA": "Dir. Logística",
+        "GERENTE_PLANTA": "Ger. Planta",
+        "CONTROLLER": "Controller",
+        "CEO": "CEO",
+        "CUSTOM": "Personalizado"
+      }
+    },
+    "runner": {
+      "decisionOf": "Decisión {current} de {total}",
+      "proceduralReference": "Referencia procedimental"
+    },
+    "intro": {
+      "label": "Evaluación",
+      "startButton": "Comenzar Evaluación"
+    },
+    "runPage": {
+      "label": "Evaluación",
+      "evaluatingTitle": "Evaluando tus decisiones...",
+      "evaluatingDescription": "Nuestro motor de IA está analizando tu criterio",
+      "resultsLabel": "Resultados"
+    },
+    "results": {
+      "alignmentLabel": "Alineamiento con procedimiento",
+      "riskManagementLabel": "Gestión de riesgo",
+      "criterioLabel": "Criterio de decisión",
+      "overallScore": "Score general",
+      "errorPatterns": "Patrones de error detectados",
+      "hideFeedback": "Ocultar retroalimentación",
+      "showFeedback": "Ver retroalimentación detallada",
+      "backToCatalog": "Volver al catálogo"
+    },
+    "dashboard": {
+      "title": "Dashboard de Riesgo Humano",
+      "description": "Evaluación del criterio de decisión de tu equipo basada en evaluaciones.",
+      "exportPdf": "Exportar PDF",
+      "insufficientTitle": "Datos insuficientes",
+      "insufficientDescription": "Se necesitan al menos 3 evaluaciones completadas para generar el dashboard de riesgo humano. Invita a tu equipo a completar evaluaciones.",
+      "goToEvaluations": "Ir a Evaluaciones",
+      "totalSimulations": "Total Simulaciones",
+      "membersEvaluated": "Miembros Evaluados",
+      "completionRate": "Tasa de Completado",
+      "avgDuration": "Tiempo Promedio",
+      "errorPatternsTitle": "Patrones de Error Frecuentes",
+      "noPatterns": "Sin patrones detectados",
+      "scoreLabel": "Puntaje",
+      "alignment": "Alineamiento",
+      "controlLevel": "Nivel de Control",
+      "criterio": "Criterio",
+      "scoreDistribution": "Distribución de Puntajes",
+      "scoreTrend": "Tendencia de Puntaje",
+      "needsTwoMonths": "Se necesitan datos de al menos 2 meses",
+      "humanRiskScore": "Puntaje de Riesgo Humano",
+      "processHeatmap": "Mapa de Calor por Proceso",
+      "process": "Proceso",
+      "riskLevel": "Nivel de Riesgo",
+      "simulations": "Simulaciones",
+      "memberDetail": "Detalle por Miembro",
+      "member": "Miembro",
+      "score": "Puntaje",
+      "strengths": "Fortalezas",
+      "riskAreas": "Áreas de riesgo",
+      "updated": "Actualizado",
+      "avgScoreLabel": "Puntaje Promedio"
     },
     "progress": {
       "title": "Progreso y Mejora",

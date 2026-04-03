@@ -78,6 +78,7 @@ export interface ProcessData {
 	versionsCount: number;
 	raciCount: number;
 	risksCount: number;
+	proceduresCount: number;
 	hasIntelligence: boolean;
 	conflictsCount: number;
 }

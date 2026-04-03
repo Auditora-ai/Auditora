@@ -155,19 +155,35 @@ export const getNavSummary = protectedProcedure
 		);
 
 		// Pending deliverables: processes with completed sessions but no recent exports
-		const pendingDeliverables = await db.$queryRaw<
-			[{ count: bigint }]
-		>`SELECT COUNT(DISTINCT pd.id) as count
-		  FROM process_definition pd
-		  JOIN meeting_session ms ON ms.process_definition_id = pd.id AND ms.status = 'ENDED'
-		  WHERE pd.architecture_id = ${architecture.id}
-		  AND pd.id NOT IN (
-		    SELECT DISTINCT sd.session_id FROM session_deliverable sd
-		    JOIN meeting_session ms2 ON ms2.id = sd.session_id
-		    WHERE ms2.organization_id = ${organizationId}
-		    AND sd.status = 'completed'
-		    AND sd.created_at > NOW() - INTERVAL '30 days'
-		  )`;
+		// Using Prisma queries instead of raw SQL to avoid column name mismatches
+		const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+		const processesWithEndedSessions = await db.processDefinition.findMany({
+			where: {
+				architectureId: architecture.id,
+				sessions: {
+					some: { status: "ENDED" },
+				},
+			},
+			select: {
+				id: true,
+				sessions: {
+					where: { status: "ENDED" },
+					select: {
+						sessionDeliverables: {
+							where: {
+								status: "completed",
+								createdAt: { gte: thirtyDaysAgo },
+							},
+							select: { id: true },
+							take: 1,
+						},
+					},
+				},
+			},
+		});
+		const pendingDeliverablesCount = processesWithEndedSessions.filter(
+			(p) => !p.sessions.some((s) => s.sessionDeliverables.length > 0),
+		).length;
 
 		return {
 			maturityScore,
@@ -183,7 +199,7 @@ export const getNavSummary = protectedProcedure
 				documented: documentedProcesses,
 				total: totalProcesses,
 			},
-			pendingDeliverables: Number(pendingDeliverables[0]?.count ?? 0),
+			pendingDeliverables: pendingDeliverablesCount,
 			hasActiveSession: !!activeSession,
 		};
 	});

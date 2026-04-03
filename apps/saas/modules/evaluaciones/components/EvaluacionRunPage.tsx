@@ -5,6 +5,7 @@ import { EvaluacionIntro } from "./EvaluacionIntro";
 import { EvaluacionRunner } from "./EvaluacionRunner";
 import { EvaluacionResults } from "./EvaluacionResults";
 import { Loader2Icon } from "lucide-react";
+import { useTranslations } from 'next-intl';
 
 interface DecisionOption {
   label: string;
@@ -46,6 +47,7 @@ export function EvaluacionRunPage({
   templateTitle,
   narrative,
 }: EvaluacionRunPageProps) {
+  const t = useTranslations('evaluaciones.runPage');
   const [phase, setPhase] = useState<Phase>("intro");
   const [scores, setScores] = useState<ScoreData | null>(null);
 
@@ -109,7 +111,7 @@ export function EvaluacionRunPage({
               className="text-xs font-medium uppercase tracking-[0.2em]"
               style={{ color: "#3B8FE8" }}
             >
-              Evaluación
+              {t('label')}
             </p>
             <h1
               className="mt-1 font-display text-lg"
@@ -147,13 +149,13 @@ export function EvaluacionRunPage({
               className="font-display text-xl"
               style={{ color: "#F1F5F9" }}
             >
-              Evaluando tus decisiones...
+              {t('evaluatingTitle')}
             </p>
             <p
               className="mt-2 text-sm"
               style={{ color: "#64748B" }}
             >
-              Nuestro motor de IA está analizando tu criterio
+              {t('evaluatingDescription')}
             </p>
           </div>
         </div>
@@ -167,7 +169,7 @@ export function EvaluacionRunPage({
               className="text-xs font-medium uppercase tracking-[0.2em]"
               style={{ color: "#3B8FE8" }}
             >
-              Resultados
+              {t('resultsLabel')}
             </p>
             <h1
               className="mt-2 font-display text-2xl md:text-3xl"

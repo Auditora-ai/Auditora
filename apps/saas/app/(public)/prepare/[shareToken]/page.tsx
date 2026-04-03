@@ -25,14 +25,14 @@ const CATEGORY_LABELS: Record<string, string> = {
   MISSING_PATH: "Flujo del proceso",
   MISSING_ROLE: "Roles y responsabilidades",
   MISSING_EXCEPTION: "Manejo de excepciones",
-  MISSING_DECISION: "Criterios de decision",
+  MISSING_DECISION: "Criterios de decisión",
   MISSING_TRIGGER: "Inicio del proceso",
   MISSING_OUTPUT: "Resultados del proceso",
-  CONTRADICTION: "Aclaracion necesaria",
-  UNCLEAR_HANDOFF: "Transferencia entre areas",
+  CONTRADICTION: "Aclaración necesaria",
+  UNCLEAR_HANDOFF: "Transferencia entre áreas",
   MISSING_SLA: "Tiempos y niveles de servicio",
   MISSING_SYSTEM: "Sistemas y aplicaciones",
-  GENERAL_GAP: "Informacion general",
+  GENERAL_GAP: "Información general",
 };
 
 export default function PreparePage() {
@@ -52,7 +52,7 @@ export default function PreparePage() {
       try {
         const res = await fetch(`/api/public/intelligence/${shareToken}`);
         if (res.status === 404) {
-          setError("Este enlace no es valido.");
+          setError("Este enlace no es válido.");
           return;
         }
         if (res.status === 410) {

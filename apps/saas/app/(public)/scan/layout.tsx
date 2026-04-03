@@ -24,6 +24,21 @@ export default function ScanLayout({ children }: PropsWithChildren) {
             <span className="font-light text-[#3B8FE8]">.ai</span>
           </span>
         </Link>
+
+        <div className="flex items-center gap-3">
+          <Link
+            href="/login"
+            className="text-sm font-medium text-white/60 transition-colors hover:text-white"
+          >
+            Iniciar sesión
+          </Link>
+          <Link
+            href="/signup"
+            className="inline-flex items-center rounded-lg bg-[#3B8FE8] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#2E7FD6]"
+          >
+            Registrarse
+          </Link>
+        </div>
       </header>
 
       {/* Page content */}

@@ -407,8 +407,10 @@
       "deleteOrganization": {
         "confirmation": "Are you sure you want to delete your organization?",
         "description": "Permanently delete your organization. Once you delete your organization, there is no going back. To confirm, please enter your password below:",
+        "irreversibleWarning": "This action is permanent and cannot be undone. All data, processes, evaluations, and member access will be permanently deleted.",
         "submit": "Delete organization",
-        "title": "Delete organization"
+        "title": "Delete organization",
+        "typeToConfirm": "Type \"{name}\" to confirm"
       },
       "logo": {
         "description": "Upload a logo for your organization.",
@@ -2014,11 +2016,96 @@
   },
   "evaluaciones": {
     "pageDescription": "Harvard-style case evaluations generated from your real processes and risks.",
+    "metaTitleRunning": "Evaluation in progress",
     "tabs": {
       "label": "Evaluations navigation",
       "catalog": "Catalog",
       "dashboard": "Risk Dashboard",
       "progress": "Progress"
+    },
+    "hub": {
+      "emptyTitle": "No evaluations created",
+      "emptyDescription": "Evaluations are generated from your documented processes and risks. First, map a process and identify its risks.",
+      "goToProcesses": "Go to Processes",
+      "evaluations": "Evaluations",
+      "completed": "Completed",
+      "avgScore": "Avg. Score",
+      "catalog": "Evaluation catalog",
+      "customRole": "Custom",
+      "evalCount": "{count} eval.",
+      "statusActive": "Active",
+      "statusDraft": "Draft",
+      "recentRuns": "Recent evaluations",
+      "statusCompleted": "Ok",
+      "statusInProgress": "In progress",
+      "roleLabels": {
+        "DIRECTOR_OPERACIONES": "Ops Director",
+        "DIRECTOR_COMPRAS": "Procurement Dir.",
+        "DIRECTOR_CALIDAD": "Quality Dir.",
+        "DIRECTOR_FINANZAS": "Finance Dir.",
+        "DIRECTOR_LOGISTICA": "Logistics Dir.",
+        "GERENTE_PLANTA": "Plant Manager",
+        "CONTROLLER": "Controller",
+        "CEO": "CEO",
+        "CUSTOM": "Custom"
+      }
+    },
+    "runner": {
+      "decisionOf": "Decision {current} of {total}",
+      "proceduralReference": "Procedural reference"
+    },
+    "intro": {
+      "label": "Evaluation",
+      "startButton": "Start Evaluation"
+    },
+    "runPage": {
+      "label": "Evaluation",
+      "evaluatingTitle": "Evaluating your decisions...",
+      "evaluatingDescription": "Our AI engine is analyzing your judgment",
+      "resultsLabel": "Results"
+    },
+    "results": {
+      "alignmentLabel": "Procedure alignment",
+      "riskManagementLabel": "Risk management",
+      "criterioLabel": "Decision judgment",
+      "overallScore": "Overall score",
+      "errorPatterns": "Detected error patterns",
+      "hideFeedback": "Hide feedback",
+      "showFeedback": "View detailed feedback",
+      "backToCatalog": "Back to catalog"
+    },
+    "dashboard": {
+      "title": "Human Risk Dashboard",
+      "description": "Assessment of your team's decision-making criteria based on evaluations.",
+      "exportPdf": "Export PDF",
+      "insufficientTitle": "Insufficient data",
+      "insufficientDescription": "At least 3 completed evaluations are needed to generate the human risk dashboard. Invite your team to complete evaluations.",
+      "goToEvaluations": "Go to Evaluations",
+      "totalSimulations": "Total Simulations",
+      "membersEvaluated": "Members Evaluated",
+      "completionRate": "Completion Rate",
+      "avgDuration": "Average Duration",
+      "errorPatternsTitle": "Frequent Error Patterns",
+      "noPatterns": "No patterns detected",
+      "scoreLabel": "Score",
+      "alignment": "Alignment",
+      "controlLevel": "Control Level",
+      "criterio": "Judgment",
+      "scoreDistribution": "Score Distribution",
+      "scoreTrend": "Score Trend",
+      "needsTwoMonths": "Data from at least 2 months is needed",
+      "humanRiskScore": "Human Risk Score",
+      "processHeatmap": "Process Heatmap",
+      "process": "Process",
+      "riskLevel": "Risk Level",
+      "simulations": "Simulations",
+      "memberDetail": "Member Detail",
+      "member": "Member",
+      "score": "Score",
+      "strengths": "Strengths",
+      "riskAreas": "Risk areas",
+      "updated": "Updated",
+      "avgScoreLabel": "Average Score"
     },
     "progress": {
       "title": "Progress & Improvement",

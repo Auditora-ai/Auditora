@@ -83,7 +83,7 @@ export default async function SharedReportPage({
 						target="_blank"
 						rel="noopener noreferrer"
 					>
-						Conocer mas
+						Conocer más
 					</a>
 				</div>
 			</div>

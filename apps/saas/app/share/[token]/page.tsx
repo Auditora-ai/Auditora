@@ -40,9 +40,9 @@ export default async function SharedDiagramPage({
 							<path d="M11 16L21 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
 						</svg>
 					</div>
-					<h1 className="text-lg font-semibold text-foreground">Sesion finalizada</h1>
+					<h1 className="text-lg font-semibold text-foreground">Sesión finalizada</h1>
 					<p className="mt-1 text-sm text-muted-foreground">
-						Este link de visualizacion ya no esta disponible.
+						Este link de visualización ya no está disponible.
 					</p>
 					<a
 						href="https://auditora.ai"

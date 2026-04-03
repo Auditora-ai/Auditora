@@ -302,11 +302,11 @@ export default async function SessionReviewPage({
 	});
 
 	if (!session) {
-		redirect(`/${organizationSlug}/sessions`);
+		redirect(`/${organizationSlug}/descubrir`);
 	}
 
 	if (session.organization.slug !== organizationSlug) {
-		redirect(`/${organizationSlug}/sessions`);
+		redirect(`/${organizationSlug}/descubrir`);
 	}
 
 	// Build deliverable map

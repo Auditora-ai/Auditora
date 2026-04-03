@@ -5,7 +5,7 @@ export type ScanPhase = "input" | "analyzing" | "results";
 /** SSE event types sent from POST /api/public/scan/analyze */
 export type ScanSSEEvent =
   | { type: "progress"; step: number; message: string }
-  | { type: "result"; data: ScanResult }
+  | { type: "result"; data: ScanResult; sessionId: string }
   | { type: "error"; message: string };
 
 export interface ScanResult {

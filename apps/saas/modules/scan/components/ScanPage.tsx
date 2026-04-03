@@ -7,6 +7,11 @@ import { InputPhase } from "./InputPhase";
 import { AnalyzingPhase } from "./AnalyzingPhase";
 import { ResultsPhase } from "./ResultsPhase";
 
+interface ScanResultWithSession {
+  result: ScanResult;
+  sessionId: string;
+}
+
 interface ScanPageProps {
   initialUrl: string | null;
   refSource: string | null;
@@ -18,6 +23,7 @@ export function ScanPage({ initialUrl, refSource }: ScanPageProps) {
   const [result, setResult] = useState<ScanResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
 
   const handleStartScan = useCallback((submittedUrl: string, token: string | null) => {
     setUrl(submittedUrl);
@@ -26,8 +32,9 @@ export function ScanPage({ initialUrl, refSource }: ScanPageProps) {
     setPhase("analyzing");
   }, []);
 
-  const handleAnalysisComplete = useCallback((data: ScanResult) => {
+  const handleAnalysisComplete = useCallback((data: ScanResult, sid: string) => {
     setResult(data);
+    setSessionId(sid);
     setPhase("results");
   }, []);
 
@@ -40,6 +47,7 @@ export function ScanPage({ initialUrl, refSource }: ScanPageProps) {
     setUrl("");
     setResult(null);
     setError(null);
+    setSessionId(null);
     setPhase("input");
   }, []);
 
@@ -93,6 +101,7 @@ export function ScanPage({ initialUrl, refSource }: ScanPageProps) {
             <ResultsPhase
               url={url}
               result={result}
+              sessionId={sessionId}
               onReset={handleReset}
             />
           </motion.div>

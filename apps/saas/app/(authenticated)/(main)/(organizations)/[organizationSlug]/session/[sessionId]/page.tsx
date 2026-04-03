@@ -62,7 +62,7 @@ export default async function SessionReviewPage({
 		<div>
 			<div className="mb-6 flex items-center gap-3">
 				<Button variant="ghost" size="sm" asChild>
-					<Link href={`/${organizationSlug}/sessions`}>
+					<Link href={`/${organizationSlug}/descubrir`}>
 						<ArrowLeftIcon className="mr-1 h-4 w-4" />
 						Sessions
 					</Link>

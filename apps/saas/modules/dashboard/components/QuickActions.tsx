@@ -33,7 +33,7 @@ export function QuickActions({ basePath }: QuickActionsProps) {
 			icon: VideoIcon,
 			title: t("quickActions.call"),
 			description: t("quickActions.callDesc"),
-			href: `${basePath}/sessions/new`,
+			href: `${basePath}/descubrir/new`,
 			color: "text-emerald-600",
 			bg: "bg-emerald-50",
 		},

@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { SplitWords } from "@shared/components/SplitWords";
+import { useTranslations } from 'next-intl';
 
 interface EvaluacionIntroProps {
   templateTitle: string;
@@ -16,6 +17,7 @@ export function EvaluacionIntro({
   narrative,
   onStart,
 }: EvaluacionIntroProps) {
+  const t = useTranslations('evaluaciones.intro');
   const containerRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -108,7 +110,7 @@ export function EvaluacionIntro({
           className="sim-intro-label mb-6 text-xs font-medium uppercase tracking-[0.2em]"
           style={{ color: "#3B8FE8" }}
         >
-          Evaluación
+          {t('label')}
         </p>
 
         {/* Title */}
@@ -131,6 +133,7 @@ export function EvaluacionIntro({
 
         {/* Start button */}
         <button
+          type="button"
           onClick={onStart}
           className="sim-intro-btn inline-flex min-h-[48px] items-center rounded-full px-10 py-3.5 text-base font-semibold transition-colors hover:opacity-90"
           style={{
@@ -138,7 +141,7 @@ export function EvaluacionIntro({
             color: "#0A1428",
           }}
         >
-          Comenzar Evaluación
+          {t('startButton')}
         </button>
       </div>
     </div>

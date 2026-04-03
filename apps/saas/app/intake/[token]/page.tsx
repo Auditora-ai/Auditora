@@ -146,11 +146,22 @@ export default function IntakePage() {
 	}
 
 	return (
-		<div className="min-h-screen bg-muted py-8">
-			<div className="mx-auto max-w-2xl px-4">
+		<div className="min-h-screen bg-muted">
+			{/* Branding bar */}
+			<div className="border-b border-border bg-background px-4 py-3">
+				<div className="mx-auto flex max-w-2xl items-center justify-between">
+					<span className="text-lg tracking-tight leading-none">
+						<span className="font-black text-foreground">Audit</span>
+						<span className="font-light text-muted-foreground">ora</span>
+						<span className="font-light text-blue-600">.ai</span>
+					</span>
+					<span className="text-xs text-muted-foreground">Preparación de sesión</span>
+				</div>
+			</div>
+
+			<div className="mx-auto max-w-2xl px-4 py-8">
 				{/* Header */}
 				<div className="mb-8">
-					<div className="mb-1 text-sm font-medium text-blue-600">Auditora.ai</div>
 					<h1 className="mb-2 text-2xl font-semibold text-foreground">
 						Preparación para sesión de levantamiento
 					</h1>
@@ -226,10 +237,10 @@ export default function IntakePage() {
 					</button>
 				</div>
 
-				<p className="mt-4 text-center text-xs text-muted-foreground">
-					Powered by Auditora.ai — Plataforma de levantamiento de procesos con IA
-				</p>
-			</div>
+			<p className="mt-4 text-center text-xs text-muted-foreground">
+				Powered by Auditora.ai — Plataforma de levantamiento de procesos con IA
+			</p>
+				</div>
 		</div>
 	);
 }

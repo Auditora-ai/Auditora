@@ -35,7 +35,7 @@ function scoreColor(score: number): string {
 }
 
 function scoreLabel(score: number): string {
-  if (score >= 20) return "Critico";
+  if (score >= 20) return "Crítico";
   if (score >= 12) return "Alto";
   if (score >= 6) return "Medio";
   return "Bajo";
@@ -45,9 +45,9 @@ function riskTypeLabel(type: string): string {
   const map: Record<string, string> = {
     OPERATIONAL: "Operacional",
     COMPLIANCE: "Cumplimiento",
-    STRATEGIC: "Estrategico",
+    STRATEGIC: "Estratégico",
     FINANCIAL: "Financiero",
-    TECHNOLOGY: "Tecnologia",
+    TECHNOLOGY: "Tecnología",
     HUMAN_RESOURCE: "RRHH",
     REPUTATIONAL: "Reputacional",
   };

@@ -10,6 +10,7 @@ import {
 	VideoIcon,
 	BarChart3Icon,
 	ActivityIcon,
+	ClipboardListIcon,
 } from "lucide-react";
 import { useProcessWorkspace } from "../../context/ProcessWorkspaceContext";
 import { NodeContextPanel } from "./NodeContextPanel";
@@ -20,12 +21,14 @@ import { SidebarRiskTab } from "../sidebar-tabs/SidebarRiskTab";
 import { EvalFeedbackTab } from "../sidebar-tabs/EvalFeedbackTab";
 import { VersionesTab } from "../sidebar-tabs/VersionesTab";
 import { SessionesTab } from "../sidebar-tabs/SessionesTab";
+import { SidebarProceduresTab } from "../sidebar-tabs/SidebarProceduresTab";
 import { ActivityTimeline } from "@collaboration/components/ActivityTimeline";
 import type { ProcessData } from "../../types";
 
 const TABS = [
 	{ key: "resumen", label: "Resumen", icon: LayoutDashboardIcon },
 	{ key: "contexto", label: "Contexto", icon: FileTextIcon },
+	{ key: "procedimientos", label: "SOPs", icon: ClipboardListIcon },
 	{ key: "raci", label: "RACI", icon: Table2Icon },
 	{ key: "riesgos", label: "Riesgos", icon: ShieldAlertIcon },
 	{ key: "evalFeedback", label: "Eval", icon: BarChart3Icon },
@@ -94,6 +97,13 @@ export function ContextSidebar({ process, organizationSlug, processesPath, onUpd
 						organizationSlug={organizationSlug}
 						processesPath={processesPath}
 						onUpdate={onUpdate}
+					/>
+				)}
+				{activeTab === "procedimientos" && (
+					<SidebarProceduresTab
+						processId={process.id}
+						processName={process.name}
+						organizationSlug={organizationSlug}
 					/>
 				)}
 				{activeTab === "raci" && <SidebarRaciTab processId={process.id} />}

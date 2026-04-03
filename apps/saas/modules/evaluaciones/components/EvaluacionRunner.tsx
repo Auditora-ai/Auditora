@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { useTranslations } from 'next-intl';
 
 interface DecisionOption {
   label: string;
@@ -36,6 +37,7 @@ export function EvaluacionRunner({
   respondEndpoint,
   onComplete,
 }: EvaluacionRunnerProps) {
+  const t = useTranslations('evaluaciones.runner');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>("decision");
   const [consequenceText, setConsequenceText] = useState<string | null>(null);
@@ -250,7 +252,7 @@ export function EvaluacionRunner({
       <div className="mb-8">
         <div className="mb-2 flex items-center justify-between">
           <span className="text-xs" style={{ color: "#94A3B8" }}>
-            Decisión {currentIndex + 1} de {total}
+            {t('decisionOf', { current: currentIndex + 1, total })}
           </span>
           <span className="text-xs" style={{ color: "#64748B" }}>
             {Math.round(((currentIndex + 1) / total) * 100)}%
@@ -292,7 +294,7 @@ export function EvaluacionRunner({
                 }}
               >
                 <p className="text-[10px] font-medium uppercase tracking-wider" style={{ color: "#3B8FE8" }}>
-                  Referencia procedimental
+                  {t('proceduralReference')}
                 </p>
                 <p className="mt-1 text-xs leading-relaxed" style={{ color: "#94A3B8" }}>
                   {current.proceduralReference}
@@ -305,6 +307,7 @@ export function EvaluacionRunner({
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {options.map((option, idx) => (
               <button
+                type="button"
                 key={idx}
                 onClick={() => handleOptionClick(idx)}
                 disabled={submitting}

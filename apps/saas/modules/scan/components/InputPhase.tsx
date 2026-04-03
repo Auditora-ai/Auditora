@@ -58,7 +58,7 @@ export function InputPhase({ defaultUrl, error, onSubmit }: InputPhaseProps) {
       <motion.div variants={itemVariants} className="mb-6 flex justify-center">
         <span className="inline-flex items-center gap-2 bg-[#3B8FE8]/15 text-[#3B8FE8] rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest">
           <Globe className="h-3.5 w-3.5" />
-          Free scan
+          Escaneo gratuito
         </span>
       </motion.div>
 
@@ -67,9 +67,9 @@ export function InputPhase({ defaultUrl, error, onSubmit }: InputPhaseProps) {
         variants={itemVariants}
         className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl"
       >
-        Scan your{" "}
+        Escanea tus{" "}
         <span className="bg-gradient-to-r from-[#3B8FE8] to-cyan-400 bg-clip-text text-transparent">
-          operations
+          operaciones
         </span>
       </motion.h1>
 
@@ -78,8 +78,8 @@ export function InputPhase({ defaultUrl, error, onSubmit }: InputPhaseProps) {
         variants={itemVariants}
         className="mx-auto mt-4 max-w-md text-lg text-[#94A3B8]"
       >
-        Paste any company website. We'll identify critical processes and
-        operational vulnerabilities in 60 seconds.
+        Pega cualquier sitio web. Identificaremos procesos críticos y
+        vulnerabilidades operativas en 60 segundos.
       </motion.p>
 
       {/* Error message */}
@@ -138,7 +138,7 @@ export function InputPhase({ defaultUrl, error, onSubmit }: InputPhaseProps) {
                 onFocus={() => setFocused(true)}
                 onBlur={() => setFocused(false)}
                 placeholder="https://company.com"
-                className="flex-1 bg-transparent text-white placeholder:text-white/30 outline-none text-base"
+                className="flex-1 bg-transparent text-white placeholder:text-white/30 outline-none text-[16px]"
                 autoFocus
               />
             </div>
@@ -149,7 +149,7 @@ export function InputPhase({ defaultUrl, error, onSubmit }: InputPhaseProps) {
               whileTap={{ scale: 0.97 }}
               className="shrink-0 inline-flex items-center gap-2 rounded-xl bg-[#3B8FE8] px-5 py-3 text-sm font-bold text-[#0A1428] shadow-[0_0_30px_rgba(59,143,232,0.15)] transition-colors hover:bg-[#2E7FD6] min-h-[44px]"
             >
-              Scan
+              Escanear
               <ArrowRight className="h-4 w-4" />
             </motion.button>
           </div>
@@ -161,7 +161,7 @@ export function InputPhase({ defaultUrl, error, onSubmit }: InputPhaseProps) {
         variants={itemVariants}
         className="mt-5 text-sm text-white/40"
       >
-        No signup required. Free surface-level analysis.
+        Sin registro. Análisis superficial gratuito.
       </motion.p>
 
       {/* Hidden Turnstile */}

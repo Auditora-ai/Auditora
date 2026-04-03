@@ -1,14 +1,10 @@
 import { redirect } from "next/navigation";
 
-export default function EvaluationRedirectPage({
+export default async function EvaluationRedirectPage({
 	params,
 }: {
 	params: Promise<{ organizationSlug: string }>;
 }) {
-	// Redirect to evaluaciones with dashboard tab active
-	params.then(({ organizationSlug }) => {
-		redirect(`/${organizationSlug}/evaluaciones?tab=dashboard`);
-	});
-
-	return null;
+	const { organizationSlug } = await params;
+	redirect(`/${organizationSlug}/evaluaciones?tab=dashboard`);
 }

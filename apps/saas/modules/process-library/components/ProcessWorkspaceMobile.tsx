@@ -18,6 +18,7 @@ import {
 	ShieldAlertIcon,
 	BarChart3Icon,
 	VideoIcon,
+	ClipboardListIcon,
 } from "lucide-react";
 import { ProcessWorkspaceProvider } from "../context/ProcessWorkspaceContext";
 import { CollaborationProvider } from "@collaboration/components/CollaborationProvider";
@@ -27,6 +28,7 @@ import { SidebarRaciTab } from "./sidebar-tabs/SidebarRaciTab";
 import { SidebarRiskTab } from "./sidebar-tabs/SidebarRiskTab";
 import { EvalFeedbackTab } from "./sidebar-tabs/EvalFeedbackTab";
 import { SessionesTab } from "./sidebar-tabs/SessionesTab";
+import { SidebarProceduresTab } from "./sidebar-tabs/SidebarProceduresTab";
 import { GenerateEvaluationDialog } from "./GenerateEvaluationDialog";
 import { STATUS_MAP } from "../types";
 import type { ProcessData } from "../types";
@@ -223,13 +225,20 @@ function MobileWorkspaceInner({
 								<FileTextIcon className="h-3 w-3" />
 								Contexto
 							</TabsTrigger>
-							<TabsTrigger
-								value="raci"
-								className="flex items-center gap-1 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
-							>
-								<Table2Icon className="h-3 w-3" />
-								RACI
-							</TabsTrigger>
+						<TabsTrigger
+						value="procedimientos"
+						className="flex items-center gap-1 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
+					>
+						<ClipboardListIcon className="h-3 w-3" />
+						SOPs
+					</TabsTrigger>
+						<TabsTrigger
+						value="raci"
+						className="flex items-center gap-1 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
+					>
+						<Table2Icon className="h-3 w-3" />
+						RACI
+					</TabsTrigger>
 							<TabsTrigger
 								value="riesgos"
 								className="flex items-center gap-1 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
@@ -267,8 +276,16 @@ function MobileWorkspaceInner({
 								/>
 							</TabsContent>
 
-							<TabsContent value="raci" className="mt-0">
-								<SidebarRaciTab processId={process.id} />
+					<TabsContent value="procedimientos" className="mt-0">
+							<SidebarProceduresTab
+								processId={process.id}
+								processName={process.name}
+								organizationSlug={organizationSlug}
+							/>
+						</TabsContent>
+
+						<TabsContent value="raci" className="mt-0">
+							<SidebarRaciTab processId={process.id} />
 							</TabsContent>
 
 							<TabsContent value="riesgos" className="mt-0">

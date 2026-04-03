@@ -65,7 +65,7 @@ export default async function ProcessDetailPage({
 				select: { id: true },
 			},
 			_count: {
-				select: { sessions: true, versions: true, raciEntries: true, conflicts: true, risks: true },
+				select: { sessions: true, versions: true, raciEntries: true, conflicts: true, risks: true, procedures: true },
 			},
 		},
 	});
@@ -130,6 +130,7 @@ export default async function ProcessDetailPage({
 				versionsCount: process._count.versions,
 				raciCount: process._count.raciEntries,
 				risksCount: process._count.risks,
+				proceduresCount: process._count.procedures,
 				hasIntelligence: !!process.intelligence,
 				conflictsCount: process._count.conflicts,
 			}}

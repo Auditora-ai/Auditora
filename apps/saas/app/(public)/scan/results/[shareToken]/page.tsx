@@ -97,10 +97,10 @@ export default async function SharedScanResultsPage({
 			<div className="min-h-screen bg-background flex items-center justify-center">
 				<div className="text-center px-6">
 					<h1 className="text-2xl font-serif text-foreground mb-2">
-						Link Expired
+						Enlace Expirado
 					</h1>
 					<p className="text-muted-foreground">
-						This shared scan link has expired. Scan results are available for 7 days after sharing.
+						Este enlace ha expirado. Los resultados del escaneo están disponibles por 7 días.
 					</p>
 				</div>
 			</div>
@@ -115,9 +115,9 @@ export default async function SharedScanResultsPage({
 				{/* Header */}
 				<div className="mb-8">
 					<div className="flex items-center gap-2 mb-1">
-						<span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-							Operational Risk Scan
-						</span>
+					<span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+						Escaneo de Riesgo Operativo
+					</span>
 					</div>
 					<h1 className="text-3xl font-serif text-foreground">
 						{analysis.companyName}
@@ -136,9 +136,9 @@ export default async function SharedScanResultsPage({
 				{/* Vulnerability Score */}
 				<div className="mb-8 p-6 border border-border rounded-lg">
 					<div className="flex items-center justify-between mb-3">
-						<h2 className="text-lg font-medium text-foreground">
-							Vulnerability Score
-						</h2>
+					<h2 className="text-lg font-medium text-foreground">
+						Puntuación de Vulnerabilidad
+					</h2>
 						<span
 							className={`text-3xl font-bold bg-gradient-to-r ${scoreGradient(analysis.vulnerabilityScore)} bg-clip-text text-transparent`}
 						>
@@ -155,9 +155,9 @@ export default async function SharedScanResultsPage({
 
 				{/* Executive Summary */}
 				<div className="mb-8 p-6 bg-muted/50 border border-border rounded-lg">
-					<h2 className="text-lg font-medium text-foreground mb-2">
-						Executive Summary
-					</h2>
+				<h2 className="text-lg font-medium text-foreground mb-2">
+					Resumen Ejecutivo
+				</h2>
 					<p className="text-sm text-muted-foreground leading-relaxed">
 						{analysis.summary}
 					</p>
@@ -165,9 +165,9 @@ export default async function SharedScanResultsPage({
 
 				{/* Business Processes */}
 				<div className="mb-8">
-					<h2 className="text-xl font-serif text-foreground mb-4 border-b border-border pb-2">
-						Critical Business Processes
-					</h2>
+				<h2 className="text-xl font-serif text-foreground mb-4 border-b border-border pb-2">
+					Procesos Críticos de Negocio
+				</h2>
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
 						{analysis.processes.map((process, idx) => (
 							<div
@@ -195,9 +195,9 @@ export default async function SharedScanResultsPage({
 				{/* Highest Risk Process Detail */}
 				{analysis.highestRiskProcess && (
 					<div className="mb-8">
-						<h2 className="text-xl font-serif text-foreground mb-4 border-b border-border pb-2">
-							Highest Risk: {analysis.highestRiskProcess.name}
-						</h2>
+					<h2 className="text-xl font-serif text-foreground mb-4 border-b border-border pb-2">
+						Mayor Riesgo: {analysis.highestRiskProcess.name}
+					</h2>
 						<div className="space-y-3">
 							{analysis.highestRiskProcess.risks.map((risk, idx) => (
 								<div
@@ -240,12 +240,12 @@ export default async function SharedScanResultsPage({
 
 				{/* Footer */}
 				<div className="text-center text-xs text-muted-foreground pt-8 border-t border-border space-y-1">
-					<p>
-						Generated on{" "}
-						{session.createdAt.toLocaleDateString("en-US", {
-							year: "numeric",
-							month: "long",
-							day: "numeric",
+				<p>
+					Generado el{" "}
+					{session.createdAt.toLocaleDateString("es-MX", {
+						year: "numeric",
+						month: "long",
+						day: "numeric",
 						})}
 					</p>
 					<p>Powered by Auditora.ai</p>

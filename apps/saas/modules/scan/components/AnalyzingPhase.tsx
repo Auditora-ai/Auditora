@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Globe,
   FileText,
-  Search,
+  Building2,
   ShieldAlert,
   Check,
   Loader2,
@@ -13,11 +13,11 @@ import {
 import type { ScanResult, ScanSSEEvent } from "../types";
 
 const STEPS = [
-  { label: "Connecting to website...", icon: Globe },
-  { label: "Reading business context...", icon: FileText },
-  { label: "Identifying industry & processes...", icon: Search },
-  { label: "Analyzing operational risks...", icon: ShieldAlert },
-] as const;
+  { label: "Conectando al sitio web", icon: Globe },
+  { label: "Leyendo contexto de negocio", icon: FileText },
+  { label: "Identificando industria y procesos", icon: Building2 },
+  { label: "Analizando riesgos operativos", icon: ShieldAlert },
+];
 
 const stepVariants = {
   hidden: { opacity: 0, y: 16 },
@@ -35,7 +35,7 @@ const stepVariants = {
 interface AnalyzingPhaseProps {
   url: string;
   turnstileToken: string | null;
-  onComplete: (data: ScanResult) => void;
+  onComplete: (result: ScanResult, sessionId: string) => void;
   onError: (message: string) => void;
 }
 
@@ -115,7 +115,7 @@ export function AnalyzingPhase({
                 setCompletedSteps(new Set([0, 1, 2, 3]));
                 setCurrentStep(4);
                 // Brief pause to show all checkmarks
-                setTimeout(() => onComplete(event.data), 800);
+                setTimeout(() => onComplete(event.data, (event as any).sessionId ?? ""), 800);
                 return;
               } else if (event.type === "error") {
                 onError(event.message);
@@ -144,7 +144,7 @@ export function AnalyzingPhase({
       {/* Header */}
       <div className="text-center">
         <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-          Analyzing...
+          Analizando...
         </h2>
         <p className="mt-2 text-[#94A3B8] text-sm truncate max-w-xs mx-auto">
           {url}
@@ -241,7 +241,7 @@ export function AnalyzingPhase({
                     animate={{ opacity: 1, x: 0 }}
                     className="ml-auto text-xs text-[#3B8FE8]/60"
                   >
-                    Done
+                    Listo
                   </motion.span>
                 )}
               </motion.div>

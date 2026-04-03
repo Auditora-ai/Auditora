@@ -14,6 +14,10 @@ import {
 import Link from "next/link";
 import type { ScanResult, ScanRisk } from "../types";
 
+const SIGNUP_URL = process.env.NEXT_PUBLIC_SAAS_URL
+  ? `${process.env.NEXT_PUBLIC_SAAS_URL}/signup`
+  : "/signup";
+
 /* ------------------------------------------------------------------ */
 /*  Animation variants                                                  */
 /* ------------------------------------------------------------------ */
@@ -46,9 +50,9 @@ function scoreColor(score: number): string {
 }
 
 function scoreLabel(score: number): string {
-  if (score > 60) return "High Risk";
-  if (score > 30) return "Medium Risk";
-  return "Low Risk";
+  if (score > 60) return "Riesgo Alto";
+  if (score > 30) return "Riesgo Medio";
+  return "Riesgo Bajo";
 }
 
 function severityBadge(severity: ScanRisk["severity"]) {
@@ -108,36 +112,62 @@ function useAnimatedCounter(target: number, duration = 1500) {
 interface ResultsPhaseProps {
   url: string;
   result: ScanResult;
+  sessionId: string | null;
   onReset: () => void;
 }
 
-export function ResultsPhase({ url, result, onReset }: ResultsPhaseProps) {
+export function ResultsPhase({ url, result, sessionId, onReset }: ResultsPhaseProps) {
   const animatedScore = useAnimatedCounter(result.vulnerabilityScore);
   const [copied, setCopied] = useState(false);
+  const [shareUrl, setShareUrl] = useState<string | null>(null);
+  const [sharing, setSharing] = useState(false);
 
   const color = scoreColor(result.vulnerabilityScore);
   const label = scoreLabel(result.vulnerabilityScore);
 
   const handleShare = useCallback(async () => {
-    const shareUrl = `${window.location.origin}/scan?url=${encodeURIComponent(url)}`;
-
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: `${result.companyName} - Operations Scan`,
-          text: `Check out the operational vulnerability scan for ${result.companyName}`,
-          url: shareUrl,
+    setSharing(true);
+    try {
+      // Get or create a persistent share link via the API
+      let finalUrl = shareUrl;
+      if (!finalUrl && sessionId) {
+        const res = await fetch("/api/public/scan/share", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sessionId }),
         });
-        return;
-      } catch {
-        // Fallback to clipboard
+        if (res.ok) {
+          const data = await res.json();
+          finalUrl = data.shareUrl;
+          setShareUrl(finalUrl);
+        }
       }
-    }
 
-    await navigator.clipboard.writeText(shareUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  }, [url, result.companyName]);
+      if (!finalUrl) {
+        // Fallback: share the scan URL
+        finalUrl = `${window.location.origin}/scan?url=${encodeURIComponent(url)}`;
+      }
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: `${result.companyName} — Análisis Operativo`,
+            text: `Mira el análisis de riesgo operativo de ${result.companyName}`,
+            url: finalUrl,
+          });
+          return;
+        } catch {
+          // Fallback to clipboard
+        }
+      }
+
+      await navigator.clipboard.writeText(finalUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } finally {
+      setSharing(false);
+    }
+  }, [url, result.companyName, sessionId, shareUrl]);
 
   return (
     <motion.div
@@ -170,7 +200,7 @@ export function ResultsPhase({ url, result, onReset }: ResultsPhaseProps) {
         className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-8 text-center shadow-[0_0_30px_rgba(59,143,232,0.05)]"
       >
         <p className="text-sm font-semibold uppercase tracking-widest text-[#94A3B8] mb-4">
-          Vulnerability Score
+          Puntuación de Vulnerabilidad
         </p>
 
         {/* Score gauge */}
@@ -235,7 +265,7 @@ export function ResultsPhase({ url, result, onReset }: ResultsPhaseProps) {
       {/* ---- Critical Processes Detected ---- */}
       <motion.div variants={fadeUp}>
         <h2 className="text-xl font-bold tracking-tight text-white mb-4">
-          Critical Processes Detected
+          Procesos Críticos Detectados
         </h2>
         <div className="grid gap-3 sm:grid-cols-2">
           {result.processes.map((process, i) => (
@@ -259,7 +289,7 @@ export function ResultsPhase({ url, result, onReset }: ResultsPhaseProps) {
       {/* ---- Highest Risk Process ---- */}
       <motion.div variants={fadeUp}>
         <h2 className="text-xl font-bold tracking-tight text-white mb-4">
-          Highest Risk Process
+          Proceso de Mayor Riesgo
         </h2>
         <div className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8 shadow-[0_0_30px_rgba(59,143,232,0.05)]">
           <div className="flex items-center gap-3 mb-5">
@@ -313,9 +343,9 @@ export function ResultsPhase({ url, result, onReset }: ResultsPhaseProps) {
       >
         <Info className="h-4 w-4 mt-0.5 shrink-0 text-white/30" />
         <p className="text-xs text-white/40 leading-relaxed">
-          This is a surface-level scan based on publicly available information.
-          For a comprehensive assessment including internal processes, risk
-          matrices, and actionable recommendations, create a full diagnosis.
+          Este es un análisis superficial basado en información pública.
+          Para una evaluación completa que incluya procesos internos, matrices
+          de riesgo y recomendaciones accionables, crea un diagnóstico completo.
         </p>
       </motion.div>
 
@@ -326,10 +356,10 @@ export function ResultsPhase({ url, result, onReset }: ResultsPhaseProps) {
       >
         {/* Primary CTA — deep analysis via interview */}
         <Link
-          href="interview"
+          href={SIGNUP_URL}
           className="group relative inline-flex items-center justify-center gap-2 rounded-xl bg-[#3B8FE8] px-7 py-3.5 text-sm font-bold text-white shadow-[0_0_30px_rgba(59,143,232,0.15)] transition-all duration-300 hover:bg-[#2E7FD6] hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(59,143,232,0.25)] min-h-[44px]"
         >
-          Diagnóstico completo
+          Regístrate para diagnóstico completo
           <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
         </Link>
 
