@@ -42,11 +42,11 @@ export function MaturityFlow({ currentStatus, onStatusChange, hasBpmn, hasRaci }
 						type="button"
 						onClick={() => canClick && onStatusChange(step.key)}
 						disabled={!canClick}
-						className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium transition-colors ${
+						className={`flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium transition-colors sm:px-2 sm:py-0.5 sm:text-[10px] ${
 							isActive
-								? "bg-primary text-white"
+								? "bg-primary text-primary-foreground"
 								: isPast
-									? "bg-blue-100 text-blue-800"
+									? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300"
 									: canClick
 										? "bg-muted text-muted-foreground hover:bg-border cursor-pointer"
 										: "bg-secondary text-muted-foreground/50 cursor-not-allowed"

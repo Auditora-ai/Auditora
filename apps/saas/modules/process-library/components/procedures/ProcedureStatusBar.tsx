@@ -40,9 +40,9 @@ export function ProcedureStatusBar({ status, onStatusChange }: ProcedureStatusBa
 	};
 
 	return (
-		<div className="flex items-center justify-between rounded-xl border border-border/50 bg-card px-4 py-3">
+		<div className="flex flex-col gap-3 rounded-xl border border-border/50 bg-card px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
 			{/* Stepper */}
-			<div className="flex items-center gap-1">
+			<div className="flex items-center gap-1 overflow-x-auto">
 				{steps.map((step, i) => {
 					const isCompleted = i < currentIndex;
 					const isCurrent = i === currentIndex;

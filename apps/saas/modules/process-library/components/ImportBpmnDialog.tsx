@@ -105,10 +105,13 @@ export function ImportBpmnDialog({
 
 				<div className="space-y-4">
 					<div
-						className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-border p-8 transition-colors hover:border-primary hover:bg-accent/30"
+						role="button"
+						tabIndex={0}
+						aria-label="Select a BPMN file to import"
+						className="flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-border p-8 transition-colors hover:border-primary hover:bg-accent/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
 						onClick={() => inputRef.current?.click()}
 						onKeyDown={(e) =>
-							e.key === "Enter" && inputRef.current?.click()
+							(e.key === "Enter" || e.key === " ") && inputRef.current?.click()
 						}
 					>
 						<input

@@ -16,7 +16,6 @@ import {
 	FileText,
 	PlayIcon,
 	ChevronRightIcon,
-	User,
 	ShareIcon,
 	TrashIcon,
 	MoreHorizontalIcon,
@@ -160,8 +159,8 @@ export function WorkspaceHeader({
 			{/* Left: Back + Name + Status */}
 			<div className="flex items-center gap-3 min-w-0">
 				<Link href={processesPath}>
-					<Button variant="ghost" size="icon" className="h-8 w-8 shrink-0">
-						<ArrowLeft className="h-4 w-4" />
+				<Button variant="ghost" size="icon" className="h-10 w-10 sm:h-8 sm:w-8 shrink-0">
+					<ArrowLeft className="h-4 w-4" />
 					</Button>
 				</Link>
 
@@ -253,8 +252,8 @@ export function WorkspaceHeader({
 
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
-						<Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-							<MoreHorizontalIcon className="h-4 w-4" />
+					<Button variant="ghost" size="sm" className="h-10 w-10 p-0 sm:h-8 sm:w-8">
+						<MoreHorizontalIcon className="h-4 w-4" />
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="end">
@@ -280,8 +279,8 @@ export function WorkspaceHeader({
 				<Button
 					variant="ghost"
 					size="sm"
-					className="h-8 w-8 p-0"
-					onClick={toggleSidebar}
+				className="h-10 w-10 p-0 sm:h-8 sm:w-8"
+				onClick={toggleSidebar}
 					title={sidebarCollapsed ? "Mostrar panel" : "Ocultar panel"}
 				>
 					{sidebarCollapsed ? (

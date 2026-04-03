@@ -1,12 +1,9 @@
 "use client";
 
 import { useMemo } from "react";
-import { Badge } from "@repo/ui/components/badge";
 import {
-	CheckCircleIcon,
 	AlertCircleIcon,
 	CircleIcon,
-	FileTextIcon,
 	Table2Icon,
 	ShieldAlertIcon,
 	GitBranchIcon,

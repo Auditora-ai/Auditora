@@ -21,10 +21,10 @@ interface RaciTabProps {
 }
 
 const ASSIGNMENT_COLORS: Record<string, string> = {
-	RESPONSIBLE: "bg-emerald-100 text-emerald-800",
-	ACCOUNTABLE: "bg-blue-100 text-blue-800",
-	CONSULTED: "bg-amber-100 text-amber-800",
-	INFORMED: "bg-purple-100 text-purple-800",
+	RESPONSIBLE: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400",
+	ACCOUNTABLE: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
+	CONSULTED: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400",
+	INFORMED: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
 };
 
 const ASSIGNMENT_LABELS: Record<string, string> = {
@@ -326,7 +326,7 @@ export function RaciTab({ processId }: RaciTabProps) {
 												>
 													{val && (
 														<span
-															className={`inline-flex h-7 w-7 items-center justify-center rounded-md text-xs font-bold ${ASSIGNMENT_COLORS[val] || ""}`}
+															className={`inline-flex h-9 w-9 items-center justify-center rounded-md text-xs font-bold sm:h-7 sm:w-7 ${ASSIGNMENT_COLORS[val] || ""}`}
 														>
 															{ASSIGNMENT_LABELS[val] || val}
 														</span>

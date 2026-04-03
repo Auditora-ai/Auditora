@@ -212,13 +212,12 @@ export function ProcessLibrary({
 			)}
 
 			{/* Add process modal */}
-			{showAddModal && (
-				<AddProcessModal
-					organizationId={organizationId}
-					onClose={() => setShowAddModal(false)}
-					onCreated={handleProcessAccepted}
-				/>
-			)}
+			<AddProcessModal
+				organizationId={organizationId}
+				open={showAddModal}
+				onOpenChange={setShowAddModal}
+				onCreated={handleProcessAccepted}
+			/>
 
 			{/* Import BPMN dialog */}
 			<ImportBpmnDialog

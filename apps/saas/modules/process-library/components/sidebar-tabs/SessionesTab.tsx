@@ -70,7 +70,7 @@ export function SessionesTab({ sessions, organizationSlug, processId }: Sessione
 							<span>{new Date(session.createdAt).toLocaleDateString()}</span>
 						</div>
 					</div>
-					<Button size="sm" variant="ghost" className="h-6 w-6 p-0" asChild>
+					<Button size="sm" variant="ghost" className="h-9 w-9 p-0 sm:h-6 sm:w-6" asChild>
 						{session.status === "ACTIVE" || session.status === "CONNECTING" ? (
 							<Link href={`/${organizationSlug}/session/${session.id}/live`}>
 								<PlayIcon className="h-3.5 w-3.5" />

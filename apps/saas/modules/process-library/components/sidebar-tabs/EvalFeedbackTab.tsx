@@ -9,10 +9,6 @@ import {
 } from "lucide-react";
 import type { ProcessEvalFeedbackData, EvalStepFeedback } from "../../types";
 
-interface EvalFeedbackTabProps {
-	evalFeedback?: ProcessEvalFeedbackData;
-}
-
 function getRiskBadge(failureRate: number) {
 	if (failureRate <= 20) {
 		return {
@@ -42,6 +38,20 @@ function getRiskBadge(failureRate: number) {
 	};
 }
 
+/** Returns Tailwind text color class based on failure rate threshold */
+function getFailureRateColor(rate: number): string {
+	if (rate > 50) return "text-red-600 dark:text-red-400";
+	if (rate > 20) return "text-yellow-600 dark:text-yellow-400";
+	return "text-green-600 dark:text-green-400";
+}
+
+/** Returns Tailwind bg color class for progress bars */
+function getFailureRateBg(rate: number): string {
+	if (rate > 50) return "bg-red-500";
+	if (rate > 20) return "bg-yellow-500";
+	return "bg-green-500";
+}
+
 function StepFeedbackCard({ step }: { step: EvalStepFeedback }) {
 	const risk = getRiskBadge(step.failureRate);
 	const RiskIcon = risk.icon;
@@ -64,7 +74,7 @@ function StepFeedbackCard({ step }: { step: EvalStepFeedback }) {
 					</p>
 				</div>
 				<div className="shrink-0 text-right">
-					<div className="text-lg font-bold tabular-nums" style={{ color: step.failureRate > 50 ? "#DC2626" : step.failureRate > 20 ? "#EAB308" : "#16A34A" }}>
+					<div className={`text-lg font-bold tabular-nums ${getFailureRateColor(step.failureRate)}`}>
 						{step.failureRate}%
 					</div>
 					<div className="text-[9px] text-muted-foreground">failure rate</div>
@@ -74,11 +84,8 @@ function StepFeedbackCard({ step }: { step: EvalStepFeedback }) {
 			{/* Progress bar */}
 			<div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
 				<div
-					className="h-full rounded-full transition-all"
-					style={{
-						width: `${step.failureRate}%`,
-						background: step.failureRate > 50 ? "#DC2626" : step.failureRate > 20 ? "#EAB308" : "#16A34A",
-					}}
+					className={`h-full rounded-full transition-all ${getFailureRateBg(step.failureRate)}`}
+					style={{ width: `${step.failureRate}%` }}
 				/>
 			</div>
 
@@ -97,7 +104,7 @@ function StepFeedbackCard({ step }: { step: EvalStepFeedback }) {
 	);
 }
 
-export function EvalFeedbackTab({ evalFeedback }: EvalFeedbackTabProps) {
+export function EvalFeedbackTab({ evalFeedback }: { evalFeedback?: ProcessEvalFeedbackData }) {
 	if (!evalFeedback || !evalFeedback.hasData) {
 		return (
 			<div className="flex flex-col items-center justify-center py-12 text-center">
@@ -145,7 +152,7 @@ export function EvalFeedbackTab({ evalFeedback }: EvalFeedbackTabProps) {
 					<div className="text-[9px] text-muted-foreground">Evaluations</div>
 				</div>
 				<div className="rounded-lg border border-border p-2 text-center">
-					<div className="text-lg font-bold tabular-nums" style={{ color: criticalSteps > 0 ? "#DC2626" : "#16A34A" }}>
+					<div className={`text-lg font-bold tabular-nums ${criticalSteps > 0 ? "text-red-600 dark:text-red-400" : "text-green-600 dark:text-green-400"}`}>
 						{criticalSteps}
 					</div>
 					<div className="text-[9px] text-muted-foreground">Critical Steps</div>
@@ -157,17 +164,14 @@ export function EvalFeedbackTab({ evalFeedback }: EvalFeedbackTabProps) {
 				<div className="rounded-lg border border-border p-2.5">
 					<div className="flex items-center justify-between mb-1.5">
 						<span className="text-xs font-medium">Average Step Failure Rate</span>
-						<span className="text-xs font-bold tabular-nums" style={{ color: avgFailureRate > 50 ? "#DC2626" : avgFailureRate > 20 ? "#EAB308" : "#16A34A" }}>
+						<span className={`text-xs font-bold tabular-nums ${getFailureRateColor(avgFailureRate)}`}>
 							{avgFailureRate}%
 						</span>
 					</div>
 					<div className="h-2 w-full rounded-full bg-muted overflow-hidden">
 						<div
-							className="h-full rounded-full transition-all"
-							style={{
-								width: `${avgFailureRate}%`,
-								background: avgFailureRate > 50 ? "#DC2626" : avgFailureRate > 20 ? "#EAB308" : "#16A34A",
-							}}
+							className={`h-full rounded-full transition-all ${getFailureRateBg(avgFailureRate)}`}
+							style={{ width: `${avgFailureRate}%` }}
 						/>
 					</div>
 				</div>

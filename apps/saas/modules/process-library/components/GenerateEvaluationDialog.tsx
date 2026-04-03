@@ -194,11 +194,11 @@ export function GenerateEvaluationDialog({
 								{risks.map((risk) => (
 									<label
 										key={risk.id}
-										className="flex items-start gap-2 cursor-pointer hover:bg-accent p-1 rounded"
+										className="flex items-start gap-2 cursor-pointer hover:bg-accent p-2 rounded min-h-[44px]"
 									>
 										<input
 											type="checkbox"
-											className="mt-0.5 h-4 w-4 rounded border-border accent-primary"
+											className="mt-0.5 h-5 w-5 rounded border-border accent-primary"
 											checked={selectedRiskIds.includes(
 												risk.id,
 											)}

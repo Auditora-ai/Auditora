@@ -133,7 +133,7 @@ export function CrossProcessRiskDashboard() {
       <CardContent>
         {/* Summary row */}
         {orgSummary && (
-          <div className="grid grid-cols-4 gap-3 mb-4">
+          <div className="grid grid-cols-1 gap-3 mb-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
               {
                 icon: AlertTriangleIcon,

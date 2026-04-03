@@ -1,6 +1,13 @@
 "use client";
 
 import { Button } from "@repo/ui/components/button";
+import {
+	Dialog,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from "@repo/ui/components/dialog";
 import { Input } from "@repo/ui/components/input";
 import {
 	Select,
@@ -10,19 +17,20 @@ import {
 	SelectValue,
 } from "@repo/ui/components/select";
 import { Textarea } from "@repo/ui/components/textarea";
-import { XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 interface AddProcessModalProps {
 	organizationId: string;
-	onClose: () => void;
+	open: boolean;
+	onOpenChange: (open: boolean) => void;
 	onCreated: () => void;
 }
 
 export function AddProcessModal({
 	organizationId,
-	onClose,
+	open,
+	onOpenChange,
 	onCreated,
 }: AddProcessModalProps) {
 	const tc = useTranslations("common");
@@ -62,7 +70,11 @@ export function AddProcessModal({
 			}
 
 			onCreated();
-			onClose();
+			onOpenChange(false);
+			setName("");
+			setDescription("");
+			setLevel("PROCESS");
+			setCategory("core");
 		} catch {
 			setError(tc("errorSaving"));
 		} finally {
@@ -71,19 +83,11 @@ export function AddProcessModal({
 	};
 
 	return (
-		<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-			<div className="w-full max-w-md rounded-lg bg-card p-6 shadow-lg">
-				<div className="mb-4 flex items-center justify-between">
-					<h2 className="text-lg font-semibold">Agregar Proceso</h2>
-					<Button
-						variant="ghost"
-						size="icon"
-						onClick={onClose}
-						className="size-8"
-					>
-						<XIcon className="size-4" />
-					</Button>
-				</div>
+		<Dialog open={open} onOpenChange={onOpenChange}>
+			<DialogContent className="sm:max-w-md">
+				<DialogHeader>
+					<DialogTitle>{tc("addProcess")}</DialogTitle>
+				</DialogHeader>
 
 				<form onSubmit={handleSubmit} className="space-y-4">
 					<div>
@@ -91,13 +95,13 @@ export function AddProcessModal({
 							htmlFor="process-name"
 							className="mb-1 block text-sm font-medium"
 						>
-							Nombre *
+							{tc("name")} *
 						</label>
 						<Input
 							id="process-name"
 							value={name}
 							onChange={(e) => setName(e.target.value)}
-							placeholder="Ej: Gestión de Compras"
+							placeholder={tc("processNamePlaceholder")}
 							autoFocus
 						/>
 					</div>
@@ -107,7 +111,7 @@ export function AddProcessModal({
 							htmlFor="process-desc"
 							className="mb-1 block text-sm font-medium"
 						>
-							Descripción
+							{tc("description")}
 						</label>
 						<Textarea
 							id="process-desc"
@@ -121,7 +125,7 @@ export function AddProcessModal({
 					<div className="grid grid-cols-2 gap-3">
 						<div>
 							<label className="mb-1 block text-sm font-medium">
-								Nivel
+								{tc("level")}
 							</label>
 							<Select value={level} onValueChange={setLevel}>
 								<SelectTrigger>
@@ -129,14 +133,14 @@ export function AddProcessModal({
 								</SelectTrigger>
 								<SelectContent>
 									<SelectItem value="PROCESS">
-										Proceso
+										{tc("process")}
 									</SelectItem>
 									<SelectItem value="SUBPROCESS">
-										Subproceso
+										{tc("subprocess")}
 									</SelectItem>
-									<SelectItem value="TASK">Tarea</SelectItem>
+									<SelectItem value="TASK">{tc("task")}</SelectItem>
 									<SelectItem value="PROCEDURE">
-										Procedimiento
+										{tc("procedure")}
 									</SelectItem>
 								</SelectContent>
 							</Select>
@@ -144,7 +148,7 @@ export function AddProcessModal({
 
 						<div>
 							<label className="mb-1 block text-sm font-medium">
-								Categoría
+								{tc("category")}
 							</label>
 							<Select
 								value={category}
@@ -156,10 +160,10 @@ export function AddProcessModal({
 								<SelectContent>
 									<SelectItem value="core">Core</SelectItem>
 									<SelectItem value="strategic">
-										Estratégico
+										{tc("strategic")}
 									</SelectItem>
 									<SelectItem value="support">
-										Soporte
+										{tc("support")}
 									</SelectItem>
 								</SelectContent>
 							</Select>
@@ -170,23 +174,23 @@ export function AddProcessModal({
 						<p className="text-sm text-destructive">{error}</p>
 					)}
 
-					<div className="flex justify-end gap-2">
+					<DialogFooter>
 						<Button
 							type="button"
 							variant="outline"
-							onClick={onClose}
+							onClick={() => onOpenChange(false)}
 						>
-							Cancelar
+							{tc("cancel")}
 						</Button>
 						<Button
 							type="submit"
 							disabled={!name.trim() || isSubmitting}
 						>
-							{isSubmitting ? "Creando..." : "Crear Proceso"}
+							{isSubmitting ? tc("creating") : tc("create")}
 						</Button>
-					</div>
+					</DialogFooter>
 				</form>
-			</div>
-		</div>
+			</DialogContent>
+		</Dialog>
 	);
 }

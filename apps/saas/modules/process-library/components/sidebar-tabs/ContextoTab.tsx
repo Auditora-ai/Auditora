@@ -5,12 +5,12 @@ import { Button } from "@repo/ui/components/button";
 import { Input } from "@repo/ui/components/input";
 import { Textarea } from "@repo/ui/components/textarea";
 import { Label } from "@repo/ui/components/label";
-import { Badge } from "@repo/ui/components/badge";
+import { Badge } from "@repo/ui/components/badge"; // used in TagFieldCompact
 import { SaveIcon, PlusIcon, XIcon } from "lucide-react";
 import { toastSuccess, toastError } from "@repo/ui/components/toast";
 import { useTranslations } from "next-intl";
 import { ContextChat } from "../ContextChat";
-import type { ProcessData, ProcessChild } from "../../types";
+import type { ProcessData } from "../../types";
 
 interface ContextoTabProps {
 	process: ProcessData;
@@ -120,7 +120,7 @@ function TagFieldCompact({
 						<button
 							type="button"
 							onClick={() => onChange(items.filter((_, j) => j !== i))}
-							className="ml-0.5 rounded-full p-0.5 hover:bg-muted"
+							className="ml-0.5 rounded-full p-1 hover:bg-muted sm:p-0.5"
 						>
 							<XIcon className="h-3.5 w-3.5" />
 						</button>
@@ -135,7 +135,7 @@ function TagFieldCompact({
 					onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); add(); } }}
 					className="flex-1 text-xs h-7"
 				/>
-				<Button variant="secondary" size="sm" onClick={add} disabled={!input.trim()} className="h-7 w-7 p-0">
+				<Button variant="secondary" size="sm" onClick={add} disabled={!input.trim()} className="h-9 w-9 p-0 sm:h-7 sm:w-7">
 					<PlusIcon className="h-3.5 w-3.5" />
 				</Button>
 			</div>

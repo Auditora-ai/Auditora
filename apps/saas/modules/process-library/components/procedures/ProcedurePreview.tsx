@@ -111,7 +111,7 @@ export function ProcedurePreview({
 				<p className="mt-1 text-sm text-muted-foreground">{processName}</p>
 
 				{/* Meta grid */}
-				<div className="mt-5 grid grid-cols-3 gap-3">
+				<div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
 					{responsible && (
 						<MetaField icon={<UserIcon className="h-3 w-3" />} label="Responsable" value={responsible} />
 					)}
@@ -234,8 +234,8 @@ export function ProcedurePreview({
 			)}
 
 			{indicators.length > 0 && (
-				<DocSection num={nextSection()} title="Indicadores de Desempeño">
-					<div className="grid grid-cols-2 gap-3">
+			<DocSection num={nextSection()} title="Indicadores de Desempeño">
+				<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 						{indicators.map((ind: any, i: number) => (
 							<div key={i} className="rounded-lg border border-border/40 p-3">
 								<p className="text-xs font-medium text-foreground">{typeof ind === "string" ? ind : ind.name}</p>

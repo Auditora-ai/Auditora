@@ -41,7 +41,7 @@ export type ProcessCardData = {
 
 const statusBadge: Record<string, "info" | "success" | "warning"> = {
 	DRAFT: "info",
-	MAPPED: "info",
+	MAPPED: "warning",
 	VALIDATED: "warning",
 	APPROVED: "success",
 };
@@ -78,7 +78,7 @@ export function ProcessCard({
 						</Badge>
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
-								<Button variant="ghost" size="sm" className="h-7 w-7 p-0">
+								<Button variant="ghost" size="sm" className="h-9 w-9 p-0 sm:h-7 sm:w-7">
 									<MoreHorizontalIcon className="size-4" />
 								</Button>
 							</DropdownMenuTrigger>

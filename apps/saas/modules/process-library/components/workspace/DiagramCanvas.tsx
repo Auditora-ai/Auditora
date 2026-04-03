@@ -8,8 +8,6 @@ import {
 	SaveIcon,
 	XIcon,
 	EyeIcon,
-	MessageSquareIcon,
-	SparklesIcon,
 	Undo2Icon,
 	Redo2Icon,
 	ZoomInIcon,
@@ -206,19 +204,19 @@ export function DiagramCanvas({ processId, bpmnXml, raciEntries, evalFeedback }:
 						<div className="mx-1.5 h-4 w-px bg-border" />
 					</>
 				)}
-				<Button variant="ghost" size="sm" onClick={undo} disabled={!canUndo} className="h-7 w-7 p-0">
-					<Undo2Icon className="h-3.5 w-3.5" />
-				</Button>
-				<Button variant="ghost" size="sm" onClick={redo} disabled={!canRedo} className="h-7 w-7 p-0">
-					<Redo2Icon className="h-3.5 w-3.5" />
-				</Button>
-				<div className="mx-1.5 h-4 w-px bg-border" />
-				<Button variant="ghost" size="sm" onClick={zoomIn} className="h-7 w-7 p-0">
-					<ZoomInIcon className="h-3.5 w-3.5" />
-				</Button>
-				<Button variant="ghost" size="sm" onClick={zoomOut} className="h-7 w-7 p-0">
-					<ZoomOutIcon className="h-3.5 w-3.5" />
-				</Button>
+			<Button variant="ghost" size="sm" onClick={undo} disabled={!canUndo} className="h-9 w-9 p-0 sm:h-7 sm:w-7">
+				<Undo2Icon className="h-3.5 w-3.5" />
+			</Button>
+			<Button variant="ghost" size="sm" onClick={redo} disabled={!canRedo} className="h-9 w-9 p-0 sm:h-7 sm:w-7">
+				<Redo2Icon className="h-3.5 w-3.5" />
+			</Button>
+			<div className="mx-1.5 h-4 w-px bg-border" />
+			<Button variant="ghost" size="sm" onClick={zoomIn} className="h-9 w-9 p-0 sm:h-7 sm:w-7">
+				<ZoomInIcon className="h-3.5 w-3.5" />
+			</Button>
+			<Button variant="ghost" size="sm" onClick={zoomOut} className="h-9 w-9 p-0 sm:h-7 sm:w-7">
+				<ZoomOutIcon className="h-3.5 w-3.5" />
+			</Button>
 				<Button variant="ghost" size="sm" onClick={zoomFit} className="h-7 text-xs">
 					<MaximizeIcon className="h-3.5 w-3.5 mr-1" />
 					Ajustar
@@ -229,7 +227,7 @@ export function DiagramCanvas({ processId, bpmnXml, raciEntries, evalFeedback }:
 					<SaveIcon className="mr-1 h-3.5 w-3.5" />
 					{saving ? "..." : tc("save")}
 				</Button>
-				<Button variant="ghost" size="sm" onClick={() => setFullscreen(!fullscreen)} className="h-7 w-7 p-0">
+				<Button variant="ghost" size="sm" onClick={() => setFullscreen(!fullscreen)} className="h-9 w-9 p-0 sm:h-7 sm:w-7">
 					{fullscreen ? <XIcon className="h-3.5 w-3.5" /> : <EyeIcon className="h-3.5 w-3.5" />}
 				</Button>
 			</div>
@@ -264,7 +262,7 @@ export function DiagramCanvas({ processId, bpmnXml, raciEntries, evalFeedback }:
 
 			{/* Error/repair bar */}
 			{(renderError || repairing) && (
-				<div className="absolute left-1/2 top-3 z-10 -translate-x-1/2 rounded-md border border-orientation bg-amber-100 px-4 py-2 text-xs text-amber-800 shadow-sm">
+				<div className="absolute left-1/2 top-3 z-10 -translate-x-1/2 rounded-md border border-amber-300 bg-amber-100 px-4 py-2 text-xs text-amber-800 dark:border-amber-700 dark:bg-amber-900/30 dark:text-amber-300 shadow-sm">
 					<div className="flex items-center gap-3">
 						<span>{repairing ? "Reparando diagrama..." : renderError}</span>
 						{!repairing && (
@@ -272,14 +270,14 @@ export function DiagramCanvas({ processId, bpmnXml, raciEntries, evalFeedback }:
 								<button
 									type="button"
 									onClick={handleRebuildFromNodes}
-									className="rounded bg-yellow-200 px-2 py-0.5 text-[10px] font-medium text-amber-900 hover:bg-amber-300 transition-colors"
+									className="rounded bg-yellow-200 px-2 py-0.5 text-[10px] font-medium text-amber-900 hover:bg-amber-300 dark:bg-amber-800/50 dark:text-amber-300 dark:hover:bg-amber-700/50 transition-colors"
 								>
 									Regenerar
 								</button>
 								<button
 									type="button"
 									onClick={handleRepairWithAi}
-									className="rounded bg-primary px-2 py-0.5 text-[10px] font-medium text-white hover:bg-blue-600 transition-colors"
+									className="rounded bg-primary px-2 py-0.5 text-[10px] font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
 								>
 									Arreglar con IA
 								</button>

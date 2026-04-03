@@ -1,8 +1,9 @@
 "use client";
 
 import { cn } from "@repo/ui";
-import { ClipboardListIcon, ShieldAlertIcon, ArrowLeftIcon } from "lucide-react";
+import { ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type ProcedureStatus = "DRAFT" | "IN_REVIEW" | "APPROVED" | "PUBLISHED" | "ARCHIVED";
@@ -68,6 +69,7 @@ const riskTypeLabels: Record<string, string> = {
 };
 
 export function ProcedureDetail({ procedure, organizationSlug }: ProcedureDetailProps) {
+	const router = useRouter();
 	const [activeTab, setActiveTab] = useState<"estructura" | "riesgos">("estructura");
 	const [updating, setUpdating] = useState(false);
 	const status = statusConfig[procedure.status];
@@ -83,7 +85,7 @@ export function ProcedureDetail({ procedure, organizationSlug }: ProcedureDetail
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ status: newStatus }),
 			});
-			window.location.reload();
+			router.refresh();
 		} catch (e) {
 			console.error(e);
 		} finally {
@@ -97,7 +99,7 @@ export function ProcedureDetail({ procedure, organizationSlug }: ProcedureDetail
 			<div className="mb-6">
 				<Link
 					href={`/${organizationSlug}/procedures`}
-					className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-300 mb-3"
+					className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-3"
 				>
 					<ArrowLeftIcon className="h-3 w-3" /> Procedimientos
 				</Link>
@@ -119,7 +121,7 @@ export function ProcedureDetail({ procedure, organizationSlug }: ProcedureDetail
 						<button
 							onClick={() => handleStatusChange(status.next!.status)}
 							disabled={updating}
-							className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500 transition-colors disabled:opacity-50"
+							className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50"
 						>
 							{status.next.label}
 						</button>
@@ -136,7 +138,7 @@ export function ProcedureDetail({ procedure, organizationSlug }: ProcedureDetail
 						className={cn(
 							"px-4 py-2 text-sm font-medium transition-colors border-b-2 -mb-px",
 							activeTab === tab
-								? "border-blue-500 text-foreground"
+								? "border-primary text-foreground"
 								: "border-transparent text-muted-foreground hover:text-foreground",
 						)}
 					>
