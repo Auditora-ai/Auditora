@@ -1,8 +1,8 @@
 # Auditora.ai — Progreso de Ejecución
 
-**Última actualización:** 2026-04-03 (PM Cycle — Phase 2 FULLY CLOSED ✅)
+**Última actualización:** 2026-04-03 (PM Cycle — Phase 3 KICKOFF 🚀)
 **PM:** Hermes Agent #03
-**Estado:** Fase 1 COMPLETE ✅ — Fase 2 COMPLETE ✅ (6/6 + 2 vision gaps CLOSED) — 1 crossover item (#46) — Ready for Fase 3
+**Estado:** Fase 1 COMPLETE ✅ — Fase 2 COMPLETE ✅ — Fase 3 IN PROGRESS (#20 up next)
 
 ---
 
@@ -154,13 +154,17 @@
 || #43 Scan theatrical reveal | **DONE** ✅ | 2026-04-02 | Progressive reveal, shareable links, CTA. |
 
 ### Crossover Items (Phase 2→3)
-|| #46 Panorama eval KPIs | **OPEN** 🟡 | — | Main ClientDashboard needs eval summary KPIs. Implementation guide posted. 30-45 min task — pure UI wiring. |
+|| #46 Panorama eval KPIs | **CLOSED** ✅ | 2026-04-03 | Already done via #41 — RiskDashboard (actual panorama page) has eval KPIs. ClientDashboard is orphaned code. |
 
 ## Fase 3 — Crecimiento
-| Issue | Status |
-|---|---|
-| #19 F3-01: Colaboración multi-usuario | PENDING |
-| #20 F3-02: Notificaciones | PENDING |
-| #21 F3-03: Integraciones | PENDING |
-| #22 F3-04: Onboarding basado en evaluaciones | PENDING |
-| #23 F3-05: Programa de certificación | PENDING |
+
+**Directive:** `docs/issues/PM-DIRECTIVE-PHASE3.md`
+**Execution order:** #20 → #19 → #22 → #23 → #21
+
+| Priority | Issue | Feature | Status | Fecha | Notas |
+|----------|-------|---------|--------|-------|-------|
+| 1 | #20 | F3-02: Notificaciones y gestión del cambio | **UP NEXT** 🔵 | — | Foundation: Notification model, bell UI, change confirmations, email digests. Full spec in directive. |
+| 2 | #19 | F3-01: Colaboración multi-usuario | PENDING | — | Presence, edit locking, comments/mentions, activity log. Depends on #20. |
+| 3 | #22 | F3-04: Onboarding basado en evaluaciones | PENDING | — | OnboardingPlan model, manager assigns processes, employee evaluation flows. |
+| 4 | #23 | F3-05: Programa de certificación | PENDING | — | Certification/CertificationGrant models, auto-certify after evals, expiry/renewal. |
+| 5 | #21 | F3-03: Integraciones (Slack/Teams/GWS) | PENDING | — | Webhook notifications, OAuth, channel mapping. Last — depends on #20 infra. |
