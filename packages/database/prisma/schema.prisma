@@ -43,6 +43,11 @@ model User {
   meetingSessions          MeetingSession[]
   simulationRuns           SimulationRun[]
   humanRiskProfiles        HumanRiskProfile[]
+  notificationsReceived    Notification[]      @relation("NotificationRecipient")
+  notificationsActed       Notification[]      @relation("NotificationActor")
+  changeInitiated          ChangeConfirmation[] @relation("ChangeInitiator")
+  changeResponses          ChangeConfirmationResponse[]
+  notificationPreferences  NotificationPreference[]
 
   @@unique([email])
   @@unique([username])
@@ -175,6 +180,9 @@ model Organization {
   simulationTemplates SimulationTemplate[]
   humanRiskProfiles   HumanRiskProfile[]
   procedures          Procedure[]
+  notifications           Notification[]
+  changeConfirmations     ChangeConfirmation[]
+  notificationPreferences NotificationPreference[]
 
   @@unique([slug])
   @@map("organization")
@@ -381,6 +389,7 @@ model ProcessDefinition {
   discoveryThreads DiscoveryThread[]
   simulationTemplates SimulationTemplate[]
   procedures          Procedure[]
+  changeConfirmations ChangeConfirmation[]
   createdAt        DateTime            @default(now())
 
   @@index([architectureId])
@@ -1499,6 +1508,7 @@ model Procedure {
   updatedAt             DateTime        @updatedAt
   // Version history
   versions              ProcedureVersion[]
+  changeConfirmations   ChangeConfirmation[]
 
   @@index([processDefinitionId])
   @@index([organizationId])
@@ -1524,5 +1534,174 @@ model ProcedureVersion {
 
   @@index([procedureId])
   @@map("procedure_version")
+}
+
+// ============================================
+// NOTIFICATIONS
+// ============================================
+
+enum NotificationType {
+  // Change management
+  PROCESS_UPDATED
+  PROCEDURE_UPDATED
+  CHANGE_CONFIRMATION_REQUESTED
+  CHANGE_CONFIRMED
+  CHANGE_OVERDUE
+
+  // Evaluations
+  EVALUATION_ASSIGNED
+  EVALUATION_COMPLETED
+  EVALUATION_RESULTS_READY
+
+  // Collaboration (F3-01)
+  COMMENT_ADDED
+  COMMENT_MENTION
+
+  // Onboarding (F3-04)
+  ONBOARDING_ASSIGNED
+  ONBOARDING_COMPLETED
+
+  // Certification (F3-05)
+  CERTIFICATION_EARNED
+  CERTIFICATION_EXPIRING
+
+  // System
+  MEMBER_INVITED
+  WEEKLY_DIGEST
+}
+
+model Notification {
+  id              String           @id @default(cuid())
+  organizationId  String
+  organization    Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  recipientId     String
+  recipient       User             @relation("NotificationRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  actorId         String?
+  actor           User?            @relation("NotificationActor", fields: [actorId], references: [id])
+
+  type            NotificationType
+
+  // Polymorphic reference to the source entity
+  entityType      String           // "process" | "procedure" | "evaluation" | "comment" | "change_request"
+  entityId        String
+
+  // Display data (denormalized for fast rendering)
+  title           String
+  body            String           @db.Text
+  url             String           // Deep link into the app
+
+  // State
+  read            Boolean          @default(false)
+  readAt          DateTime?
+  archived        Boolean          @default(false)
+
+  // Email digest tracking
+  emailSent       Boolean          @default(false)
+  emailSentAt     DateTime?
+
+  createdAt       DateTime         @default(now())
+
+  @@index([recipientId, read, createdAt])
+  @@index([organizationId, createdAt])
+  @@index([recipientId, emailSent])
+  @@map("notification")
+}
+
+// ============================================
+// CHANGE MANAGEMENT
+// ============================================
+
+enum ChangeType {
+  PROCESS_STRUCTURE
+  PROCEDURE_CONTENT
+  RISK_LEVEL_CHANGE
+  RACI_CHANGE
+}
+
+enum ChangeConfirmationStatus {
+  PENDING
+  COMPLETED
+  OVERDUE
+  CANCELLED
+}
+
+model ChangeConfirmation {
+  id              String                     @id @default(cuid())
+  organizationId  String
+  organization    Organization               @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  processId       String?
+  process         ProcessDefinition?         @relation(fields: [processId], references: [id])
+  procedureId     String?
+  procedure       Procedure?                 @relation(fields: [procedureId], references: [id])
+
+  changedById     String
+  changedBy       User                       @relation("ChangeInitiator", fields: [changedById], references: [id])
+
+  changeSummary   String                     @db.Text
+  changeType      ChangeType
+
+  totalRequired   Int
+  totalConfirmed  Int                        @default(0)
+  deadline        DateTime?
+  status          ChangeConfirmationStatus   @default(PENDING)
+
+  createdAt       DateTime                   @default(now())
+  updatedAt       DateTime                   @updatedAt
+
+  confirmations   ChangeConfirmationResponse[]
+
+  @@index([organizationId, status])
+  @@index([processId])
+  @@index([procedureId])
+  @@map("change_confirmation")
+}
+
+model ChangeConfirmationResponse {
+  id                    String             @id @default(cuid())
+  changeConfirmationId  String
+  changeConfirmation    ChangeConfirmation @relation(fields: [changeConfirmationId], references: [id], onDelete: Cascade)
+  userId                String
+  user                  User               @relation(fields: [userId], references: [id])
+
+  confirmed             Boolean            @default(false)
+  confirmedAt           DateTime?
+  comment               String?            @db.Text
+
+  createdAt             DateTime           @default(now())
+
+  @@unique([changeConfirmationId, userId])
+  @@index([userId, confirmed])
+  @@map("change_confirmation_response")
+}
+
+// ============================================
+// NOTIFICATION PREFERENCES
+// ============================================
+
+enum DigestFrequency {
+  REALTIME
+  DAILY
+  WEEKLY
+  NONE
+}
+
+model NotificationPreference {
+  id              String           @id @default(cuid())
+  userId          String
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId  String
+  organization    Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  inApp           Boolean          @default(true)
+  email           Boolean          @default(true)
+  digestFrequency DigestFrequency  @default(DAILY)
+  mutedTypes      String[]         @default([])
+
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@unique([userId, organizationId])
+  @@map("notification_preference")
 }
 

@@ -358,6 +358,30 @@ export const ProcedureVersionScalarFieldEnumSchema = z.enum(['id', 'procedureId'
 
 export type ProcedureVersionScalarFieldEnum = z.infer<typeof ProcedureVersionScalarFieldEnumSchema>;
 
+// File: NotificationScalarFieldEnum.schema.ts
+
+export const NotificationScalarFieldEnumSchema = z.enum(['id', 'organizationId', 'recipientId', 'actorId', 'type', 'entityType', 'entityId', 'title', 'body', 'url', 'read', 'readAt', 'archived', 'emailSent', 'emailSentAt', 'createdAt'])
+
+export type NotificationScalarFieldEnum = z.infer<typeof NotificationScalarFieldEnumSchema>;
+
+// File: ChangeConfirmationScalarFieldEnum.schema.ts
+
+export const ChangeConfirmationScalarFieldEnumSchema = z.enum(['id', 'organizationId', 'processId', 'procedureId', 'changedById', 'changeSummary', 'changeType', 'totalRequired', 'totalConfirmed', 'deadline', 'status', 'createdAt', 'updatedAt'])
+
+export type ChangeConfirmationScalarFieldEnum = z.infer<typeof ChangeConfirmationScalarFieldEnumSchema>;
+
+// File: ChangeConfirmationResponseScalarFieldEnum.schema.ts
+
+export const ChangeConfirmationResponseScalarFieldEnumSchema = z.enum(['id', 'changeConfirmationId', 'userId', 'confirmed', 'confirmedAt', 'comment', 'createdAt'])
+
+export type ChangeConfirmationResponseScalarFieldEnum = z.infer<typeof ChangeConfirmationResponseScalarFieldEnumSchema>;
+
+// File: NotificationPreferenceScalarFieldEnum.schema.ts
+
+export const NotificationPreferenceScalarFieldEnumSchema = z.enum(['id', 'userId', 'organizationId', 'inApp', 'email', 'digestFrequency', 'mutedTypes', 'createdAt', 'updatedAt'])
+
+export type NotificationPreferenceScalarFieldEnum = z.infer<typeof NotificationPreferenceScalarFieldEnumSchema>;
+
 // File: SortOrder.schema.ts
 
 export const SortOrderSchema = z.enum(['asc', 'desc'])
@@ -525,6 +549,30 @@ export type SimulationRunStatus = z.infer<typeof SimulationRunStatusSchema>;
 export const ProcedureStatusSchema = z.enum(['DRAFT', 'IN_REVIEW', 'APPROVED', 'PUBLISHED', 'ARCHIVED'])
 
 export type ProcedureStatus = z.infer<typeof ProcedureStatusSchema>;
+
+// File: NotificationType.schema.ts
+
+export const NotificationTypeSchema = z.enum(['PROCESS_UPDATED', 'PROCEDURE_UPDATED', 'CHANGE_CONFIRMATION_REQUESTED', 'CHANGE_CONFIRMED', 'CHANGE_OVERDUE', 'EVALUATION_ASSIGNED', 'EVALUATION_COMPLETED', 'EVALUATION_RESULTS_READY', 'COMMENT_ADDED', 'COMMENT_MENTION', 'ONBOARDING_ASSIGNED', 'ONBOARDING_COMPLETED', 'CERTIFICATION_EARNED', 'CERTIFICATION_EXPIRING', 'MEMBER_INVITED', 'WEEKLY_DIGEST'])
+
+export type NotificationType = z.infer<typeof NotificationTypeSchema>;
+
+// File: ChangeType.schema.ts
+
+export const ChangeTypeSchema = z.enum(['PROCESS_STRUCTURE', 'PROCEDURE_CONTENT', 'RISK_LEVEL_CHANGE', 'RACI_CHANGE'])
+
+export type ChangeType = z.infer<typeof ChangeTypeSchema>;
+
+// File: ChangeConfirmationStatus.schema.ts
+
+export const ChangeConfirmationStatusSchema = z.enum(['PENDING', 'COMPLETED', 'OVERDUE', 'CANCELLED'])
+
+export type ChangeConfirmationStatus = z.infer<typeof ChangeConfirmationStatusSchema>;
+
+// File: DigestFrequency.schema.ts
+
+export const DigestFrequencySchema = z.enum(['REALTIME', 'DAILY', 'WEEKLY', 'NONE'])
+
+export type DigestFrequency = z.infer<typeof DigestFrequencySchema>;
 
 // File: DecisionRiskLevel.schema.ts
 
@@ -1620,4 +1668,80 @@ export const ProcedureVersionSchema = z.object({
 });
 
 export type ProcedureVersionType = z.infer<typeof ProcedureVersionSchema>;
+
+
+// File: Notification.schema.ts
+
+export const NotificationSchema = z.object({
+  id: z.string(),
+  organizationId: z.string(),
+  recipientId: z.string(),
+  actorId: z.string().nullish(),
+  type: NotificationTypeSchema,
+  entityType: z.string(),
+  entityId: z.string(),
+  title: z.string(),
+  body: z.string(),
+  url: z.string(),
+  read: z.boolean(),
+  readAt: z.date().nullish(),
+  archived: z.boolean(),
+  emailSent: z.boolean(),
+  emailSentAt: z.date().nullish(),
+  createdAt: z.date(),
+});
+
+export type NotificationModel = z.infer<typeof NotificationSchema>;
+
+// File: ChangeConfirmation.schema.ts
+
+export const ChangeConfirmationSchema = z.object({
+  id: z.string(),
+  organizationId: z.string(),
+  processId: z.string().nullish(),
+  procedureId: z.string().nullish(),
+  changedById: z.string(),
+  changeSummary: z.string(),
+  changeType: ChangeTypeSchema,
+  totalRequired: z.number().int(),
+  totalConfirmed: z.number().int(),
+  deadline: z.date().nullish(),
+  status: ChangeConfirmationStatusSchema.default("PENDING"),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type ChangeConfirmationType = z.infer<typeof ChangeConfirmationSchema>;
+
+
+// File: ChangeConfirmationResponse.schema.ts
+
+export const ChangeConfirmationResponseSchema = z.object({
+  id: z.string(),
+  changeConfirmationId: z.string(),
+  userId: z.string(),
+  confirmed: z.boolean(),
+  confirmedAt: z.date().nullish(),
+  comment: z.string().nullish(),
+  createdAt: z.date(),
+});
+
+export type ChangeConfirmationResponseType = z.infer<typeof ChangeConfirmationResponseSchema>;
+
+
+// File: NotificationPreference.schema.ts
+
+export const NotificationPreferenceSchema = z.object({
+  id: z.string(),
+  userId: z.string(),
+  organizationId: z.string(),
+  inApp: z.boolean().default(true),
+  email: z.boolean().default(true),
+  digestFrequency: DigestFrequencySchema.default("DAILY"),
+  mutedTypes: z.array(z.string()),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export type NotificationPreferenceType = z.infer<typeof NotificationPreferenceSchema>;
 

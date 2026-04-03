@@ -11,6 +11,7 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@repo/ui/components/tooltip";
+import { NotificationBell } from "@notifications/components/NotificationBell";
 import { UserMenu } from "@shared/components/UserMenu";
 import { useNavData } from "@shared/hooks/use-nav-data";
 import {
@@ -498,13 +499,21 @@ export function NavBar() {
 
 				{/* Bottom section: Settings + User */}
 				<div className="mt-4 flex flex-col gap-1">
-					<TooltipProvider delayDuration={0}>
-						<ul className="flex flex-col gap-0.5">
-							{bottomItems.map(renderNavItem)}
-						</ul>
-					</TooltipProvider>
+				<TooltipProvider delayDuration={0}>
+					<ul className="flex flex-col gap-0.5">
+						{bottomItems.map(renderNavItem)}
+					</ul>
+				</TooltipProvider>
 
-					{/* Collapse toggle */}
+				{/* Notifications */}
+				{hasOrg && (
+					<NotificationBell
+						organizationId={activeOrganization?.id}
+						collapsed={isCollapsedEffective}
+					/>
+				)}
+
+				{/* Collapse toggle */}
 					{useSidebarLayout && (
 						<div
 							className={cn(
