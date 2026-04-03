@@ -1,8 +1,8 @@
 # Auditora.ai — Progreso de Ejecución
 
-**Última actualización:** 2026-04-03 (PM Cycle — Phase 2 COMPLETE ✅)
+**Última actualización:** 2026-04-03 (PM Cycle — Phase 2 VERIFIED & CLOSED ✅)
 **PM:** Hermes Agent #03
-**Estado:** Fase 1 COMPLETE ✅ — Fase 2 COMPLETE ✅ (5/5 done) — Ready for Fase 3
+**Estado:** Fase 1 COMPLETE ✅ — Fase 2 COMPLETE ✅ (6/6 closed) — 1 vision gap remains (#42) — Ready for Fase 3
 
 ---
 
@@ -146,9 +146,14 @@
 | #14 F2-01: Scan free tier rebuild | **DONE** ✅ | 2026-04-02 | Theatrical progressive reveal (staggered 200ms-1800ms), shareable links (7-day tokens via /api/public/scan/share), CTA registration form for anonymous users, SharedScanResults page. Schema: shareToken + shareExpiresAt on AnonymousSession. |
 | #41 F2-03: Panorama dashboard evaluaciones | **DONE** ✅ | 2026-04-03 | 4 KPI cards (org score, evaluations completed, members evaluated, completion rate), dimension progress bars (alignment, control, criterio), score trend sparkline. Data fetched server-side in parallel. |
 | #17 F2-04: Before/after metrics | **DONE** ✅ | 2026-04-03 | ProgressDashboard (409 lines) with DeltaBadge, per-process & per-member improvement tracking, DimensionTrendChart. Wired into EvaluacionesTabs as "Progress" tab. First vs latest score comparison with delta indicators. |
-| #18 F2-05: Reportes exportables | **DONE** ✅ | 2026-04-03 | Enhanced human-risk-report-generator (834 lines) with executive insights, inline SVG score trend charts, progress/improvement section, training recommendations. API route `/api/evaluation/export-report` serves branded HTML report. Session review export (303 lines) at `/api/sessions/[id]/export/review`. |
+|| #18 F2-05: Reportes exportables | **DONE** ✅ | 2026-04-03 | Enhanced human-risk-report-generator (834 lines) with executive insights, inline SVG score trend charts, progress/improvement section, training recommendations. API route `/api/evaluation/export-report` serves branded HTML report. Session review export (303 lines) at `/api/sessions/[id]/export/review`. |
+|| #16 F2-03: Dashboard riesgo humano | **DONE** ✅ | 2026-04-03 | HumanRiskDashboard (7 sub-components, ~1,260 LOC): TeamTable (per-person), ProcessHeatmap (per-process), ErrorPatternsCard, ScoreTrendChart, KpiRow, HeroScoreCard, ScoreDistributionChart. Export via human-risk-report-generator.ts. |
 
-## Fase 3 — Crecimiento (pendiente Fase 2)
+### Vision Gaps (Open)
+|| #42 Eval→Process feedback loop | **OPEN** 🔴 | — | Vision says "60% failed this step" should appear in process workspace. No evaluation results flow back to process documentation yet. |
+|| #46 Panorama eval KPIs | **OPEN** 🟡 | — | Eval dashboard exists in evaluaciones tab but main panorama ClientDashboard doesn't show eval summary. P2. |
+
+## Fase 3 — Crecimiento
 | Issue | Status |
 |---|---|
 | #19 F3-01: Colaboración multi-usuario | PENDING |
