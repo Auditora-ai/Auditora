@@ -163,8 +163,8 @@
 
 | Priority | Issue | Feature | Status | Fecha | Notas |
 |----------|-------|---------|--------|-------|-------|
-| 1 | #20 | F3-02: Notificaciones y gestión del cambio | **UP NEXT** 🔵 | — | Foundation: Notification model, bell UI, change confirmations, email digests. Full spec in directive. |
-| 2 | #19 | F3-01: Colaboración multi-usuario | PENDING | — | Presence, edit locking, comments/mentions, activity log. Depends on #20. |
+| 1 | #20 | F3-02: Notificaciones y gestión del cambio | **DONE** ✅ | 2026-04-03 | Full notification infra: 4 Prisma models (Notification, ChangeConfirmation, ChangeConfirmationResponse, NotificationPreference) + 4 enums. API: notifications module (list, countUnread, markRead, markAllRead, archive, preferences) + change-management module (create, listPending, confirm, getStatus). Frontend: NotificationBell (sidebar badge + dropdown, 30s polling), NotificationItem, NotificationDropdown, ChangeConfirmationCard, ChangeStatusTracker, PendingChangesPanel. Hooks: useUnreadCount, useNotifications, usePendingChanges. Integrated into NavBar bottom section. 28 files, 1741 LOC. |
+| 2 | #19 | F3-01: Colaboración multi-usuario | **UP NEXT** 🔵 | — | Presence, edit locking, comments/mentions, activity log. Depends on #20 ✅. |
 | 3 | #22 | F3-04: Onboarding basado en evaluaciones | PENDING | — | OnboardingPlan model, manager assigns processes, employee evaluation flows. |
 | 4 | #23 | F3-05: Programa de certificación | PENDING | — | Certification/CertificationGrant models, auto-certify after evals, expiry/renewal. |
 | 5 | #21 | F3-03: Integraciones (Slack/Teams/GWS) | PENDING | — | Webhook notifications, OAuth, channel mapping. Last — depends on #20 infra. |
