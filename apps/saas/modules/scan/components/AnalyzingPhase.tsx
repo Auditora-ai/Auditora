@@ -34,12 +34,14 @@ const stepVariants = {
 
 interface AnalyzingPhaseProps {
   url: string;
+  turnstileToken: string | null;
   onComplete: (data: ScanResult) => void;
   onError: (message: string) => void;
 }
 
 export function AnalyzingPhase({
   url,
+  turnstileToken,
   onComplete,
   onError,
 }: AnalyzingPhaseProps) {
@@ -60,7 +62,7 @@ export function AnalyzingPhase({
         const res = await fetch("/api/public/scan/analyze", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ url }),
+          body: JSON.stringify({ url, turnstileToken: turnstileToken || "" }),
           signal: controller.signal,
         });
 
@@ -135,7 +137,7 @@ export function AnalyzingPhase({
     return () => {
       controller.abort();
     };
-  }, [url, onComplete, onError]);
+  }, [url, turnstileToken, onComplete, onError]);
 
   return (
     <div className="space-y-6">

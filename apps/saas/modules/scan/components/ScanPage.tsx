@@ -17,10 +17,12 @@ export function ScanPage({ initialUrl, refSource }: ScanPageProps) {
   const [url, setUrl] = useState(initialUrl ?? "");
   const [result, setResult] = useState<ScanResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
-  const handleStartScan = useCallback((submittedUrl: string) => {
+  const handleStartScan = useCallback((submittedUrl: string, token: string | null) => {
     setUrl(submittedUrl);
     setError(null);
+    setTurnstileToken(token);
     setPhase("analyzing");
   }, []);
 
@@ -72,6 +74,7 @@ export function ScanPage({ initialUrl, refSource }: ScanPageProps) {
           >
             <AnalyzingPhase
               url={url}
+              turnstileToken={turnstileToken}
               onComplete={handleAnalysisComplete}
               onError={handleAnalysisError}
             />

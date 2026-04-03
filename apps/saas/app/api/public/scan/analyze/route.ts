@@ -73,8 +73,8 @@ export async function POST(request: NextRequest) {
 
 		const stream = new ReadableStream({
 			async start(controller) {
-				function sendEvent(event: string, data: unknown) {
-					const payload = `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
+				function sendEvent(type: string, data: Record<string, unknown>) {
+					const payload = `data: ${JSON.stringify({ type, ...data })}\n\n`;
 					controller.enqueue(encoder.encode(payload));
 				}
 
@@ -154,10 +154,10 @@ export async function POST(request: NextRequest) {
 						},
 					});
 
-					// Send complete event
-					sendEvent("complete", {
+					// Send result event (matches frontend ScanSSEEvent type: "result")
+					sendEvent("result", {
 						sessionId: session.id,
-						analysis,
+						data: analysis,
 					});
 				} catch (err) {
 					console.error("[scan/analyze] Error:", err);

@@ -25,7 +25,7 @@ const itemVariants = {
 interface InputPhaseProps {
   defaultUrl: string;
   error: string | null;
-  onSubmit: (url: string) => void;
+  onSubmit: (url: string, turnstileToken: string | null) => void;
 }
 
 export function InputPhase({ defaultUrl, error, onSubmit }: InputPhaseProps) {
@@ -44,7 +44,7 @@ export function InputPhase({ defaultUrl, error, onSubmit }: InputPhaseProps) {
       finalUrl = `https://${finalUrl}`;
     }
 
-    onSubmit(finalUrl);
+    onSubmit(finalUrl, turnstileToken.current);
   };
 
   return (

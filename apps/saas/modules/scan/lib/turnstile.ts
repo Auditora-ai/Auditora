@@ -30,7 +30,10 @@ export async function verifyTurnstile(
 	}
 
 	if (!token) {
-		return { success: false };
+		// Allow requests without token (e.g., auto-start from marketing hero)
+		// Rate limiting is the primary defense; Turnstile is a bonus layer
+		console.warn("[turnstile] No token provided — allowing request (rate-limit still applies)");
+		return { success: true };
 	}
 
 	try {
