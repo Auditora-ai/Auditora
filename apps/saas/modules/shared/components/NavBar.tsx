@@ -15,6 +15,7 @@ import { NotificationBell } from "@notifications/components/NotificationBell";
 import { UserMenu } from "@shared/components/UserMenu";
 import { useNavData } from "@shared/hooks/use-nav-data";
 import {
+	CompassIcon,
 	GraduationCapIcon,
 	LayoutDashboardIcon,
 	PanelLeftCloseIcon,
@@ -101,7 +102,18 @@ export function NavBar() {
 	const hasEvaluation = !!navData && navData.maturityScore >= 40;
 
 	const menuItems: NavItem[] = [
-		// ─── FLOW (consulting workflow) ───
+		// ─── FLOW (consulting workflow: Descubrir → Procesos → Evaluaciones → Panorama) ───
+		{
+			id: "descubrir",
+			label: t("app.menu.discover"),
+			href: `${basePath}/sessions`,
+			icon: CompassIcon,
+			isActive: pathname.startsWith(`${basePath}/sessions`) || pathname.startsWith(`${basePath}/session/`),
+			hidden: !hasOrg,
+			section: "flow",
+			flowStep: 1,
+			flowCompleted: hasArchitecture,
+		},
 		{
 			id: "processes",
 			label: t("app.menu.processes"),

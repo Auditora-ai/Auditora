@@ -78,6 +78,7 @@
       "analytics": "Analíticas",
       "clients": "Clientes",
       "sessions": "Sesiones",
+      "discover": "Descubrir",
       "start": "Inicio",
       "dashboard": "Panorama",
       "processes": "Procesos",
@@ -840,7 +841,18 @@
       "dateDaysAgo": "Hace {count} días",
       "activitySessionCompleted": "Sesión \"{process}\" completada",
       "activityNodesExtracted": "{count} nodos extraídos",
-      "createEvaluation": "Crear Evaluación"
+      "activityEvalCompleted": "Evaluación \"{name}\" completada",
+      "activityEvalScore": "Puntaje: {score}/100",
+      "createEvaluation": "Crear Evaluación",
+      "vulnerableProcesses": "Procesos Vulnerables",
+      "noVulnerableProcesses": "No se detectaron procesos vulnerables. Ejecuta evaluaciones para identificar áreas débiles.",
+      "evaluationsCount": "{count} evaluaciones",
+      "nextStepsTitle": "Próximos Pasos Recomendados",
+      "nextStepCapture": "Captura tu primer proceso — inicia una sesión de descubrimiento o agenda una entrevista en vivo",
+      "nextStepFirstEval": "Tienes procesos documentados — crea tu primera evaluación para evaluar a tu equipo",
+      "nextStepImproveWeakest": "La alineación de tu equipo es baja en \"{process}\". Enfoca evaluaciones ahí.",
+      "nextStepBoostCompletion": "Solo el {rate}% de las evaluaciones están completadas. Envía recordatorios a tu equipo.",
+      "nextStepGrow": "¡Tu equipo está funcionando bien! Considera agregar nuevos procesos para evaluar."
     }
   },
   "processLibrary": {

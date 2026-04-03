@@ -12,6 +12,7 @@ import {
 } from "@repo/ui/components/sheet";
 import { useNavData } from "@shared/hooks/use-nav-data";
 import {
+	CompassIcon,
 	GraduationCapIcon,
 	LayoutDashboardIcon,
 	MoreHorizontalIcon,
@@ -44,6 +45,12 @@ export function MobileBottomBar() {
 	const basePath = `/${activeOrganization!.slug}`;
 
 	const primaryTabs: MobileTab[] = [
+		{
+			label: t("app.menu.discover"),
+			href: `${basePath}/sessions`,
+			icon: CompassIcon,
+			isActive: pathname.startsWith(`${basePath}/sessions`) || pathname.startsWith(`${basePath}/session/`),
+		},
 		{
 			label: t("app.menu.processes"),
 			href: `${basePath}/processes`,

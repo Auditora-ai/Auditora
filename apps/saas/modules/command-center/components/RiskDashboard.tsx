@@ -2,11 +2,16 @@
 
 import { RiskMaturityRing } from "@shared/components/RiskMaturityRing";
 import {
+	AlertTriangleIcon,
+	ArrowRightIcon,
 	CalendarIcon,
 	ClipboardCheckIcon,
+	LightbulbIcon,
 	MicIcon,
 	PlusIcon,
+	SearchIcon,
 	ShieldAlertIcon,
+	SparklesIcon,
 	TrendingUpIcon,
 	UsersIcon,
 	WorkflowIcon,
@@ -35,6 +40,20 @@ export interface EvaluacionesSummary {
 	scoreTrend: Array<{ month: string; score: number }>;
 }
 
+export interface VulnerableProcess {
+	name: string;
+	avgScore: number;
+	processId: string;
+	simulationCount: number;
+}
+
+export interface NextStepRecommendation {
+	id: string;
+	message: string;
+	href: string;
+	icon: "scan" | "evaluate" | "improve" | "remind" | "grow";
+}
+
 export interface RiskDashboardProps {
 	organizationId: string;
 	organizationName: string;
@@ -53,6 +72,8 @@ export interface RiskDashboardProps {
 	riskCount: number;
 	hasActiveSession: boolean;
 	evaluaciones?: EvaluacionesSummary | null;
+	vulnerableProcesses?: VulnerableProcess[];
+	nextSteps?: NextStepRecommendation[];
 }
 
 export interface TopRisk {
@@ -66,7 +87,7 @@ export interface TopRisk {
 }
 
 export interface ActivityItem {
-	type: "session_ended" | "risk_found" | "process_updated";
+	type: "session_ended" | "risk_found" | "process_updated" | "evaluation_completed";
 	title: string;
 	subtitle: string;
 	date: string;
@@ -87,6 +108,8 @@ export function RiskDashboard({
 	riskCount,
 	hasActiveSession,
 	evaluaciones,
+	vulnerableProcesses = [],
+	nextSteps = [],
 }: RiskDashboardProps) {
 	const router = useRouter();
 	const t = useTranslations("dashboard.riskDashboard");
@@ -154,149 +177,193 @@ export function RiskDashboard({
 					/>
 				) : (
 					<>
-						{/* Two-column layout: Maturity + Top Risks */}
-						<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-							{/* Left: Maturity Score + Quick Actions */}
-							<div className="animate-in fade-in slide-in-from-bottom-2 duration-500 space-y-4">
-								<div className="rounded-2xl border border-white/10 bg-card/80 backdrop-blur-sm shadow-sm p-6 bg-gradient-to-br from-primary/5 to-transparent dark:border-white/5 dark:bg-card/60">
-									<RiskMaturityRing
-										score={maturityScore}
-										size="md"
-									/>
-									<div className="mt-4 grid grid-cols-3 gap-3 text-center">
-										<div>
-											<p className="text-lg font-semibold tabular-nums text-foreground">
-												{riskCount}
-											</p>
-											<p className="text-[11px] text-muted-foreground">
-												{t("risks")}
-											</p>
-										</div>
-										<div>
-											<p className="text-lg font-semibold tabular-nums text-foreground">
-												{processCount}
-											</p>
-											<p className="text-[11px] text-muted-foreground">
-												{t("processes")}
-											</p>
-										</div>
-										<div>
-											<p className="text-lg font-semibold tabular-nums text-foreground">
-												{processCount > 0
-													? Math.round(
-															(documentedCount /
-																processCount) *
-																100,
-														)
-													: 0}
-												%
-											</p>
-											<p className="text-[11px] text-muted-foreground">
-												{t("coverage")}
-											</p>
-										</div>
+					{/* Hero Score + Stats row */}
+					<div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+						<div className="rounded-2xl border border-white/10 bg-card/80 backdrop-blur-sm shadow-sm p-6 bg-gradient-to-br from-primary/5 via-transparent to-blue-500/5 dark:border-white/5 dark:bg-card/60">
+							<div className="flex flex-col items-center gap-4 md:flex-row md:gap-8">
+								{/* Large maturity ring — hero element */}
+								<RiskMaturityRing
+									score={maturityScore}
+									size="lg"
+								/>
+								{/* Stats grid */}
+								<div className="flex-1 grid grid-cols-3 gap-4 text-center md:text-left">
+									<div>
+										<p className="text-2xl font-bold tabular-nums text-foreground">
+											{processCount}
+										</p>
+										<p className="text-xs text-muted-foreground">
+											{t("processes")}
+										</p>
+									</div>
+									<div>
+										<p className="text-2xl font-bold tabular-nums text-foreground">
+											{riskCount}
+										</p>
+										<p className="text-xs text-muted-foreground">
+											{t("risks")}
+										</p>
+									</div>
+									<div>
+										<p className="text-2xl font-bold tabular-nums text-foreground">
+											{processCount > 0
+												? Math.round(
+														(documentedCount /
+															processCount) *
+															100,
+													)
+												: 0}%
+										</p>
+										<p className="text-xs text-muted-foreground">
+											{t("coverage")}
+										</p>
 									</div>
 								</div>
-
-								{/* Quick Actions — horizontal scroll on mobile, vertical on desktop */}
-								<div className="flex gap-2 overflow-x-auto pb-2 md:flex-col md:space-y-2 md:gap-0 md:overflow-visible md:pb-0">
+								{/* Quick Actions — vertical stack */}
+								<div className="flex gap-2 md:flex-col md:gap-2">
 									<Link
 										href={`${basePath}/processes`}
-										className="flex shrink-0 items-center gap-3 rounded-xl border border-white/10 bg-card/80 backdrop-blur-sm p-3 text-sm transition-colors hover:bg-accent/50 dark:border-white/5 dark:bg-card/60"
+										className="flex shrink-0 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs transition-colors hover:bg-accent/50 dark:border-white/5"
 									>
-										<ShieldAlertIcon className="size-4 text-amber-500" />
-										<span className="whitespace-nowrap text-foreground">
-											{t("viewAllRisks")}
-										</span>
-									</Link>
-									<Link
-										href={`${basePath}/processes`}
-										className="flex shrink-0 items-center gap-3 rounded-xl border border-white/10 bg-card/80 backdrop-blur-sm p-3 text-sm transition-colors hover:bg-accent/50 dark:border-white/5 dark:bg-card/60"
-									>
-										<WorkflowIcon className="size-4 text-blue-500" />
-										<span className="whitespace-nowrap text-foreground">
-											{t("viewProcesses")}
-										</span>
+										<WorkflowIcon className="size-3.5 text-blue-500" />
+										<span className="whitespace-nowrap text-foreground">{t("viewProcesses")}</span>
 									</Link>
 									<Link
 										href={`${basePath}/evaluaciones`}
-										className="flex shrink-0 items-center gap-3 rounded-xl border border-white/10 bg-card/80 backdrop-blur-sm p-3 text-sm transition-colors hover:bg-accent/50 dark:border-white/5 dark:bg-card/60"
+										className="flex shrink-0 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs transition-colors hover:bg-accent/50 dark:border-white/5"
 									>
-										<ClipboardCheckIcon className="size-4 text-primary" />
-										<span className="whitespace-nowrap text-foreground">
-											{t("viewEvaluaciones")}
-										</span>
+										<ClipboardCheckIcon className="size-3.5 text-primary" />
+										<span className="whitespace-nowrap text-foreground">{t("viewEvaluaciones")}</span>
 									</Link>
 								</div>
 							</div>
-
-							{/* Right: Top Risks (2/3 width) */}
-							<div className="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-100 lg:col-span-2">
-								<h2 className="mb-3 text-sm font-semibold text-foreground">
-									{t("topRisks")}
-								</h2>
-								{topRisks.length === 0 ? (
-									<div className="rounded-2xl border border-white/10 bg-card/80 backdrop-blur-sm shadow-sm p-8 text-center dark:border-white/5 dark:bg-card/60">
-										<p className="text-sm text-muted-foreground">
-											{t("noRisksDesc")}
-										</p>
-									</div>
-								) : (
-									<div className="space-y-3">
-										{topRisks.map((risk) => (
-											<Link
-												key={risk.id}
-												href={`${basePath}/processes`}
-												className={`block rounded-2xl border border-white/10 bg-card/80 backdrop-blur-sm p-4 transition-all duration-300 hover:shadow-md dark:border-white/5 dark:bg-card/60 border-l-4 ${
-											risk.riskScore >= 16
-												? "border-l-[#DC2626] border-red-100 dark:border-red-900/30"
-												: risk.riskScore >= 12
-													? "border-l-[#D97706] border-amber-100 dark:border-amber-900/30"
-													: "border-l-[#0EA5E9] border-border"
-										}`}
-											>
-												<div className="flex items-start justify-between">
-													<div className="min-w-0 flex-1">
-														<div className="flex items-center gap-2">
-															<span
-																className={`inline-flex h-6 min-w-[24px] items-center justify-center rounded text-xs font-semibold ${
-																	risk.riskScore >=
-																	16
-																		? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
-																		: risk.riskScore >=
-																			  12
-																			? "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
-																			: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
-																}`}
-															>
-																{risk.riskScore}
-															</span>
-															<h3 className="truncate text-sm font-medium text-foreground">
-																{risk.title}
-															</h3>
-														</div>
-														{risk.description && (
-															<p className="mt-1 line-clamp-1 text-xs text-muted-foreground">
-																{
-																	risk.description
-																}
-															</p>
-														)}
-														<p className="mt-1.5 text-[11px] text-muted-foreground">
-															{risk.processName}{" "}
-															· {tc("severity")}:{" "}
-															{risk.severity} ·
-															{tc("probability")}:{" "}
-															{risk.probability}
-														</p>
-													</div>
-												</div>
-											</Link>
-										))}
-									</div>
-								)}
-							</div>
+						</div>
 					</div>
+
+					{/* Two-column: Top Risks + Vulnerable Processes */}
+					<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+
+						{/* Left: Top Risks */}
+						<div className="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-100">
+							<h2 className="mb-3 text-sm font-semibold text-foreground">
+								{t("topRisks")}
+							</h2>
+							{topRisks.length === 0 ? (
+								<div className="rounded-2xl border border-white/10 bg-card/80 backdrop-blur-sm shadow-sm p-8 text-center dark:border-white/5 dark:bg-card/60">
+									<p className="text-sm text-muted-foreground">
+										{t("noRisksDesc")}
+									</p>
+								</div>
+							) : (
+								<div className="space-y-3">
+									{topRisks.map((risk) => (
+										<Link
+											key={risk.id}
+											href={`${basePath}/processes`}
+											className={`block rounded-2xl border border-white/10 bg-card/80 backdrop-blur-sm p-4 transition-all duration-300 hover:shadow-md dark:border-white/5 dark:bg-card/60 border-l-4 ${
+										risk.riskScore >= 16
+											? "border-l-[#DC2626] dark:border-red-900/30"
+											: risk.riskScore >= 12
+												? "border-l-[#D97706] dark:border-amber-900/30"
+												: "border-l-[#0EA5E9] border-border"
+									}`}
+										>
+											<div className="flex items-start justify-between">
+												<div className="min-w-0 flex-1">
+													<div className="flex items-center gap-2">
+														<span
+															className={`inline-flex h-6 min-w-[24px] items-center justify-center rounded text-xs font-semibold ${
+																risk.riskScore >=
+																16
+																	? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+																	: risk.riskScore >=
+																		  12
+																		? "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
+																		: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+															}`}
+														>
+															{risk.riskScore}
+														</span>
+														<h3 className="truncate text-sm font-medium text-foreground">
+															{risk.title}
+														</h3>
+													</div>
+													{risk.description && (
+														<p className="mt-1 line-clamp-1 text-xs text-muted-foreground">
+															{
+																risk.description
+															}
+														</p>
+													)}
+													<p className="mt-1.5 text-[11px] text-muted-foreground">
+														{risk.processName}{" "}
+														· {tc("severity")}:{" "}
+														{risk.severity} ·
+														{tc("probability")}:{" "}
+														{risk.probability}
+													</p>
+												</div>
+											</div>
+										</Link>
+									))}
+								</div>
+							)}
+						</div>
+
+						{/* Right: Vulnerable Processes */}
+						<div className="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-150">
+							<h2 className="mb-3 text-sm font-semibold text-foreground">
+								{t("vulnerableProcesses")}
+							</h2>
+							{vulnerableProcesses.length === 0 ? (
+								<div className="rounded-2xl border border-white/10 bg-card/80 backdrop-blur-sm shadow-sm p-8 text-center dark:border-white/5 dark:bg-card/60">
+									<p className="text-sm text-muted-foreground">
+										{t("noVulnerableProcesses")}
+									</p>
+								</div>
+							) : (
+								<div className="space-y-3">
+									{vulnerableProcesses.map((proc) => {
+										const scoreColor = proc.avgScore < 50
+											? "text-red-500"
+											: proc.avgScore < 70
+												? "text-amber-500"
+												: "text-green-500";
+										const barColor = proc.avgScore < 50
+											? "bg-red-500"
+											: proc.avgScore < 70
+												? "bg-amber-500"
+												: "bg-green-500";
+										return (
+											<Link
+												key={proc.processId}
+												href={`${basePath}/processes`}
+												className="block rounded-2xl border border-white/10 bg-card/80 backdrop-blur-sm p-4 transition-all duration-300 hover:shadow-md dark:border-white/5 dark:bg-card/60"
+											>
+												<div className="flex items-center justify-between mb-2">
+													<h3 className="truncate text-sm font-medium text-foreground">
+														{proc.name}
+													</h3>
+													<span className={`text-sm font-bold tabular-nums ${scoreColor}`}>
+														{proc.avgScore}
+													</span>
+												</div>
+												<div className="h-1.5 rounded-full bg-accent">
+													<div
+														className={`h-full rounded-full ${barColor} transition-all duration-1000 ease-out`}
+														style={{ width: `${proc.avgScore}%` }}
+													/>
+												</div>
+												<p className="mt-1.5 text-[11px] text-muted-foreground">
+													{t("evaluationsCount", { count: proc.simulationCount })}
+												</p>
+											</Link>
+										);
+									})}
+								</div>
+							)}
+						</div>
+				</div>
 
 					{/* Evaluaciones Summary */}
 					{evaluaciones && (
@@ -468,8 +535,48 @@ export function RiskDashboard({
 						</div>
 					)}
 
-				{/* Next Session */}
-					{nextSession && (
+			{/* Next Steps Recommendations */}
+				{nextSteps.length > 0 && (
+					<div className="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-200">
+						<h2 className="mb-3 text-sm font-semibold text-foreground">
+							<span className="flex items-center gap-2">
+								<LightbulbIcon className="size-4 text-amber-400" />
+								{t("nextStepsTitle")}
+							</span>
+						</h2>
+						<div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+							{nextSteps.map((step) => {
+								const iconMap = {
+									scan: <SearchIcon className="size-4 text-blue-400" />,
+									evaluate: <ClipboardCheckIcon className="size-4 text-primary" />,
+									improve: <TrendingUpIcon className="size-4 text-green-400" />,
+									remind: <UsersIcon className="size-4 text-amber-400" />,
+									grow: <SparklesIcon className="size-4 text-purple-400" />,
+								};
+								return (
+									<Link
+										key={step.id}
+										href={step.href}
+										className="group flex items-start gap-3 rounded-2xl border border-white/10 bg-card/80 backdrop-blur-sm p-4 transition-all duration-300 hover:shadow-md hover:border-primary/30 dark:border-white/5 dark:bg-card/60"
+									>
+										<div className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-white/5">
+											{iconMap[step.icon]}
+										</div>
+										<div className="min-w-0 flex-1">
+											<p className="text-sm text-foreground group-hover:text-primary transition-colors">
+												{step.message}
+											</p>
+										</div>
+										<ArrowRightIcon className="size-4 shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+									</Link>
+								);
+							})}
+						</div>
+					</div>
+				)}
+
+			{/* Next Session */}
+				{nextSession && (
 						<div className="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-200 rounded-2xl border border-white/10 bg-card/80 backdrop-blur-sm shadow-sm p-4 dark:border-white/5 dark:bg-card/60">
 
 								<div className="flex items-center gap-3">
@@ -517,17 +624,17 @@ export function RiskDashboard({
 											key={i}
 											className="flex items-center gap-3 rounded-xl border border-white/10 bg-card/80 backdrop-blur-sm px-4 py-3 dark:border-white/5 dark:bg-card/60"
 										>
-											<span
-												className={`size-2 rounded-full ${
-													item.type ===
-													"risk_found"
-														? "bg-amber-500"
-														: item.type ===
-															  "session_ended"
-															? "bg-blue-500"
-															: "bg-green-500"
-												}`}
-											/>
+								<span
+									className={`size-2 rounded-full ${
+										item.type === "risk_found"
+											? "bg-amber-500"
+											: item.type === "session_ended"
+												? "bg-blue-500"
+												: item.type === "evaluation_completed"
+													? "bg-primary"
+													: "bg-green-500"
+									}`}
+								/>
 											<div className="min-w-0 flex-1">
 												<p className="truncate text-sm text-foreground">
 													{item.title}

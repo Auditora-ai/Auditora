@@ -78,6 +78,7 @@
       "analytics": "Analytics",
       "clients": "Clients",
       "sessions": "Sessions",
+      "discover": "Discover",
       "start": "Start",
       "dashboard": "Overview",
       "processes": "Processes",
@@ -840,7 +841,18 @@
       "dateDaysAgo": "{count} days ago",
       "activitySessionCompleted": "Session \"{process}\" completed",
       "activityNodesExtracted": "{count} nodes extracted",
-      "createEvaluation": "Create Evaluation"
+      "activityEvalCompleted": "Evaluation \"{name}\" completed",
+      "activityEvalScore": "Score: {score}/100",
+      "createEvaluation": "Create Evaluation",
+      "vulnerableProcesses": "Vulnerable Processes",
+      "noVulnerableProcesses": "No vulnerable processes detected. Run evaluations to identify weak areas.",
+      "evaluationsCount": "{count} evaluations",
+      "nextStepsTitle": "Recommended Next Steps",
+      "nextStepCapture": "Capture your first process — start a discovery session or schedule a live interview",
+      "nextStepFirstEval": "You have processes documented — create your first evaluation to test your team",
+      "nextStepImproveWeakest": "Your team alignment is low on \"{process}\". Focus evaluations there.",
+      "nextStepBoostCompletion": "Only {rate}% of evaluations are completed. Send reminders to your team.",
+      "nextStepGrow": "Your team is performing well! Consider adding new processes to evaluate."
     }
   },
   "processLibrary": {

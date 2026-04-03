@@ -1,5 +1,11 @@
 import { getActiveOrganization } from "@auth/lib/server";
-import { RiskDashboard, type TopRisk, type ActivityItem } from "@command-center/components/RiskDashboard";
+import {
+	RiskDashboard,
+	type TopRisk,
+	type ActivityItem,
+	type VulnerableProcess,
+	type NextStepRecommendation,
+} from "@command-center/components/RiskDashboard";
 import { db } from "@repo/database";
 import { fetchHumanRiskDashboardData } from "@evaluaciones/lib/dashboard-queries";
 import { notFound } from "next/navigation";
@@ -34,7 +40,7 @@ export default async function OrganizationPage({
 	});
 
 	// Parallel queries for dashboard data
-	const [processes, topRisksRaw, nextSession, activeSession, recentSessions, evaluacionesData] =
+	const [processes, topRisksRaw, nextSession, activeSession, recentSessions, evaluacionesData, recentEvaluations] =
 		await Promise.all([
 			// Process stats
 			architecture
@@ -45,6 +51,7 @@ export default async function OrganizationPage({
 						},
 						select: {
 							id: true,
+							name: true,
 							versions: { select: { id: true }, take: 1 },
 							risks: { select: { id: true }, take: 1 },
 						},
@@ -112,6 +119,26 @@ export default async function OrganizationPage({
 
 			// Evaluaciones / human risk data
 			fetchHumanRiskDashboardData(orgId).catch(() => null),
+
+			// Recent completed evaluations for activity feed
+			db.simulationRun.findMany({
+				where: {
+					status: "COMPLETED",
+					scenario: { template: { organizationId: orgId } },
+				},
+				orderBy: { completedAt: "desc" },
+				take: 5,
+				select: {
+					id: true,
+					overallScore: true,
+					completedAt: true,
+					scenario: {
+						select: {
+							template: { select: { title: true } },
+						},
+					},
+				},
+			}),
 		]);
 
 	const totalProcesses = processes.length;
@@ -153,13 +180,55 @@ export default async function OrganizationPage({
 	}));
 
 	const t = await getTranslations("dashboard.riskDashboard");
+	const basePath = `/${organizationSlug}`;
 
-	const recentActivity: ActivityItem[] = recentSessions.map((s) => ({
+	// Build enriched activity feed: sessions + evaluations, sorted by date
+	const sessionActivity: ActivityItem[] = recentSessions.map((s) => ({
 		type: "session_ended" as const,
 		title: t("activitySessionCompleted", { process: s.processDefinition?.name ?? t("noProcess") }),
 		subtitle: t("activityNodesExtracted", { count: s._count.diagramNodes }),
 		date: formatRelativeDate(s.updatedAt, t),
+		_sortDate: s.updatedAt,
 	}));
+
+	const evalActivity: ActivityItem[] = recentEvaluations
+		.filter((e) => e.completedAt)
+		.map((e) => ({
+			type: "evaluation_completed" as const,
+			title: t("activityEvalCompleted", { name: e.scenario.template.title }),
+			subtitle: t("activityEvalScore", { score: e.overallScore ?? 0 }),
+			date: formatRelativeDate(e.completedAt!, t),
+			_sortDate: e.completedAt!,
+		}));
+
+	// Merge and sort by date, take top 8
+	const allActivity = [...sessionActivity, ...evalActivity]
+		.sort((a, b) => (b as ActivityItemWithSort)._sortDate.getTime() - (a as ActivityItemWithSort)._sortDate.getTime())
+		.slice(0, 8)
+		.map(({ _sortDate, ...rest }) => rest) as ActivityItem[];
+
+	// Vulnerable processes — from evaluaciones heatmap data, sorted by avg alignment (lowest first)
+	const vulnerableProcesses: VulnerableProcess[] =
+		evaluacionesData && !evaluacionesData.insufficientData
+			? evaluacionesData.processHeatmap
+					.map((p) => ({
+						name: p.processName,
+						avgScore: p.avgAlignment,
+						processId: p.processName, // using name as ID for now
+						simulationCount: p.simulationCount,
+					}))
+					.sort((a, b) => a.avgScore - b.avgScore)
+					.slice(0, 5)
+			: [];
+
+	// Next steps recommendations — smart, data-driven
+	const nextSteps: NextStepRecommendation[] = computeNextSteps({
+		processCount: totalProcesses,
+		evaluacionesData,
+		vulnerableProcesses,
+		basePath,
+		t,
+	});
 
 	return (
 		<div className="h-[calc(100vh-64px)]">
@@ -181,7 +250,7 @@ export default async function OrganizationPage({
 							}
 						: null
 				}
-				recentActivity={recentActivity}
+				recentActivity={allActivity}
 				processCount={totalProcesses}
 				documentedCount={documentedProcesses}
 				riskCount={riskCount}
@@ -198,9 +267,17 @@ export default async function OrganizationPage({
 							}
 						: null
 				}
+				vulnerableProcesses={vulnerableProcesses}
+				nextSteps={nextSteps}
 			/>
 		</div>
 	);
+}
+
+// ─── Helpers ────────────────────────────────────────────────────────────────
+
+interface ActivityItemWithSort extends ActivityItem {
+	_sortDate: Date;
 }
 
 function formatRelativeDate(date: Date, t: (key: string, values?: Record<string, unknown>) => string): string {
@@ -212,4 +289,70 @@ function formatRelativeDate(date: Date, t: (key: string, values?: Record<string,
 	if (diffDays === 1) return t("dateYesterday");
 	if (diffDays < 7) return t("dateDaysAgo", { count: diffDays });
 	return date.toLocaleDateString(undefined, { day: "numeric", month: "short" });
+}
+
+interface NextStepsInput {
+	processCount: number;
+	evaluacionesData: Awaited<ReturnType<typeof fetchHumanRiskDashboardData>> | null;
+	vulnerableProcesses: VulnerableProcess[];
+	basePath: string;
+	t: (key: string, values?: Record<string, unknown>) => string;
+}
+
+function computeNextSteps({ processCount, evaluacionesData, vulnerableProcesses, basePath, t }: NextStepsInput): NextStepRecommendation[] {
+	const steps: NextStepRecommendation[] = [];
+
+	// No processes yet → first step
+	if (processCount === 0) {
+		steps.push({
+			id: "capture-first",
+			message: t("nextStepCapture"),
+			href: `${basePath}/sessions`,
+			icon: "scan",
+		});
+		return steps;
+	}
+
+	// Has processes but no evaluations data
+	if (!evaluacionesData || evaluacionesData.insufficientData) {
+		steps.push({
+			id: "first-eval",
+			message: t("nextStepFirstEval"),
+			href: `${basePath}/evaluaciones`,
+			icon: "evaluate",
+		});
+		return steps;
+	}
+
+	// Low team alignment (< 60)
+	if (evaluacionesData.orgAvgScore < 60 && vulnerableProcesses.length > 0) {
+		steps.push({
+			id: "improve-weakest",
+			message: t("nextStepImproveWeakest", { process: vulnerableProcesses[0]?.name ?? "" }),
+			href: `${basePath}/evaluaciones`,
+			icon: "improve",
+		});
+	}
+
+	// Low completion rate (< 50%)
+	if (evaluacionesData.completionRate < 50) {
+		steps.push({
+			id: "boost-completion",
+			message: t("nextStepBoostCompletion", { rate: evaluacionesData.completionRate }),
+			href: `${basePath}/evaluaciones`,
+			icon: "remind",
+		});
+	}
+
+	// Everything healthy — grow
+	if (steps.length === 0) {
+		steps.push({
+			id: "add-processes",
+			message: t("nextStepGrow"),
+			href: `${basePath}/processes`,
+			icon: "grow",
+		});
+	}
+
+	return steps.slice(0, 3); // max 3 recommendations
 }
