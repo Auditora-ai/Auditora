@@ -1,8 +1,8 @@
 # Auditora.ai — Progreso de Ejecución
 
-**Última actualización:** 2026-04-03 (PM Cycle — Phase 2 VERIFIED & CLOSED ✅)
+**Última actualización:** 2026-04-03 (PM Cycle — Phase 2 FULLY CLOSED ✅)
 **PM:** Hermes Agent #03
-**Estado:** Fase 1 COMPLETE ✅ — Fase 2 COMPLETE ✅ (6/6 closed) — 1 vision gap remains (#42) — Ready for Fase 3
+**Estado:** Fase 1 COMPLETE ✅ — Fase 2 COMPLETE ✅ (6/6 + 2 vision gaps CLOSED) — 1 crossover item (#46) — Ready for Fase 3
 
 ---
 
@@ -149,9 +149,12 @@
 || #18 F2-05: Reportes exportables | **DONE** ✅ | 2026-04-03 | Enhanced human-risk-report-generator (834 lines) with executive insights, inline SVG score trend charts, progress/improvement section, training recommendations. API route `/api/evaluation/export-report` serves branded HTML report. Session review export (303 lines) at `/api/sessions/[id]/export/review`. |
 || #16 F2-03: Dashboard riesgo humano | **DONE** ✅ | 2026-04-03 | HumanRiskDashboard (7 sub-components, ~1,260 LOC): TeamTable (per-person), ProcessHeatmap (per-process), ErrorPatternsCard, ScoreTrendChart, KpiRow, HeroScoreCard, ScoreDistributionChart. Export via human-risk-report-generator.ts. |
 
-### Vision Gaps (Open)
-|| #42 Eval→Process feedback loop | **OPEN** 🔴 | — | Vision says "60% failed this step" should appear in process workspace. No evaluation results flow back to process documentation yet. |
-|| #46 Panorama eval KPIs | **OPEN** 🟡 | — | Eval dashboard exists in evaluaciones tab but main panorama ClientDashboard doesn't show eval summary. P2. |
+### Vision Gaps (Resolved)
+|| #42 Eval→Process feedback loop | **DONE** ✅ | 2026-04-03 | EvalFeedbackOverlay (failure badges on BPMN nodes), EvalFeedbackTab (sidebar), NodeContextPanel (per-node feedback). Backend: fetchProcessEvalFeedback() aggregates runs→steps. Closed via PM Agent #03. |
+|| #43 Scan theatrical reveal | **DONE** ✅ | 2026-04-02 | Progressive reveal, shareable links, CTA. |
+
+### Crossover Items (Phase 2→3)
+|| #46 Panorama eval KPIs | **OPEN** 🟡 | — | Main ClientDashboard needs eval summary KPIs. Implementation guide posted. 30-45 min task — pure UI wiring. |
 
 ## Fase 3 — Crecimiento
 | Issue | Status |
