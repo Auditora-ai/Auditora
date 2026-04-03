@@ -21,15 +21,17 @@ import { useTranslations } from "next-intl";
 import { useBpmnModeler } from "@meeting/hooks/useBpmnModeler";
 import { useProcessWorkspace } from "../../context/ProcessWorkspaceContext";
 import { HealthBadgeOverlay } from "./HealthBadgeOverlay";
-import type { RaciEntry } from "../../types";
+import { EvalFeedbackOverlay } from "./EvalFeedbackOverlay";
+import type { RaciEntry, ProcessEvalFeedbackData } from "../../types";
 
 interface DiagramCanvasProps {
 	processId: string;
 	bpmnXml: string | null;
 	raciEntries?: RaciEntry[];
+	evalFeedback?: ProcessEvalFeedbackData;
 }
 
-export function DiagramCanvas({ processId, bpmnXml, raciEntries }: DiagramCanvasProps) {
+export function DiagramCanvas({ processId, bpmnXml, raciEntries, evalFeedback }: DiagramCanvasProps) {
 	const tc = useTranslations("common");
 	const tpd = useTranslations("processDetail");
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -248,6 +250,15 @@ export function DiagramCanvas({ processId, bpmnXml, raciEntries }: DiagramCanvas
 					getModeler={getModeler}
 					isReady={isReady}
 					raciEntries={raciEntries}
+				/>
+			)}
+
+			{/* Evaluation feedback overlay — failure rates on steps */}
+			{isReady && evalFeedback?.hasData && (
+				<EvalFeedbackOverlay
+					getModeler={getModeler}
+					isReady={isReady}
+					evalFeedback={evalFeedback}
 				/>
 			)}
 

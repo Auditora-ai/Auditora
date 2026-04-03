@@ -19,7 +19,6 @@ import {
 	PanelLeftCloseIcon,
 	PanelLeftOpenIcon,
 	PlusIcon,
-	ScanSearchIcon,
 	SettingsIcon,
 	WorkflowIcon,
 } from "lucide-react";
@@ -102,17 +101,6 @@ export function NavBar() {
 
 	const menuItems: NavItem[] = [
 		// ─── FLOW (consulting workflow) ───
-		{
-			id: "scan",
-			label: t("app.menu.scan"),
-			href: `${basePath}/scan`,
-			icon: ScanSearchIcon,
-			isActive: pathname.startsWith(`${basePath}/scan`),
-			hidden: !hasOrg,
-			section: "flow",
-			flowStep: 1,
-			flowCompleted: hasArchitecture,
-		},
 		{
 			id: "processes",
 			label: t("app.menu.processes"),

@@ -1,51 +1,99 @@
 /**
- * POST /api/public/scan/share — Generate a shareable link for scan results
+ * Public Scan Share API
  *
- * Requires: valid scan_session cookie with completed results
- * Returns: { shareToken, shareUrl }
+ * POST /api/public/scan/share
+ *
+ * Generates a shareable link for scan results. Creates a random share token
+ * with a 7-day expiry and returns the share URL.
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { randomBytes } from "crypto";
-import { verifyAnonymousSession } from "@radiografia/lib/session-verify";
 import { db } from "@repo/database";
+import { randomBytes } from "node:crypto";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
-	const result = await verifyAnonymousSession(request);
-	if (result.error) return result.error;
+	try {
+		const body = await request.json();
+		const { sessionId } = body as { sessionId?: string };
 
-	const { session } = result;
+		if (!sessionId || typeof sessionId !== "string") {
+			return NextResponse.json(
+				{ error: "sessionId is required" },
+				{ status: 400 },
+			);
+		}
 
-	// Must have completed results to share
-	if (!session.riskResults && !session.deepRiskResults) {
+		// Find the session and verify it has results
+		const session = await db.anonymousSession.findUnique({
+			where: { id: sessionId },
+			select: {
+				id: true,
+				phase: true,
+				riskResults: true,
+				shareToken: true,
+				shareExpiresAt: true,
+			},
+		});
+
+		if (!session) {
+			return NextResponse.json(
+				{ error: "Session not found" },
+				{ status: 404 },
+			);
+		}
+
+		if (!session.riskResults) {
+			return NextResponse.json(
+				{ error: "No analysis results to share" },
+				{ status: 400 },
+			);
+		}
+
+		// If a valid share token already exists, return it
+		if (
+			session.shareToken &&
+			session.shareExpiresAt &&
+			session.shareExpiresAt > new Date()
+		) {
+			const host = request.headers.get("host") || "localhost:3000";
+			const protocol = request.headers.get("x-forwarded-proto") || "https";
+			const shareUrl = `${protocol}://${host}/scan/results/${session.shareToken}`;
+
+			return NextResponse.json({
+				shareToken: session.shareToken,
+				shareUrl,
+				expiresAt: session.shareExpiresAt.toISOString(),
+			});
+		}
+
+		// Generate new share token
+		const shareToken = randomBytes(16).toString("hex");
+		const shareExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+
+		await db.anonymousSession.update({
+			where: { id: sessionId },
+			data: {
+				shareToken,
+				shareExpiresAt,
+			},
+		});
+
+		const host = request.headers.get("host") || "localhost:3000";
+		const protocol = request.headers.get("x-forwarded-proto") || "https";
+		const shareUrl = `${protocol}://${host}/scan/results/${shareToken}`;
+
+		return NextResponse.json({
+			shareToken,
+			shareUrl,
+			expiresAt: shareExpiresAt.toISOString(),
+		});
+	} catch (err) {
+		console.error("[scan/share] Error:", err);
 		return NextResponse.json(
-			{ error: "No scan results to share. Complete the scan first." },
-			{ status: 400 },
+			{ error: "Internal server error" },
+			{ status: 500 },
 		);
 	}
-
-	// If already has a share token that hasn't expired, return it
-	if (session.shareToken && session.shareExpiresAt && session.shareExpiresAt > new Date()) {
-		const baseUrl = process.env.NEXT_PUBLIC_SAAS_URL || process.env.NEXT_PUBLIC_APP_URL || "";
-		return NextResponse.json({
-			shareToken: session.shareToken,
-			shareUrl: `${baseUrl}/scan/results/${session.shareToken}`,
-		});
-	}
-
-	// Generate a new share token (URL-safe, 16 bytes = 22 chars base64url)
-	const shareToken = randomBytes(16).toString("base64url");
-	const shareExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
-
-	await db.anonymousSession.update({
-		where: { id: session.id },
-		data: { shareToken, shareExpiresAt },
-	});
-
-	const baseUrl = process.env.NEXT_PUBLIC_SAAS_URL || process.env.NEXT_PUBLIC_APP_URL || "";
-
-	return NextResponse.json({
-		shareToken,
-		shareUrl: `${baseUrl}/scan/results/${shareToken}`,
-	});
 }

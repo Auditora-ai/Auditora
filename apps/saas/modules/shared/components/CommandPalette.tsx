@@ -11,7 +11,6 @@ import {
 	LayoutDashboardIcon,
 	MicIcon,
 	PlusIcon,
-	ScanSearchIcon,
 	SearchIcon,
 	ShieldAlertIcon,
 	WorkflowIcon,
@@ -98,14 +97,7 @@ export function CommandPalette() {
 					icon: FolderOpenIcon,
 					action: () => router.push(`${basePath}/documents`),
 				},
-				{
-					id: "go-scan",
-					label: "Radiografía",
-					section: t("sections.navigation"),
-					icon: ScanSearchIcon,
-					action: () => router.push(`${basePath}/scan`),
-				},
-			);
+				);
 		}
 
 		return actions;

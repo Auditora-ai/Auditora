@@ -8,6 +8,7 @@ import {
 	ShieldAlertIcon,
 	ClockIcon,
 	VideoIcon,
+	BarChart3Icon,
 } from "lucide-react";
 import { useProcessWorkspace } from "../../context/ProcessWorkspaceContext";
 import { NodeContextPanel } from "./NodeContextPanel";
@@ -15,6 +16,7 @@ import { ResumenTab } from "../sidebar-tabs/ResumenTab";
 import { ContextoTab } from "../sidebar-tabs/ContextoTab";
 import { SidebarRaciTab } from "../sidebar-tabs/SidebarRaciTab";
 import { SidebarRiskTab } from "../sidebar-tabs/SidebarRiskTab";
+import { EvalFeedbackTab } from "../sidebar-tabs/EvalFeedbackTab";
 import { VersionesTab } from "../sidebar-tabs/VersionesTab";
 import { SessionesTab } from "../sidebar-tabs/SessionesTab";
 import type { ProcessData } from "../../types";
@@ -24,6 +26,7 @@ const TABS = [
 	{ key: "contexto", label: "Contexto", icon: FileTextIcon },
 	{ key: "raci", label: "RACI", icon: Table2Icon },
 	{ key: "riesgos", label: "Riesgos", icon: ShieldAlertIcon },
+	{ key: "evalFeedback", label: "Eval", icon: BarChart3Icon },
 	{ key: "versiones", label: "Versiones", icon: ClockIcon },
 	{ key: "sesiones", label: "Sesiones", icon: VideoIcon },
 ] as const;
@@ -47,6 +50,7 @@ export function ContextSidebar({ process, organizationSlug, processesPath, onUpd
 				element={selectedElement}
 				processId={process.id}
 				raciEntries={process.raciEntries}
+				evalFeedback={process.evalFeedback}
 			/>
 		);
 	}
@@ -91,6 +95,7 @@ export function ContextSidebar({ process, organizationSlug, processesPath, onUpd
 				)}
 				{activeTab === "raci" && <SidebarRaciTab processId={process.id} />}
 				{activeTab === "riesgos" && <SidebarRiskTab processId={process.id} />}
+				{activeTab === "evalFeedback" && <EvalFeedbackTab evalFeedback={process.evalFeedback} />}
 				{activeTab === "versiones" && <VersionesTab processId={process.id} versions={process.versions} />}
 				{activeTab === "sesiones" && (
 					<SessionesTab

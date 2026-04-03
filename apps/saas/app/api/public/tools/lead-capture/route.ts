@@ -7,7 +7,18 @@ import {
 	getClientIp,
 } from "@repo/rate-limit";
 import { z } from "zod";
-import { verifyTurnstileToken } from "@radiografia/lib/turnstile";
+async function verifyTurnstileToken(token: string, ip: string) {
+	const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+		method: "POST",
+		headers: { "Content-Type": "application/x-www-form-urlencoded" },
+		body: new URLSearchParams({
+			secret: process.env.TURNSTILE_SECRET_KEY ?? "",
+			response: token,
+			remoteip: ip,
+		}),
+	});
+	return (await res.json()) as { success: boolean };
+}
 
 const TOOL_DISPLAY_NAMES: Record<string, string> = {
 	"bpmn-generator": "BPMN Diagram Generator",

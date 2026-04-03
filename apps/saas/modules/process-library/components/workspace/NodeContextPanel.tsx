@@ -12,9 +12,10 @@ import {
 	GitBranchIcon,
 	CircleIcon,
 	ArrowRightIcon,
+	BarChart3Icon,
 } from "lucide-react";
 import { useProcessWorkspace } from "../../context/ProcessWorkspaceContext";
-import type { RaciEntry } from "../../types";
+import type { RaciEntry, ProcessEvalFeedbackData, EvalStepFeedback } from "../../types";
 
 const TYPE_LABELS: Record<string, string> = {
 	"bpmn:Task": "Tarea",
@@ -40,13 +41,46 @@ const TYPE_LABELS: Record<string, string> = {
 	"bpmn:Lane": "Carril",
 };
 
+/**
+ * Fuzzy-match a node name against eval feedback steps.
+ * Returns matching step or null.
+ */
+function findMatchingEvalStep(
+	nodeName: string,
+	evalFeedback?: ProcessEvalFeedbackData,
+): EvalStepFeedback | null {
+	if (!evalFeedback?.hasData || !evalFeedback.steps.length) return null;
+	const normalizedName = nodeName.toLowerCase().trim();
+
+	for (const step of evalFeedback.steps) {
+		const ref = step.proceduralReference?.toLowerCase().trim();
+		if (!ref) continue;
+
+		// Direct match
+		if (ref === normalizedName) return step;
+		// Contains match
+		if (ref.includes(normalizedName) && normalizedName.length > 3) return step;
+		if (normalizedName.includes(ref) && ref.length > 3) return step;
+		// Keyword matching
+		const refWords = ref.split(/\s+/).filter((w) => w.length >= 4);
+		const nameWords = normalizedName.split(/\s+/).filter((w) => w.length >= 4);
+		if (refWords.length > 0 && nameWords.length > 0) {
+			const matchCount = nameWords.filter((w) => refWords.includes(w)).length;
+			const overlapRatio = matchCount / Math.min(refWords.length, nameWords.length);
+			if (overlapRatio >= 0.5 && matchCount >= 2) return step;
+		}
+	}
+	return null;
+}
+
 interface NodeContextPanelProps {
 	element: { id: string; type: string; name: string };
 	processId: string;
 	raciEntries?: RaciEntry[];
+	evalFeedback?: ProcessEvalFeedbackData;
 }
 
-export function NodeContextPanel({ element, processId, raciEntries }: NodeContextPanelProps) {
+export function NodeContextPanel({ element, processId, raciEntries, evalFeedback }: NodeContextPanelProps) {
 	const tpd = useTranslations("processDetail");
 	const { clearSelection } = useProcessWorkspace();
 
@@ -62,6 +96,12 @@ export function NodeContextPanel({ element, processId, raciEntries }: NodeContex
 	}, [raciEntries, element.name]);
 
 	const hasRaci = matchedRaci.length > 0;
+
+	// Match eval feedback for this node
+	const matchedEval = useMemo(
+		() => findMatchingEvalStep(element.name, evalFeedback),
+		[element.name, evalFeedback],
+	);
 
 	const isTask = element.type.includes("Task") || element.type === "bpmn:SubProcess" || element.type === "bpmn:CallActivity";
 
@@ -109,6 +149,53 @@ export function NodeContextPanel({ element, processId, raciEntries }: NodeContex
 								{tpd("noRaciAssignment")}
 							</p>
 						)}
+					</div>
+				)}
+
+				{/* Evaluation Feedback for this step */}
+				{isTask && matchedEval && (
+					<div className="rounded-lg border p-3">
+						<div className="flex items-center gap-2 mb-2">
+							<BarChart3Icon className="h-4 w-4 text-primary" />
+							<span className="text-sm font-medium">Evaluation Feedback</span>
+						</div>
+						<div className="space-y-2">
+							{/* Failure rate bar */}
+							<div className="flex items-center justify-between text-xs">
+								<span className="text-muted-foreground">Failure Rate</span>
+								<span
+									className="font-bold tabular-nums"
+									style={{
+										color: matchedEval.failureRate > 50 ? "#DC2626" : matchedEval.failureRate > 20 ? "#EAB308" : "#16A34A",
+									}}
+								>
+									{matchedEval.failureRate}%
+								</span>
+							</div>
+							<div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
+								<div
+									className="h-full rounded-full"
+									style={{
+										width: `${matchedEval.failureRate}%`,
+										background: matchedEval.failureRate > 50 ? "#DC2626" : matchedEval.failureRate > 20 ? "#EAB308" : "#16A34A",
+									}}
+								/>
+							</div>
+							<div className="grid grid-cols-2 gap-2 text-xs">
+								<div>
+									<span className="text-muted-foreground">Responses: </span>
+									<span className="font-medium">{matchedEval.totalResponses}</span>
+								</div>
+								<div>
+									<span className="text-muted-foreground">High-risk: </span>
+									<span className="font-medium text-destructive">{matchedEval.highRiskChoices}</span>
+								</div>
+							</div>
+							<div className="text-xs">
+								<span className="text-muted-foreground">Most chosen: </span>
+								<span className="font-medium">{matchedEval.mostChosenOption}</span>
+							</div>
+						</div>
 					</div>
 				)}
 

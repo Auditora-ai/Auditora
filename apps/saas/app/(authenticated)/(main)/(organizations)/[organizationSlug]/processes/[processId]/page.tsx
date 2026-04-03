@@ -2,6 +2,7 @@ import { getActiveOrganization } from "@auth/lib/server";
 import { db } from "@repo/database";
 import { notFound } from "next/navigation";
 import { ProcessWorkspace } from "@process-library/components/ProcessWorkspace";
+import { fetchProcessEvalFeedback } from "@evaluaciones/lib/process-eval-feedback";
 
 export async function generateMetadata({
 	params,
@@ -72,6 +73,9 @@ export default async function ProcessDetailPage({
 	if (!process) return notFound();
 	if (process.architecture.organizationId !== activeOrganization.id) return notFound();
 
+	// Fetch evaluation feedback for this process (shows failure rates on BPMN nodes)
+	const evalFeedbackRaw = await fetchProcessEvalFeedback(process.id);
+
 	return (
 		<ProcessWorkspace
 			process={{
@@ -108,12 +112,21 @@ export default async function ProcessDetailPage({
 					...v,
 					createdAt: v.createdAt.toISOString(),
 				})),
-				raciEntries: process.raciEntries.map((r) => ({
-					activityName: r.activityName,
-					role: r.role,
-					assignment: r.assignment,
-				})),
-				sessionsCount: process._count.sessions,
+			raciEntries: process.raciEntries.map((r) => ({
+				activityName: r.activityName,
+				role: r.role,
+				assignment: r.assignment,
+			})),
+			evalFeedback: evalFeedbackRaw.hasData
+				? {
+						hasData: true,
+						totalRuns: evalFeedbackRaw.totalRuns,
+						avgOverallScore: evalFeedbackRaw.avgOverallScore,
+						steps: evalFeedbackRaw.steps,
+						stepFailureMap: evalFeedbackRaw.stepFailureMap,
+				  }
+				: undefined,
+			sessionsCount: process._count.sessions,
 				versionsCount: process._count.versions,
 				raciCount: process._count.raciEntries,
 				risksCount: process._count.risks,

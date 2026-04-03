@@ -47,11 +47,12 @@ function WorkspaceInner({ process: initialProcess, organizationSlug, basePath }:
 			<div className="flex flex-1 overflow-hidden">
 				{/* Diagram Canvas — main area */}
 				<div className={`flex-1 overflow-hidden transition-all ${sidebarCollapsed ? "" : "mr-0"}`}>
-					<DiagramCanvas
-						processId={process.id}
-						bpmnXml={process.bpmnXml}
-						raciEntries={process.raciEntries}
-					/>
+				<DiagramCanvas
+					processId={process.id}
+					bpmnXml={process.bpmnXml}
+					raciEntries={process.raciEntries}
+					evalFeedback={process.evalFeedback}
+				/>
 				</div>
 
 				{/* Context Sidebar */}

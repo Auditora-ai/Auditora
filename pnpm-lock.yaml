@@ -749,6 +749,9 @@ importers:
       es-toolkit:
         specifier: 'catalog:'
         version: 1.45.1
+      framer-motion:
+        specifier: ^12.38.0
+        version: 12.38.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       gantt-task-react:
         specifier: ^0.3.9
         version: 0.3.9(react@19.2.4)

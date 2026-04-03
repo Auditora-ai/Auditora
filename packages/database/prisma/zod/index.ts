@@ -306,7 +306,7 @@ export type ExternalCostLogScalarFieldEnum = z.infer<typeof ExternalCostLogScala
 
 // File: AnonymousSessionScalarFieldEnum.schema.ts
 
-export const AnonymousSessionScalarFieldEnumSchema = z.enum(['id', 'fingerprint', 'phase', 'sourceUrl', 'businessContext', 'businessDescription', 'industry', 'processName', 'sipocData', 'knowledgeData', 'diagramNodes', 'riskResults', 'deepRiskResults', 'researchData', 'conversationLog', 'completenessScore', 'convertedToUserId', 'convertedAt', 'expiresAt', 'createdAt', 'updatedAt'])
+export const AnonymousSessionScalarFieldEnumSchema = z.enum(['id', 'fingerprint', 'phase', 'sourceUrl', 'businessContext', 'businessDescription', 'industry', 'processName', 'sipocData', 'knowledgeData', 'diagramNodes', 'riskResults', 'deepRiskResults', 'researchData', 'conversationLog', 'completenessScore', 'shareToken', 'shareExpiresAt', 'convertedToUserId', 'convertedAt', 'expiresAt', 'createdAt', 'updatedAt'])
 
 export type AnonymousSessionScalarFieldEnum = z.infer<typeof AnonymousSessionScalarFieldEnumSchema>;
 
@@ -1458,6 +1458,8 @@ export const AnonymousSessionSchema = z.object({
   researchData: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
   conversationLog: z.unknown().refine((val) => { const getDepth = (obj: unknown, depth: number = 0): number => { if (depth > 10) return depth; if (obj === null || typeof obj !== 'object') return depth; const values = Object.values(obj as Record<string, unknown>); if (values.length === 0) return depth; return Math.max(...values.map(v => getDepth(v, depth + 1))); }; return getDepth(val) <= 10; }, "JSON nesting depth exceeds maximum of 10").nullish(),
   completenessScore: z.number().int(),
+  shareToken: z.string().nullish(),
+  shareExpiresAt: z.date().nullish(),
   convertedToUserId: z.string().nullish(),
   convertedAt: z.date().nullish(),
   expiresAt: z.date(),

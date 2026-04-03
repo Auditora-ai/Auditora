@@ -15,7 +15,6 @@ import {
 	GraduationCapIcon,
 	LayoutDashboardIcon,
 	MoreHorizontalIcon,
-	ScanSearchIcon,
 	SettingsIcon,
 	WorkflowIcon,
 } from "lucide-react";
@@ -45,12 +44,6 @@ export function MobileBottomBar() {
 	const basePath = `/${activeOrganization!.slug}`;
 
 	const primaryTabs: MobileTab[] = [
-		{
-			label: t("app.menu.scan"),
-			href: `${basePath}/scan`,
-			icon: ScanSearchIcon,
-			isActive: pathname.startsWith(`${basePath}/scan`),
-		},
 		{
 			label: t("app.menu.processes"),
 			href: `${basePath}/processes`,

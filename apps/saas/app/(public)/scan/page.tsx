@@ -1,42 +1,13 @@
-import { RadiografiaPage } from "@radiografia/components/RadiografiaPage";
-import { RadiografiaWizard } from "@radiografia/components/v2/RadiografiaWizard";
-import { Suspense } from "react";
+import { ScanPage } from "@scan/components/ScanPage";
 
-export const metadata = {
-	title: "Free Process Scan | Auditora.ai",
-	description:
-		"Discover hidden risks in your business processes. Free AI-powered analysis in under 2 minutes.",
-};
-
-/**
- * Public scan page — two modes:
- * 1. With ?url=X param → Skip wizard, auto-start scan immediately (RadiografiaPage)
- * 2. Without URL → Show the full wizard with company form (RadiografiaWizard)
- */
-export default function Page({
-	searchParams,
-}: {
-	searchParams: Promise<{ url?: string; mode?: string; ref?: string }>;
-}) {
-	return (
-		<Suspense>
-			<ScanRouter searchParams={searchParams} />
-		</Suspense>
-	);
+interface ScanPageProps {
+  searchParams: Promise<{ url?: string; ref?: string }>;
 }
 
-async function ScanRouter({
-	searchParams,
-}: {
-	searchParams: Promise<{ url?: string; mode?: string; ref?: string }>;
-}) {
-	const params = await searchParams;
+export default async function Page({ searchParams }: ScanPageProps) {
+  const params = await searchParams;
+  const url = params.url ?? null;
+  const ref = params.ref ?? null;
 
-	// If URL provided, go straight to scan — zero friction
-	if (params.url) {
-		return <RadiografiaPage />;
-	}
-
-	// Otherwise show the wizard
-	return <RadiografiaWizard />;
+  return <ScanPage initialUrl={url} refSource={ref} />;
 }

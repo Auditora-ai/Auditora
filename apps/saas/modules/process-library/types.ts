@@ -37,6 +37,25 @@ export type RaciEntry = {
 	assignment: string;
 };
 
+export interface EvalStepFeedback {
+	decisionPrompt: string;
+	proceduralReference: string | null;
+	totalResponses: number;
+	highRiskChoices: number;
+	failureRate: number;
+	avgRiskScore: number;
+	mostChosenOption: string;
+	order: number;
+}
+
+export interface ProcessEvalFeedbackData {
+	hasData: boolean;
+	totalRuns: number;
+	avgOverallScore: number;
+	steps: EvalStepFeedback[];
+	stepFailureMap: Record<string, number>;
+}
+
 export interface ProcessData {
 	id: string;
 	name: string;
@@ -54,6 +73,7 @@ export interface ProcessData {
 	sessions?: ProcessSession[];
 	versions?: ProcessVersionEntry[];
 	raciEntries?: RaciEntry[];
+	evalFeedback?: ProcessEvalFeedbackData;
 	sessionsCount: number;
 	versionsCount: number;
 	raciCount: number;

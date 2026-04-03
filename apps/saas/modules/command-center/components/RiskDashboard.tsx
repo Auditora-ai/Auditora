@@ -136,7 +136,7 @@ export function RiskDashboard({
 						actions={[
 							{
 								label: t("scanCta"),
-								href: "/scan",
+								onClick: () => setShowWizard(true),
 							},
 							{
 								label: t("newSession"),

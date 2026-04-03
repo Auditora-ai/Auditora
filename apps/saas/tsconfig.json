@@ -24,9 +24,9 @@
 			"@process-library/*": ["./modules/process-library/*"],
 			"@discovery/*": ["./modules/discovery/*"],
 			"@deliverables/*": ["./modules/deliverables/*"],
-			"@radiografia/*": ["./modules/radiografia/*"],
 			"@ai-interview/*": ["./modules/ai-interview/*"],
-			"@evaluaciones/*": ["./modules/evaluaciones/*"]
+			"@evaluaciones/*": ["./modules/evaluaciones/*"],
+			"@scan/*": ["./modules/scan/*"]
 		}
 	},
 	"include": [

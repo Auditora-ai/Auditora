@@ -7,7 +7,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@repo/ui/components/card";
-import { BarChart3Icon, FileTextIcon, MessageSquareIcon } from "lucide-react";
+import { BarChart3Icon, FileTextIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@shared/hooks/router";
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
@@ -17,13 +17,6 @@ interface OnboardingFirstValueStepProps {
 }
 
 const ACTION_CARDS = [
-	{
-		key: "chatInterview",
-		icon: MessageSquareIcon,
-		path: "/scan",
-		color: "text-blue-500",
-		bgColor: "bg-blue-500/10",
-	},
 	{
 		key: "exploreDashboard",
 		icon: BarChart3Icon,
