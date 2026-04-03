@@ -221,7 +221,7 @@
       "ctaSecondary": "Describe the process manually",
       "subtext": "No signup required. Enter a URL and get a SIPOC map + risk assessment in 2 minutes.",
       "trust": "No credit card required · Free to start · Results in minutes",
-      "standards": "SIPOC · BPMN 2.0 · FMEA · GDPR Compliant"
+      "standards": "SIPOC · BPMN 2.0 · FMEA · Risk Management"
     },
     "trustBar": {
       "subtitle": "Built on recognized standards",
@@ -249,7 +249,7 @@
       "title": "Your competitors are mapping processes 8x faster",
       "stat": "73",
       "statLabel": "% of organizations lack documented processes for critical operations",
-      "statSource": "Gartner, 2024",
+      "statSource": "Industry average, 2024",
       "pain1": {
         "title": "Weeks lost to interviews",
         "description": "Traditional process discovery requires 3-6 weeks of interviews and multiple revision rounds before you have a usable map."
@@ -421,7 +421,7 @@
     "liveDemo": {
       "badge": "Interactive simulation",
       "title": "Test your instincts",
-      "subtitle": "One decision. Three options. See if you'd align with best practice — or join the 45% who get it wrong.",
+      "subtitle": "One decision. Three options. See if you'd align with best practice — most people don't.",
       "cardBadge": "Decision simulation",
       "processLabel": "Process: Supplier Quality Control",
       "scenario": "A supplier delivers <danger>contaminated raw material</danger> that passed incoming inspection. As <role>COO</role>, you:",
@@ -431,14 +431,14 @@
       "hint": "Select the best response based on quality management SOPs",
       "yourAnswer": "Your answer: Option {letter}",
       "resultExplanation": "The correct answer is A — immediate containment. ISO 22000 and most quality management SOPs require halting production upon detection of contamination to prevent further exposure. Option B delays root cause analysis. Option C risks distributing contaminated product.",
-      "resultStat": "45% of teams we evaluate get this wrong. The gap between what people know and what they do under pressure is where operational risk lives.",
+      "resultStat": "The gap between what people know and what they do under pressure is where operational risk lives. Most teams choose wrong on this scenario.",
       "cta": "How would YOUR team respond? Find out.",
       "tryAgain": "Try again"
     },
     "beforeAfter": {
       "label": "The Transformation",
       "title": "What changes when your processes actually work",
-      "story": "A 200-person manufacturing company was losing $200K/year to operational errors. Within 90 days of implementing Auditora, they saw these results.",
+      "story": "Consider a 200-person manufacturing company losing $200K/year to operational errors. Within 90 days of implementing Auditora, projected results could look like this.",
       "beforeLabel": "Before Auditora",
       "afterLabel": "After Auditora",
       "before": {
@@ -586,9 +586,9 @@
       "cookiePolicy": "Cookie Policy",
       "ccpa": "CCPA",
       "copyright": "© {year} {appName}. All rights reserved.",
-      "soc2": "SOC 2",
+      "soc2": "SOC 2 Aligned",
       "gdpr": "GDPR",
-      "iso27001": "ISO 27001"
+      "iso27001": "AES-256"
     },
     "menu": {
       "blog": "Blog",
@@ -599,7 +599,7 @@
       "faq": "FAQ",
       "solution": "Solution",
       "methodology": "Methodology",
-      "cases": "Cases",
+      "cases": "Evaluations",
       "howItWorks": "How it works",
       "login": "Sign in",
       "pricing": "Pricing",

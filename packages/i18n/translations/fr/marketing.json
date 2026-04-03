@@ -220,7 +220,7 @@
         "subtext": "Entrez votre URL d'entreprise. Recevez une carte de processus et une analyse de risques en minutes — sans inscription, sans engagement."
       },
       "trust": "Pas de carte de crédit requise · Gratuit pour commencer · Résultats en minutes",
-      "standards": "ISO 9001 · SOC 2 · Conforme RGPD"
+      "standards": "SIPOC · BPMN 2.0 · AMDEC · Gestion des Risques"
     },
     "problem": {
       "badge": "Le problème",
@@ -393,7 +393,7 @@
       "viewAll": "Voir tous les outils"
     },
     "trustBar": {
-      "subtitle": "Built on recognized standards",
+      "subtitle": "Basé sur des normes reconnues",
       "metric1": {
         "label": "processus cartographiés"
       },
@@ -410,7 +410,7 @@
     "beforeAfter": {
       "label": "La Transformation",
       "title": "Ce qui change quand vos processus fonctionnent vraiment",
-      "story": "Une entreprise manufacturière de 200 personnes perdait 200 000 $/an en erreurs opérationnelles. En 90 jours après l'implémentation d'Auditora, ils ont obtenu ces résultats.",
+      "story": "Considérez une entreprise manufacturière de 200 personnes perdant 200 000 $/an en erreurs opérationnelles. Après l'implémentation d'Auditora, voici les résultats potentiels à 90 jours.",
       "beforeLabel": "Avant Auditora",
       "afterLabel": "Après Auditora",
       "before": {
@@ -560,7 +560,7 @@
       "faq": "FAQ",
       "solution": "Solution",
       "methodology": "Méthodologie",
-      "cases": "Cas",
+      "cases": "Évaluations",
       "howItWorks": "Comment ça marche",
       "login": "Se connecter",
       "pricing": "Tarifs",

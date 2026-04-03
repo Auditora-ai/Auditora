@@ -85,15 +85,15 @@ export function NavBar() {
 	}[] = [
 		{
 			label: t("common.menu.solution"),
-			href: "/#solution",
+			href: "/processes",
 		},
 		{
 			label: t("common.menu.methodology"),
-			href: "/#methodology",
+			href: "/about",
 		},
 		{
 			label: t("common.menu.cases"),
-			href: "/#cases",
+			href: "/evaluations",
 		},
 		{
 			label: t("common.menu.pricing"),

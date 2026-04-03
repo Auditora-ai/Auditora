@@ -220,7 +220,7 @@
         "subtext": "Geben Sie Ihre Unternehmens-URL ein. Erhalten Sie eine Prozesskarte und Risikoanalyse in Minuten — ohne Anmeldung, ohne Verpflichtung."
       },
       "trust": "Keine Kreditkarte erforderlich · Kostenlos starten · Ergebnisse in Minuten",
-      "standards": "ISO 9001 · SOC 2 · DSGVO-konform"
+      "standards": "SIPOC · BPMN 2.0 · FMEA · Risikomanagement"
     },
     "problem": {
       "badge": "Das Problem",
@@ -393,7 +393,7 @@
       "viewAll": "Alle Tools anzeigen"
     },
     "trustBar": {
-      "subtitle": "Built on recognized standards",
+      "subtitle": "Basierend auf anerkannten Standards",
       "metric1": {
         "label": "Prozesse kartiert"
       },
@@ -410,7 +410,7 @@
     "beforeAfter": {
       "label": "Die Transformation",
       "title": "Was sich ändert, wenn Ihre Prozesse tatsächlich funktionieren",
-      "story": "Ein Fertigungsunternehmen mit 200 Mitarbeitern verlor 200.000 $/Jahr durch Betriebsfehler. Innerhalb von 90 Tagen nach der Einführung von Auditora sahen sie diese Ergebnisse.",
+      "story": "Betrachten Sie ein Fertigungsunternehmen mit 200 Mitarbeitern, das 200.000 $/Jahr durch Betriebsfehler verliert. Nach der Einführung von Auditora könnten dies die potenziellen Ergebnisse nach 90 Tagen sein.",
       "beforeLabel": "Vor Auditora",
       "afterLabel": "Nach Auditora",
       "before": {
@@ -560,7 +560,7 @@
       "faq": "FAQ",
       "solution": "Lösung",
       "methodology": "Methodik",
-      "cases": "Fälle",
+      "cases": "Evaluierungen",
       "howItWorks": "So funktioniert es",
       "login": "Anmelden",
       "pricing": "Preise",

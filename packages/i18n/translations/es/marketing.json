@@ -221,7 +221,7 @@
       "ctaSecondary": "Describir el proceso manualmente",
       "subtext": "Sin registro. Ingresa una URL y obtén un mapa SIPOC + evaluacion de riesgos en 2 minutos.",
       "trust": "Sin tarjeta de crédito · Gratis para empezar · Resultados en minutos",
-      "standards": "ISO 9001 · SOC 2 · Cumple GDPR"
+      "standards": "SIPOC · BPMN 2.0 · FMEA · Gestión de Riesgos"
     },
     "trustBar": {
       "subtitle": "Construido sobre estandares reconocidos",
@@ -249,7 +249,7 @@
       "title": "Tus competidores mapean procesos 8x mas rapido",
       "stat": "73",
       "statLabel": "% de las organizaciones carecen de procesos documentados para operaciones criticas",
-      "statSource": "Gartner, 2024",
+      "statSource": "Promedio de la industria, 2024",
       "pain1": {
         "title": "Semanas perdidas en entrevistas",
         "description": "El descubrimiento tradicional de procesos requiere 3-6 semanas de entrevistas y multiples rondas de revision antes de tener un mapa util."
@@ -421,7 +421,7 @@
     "liveDemo": {
       "badge": "Simulación interactiva",
       "title": "Pon a prueba tu instinto",
-      "subtitle": "Una decisión. Tres opciones. Descubre si te alineas con las mejores prácticas — o si eres parte del 45% que se equivoca.",
+      "subtitle": "Una decisión. Tres opciones. Descubre si te alineas con las mejores prácticas — o si la mayoría no lo hace.",
       "cardBadge": "Simulación de decisión",
       "processLabel": "Proceso: Control de Calidad de Proveedores",
       "scenario": "Un proveedor entrega <danger>materia prima contaminada</danger> que pasó la inspección de entrada. Como <role>COO</role>, tú:",
@@ -431,14 +431,14 @@
       "hint": "Selecciona la mejor respuesta según los SOPs de gestión de calidad",
       "yourAnswer": "Tu respuesta: Opción {letter}",
       "resultExplanation": "La respuesta correcta es A — contención inmediata. ISO 22000 y la mayoría de los SOPs de gestión de calidad requieren detener la producción al detectar contaminación para prevenir mayor exposición. La opción B retrasa el análisis de causa raíz. La opción C arriesga distribuir producto contaminado.",
-      "resultStat": "El 45% de los equipos que evaluamos se equivoca en esto. La brecha entre lo que la gente sabe y lo que hace bajo presión es donde vive el riesgo operativo.",
+      "resultStat": "Muchos equipos se equivocan en este tipo de decisiones. La brecha entre lo que la gente sabe y lo que hace bajo presión es donde vive el riesgo operativo.",
       "cta": "¿Cómo respondería TU equipo? Descúbrelo.",
       "tryAgain": "Intentar de nuevo"
     },
     "beforeAfter": {
       "label": "La Transformación",
       "title": "Qué cambia cuando tus procesos realmente funcionan",
-      "story": "Una empresa manufacturera de 200 personas perdía $200K/año por errores operativos. A los 90 días de implementar Auditora, obtuvieron estos resultados.",
+      "story": "Considere una empresa manufacturera de 200 personas que pierde $200K/año por errores operativos. Tras implementar Auditora, estos serían los resultados potenciales a 90 días.",
       "beforeLabel": "Antes de Auditora",
       "afterLabel": "Después de Auditora",
       "before": {
@@ -599,7 +599,7 @@
       "faq": "FAQ",
       "solution": "Solucion",
       "methodology": "Metodologia",
-      "cases": "Casos",
+      "cases": "Evaluaciones",
       "howItWorks": "Como funciona",
       "login": "Iniciar sesion",
       "pricing": "Precios",
