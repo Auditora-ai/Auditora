@@ -148,11 +148,11 @@ export function InterviewChat({
 						>
 							<div
 								className="max-w-[80%] rounded-lg px-4 py-3 text-sm leading-relaxed"
-								style={
-									msg.role === "user"
-										? { backgroundColor: "#3B8FE8", color: "#0A1428" }
-										: { backgroundColor: "#F1F5F9", border: "1px solid #E2E8F0", color: "#0A1428" }
-								}
+					style={
+							msg.role === "user"
+								? { backgroundColor: "#3B8FE8", color: "#FFFFFF" }
+								: { backgroundColor: "#F1F5F9", border: "1px solid #E2E8F0", color: "#0A1428" }
+						}
 							>
 								{msg.content}
 							</div>

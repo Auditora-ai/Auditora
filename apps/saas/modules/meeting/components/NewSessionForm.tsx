@@ -283,13 +283,16 @@ export function NewSessionForm({
 
 					<div className="relative">
 						<VideoIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-						<Input
-							value={meetingUrl}
-							onChange={(e) => setMeetingUrl(e.target.value)}
-							placeholder={t("sessions.new.form.meetingUrlPlaceholder")}
-							className="pl-10"
-							autoFocus
-						/>
+					<Input
+						type="url"
+						inputMode="url"
+						autoComplete="url"
+						value={meetingUrl}
+						onChange={(e) => setMeetingUrl(e.target.value)}
+						placeholder={t("sessions.new.form.meetingUrlPlaceholder")}
+						className="pl-10 min-h-[44px]"
+						autoFocus
+					/>
 					</div>
 					<p className="text-xs text-muted-foreground">
 						{t("sessions.new.form.meetingUrlHint")}

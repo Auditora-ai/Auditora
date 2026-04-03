@@ -67,15 +67,15 @@ export default async function DescubrirPage({
 	return (
 		<div className="pb-24 md:pb-0">
 			{/* Hero section */}
-			<div className="mb-10">
+			<div className="mb-6 md:mb-10">
 				<PageHeader
 					title={t("title")}
 					subtitle={t("subtitle")}
 				/>
 			</div>
 
-			{/* Channel cards grid */}
-			<div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+			{/* Channel cards — stacked on mobile, grid on larger */}
+			<div className="grid gap-4 md:gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
 				{channels.map((channel) => {
 					const Icon = channel.icon;
 					const SecondaryIcon = "secondaryIcon" in channel ? channel.secondaryIcon : null;
@@ -83,11 +83,11 @@ export default async function DescubrirPage({
 					return (
 						<Card
 							key={channel.key}
-							className={`group relative overflow-hidden border-slate-800 bg-slate-900/80 transition-all duration-300 ${channel.borderHover} hover:shadow-lg ${channel.glowColor}`}
+							className={`group relative overflow-hidden border-slate-800 bg-slate-900/80 transition-all duration-300 ${channel.borderHover} hover:shadow-lg active:shadow-md ${channel.glowColor}`}
 						>
-							<CardHeader className="pb-3">
+							<CardHeader className="pb-3 p-4 md:p-6 md:pb-3">
 								<div className="flex items-start justify-between">
-									<div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${channel.iconBg}`}>
+									<div className={`flex h-11 w-11 md:h-12 md:w-12 items-center justify-center rounded-2xl ${channel.iconBg}`}>
 										{SecondaryIcon ? (
 											<div className="relative">
 												<Icon className={`h-5 w-5 ${channel.iconColor}`} />
@@ -101,22 +101,22 @@ export default async function DescubrirPage({
 										{channel.badgeText}
 									</span>
 								</div>
-								<CardTitle className="mt-4 text-base font-semibold text-slate-50">
+								<CardTitle className="mt-3 md:mt-4 text-base font-semibold text-slate-50">
 									{t(`${channel.key}.title`)}
 								</CardTitle>
 							</CardHeader>
 
-							<CardContent className="pb-4">
+							<CardContent className="pb-3 md:pb-4 px-4 md:px-6">
 								<p className="text-sm leading-relaxed text-slate-400">
 									{t(`${channel.key}.description`)}
 								</p>
 							</CardContent>
 
-							<CardFooter>
+							<CardFooter className="px-4 pb-4 md:px-6 md:pb-6">
 								<Button
 									asChild
 									variant="outline"
-									className="w-full border-slate-700 text-slate-200 hover:border-slate-600 hover:bg-slate-800 hover:text-white"
+									className="w-full border-slate-700 text-slate-200 hover:border-slate-600 hover:bg-slate-800 hover:text-white min-h-[44px] active:bg-slate-700"
 								>
 									<Link href={channel.href}>
 										{t(`${channel.key}.cta`)}
@@ -130,8 +130,8 @@ export default async function DescubrirPage({
 			</div>
 
 			{/* Past sessions */}
-			<div className="mt-14">
-				<h2 className="mb-6 text-lg font-semibold text-slate-200">
+			<div className="mt-8 md:mt-14">
+				<h2 className="mb-4 md:mb-6 text-base md:text-lg font-semibold text-slate-200">
 					{t("pastSessions")}
 				</h2>
 				<SessionList organizationSlug={organizationSlug} />

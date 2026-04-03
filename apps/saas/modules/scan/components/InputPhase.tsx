@@ -130,7 +130,9 @@ export function InputPhase({ defaultUrl, error, onSubmit }: InputPhaseProps) {
             <div className="flex flex-1 items-center gap-3 rounded-xl bg-white/[0.04] px-4 py-3">
               <Globe className="h-5 w-5 shrink-0 text-white/30" />
               <input
-                type="text"
+                type="url"
+                inputMode="url"
+                autoComplete="url"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 onFocus={() => setFocused(true)}
@@ -145,7 +147,7 @@ export function InputPhase({ defaultUrl, error, onSubmit }: InputPhaseProps) {
               type="submit"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="shrink-0 inline-flex items-center gap-2 rounded-xl bg-[#3B8FE8] px-5 py-3 text-sm font-bold text-[#0A1428] shadow-[0_0_30px_rgba(59,143,232,0.15)] transition-colors hover:bg-[#2E7FD6]"
+              className="shrink-0 inline-flex items-center gap-2 rounded-xl bg-[#3B8FE8] px-5 py-3 text-sm font-bold text-[#0A1428] shadow-[0_0_30px_rgba(59,143,232,0.15)] transition-colors hover:bg-[#2E7FD6] min-h-[44px]"
             >
               Scan
               <ArrowRight className="h-4 w-4" />

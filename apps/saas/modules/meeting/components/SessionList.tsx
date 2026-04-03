@@ -212,12 +212,12 @@ export function SessionList({ organizationSlug }: { organizationSlug: string }) 
 					<p className="mt-2 max-w-sm text-sm text-muted-foreground">
 						Crea tu primera sesión para comenzar a mapear procesos.
 					</p>
-					<Button asChild className="mt-6">
-						<Link href={`/${organizationSlug}/sessions/new`}>
-							<PlusIcon className="mr-2 h-4 w-4" />
-							Nueva sesión
-						</Link>
-					</Button>
+				<Button asChild className="mt-6">
+					<Link href={`/${organizationSlug}/descubrir`}>
+						<PlusIcon className="mr-2 h-4 w-4" />
+						Descubrir procesos
+					</Link>
+				</Button>
 				</div>
 			</Card>
 		);

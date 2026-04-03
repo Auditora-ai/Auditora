@@ -324,31 +324,31 @@ export function ResultsPhase({ url, result, onReset }: ResultsPhaseProps) {
         variants={fadeUp}
         className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center pt-2"
       >
-        {/* Primary CTA */}
+        {/* Primary CTA — deep analysis via interview */}
         <Link
-          href="/signup"
-          className="group relative inline-flex items-center justify-center gap-2 rounded-xl bg-[#3B8FE8] px-7 py-3.5 text-sm font-bold text-[#0A1428] shadow-[0_0_30px_rgba(59,143,232,0.15)] transition-all duration-300 hover:bg-[#2E7FD6] hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(59,143,232,0.25)]"
+          href="interview"
+          className="group relative inline-flex items-center justify-center gap-2 rounded-xl bg-[#3B8FE8] px-7 py-3.5 text-sm font-bold text-white shadow-[0_0_30px_rgba(59,143,232,0.15)] transition-all duration-300 hover:bg-[#2E7FD6] hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(59,143,232,0.25)] min-h-[44px]"
         >
-          Get the full diagnosis
+          Diagnóstico completo
           <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
         </Link>
 
         {/* Share CTA */}
         <button
           onClick={handleShare}
-          className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-6 py-3.5 text-sm font-medium text-white/80 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
+          className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-6 py-3.5 text-sm font-medium text-white/80 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] hover:text-white min-h-[44px]"
         >
           <Share2 className="h-4 w-4" />
-          {copied ? "Link copied!" : "Share results"}
+          {copied ? "¡Link copiado!" : "Compartir"}
         </button>
 
         {/* Scan again */}
         <button
           onClick={onReset}
-          className="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3.5 text-sm font-medium text-white/40 transition-all duration-300 hover:text-white/70"
+          className="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3.5 text-sm font-medium text-white/40 transition-all duration-300 hover:text-white/70 min-h-[44px]"
         >
           <RotateCcw className="h-4 w-4" />
-          Scan another
+          Escanear otro
         </button>
       </motion.div>
 

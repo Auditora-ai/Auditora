@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { cn } from "../lib";
 
 /**
@@ -14,6 +15,10 @@ function BlueprintIsotype({
 	size = 40,
 	className,
 }: { size?: number; className?: string }) {
+	const uid = useId();
+	const blueId = `logo-blue-${uid}`;
+	const glowId = `logo-glow-${uid}`;
+
 	return (
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
@@ -23,11 +28,11 @@ function BlueprintIsotype({
 			className={className}
 		>
 			<defs>
-				<linearGradient id="logo-blue" x1="0%" y1="0%" x2="0%" y2="100%">
+				<linearGradient id={blueId} x1="0%" y1="0%" x2="0%" y2="100%">
 					<stop offset="0%" stopColor="#00B4FF" />
 					<stop offset="100%" stopColor="#0077CC" />
 				</linearGradient>
-				<filter id="logo-glow" x="-50%" y="-50%" width="200%" height="200%">
+				<filter id={glowId} x="-50%" y="-50%" width="200%" height="200%">
 					<feGaussianBlur stdDeviation="4" result="blur" />
 					<feMerge>
 						<feMergeNode in="blur" />
@@ -49,8 +54,8 @@ function BlueprintIsotype({
 					<path d="M270,250 L270,260 L260,260" />
 				</g>
 				<g
-					filter="url(#logo-glow)"
-					stroke="url(#logo-blue)"
+					filter={`url(#${glowId})`}
+					stroke={`url(#${blueId})`}
 					strokeWidth="3"
 					fill="none"
 					strokeLinecap="round"
@@ -60,7 +65,7 @@ function BlueprintIsotype({
 					<path d="M200,110 L245,250" />
 					<line x1="165" y1="200" x2="235" y2="200" />
 				</g>
-				<g filter="url(#logo-glow)" transform="translate(200,108)">
+				<g filter={`url(#${glowId})`} transform="translate(200,108)">
 					<line x1="0" y1="-15" x2="0" y2="15" stroke="#00B4FF" strokeWidth="2" />
 					<line x1="-15" y1="0" x2="15" y2="0" stroke="#00B4FF" strokeWidth="2" />
 				</g>
