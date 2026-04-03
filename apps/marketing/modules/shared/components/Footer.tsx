@@ -119,14 +119,14 @@ export function Footer() {
 							{t("common.footer.productTitle")}
 						</h3>
 						<ul className="space-y-3">
-							<li>
-								<LocaleLink
-									href="/scan"
-									className="text-sm text-white/60 hover:text-white transition-colors"
-								>
-									{t("common.footer.scan")}
-								</LocaleLink>
-							</li>
+					<li>
+						<a
+							href={config.saasUrl ? `${config.saasUrl}/scan` : "/scan"}
+							className="text-sm text-white/60 hover:text-white transition-colors"
+						>
+							{t("common.footer.scan")}
+						</a>
+					</li>
 							<li>
 								<LocaleLink
 									href="/processes"

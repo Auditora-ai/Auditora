@@ -196,7 +196,8 @@ export function NavBar() {
 										</LocaleLink>
 									))}
 
-									{config.saasUrl && (
+								{config.saasUrl && (
+									<>
 										<NextLink
 											href={config.saasUrl}
 											className="block px-3 py-3 text-base"
@@ -205,8 +206,17 @@ export function NavBar() {
 										>
 											{t("common.menu.login")}
 										</NextLink>
-									)}
-								</div>
+										<NextLink
+											href={config.saasUrl}
+											className="mx-3 mt-3 flex items-center justify-center rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground"
+											onClick={handleMobileMenuClose}
+											prefetch
+										>
+											{t("common.menu.trial")}
+										</NextLink>
+									</>
+								)}
+							</div>
 							</SheetContent>
 						</Sheet>
 
