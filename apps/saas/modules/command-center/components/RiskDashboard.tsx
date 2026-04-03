@@ -158,7 +158,7 @@ export function RiskDashboard({
 						<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
 							{/* Left: Maturity Score + Quick Actions */}
 							<div className="animate-in fade-in slide-in-from-bottom-2 duration-500 space-y-4">
-								<div className="rounded-xl border border-border bg-background p-6">
+								<div className="rounded-2xl border border-white/10 bg-card/80 backdrop-blur-sm shadow-sm p-6 bg-gradient-to-br from-primary/5 to-transparent dark:border-white/5 dark:bg-card/60">
 									<RiskMaturityRing
 										score={maturityScore}
 										size="md"
@@ -202,7 +202,7 @@ export function RiskDashboard({
 								<div className="flex gap-2 overflow-x-auto pb-2 md:flex-col md:space-y-2 md:gap-0 md:overflow-visible md:pb-0">
 									<Link
 										href={`${basePath}/processes`}
-										className="flex shrink-0 items-center gap-3 rounded-lg border border-border bg-background p-3 text-sm transition-colors hover:bg-accent/50"
+										className="flex shrink-0 items-center gap-3 rounded-xl border border-white/10 bg-card/80 backdrop-blur-sm p-3 text-sm transition-colors hover:bg-accent/50 dark:border-white/5 dark:bg-card/60"
 									>
 										<ShieldAlertIcon className="size-4 text-amber-500" />
 										<span className="whitespace-nowrap text-foreground">
@@ -211,7 +211,7 @@ export function RiskDashboard({
 									</Link>
 									<Link
 										href={`${basePath}/processes`}
-										className="flex shrink-0 items-center gap-3 rounded-lg border border-border bg-background p-3 text-sm transition-colors hover:bg-accent/50"
+										className="flex shrink-0 items-center gap-3 rounded-xl border border-white/10 bg-card/80 backdrop-blur-sm p-3 text-sm transition-colors hover:bg-accent/50 dark:border-white/5 dark:bg-card/60"
 									>
 										<WorkflowIcon className="size-4 text-blue-500" />
 										<span className="whitespace-nowrap text-foreground">
@@ -220,7 +220,7 @@ export function RiskDashboard({
 									</Link>
 									<Link
 										href={`${basePath}/evaluaciones`}
-										className="flex shrink-0 items-center gap-3 rounded-lg border border-border bg-background p-3 text-sm transition-colors hover:bg-accent/50"
+										className="flex shrink-0 items-center gap-3 rounded-xl border border-white/10 bg-card/80 backdrop-blur-sm p-3 text-sm transition-colors hover:bg-accent/50 dark:border-white/5 dark:bg-card/60"
 									>
 										<ClipboardCheckIcon className="size-4 text-primary" />
 										<span className="whitespace-nowrap text-foreground">
@@ -236,7 +236,7 @@ export function RiskDashboard({
 									{t("topRisks")}
 								</h2>
 								{topRisks.length === 0 ? (
-									<div className="rounded-xl border border-border bg-background p-8 text-center">
+									<div className="rounded-2xl border border-white/10 bg-card/80 backdrop-blur-sm shadow-sm p-8 text-center dark:border-white/5 dark:bg-card/60">
 										<p className="text-sm text-muted-foreground">
 											{t("noRisksDesc")}
 										</p>
@@ -247,7 +247,7 @@ export function RiskDashboard({
 											<Link
 												key={risk.id}
 												href={`${basePath}/processes`}
-												className={`block rounded-xl border bg-background p-4 transition-all duration-300 hover:shadow-sm border-l-4 ${
+												className={`block rounded-2xl border border-white/10 bg-card/80 backdrop-blur-sm p-4 transition-all duration-300 hover:shadow-md dark:border-white/5 dark:bg-card/60 border-l-4 ${
 											risk.riskScore >= 16
 												? "border-l-[#DC2626] border-red-100 dark:border-red-900/30"
 												: risk.riskScore >= 12
@@ -316,7 +316,7 @@ export function RiskDashboard({
 								{/* Org Score */}
 								<Link
 									href={`${basePath}/evaluaciones?tab=dashboard`}
-									className="rounded-xl border border-border bg-background p-4 transition-all hover:shadow-sm hover:border-primary/30 group"
+									className="rounded-2xl border border-white/10 bg-card/80 backdrop-blur-sm p-4 transition-all hover:shadow-md hover:border-primary/30 group dark:border-white/5 dark:bg-card/60"
 								>
 									<div className="flex items-center gap-3">
 										<div className="flex size-10 items-center justify-center rounded-lg bg-primary/10">
@@ -339,7 +339,7 @@ export function RiskDashboard({
 								{/* Total Evaluations */}
 								<Link
 									href={`${basePath}/evaluaciones`}
-									className="rounded-xl border border-border bg-background p-4 transition-all hover:shadow-sm hover:border-primary/30 group"
+									className="rounded-2xl border border-white/10 bg-card/80 backdrop-blur-sm p-4 transition-all hover:shadow-md hover:border-primary/30 group dark:border-white/5 dark:bg-card/60"
 								>
 									<div className="flex items-center gap-3">
 										<div className="flex size-10 items-center justify-center rounded-lg bg-blue-500/10">
@@ -359,7 +359,7 @@ export function RiskDashboard({
 								{/* Members Evaluated */}
 								<Link
 									href={`${basePath}/evaluaciones?tab=dashboard`}
-									className="rounded-xl border border-border bg-background p-4 transition-all hover:shadow-sm hover:border-primary/30 group"
+									className="rounded-2xl border border-white/10 bg-card/80 backdrop-blur-sm p-4 transition-all hover:shadow-md hover:border-primary/30 group dark:border-white/5 dark:bg-card/60"
 								>
 									<div className="flex items-center gap-3">
 										<div className="flex size-10 items-center justify-center rounded-lg bg-green-500/10">
@@ -379,7 +379,7 @@ export function RiskDashboard({
 								{/* Completion Rate */}
 								<Link
 									href={`${basePath}/evaluaciones?tab=dashboard`}
-									className="rounded-xl border border-border bg-background p-4 transition-all hover:shadow-sm hover:border-primary/30 group"
+									className="rounded-2xl border border-white/10 bg-card/80 backdrop-blur-sm p-4 transition-all hover:shadow-md hover:border-primary/30 group dark:border-white/5 dark:bg-card/60"
 								>
 									<div className="flex items-center gap-3">
 										<div className="flex size-10 items-center justify-center rounded-lg bg-amber-500/10">
@@ -398,7 +398,7 @@ export function RiskDashboard({
 							</div>
 
 							{/* Dimension mini-bars */}
-							<div className="mt-4 rounded-xl border border-border bg-background p-4">
+							<div className="mt-4 rounded-2xl border border-white/10 bg-card/80 backdrop-blur-sm shadow-sm p-4 dark:border-white/5 dark:bg-card/60">
 								<div className="space-y-3">
 									{[
 										{
@@ -470,7 +470,7 @@ export function RiskDashboard({
 
 				{/* Next Session */}
 					{nextSession && (
-						<div className="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-200 rounded-xl border border-border bg-background p-4">
+						<div className="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-200 rounded-2xl border border-white/10 bg-card/80 backdrop-blur-sm shadow-sm p-4 dark:border-white/5 dark:bg-card/60">
 
 								<div className="flex items-center gap-3">
 									<div className="flex size-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
@@ -515,7 +515,7 @@ export function RiskDashboard({
 									{recentActivity.map((item, i) => (
 										<div
 											key={i}
-											className="flex items-center gap-3 rounded-lg border border-border bg-background px-4 py-3"
+											className="flex items-center gap-3 rounded-xl border border-white/10 bg-card/80 backdrop-blur-sm px-4 py-3 dark:border-white/5 dark:bg-card/60"
 										>
 											<span
 												className={`size-2 rounded-full ${
