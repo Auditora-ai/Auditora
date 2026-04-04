@@ -36,7 +36,7 @@ export function HeroSection() {
 	}, [url]);
 
 	return (
-		<section className="relative min-h-[100svh] flex items-center overflow-hidden bg-transparent">
+		<section className="relative min-h-[100svh] flex items-center overflow-hidden bg-background">
 			{/* Advanced animated A background */}
 			<HeroBackground />
 
@@ -48,7 +48,7 @@ export function HeroSection() {
 					animate="visible"
 					variants={FADE_UP}
 					className={cn(
-						"text-center font-bold tracking-tight text-white",
+						"text-center font-bold tracking-tight text-foreground",
 						"text-5xl md:text-6xl lg:text-7xl",
 						"leading-[1.05]",
 					)}
@@ -64,7 +64,7 @@ export function HeroSection() {
 					variants={FADE_UP}
 					className={cn(
 						"mx-auto mt-6 max-w-2xl text-center",
-						"text-lg sm:text-xl text-[#94A3B8] leading-relaxed",
+						"text-lg sm:text-xl text-muted-foreground leading-relaxed",
 					)}
 				>
 					{t("subtitle")}
@@ -87,9 +87,9 @@ export function HeroSection() {
 								: "shadow-none",
 						)}
 						style={{
-							background: isFocused
-								? "linear-gradient(135deg, #3B8FE8 0%, #3B8FE880 50%, #3B8FE8 100%)"
-								: "linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%)",
+					background: isFocused
+						? "linear-gradient(135deg, #3B8FE8 0%, #3B8FE880 50%, #3B8FE8 100%)"
+						: "linear-gradient(135deg, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.03) 100%)"
 						}}
 					>
 						{/* Animated glow border via CSS animation */}
@@ -110,7 +110,7 @@ export function HeroSection() {
 
 						<div
 							className={cn(
-								"relative flex flex-col gap-3 rounded-2xl bg-[#0A1428] p-3",
+								"relative flex flex-col gap-3 rounded-2xl bg-card dark:bg-[#0A1428] p-3",
 								"sm:flex-row sm:items-center sm:gap-2 sm:p-2",
 							)}
 						>
@@ -123,10 +123,10 @@ export function HeroSection() {
 								onBlur={() => setIsFocused(false)}
 								placeholder={t("inputPlaceholder")}
 								className={cn(
-									"flex-1 min-h-[52px] sm:min-h-[56px] rounded-xl bg-white/[0.04] px-5",
-									"text-base sm:text-lg text-white outline-none",
-									"placeholder:text-[#475569]",
-									"focus:bg-white/[0.06] transition-colors duration-300",
+									"flex-1 min-h-[52px] sm:min-h-[56px] rounded-xl bg-muted dark:bg-white/[0.04] px-5",
+									"text-base sm:text-lg text-foreground outline-none",
+									"placeholder:text-muted-foreground/50",
+									"focus:bg-muted/80 dark:focus:bg-white/[0.06] transition-colors duration-300",
 								)}
 							/>
 							<Button
@@ -135,7 +135,7 @@ export function HeroSection() {
 								className={cn(
 									"w-full shrink-0 sm:w-auto min-h-[52px] sm:min-h-[56px] rounded-xl px-8",
 									"bg-[#3B8FE8] hover:bg-[#2E7FD6] active:bg-[#2566B0]",
-									"text-[#0A1428] font-bold text-base",
+									"text-primary-foreground font-bold text-base",
 									"transition-all duration-200",
 									"hover:shadow-[0_0_20px_rgba(59,143,232,0.3)]",
 								)}
@@ -152,7 +152,7 @@ export function HeroSection() {
 						initial="hidden"
 						animate="visible"
 						variants={FADE_UP}
-						className="mt-4 text-center text-sm text-white/40"
+						className="mt-4 text-center text-sm text-muted-foreground"
 					>
 						{t("trust")}
 					</motion.p>
@@ -166,7 +166,7 @@ export function HeroSection() {
 					variants={FADE_UP}
 					className="mt-12 flex items-center justify-center"
 				>
-					<p className="text-xs font-medium tracking-[0.2em] uppercase text-white/20">
+					<p className="text-xs font-medium tracking-[0.2em] uppercase text-muted-foreground/50">
 						{t("standards")}
 					</p>
 				</motion.div>

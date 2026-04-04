@@ -54,7 +54,7 @@ export function FinalCta() {
 						whileInView={{ opacity: 1 }}
 						viewport={{ once: true }}
 						transition={{ duration: 0.5, delay: 0.2 }}
-						className="mx-auto mt-5 max-w-lg text-base leading-relaxed text-white/50"
+						className="mx-auto mt-5 max-w-lg text-base leading-relaxed text-muted-foreground"
 					>
 						{t("subtitle")}
 					</motion.p>
@@ -87,7 +87,7 @@ export function FinalCta() {
 					onChange={(e) => setUrl(e.target.value)}
 					placeholder={t("inputPlaceholder")}
 							className={cn(
-								"w-full rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm text-white placeholder:text-white/30",
+								"w-full rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm text-foreground placeholder:text-muted-foreground/60",
 								"outline-none transition-colors focus:border-[#3B8FE8]/40 sm:flex-1",
 							)}
 						/>
@@ -106,7 +106,7 @@ export function FinalCta() {
 						whileInView={{ opacity: 1 }}
 						viewport={{ once: true }}
 						transition={{ duration: 0.5, delay: 0.5 }}
-						className="mt-5 text-xs leading-relaxed text-white/30"
+						className="mt-5 text-xs leading-relaxed text-muted-foreground/60"
 					>
 						{t("note")}
 					</motion.p>

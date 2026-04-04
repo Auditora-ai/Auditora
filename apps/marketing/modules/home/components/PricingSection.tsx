@@ -31,9 +31,9 @@ const METRIC_TRANSLATION_KEYS: Record<MetricKey, string> = {
 
 const PLAN_STYLES = {
 	starter: {
-		card: "border-white/[0.08] bg-white/[0.03]",
-		price: "text-white",
-		cta: "border-white/10 text-white hover:bg-white/5",
+		card: "border-border bg-card dark:bg-white/[0.03]",
+		price: "text-foreground",
+		cta: "border-white/10 text-foreground hover:bg-white/5",
 	},
 	growth: {
 		card: "border-[#3B8FE8]/40 bg-[#3B8FE8]/[0.04] ring-1 ring-[#3B8FE8]/20",
@@ -41,14 +41,14 @@ const PLAN_STYLES = {
 		cta: "bg-[#3B8FE8] hover:bg-[#2E7FD6] text-[#0A1428]",
 	},
 	scale: {
-		card: "border-white/[0.08] bg-white/[0.03]",
-		price: "text-white",
-		cta: "border-white/10 text-white hover:bg-white/5",
+		card: "border-border bg-card dark:bg-white/[0.03]",
+		price: "text-foreground",
+		cta: "border-white/10 text-foreground hover:bg-white/5",
 	},
 	enterprise: {
-		card: "border-white/[0.08] bg-white/[0.03]",
-		price: "text-white",
-		cta: "border-white/10 text-white hover:bg-white/5",
+		card: "border-border bg-card dark:bg-white/[0.03]",
+		price: "text-foreground",
+		cta: "border-white/10 text-foreground hover:bg-white/5",
 	},
 } as const;
 
@@ -76,7 +76,7 @@ export function PricingSection() {
 	};
 
 	return (
-		<section id="pricing" className="scroll-mt-16 py-16 sm:py-20 lg:py-28 bg-[#0A1428] relative overflow-hidden">
+		<section id="pricing" className="scroll-mt-16 py-16 sm:py-20 lg:py-28 bg-background relative overflow-hidden">
 			{/* Floating orbs */}
 			<motion.div
 				animate={{ x: [0, -15, 10, 0], y: [0, 12, -8, 0] }}
@@ -102,10 +102,10 @@ export function PricingSection() {
 						<ZapIcon className="size-3.5 text-[#3B8FE8]" strokeWidth={2} />
 						<span className="badge-pulse text-xs font-medium uppercase tracking-widest text-[#3B8FE8]">{t("pricing.badge")}</span>
 					</div>
-					<h2 className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-white max-w-3xl mx-auto text-center leading-tight">
+					<h2 className="font-display text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-foreground max-w-3xl mx-auto text-center leading-tight">
 						{t("pricing.title")}
 					</h2>
-					<p className="mt-4 text-[#94A3B8] text-sm sm:text-base max-w-xl mx-auto text-center leading-relaxed">
+					<p className="mt-4 text-muted-foreground text-sm sm:text-base max-w-xl mx-auto text-center leading-relaxed">
 						{t("pricing.subtitle")}
 					</p>
 				</motion.div>
@@ -179,7 +179,7 @@ export function PricingSection() {
 									<h3 className="text-lg font-semibold text-white">
 										{t(`pricing.products.${planId}.title`)}
 									</h3>
-									<p className="mt-1.5 text-xs sm:text-sm text-[#94A3B8] leading-relaxed">
+									<p className="mt-1.5 text-xs sm:text-sm text-muted-foreground leading-relaxed">
 										{t(`pricing.products.${planId}.description`)}
 									</p>
 
@@ -197,7 +197,7 @@ export function PricingSection() {
 
 									<div className="mt-4 flex flex-wrap gap-2">
 										{(Object.entries(metrics) as [MetricKey, string][]).map(([key, val]) => (
-											<span key={key} className="inline-flex items-center rounded-md bg-white/[0.06] px-2.5 py-1 text-xs text-[#94A3B8]">
+											<span key={key} className="inline-flex items-center rounded-md bg-white/[0.06] px-2.5 py-1 text-xs text-muted-foreground">
 												{val} {t(METRIC_TRANSLATION_KEYS[key])}
 											</span>
 										))}
@@ -207,7 +207,7 @@ export function PricingSection() {
 										{featureList.map((feature, idx) => (
 											<li key={idx} className="flex items-start gap-2.5 text-sm">
 												<CheckIcon className="mt-0.5 size-4 shrink-0 text-[#3B8FE8]" />
-												<span className="text-white/70 leading-snug">{feature}</span>
+												<span className="text-foreground/70 leading-snug">{feature}</span>
 											</li>
 										))}
 									</ul>

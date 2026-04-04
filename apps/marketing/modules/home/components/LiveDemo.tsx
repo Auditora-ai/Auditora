@@ -122,7 +122,7 @@ function PressureTimer({ active }: { active: boolean }) {
 
 	return (
 		<motion.div
-			className="flex items-center gap-2 text-white/30"
+			className="flex items-center gap-2 text-muted-foreground/50"
 			initial={{ opacity: 0 }}
 			animate={{ opacity: 1 }}
 			transition={{ delay: 0.5 }}
@@ -228,11 +228,11 @@ export function LiveDemo() {
 		<section
 			ref={sectionRef}
 			id="live-demo"
-			className="relative min-h-screen flex items-center bg-[#060B18] overflow-hidden"
+			className="relative min-h-screen flex items-center bg-muted dark:bg-[#060B18] overflow-hidden"
 		>
 			{/* Vignette edges */}
 			<div className="absolute inset-0 pointer-events-none" style={{
-				background: "radial-gradient(ellipse 80% 70% at 50% 50%, transparent 40%, #060B18 100%)",
+				background: "radial-gradient(ellipse 80% 70% at 50% 50%, transparent 40%, var(--background) 100%)",
 			}} />
 
 			{/* Ambient alert glow — pulses red subtly */}
@@ -274,12 +274,12 @@ export function LiveDemo() {
 							</motion.div>
 
 							{/* Title */}
-							<h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1]">
+							<h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground tracking-tight leading-[1.1]">
 								{t("title")}
 							</h2>
 
 							{/* Subtitle */}
-							<p className="text-[#94A3B8] text-lg sm:text-xl max-w-xl mx-auto">
+							<p className="text-muted-foreground text-lg sm:text-xl max-w-xl mx-auto">
 								{t("subtitle")}
 							</p>
 
@@ -289,8 +289,8 @@ export function LiveDemo() {
 								animate={{ y: [0, 8, 0] }}
 								transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
 							>
-								<span className="text-xs text-white/30 uppercase tracking-widest">Scroll to begin</span>
-								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-white/20">
+								<span className="text-xs text-muted-foreground/50 uppercase tracking-widest">Scroll to begin</span>
+								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-muted-foreground/30">
 									<path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
 								</svg>
 							</motion.div>
@@ -308,14 +308,14 @@ export function LiveDemo() {
 							transition={{ duration: 0.5 }}
 						>
 							{/* Scenario card */}
-							<div className="relative bg-white/[0.03] backdrop-blur border border-white/[0.08] rounded-2xl overflow-hidden shadow-2xl shadow-black/40">
+							<div className="relative bg-card dark:bg-white/[0.03] backdrop-blur border border-border rounded-2xl overflow-hidden shadow-2xl shadow-black/5 dark:shadow-black/40">
 								<AlertPulse />
 
 								{/* Header */}
 								<div className="border-b border-white/[0.06] px-6 sm:px-8 py-4 flex items-center justify-between">
 									<div className="flex items-center gap-3">
 										<div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-										<span className="text-xs font-semibold text-white/50 uppercase tracking-widest">
+										<span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
 											{t("cardBadge")}
 										</span>
 									</div>
@@ -327,7 +327,7 @@ export function LiveDemo() {
 									<TypewriterText
 										text={scenarioText}
 										highlights={scenarioHighlights}
-										className="text-base sm:text-lg leading-relaxed text-white/90"
+										className="text-base sm:text-lg leading-relaxed text-foreground/90"
 									/>
 								</div>
 							</div>
@@ -339,11 +339,11 @@ export function LiveDemo() {
 								animate={{ opacity: 1 }}
 								transition={{ delay: 0.8 }}
 							>
-								<div className="h-px flex-1 bg-gradient-to-r from-transparent to-white/10" />
-								<span className="text-sm font-bold text-white/60 uppercase tracking-[0.3em]">
+								<div className="h-px flex-1 bg-gradient-to-r from-transparent to-border" />
+								<span className="text-sm font-bold text-muted-foreground uppercase tracking-[0.3em]">
 									Your call
 								</span>
-								<div className="h-px flex-1 bg-gradient-to-l from-transparent to-white/10" />
+								<div className="h-px flex-1 bg-gradient-to-l from-transparent to-border" />
 							</motion.div>
 
 							{/* Options */}
@@ -356,19 +356,19 @@ export function LiveDemo() {
 											type="button"
 											onClick={() => handleSelect(i)}
 											className={cn(
-												"option-card opacity-0", // starts hidden, GSAP animates in
-												"group w-full text-left rounded-xl border border-white/[0.08] border-l-[3px] bg-white/[0.02]",
-												"transition-all duration-300 cursor-pointer",
-												"hover:bg-white/[0.07] hover:border-white/[0.15] hover:shadow-lg hover:shadow-white/[0.03]",
+"option-card opacity-0",
+"group w-full text-left rounded-xl border border-border border-l-[3px] bg-card dark:bg-white/[0.02]",
+										"transition-all duration-300 cursor-pointer",
+												"hover:bg-muted dark:hover:bg-white/[0.07] hover:border-border hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-white/[0.03]",
 												"hover:scale-[1.015] active:scale-[0.99]",
 												color.border,
 											)}
 										>
 											<div className="flex items-start gap-4 p-5 sm:p-6">
-												<span className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-xl bg-white/[0.06] text-sm font-bold text-white/40 group-hover:text-white group-hover:bg-white/[0.12] transition-all duration-300">
+												<span className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-xl bg-muted dark:bg-white/[0.06] text-sm font-bold text-muted-foreground group-hover:text-foreground group-hover:bg-muted/80 dark:group-hover:bg-white/[0.12] transition-all duration-300">
 													{OPTION_LETTERS[i]}
 												</span>
-												<span className="text-sm sm:text-[15px] leading-relaxed text-white/50 group-hover:text-white/90 transition-colors duration-300 pt-1.5">
+												<span className="text-sm sm:text-[15px] leading-relaxed text-muted-foreground group-hover:text-foreground transition-colors duration-300 pt-1.5">
 													{t(`option${OPTION_LETTERS[i]}`)}
 												</span>
 											</div>
@@ -416,10 +416,10 @@ export function LiveDemo() {
 										</motion.div>
 									)}
 									<div>
-										<p className="text-sm font-semibold text-white/90 mb-1">
+										<p className="text-sm font-semibold text-foreground mb-1">
 											{t("yourAnswer", { letter: OPTION_LETTERS[selected] })}
 										</p>
-										<p className="text-sm text-white/60 leading-relaxed">
+										<p className="text-sm text-muted-foreground leading-relaxed">
 											{t(`option${OPTION_LETTERS[selected]}`)}
 										</p>
 									</div>
@@ -433,7 +433,7 @@ export function LiveDemo() {
 								animate={{ opacity: 1, y: 0 }}
 								transition={{ delay: 0.4 }}
 							>
-								<p className="text-sm sm:text-base leading-relaxed text-white/85 mb-4">
+								<p className="text-sm sm:text-base leading-relaxed text-foreground/85 mb-4">
 									{t("resultExplanation")}
 								</p>
 								<p className="text-sm text-[#3B8FE8]/80 font-medium italic">
@@ -461,7 +461,7 @@ export function LiveDemo() {
 								<button
 									type="button"
 									onClick={handleReset}
-									className="text-sm text-white/30 hover:text-white/60 transition-colors cursor-pointer"
+									className="text-sm text-muted-foreground/50 hover:text-muted-foreground transition-colors cursor-pointer"
 								>
 									{t("tryAgain")}
 								</button>

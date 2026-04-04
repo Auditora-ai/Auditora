@@ -55,14 +55,14 @@ export function BeforeAfter() {
 					<motion.h2
 						custom={1}
 						variants={fadeUp}
-						className="text-3xl md:text-4xl lg:text-5xl font-bold text-white max-w-3xl mx-auto leading-tight"
+						className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground max-w-3xl mx-auto leading-tight"
 					>
 						{t("title")}
 					</motion.h2>
 					<motion.p
 						custom={2}
 						variants={fadeUp}
-						className="mt-6 text-lg text-white/60 max-w-2xl mx-auto"
+						className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto"
 					>
 						{t("story")}
 					</motion.p>
@@ -109,7 +109,7 @@ export function BeforeAfter() {
 											<span className="text-2xl font-bold text-red-400">
 												<AnimatedCounter target={item.metric} suffix={item.suffix} />
 											</span>
-											<p className="text-sm text-white/50">{t(`before.${i}`)}</p>
+											<p className="text-sm text-muted-foreground">{t(`before.${i}`)}</p>
 										</div>
 									</motion.div>
 								);
@@ -156,7 +156,7 @@ export function BeforeAfter() {
 											<span className="text-2xl font-bold text-[#3B8FE8]">
 												<AnimatedCounter target={item.metric} suffix={item.suffix} />
 											</span>
-											<p className="text-sm text-white/50">{t(`after.${i}`)}</p>
+											<p className="text-sm text-muted-foreground">{t(`after.${i}`)}</p>
 										</div>
 									</motion.div>
 								);
@@ -177,7 +177,7 @@ export function BeforeAfter() {
 						<span className="text-3xl font-bold text-[#3B8FE8]">
 							<AnimatedCounter target={200} prefix="$" suffix="K" />
 						</span>
-						<span className="text-sm text-white/70">{t("savings")}</span>
+						<span className="text-sm text-foreground/70">{t("savings")}</span>
 					</div>
 				</motion.div>
 			</div>

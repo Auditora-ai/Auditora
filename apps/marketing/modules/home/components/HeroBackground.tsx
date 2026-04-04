@@ -341,9 +341,7 @@ export function HeroBackground() {
 			</div>
 
 			{/* Mobile: gradient mask so text zone is clean */}
-			<div className="absolute inset-0 md:hidden" style={{
-				background: "linear-gradient(to bottom, transparent 30%, rgba(10,15,30,0.7) 45%, rgba(10,15,30,0.95) 55%, rgba(10,15,30,0.95) 100%)",
-			}} />
+			<div className="absolute inset-0 md:hidden bg-gradient-to-b from-transparent via-background/80 to-background" />
 
 			{/* Top glow line */}
 			<div className="absolute top-0 left-0 right-0 h-px" style={{

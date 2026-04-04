@@ -14,7 +14,7 @@ export default async function Home({
 	const { locale } = await params;
 
 	return (
-		<div data-landing className="dark bg-gradient-to-b from-[#050A15] via-[#0A1428] to-[#0F2847] text-slate-50">
+		<div data-landing>
 			<HeroSection />
 			<LiveDemo />
 			<BeforeAfter />

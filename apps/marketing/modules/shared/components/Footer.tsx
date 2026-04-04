@@ -69,14 +69,14 @@ export function Footer() {
 	const t = useTranslations();
 
 	return (
-		<footer className="bg-[#050A15] border-t border-white/10 text-white/70">
+		<footer className="bg-muted dark:bg-[#050A15] border-t border-white/10 text-white/70">
 			{/* Main footer content */}
 			<div className="container py-16">
 				{/* Top row: Logo + tagline + social */}
 				<div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 pb-12 border-b border-white/10">
 					<div className="max-w-sm">
 						<Logo variant="dark" />
-						<p className="mt-4 text-sm leading-relaxed text-white/50">
+						<p className="mt-4 text-sm leading-relaxed text-muted-foreground">
 							{t("common.footer.tagline")}
 						</p>
 					</div>
@@ -85,7 +85,7 @@ export function Footer() {
 							href="https://twitter.com/auditoraai"
 							target="_blank"
 							rel="noopener noreferrer"
-							className="flex items-center justify-center w-10 h-10 rounded-lg bg-white/5 text-white/50 hover:bg-white/10 hover:text-white transition-all"
+							className="flex items-center justify-center w-10 h-10 rounded-lg bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-foreground transition-all"
 							aria-label="Twitter"
 						>
 							<TwitterIcon />
@@ -94,7 +94,7 @@ export function Footer() {
 							href="https://linkedin.com/company/auditora"
 							target="_blank"
 							rel="noopener noreferrer"
-							className="flex items-center justify-center w-10 h-10 rounded-lg bg-white/5 text-white/50 hover:bg-white/10 hover:text-white transition-all"
+							className="flex items-center justify-center w-10 h-10 rounded-lg bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-foreground transition-all"
 							aria-label="LinkedIn"
 						>
 							<LinkedInIcon />
@@ -103,7 +103,7 @@ export function Footer() {
 							href="https://github.com/auditora"
 							target="_blank"
 							rel="noopener noreferrer"
-							className="flex items-center justify-center w-10 h-10 rounded-lg bg-white/5 text-white/50 hover:bg-white/10 hover:text-white transition-all"
+							className="flex items-center justify-center w-10 h-10 rounded-lg bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-foreground transition-all"
 							aria-label="GitHub"
 						>
 							<GitHubIcon />
@@ -115,14 +115,14 @@ export function Footer() {
 				<div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-12">
 					{/* Product */}
 					<div>
-						<h3 className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-4">
+						<h3 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">
 							{t("common.footer.productTitle")}
 						</h3>
 						<ul className="space-y-3">
 					<li>
 						<a
 							href={config.saasUrl ? `${config.saasUrl}/scan` : "/scan"}
-							className="text-sm text-white/60 hover:text-white transition-colors"
+							className="text-sm text-muted-foreground hover:text-foreground transition-colors"
 						>
 							{t("common.footer.scan")}
 						</a>
@@ -130,7 +130,7 @@ export function Footer() {
 							<li>
 								<LocaleLink
 									href="/processes"
-									className="text-sm text-white/60 hover:text-white transition-colors"
+									className="text-sm text-muted-foreground hover:text-foreground transition-colors"
 								>
 									{t("common.footer.processes")}
 								</LocaleLink>
@@ -138,7 +138,7 @@ export function Footer() {
 							<li>
 								<LocaleLink
 									href="/evaluations"
-									className="text-sm text-white/60 hover:text-white transition-colors"
+									className="text-sm text-muted-foreground hover:text-foreground transition-colors"
 								>
 									{t("common.footer.evaluations")}
 								</LocaleLink>
@@ -146,7 +146,7 @@ export function Footer() {
 							<li>
 								<LocaleLink
 									href="/#pricing"
-									className="text-sm text-white/60 hover:text-white transition-colors"
+									className="text-sm text-muted-foreground hover:text-foreground transition-colors"
 								>
 									{t("common.footer.pricing")}
 								</LocaleLink>
@@ -156,14 +156,14 @@ export function Footer() {
 
 					{/* Resources */}
 					<div>
-						<h3 className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-4">
+						<h3 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">
 							{t("common.footer.resourcesTitle")}
 						</h3>
 						<ul className="space-y-3">
 							<li>
 								<LocaleLink
 									href="/blog"
-									className="text-sm text-white/60 hover:text-white transition-colors"
+									className="text-sm text-muted-foreground hover:text-foreground transition-colors"
 								>
 									{t("common.footer.blog")}
 								</LocaleLink>
@@ -171,7 +171,7 @@ export function Footer() {
 							<li>
 								<a
 									href={config.docsUrl ?? "/docs"}
-									className="text-sm text-white/60 hover:text-white transition-colors"
+									className="text-sm text-muted-foreground hover:text-foreground transition-colors"
 								>
 									{t("common.footer.docs")}
 								</a>
@@ -179,7 +179,7 @@ export function Footer() {
 							<li>
 								<a
 									href={config.docsUrl ? `${config.docsUrl}/api` : "/docs/api"}
-									className="text-sm text-white/60 hover:text-white transition-colors"
+									className="text-sm text-muted-foreground hover:text-foreground transition-colors"
 								>
 									{t("common.footer.api")}
 								</a>
@@ -187,7 +187,7 @@ export function Footer() {
 							<li>
 								<LocaleLink
 									href="/changelog"
-									className="text-sm text-white/60 hover:text-white transition-colors"
+									className="text-sm text-muted-foreground hover:text-foreground transition-colors"
 								>
 									{t("common.footer.changelog")}
 								</LocaleLink>
@@ -197,14 +197,14 @@ export function Footer() {
 
 					{/* Company */}
 					<div>
-						<h3 className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-4">
+						<h3 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">
 							{t("common.footer.companyTitle")}
 						</h3>
 						<ul className="space-y-3">
 							<li>
 								<LocaleLink
 									href="/about"
-									className="text-sm text-white/60 hover:text-white transition-colors"
+									className="text-sm text-muted-foreground hover:text-foreground transition-colors"
 								>
 									{t("common.footer.about")}
 								</LocaleLink>
@@ -212,7 +212,7 @@ export function Footer() {
 							<li>
 								<LocaleLink
 									href="/contact"
-									className="text-sm text-white/60 hover:text-white transition-colors"
+									className="text-sm text-muted-foreground hover:text-foreground transition-colors"
 								>
 									{t("common.footer.contact")}
 								</LocaleLink>
@@ -220,7 +220,7 @@ export function Footer() {
 						<li>
 							<LocaleLink
 								href="/careers"
-								className="text-sm text-white/60 hover:text-white transition-colors"
+								className="text-sm text-muted-foreground hover:text-foreground transition-colors"
 							>
 								{t("common.footer.careers")}
 							</LocaleLink>
@@ -228,7 +228,7 @@ export function Footer() {
 						<li>
 							<LocaleLink
 								href="/security"
-								className="text-sm text-white/60 hover:text-white transition-colors"
+								className="text-sm text-muted-foreground hover:text-foreground transition-colors"
 							>
 								{t("common.footer.security")}
 							</LocaleLink>
@@ -238,14 +238,14 @@ export function Footer() {
 
 				{/* Legal */}
 					<div>
-						<h3 className="text-xs font-semibold uppercase tracking-widest text-white/40 mb-4">
+						<h3 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">
 							{t("common.footer.legalTitle")}
 						</h3>
 						<ul className="space-y-3">
 							<li>
 								<LocaleLink
 									href="/legal/privacy-policy"
-									className="text-sm text-white/60 hover:text-white transition-colors"
+									className="text-sm text-muted-foreground hover:text-foreground transition-colors"
 								>
 									{t("common.footer.privacyPolicy")}
 								</LocaleLink>
@@ -253,7 +253,7 @@ export function Footer() {
 							<li>
 								<LocaleLink
 									href="/legal/terms"
-									className="text-sm text-white/60 hover:text-white transition-colors"
+									className="text-sm text-muted-foreground hover:text-foreground transition-colors"
 								>
 									{t("common.footer.termsAndConditions")}
 								</LocaleLink>
@@ -261,7 +261,7 @@ export function Footer() {
 						<li>
 							<LocaleLink
 								href="/legal/cookie-policy"
-								className="text-sm text-white/60 hover:text-white transition-colors"
+								className="text-sm text-muted-foreground hover:text-foreground transition-colors"
 							>
 								{t("common.footer.cookiePolicy")}
 							</LocaleLink>
@@ -272,7 +272,7 @@ export function Footer() {
 							<li>
 								<LocaleLink
 									href="/legal/privacy-policy#under-ccpa-california-usa"
-									className="text-sm text-white/60 hover:text-white transition-colors"
+									className="text-sm text-muted-foreground hover:text-foreground transition-colors"
 								>
 									{t("common.footer.ccpa")}
 								</LocaleLink>
@@ -285,7 +285,7 @@ export function Footer() {
 			{/* Bottom bar */}
 			<div className="border-t border-white/10">
 				<div className="container py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-					<p className="text-xs text-white/40">
+					<p className="text-xs text-muted-foreground">
 						{t("common.footer.copyright", {
 							year: new Date().getFullYear(),
 							appName: config.appName,
@@ -293,15 +293,15 @@ export function Footer() {
 					</p>
 
 				<div className="flex items-center gap-3">
-					<LocaleLink href="/security" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 text-[11px] font-medium text-white/50 border border-white/10 hover:bg-white/10 hover:text-white/70 transition-all">
+					<LocaleLink href="/security" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 text-[11px] font-medium text-muted-foreground border border-white/10 hover:bg-white/10 hover:text-white/70 transition-all">
 						<ShieldCheckIcon />
 						{t("common.footer.soc2")}
 					</LocaleLink>
-					<span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 text-[11px] font-medium text-white/50 border border-white/10">
+					<span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 text-[11px] font-medium text-muted-foreground border border-white/10">
 						<ShieldCheckIcon />
 						{t("common.footer.gdpr")}
 					</span>
-					<LocaleLink href="/security" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 text-[11px] font-medium text-white/50 border border-white/10 hover:bg-white/10 hover:text-white/70 transition-all">
+					<LocaleLink href="/security" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 text-[11px] font-medium text-muted-foreground border border-white/10 hover:bg-white/10 hover:text-white/70 transition-all">
 						<ShieldCheckIcon />
 						{t("common.footer.iso27001")}
 					</LocaleLink>
@@ -310,7 +310,7 @@ export function Footer() {
 
 				{/* AI Disclaimer */}
 				<div className="container pb-6">
-					<p className="text-[11px] text-white/30 leading-relaxed max-w-3xl">
+					<p className="text-[11px] text-muted-foreground/60 leading-relaxed max-w-3xl">
 						{t("common.footer.aiDisclaimer")}
 					</p>
 				</div>

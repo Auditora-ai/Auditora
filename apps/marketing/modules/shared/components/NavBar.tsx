@@ -111,7 +111,7 @@ export function NavBar() {
 				isLanding && isTop
 					? "bg-transparent"
 					: isLanding
-						? "bg-[#0A1428]/95 backdrop-blur-md border-b border-white/10"
+						? "bg-background/95 backdrop-blur-md border-b border-white/10"
 						: "bg-background/80",
 				{ "border-b": !isTop && !isLanding },
 			)}

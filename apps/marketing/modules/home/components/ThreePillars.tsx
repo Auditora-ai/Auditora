@@ -52,7 +52,7 @@ function PillarCard({ pillar, index }: { pillar: Pillar; index: number }) {
 			transition={{ duration: 0.7, delay: index * 0.15, ease: EASE }}
 			className={cn(
 				"group relative w-full rounded-2xl border p-8 md:p-10",
-				"bg-white/[0.03] border-white/10 backdrop-blur-sm",
+				"bg-card dark:bg-white/[0.03] border-white/10 backdrop-blur-sm",
 				"hover:border-white/20 transition-colors duration-500"
 			)}
 		>
@@ -89,7 +89,7 @@ function PillarCard({ pillar, index }: { pillar: Pillar; index: number }) {
 
 				{/* Content */}
 				<div className="flex-1">
-					<h3 className="text-2xl md:text-3xl font-bold text-white mb-3">
+					<h3 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
 						{t(`${pillar.id}.title`)}
 					</h3>
 					<p
@@ -98,7 +98,7 @@ function PillarCard({ pillar, index }: { pillar: Pillar; index: number }) {
 					>
 						{t(`${pillar.id}.hook`)}
 					</p>
-					<p className="text-base text-white/50 leading-relaxed max-w-xl">
+					<p className="text-base text-muted-foreground leading-relaxed max-w-xl">
 						{t(`${pillar.id}.description`)}
 					</p>
 				</div>
@@ -134,10 +134,10 @@ export function ThreePillars() {
 					<p className="text-[#3B8FE8] text-sm font-semibold uppercase tracking-widest mb-4">
 						{t("label")}
 					</p>
-					<h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white max-w-2xl mx-auto leading-tight">
+					<h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground max-w-2xl mx-auto leading-tight">
 						{t("title")}
 					</h2>
-					<p className="mt-4 text-lg text-white/50 max-w-xl mx-auto">
+					<p className="mt-4 text-lg text-muted-foreground max-w-xl mx-auto">
 						{t("subtitle")}
 					</p>
 				</motion.div>

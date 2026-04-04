@@ -44,7 +44,7 @@ function QuoteCard({ profile, index }: { profile: Profile; index: number }) {
 			transition={{ duration: 0.6, delay: index * 0.15, ease: EASE }}
 			className={cn(
 				"group relative rounded-2xl border p-8",
-				"bg-white/[0.03] border-white/10 backdrop-blur-sm",
+				"bg-card dark:bg-white/[0.03] border-white/10 backdrop-blur-sm",
 				"hover:border-white/20 transition-colors duration-500"
 			)}
 		>
@@ -64,7 +64,7 @@ function QuoteCard({ profile, index }: { profile: Profile; index: number }) {
 				>
 					&ldquo;
 				</span>
-				<blockquote className="relative text-xl md:text-2xl font-medium text-white leading-relaxed pl-6 mb-6">
+				<blockquote className="relative text-xl md:text-2xl font-medium text-foreground leading-relaxed pl-6 mb-6">
 					{t(`${profile.id}.quote`)}
 				</blockquote>
 			</div>
@@ -86,7 +86,7 @@ function QuoteCard({ profile, index }: { profile: Profile; index: number }) {
 					<p className="text-sm font-semibold text-white">
 						{t(`${profile.id}.role`)}
 					</p>
-					<p className="text-xs text-white/40">
+					<p className="text-xs text-muted-foreground">
 						{t(`${profile.id}.company`)}
 					</p>
 				</div>
@@ -132,10 +132,10 @@ export function WhoItsFor() {
 					<p className="text-[#3B8FE8] text-sm font-semibold uppercase tracking-widest mb-4">
 						{t("label")}
 					</p>
-					<h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white max-w-2xl mx-auto leading-tight">
+					<h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground max-w-2xl mx-auto leading-tight">
 						{t("title")}
 					</h2>
-					<p className="mt-4 text-lg text-white/50 max-w-xl mx-auto">
+					<p className="mt-4 text-lg text-muted-foreground max-w-xl mx-auto">
 						{t("subtitle")}
 					</p>
 				</motion.div>
