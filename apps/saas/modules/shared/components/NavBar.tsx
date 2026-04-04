@@ -103,13 +103,25 @@ export function NavBar() {
 	const hasEvaluation = !!navData && navData.maturityScore >= 40;
 
 	const menuItems: NavItem[] = [
-		// ─── CAPTURAR ───
+		// ─── HOME ───
+		{
+			id: "panorama",
+			label: t("app.menu.dashboard"),
+			href: basePath,
+			icon: LayoutDashboardIcon,
+			isActive: pathname === "/" || pathname === basePath || pathname === `${basePath}/panorama`,
+			section: "flow",
+			flowStep: 0,
+			flowCompleted: hasEvaluation,
+			sectionHeader: t("app.sections.view"),
+		},
+		// ─── ENTENDER ───
 		{
 			id: "descubrir",
 			label: t("app.menu.discover"),
-			href: `${basePath}/descubrir`,
+			href: `${basePath}/discovery`,
 			icon: CompassIcon,
-			isActive: pathname.startsWith(`${basePath}/descubrir`) || pathname.startsWith(`${basePath}/sessions`) || pathname.startsWith(`${basePath}/session/`),
+			isActive: pathname.startsWith(`${basePath}/discovery`) || pathname.startsWith(`${basePath}/capture`) || pathname.startsWith(`${basePath}/descubrir`) || pathname.startsWith(`${basePath}/sessions`) || pathname.startsWith(`${basePath}/session/`),
 			hidden: !hasOrg,
 			section: "flow",
 			flowStep: 1,
@@ -122,13 +134,13 @@ export function NavBar() {
 			label: t("app.menu.processes"),
 			href: `${basePath}/procesos`,
 			icon: WorkflowIcon,
-			isActive: pathname.startsWith(`${basePath}/processes`) || pathname.startsWith(`${basePath}/procesos`) || pathname.startsWith(`${basePath}/procedures`),
+			isActive: pathname.startsWith(`${basePath}/process/`) || pathname.startsWith(`${basePath}/processes`) || pathname.startsWith(`${basePath}/procesos`) || pathname.startsWith(`${basePath}/procedures`),
 			hidden: !hasOrg,
 			section: "flow",
 			badge: processBadge,
 			quickAction: {
 				label: t("app.actions.newProcess"),
-				href: `${basePath}/procesos`,
+				href: `${basePath}/capture/new`,
 			},
 			flowStep: 2,
 			flowCompleted: hasProcesses,
@@ -140,24 +152,12 @@ export function NavBar() {
 			label: t("app.menu.evaluaciones"),
 			href: `${basePath}/evaluaciones`,
 			icon: GraduationCapIcon,
-			isActive: pathname.startsWith(`${basePath}/evaluaciones`),
+			isActive: pathname.startsWith(`${basePath}/evaluate`) || pathname.startsWith(`${basePath}/evaluaciones`),
 			hidden: !hasOrg,
 			section: "flow",
 			flowStep: 3,
 			flowCompleted: false,
 			sectionHeader: t("app.sections.evaluate"),
-		},
-		// ─── VER ───
-		{
-			id: "panorama",
-			label: t("app.menu.dashboard"),
-			href: `${basePath}/panorama`,
-			icon: LayoutDashboardIcon,
-			isActive: pathname === "/" || pathname === basePath || pathname === `${basePath}/panorama`,
-			section: "flow",
-			flowStep: 4,
-			flowCompleted: hasEvaluation,
-			sectionHeader: t("app.sections.view"),
 		},
 		// ─── CONFIGURAR ───
 		{

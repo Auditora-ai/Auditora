@@ -58,28 +58,28 @@ export function MobileBottomBar() {
 
 	const primaryTabs: MobileTab[] = [
 		{
+			label: t("app.menu.dashboard"),
+			href: basePath,
+			icon: LayoutDashboardIcon,
+			isActive: pathname === basePath || pathname === `${basePath}/panorama`,
+		},
+		{
 			label: t("app.menu.discover"),
-			href: `${basePath}/descubrir`,
+			href: `${basePath}/discovery`,
 			icon: CompassIcon,
-			isActive: pathname.startsWith(`${basePath}/descubrir`) || pathname.startsWith(`${basePath}/sessions`) || pathname.startsWith(`${basePath}/session/`),
+			isActive: pathname.startsWith(`${basePath}/discovery`) || pathname.startsWith(`${basePath}/capture`) || pathname.startsWith(`${basePath}/descubrir`) || pathname.startsWith(`${basePath}/sessions`) || pathname.startsWith(`${basePath}/session/`),
 		},
 		{
 			label: t("app.menu.processes"),
 			href: `${basePath}/procesos`,
 			icon: WorkflowIcon,
-			isActive: pathname.startsWith(`${basePath}/processes`) || pathname.startsWith(`${basePath}/procesos`) || pathname.startsWith(`${basePath}/procedures`),
+			isActive: pathname.startsWith(`${basePath}/process/`) || pathname.startsWith(`${basePath}/processes`) || pathname.startsWith(`${basePath}/procesos`) || pathname.startsWith(`${basePath}/procedures`),
 		},
 		{
 			label: t("app.menu.evaluaciones"),
 			href: `${basePath}/evaluaciones`,
 			icon: GraduationCapIcon,
-			isActive: pathname.startsWith(`${basePath}/evaluaciones`),
-		},
-		{
-			label: t("app.menu.dashboard"),
-			href: `${basePath}/panorama`,
-			icon: LayoutDashboardIcon,
-			isActive: pathname === basePath || pathname === `${basePath}/panorama`,
+			isActive: pathname.startsWith(`${basePath}/evaluate`) || pathname.startsWith(`${basePath}/evaluaciones`),
 		},
 	];
 
