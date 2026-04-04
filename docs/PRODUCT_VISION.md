@@ -1,7 +1,7 @@
-# Auditora.ai — Product Vision v2
+# Auditora.ai — Product Vision v3
 
-**Version:** 2.0
-**Fecha:** 2026-04-02
+**Version:** 3.0
+**Fecha:** 2026-04-04
 **Status:** Active — fuente de verdad
 
 ---
@@ -20,111 +20,204 @@ Auditora resuelve esto poniendo los procesos de la empresa a prueba. Generas esc
 
 ---
 
-## Los 3 Pilares
+## El Flujo — Un ciclo, no módulos sueltos
 
-### 1. CAPTURAR — Cómo los procesos entran al sistema
-
-Los procesos existen en la cabeza de la gente, en correos, en archivos sueltos. Auditora tiene 3 canales para capturarlos:
-
-**a) Scan Automático (free tier — cero fricción)**
-El prospecto pega una URL y en 60 segundos ve algo impresionante: "detectamos que eres una empresa de manufactura, estos son tus 5 procesos críticos, y tu proceso de Compras tiene 3 riesgos potenciales". No necesita registrarse. No necesita pagar. El objetivo NO es ser preciso — es que el director perciba el potencial: "si esto lo hace con solo una URL, imagínate cuando le demos datos reales".
-
-El scan actual tiene el concepto correcto pero la ejecución fallida: hace crawling de marketing copy y genera inferencias que parecen inventadas. Necesita rebuild completo:
-
-- El output debe ser visualmente impactante (theatrical reveal, no tabla aburrida)
-- Debe terminar con un CTA claro: "esto es una vista previa. Regístrate para el diagnóstico real"
-- Los datos deben sentirse específicos al negocio, no genéricos ("empresa de manufactura")
-- Debe generar un link compartible para que el director lo envíe a su equipo
-- No debe prometer más de lo que puede entregar (el disclaimer es parte del UX)
-
-Este es el funnel de adquisición: Scan free → Registro → Entrevista por chat → Procesos reales → Evaluaciones de valor.
-
-**b) Entrevista por Chat (captura profunda)**
-Un asistente de IA entrevista al responsable del proceso por chat (no por llamada). Pregunta estructuradas adaptativas tipo SIPOC: "qué entra", "quién lo hace", "qué pasa si falla", "quién aprueba". Genera el diagrama BPMN y el procedimiento. Más rápido que una llamada, más barato, el usuario puede hacerlo a su ritmo, y funciona en español con acentos.
-
-**c) Sesión en Vivo (demo wow)**
-Un bot se une a la videollamada (Recall.ai), escucha la conversación, y genera el diagrama BPMN en tiempo real. Es impresionante en demo. Es el feature que hace que el prospecto diga "wow, quiero esto". Pero es secundario como input channel — más costoso, más complejo, más fricción. Se usa para demos y para clientes premium que quieren la experiencia completa.
-
-**Resultado de los 3 canales:** Proceso documentado con BPMN + procedimiento + riesgos identificados.
-
----
-
-### 2. DOCUMENTAR — Donde viven los procesos
-
-Una vez capturado, el proceso vive en la librería. Pero aquí está el cambio de mindset: no documentamos por documentar. Documentamos para poder evaluar.
-
-Cada proceso tiene:
-- **Diagrama BPMN** — la versión técnica (para el consultor/analista)
-- **Mapa visual** — la versión humana (para el CEO, el gerente, cualquier persona)
-- **Procedimiento (SOP)** — generado por IA a partir del proceso, editable, versionado
-- **RACI** — quién es responsable de cada paso
-- **Riesgos** — no como módulo separado, como propiedad del proceso. "Este paso tiene riesgo alto porque si falla se para la línea."
-
-La documentación no es estática. Se enriquece con las evaluaciones: "el 60% de los evaluados falló en este paso del proceso de compras — necesitamos revisar el procedimiento aquí."
-
----
-
-### 3. EVALUAR — El producto que se vende
-
-Aquí está el dinero.
-
-Generas evaluaciones tipo caso Harvard:
-- Seleccionas un proceso (ej: Compras)
-- La IA genera escenarios basados en EL procedimiento REAL de esa empresa
-- El empleado enfrenta decisiones concretas: "Llegó una orden de $500K que cumple todos los criterios excepto que el proveedor no está en el listado aprobado. Qué haces?"
-- Opciones A, B, C — cada una con consecuencias
-- El sistema evalúa si la decisión alinea con el procedimiento
-
-**Lo que el CEO ve:**
-- "Tu equipo de compras tiene un 72% de alineación procedimental"
-- "El punto más débil: aprobación de proveedores nuevos — 3 de 5 evaluados tomaron la decisión incorrecta"
-- "María García (gerente) score 91% — excelente. Carlos López (analista) score 45% — necesita reentrenamiento urgente"
-- "Antes de la evaluación: el proceso de compras tenía 3 errores críticos/mes. Después del reentrenamiento: 0."
-
-**Esto es tangible. Esto se puede medir. Esto es lo que el dueño le muestra a su junta directiva.**
-
----
-
-## Sidebar Restructure
-
-De 6 módulos lineales a 4 secciones con propósito claro:
+La app sigue un ciclo natural de BPM profesional. Cada fase alimenta la siguiente. No hay features desconectadas ni callejones sin salida.
 
 ```
-CAPTURAR
-├── Descubrir          (Scan + Entrevista + Sesión en Vivo)
-│                       3 canales de entrada al mismo destino
+ENTENDER → CAPTURAR → DOCUMENTAR → EVALUAR → ACTUAR → (repetir)
+```
+
+### Fase 0: ENTENDER — Discovery Organizacional
+
+**Antes de capturar un solo proceso, hay que entender la empresa.**
+
+Un consultor BPM no llega y dice "dime un proceso". Primero entiende el negocio: qué hace la empresa, cómo genera valor, cuáles son sus procesos críticos. Auditora replica esto con IA.
+
+**Qué hace:**
+La IA actúa como consultor BPM senior y entrevista al usuario sobre su empresa:
+- ¿A qué se dedica tu empresa? (industria, producto/servicio)
+- ¿Quién es tu cliente?
+- ¿Cómo le llega tu producto al cliente? (cadena de valor)
+- ¿Cuántos empleados? ¿Qué áreas/departamentos?
+- ¿Tienen certificaciones? (ISO, IATF, etc.)
+
+**Qué produce:**
+- **Cadena de valor** (modelo Porter): actividades primarias y de soporte
+- **Arquitectura de procesos sugerida**: procesos estratégicos, operativos y de soporte — generados por IA según industria, tamaño y contexto
+- **Priorización**: el usuario valida, elimina, marca como críticos
+
+**Por qué es esencial:**
+- El consultor que llega con un nuevo cliente no sabe los nombres de los procesos — necesita entender la configuración de valor primero
+- El CEO que se registra solo no sabe por dónde empezar — la IA le da el mapa
+- Sin arquitectura de procesos, el usuario captura procesos al azar sin estrategia
+- Con arquitectura, cada proceso capturado tiene contexto: tipo (estratégico/operativo/soporte), relación con otros procesos, prioridad
+
+**Valor para el consultor:** En 20 minutos de chat con la IA tiene la cadena de valor y arquitectura de procesos de su nuevo cliente. Eso le tomaría 2-3 sesiones de levantamiento manual.
+
+**Datos:** CompanyBrain, OrgContext (misión, visión, industria, estructura), ValueChainActivity, ProcessArchitecture, ProcessDefinition (generados en bloque con category y prioridad).
+
+**Ruta:** `/discovery`
+
+---
+
+### Fase 1: CAPTURAR — Cómo los procesos entran al sistema
+
+Los procesos existen en la cabeza de la gente. La ÚNICA forma real de capturar un proceso es hablar con quien lo ejecuta. En BPM esto se llama "process elicitation".
+
+**3 métodos de captura — 3 formas de hacer lo mismo:**
+
+**a) Entrevista SIPOC por Chat (método principal)**
+La IA entrevista al process owner siguiendo el framework SIPOC:
+- **Suppliers:** "¿Quién te da los insumos para arrancar?"
+- **Inputs:** "¿Qué necesitas para empezar? ¿Documentos? ¿Materiales? ¿Aprobaciones?"
+- **Process:** "Cuéntame paso a paso qué haces" — para cada paso pregunta: ¿Quién lo ejecuta? ¿Cuánto tarda? ¿Qué puede salir mal? ¿Qué haces cuando falla? ¿Quién aprueba?
+- **Outputs:** "¿Qué produce este proceso al final?"
+- **Customers:** "¿Quién recibe lo que este proceso produce?"
+
+La IA ya conoce el contexto de la empresa (de la Fase 0), así que las preguntas son contextuales, no genéricas. Si sabe que es una manufactura automotriz, pregunta diferente que a una empresa de logística.
+
+**b) Subir Documento Existente**
+El usuario sube un PDF, Word, o manual interno que ya describe el proceso. La IA lo parsea y estructura en SIPOC/BPMN. Para empresas que ya tienen documentación pero quieren ponerla a prueba.
+
+**c) Sesión en Vivo (premium)**
+Bot se une a videollamada (Recall.ai), escucha, extrae la estructura SIPOC del diálogo natural. Feature premium de alto impacto en demos.
+
+**Resultado de los 3 métodos:** Borrador del proceso que pasa automáticamente a documentación.
+
+**Nota sobre el Scan de URL:** El scan de URL pública NO es captura de proceso — es una herramienta de marketing/lead-gen que muestra análisis superficial de la empresa. Vive en el funnel de adquisición (landing → scan → registro), no en el flujo core de la app. No produce procesos reales porque no tiene acceso a información interna. Su valor es impresionar al prospecto para que se registre.
+
+**Ruta:** `/capture/[processId]` o `/capture/new`
+
+---
+
+### Fase 2: DOCUMENTAR — Donde viven los procesos
+
+Una vez capturado, el proceso se documenta automáticamente. La documentación no es el producto — es el prerequisito para evaluar. Documentamos para poder poner a prueba.
+
+Cada proceso documentado tiene:
+- **Flujo visual** — diagrama paso a paso (vertical en mobile, BPMN exportable para técnicos)
+- **Procedimiento (SOP)** — instrucción paso a paso, editable, versionado
+- **RACI** — quién es Responsable, Aprobador, Consultado, Informado en cada paso
+- **Riesgos (FMEA)** — por cada paso: qué puede fallar, Severidad × Frecuencia × Detectabilidad = RPN (Risk Priority Number). Esto ES la metodología FMEA aplicada, no un label
+- **Historial** — versiones, cambios, quién editó qué
+
+**La documentación es viva, no un PDF muerto:**
+- El process owner puede editar cualquier paso
+- La IA sugiere mejoras: "¿Qué pasa si el proveedor no tiene stock? No mencionaste ese caso"
+- Se enriquece con resultados de evaluaciones: "el 60% del equipo falla en el paso 7 — considerar agregar checklist"
+
+**Ciclo de vida del proceso:**
+- `DRAFT` (gris) — existe en la arquitectura pero no se ha capturado
+- `CAPTURED` (amarillo) — se hizo elicitation pero no está validado
+- `DOCUMENTED` (azul) — validado por el process owner, listo para evaluar
+- `EVALUATED` (verde/rojo) — tiene resultados de evaluación, score visible
+
+**Ruta:** `/process/[processId]`
+
+---
+
+### Fase 3: EVALUAR — El producto que se vende
+
+Aquí está el dinero. Las evaluaciones son la unidad de valor de Auditora.
+
+**Cómo se generan los escenarios:**
+La IA toma los riesgos del FMEA y los puntos de decisión del BPMN para generar escenarios Harvard-case. No son preguntas genéricas — salen del PROCESO REAL documentado de esa empresa.
+
+Ejemplo: Si el paso 7 del proceso de Compras dice "Si el material no pasa inspección, rechazar y documentar" y el FMEA dice "Riesgo alto: frecuentemente se acepta material fuera de spec por presión de producción"...
+
+→ **Escenario:** "Eres supervisor de calidad. Llega un lote del proveedor X. Tu medición muestra que está 2% fuera de especificación. El gerente de producción te llama y dice que la línea está parada y necesitan ese material HOY. ¿Qué haces?"
+- Opción A: "Acepto el material para no parar la línea" → Incorrecto. Viola paso 7.
+- Opción B: "Rechazo y documento según procedimiento" → Correcto. Alineado con SOP.
+- Opción C: "Acepto condicionalmente y notifico a calidad" → Parcial. No está en el procedimiento actual.
+
+**3 modos de la pantalla de Evaluación:**
+
+**Modo Lanzar (manager):**
+- Selecciona proceso → selecciona personas → ve los riesgos FMEA que serán base de escenarios
+- "Generar y enviar evaluación" → IA crea escenarios, envía links
+- Ve progreso: "3/8 personas han completado"
+
+**Modo Tomar (evaluee):**
+- Recibe link, abre en celular
+- Pantalla completa, inmersivo, un escenario a la vez
+- Contexto → "¿Qué haces?" → 3 opciones → Feedback con explicación → Siguiente
+- 10-15 minutos máximo
+- Score final con gaps específicos vinculados a pasos del proceso
+
+**Modo Resultados (manager):**
+- Por persona: score + gaps específicos ("María falla en pasos 7-9: manejo de material fuera de spec")
+- Por proceso: % alineación del equipo, pasos más débiles, pasos más fuertes
+- Comparativa antes/después entre evaluaciones
+- Drill-down: decisiones exactas de cada persona vs respuesta correcta
+
+**Ruta:** `/evaluate/[processId]` (lanzar/resultados) + `/intake/evaluacion/[token]` (tomar, público)
+
+---
+
+### Fase 4: ACTUAR — Mejora continua
+
+Después de evaluar, la app no deja al usuario solo con un número. Le dice qué hacer.
+
+**El HOME de la app es el estado de la operación:**
+Lista de procesos de la organización con su estado de madurez y score. Agrupados por tipo (estratégico/operativo/soporte). El CEO abre la app, ve su operación en 10 segundos.
+
+**El Panorama (dashboard ejecutivo) responde 3 preguntas:**
+1. "¿Qué tan preparada está mi operación?" → Score global con tendencia
+2. "¿Dónde están los huecos?" → Alertas: procesos vulnerables, riesgos sin mitigar, personas en riesgo
+3. "¿Qué hago ahora?" → Acciones concretas: "Evalúa Compras", "Documenta Logística", "Re-evalúa Producción"
+
+**El ciclo se cierra:**
+Capturaste → Documentaste → Evaluaste → Identificaste gaps → Mejoraste procedimiento → Re-evaluaste → Mediste mejora
+
+**Rutas:** `/` (home/mapa de procesos) + `/panorama` (dashboard ejecutivo)
+
+---
+
+## Navegación (Mobile-first)
+
+La app tiene 4 secciones principales + configuración. En mobile, la navegación es bottom tabs o sidebar colapsada.
+
+```
+HOME (/)
+├── Mapa de procesos con estados de madurez
+├── FAB "+" para capturar nuevo proceso
 │
-DOCUMENTAR
-├── Procesos            (BPMN + mapa visual + procedimientos + RACI + riesgos)
-│                       Todo en un solo workspace por proceso
+DESCUBRIR (/discovery)
+├── Discovery organizacional (primera vez)
+├── Entrevista SIPOC (/capture/[id])
 │
-EVALUAR
-├── Evaluaciones        (Stress tests — antes "Simulaciones")
-│                       Escenarios de decisión basados en procesos reales
-│                       Dashboard de riesgo humano por persona y por proceso
+PROCESOS (/process/[id])
+├── Flujo | Procedimiento | Riesgos | RACI | Historial
+├── CTA "Evaluar equipo"
 │
-VER
-├── Panorama            (Dashboard consolidado)
-│                       Score global, procesos vulnerables, próximos pasos
-│                       Accionable: "clic para ver los detalles"
+EVALUACIONES (/evaluate/[id])
+├── Lanzar evaluación
+├── Tomar evaluación (/intake/evaluacion/[token])
+├── Resultados por persona y proceso
 │
-CONFIGURAR (bottom)
-├── Configuración       (Org, miembros, facturación)
+PANORAMA (/panorama)
+├── Score global + tendencia
+├── Alertas + acciones accionables
+│
+CONFIGURACIÓN (bottom)
+├── Org, miembros, facturación
 ```
 
 ### Lo que desaparece como módulo independiente:
 
 | Módulo viejo | Destino |
 |---|---|
-| Sessions | Se absorbe como canal dentro de "Descubrir" |
-| Riesgos | Propiedad de cada proceso, no módulo separado |
-| Procedimientos | Se integra dentro del workspace de Procesos |
-| Simulations | Se renombra a "Evaluaciones" — es el módulo principal |
-| Evaluation | Se fusiona con Evaluaciones (es el dashboard del mismo módulo) |
-| Deliverables | Se absorbe en Procesos (exportar) y Evaluaciones (reportes) |
-| Discovery (chat) | Se absorbe como canal dentro de "Descubrir" |
-| Documents | Se elimina — los documentos viven dentro de procesos |
-| Assistant | Se elimina como módulo — la IA está integrada en cada módulo |
+| Sessions | Canal dentro de Captura (sesión en vivo) |
+| Riesgos | Propiedad de cada proceso (tab FMEA) |
+| Procedimientos | Tab dentro de cada proceso |
+| Simulations | Renombrado a Evaluaciones |
+| Evaluation | Dashboard dentro de Evaluaciones |
+| Deliverables | Exportar dentro de Procesos y Evaluaciones |
+| Discovery (chat viejo) | Reemplazado por Discovery Organizacional + Entrevista SIPOC |
+| Documents | Eliminado — documentos viven dentro de procesos |
+| Assistant | Eliminado — la IA está integrada en cada fase |
+| Scan (dentro de app) | Movido a funnel de marketing (público, sin auth) |
 
 ---
 
@@ -139,12 +232,28 @@ CONFIGURAR (bottom)
 **Responsable de RH / Capacitación:**
 "La capacitación genérica no funciona. Auditora genera evaluaciones personalizadas con los casos reales de cada departamento. Puedo medir quién necesita ayuda y en qué."
 
-**Consultor BPM (usuario indirecto):**
-"Auditora me ayuda a capturar procesos más rápido y a demostrar valor a mis clientes con datos concretos de evaluación."
+**Consultor BPM:**
+"Auditora me ayuda a entender el negocio de mi cliente en 20 minutos (Discovery), capturar procesos más rápido (SIPOC por chat), y demostrar valor con datos concretos de evaluación. Lo que me tomaba 2 semanas de levantamiento lo hago en 2 días."
 
 ---
 
-## Métricas de Impacto (lo que hace el producto tangible)
+## Metodologías Aplicadas (no solo mencionadas)
+
+| Metodología | Dónde se aplica | Cómo se materializa en la app |
+|---|---|---|
+| **SIPOC** (Six Sigma) | Fase 1: Captura | Framework de la entrevista IA — las preguntas siguen S-I-P-O-C con indicador visual de fase |
+| **BPMN 2.0** (OMG) | Fase 2: Documentación | Diagrama de flujo generado automáticamente, exportable a XML, editable |
+| **FMEA** (ISO/TS 16949) | Fase 2: Tab Riesgos | Severidad × Frecuencia × Detectabilidad = RPN por cada paso del proceso |
+| **Caso Harvard** | Fase 3: Evaluación | Escenarios de decisión situacional generados del FMEA + BPMN del proceso real |
+| **RACI** | Fase 2: Tab RACI | Matriz Responsable/Aprobador/Consultado/Informado por paso |
+| **Cadena de Valor (Porter)** | Fase 0: Discovery | Mapeo de actividades primarias y de soporte de la empresa |
+| **Arquitectura de Procesos** | Fase 0: Discovery | Clasificación estratégico/operativo/soporte con priorización |
+
+Cada metodología tiene implementación real en el código, no es solo un label en la landing.
+
+---
+
+## Métricas de Impacto
 
 | Métrica | Antes | Después | Cómo se mide |
 |---|---|---|---|
@@ -156,48 +265,9 @@ CONFIGURAR (bottom)
 
 ---
 
-## Módulos de Código — Nuevo Mapping
-
-| Sección | Módulo actual | Acción |
-|---|---|---|
-| Descubrir | `radiografia/` | Refactor: extraer diagramador como shared lib |
-| Descubrir | `meeting/` | Split: diagramador → shared, call → plugin |
-| Descubrir | `ai-interview/` | Integrar como canal de entrevista por chat |
-| Descubrir | `discovery/` | Fusionar en Descubrir (chat de captura) |
-| Procesos | `process-library/` | Expandir: absorber procedimientos y riesgos |
-| Procesos | `procedures/` | Fusionar en process-library |
-| Procesos | `risk/` | Propiedad de procesos, no módulo independiente |
-| Evaluaciones | `simulations/` | Renombrar y reposicionar como módulo principal |
-| Evaluaciones | (evaluation page) | Fusionar como dashboard dentro de simulaciones |
-| Panorama | `command-center/` | Refactor: simplificar a dashboard accionable |
-| Entregables | `deliverables/` | Absorber en Procesos (export) y Evaluaciones (reportes) |
-| Eliminar | `documents/` | Borrar |
-| Eliminar | `discovery/` (como standalone) | Fusionar |
-| Shared | nuevo `modules/process-engine/` | Extraer diagramador BPMN de meeting/ como lib compartida |
-
----
-
----
-
 ## Modelo de Negocio
 
-### Problema del modelo actual
-
-El modelo de negocio está diseñado para "levantamiento de procesos" — vende sesiones IA. Esto no tiene sentido con el producto actual por varias razones:
-
-1. **Las sesiones no son el producto.** Vender "10 sesiones IA al mes" es como vender "10 llamadas con tu doctor al mes". La llamada no es el valor — el diagnóstico es. El dueño de empresa no piensa en "cuántas sesiones necesito", piensa en "quiero saber si mi equipo está listo".
-
-2. **El onboarding es débil.** Un solo step (OnboardingAccountStep) que solo pide datos de cuenta. No pide industria, no pide tamaño de empresa, no guía al usuario a su primer proceso. El usuario se registra y se queda mirando un dashboard vacío.
-
-3. **El scan free tier no tiene funnel.** Existen rutas públicas (`/api/public/scan/*`) pero no hay un flujo claro de "scan gratis → impresionar → registrar → convertir". El scan está dentro de la app autenticada — debería ser público y sin registro.
-
-4. **Los límites miden lo equivocado.** Sessions: 10/40/100. Processes: 5/unlimited/unlimited. Usuarios: 1/5/15. Nada de esto mide lo que el cliente valora. El cliente valora: "cuántos de mis empleados evalué", "cuántos riesgos identifiqué", "cuántos procedimientos tengo publicados".
-
-5. **No hay unidad de valor que escale naturalmente.** El consultor independiente que levanta 5 procesos es un cliente chico con poco upsell. La empresa de 500 empleados que quiere evaluar a 200 personas en 8 procesos distintos es el cliente grande — y el modelo actual no está diseñado para eso.
-
-### Nuevo Modelo de Negocio
-
-**Unidad de valor: Evaluaciones completadas.**
+### Unidad de valor: Evaluaciones completadas.
 
 La empresa paga por evaluar a su gente. La documentación de procesos es el prerequisite — necesitas procesos documentados para generar evaluaciones relevantes. Pero el dinero está en las evaluaciones.
 
@@ -206,29 +276,27 @@ La empresa paga por evaluar a su gente. La documentación de procesos es el prer
 ```
 LANDING (marketing)
   ↓
-SCAN GRATIS (publico, sin registro)
-  "Pega tu URL y en 60 segundos ve qué tan expuesta está tu operación"
-  ↓ salida: "Regístrate para el diagnóstico completo"
+SCAN GRATIS (público, sin registro)
+  "Pega tu URL y ve qué tan expuesta está tu operación"
+  → Impresionar al prospecto (herramienta de marketing, no de captura)
   ↓
 REGISTRO
-  Onboarding inteligente: nombre empresa, industria, tamaño, ¿cuántos empleados evaluarías?
-  ↓ auto-genera: primera org, primer scan real
+  → Discovery organizacional: la IA entiende el negocio y genera arquitectura de procesos
   ↓
-PRUEBA GRATIS (14 días, full access)
-  - Documentar hasta 3 procesos (via chat o session)
+PRUEBA GRATIS (14 días)
+  - Capturar hasta 3 procesos (via SIPOC chat o documento)
   - Generar hasta 10 evaluaciones
   - Ver resultados y dashboard de riesgo humano
-  - Exportar 1 reporte
-  ↓ salida: "Tu equipo tiene 62% de alineación. Upgrade para evaluar a todos."
   ↓
 CONVERSIÓN
+  "Tu equipo tiene 62% de alineación. Upgrade para evaluar a todos."
 ```
 
 #### Planes
 
 | | Starter | Growth | Scale | Enterprise |
 |---|---|---|---|---|
-| **Para quién** | La empresa que empieza, 1 proceso clave | El equipo que quiere cubrir un área completa | La empresa que quiere evaluar toda su operación | Custom |
+| **Para quién** | Empieza con 1 proceso clave | Cubre un área completa | Toda la operación | Custom |
 | **Precio** | $49/mes | $199/mes | $499/mes | Custom |
 | **Procesos** | 3 | 15 | Ilimitados | Ilimitados |
 | **Evaluaciones/mes** | 10 | 50 | 250 | Ilimitadas |
@@ -238,85 +306,83 @@ CONVERSIÓN
 | **Usuarios admin** | 2 | 5 | 15 | Ilimitados |
 | **Export** | PDF básico | PDF + PPTX + Excel | Todo + API | Todo + API + SSO |
 
-**Lógica de precios:**
-- Starter = "prueba Auditora en tu proceso más crítico". Barato enough para decidir.
-- Growth = "cubrir un departamento completo". El sweet spot para empresas de 50-200.
-- Scale = "transformación operacional completa". Para empresas de 200-1000.
-- Enterprise = custom por número de evaluadores, SSO, integraciones, SLA.
-
-**Por qué funciona:**
-- Las evaluaciones son consumibles naturales. Se agotan, se renuevan. Igual que los créditos de OpenAI.
-- Los procesos documentados son "sunk cost" — una vez que el cliente documentó 15 procesos, no se va a ir a la competencia y empezar de cero. High switching cost.
-- El valor es medible: "pasamos de 45% a 82% de alineación procedimental en 3 meses". Eso se presenta en junta directiva.
-- El seat model (evaluadores) escala con el tamaño de la empresa. Más empleados = más evaluaciones = más ingresos.
-
-#### Límites que importan
-
-| Métrica | Por qué importa | Cómo se mide |
-|---|---|---|
-| Evaluaciones completadas/mes | Unidad de valor principal | SimulationRun.count por mes por org |
-| Evaluadores únicos/mes | Escala con tamaño de empresa | SimulationRun.userId distinct por mes |
-| Procesos documentados | Sunk cost / switching cost | ProcessDefinition.count por org |
-| Sesiones IA/mes | Costo real para nosotros (API calls) | Session.count por mes por org |
-| Reportes exportados/mes | Deliverable tangible | Export.count por mes por org |
-
-#### Onboarding Rediseñado
-
-El onboarding actual es un solo step que pide datos de cuenta. Necesita ser un wizard que guíe al valor:
-
-**Step 1 — Cuenta** (ya existe, OnboardingAccountStep)
-- Nombre, email, contraseña
-
-**Step 2 — Tu Empresa**
-- Nombre de la empresa
-- Industria (dropdown con las industries del scan)
-- Tamaño de empresa (rangos: 10-50, 51-200, 201-500, 501-1000)
-- ¿Cuántas personas te gustaría evaluar? (5, 10-30, 31-100, 100+)
-- ¿Cuál es el proceso que más te preocupa? (texto libre)
-
-**Step 3 — Primer Valor**
-- "Basado en lo que nos contaste, te recomendamos empezar con [proceso inferido]"
-- Opción A: "Iniciar entrevista por chat" (va al chat de captura de procesos)
-- Opción B: "Agendar una sesión en vivo" (va a crear session)
-- Opción C: "Explorar el dashboard" (skip, va al panorama)
-
-**Step 4 — Setup Completo**
-- Invitar miembros (opcional)
-- "Tu organización está lista. Te recomendamos documentar tu primer proceso antes de crear evaluaciones."
-
-#### Cambios al Código Existente
-
-| Archivo | Cambio |
-|---|---|
-| `packages/payments/config.ts` | Nuevos planes, nuevos límites (evaluaciones, evaluadores, procesos) |
-| `packages/payments/types.ts` | PlanLimits: reemplazar sessions/processes/users por evaluations/evaluators/processes/sessions/reports |
-| `apps/saas/modules/payments/components/UsageDashboard.tsx` | Mostrar evaluaciones usadas, no sesiones |
-| `apps/saas/modules/payments/components/PricingTable.tsx` | Actualizar features por plan |
-| `packages/i18n/translations/*/shared.json` | Reescribir sección `pricing` completa |
-| `apps/saas/modules/onboarding/components/OnboardingForm.tsx` | Agregar Steps 2-4 (empresa, primer valor, setup) |
-| `apps/saas/app/(authenticated)/choose-plan/page.tsx` | Actualizar copy para nuevo modelo |
+**Lógica:**
+- Evaluaciones son consumibles naturales (se agotan, se renuevan mensualmente)
+- Procesos documentados son sunk cost (high switching cost — no te vas a ir y empezar de cero)
+- El valor es medible: "pasamos de 45% a 82% de alineación en 3 meses"
 
 ---
 
-## Roadmap Sugerido (no es orden definitivo)
+## Estructura de Código
 
-### Fase 1 — Fundamentos
-- Consolidar diagramador BPMN como lib compartida (sale de meeting/, se usa en scan + sessions + procesos)
-- Mergear procedimientos y riesgos dentro de process-library
-- Renombrar simulaciones → evaluaciones
-- Limpiar módulos muertos (documents, discovery standalone, assistant)
-- Rediseñar modelo de negocio: planes, límites, onboarding
+### Rutas del SaaS
+
+```
+[orgSlug]/                      → HOME: mapa de procesos con madurez
+[orgSlug]/discovery             → Discovery organizacional (Fase 0)
+[orgSlug]/capture/new           → Nuevo proceso + selección de método
+[orgSlug]/capture/[processId]   → Entrevista SIPOC (Fase 1)
+[orgSlug]/process/[processId]   → Documento vivo con tabs (Fase 2)
+[orgSlug]/evaluate/[processId]  → Lanzar + resultados (Fase 3)
+[orgSlug]/panorama              → Dashboard ejecutivo (Fase 4)
+/intake/evaluacion/[token]      → Tomar evaluación (público, sin auth)
+/scan                           → Scan público (marketing funnel)
+```
+
+### Módulos del SaaS
+
+```
+modules/
+├── home/           → Mapa de procesos (HOME)
+├── discovery/      → Discovery organizacional (Fase 0)
+├── capture/        → Entrevista SIPOC + método selector (Fase 1)
+├── process/        → Documento vivo: flujo, SOP, FMEA, RACI (Fase 2)
+├── evaluate/       → Evaluaciones Harvard-case (Fase 3)
+├── panorama/       → Dashboard ejecutivo (Fase 4)
+├── auth/           → Autenticación
+├── organizations/  → Gestión de org
+├── settings/       → Configuración
+├── payments/       → Facturación
+├── onboarding/     → Wizard de registro
+├── shared/         → Componentes compartidos
+└── i18n/           → Internacionalización
+```
+
+### Modelos de Datos (Prisma)
+
+| Fase | Modelos |
+|---|---|
+| Discovery | CompanyBrain, OrgContext, ValueChainActivity, ProcessArchitecture |
+| Captura | ProcessDefinition, DiscoveryThread, DiscoveryMessage |
+| Documentación | ProcessDefinition (bpmnXml), Procedure, RaciEntry, ProcessRisk |
+| Evaluación | SimulationTemplate, SimulationScenario, Decision, DecisionResponse, SimulationRun |
+| Mejora | HumanRiskProfile, ProcessVersion, ProcessActivityLog |
+
+---
+
+## Roadmap
+
+### Fase 1 — Fundamentos (actual)
+- ✅ Discovery organizacional (cadena de valor + arquitectura de procesos)
+- ✅ HOME como mapa de procesos con estados de madurez
+- ✅ Captura SIPOC por chat con indicador de fase
+- ✅ Proceso como documento vivo (flujo + SOP + FMEA + RACI)
+- ✅ Evaluaciones Harvard-case (lanzar + tomar + resultados)
+- ✅ Panorama ejecutivo con alertas y acciones
+- [ ] Conectar frontend a backend real (mock → API)
+- [ ] Rediseñar onboarding: cuenta → empresa → Discovery → primer proceso
+- [ ] Actualizar modelo de negocio en payments (evaluaciones como unidad)
 
 ### Fase 2 — El Producto que se Vende
-- Evaluaciones como módulo estrella: generación automática de escenarios desde procedimientos
+- Generación automática de escenarios desde FMEA + BPMN
 - Dashboard de riesgo humano por persona y por proceso
 - Before/after metrics (alineación procedimental)
-- Reportes exportables para junta directiva
-- Scan free tier rebuild (público, sin registro, theatrical reveal, CTA registro)
+- Reportes exportables para junta directiva (PDF + PPTX)
+- Scan free tier como herramienta de marketing (público, impactante, CTA registro)
 
 ### Fase 3 — Crecimiento
 - Colaboración multi-usuario en procesos
-- Notificaciones y gestión del cambio ("el procedimiento X cambió, 3 de 5 responsables no lo han confirmado")
+- Notificaciones y gestión del cambio
 - Integraciones (Slack, Teams, Google Workspace)
-- Módulo de onboarding basado en evaluaciones
 - Programa de certificación ("Tu equipo está certificado en Proceso de Compras")
+- API pública para enterprise
