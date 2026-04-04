@@ -263,7 +263,7 @@ function QuickActionCard({ href, icon, title, subtitle, iconBg }: { href: string
 
 function RiskCard({ risk, basePath }: { risk: TopRisk; basePath: string }) {
 	const severity = risk.riskScore >= 16 ? "destructive" : risk.riskScore >= 12 ? "secondary" : "outline";
-	const borderColor = risk.riskScore >= 16 ? "border-l-destructive" : risk.riskScore >= 12 ? "border-l-[hsl(var(--chart-3))]" : "border-l-primary";
+	const borderColor = risk.riskScore >= 16 ? "border-l-destructive" : risk.riskScore >= 12 ? "border-l-amber-500" : "border-l-primary";
 
 	return (
 		<Link
@@ -287,8 +287,8 @@ function RiskCard({ risk, basePath }: { risk: TopRisk; basePath: string }) {
 }
 
 function VulnerableProcessCard({ process, basePath }: { process: VulnerableProcess; basePath: string }) {
-	const scoreColor = process.avgScore < 50 ? "text-destructive" : process.avgScore < 70 ? "text-[hsl(var(--chart-3))]" : "text-green-600 dark:text-green-400";
-	const barColor = process.avgScore < 50 ? "bg-destructive" : process.avgScore < 70 ? "bg-[hsl(var(--chart-3))]" : "bg-green-500";
+	const scoreColor = process.avgScore < 50 ? "text-destructive" : process.avgScore < 70 ? "text-amber-600 dark:text-amber-400" : "text-green-600 dark:text-green-400";
+	const barColor = process.avgScore < 50 ? "bg-destructive" : process.avgScore < 70 ? "bg-amber-500" : "bg-green-500";
 
 	return (
 		<Link
@@ -311,7 +311,7 @@ function NextStepIcon({ icon }: { icon: string }) {
 		scan: <SearchIcon className="size-4 text-primary" />,
 		evaluate: <ClipboardCheckIcon className="size-4 text-primary" />,
 		improve: <TrendingUpIcon className="size-4 text-destructive" />,
-		remind: <UserPlusIcon className="size-4 text-[hsl(var(--chart-3))]" />,
+		remind: <UserPlusIcon className="size-4 text-amber-600 dark:text-amber-400" />,
 		grow: <WorkflowIcon className="size-4 text-green-600 dark:text-green-400" />,
 	};
 	return (

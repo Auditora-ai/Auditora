@@ -886,6 +886,7 @@
       "onboardingStep1": "Captura un proceso",
       "onboardingStep2": "Corre tu primera evaluación",
       "onboardingStep3": "Invita a tu equipo",
+      "recentActivityTitle": "Actividad Reciente",
       "heroLabel": "Alineación del Equipo"
     },
     "panorama": {
@@ -920,7 +921,11 @@
       "sessionCompleted": "Sesión completada",
       "evalCompleted": "Evaluación completada",
       "score": "Puntaje: {score}/100",
-      "nodesExtracted": "{count} nodos extraídos"
+      "nodesExtracted": "{count} nodos extraídos",
+      "subtitle": "Vista ejecutiva de tu operación",
+      "dateToday": "Hoy",
+      "dateYesterday": "Ayer",
+      "dateDaysAgo": "Hace {count} días"
     }
   },
   "processLibrary": {

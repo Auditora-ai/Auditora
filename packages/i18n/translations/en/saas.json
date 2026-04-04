@@ -886,6 +886,7 @@
       "onboardingStep1": "Capture a process",
       "onboardingStep2": "Run your first evaluation",
       "onboardingStep3": "Invite your team",
+      "recentActivityTitle": "Recent Activity",
       "heroLabel": "Team Alignment"
     },
     "panorama": {
@@ -920,7 +921,11 @@
       "sessionCompleted": "Session completed",
       "evalCompleted": "Evaluation completed",
       "score": "Score: {score}/100",
-      "nodesExtracted": "{count} nodes extracted"
+      "nodesExtracted": "{count} nodes extracted",
+      "subtitle": "Executive overview of your operation",
+      "dateToday": "Today",
+      "dateYesterday": "Yesterday",
+      "dateDaysAgo": "{count} days ago"
     }
   },
   "processLibrary": {

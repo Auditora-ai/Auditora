@@ -144,7 +144,7 @@ export default async function PanoramaServerPage({
 		type: "session_ended",
 		title: t("sessionCompleted"),
 		subtitle: t("nodesExtracted", { count: s._count.diagramNodes }),
-		date: formatRelative(s.updatedAt),
+		date: formatRelative(s.updatedAt, t),
 	}));
 	const evalActivity: PanoramaActivityItem[] = recentEvaluations
 		.filter((e) => e.completedAt)
@@ -152,7 +152,7 @@ export default async function PanoramaServerPage({
 			type: "evaluation_completed",
 			title: t("evalCompleted"),
 			subtitle: t("score", { score: e.overallScore ?? 0 }),
-			date: formatRelative(e.completedAt!),
+			date: formatRelative(e.completedAt!, t),
 		}));
 	const activity = [...sessionActivity, ...evalActivity]
 		.sort((a, b) => 0) // already sorted by recency from DB
@@ -176,12 +176,12 @@ export default async function PanoramaServerPage({
 	return <PanoramaPage data={data} />;
 }
 
-function formatRelative(date: Date): string {
+function formatRelative(date: Date, t: (key: string, values?: Record<string, unknown>) => string): string {
 	const now = new Date();
 	const diffMs = now.getTime() - date.getTime();
 	const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-	if (diffDays === 0) return "Hoy";
-	if (diffDays === 1) return "Ayer";
-	if (diffDays < 7) return `Hace ${diffDays}d`;
+	if (diffDays === 0) return t("dateToday");
+	if (diffDays === 1) return t("dateYesterday");
+	if (diffDays < 7) return t("dateDaysAgo", { count: diffDays });
 	return date.toLocaleDateString(undefined, { day: "numeric", month: "short" });
 }

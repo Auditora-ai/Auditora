@@ -57,7 +57,6 @@ export default async function ProcessDetailPage({
 				orderBy: { version: "desc" },
 				take: 20,
 			},
-			// Full RACI entries for per-node health badges
 			raciEntries: {
 				select: { activityName: true, role: true, assignment: true },
 			},
@@ -73,7 +72,6 @@ export default async function ProcessDetailPage({
 	if (!process) return notFound();
 	if (process.architecture.organizationId !== activeOrganization.id) return notFound();
 
-	// Fetch evaluation feedback for this process (shows failure rates on BPMN nodes)
 	const evalFeedbackRaw = await fetchProcessEvalFeedback(process.id);
 
 	return (
@@ -112,21 +110,21 @@ export default async function ProcessDetailPage({
 					...v,
 					createdAt: v.createdAt.toISOString(),
 				})),
-			raciEntries: process.raciEntries.map((r) => ({
-				activityName: r.activityName,
-				role: r.role,
-				assignment: r.assignment,
-			})),
-			evalFeedback: evalFeedbackRaw.hasData
-				? {
-						hasData: true,
-						totalRuns: evalFeedbackRaw.totalRuns,
-						avgOverallScore: evalFeedbackRaw.avgOverallScore,
-						steps: evalFeedbackRaw.steps,
-						stepFailureMap: evalFeedbackRaw.stepFailureMap,
-				  }
-				: undefined,
-			sessionsCount: process._count.sessions,
+				raciEntries: process.raciEntries.map((r) => ({
+					activityName: r.activityName,
+					role: r.role,
+					assignment: r.assignment,
+				})),
+				evalFeedback: evalFeedbackRaw.hasData
+					? {
+							hasData: true,
+							totalRuns: evalFeedbackRaw.totalRuns,
+							avgOverallScore: evalFeedbackRaw.avgOverallScore,
+							steps: evalFeedbackRaw.steps,
+							stepFailureMap: evalFeedbackRaw.stepFailureMap,
+						}
+					: undefined,
+				sessionsCount: process._count.sessions,
 				versionsCount: process._count.versions,
 				raciCount: process._count.raciEntries,
 				risksCount: process._count.risks,
