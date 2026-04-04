@@ -2052,7 +2052,9 @@
     },
     "runner": {
       "decisionOf": "Decisión {current} de {total}",
-      "proceduralReference": "Referencia procedimental"
+      "proceduralReference": "Referencia procedimental",
+      "submitError": "No pudimos registrar tu respuesta. Intenta de nuevo.",
+      "retry": "Reintentar"
     },
     "intro": {
       "label": "Evaluación",

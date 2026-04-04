@@ -1,6 +1,7 @@
 "use client";
 
 import { Badge } from "@repo/ui/components/badge";
+import { ClockIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { VersionDiff } from "../VersionDiff";
 import type { ProcessVersionEntry } from "../../types";
@@ -17,8 +18,12 @@ export function VersionesTab({ processId, versions }: VersionesTabProps) {
 	if (!versions || versions.length === 0) {
 		return (
 			<div className="flex flex-col items-center justify-center py-8 text-center">
-				<p className="text-xs text-muted-foreground">
+				<ClockIcon className="mb-2 h-6 w-6 text-muted-foreground/40" />
+				<p className="text-sm font-medium text-muted-foreground mb-1">
 					{t("noVersions")}
+				</p>
+				<p className="text-xs text-muted-foreground/70 max-w-[220px]">
+					Las versiones se crean automáticamente al guardar cambios en el diagrama.
 				</p>
 			</div>
 		);

@@ -82,9 +82,9 @@ function StepFeedbackCard({ step }: { step: EvalStepFeedback }) {
 			</div>
 
 			{/* Progress bar */}
-			<div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
+			<div className="h-1.5 w-full rounded-full bg-muted overflow-hidden" role="progressbar" aria-valuenow={step.failureRate} aria-valuemin={0} aria-valuemax={100} aria-label={`Tasa de fallo: ${step.failureRate}%`}>
 				<div
-					className={`h-full rounded-full transition-all ${getFailureRateBg(step.failureRate)}`}
+					className={`h-full rounded-full transition-all duration-500 ease-out ${getFailureRateBg(step.failureRate)}`}
 					style={{ width: `${step.failureRate}%` }}
 				/>
 			</div>
@@ -168,12 +168,12 @@ export function EvalFeedbackTab({ evalFeedback }: { evalFeedback?: ProcessEvalFe
 							{avgFailureRate}%
 						</span>
 					</div>
-					<div className="h-2 w-full rounded-full bg-muted overflow-hidden">
-						<div
-							className={`h-full rounded-full transition-all ${getFailureRateBg(avgFailureRate)}`}
-							style={{ width: `${avgFailureRate}%` }}
-						/>
-					</div>
+				<div className="h-2 w-full rounded-full bg-muted overflow-hidden" role="progressbar" aria-valuenow={avgFailureRate} aria-valuemin={0} aria-valuemax={100} aria-label={`Tasa de fallo promedio: ${avgFailureRate}%`}>
+					<div
+						className={`h-full rounded-full transition-all duration-500 ease-out ${getFailureRateBg(avgFailureRate)}`}
+						style={{ width: `${avgFailureRate}%` }}
+					/>
+				</div>
 				</div>
 			)}
 

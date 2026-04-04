@@ -7,6 +7,7 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/components/chart";
 import { Bar, BarChart, XAxis, YAxis, Cell } from "recharts";
+import { useTranslations } from "next-intl";
 
 interface ScoreDistributionChartProps {
   dimensionAverages: {
@@ -17,7 +18,7 @@ interface ScoreDistributionChartProps {
 }
 
 const chartConfig = {
-  value: { label: "Puntaje" },
+  value: { label: "Score" },
 } satisfies ChartConfig;
 
 function barColor(value: number): string {
@@ -29,17 +30,19 @@ function barColor(value: number): string {
 export function ScoreDistributionChart({
   dimensionAverages,
 }: ScoreDistributionChartProps) {
+  const t = useTranslations("evaluaciones.dashboard");
+
   const data = [
     {
-      dimension: "Alineamiento",
+      dimension: t("alignment"),
       value: dimensionAverages.alignment,
     },
     {
-      dimension: "Nivel de Control",
+      dimension: t("controlLevel"),
       value: Math.max(0, 100 - dimensionAverages.riskLevel),
     },
     {
-      dimension: "Criterio",
+      dimension: t("criterio"),
       value: dimensionAverages.criterio,
     },
   ];
@@ -47,22 +50,28 @@ export function ScoreDistributionChart({
   return (
     <div className="rounded-lg border border-slate-800 bg-slate-900 p-5">
       <h3 className="mb-4 text-sm font-medium text-slate-400">
-        Distribución de Puntajes
+        {t("scoreDistribution")}
       </h3>
       <ChartContainer config={chartConfig} className="h-[180px] w-full">
         <BarChart
           data={data}
           layout="vertical"
-          margin={{ top: 0, right: 16, bottom: 0, left: 110 }}
+          margin={{ top: 0, right: 16, bottom: 0, left: 0 }}
         >
-          <XAxis type="number" domain={[0, 100]} hide />
+          <XAxis
+            type="number"
+            domain={[0, 100]}
+            tickLine={false}
+            axisLine={false}
+            tick={{ fill: "#64748b", fontSize: 11 }}
+          />
           <YAxis
             type="category"
             dataKey="dimension"
             tickLine={false}
             axisLine={false}
-            tick={{ fill: "#94a3b8", fontSize: 13 }}
-            width={105}
+            tick={{ fill: "#94a3b8", fontSize: 12 }}
+            width={110}
           />
           <ChartTooltip
             content={
@@ -75,9 +84,9 @@ export function ScoreDistributionChart({
               />
             }
           />
-          <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={28}>
-            {data.map((entry, index) => (
-              <Cell key={index} fill={barColor(entry.value)} />
+          <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={24}>
+            {data.map((entry) => (
+              <Cell key={entry.dimension} fill={barColor(entry.value)} />
             ))}
           </Bar>
         </BarChart>

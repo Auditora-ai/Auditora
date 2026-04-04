@@ -26,8 +26,13 @@ export function ProcessHealthRing({
 		<div
 			className="relative flex items-center gap-2"
 			title={`Proceso ${pct}% completo`}
+			role="meter"
+			aria-valuenow={pct}
+			aria-valuemin={0}
+			aria-valuemax={100}
+			aria-label={`Salud del proceso: ${pct}%`}
 		>
-			<svg width={size} height={size} className="-rotate-90">
+			<svg width={size} height={size} className="-rotate-90" aria-hidden="true">
 				{/* Track */}
 				<circle
 					cx={size / 2}

@@ -14,27 +14,29 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { useTranslations } from "next-intl";
 
 interface ScoreTrendChartProps {
   scoreTrend: Array<{ month: string; score: number }>;
 }
 
 const chartConfig = {
-  score: { label: "Puntaje Promedio", color: "#3B8FE8" },
+  score: { label: "Score", color: "#3B8FE8" },
 } satisfies ChartConfig;
 
 export function ScoreTrendChart({ scoreTrend }: ScoreTrendChartProps) {
+  const t = useTranslations("evaluaciones.dashboard");
   const hasEnoughData = scoreTrend.length >= 2;
 
   return (
     <div className="rounded-lg border border-slate-800 bg-slate-900 p-5">
       <h3 className="mb-4 text-sm font-medium text-slate-400">
-        Tendencia de Puntaje
+        {t("scoreTrend")}
       </h3>
       {!hasEnoughData ? (
         <div className="flex h-[180px] items-center justify-center">
           <p className="text-sm text-slate-500">
-            Se necesitan datos de al menos 2 meses
+            {t("needsTwoMonths")}
           </p>
         </div>
       ) : (
@@ -44,7 +46,7 @@ export function ScoreTrendChart({ scoreTrend }: ScoreTrendChartProps) {
             margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
           >
             <defs>
-              <linearGradient id="scoreFill" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="eval-score-trend-fill" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#3B8FE8" stopOpacity={0.3} />
                 <stop offset="100%" stopColor="#3B8FE8" stopOpacity={0} />
               </linearGradient>
@@ -90,7 +92,7 @@ export function ScoreTrendChart({ scoreTrend }: ScoreTrendChartProps) {
             <Area
               dataKey="score"
               type="monotone"
-              fill="url(#scoreFill)"
+              fill="url(#eval-score-trend-fill)"
               stroke="#3B8FE8"
               strokeWidth={2}
             />

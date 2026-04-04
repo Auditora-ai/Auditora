@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { AlertCircleIcon, RotateCcwIcon } from "lucide-react";
 import { useTranslations } from 'next-intl';
 
 interface DecisionOption {
@@ -42,6 +43,7 @@ export function EvaluacionRunner({
   const [phase, setPhase] = useState<Phase>("decision");
   const [consequenceText, setConsequenceText] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const decisionRef = useRef<HTMLDivElement>(null);
@@ -143,6 +145,7 @@ export function EvaluacionRunner({
     async (optionIndex: number) => {
       if (submitting || phase !== "decision" || !current) return;
 
+      setError(null);
       setSubmitting(true);
       const timeToDecide = Math.round(
         (Date.now() - decisionStartRef.current) / 1000,
@@ -224,8 +227,8 @@ export function EvaluacionRunner({
           setCurrentIndex((prev) => prev + 1);
           setPhase("decision");
         }
-      } catch {
-        // Stay on current decision
+      } catch (err) {
+        setError(t('submitError'));
       } finally {
         setSubmitting(false);
       }
@@ -273,6 +276,22 @@ export function EvaluacionRunner({
           />
         </div>
       </div>
+
+      {/* Error banner */}
+      {error && (
+        <div className="mb-6 flex items-center gap-3 rounded-lg border border-red-500/30 bg-red-950/30 px-4 py-3">
+          <AlertCircleIcon className="h-4 w-4 shrink-0 text-red-400" />
+          <p className="flex-1 text-sm text-red-300">{error}</p>
+          <button
+            type="button"
+            onClick={() => setError(null)}
+            className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-medium text-red-400 transition-colors hover:bg-red-950/50 hover:text-red-300"
+          >
+            <RotateCcwIcon className="h-3 w-3" />
+            {t('retry')}
+          </button>
+        </div>
+      )}
 
       {/* Decision phase */}
       {phase === "decision" && (

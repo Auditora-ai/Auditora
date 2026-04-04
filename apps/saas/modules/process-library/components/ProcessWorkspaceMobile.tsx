@@ -20,6 +20,7 @@ import {
 	VideoIcon,
 	ClipboardListIcon,
 } from "lucide-react";
+import { toastError } from "@repo/ui/components/toast";
 import { ProcessWorkspaceProvider } from "../context/ProcessWorkspaceContext";
 import { CollaborationProvider } from "@collaboration/components/CollaborationProvider";
 import { ResumenTab } from "./sidebar-tabs/ResumenTab";
@@ -90,7 +91,7 @@ function MobileWorkspaceInner({
 				setTimeout(() => URL.revokeObjectURL(url), 5000);
 			}
 		} catch {
-			// Silently fail — user can try again
+			toastError("No se pudo descargar. Intenta de nuevo.");
 		} finally {
 			setDownloading(false);
 		}
@@ -344,15 +345,17 @@ function MobileWorkspaceInner({
 				)}
 
 				{/* Main FAB toggle */}
-				<button
-					type="button"
-					onClick={() => setFabOpen((prev) => !prev)}
-					className={`flex h-14 w-14 items-center justify-center rounded-full shadow-xl transition-all duration-200 ${
-						fabOpen
-							? "bg-slate-700 rotate-45 shadow-slate-700/25"
-							: "bg-sky-600 shadow-sky-600/30"
-					}`}
-				>
+			<button
+				type="button"
+				onClick={() => setFabOpen((prev) => !prev)}
+				aria-label={fabOpen ? "Cerrar menú de acciones" : "Abrir menú de acciones"}
+				aria-expanded={fabOpen}
+				className={`flex h-14 w-14 items-center justify-center rounded-full shadow-xl transition-all duration-200 active:scale-[0.95] ${
+					fabOpen
+						? "bg-slate-700 rotate-45 shadow-slate-700/25"
+						: "bg-sky-600 shadow-sky-600/30"
+				}`}
+			>
 					{fabOpen ? (
 						<XIcon className="h-6 w-6 text-white" />
 					) : (

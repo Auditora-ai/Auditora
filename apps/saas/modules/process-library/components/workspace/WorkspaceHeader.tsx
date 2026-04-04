@@ -83,7 +83,11 @@ export function WorkspaceHeader({
 				const url = URL.createObjectURL(blob);
 				window.open(url, "_blank");
 				setTimeout(() => URL.revokeObjectURL(url), 5000);
+			} else {
+				toastError("No se pudo exportar el reporte. Intenta de nuevo.");
 			}
+		} catch {
+			toastError("Error de conexión al exportar.");
 		} finally {
 			setExporting(false);
 		}
@@ -175,27 +179,32 @@ export function WorkspaceHeader({
 				)}
 
 				{/* Name — inline editable */}
-				{editingField === "name" ? (
-					<input
-						autoFocus
-						className="text-base font-semibold bg-transparent border-b-2 border-primary outline-none px-0 py-0 min-w-[200px]"
-						value={editName}
-						onChange={(e) => setEditName(e.target.value)}
-						onBlur={() => saveInlineField("name", editName)}
-						onKeyDown={(e) => {
-							if (e.key === "Enter") saveInlineField("name", editName);
-							if (e.key === "Escape") { setEditName(process.name); setEditingField(null); }
-						}}
-					/>
-				) : (
-					<h1
-						className="text-base font-semibold cursor-pointer hover:text-primary/80 transition-colors truncate max-w-[300px]"
-						onClick={() => { setEditName(process.name); setEditingField("name"); }}
-						title={process.name}
-					>
-						{process.name}
-					</h1>
-				)}
+			{editingField === "name" ? (
+				<input
+					autoFocus
+					aria-label="Nombre del proceso"
+					className="text-base font-semibold bg-transparent border-b-2 border-primary outline-none px-0 py-0 min-w-[200px]"
+					value={editName}
+					onChange={(e) => setEditName(e.target.value)}
+					onBlur={() => saveInlineField("name", editName)}
+					onKeyDown={(e) => {
+						if (e.key === "Enter") saveInlineField("name", editName);
+						if (e.key === "Escape") { setEditName(process.name); setEditingField(null); }
+					}}
+				/>
+			) : (
+				<h1
+					className="text-base font-semibold cursor-pointer hover:text-primary/80 transition-colors truncate max-w-[300px]"
+					onClick={() => { setEditName(process.name); setEditingField("name"); }}
+					onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { setEditName(process.name); setEditingField("name"); } }}
+					tabIndex={0}
+					role="button"
+					aria-label={`Editar nombre: ${process.name}`}
+					title={process.name}
+				>
+					{process.name}
+				</h1>
+			)}
 
 				{process.category && (
 					<Badge className="hidden sm:inline-flex">{process.category}</Badge>

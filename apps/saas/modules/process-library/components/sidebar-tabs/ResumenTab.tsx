@@ -50,13 +50,13 @@ export function ResumenTab({ process }: ResumenTabProps) {
 			<div className="rounded-lg border p-3">
 				<div className="flex items-center justify-between mb-2">
 					<span className="text-sm font-medium">Salud del Proceso</span>
-					<span className={`text-lg font-bold ${health >= 75 ? "text-success" : health >= 50 ? "text-orientation" : "text-destructive"}`}>
+					<span className={`text-lg font-bold tabular-nums ${health >= 75 ? "text-success" : health >= 50 ? "text-orientation" : "text-destructive"}`}>
 						{health}%
 					</span>
 				</div>
-				<div className="h-2 rounded-full bg-muted overflow-hidden">
+				<div className="h-2 rounded-full bg-muted overflow-hidden" role="progressbar" aria-valuenow={health} aria-valuemin={0} aria-valuemax={100} aria-label="Salud del proceso">
 					<div
-						className={`h-full rounded-full transition-all ${health >= 75 ? "bg-success" : health >= 50 ? "bg-orientation" : "bg-destructive"}`}
+						className={`h-full rounded-full transition-all duration-500 ease-out ${health >= 75 ? "bg-success" : health >= 50 ? "bg-orientation" : "bg-destructive"}`}
 						style={{ width: `${health}%` }}
 					/>
 				</div>
@@ -107,11 +107,11 @@ export function ResumenTab({ process }: ResumenTabProps) {
 
 function StatCard({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: number }) {
 	return (
-		<div className="flex items-center gap-2 rounded-lg border px-2.5 py-2">
-			<Icon className="h-3.5 w-3.5 text-muted-foreground" />
+		<div className="flex items-center gap-2 rounded-lg border px-2.5 py-2 transition-colors hover:bg-accent/30">
+			<Icon className={`h-3.5 w-3.5 shrink-0 ${value > 0 ? "text-primary" : "text-muted-foreground/50"}`} />
 			<div>
 				<p className="text-xs text-muted-foreground">{label}</p>
-				<p className="text-sm font-semibold">{value}</p>
+				<p className={`text-sm font-semibold tabular-nums ${value === 0 ? "text-muted-foreground/50" : ""}`}>{value}</p>
 			</div>
 		</div>
 	);

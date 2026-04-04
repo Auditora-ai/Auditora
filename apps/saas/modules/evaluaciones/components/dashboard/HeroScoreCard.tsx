@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { scoreStroke } from "@evaluaciones/lib/score-utils";
 
 interface HeroScoreCardProps {
@@ -7,6 +8,7 @@ interface HeroScoreCardProps {
 }
 
 export function HeroScoreCard({ score }: HeroScoreCardProps) {
+  const t = useTranslations("evaluaciones.dashboard");
   const radius = 70;
   const circumference = 2 * Math.PI * radius;
   const progress = Math.min(Math.max(score, 0), 100);
@@ -15,7 +17,15 @@ export function HeroScoreCard({ score }: HeroScoreCardProps) {
 
   return (
     <div className="flex flex-col items-center rounded-lg border border-slate-800 bg-slate-900 p-8">
-      <svg width="180" height="180" viewBox="0 0 180 180" className="-rotate-90">
+      <svg
+        width="180"
+        height="180"
+        viewBox="0 0 180 180"
+        className="-rotate-90"
+        role="img"
+        aria-label={`${t("humanRiskScore")}: ${score}/100`}
+      >
+        <title>{`${t("humanRiskScore")}: ${score}/100`}</title>
         {/* Track */}
         <circle
           cx="90"
@@ -50,7 +60,7 @@ export function HeroScoreCard({ score }: HeroScoreCardProps) {
         <span className="text-sm text-slate-500">/100</span>
       </div>
       <p className="text-xs font-medium uppercase tracking-wider text-slate-500">
-        Puntaje de Riesgo Humano
+        {t("humanRiskScore")}
       </p>
     </div>
   );

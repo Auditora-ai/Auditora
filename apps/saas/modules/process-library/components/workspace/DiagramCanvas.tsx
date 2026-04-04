@@ -287,10 +287,17 @@ export function DiagramCanvas({ processId, bpmnXml, raciEntries, evalFeedback }:
 				</div>
 			)}
 
-			{/* Loading state */}
+			{/* Loading state — skeleton diagram placeholder */}
 			{!isReady && (
-				<div className="absolute inset-0 flex items-center justify-center bg-background/50">
-					<div className="h-16 w-16 animate-pulse rounded-lg bg-muted" />
+				<div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-background/60 backdrop-blur-sm">
+					<div className="flex items-center gap-4">
+						<div className="h-10 w-24 animate-pulse rounded-lg bg-muted" />
+						<div className="h-px w-8 animate-pulse bg-muted" />
+						<div className="h-10 w-28 animate-pulse rounded-lg bg-muted" />
+						<div className="h-px w-8 animate-pulse bg-muted" />
+						<div className="h-10 w-20 animate-pulse rounded-lg bg-muted" />
+					</div>
+					<p className="text-xs text-muted-foreground animate-pulse">Cargando diagrama…</p>
 				</div>
 			)}
 		</div>

@@ -7,6 +7,7 @@ import {
   ClockIcon,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface KpiRowProps {
   totalSimulations: number;
@@ -27,19 +28,19 @@ function KpiCard({
   suffix?: string;
 }) {
   return (
-    <div className="rounded-lg border border-slate-800 bg-slate-900 p-5">
+    <div className="rounded-lg border border-slate-800 bg-slate-900 p-4 md:p-5">
       <div className="flex items-center gap-2">
         <Icon className="h-4 w-4 text-slate-500" />
-        <p className="text-xs font-medium uppercase tracking-wider text-slate-500">
+        <p className="text-[10px] font-medium uppercase tracking-wider text-slate-500 md:text-xs">
           {label}
         </p>
       </div>
       <p
-        className="mt-2 text-3xl font-semibold text-foreground"
+        className="mt-2 text-2xl font-semibold text-foreground md:text-3xl"
         style={{ fontVariantNumeric: "tabular-nums" }}
       >
         {value}
-        {suffix && <span className="text-lg text-slate-500">{suffix}</span>}
+        {suffix && <span className="text-base text-slate-500 md:text-lg">{suffix}</span>}
       </p>
     </div>
   );
@@ -51,27 +52,29 @@ export function KpiRow({
   completionRate,
   avgDurationMinutes,
 }: KpiRowProps) {
+  const t = useTranslations("evaluaciones.dashboard");
+
   return (
-    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4">
       <KpiCard
         icon={TargetIcon}
-        label="Total Simulaciones"
+        label={t("totalSimulations")}
         value={totalSimulations}
       />
       <KpiCard
         icon={UsersIcon}
-        label="Miembros Evaluados"
+        label={t("membersEvaluated")}
         value={membersEvaluated}
       />
       <KpiCard
         icon={CheckCircle2Icon}
-        label="Tasa de Completado"
+        label={t("completionRate")}
         value={completionRate}
         suffix="%"
       />
       <KpiCard
         icon={ClockIcon}
-        label="Tiempo Promedio"
+        label={t("avgDuration")}
         value={avgDurationMinutes}
         suffix=" min"
       />

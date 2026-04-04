@@ -113,29 +113,32 @@ function TagFieldCompact({
 	return (
 		<div className="space-y-1.5">
 			<Label className="text-xs">{label}</Label>
-			<div className="flex flex-wrap gap-1">
-				{items.map((item, i) => (
-					<Badge key={i} status="info" className="gap-0.5 pr-0.5 text-[10px]">
-						{item}
-						<button
-							type="button"
-							onClick={() => onChange(items.filter((_, j) => j !== i))}
-							className="ml-0.5 rounded-full p-1 hover:bg-muted sm:p-0.5"
-						>
-							<XIcon className="h-3.5 w-3.5" />
-						</button>
-					</Badge>
-				))}
-			</div>
+			{items.length > 0 && (
+				<div className="flex flex-wrap gap-1">
+					{items.map((item, i) => (
+						<Badge key={i} status="info" className="gap-0.5 pr-0.5 text-[10px]">
+							{item}
+							<button
+								type="button"
+								aria-label={`Eliminar ${item}`}
+								onClick={() => onChange(items.filter((_, j) => j !== i))}
+								className="ml-0.5 rounded-full p-1 hover:bg-muted min-h-[28px] min-w-[28px] flex items-center justify-center sm:min-h-0 sm:min-w-0 sm:p-0.5"
+							>
+								<XIcon className="h-3.5 w-3.5" />
+							</button>
+						</Badge>
+					))}
+				</div>
+			)}
 			<div className="flex gap-1">
 				<Input
 					value={input}
 					onChange={(e) => setInput(e.target.value)}
 					placeholder={placeholder}
 					onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); add(); } }}
-					className="flex-1 text-xs h-7"
+					className="flex-1 text-xs h-9 sm:h-7"
 				/>
-				<Button variant="secondary" size="sm" onClick={add} disabled={!input.trim()} className="h-9 w-9 p-0 sm:h-7 sm:w-7">
+				<Button variant="secondary" size="sm" onClick={add} disabled={!input.trim()} aria-label={`Agregar ${label.toLowerCase()}`} className="h-9 w-9 p-0 sm:h-7 sm:w-7">
 					<PlusIcon className="h-3.5 w-3.5" />
 				</Button>
 			</div>

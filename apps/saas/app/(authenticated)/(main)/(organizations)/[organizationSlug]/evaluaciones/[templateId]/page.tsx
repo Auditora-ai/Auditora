@@ -93,24 +93,24 @@ export default async function SimulationTemplatePage({
   );
 
   return (
-    <div className="flex flex-col gap-6 p-6">
+    <div className="flex flex-col gap-5 px-4 py-5 md:gap-6 md:p-6">
       {/* Header */}
       <div>
         <Link
           href={`/${organizationSlug}/evaluaciones`}
-          className="mb-2 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+          className="mb-2 inline-flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
         >
           &larr; Evaluaciones
         </Link>
-        <h1 className="text-2xl font-semibold text-foreground">
+        <h1 className="text-xl font-semibold text-foreground md:text-2xl">
           {template.title}
         </h1>
-        <div className="mt-1 flex items-center gap-3 text-sm text-muted-foreground">
-          <span>{template.processDefinition.name}</span>
-          <span>&middot;</span>
+        <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted-foreground md:gap-x-3 md:text-sm">
+          <span className="truncate max-w-[180px] md:max-w-none">{template.processDefinition.name}</span>
+          <span className="hidden md:inline">&middot;</span>
           <span>{roleName}</span>
           <span>&middot;</span>
-          <span>
+          <span className="whitespace-nowrap">
             {template.scenarios.reduce(
               (acc, s) => acc + s.decisions.length,
               0,
@@ -121,8 +121,8 @@ export default async function SimulationTemplatePage({
       </div>
 
       {/* Narrative */}
-      <div className="rounded-lg border border-border/50 bg-card p-5">
-        <h2 className="mb-2 text-sm font-medium uppercase tracking-wider text-muted-foreground">
+      <div className="rounded-lg border border-border/50 bg-card p-4 md:p-5">
+        <h2 className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground md:text-sm">
           Contexto narrativo
         </h2>
         <p className="text-sm leading-relaxed text-foreground">
@@ -131,22 +131,22 @@ export default async function SimulationTemplatePage({
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
-        <div className="rounded-lg border border-border/50 bg-card p-4">
-          <p className="text-xs text-muted-foreground">Escenarios</p>
-          <p className="mt-1 text-2xl font-semibold text-foreground">
+      <div className="grid grid-cols-3 gap-2 md:gap-4">
+        <div className="rounded-lg border border-border/50 bg-card p-3 md:p-4">
+          <p className="text-[10px] text-muted-foreground md:text-xs">Escenarios</p>
+          <p className="mt-0.5 text-xl font-semibold text-foreground md:mt-1 md:text-2xl" style={{ fontVariantNumeric: "tabular-nums" }}>
             {template.scenarios.length}
           </p>
         </div>
-        <div className="rounded-lg border border-border/50 bg-card p-4">
-          <p className="text-xs text-muted-foreground">Evaluaciones</p>
-          <p className="mt-1 text-2xl font-semibold text-foreground">
+        <div className="rounded-lg border border-border/50 bg-card p-3 md:p-4">
+          <p className="text-[10px] text-muted-foreground md:text-xs">Evaluaciones</p>
+          <p className="mt-0.5 text-xl font-semibold text-foreground md:mt-1 md:text-2xl" style={{ fontVariantNumeric: "tabular-nums" }}>
             {totalRuns}
           </p>
         </div>
-        <div className="rounded-lg border border-border/50 bg-card p-4">
-          <p className="text-xs text-muted-foreground">Completadas</p>
-          <p className="mt-1 text-2xl font-semibold text-foreground">
+        <div className="rounded-lg border border-border/50 bg-card p-3 md:p-4">
+          <p className="text-[10px] text-muted-foreground md:text-xs">Completadas</p>
+          <p className="mt-0.5 text-xl font-semibold text-foreground md:mt-1 md:text-2xl" style={{ fontVariantNumeric: "tabular-nums" }}>
             {completedRuns}
           </p>
         </div>
@@ -154,21 +154,21 @@ export default async function SimulationTemplatePage({
 
       {/* Scenarios with start buttons */}
       <div>
-        <h2 className="mb-3 text-sm font-medium uppercase tracking-wider text-muted-foreground">
+        <h2 className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground md:text-sm">
           Escenarios disponibles
         </h2>
         <div className="grid gap-3">
           {template.scenarios.map((scenario, idx) => (
             <div
               key={scenario.id}
-              className="flex items-center justify-between rounded-lg border border-border/50 bg-card p-4"
+              className="flex flex-col gap-3 rounded-lg border border-border/50 bg-card p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4"
             >
-              <div className="flex items-start gap-3">
+              <div className="flex items-start gap-2.5 md:gap-3">
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted/50">
                   <GraduationCapIcon className="h-4 w-4 text-muted-foreground" />
                 </div>
                 <div>
-                  <span className="font-medium text-foreground">
+                  <span className="text-sm font-medium text-foreground">
                     Escenario {idx + 1}
                   </span>
                   <div className="mt-0.5 text-xs text-muted-foreground">
@@ -180,7 +180,7 @@ export default async function SimulationTemplatePage({
               {template.status === "PUBLISHED" && (
                 <Link
                   href={`/${organizationSlug}/evaluaciones/${template.id}/run/${scenario.id}`}
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-blue-700 active:scale-[0.98] sm:self-auto"
                 >
                   <PlayIcon className="h-3.5 w-3.5" />
                   Iniciar Evaluación
@@ -194,7 +194,7 @@ export default async function SimulationTemplatePage({
       {/* Recent runs */}
       {totalRuns > 0 && (
         <div>
-          <h2 className="mb-3 text-sm font-medium uppercase tracking-wider text-muted-foreground">
+          <h2 className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground md:text-sm">
             Evaluaciones recientes
           </h2>
           <div className="grid gap-2">
@@ -202,28 +202,28 @@ export default async function SimulationTemplatePage({
               s.runs.map((run) => (
                 <div
                   key={run.id}
-                  className="flex items-center justify-between rounded-lg border border-border/50 bg-card px-4 py-3"
+                  className="flex items-center justify-between rounded-lg border border-border/50 bg-card px-3 py-2.5 md:px-4 md:py-3 min-h-[52px]"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-muted/50">
+                  <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-full bg-muted/50 shrink-0">
                       <UserIcon className="h-3.5 w-3.5 text-muted-foreground" />
                     </div>
-                    <div>
-                      <span className="text-sm text-foreground">
+                    <div className="min-w-0">
+                      <span className="text-sm text-foreground truncate block">
                         {run.user.name}
                       </span>
                       {run.duration && (
-                        <span className="ml-2 inline-flex items-center gap-1 text-xs text-muted-foreground">
+                        <span className="inline-flex items-center gap-1 text-[10px] text-muted-foreground md:text-xs">
                           <ClockIcon className="h-3 w-3" />
                           {Math.floor(run.duration / 60)}m {run.duration % 60}s
                         </span>
                       )}
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 md:gap-3 shrink-0 ml-2">
                     <span
                       className={cn(
-                        "text-sm font-medium",
+                        "text-sm font-medium tabular-nums",
                         scoreColor(run.overallScore),
                       )}
                     >

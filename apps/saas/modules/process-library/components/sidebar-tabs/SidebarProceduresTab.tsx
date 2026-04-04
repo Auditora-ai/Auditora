@@ -11,6 +11,8 @@ import {
 	FileTextIcon,
 	ChevronRightIcon,
 	LoaderIcon,
+	AlertCircleIcon,
+	RefreshCwIcon,
 } from "lucide-react";
 import { cn } from "@repo/ui";
 
@@ -41,26 +43,32 @@ const statusConfig: Record<string, { label: string; className: string }> = {
 export function SidebarProceduresTab({ processId, processName, organizationSlug }: SidebarProceduresTabProps) {
 	const [procedures, setProcedures] = useState<ProcedureSummary[]>([]);
 	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(false);
 	const [generating, setGenerating] = useState(false);
+	const [retryKey, setRetryKey] = useState(0);
 
 	useEffect(() => {
 		let cancelled = false;
+		setLoading(true);
+		setError(false);
 		async function fetchProcedures() {
 			try {
 				const res = await fetch(`/api/processes/${processId}/procedures`);
 				if (res.ok) {
 					const data = await res.json();
 					if (!cancelled) setProcedures(data);
+				} else {
+					if (!cancelled) setError(true);
 				}
 			} catch {
-				// silently fail
+				if (!cancelled) setError(true);
 			} finally {
 				if (!cancelled) setLoading(false);
 			}
 		}
 		fetchProcedures();
 		return () => { cancelled = true; };
-	}, [processId]);
+	}, [processId, retryKey]);
 
 	const handleGenerateAI = async () => {
 		setGenerating(true);
@@ -73,7 +81,7 @@ export function SidebarProceduresTab({ processId, processName, organizationSlug 
 				setProcedures((prev) => [newProc, ...prev]);
 			}
 		} catch {
-			// silently fail
+			// Generation failed — user can retry
 		} finally {
 			setGenerating(false);
 		}
@@ -81,9 +89,43 @@ export function SidebarProceduresTab({ processId, processName, organizationSlug 
 
 	if (loading) {
 		return (
-			<div className="flex flex-col items-center justify-center gap-2 py-12 text-slate-400">
-				<LoaderIcon className="h-5 w-5 animate-spin" />
-				<span className="text-xs">Cargando procedimientos…</span>
+			<div className="flex flex-col gap-3 py-4">
+				{[1, 2, 3].map((i) => (
+					<div key={i} className="animate-pulse rounded-lg border border-slate-800 bg-slate-900/50 p-3">
+						<div className="flex items-start gap-3">
+							<div className="h-8 w-8 rounded-md bg-slate-800" />
+							<div className="flex-1 space-y-2">
+								<div className="h-4 w-3/4 rounded bg-slate-800" />
+								<div className="h-3 w-1/2 rounded bg-slate-800/60" />
+							</div>
+						</div>
+					</div>
+				))}
+			</div>
+		);
+	}
+
+	if (error && procedures.length === 0) {
+		return (
+			<div className="flex flex-col items-center gap-3 py-8 text-center">
+				<div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-900/20">
+					<AlertCircleIcon className="h-6 w-6 text-red-400" />
+				</div>
+				<div>
+					<p className="text-sm font-medium text-slate-300">No se pudieron cargar los procedimientos</p>
+					<p className="mt-1 text-xs text-slate-500">
+						Verifica tu conexión e intenta de nuevo.
+					</p>
+				</div>
+				<Button
+					variant="outline"
+					size="sm"
+					onClick={() => setRetryKey((k) => k + 1)}
+					className="border-slate-700"
+				>
+					<RefreshCwIcon className="mr-1.5 h-3.5 w-3.5" />
+					Reintentar
+				</Button>
 			</div>
 		);
 	}

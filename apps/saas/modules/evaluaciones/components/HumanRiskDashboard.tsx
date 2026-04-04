@@ -3,6 +3,7 @@
 import { EmptyState } from "@shared/components/EmptyState";
 import { ShieldAlertIcon, FileDownIcon } from "lucide-react";
 import { Button } from "@repo/ui/components/button";
+import { useTranslations } from "next-intl";
 import type { DashboardData } from "@evaluaciones/lib/dashboard-queries";
 import { HeroScoreCard } from "./dashboard/HeroScoreCard";
 import { KpiRow } from "./dashboard/KpiRow";
@@ -21,15 +22,17 @@ export function HumanRiskDashboard({
   data,
   organizationSlug,
 }: HumanRiskDashboardProps) {
+  const t = useTranslations("evaluaciones.dashboard");
+
   if (data.insufficientData) {
     return (
       <EmptyState
         icon={ShieldAlertIcon}
-        title="Datos insuficientes"
-        description="Se necesitan al menos 3 evaluaciones completadas para generar el dashboard de riesgo humano. Invita a tu equipo a completar evaluaciones."
+        title={t("insufficientTitle")}
+        description={t("insufficientDescription")}
         actions={[
           {
-            label: "Ir a Evaluaciones",
+            label: t("goToEvaluations"),
             href: `/${organizationSlug}/evaluaciones`,
             variant: "primary",
           },
@@ -39,25 +42,32 @@ export function HumanRiskDashboard({
   }
 
   const handleExport = () => {
-    window.open(`/api/evaluation/export-report`, "_blank");
+    window.open(
+      `/${organizationSlug}/api/evaluation/export-report`,
+      "_blank",
+    );
   };
 
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-foreground">
-            Dashboard de Riesgo Humano
+          <h1 className="text-xl font-semibold text-foreground md:text-2xl">
+            {t("title")}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Evaluación del criterio de decisión de tu equipo basada en
-            evaluaciones.
+            {t("description")}
           </p>
         </div>
-        <Button variant="secondary" size="sm" onClick={handleExport}>
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={handleExport}
+          className="self-start sm:self-auto"
+        >
           <FileDownIcon className="mr-2 h-4 w-4" />
-          Exportar PDF
+          {t("exportPdf")}
         </Button>
       </div>
 

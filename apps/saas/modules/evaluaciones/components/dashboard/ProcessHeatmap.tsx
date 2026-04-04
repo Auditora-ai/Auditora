@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@repo/ui";
+import { useTranslations } from "next-intl";
 import {
   scoreColor,
   scoreBg,
@@ -24,10 +25,10 @@ function ScoreCell({
   const bgFn = inverted ? riskLevelBg : scoreBg;
 
   return (
-    <td className="px-4 py-3 text-center">
+    <td className="px-3 py-3 text-center md:px-4">
       <span
         className={cn(
-          "inline-flex min-w-[3rem] items-center justify-center rounded-md px-2.5 py-1 text-sm font-semibold",
+          "inline-flex min-w-[2.5rem] items-center justify-center rounded-md px-2 py-1 text-xs font-semibold md:min-w-[3rem] md:px-2.5 md:text-sm",
           bgFn(value),
           colorFn(value),
         )}
@@ -40,6 +41,8 @@ function ScoreCell({
 }
 
 export function ProcessHeatmap({ processHeatmap }: ProcessHeatmapProps) {
+  const t = useTranslations("evaluaciones.dashboard");
+
   if (processHeatmap.length === 0) {
     return null;
   }
@@ -48,18 +51,18 @@ export function ProcessHeatmap({ processHeatmap }: ProcessHeatmapProps) {
     <div className="overflow-hidden rounded-lg border border-slate-800 bg-slate-900">
       <div className="px-5 py-4">
         <h3 className="text-sm font-medium text-slate-400">
-          Mapa de Calor por Proceso
+          {t("processHeatmap")}
         </h3>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr className="border-t border-slate-800 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
-              <th className="px-5 py-3">Proceso</th>
-              <th className="px-4 py-3 text-center">Alineamiento</th>
-              <th className="px-4 py-3 text-center">Nivel de Riesgo</th>
-              <th className="px-4 py-3 text-center">Criterio</th>
-              <th className="px-4 py-3 text-center">Simulaciones</th>
+            <tr className="border-t border-slate-800 text-left text-[10px] font-medium uppercase tracking-wider text-slate-500 md:text-xs">
+              <th className="px-4 py-3 md:px-5">{t("process")}</th>
+              <th className="px-3 py-3 text-center md:px-4">{t("alignment")}</th>
+              <th className="px-3 py-3 text-center md:px-4">{t("riskLevel")}</th>
+              <th className="px-3 py-3 text-center md:px-4">{t("criterio")}</th>
+              <th className="px-3 py-3 text-center md:px-4">{t("simulations")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-800">
@@ -68,14 +71,14 @@ export function ProcessHeatmap({ processHeatmap }: ProcessHeatmapProps) {
                 key={row.processName}
                 className="transition-colors hover:bg-slate-800/50"
               >
-                <td className="px-5 py-3 text-sm font-medium text-foreground">
+                <td className="px-4 py-3 text-sm font-medium text-foreground md:px-5">
                   {row.processName}
                 </td>
                 <ScoreCell value={row.avgAlignment} />
                 <ScoreCell value={row.avgRiskLevel} inverted />
                 <ScoreCell value={row.avgCriterio} />
                 <td
-                  className="px-4 py-3 text-center text-sm text-slate-400"
+                  className="px-3 py-3 text-center text-sm text-slate-400 md:px-4"
                   style={{ fontVariantNumeric: "tabular-nums" }}
                 >
                   {row.simulationCount}

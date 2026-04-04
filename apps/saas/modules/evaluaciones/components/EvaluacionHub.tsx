@@ -120,9 +120,9 @@ export function EvaluacionHub({ templates, recentRuns, organizationSlug }: Evalu
 				</div>
 				<div className="rounded-lg border border-border/50 bg-card p-3 md:p-4">
 					<p className="text-[10px] md:text-xs text-muted-foreground">Score prom.</p>
-					<p className={cn("mt-0.5 text-xl md:text-2xl font-semibold", scoreColor(avgScore))}>
-						{avgScore !== null ? avgScore : "—"}
-					</p>
+				<p className={cn("mt-0.5 text-xl md:text-2xl font-semibold tabular-nums", scoreColor(avgScore))}>
+					{avgScore !== null ? avgScore : "—"}
+				</p>
 				</div>
 			</div>
 
@@ -162,14 +162,20 @@ export function EvaluacionHub({ templates, recentRuns, organizationSlug }: Evalu
 									</div>
 								</div>
 								<div className="flex items-center gap-2 shrink-0 ml-2">
-									<span className={cn(
-										"inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium",
-										template.status === "PUBLISHED"
-											? "bg-emerald-500/20 text-emerald-400"
-											: "bg-slate-500/20 text-slate-400",
-									)}>
-										{template.status === "PUBLISHED" ? "Activa" : "Borrador"}
-									</span>
+							<span className={cn(
+								"inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium",
+								template.status === "PUBLISHED" && "bg-emerald-500/20 text-emerald-400",
+								template.status === "DRAFT" && "bg-slate-500/20 text-slate-400",
+								template.status === "GENERATING" && "bg-blue-500/20 text-blue-400",
+								template.status === "GENERATION_FAILED" && "bg-red-500/20 text-red-400",
+								template.status === "ARCHIVED" && "bg-slate-500/20 text-slate-500",
+							)}>
+								{template.status === "PUBLISHED" ? "Activa"
+									: template.status === "GENERATING" ? "Generando…"
+									: template.status === "GENERATION_FAILED" ? "Error"
+									: template.status === "ARCHIVED" ? "Archivada"
+									: "Borrador"}
+							</span>
 								</div>
 							</Link>
 						);
@@ -201,9 +207,9 @@ export function EvaluacionHub({ templates, recentRuns, organizationSlug }: Evalu
 									</div>
 								</div>
 								<div className="flex items-center gap-2 md:gap-3 shrink-0 ml-2">
-									<span className={cn("text-sm font-medium tabular-nums", scoreColor(run.overallScore))}>
-										{run.overallScore !== null ? run.overallScore : "—"}
-									</span>
+							<span className={cn("text-sm font-medium", scoreColor(run.overallScore))} style={{ fontVariantNumeric: "tabular-nums" }}>
+								{run.overallScore !== null ? run.overallScore : "—"}
+							</span>
 									<span className={cn(
 										"inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium",
 										run.status === "COMPLETED"

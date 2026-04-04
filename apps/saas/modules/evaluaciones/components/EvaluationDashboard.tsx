@@ -3,6 +3,7 @@
 import { EmptyState } from "@shared/components/EmptyState";
 import { BarChart3Icon } from "lucide-react";
 import { cn } from "@repo/ui";
+import { scoreColor, scoreBg } from "@evaluaciones/lib/score-utils";
 
 interface ProfileItem {
   id: string;
@@ -23,20 +24,6 @@ interface EvaluationDashboardProps {
   profiles: ProfileItem[];
   orgAvgScore: number;
   organizationSlug: string;
-}
-
-function scoreColor(score: number | null): string {
-  if (score === null) return "text-slate-500";
-  if (score >= 80) return "text-emerald-400";
-  if (score >= 60) return "text-amber-400";
-  return "text-red-400";
-}
-
-function scoreBg(score: number | null): string {
-  if (score === null) return "bg-slate-800";
-  if (score >= 80) return "bg-emerald-950/50";
-  if (score >= 60) return "bg-amber-950/50";
-  return "bg-red-950/50";
 }
 
 export function EvaluationDashboard({
