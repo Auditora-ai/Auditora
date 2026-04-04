@@ -1,7 +1,8 @@
 "use client";
 
 import { Button } from "@repo/ui/components/button";
-import { FileTextIcon, PlusIcon } from "lucide-react";
+import Link from "next/link";
+import { FileTextIcon, PlusIcon, MessageSquareIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useCallback } from "react";
@@ -178,14 +179,22 @@ export function ProcessLibrary({
 							? t("empty.description")
 							: td("noCategoryFilterDesc")}
 					</p>
-					<div className="mt-6 flex gap-2">
+					<div className="mt-6 flex flex-col sm:flex-row gap-2">
+						{processes.length === 0 && (
+							<Button asChild className="min-h-[44px]">
+								<Link href={`${basePath}/descubrir/new`}>
+									<MessageSquareIcon className="mr-2 size-4" />
+									{t("empty.ctaInterview")}
+								</Link>
+							</Button>
+						)}
 						<Button
 							variant="outline"
 							onClick={() => setShowAddModal(true)}
 							className="min-h-[44px]"
 						>
 							<PlusIcon className="mr-2 size-4" />
-							Agregar manual
+							{t("empty.ctaManual")}
 						</Button>
 					</div>
 				</div>

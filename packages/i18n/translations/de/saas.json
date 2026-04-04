@@ -915,8 +915,10 @@
     "allProjects": "Alle Projekte",
     "empty": {
       "title": "Noch keine Prozesse kartiert",
-      "description": "Planen Sie eine Discovery-Sitzung, um mit der Prozesskartierung zu beginnen.",
-      "cta": "Neue Sitzung"
+      "description": "Dokumentieren Sie Ihren ersten Prozess, um Bewertungen basierend auf Ihren echten Verfahren zu erstellen.",
+      "cta": "Neue Sitzung",
+      "ctaInterview": "KI-Interview starten",
+      "ctaManual": "Manuell hinzufügen"
     },
     "export": "BPMN exportieren",
     "view": "Ansehen",

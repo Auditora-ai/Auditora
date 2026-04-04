@@ -103,9 +103,9 @@ function MobileWorkspaceInner({
 			<header className="sticky top-0 z-30 flex items-center gap-3 border-b border-slate-800 bg-slate-950/95 backdrop-blur px-4 py-3">
 				<Link href={processesPath}>
 					<Button
-						variant="ghost"
-						size="icon"
-						className="h-9 w-9 shrink-0 text-slate-400 hover:text-slate-50"
+					variant="ghost"
+					size="icon"
+					className="h-11 w-11 shrink-0 text-slate-400 hover:text-slate-50"
 					>
 						<ArrowLeftIcon className="h-5 w-5" />
 					</Button>
@@ -212,55 +212,55 @@ function MobileWorkspaceInner({
 				<section className="mx-4 mt-4">
 					<Tabs defaultValue="resumen" className="w-full">
 						<TabsList className="w-full overflow-x-auto border border-slate-800 bg-slate-900 p-1">
-							<TabsTrigger
-								value="resumen"
-								className="flex items-center gap-1 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
-							>
-								<LayoutDashboardIcon className="h-3 w-3" />
-								Resumen
-							</TabsTrigger>
-							<TabsTrigger
-								value="contexto"
-								className="flex items-center gap-1 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
-							>
-								<FileTextIcon className="h-3 w-3" />
-								Contexto
-							</TabsTrigger>
-						<TabsTrigger
-						value="procedimientos"
-						className="flex items-center gap-1 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
+					<TabsTrigger
+						value="resumen"
+						className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 px-3 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
 					>
-						<ClipboardListIcon className="h-3 w-3" />
+						<LayoutDashboardIcon className="h-3.5 w-3.5" />
+						Resumen
+					</TabsTrigger>
+					<TabsTrigger
+						value="contexto"
+						className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 px-3 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
+					>
+						<FileTextIcon className="h-3.5 w-3.5" />
+						Contexto
+					</TabsTrigger>
+					<TabsTrigger
+						value="procedimientos"
+						className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 px-3 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
+					>
+						<ClipboardListIcon className="h-3.5 w-3.5" />
 						SOPs
 					</TabsTrigger>
-						<TabsTrigger
+					<TabsTrigger
 						value="raci"
-						className="flex items-center gap-1 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
+						className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 px-3 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
 					>
-						<Table2Icon className="h-3 w-3" />
+						<Table2Icon className="h-3.5 w-3.5" />
 						RACI
 					</TabsTrigger>
-							<TabsTrigger
-								value="riesgos"
-								className="flex items-center gap-1 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
-							>
-								<ShieldAlertIcon className="h-3 w-3" />
-								Riesgos
-							</TabsTrigger>
-							<TabsTrigger
-								value="evaluacion"
-								className="flex items-center gap-1 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
-							>
-								<BarChart3Icon className="h-3 w-3" />
-								Evaluación
-							</TabsTrigger>
-							<TabsTrigger
-								value="sesiones"
-								className="flex items-center gap-1 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
-							>
-								<VideoIcon className="h-3 w-3" />
-								Sesiones
-							</TabsTrigger>
+					<TabsTrigger
+						value="riesgos"
+						className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 px-3 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
+					>
+						<ShieldAlertIcon className="h-3.5 w-3.5" />
+						Riesgos
+					</TabsTrigger>
+					<TabsTrigger
+						value="evaluacion"
+						className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 px-3 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
+					>
+						<BarChart3Icon className="h-3.5 w-3.5" />
+						Evaluación
+					</TabsTrigger>
+					<TabsTrigger
+						value="sesiones"
+						className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 px-3 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
+					>
+						<VideoIcon className="h-3.5 w-3.5" />
+						Sesiones
+					</TabsTrigger>
 						</TabsList>
 
 						<div className="mt-3 rounded-xl border border-slate-800 bg-slate-900 p-3">
@@ -323,7 +323,7 @@ function MobileWorkspaceInner({
 							<span className="rounded-lg bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-200 shadow-lg border border-slate-700">
 								Iniciar entrevista
 							</span>
-							<div className="flex h-10 w-10 items-center justify-center rounded-full bg-sky-600 shadow-lg shadow-sky-600/25">
+							<div className="flex h-11 w-11 items-center justify-center rounded-full bg-sky-600 shadow-lg shadow-sky-600/25">
 								<PlayIcon className="h-4 w-4 text-white" />
 							</div>
 						</Link>

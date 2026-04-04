@@ -915,8 +915,10 @@
     "allProjects": "Tous les projets",
     "empty": {
       "title": "Aucun processus cartographié",
-      "description": "Planifiez une session de découverte pour commencer la cartographie.",
-      "cta": "Nouvelle session"
+      "description": "Documentez votre premier processus pour générer des évaluations basées sur vos procédures réelles.",
+      "cta": "Nouvelle session",
+      "ctaInterview": "Démarrer l'entretien IA",
+      "ctaManual": "Ajouter manuellement"
     },
     "export": "Exporter BPMN",
     "view": "Voir",

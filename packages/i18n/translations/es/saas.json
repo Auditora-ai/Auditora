@@ -899,8 +899,10 @@
     "allProjects": "Todos los proyectos",
     "empty": {
       "title": "Aún no hay procesos mapeados",
-      "description": "Programa una sesión de descubrimiento para empezar a mapear procesos.",
-      "cta": "Nueva Sesión"
+      "description": "Documenta tu primer proceso para generar evaluaciones basadas en tus procedimientos reales.",
+      "cta": "Nueva Sesión",
+      "ctaInterview": "Iniciar entrevista IA",
+      "ctaManual": "Agregar manual"
     },
     "export": "Exportar BPMN",
     "view": "Ver",

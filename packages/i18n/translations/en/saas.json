@@ -899,8 +899,10 @@
     "allProjects": "All projects",
     "empty": {
       "title": "No processes mapped yet",
-      "description": "Schedule a discovery session to start mapping processes.",
-      "cta": "New Session"
+      "description": "Document your first process to generate evaluations based on your real procedures.",
+      "cta": "New Session",
+      "ctaInterview": "Start AI interview",
+      "ctaManual": "Add manually"
     },
     "export": "Export BPMN",
     "view": "View",
