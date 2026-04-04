@@ -2,6 +2,7 @@
 
 import { config } from "@config";
 import { Button, cn } from "@repo/ui";
+import { HeroIsotype } from "@repo/ui/components/logo";
 import { ArrowRightIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
@@ -47,8 +48,19 @@ export function HeroSection() {
 				}}
 			/>
 
-			<div className="container relative z-10 mx-auto max-w-4xl px-4 py-24 sm:py-32 md:py-40">
-				{/* Headline */}
+		{/* Blueprint isotipo as background watermark */}
+		<div className="pointer-events-none absolute inset-0 flex items-center justify-center" aria-hidden="true">
+			<motion.div
+				initial={{ opacity: 0, scale: 0.8 }}
+				animate={{ opacity: 0.06, scale: 1 }}
+				transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+			>
+				<HeroIsotype size={500} className="md:w-[600px] md:h-[600px] lg:w-[700px] lg:h-[700px]" />
+			</motion.div>
+		</div>
+
+		<div className="container relative z-10 mx-auto max-w-4xl px-4 py-24 sm:py-32 md:py-40">
+			{/* Headline */}
 				<motion.h1
 					custom={0}
 					initial="hidden"
