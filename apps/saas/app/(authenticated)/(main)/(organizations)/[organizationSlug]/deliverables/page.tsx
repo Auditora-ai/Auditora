@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-export default function DeliverablesRedirectPage({
+export default async function DeliverablesRedirectPage({
 	params,
 }: {
 	params: Promise<{ organizationSlug: string }>;
@@ -9,9 +9,6 @@ export default function DeliverablesRedirectPage({
 	// - Process deliverables → /processes
 	// - Risk reports → /processes (risks tab)
 	// - Evaluation reports → /evaluaciones?tab=dashboard
-	params.then(({ organizationSlug }) => {
-		redirect(`/${organizationSlug}/processes`);
-	});
-
-	return null;
+	const { organizationSlug } = await params;
+	redirect(`/${organizationSlug}/processes`);
 }

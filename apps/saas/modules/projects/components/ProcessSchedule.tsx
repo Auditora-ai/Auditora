@@ -72,7 +72,7 @@ export function ProcessSchedule({
 	organizationSlug,
 }: ProcessScheduleProps) {
 	const t = useTranslations("processes");
-	const sessionUrl = `/${organizationSlug}/sessions/new?processId=${process.id}&type=DEEP_DIVE`;
+	const sessionUrl = `/${organizationSlug}/descubrir/new?processId=${process.id}&type=DEEP_DIVE`;
 
 	const currentStatusIndex = STATUS_ORDER.indexOf(process.processStatus);
 	const nextStatus = currentStatusIndex < STATUS_ORDER.length - 1

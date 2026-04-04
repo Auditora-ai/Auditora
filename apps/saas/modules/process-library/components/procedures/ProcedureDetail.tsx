@@ -98,7 +98,7 @@ export function ProcedureDetail({ procedure, organizationSlug }: ProcedureDetail
 			{/* Header */}
 			<div className="mb-6">
 				<Link
-					href={`/${organizationSlug}/procedures`}
+					href={`/${organizationSlug}/processes`}
 					className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-3"
 				>
 					<ArrowLeftIcon className="h-3 w-3" /> Procedimientos

@@ -43,7 +43,7 @@ export function HumanRiskDashboard({
 
   const handleExport = () => {
     window.open(
-      `/${organizationSlug}/api/evaluation/export-report`,
+      `/api/evaluation/export-report`,
       "_blank",
     );
   };

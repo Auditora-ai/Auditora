@@ -148,7 +148,7 @@ export function ProcedureList({ procedures, processes, organizationSlug }: Proce
 						return (
 							<Link
 								key={proc.id}
-								href={`/${organizationSlug}/procedures/${proc.id}`}
+								href={`/${organizationSlug}/processes`}
 								className="group flex items-center justify-between rounded-lg border border-border/50 bg-card p-4 transition-all hover:border-border hover:bg-accent/30 hover:shadow-sm"
 							>
 								<div className="flex items-start gap-3 min-w-0">

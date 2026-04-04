@@ -67,7 +67,7 @@ export function CreateProcedureDialog({
 			}
 
 			onOpenChange(false);
-			router.push(`/${organizationSlug}/procedures/${procedure.id}`);
+			router.push(`/${organizationSlug}/processes`);
 		} catch (err: any) {
 			setError(err.message);
 		} finally {

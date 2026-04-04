@@ -25,7 +25,7 @@ export function SessionesTab({ sessions, organizationSlug, processId }: Sessione
 					{t("noSessions")}
 				</p>
 				<Button size="sm" asChild>
-					<Link href={`/${organizationSlug}/sessions/new?processId=${processId}&type=DEEP_DIVE`}>
+					<Link href={`/${organizationSlug}/descubrir/new?processId=${processId}&type=DEEP_DIVE`}>
 						<PlayIcon className="mr-1 h-3.5 w-3.5" />
 						Deep Dive
 					</Link>
@@ -41,13 +41,13 @@ export function SessionesTab({ sessions, organizationSlug, processId }: Sessione
 			<div className="flex gap-1.5 mb-3">
 				{lastSession?.status === "ENDED" && (
 					<Button variant="secondary" size="sm" className="text-xs h-7 flex-1" asChild>
-						<Link href={`/${organizationSlug}/sessions/new?processId=${processId}&type=DEEP_DIVE&continuationOf=${lastSession.id}`}>
+						<Link href={`/${organizationSlug}/descubrir/new?processId=${processId}&type=DEEP_DIVE&continuationOf=${lastSession.id}`}>
 							Continuar
 						</Link>
 					</Button>
 				)}
 				<Button size="sm" className="text-xs h-7 flex-1" asChild>
-					<Link href={`/${organizationSlug}/sessions/new?processId=${processId}&type=DEEP_DIVE`}>
+					<Link href={`/${organizationSlug}/descubrir/new?processId=${processId}&type=DEEP_DIVE`}>
 						<PlayIcon className="mr-1 h-3.5 w-3.5" />
 						Deep Dive
 					</Link>

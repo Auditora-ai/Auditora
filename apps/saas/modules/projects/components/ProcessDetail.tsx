@@ -869,7 +869,7 @@ function SessionsTab({
 					{lastSession && lastSession.status === "ENDED" && (
 						<Button variant="secondary" size="sm" asChild>
 							<Link
-								href={`/${organizationSlug}/sessions/new?processId=${processId}&type=DEEP_DIVE&continuationOf=${lastSession.id}`}
+								href={`/${organizationSlug}/descubrir/new?processId=${processId}&type=DEEP_DIVE&continuationOf=${lastSession.id}`}
 							>
 								<PlayIcon className="mr-1.5 h-3.5 w-3.5" />
 								{t("continueLast")}
@@ -878,7 +878,7 @@ function SessionsTab({
 					)}
 					<Button size="sm" asChild>
 						<Link
-							href={`/${organizationSlug}/sessions/new?processId=${processId}&type=DEEP_DIVE`}
+							href={`/${organizationSlug}/descubrir/new?processId=${processId}&type=DEEP_DIVE`}
 						>
 							<PlayIcon className="mr-1.5 h-3.5 w-3.5" />
 							{t("startDeepDive")}
