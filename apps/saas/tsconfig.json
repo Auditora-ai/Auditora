@@ -29,7 +29,8 @@
 			"@scan/*": ["./modules/scan/*"],
 			"@notifications/*": ["./modules/notifications/*"],
 			"@change-management/*": ["./modules/change-management/*"],
-			"@collaboration/*": ["./modules/collaboration/*"]
+			"@collaboration/*": ["./modules/collaboration/*"],
+			"@home/*": ["./modules/home/*"]
 		}
 	},
 	"include": [
