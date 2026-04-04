@@ -3,7 +3,7 @@
 import { config } from "@config";
 import { cn } from "@repo/ui";
 import { Button } from "@repo/ui/components/button";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import {
 	ArrowRightIcon,
 	CheckCircle2Icon,
@@ -16,213 +16,141 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
+if (typeof window !== "undefined") {
+	gsap.registerPlugin(ScrollTrigger);
+}
 
 const CORRECT_ANSWER = 0;
+const OPTION_LETTERS = ["A", "B", "C"];
 
-/* ─── Typewriter: each word fades in on scroll ─── */
-function TypewriterText({
-	text,
-	highlights,
-	className,
-}: {
-	text: string;
-	highlights?: Record<string, "danger" | "role">;
-	className?: string;
-}) {
-	const ref = useRef<HTMLParagraphElement>(null);
-
-	useEffect(() => {
-		if (!ref.current) return;
-		const words = ref.current.querySelectorAll(".tw-word");
-		gsap.fromTo(
-			words,
-			{ opacity: 0, y: 8, filter: "blur(4px)" },
-			{
-				opacity: 1,
-				y: 0,
-				filter: "blur(0px)",
-				stagger: 0.04,
-				duration: 0.3,
-				ease: "power2.out",
-				scrollTrigger: {
-					trigger: ref.current,
-					start: "top 80%",
-					toggleActions: "play none none reverse",
-				},
-			},
-		);
-	}, []);
-
-	// Split text into words, apply highlight classes
-	const words = text.split(" ");
-
-	return (
-		<p ref={ref} className={className}>
-			{words.map((word, i) => {
-				const clean = word.replace(/[.,!?;:]/g, "");
-				const punct = word.slice(clean.length);
-				let colorClass = "";
-				if (highlights) {
-					for (const [key, type] of Object.entries(highlights)) {
-						if (clean.toLowerCase().includes(key.toLowerCase())) {
-							colorClass =
-								type === "danger"
-									? "text-red-400 font-semibold"
-									: "text-[#3B8FE8] font-semibold";
-						}
-					}
-				}
-				return (
-					<span key={i} className={cn("tw-word inline-block mr-[0.3em] opacity-0", colorClass)}>
-						{word}
-					</span>
-				);
-			})}
-		</p>
-	);
-}
-
-/* ─── Pulsing alert ring ─── */
-function AlertPulse() {
-	return (
-		<div className="absolute top-6 right-6 sm:top-8 sm:right-8">
-			<div className="relative">
-				<motion.div
-					className="absolute inset-0 rounded-full bg-red-500/20"
-					animate={{ scale: [1, 2, 2.5], opacity: [0.4, 0.1, 0] }}
-					transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeOut" }}
-				/>
-				<motion.div
-					className="absolute inset-0 rounded-full bg-red-500/30"
-					animate={{ scale: [1, 1.5, 2], opacity: [0.5, 0.2, 0] }}
-					transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeOut", delay: 0.3 }}
-				/>
-				<div className="relative w-10 h-10 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center">
-					<AlertTriangleIcon className="size-4 text-red-400" />
-				</div>
-			</div>
-		</div>
-	);
-}
-
-/* ─── Fake pressure timer ─── */
-function PressureTimer({ active }: { active: boolean }) {
-	const [seconds, setSeconds] = useState(0);
-
-	useEffect(() => {
-		if (!active) return;
-		const iv = setInterval(() => setSeconds((s) => s + 1), 1000);
-		return () => clearInterval(iv);
-	}, [active]);
-
-	if (!active) return null;
-
-	const display = `${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, "0")}`;
-
-	return (
-		<motion.div
-			className="flex items-center gap-2 text-muted-foreground/50"
-			initial={{ opacity: 0 }}
-			animate={{ opacity: 1 }}
-			transition={{ delay: 0.5 }}
-		>
-			<ClockIcon className="size-3.5" />
-			<span className="text-xs font-mono tabular-nums">{display}</span>
-		</motion.div>
-	);
-}
-
-/* ─── Main Component ─── */
+/**
+ * LiveDemo — scroll-driven reveal + interactive decision.
+ *
+ * Architecture:
+ * - ALL content is always in the DOM (no AnimatePresence, no conditional rendering for scroll phases)
+ * - GSAP ScrollTrigger timeline controls opacity/y/scale of each layer
+ * - Phase 1 (0%-30%): title + subtitle visible, scenario hidden
+ * - Phase 2 (30%-70%): title fades, scenario + options scroll in
+ * - After user clicks: React state takes over for result (no more scroll dependency)
+ */
 export function LiveDemo() {
 	const t = useTranslations("home.liveDemo");
 	const [selected, setSelected] = useState<number | null>(null);
-	const [phase, setPhase] = useState<"intro" | "decide" | "result">("intro");
-	const sectionRef = useRef<HTMLElement>(null);
-	const cardRef = useRef<HTMLDivElement>(null);
-	const optionsRef = useRef<HTMLDivElement>(null);
+	const [showResult, setShowResult] = useState(false);
 
-	const isAnswered = selected !== null;
+	const sectionRef = useRef<HTMLElement>(null);
+	const introRef = useRef<HTMLDivElement>(null);
+	const scenarioRef = useRef<HTMLDivElement>(null);
+	const optionsRef = useRef<HTMLDivElement>(null);
+	const yourCallRef = useRef<HTMLDivElement>(null);
+
 	const isCorrect = selected === CORRECT_ANSWER;
 
-	// Scroll-triggered phase transitions
+	// ─── GSAP scroll timeline ───
 	useEffect(() => {
-		if (!sectionRef.current || !cardRef.current || !optionsRef.current) return;
+		if (!sectionRef.current || !introRef.current || !scenarioRef.current || !optionsRef.current || !yourCallRef.current) return;
 
-		// Pin the section while user scrolls through phases
-		const pin = ScrollTrigger.create({
-			trigger: sectionRef.current,
-			start: "top top",
-			end: "+=150%",
-			pin: true,
-			pinSpacing: true,
-			onUpdate: (self) => {
-				if (isAnswered) return; // Don't change phase after answering
-				if (self.progress < 0.4) {
-					setPhase("intro");
-				} else {
-					setPhase("decide");
-				}
-			},
-		});
+		// Sync Lenis with ScrollTrigger
+		ScrollTrigger.defaults({ scroller: undefined });
 
-		return () => pin.kill();
-	}, [isAnswered]);
+		const ctx = gsap.context(() => {
+			// Set initial states
+			gsap.set(scenarioRef.current, { opacity: 0, y: 60 });
+			gsap.set(yourCallRef.current, { opacity: 0 });
+			gsap.set(".option-card", { opacity: 0, y: 40 });
 
-	// Animate options entrance when phase changes to "decide"
-	useEffect(() => {
-		if (phase !== "decide" || !optionsRef.current) return;
-		const options = optionsRef.current.querySelectorAll(".option-card");
-		gsap.fromTo(
-			options,
-			{ opacity: 0, y: 40, scale: 0.95 },
-			{
+			const tl = gsap.timeline({
+				scrollTrigger: {
+					trigger: sectionRef.current,
+					start: "top top",
+					end: "+=200%",
+					pin: true,
+					scrub: 0.8,
+					pinSpacing: true,
+					anticipatePin: 1,
+					invalidateOnRefresh: true,
+				},
+			});
+
+			// Phase 1 (0% → 30%): Intro visible, nothing else
+			tl.to({}, { duration: 0.3 }); // Hold intro
+
+			// Phase 2 (30% → 50%): Intro fades up, scenario appears
+			tl.to(introRef.current, {
+				opacity: 0,
+				y: -40,
+				duration: 0.15,
+				ease: "power2.in",
+			});
+			tl.to(scenarioRef.current, {
 				opacity: 1,
 				y: 0,
-				scale: 1,
-				stagger: 0.15,
-				duration: 0.6,
-				ease: "power3.out",
-			},
-		);
-	}, [phase]);
+				duration: 0.2,
+				ease: "power2.out",
+			}, "-=0.05");
 
-	const handleSelect = useCallback(
-		(index: number) => {
-			if (isAnswered) return;
-			setSelected(index);
-			setPhase("result");
-			// Release the pin after answering
-			setTimeout(() => {
-				ScrollTrigger.getAll().forEach((st) => {
-					if (st.vars.trigger === sectionRef.current) {
-						st.kill();
-					}
-				});
-			}, 2000);
-		},
-		[isAnswered],
-	);
+			// Phase 3 (50% → 70%): "Your call" label + options stagger in
+			tl.to(yourCallRef.current, {
+				opacity: 1,
+				duration: 0.1,
+			});
+			tl.to(".option-card", {
+				opacity: 1,
+				y: 0,
+				stagger: 0.08,
+				duration: 0.15,
+				ease: "power2.out",
+			}, "-=0.05");
 
-	function handleReset() {
+			// Phase 4 (70% → 100%): Hold — user interacts
+			tl.to({}, { duration: 0.3 });
+
+		}, sectionRef);
+
+		return () => ctx.revert();
+	}, []);
+
+	// ─── Handle selection ───
+	const handleSelect = useCallback((index: number) => {
+		if (selected !== null) return;
+		setSelected(index);
+		setShowResult(true);
+
+		// Animate the options out and result in
+		if (optionsRef.current && yourCallRef.current) {
+			gsap.to(".option-card", {
+				opacity: 0,
+				y: -20,
+				stagger: 0.05,
+				duration: 0.3,
+				ease: "power2.in",
+			});
+			gsap.to(yourCallRef.current, { opacity: 0, duration: 0.2 });
+		}
+
+		// Kill the pin so user can scroll away
+		setTimeout(() => {
+			ScrollTrigger.getAll().forEach((st) => {
+				if (st.trigger === sectionRef.current) {
+					st.disable();
+				}
+			});
+		}, 1500);
+	}, [selected]);
+
+	const handleReset = useCallback(() => {
 		setSelected(null);
-		setPhase("intro");
-	}
+		setShowResult(false);
 
-	const OPTION_LETTERS = ["A", "B", "C"];
-	const OPTION_COLORS = [
-		{ border: "border-l-emerald-500/60", bg: "bg-emerald-500/10", ring: "ring-emerald-400/50" },
-		{ border: "border-l-amber-500/60", bg: "bg-amber-500/10", ring: "ring-amber-400/50" },
-		{ border: "border-l-sky-500/60", bg: "bg-sky-500/10", ring: "ring-sky-400/50" },
-	];
+		// Reset option cards
+		gsap.to(".option-card", { opacity: 1, y: 0, stagger: 0.05, duration: 0.3 });
+		gsap.to(yourCallRef.current, { opacity: 1, duration: 0.3 });
+	}, []);
 
-	const scenarioText =
-		"A supplier delivers contaminated raw material that passed incoming inspection. As COO, you need to make a decision immediately. What do you do?";
-	const scenarioHighlights: Record<string, "danger" | "role"> = {
-		contaminated: "danger",
-		COO: "role",
-		immediately: "danger",
-	};
+	const scenarioWords = t("scenario", {
+		danger: "|||DANGER|||",
+		role: "|||ROLE|||",
+	}).split(" ");
 
 	return (
 		<section
@@ -230,189 +158,142 @@ export function LiveDemo() {
 			id="live-demo"
 			className="relative min-h-screen flex items-center bg-muted dark:bg-[#060B18] overflow-hidden"
 		>
-			{/* Vignette edges */}
+			{/* Ambient glow */}
 			<div className="absolute inset-0 pointer-events-none" style={{
-				background: "radial-gradient(ellipse 80% 70% at 50% 50%, transparent 40%, var(--background) 100%)",
+				background: "radial-gradient(ellipse 70% 60% at 50% 50%, rgba(59,143,232,0.04) 0%, transparent 70%)",
 			}} />
 
-			{/* Ambient alert glow — pulses red subtly */}
-			<motion.div
-				className="absolute inset-0 pointer-events-none"
-				animate={{
-					background: [
-						"radial-gradient(ellipse 60% 50% at 50% 50%, rgba(220,38,38,0.03) 0%, transparent 70%)",
-						"radial-gradient(ellipse 60% 50% at 50% 50%, rgba(220,38,38,0.06) 0%, transparent 70%)",
-						"radial-gradient(ellipse 60% 50% at 50% 50%, rgba(220,38,38,0.03) 0%, transparent 70%)",
-					],
-				}}
-				transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-			/>
-
 			<div className="container max-w-3xl relative z-10 px-4 py-16 sm:py-20">
-				{/* ─── PHASE: INTRO — Scenario builds with scroll ─── */}
-				<AnimatePresence mode="wait">
-					{phase === "intro" && (
-						<motion.div
-							key="intro"
-							initial={{ opacity: 0 }}
-							animate={{ opacity: 1 }}
-							exit={{ opacity: 0, y: -20 }}
-							transition={{ duration: 0.5 }}
-							className="text-center space-y-8"
-						>
-							{/* Badge */}
-							<motion.div
-								className="inline-flex items-center gap-2 rounded-full border border-red-500/20 bg-red-500/[0.08] px-4 py-1.5"
-								initial={{ opacity: 0, scale: 0.9 }}
-								animate={{ opacity: 1, scale: 1 }}
-								transition={{ delay: 0.2 }}
-							>
-								<AlertTriangleIcon className="size-3.5 text-red-400" />
-								<span className="text-xs font-semibold text-red-400 uppercase tracking-widest">
-									Incoming alert
+
+				{/* ═══ LAYER 1: INTRO (fades out on scroll) ═══ */}
+				<div ref={introRef} className="text-center space-y-6 mb-12">
+					{/* Badge */}
+					<div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.08] px-4 py-1.5">
+						<AlertTriangleIcon className="size-3.5 text-primary" />
+						<span className="text-xs font-semibold text-primary uppercase tracking-widest">
+							{t("badge")}
+						</span>
+					</div>
+
+					{/* Title */}
+					<h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground tracking-tight leading-[1.1]">
+						{t("title")}
+					</h2>
+
+					{/* Subtitle */}
+					<p className="text-muted-foreground text-lg sm:text-xl max-w-xl mx-auto leading-relaxed">
+						{t("subtitle")}
+					</p>
+
+					{/* Scroll cue */}
+					<div className="flex flex-col items-center gap-2 pt-6 animate-bounce">
+						<span className="text-xs text-muted-foreground/60 uppercase tracking-widest">Scroll</span>
+						<svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-muted-foreground/40">
+							<path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+						</svg>
+					</div>
+				</div>
+
+				{/* ═══ LAYER 2: SCENARIO CARD (scrolls in) ═══ */}
+				<div ref={scenarioRef}>
+					<div className="relative bg-card dark:bg-white/[0.03] backdrop-blur border border-border rounded-2xl overflow-hidden shadow-xl shadow-black/5 dark:shadow-black/30">
+						{/* Header */}
+						<div className="flex items-center justify-between border-b border-border px-5 sm:px-7 py-3.5">
+							<div className="flex items-center gap-3">
+								<div className="w-2 h-2 rounded-full bg-destructive animate-pulse" />
+								<span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
+									{t("cardBadge")}
 								</span>
-							</motion.div>
+							</div>
+							<div className="hidden sm:flex items-center gap-2 text-muted-foreground/60">
+								<ClockIcon className="size-3.5" />
+								<span className="text-xs">{t("processLabel")}</span>
+							</div>
+						</div>
 
-							{/* Title */}
-							<h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground tracking-tight leading-[1.1]">
-								{t("title")}
-							</h2>
-
-							{/* Subtitle */}
-							<p className="text-muted-foreground text-lg sm:text-xl max-w-xl mx-auto">
-								{t("subtitle")}
+						{/* Scenario text */}
+						<div className="px-5 sm:px-7 py-5 sm:py-7">
+							<p className="text-base sm:text-lg leading-relaxed text-foreground/90">
+								{t.rich("scenario", {
+									danger: (chunks) => (
+										<span className="text-destructive font-semibold">{chunks}</span>
+									),
+									role: (chunks) => (
+										<span className="text-primary font-semibold">{chunks}</span>
+									),
+								})}
 							</p>
+						</div>
+					</div>
 
-							{/* Scroll cue */}
-							<motion.div
-								className="flex flex-col items-center gap-2 pt-8"
-								animate={{ y: [0, 8, 0] }}
-								transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-							>
-								<span className="text-xs text-muted-foreground/50 uppercase tracking-widest">Scroll to begin</span>
-								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-muted-foreground/30">
-									<path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-								</svg>
-							</motion.div>
-						</motion.div>
-					)}
+					{/* ═══ LAYER 3: YOUR CALL + OPTIONS (stagger in) ═══ */}
+					<div ref={yourCallRef} className="my-7">
+						<div className="flex items-center gap-3">
+							<div className="h-px flex-1 bg-gradient-to-r from-transparent to-border" />
+							<span className="text-sm font-bold text-muted-foreground uppercase tracking-[0.25em]">
+								Your call
+							</span>
+							<div className="h-px flex-1 bg-gradient-to-l from-transparent to-border" />
+						</div>
+					</div>
 
-					{/* ─── PHASE: DECIDE — Scenario + options ─── */}
-					{phase === "decide" && !isAnswered && (
-						<motion.div
-							key="decide"
-							ref={cardRef}
-							initial={{ opacity: 0 }}
-							animate={{ opacity: 1 }}
-							exit={{ opacity: 0 }}
-							transition={{ duration: 0.5 }}
-						>
-							{/* Scenario card */}
-							<div className="relative bg-card dark:bg-white/[0.03] backdrop-blur border border-border rounded-2xl overflow-hidden shadow-2xl shadow-black/5 dark:shadow-black/40">
-								<AlertPulse />
-
-								{/* Header */}
-								<div className="border-b border-white/[0.06] px-6 sm:px-8 py-4 flex items-center justify-between">
-									<div className="flex items-center gap-3">
-										<div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-										<span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
-											{t("cardBadge")}
+					<div ref={optionsRef} className="space-y-3">
+						{[0, 1, 2].map((i) => {
+							const colors = [
+								"border-l-emerald-500/60",
+								"border-l-amber-500/60",
+								"border-l-sky-500/60",
+							];
+							return (
+								<button
+									key={i}
+									type="button"
+									onClick={() => handleSelect(i)}
+									className={cn(
+										"option-card",
+										"group w-full text-left rounded-xl border border-border border-l-[3px] bg-card dark:bg-white/[0.02]",
+										"transition-all duration-300 cursor-pointer",
+										"hover:bg-accent dark:hover:bg-white/[0.06] hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-black/20",
+										"hover:scale-[1.01] active:scale-[0.995]",
+										colors[i],
+									)}
+								>
+									<div className="flex items-start gap-4 p-4 sm:p-5">
+										<span className="flex-shrink-0 flex items-center justify-center w-9 h-9 rounded-lg bg-muted dark:bg-white/[0.06] text-sm font-bold text-muted-foreground group-hover:text-foreground group-hover:bg-accent transition-all duration-200">
+											{OPTION_LETTERS[i]}
+										</span>
+										<span className="text-sm sm:text-[15px] leading-relaxed text-muted-foreground group-hover:text-foreground transition-colors duration-200 pt-1">
+											{t(`option${OPTION_LETTERS[i]}`)}
 										</span>
 									</div>
-									<PressureTimer active={phase === "decide"} />
-								</div>
+								</button>
+							);
+						})}
+					</div>
 
-								{/* Scenario text — typewriter */}
-								<div className="px-6 sm:px-8 py-6 sm:py-8">
-									<TypewriterText
-										text={scenarioText}
-										highlights={scenarioHighlights}
-										className="text-base sm:text-lg leading-relaxed text-foreground/90"
-									/>
-								</div>
-							</div>
-
-							{/* YOUR CALL label */}
-							<motion.div
-								className="flex items-center justify-center gap-3 my-8"
-								initial={{ opacity: 0 }}
-								animate={{ opacity: 1 }}
-								transition={{ delay: 0.8 }}
-							>
-								<div className="h-px flex-1 bg-gradient-to-r from-transparent to-border" />
-								<span className="text-sm font-bold text-muted-foreground uppercase tracking-[0.3em]">
-									Your call
-								</span>
-								<div className="h-px flex-1 bg-gradient-to-l from-transparent to-border" />
-							</motion.div>
-
-							{/* Options */}
-							<div ref={optionsRef} className="space-y-3">
-								{[0, 1, 2].map((i) => {
-									const color = OPTION_COLORS[i];
-									return (
-										<button
-											key={i}
-											type="button"
-											onClick={() => handleSelect(i)}
-											className={cn(
-"option-card opacity-0",
-"group w-full text-left rounded-xl border border-border border-l-[3px] bg-card dark:bg-white/[0.02]",
-										"transition-all duration-300 cursor-pointer",
-												"hover:bg-muted dark:hover:bg-white/[0.07] hover:border-border hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-white/[0.03]",
-												"hover:scale-[1.015] active:scale-[0.99]",
-												color.border,
-											)}
-										>
-											<div className="flex items-start gap-4 p-5 sm:p-6">
-												<span className="flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-xl bg-muted dark:bg-white/[0.06] text-sm font-bold text-muted-foreground group-hover:text-foreground group-hover:bg-muted/80 dark:group-hover:bg-white/[0.12] transition-all duration-300">
-													{OPTION_LETTERS[i]}
-												</span>
-												<span className="text-sm sm:text-[15px] leading-relaxed text-muted-foreground group-hover:text-foreground transition-colors duration-300 pt-1.5">
-													{t(`option${OPTION_LETTERS[i]}`)}
-												</span>
-											</div>
-										</button>
-									);
-								})}
-							</div>
-						</motion.div>
-					)}
-
-					{/* ─── PHASE: RESULT ─── */}
-					{phase === "result" && isAnswered && (
+					{/* ═══ RESULT (appears after selection, React-controlled) ═══ */}
+					{showResult && selected !== null && (
 						<motion.div
-							key="result"
 							initial={{ opacity: 0, y: 20 }}
 							animate={{ opacity: 1, y: 0 }}
-							transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-							className="space-y-6"
+							transition={{ duration: 0.5, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+							className="mt-6 space-y-5"
 						>
 							{/* Selected answer */}
-							<div
-								className={cn(
-									"rounded-xl border border-l-[3px] p-5 sm:p-6",
-									isCorrect
-										? "border-emerald-400/40 bg-emerald-500/[0.08]"
-										: "border-red-400/40 bg-red-500/[0.06]",
-								)}
-							>
-								<div className="flex items-start gap-4">
+							<div className={cn(
+								"rounded-xl border border-l-[3px] p-5",
+								isCorrect
+									? "border-emerald-400/40 bg-emerald-500/[0.08]"
+									: "border-red-400/40 bg-red-500/[0.06]",
+							)}>
+								<div className="flex items-start gap-3.5">
 									{isCorrect ? (
-										<motion.div
-											initial={{ scale: 0 }}
-											animate={{ scale: 1 }}
-											transition={{ type: "spring", stiffness: 300, delay: 0.2 }}
-										>
-											<CheckCircle2Icon className="size-6 text-emerald-400 flex-shrink-0" />
+										<motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 300, delay: 0.5 }}>
+											<CheckCircle2Icon className="size-5 text-emerald-400 flex-shrink-0 mt-0.5" />
 										</motion.div>
 									) : (
-										<motion.div
-											initial={{ scale: 0 }}
-											animate={{ scale: 1 }}
-											transition={{ type: "spring", stiffness: 300, delay: 0.2 }}
-										>
-											<XCircleIcon className="size-6 text-red-400 flex-shrink-0" />
+										<motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 300, delay: 0.5 }}>
+											<XCircleIcon className="size-5 text-red-400 flex-shrink-0 mt-0.5" />
 										</motion.div>
 									)}
 									<div>
@@ -428,47 +309,47 @@ export function LiveDemo() {
 
 							{/* Explanation */}
 							<motion.div
-								className="relative rounded-xl border border-[#3B8FE8]/20 bg-[#3B8FE8]/[0.06] p-6 sm:p-7"
+								className="rounded-xl border border-primary/20 bg-primary/[0.05] p-5 sm:p-6"
 								initial={{ opacity: 0, y: 10 }}
 								animate={{ opacity: 1, y: 0 }}
-								transition={{ delay: 0.4 }}
+								transition={{ delay: 0.6 }}
 							>
-								<p className="text-sm sm:text-base leading-relaxed text-foreground/85 mb-4">
+								<p className="text-sm sm:text-base leading-relaxed text-foreground/85 mb-3">
 									{t("resultExplanation")}
 								</p>
-								<p className="text-sm text-[#3B8FE8]/80 font-medium italic">
+								<p className="text-sm text-primary/70 font-medium italic">
 									{t("resultStat")}
 								</p>
 							</motion.div>
 
 							{/* CTA */}
 							<motion.div
-								className="flex flex-col sm:flex-row items-center gap-4 pt-4"
+								className="flex flex-col sm:flex-row items-center gap-4 pt-2"
 								initial={{ opacity: 0 }}
 								animate={{ opacity: 1 }}
-								transition={{ delay: 0.7 }}
+								transition={{ delay: 0.8 }}
 							>
 								<Button
 									size="lg"
 									asChild
-									className="bg-[#3B8FE8] hover:bg-[#2E7FD6] text-[#0A1428] font-bold w-full sm:w-auto text-base px-8 h-14"
+									className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold w-full sm:w-auto text-base px-8 h-13"
 								>
 									<a href={`${config.saasUrl}/scan`}>
 										{t("cta")}
-										<ArrowRightIcon className="ml-2 size-5" />
+										<ArrowRightIcon className="ml-2 size-4" />
 									</a>
 								</Button>
 								<button
 									type="button"
 									onClick={handleReset}
-									className="text-sm text-muted-foreground/50 hover:text-muted-foreground transition-colors cursor-pointer"
+									className="text-sm text-muted-foreground/60 hover:text-muted-foreground transition-colors cursor-pointer"
 								>
 									{t("tryAgain")}
 								</button>
 							</motion.div>
 						</motion.div>
 					)}
-				</AnimatePresence>
+				</div>
 			</div>
 		</section>
 	);
