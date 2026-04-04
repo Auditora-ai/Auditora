@@ -90,7 +90,7 @@ function TreeNode({
 		node.processStatus.toLowerCase() as "draft" | "mapped" | "validated" | "approved",
 	);
 
-	const processDetailPath = `/${organizationSlug}/processes/${node.id}`;
+	const processDetailPath = `/${organizationSlug}/procesos/${node.id}`;
 
 	return (
 		<div>

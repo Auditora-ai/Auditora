@@ -69,7 +69,7 @@ export function CommandPalette() {
 					label: tApp("menu.processes"),
 					section: t("sections.document"),
 					icon: WorkflowIcon,
-					action: () => router.push(`${basePath}/processes`),
+					action: () => router.push(`${basePath}/procesos`),
 				},
 				// EVALUAR
 				{

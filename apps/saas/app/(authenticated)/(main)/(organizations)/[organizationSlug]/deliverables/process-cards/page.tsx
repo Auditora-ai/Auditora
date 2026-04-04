@@ -1,12 +1,10 @@
 import { redirect } from "next/navigation";
 
-export default function DeliverablesProcessCardsRedirect({
+export default async function DeliverablesProcessCardsRedirect({
 	params,
 }: {
 	params: Promise<{ organizationSlug: string }>;
 }) {
-	params.then(({ organizationSlug }) => {
-		redirect(`/${organizationSlug}/processes`);
-	});
-	return null;
+	const { organizationSlug } = await params;
+	redirect(`/${organizationSlug}/procesos`);
 }

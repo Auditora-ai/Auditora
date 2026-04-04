@@ -1,12 +1,10 @@
 import { redirect } from "next/navigation";
 
-export default function DeliverablesRaciRedirect({
+export default async function DeliverablesraciRedirect({
 	params,
 }: {
 	params: Promise<{ organizationSlug: string }>;
 }) {
-	params.then(({ organizationSlug }) => {
-		redirect(`/${organizationSlug}/processes`);
-	});
-	return null;
+	const { organizationSlug } = await params;
+	redirect(`/${organizationSlug}/procesos`);
 }

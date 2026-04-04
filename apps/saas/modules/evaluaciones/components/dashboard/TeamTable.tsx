@@ -3,33 +3,36 @@
 import { cn } from "@repo/ui";
 import { scoreColor, scoreBg } from "@evaluaciones/lib/score-utils";
 import type { ProfileItem } from "@evaluaciones/lib/dashboard-queries";
+import { useTranslations } from "next-intl";
 
 interface TeamTableProps {
   profiles: ProfileItem[];
 }
 
 export function TeamTable({ profiles }: TeamTableProps) {
+  const t = useTranslations("evaluaciones.dashboard");
+
   if (profiles.length === 0) return null;
 
   return (
     <div className="overflow-hidden rounded-lg border border-slate-800 bg-slate-900">
       <div className="px-5 py-4">
         <h3 className="text-sm font-medium text-slate-400">
-          Detalle por Miembro
+          {t("teamTableTitle")}
         </h3>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
             <tr className="border-t border-slate-800 text-left text-xs font-medium uppercase tracking-wider text-slate-500">
-              <th className="px-5 py-3">Miembro</th>
-              <th className="px-5 py-3">Puntaje</th>
-              <th className="px-5 py-3">Simulaciones</th>
-              <th className="hidden px-5 py-3 md:table-cell">Fortalezas</th>
+              <th className="px-5 py-3">{t("member")}</th>
+              <th className="px-5 py-3">{t("score")}</th>
+              <th className="px-5 py-3">{t("evaluations")}</th>
+              <th className="hidden px-5 py-3 md:table-cell">{t("strengths")}</th>
               <th className="hidden px-5 py-3 md:table-cell">
-                Áreas de riesgo
+                {t("riskAreas")}
               </th>
-              <th className="px-5 py-3">Actualizado</th>
+              <th className="px-5 py-3">{t("updated")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-800">

@@ -150,7 +150,7 @@ export function ProcessDetail({
 	const [saving, setSaving] = useState(false);
 	const [dirty, setDirty] = useState(false);
 
-	const basePath = `/${organizationSlug}/processes`;
+	const basePath = `/${organizationSlug}/procesos`;
 	const processPath = `${basePath}/${process.id}`;
 
 	// Track edits

@@ -211,7 +211,7 @@ export function ProcessSchedule({
 									{draftChildren.map((child) => (
 										<Link
 											key={child.id}
-											href={`/${organizationSlug}/processes/${child.id}`}
+											href={`/${organizationSlug}/procesos/${child.id}`}
 											className="flex items-center justify-between rounded-md border border-border px-3 py-2 text-sm transition-colors hover:bg-accent/50"
 										>
 											<span className="font-medium">{child.name}</span>
@@ -232,7 +232,7 @@ export function ProcessSchedule({
 									{mappedChildren.map((child) => (
 										<Link
 											key={child.id}
-											href={`/${organizationSlug}/processes/${child.id}`}
+											href={`/${organizationSlug}/procesos/${child.id}`}
 											className="flex items-center justify-between rounded-md border border-border px-3 py-2 text-sm transition-colors hover:bg-accent/50"
 										>
 											<span className="font-medium">{child.name}</span>

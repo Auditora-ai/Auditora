@@ -41,13 +41,6 @@ export function HumanRiskDashboard({
     );
   }
 
-  const handleExport = () => {
-    window.open(
-      `/api/evaluation/export-report`,
-      "_blank",
-    );
-  };
-
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
@@ -63,8 +56,9 @@ export function HumanRiskDashboard({
         <Button
           variant="secondary"
           size="sm"
-          onClick={handleExport}
-          className="self-start sm:self-auto"
+          disabled
+          title="Próximamente"
+          className="self-start sm:self-auto opacity-60 cursor-not-allowed"
         >
           <FileDownIcon className="mr-2 h-4 w-4" />
           {t("exportPdf")}

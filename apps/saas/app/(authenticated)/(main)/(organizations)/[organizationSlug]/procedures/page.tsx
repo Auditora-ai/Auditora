@@ -6,5 +6,5 @@ export default async function DeprecatedProceduresPage({
 	params: Promise<{ organizationSlug: string }>;
 }) {
 	const { organizationSlug } = await params;
-	redirect(`/${organizationSlug}/processes`);
+	redirect(`/${organizationSlug}/procesos`);
 }

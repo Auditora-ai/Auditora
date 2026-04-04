@@ -186,7 +186,7 @@ export function HeroBpmnViewer({
 	if (!showDemo && processId) {
 		return (
 			<div className="hero-bpmn">
-				<Link href={`${basePath}/processes/${processId}`} className="block hover:opacity-95 transition-opacity">
+				<Link href={`${basePath}/procesos/${processId}`} className="block hover:opacity-95 transition-opacity">
 					{content}
 				</Link>
 			</div>

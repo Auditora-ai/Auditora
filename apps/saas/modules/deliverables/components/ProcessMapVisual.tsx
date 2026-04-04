@@ -251,7 +251,7 @@ export function ProcessMapVisual({ processes, links, organizationSlug }: Props) 
             </div>
             <div className="flex items-center gap-2">
               <Link
-                href={`/${organizationSlug}/processes/${selectedProcess.id}`}
+                href={`/${organizationSlug}/procesos/${selectedProcess.id}`}
                 className="text-xs text-blue-600 hover:text-blue-800 font-medium"
               >
                 Ver proceso →

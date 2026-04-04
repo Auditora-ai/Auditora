@@ -134,7 +134,7 @@ export function ClientDashboard({
 							</CardTitle>
 							{data.recentProcesses.length > 0 && (
 								<Link
-									href={`${basePath}/processes`}
+									href={`${basePath}/procesos`}
 									className="text-xs text-primary hover:underline"
 								>
 									{t("viewAll")}
@@ -152,7 +152,7 @@ export function ClientDashboard({
 								{data.recentProcesses.map((p) => (
 									<Link
 										key={p.id}
-										href={`${basePath}/processes/${p.id}`}
+										href={`${basePath}/procesos/${p.id}`}
 										className="flex items-center justify-between rounded-md border p-3 transition-colors hover:bg-accent/50"
 									>
 										<span className="font-medium text-sm truncate">{p.name}</span>

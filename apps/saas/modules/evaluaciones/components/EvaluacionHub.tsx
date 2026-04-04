@@ -5,30 +5,30 @@ import { GraduationCapIcon, UserIcon } from "lucide-react";
 import { cn } from "@repo/ui";
 import Link from "next/link";
 
-type SimulationTemplateStatus = "GENERATING" | "GENERATION_FAILED" | "DRAFT" | "PUBLISHED" | "ARCHIVED";
-type SimulationTargetRole = "DIRECTOR_OPERACIONES" | "DIRECTOR_COMPRAS" | "DIRECTOR_CALIDAD" | "DIRECTOR_FINANZAS" | "DIRECTOR_LOGISTICA" | "GERENTE_PLANTA" | "CONTROLLER" | "CEO" | "CUSTOM";
-type SimulationRunStatus = "IN_PROGRESS" | "COMPLETED" | "ABANDONED";
+type EvaluacionTemplateStatus = "GENERATING" | "GENERATION_FAILED" | "DRAFT" | "PUBLISHED" | "ARCHIVED";
+type EvaluacionTargetRole = "DIRECTOR_OPERACIONES" | "DIRECTOR_COMPRAS" | "DIRECTOR_CALIDAD" | "DIRECTOR_FINANZAS" | "DIRECTOR_LOGISTICA" | "GERENTE_PLANTA" | "CONTROLLER" | "CEO" | "CUSTOM";
+type EvaluacionRunStatus = "IN_PROGRESS" | "COMPLETED" | "ABANDONED";
 
 interface TemplateItem {
 	id: string;
 	title: string;
-	status: SimulationTemplateStatus;
-	targetRole: SimulationTargetRole;
+	status: EvaluacionTemplateStatus;
+	targetRole: EvaluacionTargetRole;
 	customRoleName: string | null;
 	processDefinition: { name: string };
 	scenarios: Array<{
-		runs: Array<{ status: SimulationRunStatus; overallScore: number | null }>;
+		runs: Array<{ status: EvaluacionRunStatus; overallScore: number | null }>;
 	}>;
 }
 
 interface RunItem {
 	id: string;
-	status: SimulationRunStatus;
+	status: EvaluacionRunStatus;
 	overallScore: number | null;
 	createdAt: Date;
 	user: { name: string; image: string | null };
 	scenario: {
-		template: { title: string; targetRole: SimulationTargetRole };
+		template: { title: string; targetRole: EvaluacionTargetRole };
 	};
 }
 
@@ -38,7 +38,7 @@ interface EvaluacionHubProps {
 	organizationSlug: string;
 }
 
-const roleLabels: Record<SimulationTargetRole, string> = {
+const roleLabels: Record<EvaluacionTargetRole, string> = {
 	DIRECTOR_OPERACIONES: "Dir. Operaciones",
 	DIRECTOR_COMPRAS: "Dir. Compras",
 	DIRECTOR_CALIDAD: "Dir. Calidad",
@@ -67,7 +67,7 @@ export function EvaluacionHub({ templates, recentRuns, organizationSlug }: Evalu
 				actions={[
 					{
 						label: "Ir a Procesos",
-						href: `/${organizationSlug}/processes`,
+						href: `/${organizationSlug}/procesos`,
 						variant: "primary",
 					},
 				]}

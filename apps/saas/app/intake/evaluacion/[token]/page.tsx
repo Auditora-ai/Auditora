@@ -107,12 +107,25 @@ export default function IntakeSimulationPage() {
   const respondEndpoint = `/api/evaluaciones/${data.templateId}/run/${data.runId}`;
 
   return (
-    <EvaluacionRunPage
-      decisions={data.decisions}
-      respondEndpoint={respondEndpoint}
-      backHref="/"
-      templateTitle={data.templateTitle}
-      narrative={data.narrative}
-    />
+    <div>
+      {/* Branding bar */}
+      <div className="fixed top-0 left-0 right-0 z-50 border-b border-slate-800/50 bg-[#0A1428]/90 backdrop-blur-sm px-4 py-2.5">
+        <div className="mx-auto flex max-w-3xl items-center justify-between">
+          <span className="text-base tracking-tight leading-none">
+            <span className="font-black text-slate-100">Audit</span>
+            <span className="font-light text-slate-400">ora</span>
+            <span className="font-light text-blue-500">.ai</span>
+          </span>
+          <span className="text-[10px] text-slate-500 uppercase tracking-widest">Evaluación</span>
+        </div>
+      </div>
+      <EvaluacionRunPage
+        decisions={data.decisions}
+        respondEndpoint={respondEndpoint}
+        backHref="/"
+        templateTitle={data.templateTitle}
+        narrative={data.narrative}
+      />
+    </div>
   );
 }

@@ -27,8 +27,7 @@ export function ErrorPatternsCard({ errorPatterns }: ErrorPatternsCardProps) {
               {t("noPatterns")}
             </p>
             <p className="mt-0.5 text-xs text-slate-500">
-              Los patrones de error aparecerán cuando se detecten decisiones
-              recurrentes de alto riesgo.
+              {t("noPatternsDescription")}
             </p>
           </div>
         </div>

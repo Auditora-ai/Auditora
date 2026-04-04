@@ -22,6 +22,7 @@
 		"@types/node": "catalog:",
 		"ai": "catalog:",
 		"dotenv-cli": "catalog:",
+		"shadcn": "^4.1.2",
 		"tsx": "catalog:",
 		"turbo": "^2.8.17",
 		"typescript": "catalog:",

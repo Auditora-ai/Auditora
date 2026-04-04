@@ -65,7 +65,7 @@ export function MobileBottomBar() {
 		},
 		{
 			label: t("app.menu.processes"),
-			href: `${basePath}/processes`,
+			href: `${basePath}/procesos`,
 			icon: WorkflowIcon,
 			isActive: pathname.startsWith(`${basePath}/processes`) || pathname.startsWith(`${basePath}/procesos`) || pathname.startsWith(`${basePath}/procedures`),
 		},

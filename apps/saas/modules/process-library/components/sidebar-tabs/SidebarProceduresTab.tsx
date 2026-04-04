@@ -162,7 +162,7 @@ export function SidebarProceduresTab({ processId, processName, organizationSlug 
 						asChild
 						className="w-full border-slate-700"
 					>
-						<Link href={`/${organizationSlug}/processes/${processId}?tab=procedures&action=create`}>
+						<Link href={`/${organizationSlug}/procesos/${processId}?tab=procedures&action=create`}>
 							<PlusIcon className="mr-1.5 h-3.5 w-3.5" />
 							Crear manualmente
 						</Link>
@@ -201,7 +201,7 @@ export function SidebarProceduresTab({ processId, processName, organizationSlug 
 				return (
 					<Link
 						key={proc.id}
-						href={`/${organizationSlug}/processes/${processId}?tab=procedures&procedureId=${proc.id}`}
+						href={`/${organizationSlug}/procesos/${processId}?tab=procedures&procedureId=${proc.id}`}
 						className="group flex items-start gap-3 rounded-lg border border-slate-800 bg-slate-900/50 p-3 transition-colors hover:border-slate-700 hover:bg-slate-900"
 					>
 						<div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-slate-800 text-slate-400 group-hover:text-slate-200">

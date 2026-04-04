@@ -59,7 +59,7 @@ function MobileWorkspaceInner({
 	const [fabOpen, setFabOpen] = useState(false);
 	const [downloading, setDownloading] = useState(false);
 
-	const processesPath = `${basePath}/processes`;
+	const processesPath = `${basePath}/procesos`;
 
 	const handleProcessUpdate = (updated: Partial<ProcessData>) => {
 		setProcess((prev) => ({ ...prev, ...updated }));

@@ -196,7 +196,7 @@ export function RiskDashboard({
 								},
 								{
 									label: t("emptyCtaExplore"),
-									href: `${basePath}/processes`,
+									href: `${basePath}/procesos`,
 									variant: "outline",
 								},
 							]}
@@ -256,7 +256,7 @@ export function RiskDashboard({
 										<div className="grid grid-cols-2 gap-3 text-center md:grid-cols-4 md:text-left">
 											{/* Documented processes: X of Y */}
 											<Link
-												href={`${basePath}/processes`}
+												href={`${basePath}/procesos`}
 												className="group rounded-xl bg-white/5 p-2.5 transition-colors hover:bg-accent/30 md:bg-transparent md:p-0"
 											>
 												<p className="text-xl font-bold tabular-nums text-foreground transition-colors group-hover:text-primary md:text-2xl">
@@ -272,7 +272,7 @@ export function RiskDashboard({
 
 											{/* Risk count */}
 											<Link
-												href={`${basePath}/processes`}
+												href={`${basePath}/procesos`}
 												className="group rounded-xl bg-white/5 p-2.5 transition-colors hover:bg-accent/30 md:bg-transparent md:p-0"
 											>
 												<p className="text-xl font-bold tabular-nums text-foreground transition-colors group-hover:text-amber-500 md:text-2xl">
@@ -395,7 +395,7 @@ export function RiskDashboard({
 										{topRisks.map((risk) => (
 											<Link
 												key={risk.id}
-												href={`${basePath}/processes`}
+												href={`${basePath}/procesos`}
 												className={`block rounded-2xl border border-l-4 border-white/10 bg-card/80 p-4 backdrop-blur-sm transition-all duration-300 hover:shadow-md dark:border-white/5 dark:bg-card/60 ${
 													risk.riskScore >= 16
 														? "border-l-[#DC2626] dark:border-red-900/30"
