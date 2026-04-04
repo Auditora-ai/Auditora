@@ -2,11 +2,11 @@
 
 import { config } from "@config";
 import { Button, cn } from "@repo/ui";
-import { HeroIsotype } from "@repo/ui/components/logo";
 import { ArrowRightIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useState, useCallback } from "react";
+import { HeroBackground } from "./HeroBackground";
 
 const FADE_UP = {
 	hidden: { opacity: 0, y: 20 },
@@ -37,27 +37,8 @@ export function HeroSection() {
 
 	return (
 		<section className="relative min-h-[100svh] flex items-center overflow-hidden bg-transparent">
-			{/* Single subtle gradient line across the top */}
-			<div
-				className="pointer-events-none absolute top-0 left-0 right-0 h-px"
-				aria-hidden="true"
-				style={{
-					background:
-						"linear-gradient(90deg, transparent 0%, #3B8FE8 50%, transparent 100%)",
-					opacity: 0.3,
-				}}
-			/>
-
-		{/* Blueprint isotipo as background watermark */}
-		<div className="pointer-events-none absolute inset-0 flex items-center justify-center" aria-hidden="true">
-			<motion.div
-				initial={{ opacity: 0, scale: 0.8 }}
-				animate={{ opacity: 0.06, scale: 1 }}
-				transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
-			>
-				<HeroIsotype size={500} className="md:w-[600px] md:h-[600px] lg:w-[700px] lg:h-[700px]" />
-			</motion.div>
-		</div>
+			{/* Advanced animated A background */}
+			<HeroBackground />
 
 		<div className="container relative z-10 mx-auto max-w-4xl px-4 py-24 sm:py-32 md:py-40">
 			{/* Headline */}
