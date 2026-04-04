@@ -3,12 +3,20 @@
 import { useEffect, useState } from "react";
 import { ArrowUpRightIcon, XIcon } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
-interface CreditStatus {
+interface UsageMetric {
 	used: number;
 	limit: number | null;
-	remaining: number | null;
-	resetDate: string | null;
+}
+
+interface UsageData {
+	evaluations: UsageMetric;
+	evaluators: UsageMetric;
+	processes: UsageMetric;
+	sessions: UsageMetric;
+	reports: UsageMetric;
+	billingCycleAnchor: string | null;
 }
 
 export function UpgradeBanner({
@@ -18,32 +26,47 @@ export function UpgradeBanner({
 	organizationId: string;
 	organizationSlug: string;
 }) {
-	const [credits, setCredits] = useState<CreditStatus | null>(null);
+	const t = useTranslations();
+	const [usage, setUsage] = useState<UsageData | null>(null);
 	const [dismissed, setDismissed] = useState(false);
 
 	useEffect(() => {
-		async function fetchCredits() {
+		async function fetchUsage() {
 			try {
 				const res = await fetch(
-					`/api/organizations/session-credits?organizationId=${organizationId}`,
+					`/api/organizations/${organizationId}/usage`,
 				);
 				if (res.ok) {
-					setCredits(await res.json());
+					const data = await res.json();
+					if (
+						data &&
+						typeof data === "object" &&
+						"evaluations" in data
+					) {
+						setUsage(data as UsageData);
+					}
 				}
 			} catch {
 				// Silent fail
 			}
 		}
-		fetchCredits();
+		fetchUsage();
 	}, [organizationId]);
 
-	if (dismissed || !credits || credits.limit === null) {
+	if (dismissed || !usage) {
 		return null;
 	}
 
-	const usagePercent = credits.limit > 0
-		? Math.round((credits.used / credits.limit) * 100)
-		: 0;
+	// Check evaluations usage (primary unit of value)
+	const evalLimit = usage.evaluations.limit;
+	if (evalLimit === null) {
+		return null;
+	}
+
+	const usagePercent =
+		evalLimit > 0
+			? Math.round((usage.evaluations.used / evalLimit) * 100)
+			: 0;
 
 	// Only show at >= 80% usage
 	if (usagePercent < 80) {
@@ -51,6 +74,7 @@ export function UpgradeBanner({
 	}
 
 	const isExhausted = usagePercent >= 100;
+	const remaining = Math.max(0, evalLimit - usage.evaluations.used);
 
 	return (
 		<div
@@ -70,15 +94,15 @@ export function UpgradeBanner({
 
 			<p className="pr-6">
 				{isExhausted
-					? "Has alcanzado el límite de sesiones IA este mes."
-					: `Te quedan ${credits.remaining} sesiones IA este mes.`}
+					? t("pricing.evaluationsExhausted")
+					: t("pricing.evaluationsRemaining", { count: remaining })}
 			</p>
 
 			<Link
 				href={`/${organizationSlug}/settings/billing`}
 				className="mt-1 inline-flex items-center gap-1 text-xs font-medium underline underline-offset-2"
 			>
-				Actualizar plan
+				{t("settings.billing.changePlan.title")}
 				<ArrowUpRightIcon className="size-3" />
 			</Link>
 		</div>
