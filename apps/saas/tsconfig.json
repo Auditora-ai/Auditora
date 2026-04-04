@@ -32,7 +32,9 @@
 			"@collaboration/*": ["./modules/collaboration/*"],
 			"@home/*": ["./modules/home/*"],
 			"@process/*": ["./modules/process/*"],
-			"@capture/*": ["./modules/capture/*"]
+			"@capture/*": ["./modules/capture/*"],
+			"@evaluate/*": ["./modules/evaluate/*"],
+			"@panorama/*": ["./modules/panorama/*"]
 		}
 	},
 	"include": [
