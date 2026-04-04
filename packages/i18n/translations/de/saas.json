@@ -1920,6 +1920,7 @@
       "catalog": "Bewertungskatalog",
       "customRole": "Benutzerdefiniert",
       "evalCount": "{count} Bew.",
+      "scenarioCount": "{count} Szenarien",
       "statusActive": "Aktiv",
       "statusDraft": "Entwurf",
       "recentRuns": "Aktuelle Bewertungen",
@@ -1939,11 +1940,16 @@
     },
     "runner": {
       "decisionOf": "Entscheidung {current} von {total}",
-      "proceduralReference": "Verfahrensreferenz"
+      "proceduralReference": "Verfahrensreferenz",
+      "submitError": "Ihre Antwort konnte nicht aufgezeichnet werden. Bitte versuchen Sie es erneut.",
+      "retry": "Erneut versuchen"
     },
     "intro": {
       "label": "Bewertung",
-      "startButton": "Bewertung starten"
+      "startButton": "Bewertung starten",
+      "yourRole": "Ihre Rolle: {role}",
+      "decisionCount": "{count} Entscheidungen",
+      "stakesMessage": "Ihre Entscheidungen werden gegen das tatsächliche Verfahren Ihrer Organisation bewertet."
     },
     "runPage": {
       "label": "Bewertung",
@@ -1987,12 +1993,15 @@
       "riskLevel": "Risikoniveau",
       "simulations": "Simulationen",
       "memberDetail": "Mitgliederdetail",
+      "teamDetail": "Detail pro Teammitglied",
       "member": "Mitglied",
       "score": "Punktzahl",
+      "evaluations": "Bewertungen",
       "strengths": "Stärken",
       "riskAreas": "Risikobereiche",
       "updated": "Aktualisiert",
-      "avgScoreLabel": "Durchschnittliche Punktzahl"
+      "avgScoreLabel": "Durchschnittliche Punktzahl",
+      "comingSoon": "Demnächst verfügbar"
     },
     "progress": {
       "title": "Fortschritt & Verbesserung",

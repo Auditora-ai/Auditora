@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { SendIcon, SparklesIcon } from "lucide-react";
+import { SendIcon, SparklesIcon, Zap } from "lucide-react";
 import { TopicChips } from "./TopicChips";
 
 interface ChatMessage {
@@ -29,6 +29,14 @@ interface InterviewChatProps {
 	onReveal: () => void;
 	processName: string;
 }
+
+const SIPOC_DIMS = [
+	{ key: "suppliers" as const, label: "S", fullLabel: "Proveedores", color: "#8B5CF6" },
+	{ key: "inputs" as const, label: "I", fullLabel: "Entradas", color: "#3B82F6" },
+	{ key: "process" as const, label: "P", fullLabel: "Proceso", color: "#F59E0B" },
+	{ key: "outputs" as const, label: "O", fullLabel: "Salidas", color: "#22C55E" },
+	{ key: "customers" as const, label: "C", fullLabel: "Clientes", color: "#EC4899" },
+] as const;
 
 export function InterviewChat({
 	messages,
@@ -63,96 +71,104 @@ export function InterviewChat({
 		}
 	}
 
-	const sipocDimensions = sipocCoverage
-		? [
-			{ label: "S", value: sipocCoverage.suppliers, name: "Suppliers" },
-			{ label: "I", value: sipocCoverage.inputs, name: "Inputs" },
-			{ label: "P", value: sipocCoverage.process, name: "Process" },
-			{ label: "O", value: sipocCoverage.outputs, name: "Outputs" },
-			{ label: "C", value: sipocCoverage.customers, name: "Customers" },
-		]
-		: null;
-
 	return (
 		<div className="flex h-full flex-col" style={{ backgroundColor: "#F8FAFC" }}>
 			{/* Header */}
-			<div className="border-b px-6 py-4" style={{ borderColor: "#E2E8F0" }}>
-				<div className="flex items-center justify-between">
-					<div className="flex items-center gap-3">
-						<SparklesIcon className="size-5" style={{ color: "#D97706" }} />
-						<h2 className="text-lg font-semibold" style={{ color: "#0A1428" }}>
+			<div className="border-b px-4 py-3 sm:px-6 sm:py-4" style={{ borderColor: "#E2E8F0" }}>
+				<div className="flex items-center justify-between gap-2">
+					<div className="flex items-center gap-2 min-w-0">
+						<SparklesIcon className="size-4 sm:size-5 shrink-0" style={{ color: "#D97706" }} />
+						<h2 className="text-sm sm:text-lg font-semibold truncate" style={{ color: "#0A1428" }}>
 							{processName}
 						</h2>
 					</div>
-					<div className="flex items-center gap-3">
+					<div className="flex items-center gap-2 shrink-0">
 						{/* Completeness badge */}
 						<div
-							className="flex items-center gap-2 rounded-full px-3 py-1"
+							className="flex items-center gap-1 rounded-full px-2.5 py-1"
 							style={{
 								backgroundColor: completenessScore >= 70 ? "#F0FDF4" : "#FEF3C7",
 								color: completenessScore >= 70 ? "#16A34A" : "#D97706",
 							}}
 						>
-							<span className="text-xs font-medium">
+							<span className="text-[10px] sm:text-xs font-medium">
 								{completenessScore}%
 							</span>
 						</div>
 						{readyForReveal && (
 							<button
 								onClick={onReveal}
-								className="rounded-md px-4 py-2 text-sm font-medium text-white transition-colors hover:opacity-90"
+								className="rounded-md px-3 py-2 text-xs sm:text-sm font-medium text-white transition-colors hover:opacity-90 min-h-[36px] sm:min-h-[40px]"
 								style={{ backgroundColor: "#3B8FE8" }}
 							>
-								Ver Diagrama
+								Ver BPMN
 							</button>
 						)}
 					</div>
 				</div>
 
-				{/* SIPOC bar */}
-				{sipocDimensions && (
-					<div className="mt-3 flex items-center gap-4">
-						{sipocDimensions.map((dim) => (
-							<div key={dim.label} className="flex items-center gap-1.5">
-								<span
-									className="text-xs font-medium"
-									style={{
-										color: dim.value >= 70 ? "#16A34A" : dim.value > 30 ? "#D97706" : "#94A3B8",
-									}}
-								>
-									{dim.label}
-								</span>
-								<div className="h-1 w-12 overflow-hidden rounded-full" style={{ backgroundColor: "#E2E8F0" }}>
-									<div
-										className="h-full rounded-full transition-all"
-										style={{
-											width: `${dim.value}%`,
-											backgroundColor: dim.value >= 70 ? "#16A34A" : "#D97706",
-											transitionDuration: "500ms",
-										}}
-									/>
-								</div>
-							</div>
-						))}
+				{/* SIPOC coverage bar — methodology-visible */}
+				{sipocCoverage && (
+					<div className="mt-2 sm:mt-3">
+						<div className="flex items-center gap-1 mb-1">
+							<Zap className="size-2.5" style={{ color: "#D97706" }} />
+							<span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: "#94A3B8" }}>
+								Cobertura SIPOC
+							</span>
+						</div>
+						<div className="flex items-center gap-2 sm:gap-3">
+							{SIPOC_DIMS.map((dim) => {
+								const val = sipocCoverage[dim.key];
+								return (
+									<div key={dim.key} className="flex items-center gap-1" title={dim.fullLabel}>
+										<span
+											className="flex h-5 w-5 items-center justify-center rounded text-[10px] font-bold"
+											style={{
+												backgroundColor: val >= 70 ? `${dim.color}20` : val > 30 ? `${dim.color}10` : "#F1F5F9",
+												color: val >= 70 ? dim.color : val > 30 ? "#D97706" : "#94A3B8",
+												border: `1px solid ${val >= 70 ? `${dim.color}30` : "transparent"}`,
+											}}
+										>
+											{dim.label}
+										</span>
+										<div className="h-1.5 w-8 sm:w-12 overflow-hidden rounded-full" style={{ backgroundColor: "#E2E8F0" }}>
+											<div
+												className="h-full rounded-full transition-all"
+												style={{
+													width: `${val}%`,
+													backgroundColor: val >= 70 ? dim.color : "#D97706",
+													transitionDuration: "500ms",
+												}}
+											/>
+										</div>
+										<span className="hidden sm:inline text-[9px] font-medium" style={{ color: "#94A3B8" }}>
+											{dim.fullLabel}
+										</span>
+									</div>
+								);
+							})}
+						</div>
 					</div>
 				)}
 			</div>
 
-			{/* Messages */}
-			<div className="flex-1 overflow-y-auto px-6 py-4">
-				<div className="mx-auto max-w-2xl space-y-4">
+			{/* Messages — full width on mobile */}
+			<div className="flex-1 overflow-y-auto px-3 py-3 sm:px-6 sm:py-4">
+				<div className="mx-auto max-w-2xl space-y-3 sm:space-y-4">
 					{messages.map((msg, i) => (
 						<div
 							key={i}
 							className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
 						>
 							<div
-								className="max-w-[80%] rounded-lg px-4 py-3 text-sm leading-relaxed"
-					style={
-							msg.role === "user"
-								? { backgroundColor: "#3B8FE8", color: "#FFFFFF" }
-								: { backgroundColor: "#F1F5F9", border: "1px solid #E2E8F0", color: "#0A1428" }
-						}
+								className={`rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+									msg.role === "user" ? "max-w-[85%] sm:max-w-[75%]" : "max-w-[90%] sm:max-w-[80%]"
+								}`}
+								style={
+									msg.role === "user"
+										? { backgroundColor: "#3B8FE8", color: "#FFFFFF" }
+										: { backgroundColor: "#F1F5F9", border: "1px solid #E2E8F0", color: "#0A1428" }
+								}
 							>
 								{msg.content}
 							</div>
@@ -174,7 +190,7 @@ export function InterviewChat({
 					{sending && (
 						<div className="flex justify-start">
 							<div
-								className="flex items-center gap-1 rounded-lg px-4 py-3"
+								className="flex items-center gap-1 rounded-2xl px-4 py-3"
 								style={{ backgroundColor: "#F1F5F9", border: "1px solid #E2E8F0" }}
 							>
 								<span className="animate-bounce text-xs" style={{ color: "#94A3B8", animationDelay: "0ms" }}>●</span>
@@ -186,7 +202,7 @@ export function InterviewChat({
 
 					{error && (
 						<div className="flex justify-center">
-							<span className="rounded-md px-3 py-1 text-xs" style={{ backgroundColor: "#FEF2F2", color: "#DC2626" }}>
+							<span className="rounded-md px-3 py-1.5 text-xs" style={{ backgroundColor: "#FEF2F2", color: "#DC2626" }}>
 								{error}
 							</span>
 						</div>
@@ -196,32 +212,33 @@ export function InterviewChat({
 				</div>
 			</div>
 
-			{/* Input */}
-			<div className="border-t px-6 py-4" style={{ borderColor: "#E2E8F0" }}>
-				<div className="mx-auto flex max-w-2xl items-center gap-3">
-				<input
-					ref={inputRef}
-					type="text"
-					value={input}
-					onChange={(e) => setInput(e.target.value)}
-					onKeyDown={handleKeyDown}
-					placeholder="Escribe tu respuesta..."
-					disabled={sending}
-					className="flex-1 rounded-lg border px-4 py-3 text-sm outline-none transition-colors focus:border-[#3B8FE8] focus:bg-[#EFF6FF] focus:ring-1 focus:ring-[#3B8FE8]/30"
-					style={{
-						backgroundColor: "#F1F5F9",
-						borderColor: "#E2E8F0",
-						color: "#0A1428",
-						minHeight: "44px",
-					}}
-				/>
+			{/* Input — sticky bottom with safe area */}
+			<div className="border-t px-3 py-3 sm:px-6 sm:py-4 pb-safe" style={{ borderColor: "#E2E8F0", backgroundColor: "#FFFFFF" }}>
+				<div className="mx-auto flex max-w-2xl items-center gap-2 sm:gap-3">
+					<input
+						ref={inputRef}
+						type="text"
+						enterKeyHint="send"
+						value={input}
+						onChange={(e) => setInput(e.target.value)}
+						onKeyDown={handleKeyDown}
+						placeholder="Escribe tu respuesta..."
+						disabled={sending}
+						className="flex-1 rounded-xl border px-4 py-3 text-[16px] sm:text-sm outline-none transition-colors focus:border-[#3B8FE8] focus:bg-[#EFF6FF] focus:ring-1 focus:ring-[#3B8FE8]/30"
+						style={{
+							backgroundColor: "#F1F5F9",
+							borderColor: "#E2E8F0",
+							color: "#0A1428",
+							minHeight: "48px",
+						}}
+					/>
 					<button
 						onClick={handleSend}
 						disabled={!input.trim() || sending}
-						className="flex items-center justify-center rounded-lg px-5 text-white transition-colors disabled:opacity-50"
-						style={{ backgroundColor: "#3B8FE8", minHeight: "44px" }}
+						className="flex items-center justify-center rounded-xl px-5 text-white transition-colors disabled:opacity-50 active:scale-95"
+						style={{ backgroundColor: "#3B8FE8", minHeight: "48px", minWidth: "48px" }}
 					>
-						<SendIcon className="size-4" />
+						<SendIcon className="size-5" />
 					</button>
 				</div>
 			</div>

@@ -251,18 +251,18 @@ export function EvaluacionRunner({
 
   return (
     <div ref={containerRef} className="mx-auto max-w-3xl px-4">
-      {/* Progress bar */}
-      <div className="mb-8">
+      {/* Progress bar — visible on mobile */}
+      <div className="mb-6 md:mb-8">
         <div className="mb-2 flex items-center justify-between">
-          <span className="text-xs" style={{ color: "#94A3B8" }}>
+          <span className="text-xs font-medium" style={{ color: "#94A3B8" }}>
             {t('decisionOf', { current: currentIndex + 1, total })}
           </span>
-          <span className="text-xs" style={{ color: "#64748B" }}>
+          <span className="text-xs font-medium tabular-nums" style={{ color: "#64748B" }}>
             {Math.round(((currentIndex + 1) / total) * 100)}%
           </span>
         </div>
         <div
-          className="h-0.5 w-full overflow-hidden rounded-full"
+          className="h-1.5 md:h-1 w-full overflow-hidden rounded-full"
           style={{ backgroundColor: "#1E293B" }}
         >
           <div
@@ -322,18 +322,18 @@ export function EvaluacionRunner({
             )}
           </div>
 
-          {/* Option cards */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {/* Option cards — large touch targets for mobile */}
+          <div className="grid grid-cols-1 gap-3 md:gap-4">
             {options.map((option, idx) => (
               <button
                 type="button"
                 key={idx}
                 onClick={() => handleOptionClick(idx)}
                 disabled={submitting}
-                className="sim-option-card group rounded-xl p-6 text-left transition-all duration-200 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                className="sim-option-card group rounded-xl min-h-[56px] p-4 md:p-6 text-left transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A1428] disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.98]"
                 style={{
                   backgroundColor: "#111827",
-                  borderWidth: "1px",
+                  borderWidth: "1.5px",
                   borderStyle: "solid",
                   borderColor: "#1E293B",
                 }}
@@ -347,11 +347,11 @@ export function EvaluacionRunner({
                   e.currentTarget.style.boxShadow = "none";
                 }}
               >
-                <div className="mb-3 flex items-center gap-3">
+                <div className="mb-2 md:mb-3 flex items-center gap-3">
                   <span
-                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold transition-colors"
+                    className="flex h-8 w-8 md:h-7 md:w-7 shrink-0 items-center justify-center rounded-full text-sm md:text-xs font-bold transition-colors"
                     style={{
-                      borderWidth: "1.5px",
+                      borderWidth: "2px",
                       borderStyle: "solid",
                       borderColor: "#334155",
                       color: "#94A3B8",
@@ -360,14 +360,14 @@ export function EvaluacionRunner({
                     {String.fromCharCode(65 + idx)}
                   </span>
                   <span
-                    className="text-base font-medium"
+                    className="text-base md:text-base font-semibold"
                     style={{ color: "#F1F5F9" }}
                   >
                     {option.label}
                   </span>
                 </div>
                 <p
-                  className="text-sm leading-relaxed"
+                  className="text-sm md:text-sm leading-relaxed pl-11 md:pl-10"
                   style={{ color: "#94A3B8" }}
                 >
                   {option.description}

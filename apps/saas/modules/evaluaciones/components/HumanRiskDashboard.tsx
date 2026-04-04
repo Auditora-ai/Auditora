@@ -57,7 +57,7 @@ export function HumanRiskDashboard({
           variant="secondary"
           size="sm"
           disabled
-          title="Próximamente"
+          title={t("comingSoon")}
           className="self-start sm:self-auto opacity-60 cursor-not-allowed"
         >
           <FileDownIcon className="mr-2 h-4 w-4" />

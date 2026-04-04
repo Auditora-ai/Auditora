@@ -15,6 +15,8 @@ export interface ScanResult {
   summary: string;
   processes: ScanProcess[];
   highestRiskProcess: ScanHighRiskProcess;
+  /** SIPOC map inferred from the scan — may be absent on older results */
+  sipoc?: ScanSipoc;
 }
 
 export interface ScanProcess {
@@ -33,4 +35,13 @@ export interface ScanRisk {
 export interface ScanHighRiskProcess {
   name: string;
   risks: ScanRisk[];
+}
+
+/** SIPOC map data for the highest-risk process */
+export interface ScanSipoc {
+  suppliers: string[];
+  inputs: string[];
+  processSteps: string[];
+  outputs: string[];
+  customers: string[];
 }

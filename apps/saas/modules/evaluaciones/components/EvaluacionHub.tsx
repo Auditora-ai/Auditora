@@ -1,9 +1,10 @@
 "use client";
 
 import { EmptyState } from "@shared/components/EmptyState";
-import { GraduationCapIcon, UserIcon } from "lucide-react";
+import { GraduationCapIcon, UserIcon, AlertTriangleIcon, CheckCircle2Icon, PlayCircleIcon } from "lucide-react";
 import { cn } from "@repo/ui";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 type EvaluacionTemplateStatus = "GENERATING" | "GENERATION_FAILED" | "DRAFT" | "PUBLISHED" | "ARCHIVED";
 type EvaluacionTargetRole = "DIRECTOR_OPERACIONES" | "DIRECTOR_COMPRAS" | "DIRECTOR_CALIDAD" | "DIRECTOR_FINANZAS" | "DIRECTOR_LOGISTICA" | "GERENTE_PLANTA" | "CONTROLLER" | "CEO" | "CUSTOM";
@@ -38,18 +39,6 @@ interface EvaluacionHubProps {
 	organizationSlug: string;
 }
 
-const roleLabels: Record<EvaluacionTargetRole, string> = {
-	DIRECTOR_OPERACIONES: "Dir. Operaciones",
-	DIRECTOR_COMPRAS: "Dir. Compras",
-	DIRECTOR_CALIDAD: "Dir. Calidad",
-	DIRECTOR_FINANZAS: "Dir. Finanzas",
-	DIRECTOR_LOGISTICA: "Dir. Logística",
-	GERENTE_PLANTA: "Ger. Planta",
-	CONTROLLER: "Controller",
-	CEO: "CEO",
-	CUSTOM: "Personalizado",
-};
-
 function scoreColor(score: number | null): string {
 	if (score === null) return "text-muted-foreground";
 	if (score >= 75) return "text-emerald-400";
@@ -57,16 +46,25 @@ function scoreColor(score: number | null): string {
 	return "text-red-400";
 }
 
+function riskIndicator(avgScore: number | null): { label: string; color: string; bg: string } {
+	if (avgScore === null) return { label: "—", color: "text-muted-foreground", bg: "bg-muted/50" };
+	if (avgScore >= 75) return { label: "LOW", color: "text-emerald-400", bg: "bg-emerald-500/10" };
+	if (avgScore >= 50) return { label: "MED", color: "text-amber-400", bg: "bg-amber-500/10" };
+	return { label: "HIGH", color: "text-red-400", bg: "bg-red-500/10" };
+}
+
 export function EvaluacionHub({ templates, recentRuns, organizationSlug }: EvaluacionHubProps) {
+	const t = useTranslations("evaluaciones.hub");
+
 	if (templates.length === 0) {
 		return (
 			<EmptyState
 				icon={GraduationCapIcon}
-			title="Sin evaluaciones creadas"
-			description="Las evaluaciones se generan a partir de tus procesos y riesgos documentados. Primero mapea un proceso y detecta sus riesgos."
+				title={t("emptyTitle")}
+				description={t("emptyDescription")}
 				actions={[
 					{
-						label: "Ir a Procesos",
+						label: t("goToProcesses"),
 						href: `/${organizationSlug}/procesos`,
 						variant: "primary",
 					},
@@ -76,12 +74,12 @@ export function EvaluacionHub({ templates, recentRuns, organizationSlug }: Evalu
 	}
 
 	const totalRuns = templates.reduce(
-		(acc, t) => acc + t.scenarios.reduce((s, sc) => s + sc.runs.length, 0),
+		(acc, tpl) => acc + tpl.scenarios.reduce((s, sc) => s + sc.runs.length, 0),
 		0,
 	);
 	const completedRuns = templates.reduce(
-		(acc, t) =>
-			acc + t.scenarios.reduce(
+		(acc, tpl) =>
+			acc + tpl.scenarios.reduce(
 				(s, sc) => s + sc.runs.filter((r) => r.status === "COMPLETED").length,
 				0,
 			),
@@ -91,9 +89,9 @@ export function EvaluacionHub({ templates, recentRuns, organizationSlug }: Evalu
 		completedRuns > 0
 			? Math.round(
 					templates.reduce(
-						(acc, t) =>
+						(acc, tpl) =>
 							acc +
-							t.scenarios.reduce(
+							tpl.scenarios.reduce(
 								(s, sc) =>
 									s +
 									sc.runs
@@ -111,72 +109,124 @@ export function EvaluacionHub({ templates, recentRuns, organizationSlug }: Evalu
 			{/* Stats row — 3 columns, compact on mobile */}
 			<div className="grid grid-cols-3 gap-2 md:gap-4" role="list">
 			<div className="rounded-2xl border border-border/50 bg-card p-4 md:p-4">
-				<p className="text-[10px] md:text-xs text-muted-foreground">Evaluaciones</p>
+				<p className="text-[10px] md:text-xs text-muted-foreground">{t("evaluations")}</p>
 				<p className="mt-0.5 text-xl md:text-2xl font-semibold text-foreground">{templates.length}</p>
 			</div>
 			<div className="rounded-2xl border border-border/50 bg-card p-4 md:p-4">
-				<p className="text-[10px] md:text-xs text-muted-foreground truncate">Completadas</p>
+				<p className="text-[10px] md:text-xs text-muted-foreground truncate">{t("completed")}</p>
 				<p className="mt-0.5 text-xl md:text-2xl font-semibold text-foreground">{completedRuns}</p>
 			</div>
 			<div className="rounded-2xl border border-border/50 bg-card p-4 md:p-4">
-					<p className="text-[10px] md:text-xs text-muted-foreground">Score prom.</p>
+					<p className="text-[10px] md:text-xs text-muted-foreground">{t("avgScore")}</p>
 				<p className={cn("mt-0.5 text-xl md:text-2xl font-semibold tabular-nums", scoreColor(avgScore))}>
 					{avgScore !== null ? avgScore : "—"}
 				</p>
 				</div>
 			</div>
 
-			{/* Templates list */}
+			{/* Templates — Harvard-case style cards */}
 			<div>
 				<h2 className="mb-3 text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider">
-					Catálogo de evaluaciones
+					{t("catalog")}
 				</h2>
 				<div className="grid gap-3">
 					{templates.map((template) => {
+						const scenarioCount = template.scenarios.length;
 						const runCount = template.scenarios.reduce((s, sc) => s + sc.runs.length, 0);
+						const completedCount = template.scenarios.reduce(
+							(s, sc) => s + sc.runs.filter((r) => r.status === "COMPLETED").length,
+							0,
+						);
+						const templateAvg = completedCount > 0
+							? Math.round(
+								template.scenarios.reduce(
+									(s, sc) => s + sc.runs.filter((r) => r.overallScore !== null).reduce((sum, r) => sum + (r.overallScore ?? 0), 0),
+									0,
+								) / completedCount
+							)
+							: null;
+						const completionRate = runCount > 0 ? Math.round((completedCount / runCount) * 100) : 0;
+						const risk = riskIndicator(templateAvg);
 						const roleName = template.targetRole === "CUSTOM"
-							? template.customRoleName ?? "Personalizado"
-							: roleLabels[template.targetRole];
+							? template.customRoleName ?? t("customRole")
+							: t(`roleLabels.${template.targetRole}`);
 
 						return (
 							<Link
 								key={template.id}
 								href={`/${organizationSlug}/evaluaciones/${template.id}`}
-								className="group flex items-center justify-between rounded-2xl border border-border/50 bg-card p-4 md:p-4 transition-all hover:border-border hover:bg-accent/30 active:bg-accent/50 active:scale-[0.99] min-h-[64px]"
+								className="group block rounded-2xl border border-border/50 bg-card p-4 md:p-5 transition-all hover:border-border hover:bg-accent/30 active:bg-accent/50 active:scale-[0.99]"
 							>
-								<div className="flex items-start gap-2.5 md:gap-3 min-w-0 flex-1">
-									<div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted/50">
-										<GraduationCapIcon className="h-4 w-4 text-muted-foreground" />
-									</div>
+								{/* Top: Title + Status */}
+								<div className="flex items-start justify-between gap-2 mb-2">
 									<div className="min-w-0 flex-1">
-										<span className="font-medium text-sm text-foreground block truncate">
+										<h3 className="font-semibold text-sm md:text-base text-foreground truncate">
 											{template.title}
+										</h3>
+										<p className="text-xs text-muted-foreground mt-0.5 truncate">
+											{template.processDefinition.name} · {roleName}
+										</p>
+									</div>
+									<span className={cn(
+										"inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium shrink-0",
+										template.status === "PUBLISHED" && "bg-emerald-500/20 text-emerald-400",
+										template.status === "DRAFT" && "bg-slate-500/20 text-slate-400",
+										template.status === "GENERATING" && "bg-blue-500/20 text-blue-400",
+										template.status === "GENERATION_FAILED" && "bg-red-500/20 text-red-400",
+										template.status === "ARCHIVED" && "bg-slate-500/20 text-slate-500",
+									)}>
+										{template.status === "PUBLISHED" ? t("statusActive")
+											: template.status === "GENERATING" ? "…"
+											: template.status === "GENERATION_FAILED" ? "Error"
+											: template.status === "ARCHIVED" ? "Archived"
+											: t("statusDraft")}
+									</span>
+								</div>
+
+								{/* Middle: Key metrics row */}
+								<div className="flex items-center gap-3 md:gap-4 mt-3 flex-wrap">
+									{/* Risk level badge */}
+									<div className={cn("flex items-center gap-1 rounded-md px-2 py-1 text-[10px] md:text-xs font-semibold", risk.bg, risk.color)}>
+										<AlertTriangleIcon className="size-3" />
+										{risk.label}
+									</div>
+
+									{/* Scenario count */}
+									<div className="flex items-center gap-1 text-[10px] md:text-xs text-muted-foreground">
+										<PlayCircleIcon className="size-3" />
+										<span>{t("scenarioCount", { count: scenarioCount })}</span>
+									</div>
+
+									{/* Completion rate */}
+									{runCount > 0 && (
+										<div className="flex items-center gap-1 text-[10px] md:text-xs text-muted-foreground">
+											<CheckCircle2Icon className="size-3" />
+											<span>{completionRate}%</span>
+										</div>
+									)}
+
+									{/* Avg score */}
+									{templateAvg !== null && (
+										<span className={cn("text-xs md:text-sm font-semibold tabular-nums ml-auto", scoreColor(templateAvg))}>
+											{templateAvg}
 										</span>
-										<div className="mt-0.5 flex items-center gap-1.5 md:gap-2 text-xs text-muted-foreground flex-wrap">
-											<span className="truncate max-w-[120px] md:max-w-none">{template.processDefinition.name}</span>
-											<span className="hidden md:inline">·</span>
-											<span className="hidden md:inline">{roleName}</span>
-											<span>·</span>
-											<span className="whitespace-nowrap">{runCount} eval.</span>
+									)}
+								</div>
+
+								{/* Bottom: Progress bar (completion) */}
+								{runCount > 0 && (
+									<div className="mt-3">
+										<div className="h-1 w-full rounded-full bg-muted/50 overflow-hidden">
+											<div
+												className={cn(
+													"h-full rounded-full transition-all duration-500",
+													completionRate >= 75 ? "bg-emerald-500" : completionRate >= 40 ? "bg-amber-500" : "bg-red-500"
+												)}
+												style={{ width: `${completionRate}%` }}
+											/>
 										</div>
 									</div>
-								</div>
-								<div className="flex items-center gap-2 shrink-0 ml-2">
-							<span className={cn(
-								"inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium",
-								template.status === "PUBLISHED" && "bg-emerald-500/20 text-emerald-400",
-								template.status === "DRAFT" && "bg-slate-500/20 text-slate-400",
-								template.status === "GENERATING" && "bg-blue-500/20 text-blue-400",
-								template.status === "GENERATION_FAILED" && "bg-red-500/20 text-red-400",
-								template.status === "ARCHIVED" && "bg-slate-500/20 text-slate-500",
-							)}>
-								{template.status === "PUBLISHED" ? "Activa"
-									: template.status === "GENERATING" ? "Generando…"
-									: template.status === "GENERATION_FAILED" ? "Error"
-									: template.status === "ARCHIVED" ? "Archivada"
-									: "Borrador"}
-							</span>
-								</div>
+								)}
 							</Link>
 						);
 					})}
@@ -187,7 +237,7 @@ export function EvaluacionHub({ templates, recentRuns, organizationSlug }: Evalu
 			{recentRuns.length > 0 && (
 				<div>
 					<h2 className="mb-3 text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider">
-						Evaluaciones recientes
+						{t("recentRuns")}
 					</h2>
 					<div className="grid gap-2">
 						{recentRuns.map((run) => (
@@ -207,9 +257,9 @@ export function EvaluacionHub({ templates, recentRuns, organizationSlug }: Evalu
 									</div>
 								</div>
 								<div className="flex items-center gap-2 md:gap-3 shrink-0 ml-2">
-							<span className={cn("text-sm font-medium", scoreColor(run.overallScore))} style={{ fontVariantNumeric: "tabular-nums" }}>
-								{run.overallScore !== null ? run.overallScore : "—"}
-							</span>
+						<span className={cn("text-sm font-medium", scoreColor(run.overallScore))} style={{ fontVariantNumeric: "tabular-nums" }}>
+							{run.overallScore !== null ? run.overallScore : "—"}
+						</span>
 									<span className={cn(
 										"inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium",
 										run.status === "COMPLETED"
@@ -218,7 +268,7 @@ export function EvaluacionHub({ templates, recentRuns, organizationSlug }: Evalu
 												? "bg-blue-500/20 text-blue-400"
 												: "bg-slate-500/20 text-slate-400",
 									)}>
-										{run.status === "COMPLETED" ? "Ok" : run.status === "IN_PROGRESS" ? "En curso" : "—"}
+										{run.status === "COMPLETED" ? t("statusCompleted") : run.status === "IN_PROGRESS" ? t("statusInProgress") : "—"}
 									</span>
 								</div>
 							</div>

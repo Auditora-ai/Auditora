@@ -1052,21 +1052,27 @@
     "pastSessions": "Sesiones anteriores",
     "scan": {
       "title": "Scan Rápido",
-      "description": "Pega una URL y en 60s detectamos procesos y riesgos",
+      "description": "Pega una URL y en 60 segundos obtén un mapa SIPOC de procesos críticos con evaluación de riesgos (FMEA). Sin registro.",
       "cta": "Iniciar Scan",
-      "badge": "Gratis"
+      "badge": "Gratis",
+      "methodology": "SIPOC + FMEA",
+      "output": "Mapa de procesos • Evaluación de riesgos • Score de vulnerabilidad"
     },
     "interview": {
       "title": "Entrevista IA",
-      "description": "Un asistente te guía paso a paso para documentar tu proceso por chat",
+      "description": "La IA te guía con preguntas tipo SIPOC (Proveedores → Entradas → Proceso → Salidas → Clientes) y genera un diagrama BPMN 2.0 + procedimiento SOP.",
       "cta": "Iniciar Entrevista",
-      "badge": "Recomendado"
+      "badge": "Recomendado",
+      "methodology": "SIPOC → BPMN 2.0",
+      "output": "Diagrama BPMN • Procedimiento SOP • Riesgos identificados"
     },
     "live": {
       "title": "Sesión en Vivo",
-      "description": "Un bot se une a tu videollamada y genera el diagrama BPMN en tiempo real",
+      "description": "Un bot de IA se une a tu videollamada, escucha la conversación y construye el diagrama BPMN en tiempo real. Experiencia tipo caso Harvard.",
       "cta": "Nueva Sesión",
-      "badge": "Premium"
+      "badge": "Premium",
+      "methodology": "BPMN en vivo",
+      "output": "Diagrama BPMN • Transcripción • Riesgos detectados"
     }
   },
   "sessions": {
@@ -2037,6 +2043,7 @@
       "catalog": "Catálogo de evaluaciones",
       "customRole": "Personalizado",
       "evalCount": "{count} eval.",
+      "scenarioCount": "{count} escenarios",
       "statusActive": "Activa",
       "statusDraft": "Borrador",
       "recentRuns": "Evaluaciones recientes",
@@ -2062,7 +2069,10 @@
     },
     "intro": {
       "label": "Evaluación",
-      "startButton": "Comenzar Evaluación"
+      "startButton": "Comenzar Evaluación",
+      "yourRole": "Tu rol: {role}",
+      "decisionCount": "{count} decisiones",
+      "stakesMessage": "Tus decisiones serán evaluadas contra el procedimiento real de tu organización."
     },
     "runPage": {
       "label": "Evaluación",
@@ -2106,12 +2116,15 @@
       "riskLevel": "Nivel de Riesgo",
       "simulations": "Simulaciones",
       "memberDetail": "Detalle por Miembro",
+      "teamDetail": "Detalle por Miembro del Equipo",
       "member": "Miembro",
       "score": "Puntaje",
+      "evaluations": "evaluaciones",
       "strengths": "Fortalezas",
       "riskAreas": "Áreas de riesgo",
       "updated": "Actualizado",
-      "avgScoreLabel": "Puntaje Promedio"
+      "avgScoreLabel": "Puntaje Promedio",
+      "comingSoon": "Próximamente"
     },
     "progress": {
       "title": "Progreso y Mejora",

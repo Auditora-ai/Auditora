@@ -1,7 +1,7 @@
 import { getActiveOrganization } from "@auth/lib/server";
 import { PageHeader } from "@shared/components/PageHeader";
 import { Button, Card, CardContent, CardFooter, CardHeader, CardTitle } from "@repo/ui";
-import { Globe, MessageSquare, Sparkles, Video, ArrowRight } from "lucide-react";
+import { Globe, MessageSquare, Sparkles, Video, ArrowRight, Zap } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -38,6 +38,7 @@ export default async function DescubrirPage({
 			iconColor: "text-emerald-400",
 			borderHover: "hover:border-emerald-500/30",
 			glowColor: "hover:shadow-emerald-500/5",
+			methodologyColor: "text-emerald-400/80 bg-emerald-500/5 border-emerald-500/15",
 		},
 		{
 			key: "interview" as const,
@@ -50,6 +51,7 @@ export default async function DescubrirPage({
 			iconColor: "text-blue-400",
 			borderHover: "hover:border-blue-500/30",
 			glowColor: "hover:shadow-blue-500/5",
+			methodologyColor: "text-blue-400/80 bg-blue-500/5 border-blue-500/15",
 		},
 		{
 			key: "live" as const,
@@ -61,6 +63,7 @@ export default async function DescubrirPage({
 			iconColor: "text-amber-400",
 			borderHover: "hover:border-amber-500/30",
 			glowColor: "hover:shadow-amber-500/5",
+			methodologyColor: "text-amber-400/80 bg-amber-500/5 border-amber-500/15",
 		},
 	];
 
@@ -97,18 +100,28 @@ export default async function DescubrirPage({
 											<Icon className={`h-5 w-5 ${channel.iconColor}`} />
 										)}
 									</div>
-									<span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${channel.badgeClass}`}>
-										{channel.badgeText}
-									</span>
+									<div className="flex items-center gap-1.5">
+										<span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider ${channel.methodologyColor}`}>
+											<Zap className="mr-0.5 h-2.5 w-2.5" />
+											{t(`${channel.key}.methodology`)}
+										</span>
+										<span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${channel.badgeClass}`}>
+											{channel.badgeText}
+										</span>
+									</div>
 								</div>
 								<CardTitle className="mt-3 md:mt-4 text-base font-semibold text-slate-50">
 									{t(`${channel.key}.title`)}
 								</CardTitle>
 							</CardHeader>
 
-							<CardContent className="pb-3 md:pb-4 px-4 md:px-6">
+							<CardContent className="pb-3 md:pb-4 px-4 md:px-6 space-y-3">
 								<p className="text-sm leading-relaxed text-slate-400">
 									{t(`${channel.key}.description`)}
+								</p>
+								{/* Output deliverables */}
+								<p className="text-[11px] font-medium tracking-wide text-slate-500 uppercase">
+									{t(`${channel.key}.output`)}
 								</p>
 							</CardContent>
 

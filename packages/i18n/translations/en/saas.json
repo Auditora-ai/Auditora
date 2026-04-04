@@ -1052,21 +1052,27 @@
     "pastSessions": "Past sessions",
     "scan": {
       "title": "Quick Scan",
-      "description": "Paste a URL and in 60 seconds we detect processes and risks",
+      "description": "Paste a URL and in 60 seconds get a SIPOC process map with risk assessment (FMEA). No sign-up required.",
       "cta": "Start Scan",
-      "badge": "Free"
+      "badge": "Free",
+      "methodology": "SIPOC + FMEA",
+      "output": "Process map • Risk assessment • Vulnerability score"
     },
     "interview": {
       "title": "AI Interview",
-      "description": "An assistant guides you step by step to document your process via chat",
+      "description": "AI guides you with SIPOC-style questions (Suppliers → Inputs → Process → Outputs → Customers) and generates a BPMN 2.0 diagram + SOP procedure.",
       "cta": "Start Interview",
-      "badge": "Recommended"
+      "badge": "Recommended",
+      "methodology": "SIPOC → BPMN 2.0",
+      "output": "BPMN diagram • SOP procedure • Identified risks"
     },
     "live": {
       "title": "Live Session",
-      "description": "A bot joins your video call and generates the BPMN diagram in real time",
+      "description": "An AI bot joins your video call, listens to the conversation and builds the BPMN diagram in real time. Harvard-case style experience.",
       "cta": "New Session",
-      "badge": "Premium"
+      "badge": "Premium",
+      "methodology": "Live BPMN",
+      "output": "BPMN diagram • Transcript • Detected risks"
     }
   },
   "sessions": {
@@ -2037,6 +2043,7 @@
       "catalog": "Evaluation catalog",
       "customRole": "Custom",
       "evalCount": "{count} eval.",
+      "scenarioCount": "{count} scenarios",
       "statusActive": "Active",
       "statusDraft": "Draft",
       "recentRuns": "Recent evaluations",
@@ -2062,7 +2069,10 @@
     },
     "intro": {
       "label": "Evaluation",
-      "startButton": "Start Evaluation"
+      "startButton": "Start Evaluation",
+      "yourRole": "Your role: {role}",
+      "decisionCount": "{count} decisions",
+      "stakesMessage": "Your decisions will be evaluated against your organization's actual procedure."
     },
     "runPage": {
       "label": "Evaluation",
@@ -2106,12 +2116,15 @@
       "riskLevel": "Risk Level",
       "simulations": "Simulations",
       "memberDetail": "Member Detail",
+      "teamDetail": "Team Member Detail",
       "member": "Member",
       "score": "Score",
+      "evaluations": "evaluations",
       "strengths": "Strengths",
       "riskAreas": "Risk areas",
       "updated": "Updated",
-      "avgScoreLabel": "Average Score"
+      "avgScoreLabel": "Average Score",
+      "comingSoon": "Coming soon"
     },
     "progress": {
       "title": "Progress & Improvement",
