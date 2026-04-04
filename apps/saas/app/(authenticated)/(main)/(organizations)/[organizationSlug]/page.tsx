@@ -1,11 +1,11 @@
 import { getActiveOrganization } from "@auth/lib/server";
-import {
-	RiskDashboard,
-	type TopRisk,
-	type ActivityItem,
-	type VulnerableProcess,
-	type NextStepRecommendation,
-} from "@command-center/components/RiskDashboard";
+import { HomePage } from "@/modules/home";
+import type {
+	TopRisk,
+	ActivityItem,
+	VulnerableProcess,
+	NextStepRecommendation,
+} from "@/modules/home/types";
 import { db } from "@repo/database";
 import { fetchHumanRiskDashboardData } from "@evaluaciones/lib/dashboard-queries";
 import { notFound } from "next/navigation";
@@ -231,46 +231,44 @@ export default async function OrganizationPage({
 	});
 
 	return (
-		<div className="h-[calc(100vh-56px)] md:h-[calc(100vh-64px)]">
-			<RiskDashboard
-				organizationId={orgId}
-				organizationName={activeOrganization.name}
-				organizationSlug={organizationSlug}
-				maturityScore={maturityScore}
-				topRisks={topRisks}
-				nextSession={
-					nextSession
-						? {
-								id: nextSession.id,
-								scheduledFor:
-									nextSession.scheduledFor!.toISOString(),
-								processName:
-									nextSession.processDefinition?.name ?? null,
-								status: nextSession.status,
-							}
-						: null
-				}
-				recentActivity={allActivity}
-				processCount={totalProcesses}
-				documentedCount={documentedProcesses}
-				riskCount={riskCount}
-				hasActiveSession={!!activeSession}
-				evaluaciones={
-					evaluacionesData && !evaluacionesData.insufficientData
-						? {
-								orgAvgScore: evaluacionesData.orgAvgScore,
-								totalSimulations: evaluacionesData.totalSimulations,
-								membersEvaluated: evaluacionesData.membersEvaluated,
-								completionRate: evaluacionesData.completionRate,
-								dimensionAverages: evaluacionesData.dimensionAverages,
-								scoreTrend: evaluacionesData.scoreTrend,
-							}
-						: null
-				}
-				vulnerableProcesses={vulnerableProcesses}
-				nextSteps={nextSteps}
-			/>
-		</div>
+		<HomePage
+			organizationId={orgId}
+			organizationName={activeOrganization.name}
+			organizationSlug={organizationSlug}
+			maturityScore={maturityScore}
+			topRisks={topRisks}
+			nextSession={
+				nextSession
+					? {
+							id: nextSession.id,
+							scheduledFor:
+								nextSession.scheduledFor!.toISOString(),
+							processName:
+								nextSession.processDefinition?.name ?? null,
+							status: nextSession.status,
+						}
+					: null
+			}
+			recentActivity={allActivity}
+			processCount={totalProcesses}
+			documentedCount={documentedProcesses}
+			riskCount={riskCount}
+			hasActiveSession={!!activeSession}
+			evaluaciones={
+				evaluacionesData && !evaluacionesData.insufficientData
+					? {
+							orgAvgScore: evaluacionesData.orgAvgScore,
+							totalSimulations: evaluacionesData.totalSimulations,
+							membersEvaluated: evaluacionesData.membersEvaluated,
+							completionRate: evaluacionesData.completionRate,
+							dimensionAverages: evaluacionesData.dimensionAverages,
+							scoreTrend: evaluacionesData.scoreTrend,
+						}
+					: null
+			}
+			vulnerableProcesses={vulnerableProcesses}
+			nextSteps={nextSteps}
+		/>
 	);
 }
 

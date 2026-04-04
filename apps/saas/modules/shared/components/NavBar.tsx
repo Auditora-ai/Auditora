@@ -15,6 +15,7 @@ import { NotificationBell } from "@notifications/components/NotificationBell";
 import { UserMenu } from "@shared/components/UserMenu";
 import { useNavData } from "@shared/hooks/use-nav-data";
 import {
+	BarChart3Icon,
 	CompassIcon,
 	GraduationCapIcon,
 	LayoutDashboardIcon,
@@ -103,13 +104,23 @@ export function NavBar() {
 	const hasEvaluation = !!navData && navData.maturityScore >= 40;
 
 	const menuItems: NavItem[] = [
+		// ─── INICIO ───
+		{
+			id: "home",
+			label: t("app.menu.home"),
+			href: basePath,
+			icon: LayoutDashboardIcon,
+			isActive: pathname === basePath || pathname === `${basePath}/`,
+			hidden: !hasOrg,
+			section: "main",
+		},
 		// ─── CAPTURAR ───
 		{
 			id: "descubrir",
 			label: t("app.menu.discover"),
 			href: `${basePath}/descubrir`,
 			icon: CompassIcon,
-			isActive: pathname.startsWith(`${basePath}/descubrir`) || pathname.startsWith(`${basePath}/sessions`) || pathname.startsWith(`${basePath}/session/`),
+			isActive: pathname.startsWith(`${basePath}/descubrir`) || pathname.startsWith(`${basePath}/discovery`) || pathname.startsWith(`${basePath}/capture`) || pathname.startsWith(`${basePath}/sessions`) || pathname.startsWith(`${basePath}/session/`),
 			hidden: !hasOrg,
 			section: "flow",
 			flowStep: 1,
@@ -122,7 +133,7 @@ export function NavBar() {
 			label: t("app.menu.processes"),
 			href: `${basePath}/procesos`,
 			icon: WorkflowIcon,
-			isActive: pathname.startsWith(`${basePath}/processes`) || pathname.startsWith(`${basePath}/procesos`) || pathname.startsWith(`${basePath}/procedures`),
+			isActive: pathname.startsWith(`${basePath}/processes`) || pathname.startsWith(`${basePath}/procesos`) || pathname.startsWith(`${basePath}/process/`) || pathname.startsWith(`${basePath}/procedures`),
 			hidden: !hasOrg,
 			section: "flow",
 			badge: processBadge,
@@ -140,7 +151,7 @@ export function NavBar() {
 			label: t("app.menu.evaluaciones"),
 			href: `${basePath}/evaluaciones`,
 			icon: GraduationCapIcon,
-			isActive: pathname.startsWith(`${basePath}/evaluaciones`),
+			isActive: pathname.startsWith(`${basePath}/evaluaciones`) || pathname.startsWith(`${basePath}/evaluate`),
 			hidden: !hasOrg,
 			section: "flow",
 			flowStep: 3,
@@ -152,8 +163,8 @@ export function NavBar() {
 			id: "panorama",
 			label: t("app.menu.dashboard"),
 			href: `${basePath}/panorama`,
-			icon: LayoutDashboardIcon,
-			isActive: pathname === "/" || pathname === basePath || pathname === `${basePath}/panorama`,
+			icon: BarChart3Icon,
+			isActive: pathname === `${basePath}/panorama`,
 			section: "flow",
 			flowStep: 4,
 			flowCompleted: hasEvaluation,
@@ -171,6 +182,9 @@ export function NavBar() {
 		},
 	];
 
+	const mainItems = menuItems.filter(
+		(i) => i.section === "main" && !i.hidden,
+	);
 	const flowItems = menuItems.filter(
 		(i) => i.section === "flow" && !i.hidden,
 	);
@@ -502,13 +516,20 @@ export function NavBar() {
 					</div>
 				)}
 
-				{/* Flow section — consulting workflow */}
-				<TooltipProvider delayDuration={0}>
-				{flowItems.length > 0 && (
-					<ul className="flex flex-col gap-0.5">
-						{flowItems.map((item, i, arr) => renderFlowItem(item, i, arr))}
-					</ul>
-				)}
+			{/* Main section — Home */}
+			{mainItems.length > 0 && (
+				<ul className="flex flex-col gap-0.5 mb-2">
+					{mainItems.map(renderNavItem)}
+				</ul>
+			)}
+
+			{/* Flow section — consulting workflow */}
+			<TooltipProvider delayDuration={0}>
+			{flowItems.length > 0 && (
+				<ul className="flex flex-col gap-0.5">
+					{flowItems.map((item, i, arr) => renderFlowItem(item, i, arr))}
+				</ul>
+			)}
 
 			</TooltipProvider>
 

@@ -1,0 +1,299 @@
+{
+  "_description": "Complete summary of all data-fetching code in the evaluaciones module for the PANORAMA dashboard",
+  "_panoramaPageStatus": "The /panorama/page.tsx currently just REDIRECTS to /{organizationSlug}/ — it has NO dashboard. All dashboard data lives in the evaluaciones module at /evaluaciones?tab=dashboard and /evaluaciones?tab=progress",
+
+  "dataSourceFiles": {
+    "dashboardQueries": "modules/evaluaciones/lib/dashboard-queries.ts",
+    "scoreUtils": "modules/evaluaciones/lib/score-utils.ts",
+    "evaluacionesPage": "app/(authenticated)/(main)/(organizations)/[organizationSlug]/evaluaciones/page.tsx"
+  },
+
+  "serverSideFunctions": {
+    "fetchHumanRiskDashboardData": {
+      "file": "modules/evaluaciones/lib/dashboard-queries.ts",
+      "signature": "async (organizationId: string) => Promise<DashboardData>",
+      "description": "Main dashboard query. Fetches HumanRiskProfiles, completed SimulationRuns, and total run count in parallel. Computes all aggregations server-side.",
+      "prismaQueries": [
+        {
+          "model": "humanRiskProfile",
+          "method": "findMany",
+          "filter": "{ organizationId }",
+          "includes": "user { name, email, image }",
+          "orderBy": "overallScore desc"
+        },
+        {
+          "model": "simulationRun",
+          "method": "findMany",
+          "filter": "{ status: COMPLETED, scenario.template.organizationId }",
+          "selects": "overallScore, alignment, riskLevel, criterio, duration, completedAt, errorPatterns, scenario.template.processDefinitionId, scenario.template.title",
+          "orderBy": "completedAt asc"
+        },
+        {
+          "model": "simulationRun",
+          "method": "count",
+          "filter": "{ scenario.template.organizationId }",
+          "description": "Total runs (all statuses) for completion rate calc"
+        }
+      ],
+      "returnType": {
+        "insufficientData": "boolean — true if completedRuns < 3",
+        "orgAvgScore": "number — average of all HumanRiskProfile.overallScore values (0-100)",
+        "totalSimulations": "number — count of COMPLETED SimulationRuns",
+        "membersEvaluated": "number — count of HumanRiskProfile records",
+        "completionRate": "number — percentage (0-100) of completed vs total runs",
+        "avgDurationMinutes": "number — average run duration in minutes",
+        "dimensionAverages": {
+          "alignment": "number 0-100",
+          "riskLevel": "number 0-100",
+          "criterio": "number 0-100"
+        },
+        "scoreTrend": "Array<{ month: string (e.g. 'Ene 2025'), score: number }> — monthly avg overallScore",
+        "processHeatmap": "Array<ProcessHeatmapRow> — per-process dimension averages",
+        "errorPatterns": "Array<{ pattern: string, count: number }> — top 10 most frequent error patterns",
+        "profiles": "Array<ProfileItem> — all user profiles with scores, strengths, risk areas"
+      }
+    },
+
+    "fetchProgressData": {
+      "file": "modules/evaluaciones/lib/dashboard-queries.ts",
+      "signature": "async (organizationId: string) => Promise<ProgressData>",
+      "description": "Before/after progress comparison. Splits completed runs into first-half vs second-half to show improvement over time.",
+      "prismaQueries": [
+        {
+          "model": "simulationRun",
+          "method": "findMany",
+          "filter": "{ status: COMPLETED, scenario.template.organizationId }",
+          "selects": "userId, overallScore, alignment, riskLevel, criterio, completedAt, scenario.template.processDefinitionId, scenario.template.title, user.name, user.email, user.image",
+          "orderBy": "completedAt asc"
+        }
+      ],
+      "returnType": {
+        "insufficientData": "boolean — true if completedRuns < 2",
+        "overallFirst": "PeriodScores — {overall, alignment, riskLevel, criterio, count} for first half of runs",
+        "overallLatest": "PeriodScores — same for second half",
+        "overallDelta": "number — latest.overall - first.overall (positive = improvement)",
+        "processProgress": "Array<ProcessProgress> — per-process first/latest comparison, sorted by delta desc",
+        "memberProgress": "Array<MemberProgress> — per-member first/latest score comparison, sorted by delta desc",
+        "dimensionTrends": "Array<DimensionTrend> — { month, alignment, riskLevel, criterio } monthly averages",
+        "totalMonths": "number — distinct months with data"
+      }
+    },
+
+    "evaluacionesPageQueries": {
+      "file": "app/.../evaluaciones/page.tsx",
+      "description": "Server component that fetches catalog data AND calls both dashboard functions",
+      "queries": [
+        {
+          "model": "simulationTemplate",
+          "method": "findMany",
+          "filter": "{ organizationId, status: [PUBLISHED, DRAFT] }",
+          "includes": "processDefinition.name, scenarios.runs.{status, overallScore}",
+          "orderBy": "updatedAt desc",
+          "usedBy": "EvaluacionHub catalog tab"
+        },
+        {
+          "model": "simulationRun",
+          "method": "findMany",
+          "filter": "{ scenario.template.organizationId }",
+          "includes": "user.{name, image}, scenario.template.{title, targetRole}",
+          "orderBy": "createdAt desc",
+          "take": 10,
+          "usedBy": "EvaluacionHub recent runs list"
+        }
+      ],
+      "calls": [
+        "fetchHumanRiskDashboardData(activeOrganization.id)",
+        "fetchProgressData(activeOrganization.id)"
+      ]
+    }
+  },
+
+  "interfaces": {
+    "DashboardData": {
+      "file": "dashboard-queries.ts:27-39",
+      "fields": {
+        "insufficientData": "boolean",
+        "orgAvgScore": "number",
+        "totalSimulations": "number",
+        "membersEvaluated": "number",
+        "completionRate": "number",
+        "avgDurationMinutes": "number",
+        "dimensionAverages": "{ alignment: number, riskLevel: number, criterio: number }",
+        "scoreTrend": "Array<{ month: string, score: number }>",
+        "processHeatmap": "ProcessHeatmapRow[]",
+        "errorPatterns": "Array<{ pattern: string, count: number }>",
+        "profiles": "ProfileItem[]"
+      }
+    },
+    "ProfileItem": {
+      "file": "dashboard-queries.ts:3-17",
+      "fields": {
+        "id": "string",
+        "userId": "string",
+        "overallScore": "number | null",
+        "totalSimulations": "number",
+        "strengthAreas": "string[] | null",
+        "riskAreas": "string[] | null",
+        "recommendedTraining": "string[] | null",
+        "lastUpdatedAt": "Date",
+        "user": "{ name: string | null, email: string, image: string | null }"
+      }
+    },
+    "ProcessHeatmapRow": {
+      "file": "dashboard-queries.ts:19-25",
+      "fields": {
+        "processName": "string",
+        "avgAlignment": "number 0-100",
+        "avgRiskLevel": "number 0-100",
+        "avgCriterio": "number 0-100",
+        "simulationCount": "number"
+      }
+    },
+    "ProgressData": {
+      "file": "dashboard-queries.ts:260-269",
+      "fields": {
+        "insufficientData": "boolean",
+        "overallFirst": "PeriodScores",
+        "overallLatest": "PeriodScores",
+        "overallDelta": "number",
+        "processProgress": "ProcessProgress[]",
+        "memberProgress": "MemberProgress[]",
+        "dimensionTrends": "DimensionTrend[]",
+        "totalMonths": "number"
+      }
+    },
+    "PeriodScores": {
+      "fields": { "overall": "number", "alignment": "number", "riskLevel": "number", "criterio": "number", "count": "number" }
+    },
+    "ProcessProgress": {
+      "fields": { "processName": "string", "processId": "string", "first": "PeriodScores", "latest": "PeriodScores", "delta": "number", "runCount": "number" }
+    },
+    "MemberProgress": {
+      "fields": { "userId": "string", "userName": "string", "userEmail": "string", "userImage": "string | null", "firstScore": "number", "latestScore": "number", "delta": "number", "totalRuns": "number" }
+    },
+    "DimensionTrend": {
+      "fields": { "month": "string", "alignment": "number", "riskLevel": "number", "criterio": "number" }
+    }
+  },
+
+  "scoreUtils": {
+    "file": "modules/evaluaciones/lib/score-utils.ts",
+    "exports": {
+      "scoreColor": "(score: number | null) => string — Tailwind text color class (>=80 emerald, >=60 amber, <60 red)",
+      "scoreBg": "(score: number | null) => string — Tailwind bg class",
+      "scoreStroke": "(score: number | null) => string — hex color for SVG strokes",
+      "riskLevelColor": "(riskLevel: number | null) => string — INVERTED: <=30 green, <=60 amber, >60 red",
+      "riskLevelBg": "(riskLevel: number | null) => string — INVERTED bg class"
+    }
+  },
+
+  "dashboardComponents": {
+    "HumanRiskDashboard": {
+      "file": "components/HumanRiskDashboard.tsx",
+      "props": "{ data: DashboardData, organizationSlug: string }",
+      "renders": "HeroScoreCard, KpiRow, ScoreDistributionChart, ScoreTrendChart, ProcessHeatmap, ErrorPatternsCard, TeamTable",
+      "emptyState": "Shows EmptyState when data.insufficientData is true"
+    },
+    "ProgressDashboard": {
+      "file": "components/ProgressDashboard.tsx",
+      "props": "{ data: ProgressData, organizationSlug: string }",
+      "renders": "OverallImprovementHero, DimensionComparisonCards, DimensionTrendChart, ProcessProgressTable, MemberProgressTable",
+      "emptyState": "Shows EmptyState when data.insufficientData is true"
+    },
+    "HeroScoreCard": {
+      "file": "components/dashboard/HeroScoreCard.tsx",
+      "props": "{ score: number }",
+      "description": "Large circular gauge showing org average score (0-100) with color-coded SVG ring"
+    },
+    "KpiRow": {
+      "file": "components/dashboard/KpiRow.tsx",
+      "props": "{ totalSimulations: number, membersEvaluated: number, completionRate: number, avgDurationMinutes: number }",
+      "description": "4-card grid of KPI metrics"
+    },
+    "ScoreDistributionChart": {
+      "file": "components/dashboard/ScoreDistributionChart.tsx",
+      "props": "{ dimensionAverages: { alignment: number, riskLevel: number, criterio: number } }",
+      "description": "Horizontal bar chart of 3 dimensions. Note: riskLevel is INVERTED to show as 'Control Level' (100 - riskLevel)"
+    },
+    "ScoreTrendChart": {
+      "file": "components/dashboard/ScoreTrendChart.tsx",
+      "props": "{ scoreTrend: Array<{ month: string, score: number }> }",
+      "description": "Area chart showing score trend over months. Needs >= 2 data points. Reference lines at 80 (green) and 60 (amber)"
+    },
+    "ProcessHeatmap": {
+      "file": "components/dashboard/ProcessHeatmap.tsx",
+      "props": "{ processHeatmap: ProcessHeatmapRow[] }",
+      "description": "Table showing per-process scores across 3 dimensions with color-coded cells. Mobile: card layout. Desktop: table."
+    },
+    "ErrorPatternsCard": {
+      "file": "components/dashboard/ErrorPatternsCard.tsx",
+      "props": "{ errorPatterns: Array<{ pattern: string, count: number }> }",
+      "description": "List of top error patterns with frequency badges"
+    },
+    "TeamTable": {
+      "file": "components/dashboard/TeamTable.tsx",
+      "props": "{ profiles: ProfileItem[] }",
+      "description": "Table of team members with avatar, score, simulation count, strength/risk area tags, last updated date"
+    },
+    "DimensionTrendChart": {
+      "file": "components/dashboard/DimensionTrendChart.tsx",
+      "props": "{ dimensionTrends: DimensionTrend[] }",
+      "description": "Multi-line chart showing alignment, riskLevel, criterio trends by month"
+    }
+  },
+
+  "tabSystem": {
+    "file": "components/EvaluacionesTabs.tsx",
+    "tabs": [
+      { "id": "catalog", "content": "EvaluacionHub (templates + recent runs)" },
+      { "id": "dashboard", "content": "HumanRiskDashboard (uses DashboardData)" },
+      { "id": "progress", "content": "ProgressDashboard (uses ProgressData)" }
+    ],
+    "routing": "URL param ?tab=dashboard or ?tab=progress, default is catalog"
+  },
+
+  "prismaModels": {
+    "SimulationRun": {
+      "table": "simulation_run",
+      "keyFields": {
+        "alignment": "Int? 0-100 — alignment with procedure",
+        "riskLevel": "Int? 0-100 — risk introduced by decisions",
+        "criterio": "Int? 0-100 — quality of judgment",
+        "overallScore": "Int? — Weighted: 0.3*alignment + 0.3*(100-riskLevel) + 0.4*criterio",
+        "errorPatterns": "Json? — Array<string>",
+        "duration": "Int? — total seconds",
+        "completedAt": "DateTime?",
+        "status": "SimulationRunStatus (IN_PROGRESS | COMPLETED | ABANDONED)"
+      }
+    },
+    "HumanRiskProfile": {
+      "table": "human_risk_profile",
+      "keyFields": {
+        "overallScore": "Int? — weighted aggregate across all simulations",
+        "totalSimulations": "Int default 0",
+        "strengthAreas": "Json? — Array<string>",
+        "riskAreas": "Json? — Array<string>",
+        "recommendedTraining": "Json? — Array<string>",
+        "patternsByProcess": "Json? — Array<{ processId, processName, avgAlignment, avgRiskLevel, dominantErrorPattern, simulationCount }>"
+      },
+      "uniqueConstraint": "[userId, organizationId]"
+    },
+    "SimulationTemplate": {
+      "keyFields": {
+        "title": "String",
+        "status": "GENERATING | GENERATION_FAILED | DRAFT | PUBLISHED | ARCHIVED",
+        "targetRole": "enum (DIRECTOR_OPERACIONES, etc.)",
+        "processDefinitionId": "String? — links to ProcessDefinition"
+      }
+    }
+  },
+
+  "howToUsForPanorama": {
+    "step1": "Import fetchHumanRiskDashboardData and fetchProgressData from '@evaluaciones/lib/dashboard-queries'",
+    "step2": "Call both with organizationId (from getActiveOrganization)",
+    "step3": "DashboardData provides: orgAvgScore, totalSimulations, membersEvaluated, completionRate, avgDurationMinutes, dimensionAverages, scoreTrend, processHeatmap, errorPatterns, profiles",
+    "step4": "ProgressData provides: overallFirst/Latest comparison, processProgress, memberProgress, dimensionTrends",
+    "step5": "Existing components can be reused: HeroScoreCard, KpiRow, ScoreDistributionChart, ScoreTrendChart, ProcessHeatmap, ErrorPatternsCard, TeamTable, DimensionTrendChart",
+    "step6": "All score thresholds: >=80 green/good, >=60 amber/medium, <60 red/bad. For riskLevel: INVERTED (<=30 good, <=60 medium, >60 bad)"
+  }
+}

@@ -20,7 +20,8 @@
 			"@command-center/*": ["./modules/command-center/*"],
 			"@scan/*": ["./modules/scan/*"],
 			"@notifications/*": ["./modules/notifications/*"],
-			"@collaboration/*": ["./modules/collaboration/*"]
+			"@collaboration/*": ["./modules/collaboration/*"],
+			"@panorama/*": ["./modules/panorama/*"]
 		}
 	},
 	"include": [

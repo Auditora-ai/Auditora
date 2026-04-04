@@ -1,0 +1,355 @@
+{
+  "_description": "Complete summary of all real data available for the HOME module, extracted from command-center, process-library, and evaluaciones modules. NO mock data needed.",
+  "_lastUpdated": "2026-04-04",
+
+  "serverSideDataSources": {
+    "1_orgHomePage": {
+      "file": "app/(authenticated)/(main)/(organizations)/[organizationSlug]/page.tsx",
+      "description": "The main org-level page.tsx that serves as the HOME view. It performs ALL data fetching server-side via Prisma and passes pre-computed props to the RiskDashboard client component.",
+      "dataFetched": {
+        "processArchitecture": {
+          "query": "db.processArchitecture.findUnique({ where: { organizationId }, select: { id: true } })",
+          "returns": "{ id: string } | null"
+        },
+        "processes": {
+          "query": "db.processDefinition.findMany({ where: { architectureId, level: 'PROCESS' }, select: { id, name, versions: [take:1], risks: [take:1] } })",
+          "returns": "Array<{ id: string; name: string; versions: { id: string }[]; risks: { id: string }[] }>",
+          "derivedMetrics": {
+            "totalProcesses": "processes.length",
+            "documentedProcesses": "processes with at least 1 version",
+            "processesWithRisks": "processes with at least 1 risk"
+          }
+        },
+        "topRisksRaw": {
+          "query": "db.processRisk.findMany({ where: { processDefinition.architectureId, status NOT IN [CLOSED, ACCEPTED] }, orderBy: { riskScore: desc }, take: 5 })",
+          "returns": "Array<{ id, title, description, severity, probability, riskScore, processDefinition: { name } }>"
+        },
+        "nextSession": {
+          "query": "db.meetingSession.findFirst({ where: { orgId, status: SCHEDULED, scheduledFor >= now }, orderBy: { scheduledFor: asc } })",
+          "returns": "{ id, scheduledFor, processDefinition: { name }, status } | null"
+        },
+        "activeSession": {
+          "query": "db.meetingSession.findFirst({ where: { orgId, status IN [ACTIVE, CONNECTING] } })",
+          "returns": "{ id } | null"
+        },
+        "recentSessions": {
+          "query": "db.meetingSession.findMany({ where: { orgId, status: ENDED }, orderBy: { updatedAt: desc }, take: 5 })",
+          "returns": "Array<{ id, updatedAt, processDefinition: { name }, _count: { diagramNodes } }>"
+        },
+        "evaluacionesData": {
+          "function": "fetchHumanRiskDashboardData(orgId)",
+          "source": "@evaluaciones/lib/dashboard-queries",
+          "returns": "DashboardData (see evaluacionesDashboardQueries below)"
+        },
+        "recentEvaluations": {
+          "query": "db.simulationRun.findMany({ where: { status: COMPLETED, scenario.template.organizationId }, orderBy: { completedAt: desc }, take: 5 })",
+          "returns": "Array<{ id, overallScore, completedAt, scenario: { template: { title } } }>"
+        },
+        "riskCount": {
+          "query": "db.processRisk.count({ where: { processDefinition.architectureId } })",
+          "returns": "number"
+        }
+      },
+      "computedServerSide": {
+        "maturityScore": {
+          "formula": "(processDocumentation * 0.25 + riskCoverage * 0.25 + evaluationScore * 0.5) * 100",
+          "type": "number (0-100)"
+        },
+        "topRisks": {
+          "type": "TopRisk[]",
+          "fields": "{ id, title, description, processName, severity, probability, riskScore }"
+        },
+        "allActivity": {
+          "type": "ActivityItem[]",
+          "description": "Merged and sorted recent sessions + evaluations, top 8",
+          "fields": "{ type: 'session_ended' | 'risk_found' | 'process_updated' | 'evaluation_completed', title, subtitle, date }"
+        },
+        "vulnerableProcesses": {
+          "type": "VulnerableProcess[]",
+          "source": "evaluacionesData.processHeatmap sorted by avgAlignment ASC, take 5",
+          "fields": "{ name, avgScore, processId, simulationCount }"
+        },
+        "nextSteps": {
+          "type": "NextStepRecommendation[]",
+          "description": "Data-driven recommendations based on process count, evaluaciones data, and vulnerable processes",
+          "fields": "{ id, message, href, icon: 'scan' | 'evaluate' | 'improve' | 'remind' | 'grow' }",
+          "maxItems": 3
+        }
+      }
+    },
+
+    "2_evaluacionesDashboardQueries": {
+      "file": "modules/evaluaciones/lib/dashboard-queries.ts",
+      "functions": {
+        "fetchHumanRiskDashboardData": {
+          "params": "(organizationId: string)",
+          "returns": "DashboardData",
+          "returnType": {
+            "insufficientData": "boolean (true if < 3 completed runs)",
+            "orgAvgScore": "number (0-100)",
+            "totalSimulations": "number",
+            "membersEvaluated": "number",
+            "completionRate": "number (0-100, percentage)",
+            "avgDurationMinutes": "number",
+            "dimensionAverages": {
+              "alignment": "number (0-100)",
+              "riskLevel": "number (0-100)",
+              "criterio": "number (0-100)"
+            },
+            "scoreTrend": "Array<{ month: string, score: number }>",
+            "processHeatmap": "Array<ProcessHeatmapRow>",
+            "errorPatterns": "Array<{ pattern: string, count: number }>",
+            "profiles": "Array<ProfileItem>"
+          }
+        },
+        "fetchProgressData": {
+          "params": "(organizationId: string)",
+          "returns": "ProgressData",
+          "returnType": {
+            "insufficientData": "boolean",
+            "overallFirst": "PeriodScores { overall, alignment, riskLevel, criterio, count }",
+            "overallLatest": "PeriodScores",
+            "overallDelta": "number",
+            "processProgress": "Array<ProcessProgress>",
+            "memberProgress": "Array<MemberProgress>",
+            "dimensionTrends": "Array<DimensionTrend>",
+            "totalMonths": "number"
+          }
+        }
+      },
+      "helperTypes": {
+        "ProcessHeatmapRow": "{ processName, avgAlignment, avgRiskLevel, avgCriterio, simulationCount }",
+        "ProfileItem": "{ id, userId, overallScore, totalSimulations, strengthAreas, riskAreas, recommendedTraining, lastUpdatedAt, user: { name, email, image } }",
+        "ProcessProgress": "{ processName, processId, first: PeriodScores, latest: PeriodScores, delta, runCount }",
+        "MemberProgress": "{ userId, userName, userEmail, userImage, firstScore, latestScore, delta, totalRuns }",
+        "DimensionTrend": "{ month, alignment, riskLevel, criterio }"
+      }
+    },
+
+    "3_processLibraryPage": {
+      "file": "app/(authenticated)/(main)/(organizations)/[organizationSlug]/procesos/page.tsx",
+      "description": "Server-side fetch of process list for the ProcessLibrary component",
+      "query": "db.processDefinition.findMany({ where: { architecture.organizationId }, include: { _count: { sessions, versions, risks }, risks: [critical only] }, orderBy: { createdAt: desc } })",
+      "returnsMappedTo": "ProcessCardData[]"
+    }
+  },
+
+  "clientSideApiEndpoints": {
+    "1_organizationRisks": {
+      "endpoint": "GET /api/organization/risks",
+      "file": "app/api/organization/risks/route.ts",
+      "usedBy": "CrossProcessRiskDashboard (client-side fetch)",
+      "returns": {
+        "processes": "Array<ProcessRiskSummary>",
+        "orgSummary": "OrgSummary"
+      },
+      "types": {
+        "ProcessRiskSummary": "{ id, name, totalRisks, criticalCount, highCount, avgRiskScore, topRisk: { title, riskScore, riskType } | null }",
+        "OrgSummary": "{ totalRisks, avgScore, heatMatrix: number[][] (5x5), topRiskTypes: Array<{ type, count }> }"
+      }
+    },
+    "2_sessionsApi": {
+      "endpoint": "GET /api/sessions",
+      "file": "app/api/sessions/route.ts",
+      "usedBy": "CommandCenter.refreshSessions()",
+      "returns": "SessionData[] (same shape passed as initial props)"
+    },
+    "3_sessionsUpdate": {
+      "endpoint": "PATCH /api/sessions/{sessionId}",
+      "file": "app/api/sessions/route.ts (inferred)",
+      "usedBy": "CommandCenter.handleReschedule, handleQuickEdit"
+    },
+    "4_sessionsCreate": {
+      "endpoint": "POST /api/sessions",
+      "file": "app/api/sessions/route.ts",
+      "usedBy": "SessionWizard, CommandCenter.handleEditMode"
+    }
+  },
+
+  "componentInterfaces": {
+    "RiskDashboard": {
+      "file": "modules/command-center/components/RiskDashboard.tsx",
+      "description": "THE main home view component. Client-side, receives all data as props from server component.",
+      "props": {
+        "organizationId": "string",
+        "organizationName": "string",
+        "organizationSlug": "string",
+        "maturityScore": "number (0-100)",
+        "topRisks": "TopRisk[]",
+        "nextSession": "{ id, scheduledFor: string, processName: string | null, status } | null",
+        "recentActivity": "ActivityItem[]",
+        "processCount": "number",
+        "documentedCount": "number",
+        "riskCount": "number",
+        "hasActiveSession": "boolean",
+        "evaluaciones": "EvaluacionesSummary | null",
+        "vulnerableProcesses": "VulnerableProcess[]",
+        "nextSteps": "NextStepRecommendation[]"
+      },
+      "sections": [
+        "Header (org name, live badge, CTA buttons)",
+        "Hero Score + Stats Row (maturity ring + 4 KPI tiles)",
+        "Quick Actions (3 cards: capture, evaluate, invite)",
+        "Two-column: Top Risks + Vulnerable Processes",
+        "Evaluaciones Summary (4 cards + dimension bars + trend sparkline)",
+        "Next Steps Recommendations",
+        "Next Session card",
+        "Recent Activity feed"
+      ],
+      "emptyState": "Shows onboarding checklist when processCount === 0 && riskCount === 0"
+    },
+
+    "ProcessCard": {
+      "file": "modules/process-library/components/ProcessCard.tsx",
+      "props": {
+        "process": "ProcessCardData",
+        "basePath": "string",
+        "onExport": "(processId: string) => void (optional)",
+        "onDelete": "(processId: string) => void (optional)"
+      },
+      "dataType": {
+        "ProcessCardData": {
+          "id": "string",
+          "name": "string",
+          "description": "string | null",
+          "level": "string (PROCESS, etc.)",
+          "processStatus": "string (DRAFT | MAPPED | VALIDATED | APPROVED)",
+          "category": "string | null (core | strategic | support)",
+          "nodesCount": "number",
+          "versionsCount": "number",
+          "sessionsCount": "number",
+          "hasBpmn": "boolean",
+          "riskCount": "number (optional)",
+          "criticalRiskCount": "number (optional)"
+        }
+      }
+    },
+
+    "CommandCenter": {
+      "file": "modules/command-center/components/CommandCenter.tsx",
+      "description": "Session management dashboard (NOT the home page, separate /descubrir route)",
+      "props": {
+        "sessions": "SessionData[]",
+        "organizationId": "string",
+        "organizationName": "string",
+        "organizationSlug": "string",
+        "processCount": "number",
+        "coveragePercent": "number",
+        "processes": "ProcessData[]",
+        "suggestions": "SessionSuggestion[]"
+      },
+      "sessionDataType": {
+        "id": "string",
+        "type": "string",
+        "status": "string (ACTIVE | CONNECTING | SCHEDULED | ENDED | FAILED)",
+        "scheduledFor": "string | null",
+        "scheduledEnd": "string | null",
+        "startedAt": "string | null",
+        "endedAt": "string | null",
+        "createdAt": "string",
+        "intakeToken": "string | null",
+        "intakeStatus": "string | null",
+        "sessionGoals": "string | null",
+        "processDefinition": "{ id, name } | null",
+        "participants": "Array<{ name, email, role, participantType }>",
+        "_count": "{ diagramNodes, transcriptEntries, intakeResponses }"
+      }
+    },
+
+    "OrgRisksDashboard": {
+      "file": "modules/process-library/components/risks/OrgRisksDashboard.tsx",
+      "description": "Full risk management view with heat matrix, register, FMEA",
+      "props": {
+        "risks": "OrgRiskData[]",
+        "processes": "ProcessSummary[]",
+        "stats": "RiskStats",
+        "organizationSlug": "string"
+      },
+      "types": {
+        "OrgRiskData": "Full risk with mitigations and controls",
+        "ProcessSummary": "{ id, name, riskCount }",
+        "RiskStats": "{ total, critical, high, avgScore, opportunities }"
+      }
+    },
+
+    "ProcessPhaseDashboard": {
+      "file": "modules/process-library/components/ProcessPhaseDashboard.tsx",
+      "description": "Per-process maturity phases (contexto, captura, modelo, analisis)",
+      "exports": {
+        "calculatePhaseCompleteness": "returns PhaseScores { contexto, captura, modelo, analisis }",
+        "calculateOverallHealth": "returns number (0-100 from PhaseScores)"
+      }
+    },
+
+    "ProcessHealthRing": {
+      "file": "modules/process-library/components/ProcessHealthRing.tsx",
+      "description": "Simple SVG ring for process health score",
+      "props": { "score": "number", "size": "number (default 36)" }
+    },
+
+    "RiskMaturityRing": {
+      "file": "modules/shared/components/RiskMaturityRing.tsx",
+      "description": "Reusable maturity score ring with sm/md/lg sizes and color coding",
+      "props": { "score": "number", "size": "'sm' | 'md' | 'lg'", "className": "string" }
+    }
+  },
+
+  "processLibraryTypes": {
+    "file": "modules/process-library/types.ts",
+    "types": {
+      "ProcessData": {
+        "id": "string",
+        "name": "string",
+        "description": "string | null",
+        "level": "string",
+        "processStatus": "string",
+        "category": "string | null",
+        "owner": "string | null",
+        "goals": "string[]",
+        "triggers": "string[]",
+        "outputs": "string[]",
+        "bpmnXml": "string | null",
+        "parent": "{ id, name, level } | null",
+        "children": "ProcessChild[]",
+        "sessions": "ProcessSession[]",
+        "versions": "ProcessVersionEntry[]",
+        "raciEntries": "RaciEntry[]",
+        "evalFeedback": "ProcessEvalFeedbackData",
+        "sessionsCount": "number",
+        "versionsCount": "number",
+        "raciCount": "number",
+        "risksCount": "number",
+        "proceduresCount": "number",
+        "hasIntelligence": "boolean",
+        "conflictsCount": "number"
+      },
+      "STATUS_MAP": "DRAFT=info, MAPPED=warning, VALIDATED=success, APPROVED=success",
+      "SESSION_STATUS_VARIANT": "ACTIVE=info, CONNECTING=warning, ENDED=success, FAILED=error, SCHEDULED=info"
+    }
+  },
+
+  "hooksSummary": {
+    "description": "The app uses a SERVER COMPONENT pattern, not client-side hooks for data fetching. Data is fetched in page.tsx files using Prisma directly and passed as props to client components.",
+    "clientSideDataFetching": [
+      "CrossProcessRiskDashboard: useEffect + fetch('/api/organization/risks')",
+      "CommandCenter.refreshSessions: fetch('/api/sessions')"
+    ],
+    "noCustomHooks": "There are NO custom useProcess, useRisks, useSessions hooks. All data is passed as props from RSC (React Server Components)."
+  },
+
+  "dataFlowForNewHomeModule": {
+    "recommendation": "The page.tsx already fetches ALL the data needed for the home view. The new HOME module components should receive the same props that RiskDashboard currently receives. You can either: (A) Refactor page.tsx to pass data to new home components, or (B) Keep the same data-fetching in page.tsx and create new sub-components that receive the data as props.",
+    "availableDataPoints": [
+      "maturityScore (0-100, computed from documentation + risk coverage + evaluations)",
+      "processCount, documentedCount (total vs documented processes)",
+      "riskCount (total risks across org)",
+      "topRisks (top 5 by riskScore, with processName, severity, probability)",
+      "nextSession (next scheduled meeting session)",
+      "hasActiveSession (boolean)",
+      "recentActivity (merged sessions + evaluations feed, top 8)",
+      "evaluaciones (org avg score, dimensions, trend, completion rate, members evaluated)",
+      "vulnerableProcesses (lowest alignment scores, top 5)",
+      "nextSteps (smart recommendations, max 3)"
+    ]
+  }
+}
