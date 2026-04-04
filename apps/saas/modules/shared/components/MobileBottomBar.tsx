@@ -17,11 +17,12 @@ import {
 import { UserAvatar } from "@shared/components/UserAvatar";
 import { useNavData } from "@shared/hooks/use-nav-data";
 import {
+	BarChart3Icon,
 	BellIcon,
 	CompassIcon,
 	CreditCardIcon,
 	GraduationCapIcon,
-	LayoutDashboardIcon,
+	HomeIcon,
 	LogOutIcon,
 	MoreHorizontalIcon,
 	SettingsIcon,
@@ -60,8 +61,8 @@ export function MobileBottomBar() {
 		{
 			label: t("app.menu.home"),
 			href: basePath,
-			icon: LayoutDashboardIcon,
-			isActive: pathname === basePath,
+			icon: HomeIcon,
+			isActive: pathname === basePath || pathname.startsWith(`${basePath}/process/`),
 		},
 		{
 			label: t("app.menu.discover"),
@@ -71,9 +72,15 @@ export function MobileBottomBar() {
 		},
 		{
 			label: t("app.menu.evaluaciones"),
-			href: `${basePath}/panorama`,
+			href: basePath,
 			icon: GraduationCapIcon,
-			isActive: pathname.startsWith(`${basePath}/evaluate`) || pathname.startsWith(`${basePath}/panorama`),
+			isActive: pathname.startsWith(`${basePath}/evaluate`),
+		},
+		{
+			label: t("app.menu.dashboard"),
+			href: `${basePath}/panorama`,
+			icon: BarChart3Icon,
+			isActive: pathname.startsWith(`${basePath}/panorama`),
 		},
 	];
 
