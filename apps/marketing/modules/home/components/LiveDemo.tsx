@@ -147,11 +147,6 @@ export function LiveDemo() {
 		gsap.to(yourCallRef.current, { opacity: 1, duration: 0.3 });
 	}, []);
 
-	const scenarioWords = t("scenario", {
-		danger: "|||DANGER|||",
-		role: "|||ROLE|||",
-	}).split(" ");
-
 	return (
 		<section
 			ref={sectionRef}
