@@ -1,11 +1,10 @@
 import { redirect } from "next/navigation";
 
-// Redirect zombie route → HOME
-export default async function Page({
-  params,
+export default async function EvaluationRedirectPage({
+	params,
 }: {
-  params: Promise<{ organizationSlug: string }>;
+	params: Promise<{ organizationSlug: string }>;
 }) {
-  const { organizationSlug } = await params;
-  redirect(`/${organizationSlug}`);
+	const { organizationSlug } = await params;
+	redirect(`/${organizationSlug}/evaluaciones?tab=dashboard`);
 }

@@ -1,11 +1,14 @@
 import { redirect } from "next/navigation";
 
-// Redirect zombie route → HOME - mapa de procesos
-export default async function Page({
-  params,
+export default async function DeliverablesRedirectPage({
+	params,
 }: {
-  params: Promise<{ organizationSlug: string }>;
+	// Deliverables are now absorbed into their respective modules:
+	// - Process deliverables → /procesos
+	// - Risk reports → /procesos (risks tab)
+	// - Evaluation reports → /evaluaciones?tab=dashboard
+	params: Promise<{ organizationSlug: string }>;
 }) {
-  const { organizationSlug } = await params;
-  redirect(`/${organizationSlug}`);
+	const { organizationSlug } = await params;
+	redirect(`/${organizationSlug}/procesos`);
 }

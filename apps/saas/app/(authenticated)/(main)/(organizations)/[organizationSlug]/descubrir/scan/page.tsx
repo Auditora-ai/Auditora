@@ -1,11 +1,15 @@
-import { redirect } from "next/navigation";
+import { ScanPage } from "@scan/components/ScanPage";
 
-// Redirect zombie route → discovery v3
-export default async function Page({
-  params,
+export async function generateMetadata() {
+	return { title: "Scan Automático" };
+}
+
+export default async function DescubrirScanPage({
+	searchParams,
 }: {
-  params: Promise<{ organizationSlug: string }>;
+	searchParams: Promise<{ url?: string; ref?: string }>;
 }) {
-  const { organizationSlug } = await params;
-  redirect(`/${organizationSlug}/discovery`);
+	const { url, ref } = await searchParams;
+
+	return <ScanPage initialUrl={url ?? null} refSource={ref ?? null} />;
 }

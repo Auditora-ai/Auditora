@@ -1,12 +1,10 @@
 import { redirect } from "next/navigation";
 
-// Redirect zombie route → process detail
-export default async function Page({
-  params,
+export default async function ProcessDetailRedirect({
+	params,
 }: {
-  params: Promise<{ organizationSlug: string; [key: string]: string }>;
+	params: Promise<{ organizationSlug: string; processId: string }>;
 }) {
-  const { organizationSlug, ...rest } = await params;
-  const id = Object.values(rest)[0] || "";
-  redirect(`/${organizationSlug}/process/[id]`.replace("[id]", id));
+	const { organizationSlug, processId } = await params;
+	redirect(`/${organizationSlug}/procesos/${processId}`);
 }

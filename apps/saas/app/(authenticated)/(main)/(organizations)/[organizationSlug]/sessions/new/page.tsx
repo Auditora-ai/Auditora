@@ -1,11 +1,10 @@
 import { redirect } from "next/navigation";
 
-// Redirect zombie route → discovery
-export default async function Page({
-  params,
+export default async function SessionsNewRedirect({
+	params,
 }: {
-  params: Promise<{ organizationSlug: string }>;
+	params: Promise<{ organizationSlug: string }>;
 }) {
-  const { organizationSlug } = await params;
-  redirect(`/${organizationSlug}/discovery`);
+	const { organizationSlug } = await params;
+	redirect(`/${organizationSlug}/descubrir/new`);
 }

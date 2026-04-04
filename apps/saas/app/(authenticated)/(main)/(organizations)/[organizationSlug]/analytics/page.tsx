@@ -1,11 +1,10 @@
 import { redirect } from "next/navigation";
 
-// Redirect zombie route → panorama
-export default async function Page({
-  params,
+export default async function DeprecatedAnalyticsPage({
+	params,
 }: {
-  params: Promise<{ organizationSlug: string }>;
+	params: Promise<{ organizationSlug: string }>;
 }) {
-  const { organizationSlug } = await params;
-  redirect(`/${organizationSlug}/panorama`);
+	const { organizationSlug } = await params;
+	redirect(`/${organizationSlug}/panorama`);
 }
