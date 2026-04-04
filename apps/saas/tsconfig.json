@@ -30,7 +30,9 @@
 			"@notifications/*": ["./modules/notifications/*"],
 			"@change-management/*": ["./modules/change-management/*"],
 			"@collaboration/*": ["./modules/collaboration/*"],
-			"@home/*": ["./modules/home/*"]
+			"@home/*": ["./modules/home/*"],
+			"@process/*": ["./modules/process/*"],
+			"@capture/*": ["./modules/capture/*"]
 		}
 	},
 	"include": [
