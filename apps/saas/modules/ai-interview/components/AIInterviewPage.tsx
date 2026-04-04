@@ -56,30 +56,30 @@ export function AIInterviewPage({
 		<div className="flex h-screen flex-col">
 			{/* Top nav */}
 			<div
-				className="flex items-center gap-2 sm:gap-3 border-b px-3 py-2 sm:px-6 sm:py-3"
-				style={{ backgroundColor: "#0A1428", borderColor: "#1E293B" }}
+				className="flex items-center gap-2 sm:gap-3 border-b border-border bg-background/95 backdrop-blur px-3 py-2 sm:px-6 sm:py-3"
+				className="bg-background border-border"
 			>
 				<Link
 					href={`/${organizationSlug}/descubrir`}
-					className="flex items-center gap-1 text-sm transition-colors hover:opacity-80 min-h-[36px] min-w-[36px] justify-center sm:justify-start sm:min-w-0"
-					style={{ color: "#94A3B8" }}
+					className="flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:opacity-80 min-h-[36px] min-w-[36px] justify-center sm:justify-start sm:min-w-0"
+					
 				>
 					<ArrowLeftIcon className="size-4" />
 					<span className="hidden sm:inline">Sesiones</span>
 				</Link>
-				<span style={{ color: "#1E293B" }} className="hidden sm:inline">|</span>
-				<span className="text-sm font-medium" style={{ color: "#F1F5F9" }}>
+				<span className="hidden sm:inline text-border">|</span>
+				<span className="text-sm font-medium text-foreground">
 					Entrevista IA
 				</span>
 				<span className="hidden sm:inline text-[9px] font-bold uppercase tracking-wider rounded-full px-2 py-0.5"
-					style={{ backgroundColor: "#1E293B", color: "#3B8FE8" }}
+					className="bg-primary/10 text-primary"
 				>
 					SIPOC → BPMN 2.0
 				</span>
 				{phase === "chat" && (
 					<span
 						className="ml-auto rounded-full px-2 py-0.5 text-[10px] sm:text-xs"
-						style={{ backgroundColor: "#111827", color: "#D97706", border: "1px solid #1E293B" }}
+						className="bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-border"
 					>
 						En progreso
 					</span>
@@ -137,18 +137,18 @@ export function AIInterviewPage({
 						transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
 						className="h-full"
 					>
-				<div className="flex h-full flex-col overflow-y-auto" style={{ backgroundColor: "#F8FAFC" }}>
+				<div className="flex h-full flex-col overflow-y-auto bg-background">
 					{/* Diagram section */}
-					<div className="border-b p-4 sm:p-6" style={{ borderColor: "#E2E8F0" }}>
+					<div className="border-b border-border p-4 sm:p-6">
 						<div className="flex items-center gap-3 mb-4 flex-wrap">
 							<h2
 								className="text-xl sm:text-2xl font-semibold"
-								style={{ color: "#0A1428" }}
+								
 							>
 								Tu proceso: {processName}
 							</h2>
 							<span className="rounded-full px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider"
-								style={{ backgroundColor: "#EFF6FF", color: "#2563EB", border: "1px solid #BFDBFE" }}
+								className="bg-primary/10 text-primary border border-primary/20"
 							>
 								BPMN 2.0
 							</span>
@@ -159,8 +159,8 @@ export function AIInterviewPage({
 								className="h-[300px] sm:h-[400px]"
 							/>
 						) : (
-							<div className="flex h-[200px] items-center justify-center rounded-lg border" style={{ borderColor: "#E2E8F0" }}>
-								<span className="text-sm" style={{ color: "#64748B" }}>No se pudo generar el diagrama</span>
+							<div className="flex h-[200px] items-center justify-center rounded-lg border border-border">
+								<span className="text-sm" >No se pudo generar el diagrama</span>
 							</div>
 						)}
 					</div>
@@ -171,12 +171,12 @@ export function AIInterviewPage({
 							<div className="flex items-center gap-3 mb-4 flex-wrap">
 								<h2
 									className="text-xl sm:text-2xl font-semibold"
-									style={{ color: "#0A1428" }}
+									
 								>
 									Riesgos Descubiertos
 								</h2>
 								<span className="rounded-full px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider"
-									style={{ backgroundColor: "#FEF2F2", color: "#DC2626", border: "1px solid #FECACA" }}
+									className="bg-destructive/10 text-destructive border border-destructive/20"
 								>
 									Análisis FMEA
 								</span>
@@ -184,24 +184,24 @@ export function AIInterviewPage({
 
 							{completionData.riskSummary && (
 								<div className="mb-4 flex flex-wrap gap-3">
-									<div className="rounded-lg border px-4 py-3" style={{ borderColor: "#E2E8F0" }}>
-										<span className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: "#64748B" }}>Score FMEA</span>
-										<p className="text-lg font-semibold" style={{ color: "#0A1428" }}>
+									<div className="rounded-lg border px-4 py-3" >
+										<span className="text-[10px] uppercase tracking-wider font-semibold" >Score FMEA</span>
+										<p className="text-lg font-semibold" >
 											{completionData.riskSummary.totalRiskScore}
 										</p>
 									</div>
 									{completionData.riskSummary.criticalCount > 0 && (
-										<div className="rounded-lg border px-4 py-3" style={{ borderColor: "#DC2626", backgroundColor: "#FEF2F2" }}>
-											<span className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: "#DC2626" }}>Críticos</span>
-											<p className="text-lg font-semibold" style={{ color: "#DC2626" }}>
+										<div className="rounded-lg border px-4 py-3" className="border-destructive bg-destructive/5">
+											<span className="text-[10px] uppercase tracking-wider font-semibold" >Críticos</span>
+											<p className="text-lg font-semibold" >
 												{completionData.riskSummary.criticalCount}
 											</p>
 										</div>
 									)}
 									{completionData.riskSummary.topRiskArea && (
-										<div className="rounded-lg border px-4 py-3" style={{ borderColor: "#E2E8F0" }}>
-											<span className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: "#64748B" }}>Área Principal</span>
-											<p className="text-sm font-medium" style={{ color: "#0A1428" }}>
+										<div className="rounded-lg border px-4 py-3" >
+											<span className="text-[10px] uppercase tracking-wider font-semibold" >Área Principal</span>
+											<p className="text-sm font-medium text-foreground">
 												{completionData.riskSummary.topRiskArea}
 											</p>
 										</div>
@@ -218,10 +218,10 @@ export function AIInterviewPage({
 										<div
 											key={i}
 											className="rounded-lg border p-4"
-											style={{ borderColor: "#E2E8F0", backgroundColor: "#F1F5F9" }}
+											className="border-border bg-muted"
 										>
 											<div className="flex items-start justify-between gap-2">
-												<h3 className="text-sm font-medium" style={{ color: "#0A1428" }}>
+												<h3 className="text-sm font-medium text-foreground">
 													{risk.title}
 												</h3>
 												<div className="flex gap-1 shrink-0">
@@ -251,7 +251,7 @@ export function AIInterviewPage({
 													</span>
 												</div>
 											</div>
-											<p className="mt-1 text-xs leading-relaxed" style={{ color: "#64748B" }}>
+											<p className="mt-1 text-xs leading-relaxed" >
 												{risk.description}
 											</p>
 										</div>
@@ -260,8 +260,8 @@ export function AIInterviewPage({
 							</div>
 
 							{/* FMEA legend */}
-							<div className="mt-4 flex flex-wrap items-center gap-2 border-t pt-3" style={{ borderColor: "#E2E8F0" }}>
-								<span className="text-[9px] font-semibold uppercase tracking-widest" style={{ color: "#94A3B8" }}>
+							<div className="mt-4 flex flex-wrap items-center gap-2 border-t pt-3" >
+								<span className="text-[9px] font-semibold uppercase tracking-widest" >
 									S=Severidad  P=Probabilidad  RPN=Número de Prioridad de Riesgo
 								</span>
 							</div>
@@ -269,7 +269,7 @@ export function AIInterviewPage({
 					)}
 
 					{/* Actions */}
-					<div className="border-t p-4 sm:p-6 pb-safe" style={{ borderColor: "#E2E8F0" }}>
+					<div className="border-t border-border p-4 sm:p-6 pb-safe">
 						<div className="flex flex-col sm:flex-row gap-3">
 							{shareToken && (
 								<button
@@ -279,7 +279,7 @@ export function AIInterviewPage({
 										);
 									}}
 									className="flex items-center justify-center gap-2 rounded-md border px-4 py-2.5 text-sm font-medium transition-colors hover:opacity-80 min-h-[44px]"
-									style={{ borderColor: "#E2E8F0", color: "#3B8FE8" }}
+									className="border-border text-primary"
 								>
 									<ShareIcon className="size-4" />
 									Compartir
@@ -288,7 +288,7 @@ export function AIInterviewPage({
 							<Link
 								href={`/${organizationSlug}/descubrir`}
 								className="flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium text-primary-foreground min-h-[44px]"
-								style={{ backgroundColor: "#3B8FE8" }}
+								
 							>
 								Volver a Descubrir
 							</Link>

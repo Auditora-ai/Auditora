@@ -72,13 +72,13 @@ export function InterviewChat({
 	}
 
 	return (
-		<div className="flex h-full flex-col" style={{ backgroundColor: "#F8FAFC" }}>
+		<div className="flex h-full flex-col bg-background">
 			{/* Header */}
-			<div className="border-b px-4 py-3 sm:px-6 sm:py-4" style={{ borderColor: "#E2E8F0" }}>
+			<div className="border-b border-border px-4 py-3 sm:px-6 sm:py-4">
 				<div className="flex items-center justify-between gap-2">
 					<div className="flex items-center gap-2 min-w-0">
-						<SparklesIcon className="size-4 sm:size-5 shrink-0" style={{ color: "#D97706" }} />
-						<h2 className="text-sm sm:text-lg font-semibold truncate" style={{ color: "#0A1428" }}>
+						<SparklesIcon className="size-4 sm:size-5 shrink-0"  />
+						<h2 className="text-sm sm:text-lg font-semibold truncate text-foreground" >
 							{processName}
 						</h2>
 					</div>
@@ -86,10 +86,7 @@ export function InterviewChat({
 						{/* Completeness badge */}
 						<div
 							className="flex items-center gap-1 rounded-full px-2.5 py-1"
-							style={{
-								backgroundColor: completenessScore >= 70 ? "#F0FDF4" : "#FEF3C7",
-								color: completenessScore >= 70 ? "#16A34A" : "#D97706",
-							}}
+							className={completenessScore >= 70 ? "bg-green-500/10 text-green-600 dark:text-green-400" : "bg-amber-500/10 text-amber-600 dark:text-amber-400"}
 						>
 							<span className="text-[10px] sm:text-xs font-medium">
 								{completenessScore}%
@@ -99,7 +96,7 @@ export function InterviewChat({
 							<button
 								onClick={onReveal}
 								className="rounded-md px-3 py-2 text-xs sm:text-sm font-medium text-primary-foreground transition-colors hover:opacity-90 min-h-[36px] sm:min-h-[40px]"
-								style={{ backgroundColor: "#3B8FE8" }}
+								
 							>
 								Ver BPMN
 							</button>
@@ -111,8 +108,8 @@ export function InterviewChat({
 				{sipocCoverage && (
 					<div className="mt-2 sm:mt-3">
 						<div className="flex items-center gap-1 mb-1">
-							<Zap className="size-2.5" style={{ color: "#D97706" }} />
-							<span className="text-[9px] font-bold uppercase tracking-widest" style={{ color: "#94A3B8" }}>
+							<Zap className="size-2.5"  />
+							<span className="text-[9px] font-bold uppercase tracking-widest" >
 								Cobertura SIPOC
 							</span>
 						</div>
@@ -131,7 +128,7 @@ export function InterviewChat({
 										>
 											{dim.label}
 										</span>
-										<div className="h-1.5 w-8 sm:w-12 overflow-hidden rounded-full" style={{ backgroundColor: "#E2E8F0" }}>
+										<div className="h-1.5 w-8 sm:w-12 overflow-hidden rounded-full" >
 											<div
 												className="h-full rounded-full transition-all"
 												style={{
@@ -141,7 +138,7 @@ export function InterviewChat({
 												}}
 											/>
 										</div>
-										<span className="hidden sm:inline text-[9px] font-medium" style={{ color: "#94A3B8" }}>
+										<span className="hidden sm:inline text-[9px] font-medium" >
 											{dim.fullLabel}
 										</span>
 									</div>
@@ -161,14 +158,11 @@ export function InterviewChat({
 							className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
 						>
 							<div
-								className={`rounded-2xl px-4 py-3 text-sm leading-relaxed ${
-									msg.role === "user" ? "max-w-[85%] sm:max-w-[75%]" : "max-w-[90%] sm:max-w-[80%]"
-								}`}
-								style={
-									msg.role === "user"
-										? { backgroundColor: "#3B8FE8", color: "#FFFFFF" }
-										: { backgroundColor: "#F1F5F9", border: "1px solid #E2E8F0", color: "#0A1428" }
-								}
+						className={`rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+							msg.role === "user"
+								? "max-w-[85%] sm:max-w-[75%] bg-primary text-primary-foreground"
+								: "max-w-[90%] sm:max-w-[80%] bg-muted border border-border text-foreground"
+						}`}
 							>
 								{msg.content}
 							</div>
@@ -191,18 +185,18 @@ export function InterviewChat({
 						<div className="flex justify-start">
 							<div
 								className="flex items-center gap-1 rounded-2xl px-4 py-3"
-								style={{ backgroundColor: "#F1F5F9", border: "1px solid #E2E8F0" }}
+								
 							>
-								<span className="animate-bounce text-xs" style={{ color: "#94A3B8", animationDelay: "0ms" }}>●</span>
-								<span className="animate-bounce text-xs" style={{ color: "#94A3B8", animationDelay: "150ms" }}>●</span>
-								<span className="animate-bounce text-xs" style={{ color: "#94A3B8", animationDelay: "300ms" }}>●</span>
+								<span className="animate-bounce text-xs" style={{ animationDelay: "0ms" }}>●</span>
+								<span className="animate-bounce text-xs" style={{ animationDelay: "150ms" }}>●</span>
+								<span className="animate-bounce text-xs" style={{ animationDelay: "300ms" }}>●</span>
 							</div>
 						</div>
 					)}
 
 					{error && (
 						<div className="flex justify-center">
-							<span className="rounded-md px-3 py-1.5 text-xs" style={{ backgroundColor: "#FEF2F2", color: "#DC2626" }}>
+							<span className="rounded-md px-3 py-1.5 text-xs" >
 								{error}
 							</span>
 						</div>
@@ -213,7 +207,7 @@ export function InterviewChat({
 			</div>
 
 			{/* Input — sticky bottom with safe area */}
-			<div className="border-t px-3 py-3 sm:px-6 sm:py-4 pb-safe" style={{ borderColor: "#E2E8F0", backgroundColor: "#FFFFFF" }}>
+			<div className="border-t border-border bg-background px-3 py-3 sm:px-6 sm:py-4 pb-safe" >
 				<div className="mx-auto flex max-w-2xl items-center gap-2 sm:gap-3">
 					<input
 						ref={inputRef}
@@ -224,19 +218,13 @@ export function InterviewChat({
 						onKeyDown={handleKeyDown}
 						placeholder="Escribe tu respuesta..."
 						disabled={sending}
-						className="flex-1 rounded-xl border px-4 py-3 text-[16px] sm:text-sm outline-none transition-colors focus:border-[#3B8FE8] focus:bg-[#EFF6FF] focus:ring-1 focus:ring-[#3B8FE8]/30"
-						style={{
-							backgroundColor: "#F1F5F9",
-							borderColor: "#E2E8F0",
-							color: "#0A1428",
-							minHeight: "48px",
-						}}
+					className="flex-1 rounded-xl border border-border bg-muted text-foreground px-4 py-3 text-[16px] sm:text-sm outline-none transition-colors focus:border-primary focus:bg-primary/5 focus:ring-1 focus:ring-primary/30"
+					style={{ minHeight: "48px" }}
 					/>
 					<button
 						onClick={handleSend}
 						disabled={!input.trim() || sending}
-						className="flex items-center justify-center rounded-xl px-5 text-primary-foreground transition-colors disabled:opacity-50 active:scale-95"
-						style={{ backgroundColor: "#3B8FE8", minHeight: "48px", minWidth: "48px" }}
+						className="flex items-center justify-center rounded-xl bg-primary px-5 text-primary-foreground transition-colors disabled:opacity-50 active:scale-95 min-h-[48px] min-w-[48px]"	
 					>
 						<SendIcon className="size-5" />
 					</button>

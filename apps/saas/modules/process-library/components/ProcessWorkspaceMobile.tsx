@@ -128,8 +128,8 @@ function MobileWorkspaceInner({
 			{/* ── Scrollable content ── */}
 			<main className="flex-1 overflow-y-auto pb-24">
 				{/* ── Diagram Preview Card ── */}
-				<section className="mx-4 mt-4">
-					<div className="overflow-hidden rounded-xl border border-border bg-card">
+				<section className="mx-0 mt-0">
+					<div className="overflow-hidden rounded-2xl border border-border bg-card">
 						{process.bpmnXml ? (
 							<div className="flex h-48 items-center justify-center bg-muted/50 p-4">
 								<div className="text-center">
@@ -209,9 +209,9 @@ function MobileWorkspaceInner({
 				</section>
 
 				{/* ── Tab sections ── */}
-				<section className="mx-4 mt-4">
+				<section className="mx-0 mt-0">
 					<Tabs defaultValue="resumen" className="w-full">
-						<TabsList className="w-full overflow-x-auto border border-border bg-muted p-1">
+						<TabsList className="w-full overflow-x-auto rounded-xl border border-border bg-muted p-1">
 					<TabsTrigger
 						value="resumen"
 						className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 px-3 text-xs data-[state=active]:bg-background data-[state=active]:text-foreground"
@@ -263,7 +263,7 @@ function MobileWorkspaceInner({
 					</TabsTrigger>
 						</TabsList>
 
-						<div className="mt-3 rounded-xl border border-border bg-card p-3">
+						<div className="mt-3 rounded-2xl border border-border bg-card p-4">
 							<TabsContent value="resumen" className="mt-0">
 								<ResumenTab process={process} />
 							</TabsContent>
@@ -320,7 +320,7 @@ function MobileWorkspaceInner({
 							className="flex items-center gap-2"
 							onClick={() => setFabOpen(false)}
 						>
-							<span className="rounded-lg bg-card px-3 py-1.5 text-xs font-medium text-foreground shadow-lg border border-border">
+							<span className="rounded-xl bg-card px-3 py-2 text-xs font-medium text-foreground shadow-lg border border-border">
 								Iniciar entrevista
 							</span>
 							<div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary shadow-lg shadow-primary/25">
@@ -331,7 +331,7 @@ function MobileWorkspaceInner({
 						{/* Generate Evaluation */}
 						{(process.risksCount ?? 0) > 0 && (
 							<div className="flex items-center gap-2">
-								<span className="rounded-lg bg-card px-3 py-1.5 text-xs font-medium text-foreground shadow-lg border border-border">
+								<span className="rounded-xl bg-card px-3 py-2 text-xs font-medium text-foreground shadow-lg border border-border">
 									Generar evaluación
 								</span>
 								<GenerateEvaluationDialog
