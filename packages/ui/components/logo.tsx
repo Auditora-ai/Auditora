@@ -9,6 +9,11 @@ import { cn } from "../lib";
  * - monogram: just the blueprint "A" isotipo (for favicons, compact spaces)
  * - dark: white text on dark bg (default)
  * - light: dark text on light bg
+ *
+ * Sizes:
+ * - sm: compact nav / mobile
+ * - md: default navbar
+ * - lg: hero / footer / splash
  */
 
 function BlueprintIsotype({
@@ -91,45 +96,41 @@ export function Logo({
 
 	// Monogram version — just the blueprint "A" isotipo
 	if (monogram) {
-		const isoSize = size === "sm" ? 24 : size === "lg" ? 48 : 32;
+		const isoSize = size === "sm" ? 28 : size === "lg" ? 56 : 36;
 		return <BlueprintIsotype size={isoSize} className={className} />;
 	}
 
 	// Full horizontal logo: isotipo + wordmark
-	const isoSize = size === "sm" ? 28 : size === "lg" ? 48 : 36;
+	const isoSize = size === "sm" ? 30 : size === "lg" ? 52 : 36;
 	const textSize =
-		size === "sm" ? "text-lg" : size === "lg" ? "text-3xl" : "text-xl";
+		size === "sm"
+			? "text-[18px]"
+			: size === "lg"
+				? "text-[30px]"
+				: "text-[22px]";
 
 	return (
 		<span
-			className={cn("flex items-center gap-2 leading-none", className)}
+			className={cn("flex items-center gap-2.5 leading-none select-none", className)}
 		>
-			<BlueprintIsotype size={isoSize} />
+			<BlueprintIsotype size={isoSize} className="shrink-0" />
 			{withLabel && (
 				<span
 					className={cn(textSize, "tracking-tight")}
-					style={{ fontFamily: "'Oxanium', sans-serif" }}
+					style={{ fontFamily: "var(--font-brand, 'Oxanium'), sans-serif" }}
 				>
 					<span
 						className={cn(
 							"font-bold",
-							isLight ? "text-[#0077CC]" : "text-[#00B4FF]",
+							isLight ? "text-slate-900" : "text-white",
 						)}
 					>
-						A
+						Auditora
 					</span>
 					<span
 						className={cn(
 							"font-bold",
-							isLight ? "text-slate-800" : "text-[#F1F5F9]",
-						)}
-					>
-						uditora
-					</span>
-					<span
-						className={cn(
-							"font-light",
-							isLight ? "text-slate-400" : "text-[#64748B]",
+							isLight ? "text-[#0077CC]" : "text-[#00B4FF]",
 						)}
 					>
 						.ai

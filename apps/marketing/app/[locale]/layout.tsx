@@ -9,7 +9,7 @@ import { Footer } from "@shared/components/Footer";
 import { LenisProvider } from "@shared/components/LenisProvider";
 import { NavBar } from "@shared/components/NavBar";
 import { CONSENT_COOKIE_NAME, parseConsentCookie } from "@shared/lib/consent-types";
-import { Geist, Inter } from "next/font/google";
+import { Geist, Inter, Oxanium } from "next/font/google";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
@@ -27,6 +27,12 @@ const displayFont = Inter({
 	weight: ["600", "700", "800"],
 	subsets: ["latin"],
 	variable: "--font-display",
+});
+
+const brandFont = Oxanium({
+	weight: ["300", "400", "700"],
+	subsets: ["latin"],
+	variable: "--font-brand",
 });
 
 const locales = Object.keys(i18nConfig.locales) as string[];
@@ -57,7 +63,7 @@ export default async function MarketingLayout({
 		<html
 			lang={locale}
 			suppressHydrationWarning
-			className={`${sansFont.variable} ${displayFont.variable}`}
+			className={`${sansFont.variable} ${displayFont.variable} ${brandFont.variable}`}
 		>
 			<body
 				className={cn(
