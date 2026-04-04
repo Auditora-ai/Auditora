@@ -1,16 +1,16 @@
 {
 	"dependencies": {
 		"@repo/i18n": "workspace:*",
-		"@react-email/components": "^1.0.10",
-		"@react-email/render": "^2.0.4",
+		"@react-email/components": "^1.0.11",
+		"@react-email/render": "^2.0.5",
 		"@repo/logs": "workspace:*",
 		"@repo/ui": "workspace:*",
 		"next-intl": "catalog:",
-		"nodemailer": "^8.0.3",
+		"nodemailer": "^8.0.4",
 		"react": "catalog:",
 		"react-dom": "catalog:",
 		"react-email": "^5.2.10",
-		"resend": "^6.9.4",
+		"resend": "^6.10.0",
 		"use-intl": "catalog:"
 	},
 	"devDependencies": {
