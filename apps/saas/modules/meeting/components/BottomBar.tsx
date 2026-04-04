@@ -300,7 +300,7 @@ export function BottomBar() {
 					<div className="flex items-center justify-between border-b border-chrome-border px-4 py-2">
 						<div className="flex items-center gap-2">
 							<ShieldCheckIcon className="h-3.5 w-3.5 text-violet-600" />
-							<span className="font-display text-sm text-chrome-text">
+							<span className="text-sm font-medium text-chrome-text">
 								{t("bottomBar.auditHeader")}
 							</span>
 							<span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${

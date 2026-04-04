@@ -210,11 +210,11 @@ export function generateRiskReportHtml(data: RiskReportData): string {
   <meta charset="UTF-8">
   <title>Reporte de Riesgos — ${escHtml(data.processName)}</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Geist:wght@400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap');
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Geist', -apple-system, sans-serif; color: #0F172A; line-height: 1.5; padding: 40px; max-width: 1100px; margin: 0 auto; }
-    h1 { font-family: 'Instrument Serif', serif; font-size: 32px; margin-bottom: 4px; }
-    h2 { font-family: 'Instrument Serif', serif; font-size: 24px; margin: 32px 0 16px; border-bottom: 2px solid #E2E8F0; padding-bottom: 8px; }
+    h1 { font-family: 'Geist', -apple-system, sans-serif; font-size: 32px; font-weight: 600; margin-bottom: 4px; }
+    h2 { font-family: 'Geist', -apple-system, sans-serif; font-size: 24px; font-weight: 600; margin: 32px 0 16px; border-bottom: 2px solid #E2E8F0; padding-bottom: 8px; }
     h3 { font-size: 16px; font-weight: 600; margin: 20px 0 8px; }
     .meta { color: #64748B; font-size: 14px; margin-bottom: 24px; }
     .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 16px 0 32px; }

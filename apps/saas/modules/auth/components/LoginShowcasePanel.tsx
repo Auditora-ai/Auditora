@@ -210,13 +210,12 @@ export function LoginShowcasePanel({
 					</div>
 
 					{/* Headline */}
-					<h2
-						className="font-display text-2xl leading-snug tracking-tight lg:text-3xl"
-						style={{
-							color: "#F1F5F9",
-							fontFamily: "'Instrument Serif', serif",
-						}}
-					>
+				<h2
+					className="text-2xl font-semibold leading-snug tracking-tight lg:text-3xl"
+					style={{
+						color: "#F1F5F9",
+					}}
+				>
 						<SplitWords innerClassName="tagline-word">
 							{title}
 						</SplitWords>

@@ -6,7 +6,7 @@
  * - Complexity (inverted, from complexity_score)
  * - SIPOC Coverage (from process_audit updatedScores)
  *
- * Dark chrome header with Instrument Serif display type.
+ * Dark chrome header with Geist Sans display type.
  */
 
 interface MaturityScoreProps {
@@ -79,10 +79,9 @@ export function MaturityScore({
 						<p className="mb-2 text-xs font-medium uppercase tracking-wider text-slate-500">
 							Process Intelligence Report
 						</p>
-						<h1
-							className="text-3xl font-semibold text-slate-50 truncate"
-							style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}
-						>
+					<h1
+						className="text-3xl font-semibold text-slate-50 truncate"
+					>
 							{processName}
 						</h1>
 						<p className="mt-1 text-sm text-slate-400">{orgName}</p>
@@ -147,8 +146,7 @@ export function MaturityScore({
 							</svg>
 							<div className="absolute inset-0 flex flex-col items-center justify-center">
 								<span
-									className={`text-4xl font-bold ${scoreColor(score)}`}
-									style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}
+							className={`text-4xl font-bold ${scoreColor(score)}`}
 								>
 									{score}
 								</span>

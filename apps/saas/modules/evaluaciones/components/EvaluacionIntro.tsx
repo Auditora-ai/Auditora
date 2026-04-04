@@ -115,7 +115,7 @@ export function EvaluacionIntro({
 
         {/* Title */}
         <h1
-          className="sim-intro-word mb-10 font-display text-3xl font-normal leading-tight md:text-5xl"
+          className="sim-intro-word mb-10 text-3xl font-semibold leading-tight tracking-tight md:text-5xl"
           style={{ color: "#F1F5F9" }}
         >
           <SplitWords>{templateTitle}</SplitWords>
@@ -123,7 +123,7 @@ export function EvaluacionIntro({
 
         {/* Narrative */}
         <div
-          className="sim-intro-narrative mb-12 space-y-4 text-left font-display text-lg italic leading-relaxed"
+          className="sim-intro-narrative mb-12 space-y-4 text-left text-lg italic leading-relaxed"
           style={{ color: "#94A3B8" }}
         >
           {narrative.split("\n").filter(Boolean).map((paragraph, i) => (

@@ -105,7 +105,7 @@ export function ProcedurePreview({
 				<p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
 					Procedimiento Operativo
 				</p>
-				<h1 className="mt-2 font-display text-2xl font-bold leading-tight text-foreground">
+				<h1 className="mt-2 text-2xl font-bold leading-tight text-foreground">
 					{title}
 				</h1>
 				<p className="mt-1 text-sm text-muted-foreground">{processName}</p>
@@ -277,9 +277,7 @@ export function ProcedurePreview({
 			)}
 
 			{/* Document styling */}
-			<style>{`
-				.procedure-preview h1 { font-family: var(--font-display, 'Instrument Serif', serif); }
-			`}</style>
+
 		</div>
 	);
 }

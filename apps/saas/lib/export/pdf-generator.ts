@@ -107,7 +107,7 @@ export function generateReportHtml(data: PdfProjectData): string {
   /* Cover page */
   .cover { text-align: center; padding-top: 160px; page-break-after: always; background: linear-gradient(180deg, #0A1428 0%, #111827 100%); margin: -2cm; padding-left: 2cm; padding-right: 2cm; padding-bottom: 2cm; min-height: 100vh; box-sizing: border-box; }
   .cover .brand-mark { display: inline-block; width: 48px; height: 48px; border-radius: 12px; background: #3B8FE8; margin-bottom: 32px; }
-  .cover h1 { font-family: 'Instrument Serif', Georgia, serif; font-size: 40px; margin-bottom: 8px; color: #F1F5F9; letter-spacing: -0.02em; }
+  .cover h1 { font-family: 'Geist', -apple-system, sans-serif; font-size: 40px; font-weight: 600; margin-bottom: 8px; color: #F1F5F9; letter-spacing: -0.02em; }
   .cover .client { font-size: 22px; color: #94A3B8; margin-bottom: 48px; font-weight: 300; }
   .cover .org { font-size: 14px; color: #64748B; }
   .cover .date { font-size: 13px; color: #64748B; margin-top: 48px; }
@@ -115,7 +115,7 @@ export function generateReportHtml(data: PdfProjectData): string {
   .cover .accent-line { width: 60px; height: 3px; background: #3B8FE8; margin: 24px auto; border-radius: 2px; }
 
   /* Typography */
-  h2 { font-family: 'Instrument Serif', Georgia, serif; font-size: 24px; border-bottom: 2px solid #3B8FE8; padding-bottom: 8px; color: #0F172A; letter-spacing: -0.01em; }
+  h2 { font-family: 'Geist', -apple-system, sans-serif; font-size: 24px; font-weight: 600; border-bottom: 2px solid #3B8FE8; padding-bottom: 8px; color: #0F172A; letter-spacing: -0.01em; }
   h4 { color: #0A1428; margin-bottom: 4px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; }
 
   /* Diagrams */

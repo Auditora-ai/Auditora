@@ -2,10 +2,9 @@ export function ReportSection({ title, actions, children }: { title: string; act
 	return (
 		<section className="rounded-lg border border-slate-200 bg-white overflow-hidden">
 			<div className="flex items-center justify-between border-b border-slate-100 px-4 py-4 md:px-6">
-				<h2
-					className="text-lg text-slate-900"
-					style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}
-				>
+			<h2
+				className="text-lg font-semibold text-slate-900"
+			>
 					{title}
 				</h2>
 				{actions && <div className="flex items-center gap-2">{actions}</div>}

@@ -28,7 +28,7 @@ export function DashboardWelcome({
 
 	return (
 		<div className="flex flex-col items-center py-12">
-			<h1 className="font-serif text-3xl font-bold tracking-tight">
+			<h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
 				{t("title")}
 			</h1>
 			<p className="mt-2 text-muted-foreground">{t("subtitle")}</p>

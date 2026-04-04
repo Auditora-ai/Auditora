@@ -299,7 +299,7 @@ export function EvaluacionRunner({
           {/* Prompt */}
           <div className="sim-decision-content mb-8">
             <h2
-              className="font-display text-xl leading-relaxed md:text-2xl"
+              className="text-xl font-semibold leading-relaxed md:text-2xl"
               style={{ color: "#F1F5F9" }}
             >
               {current.prompt}
@@ -385,7 +385,7 @@ export function EvaluacionRunner({
           className="flex min-h-[40vh] items-center justify-center"
         >
           <p
-            className="sim-consequence-text max-w-xl text-center font-display text-lg italic leading-relaxed"
+            className="sim-consequence-text max-w-xl text-center text-lg italic leading-relaxed"
             style={{ color: "#94A3B8" }}
           >
             {consequenceText}

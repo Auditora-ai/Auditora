@@ -136,7 +136,7 @@ export function TopBar({ processName: initialName, clientName }: TopBarProps) {
 					<button
 						type="button"
 						onClick={() => setEditing(true)}
-						className="max-w-[280px] truncate rounded px-1 py-0.5 font-display text-sm text-chrome-text transition-colors hover:bg-chrome-raised"
+						className="max-w-[280px] truncate rounded px-1 py-0.5 text-sm font-medium text-chrome-text transition-colors hover:bg-chrome-raised"
 						title={t("topBar.processNameTitle")}
 					>
 						{processName || t("topBar.newSession")}

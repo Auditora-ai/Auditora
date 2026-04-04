@@ -80,7 +80,7 @@ export function InterviewChat({
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-3">
 						<SparklesIcon className="size-5" style={{ color: "#D97706" }} />
-						<h2 className="text-lg font-semibold" style={{ fontFamily: "'Instrument Serif', Georgia, serif", color: "#0A1428" }}>
+						<h2 className="text-lg font-semibold" style={{ color: "#0A1428" }}>
 							{processName}
 						</h2>
 					</div>

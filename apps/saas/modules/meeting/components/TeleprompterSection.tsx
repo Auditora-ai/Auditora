@@ -280,7 +280,7 @@ export function TeleprompterSection({
 			{!compact && (
 				<div className="flex items-center gap-2 border-b border-chrome-border px-3 py-2">
 					<SparklesIcon className="h-3.5 w-3.5 text-primary" />
-					<span className="font-display text-sm text-chrome-text-secondary">
+					<span className="text-sm font-medium text-chrome-text-secondary">
 						{t("teleprompter.header")}
 					</span>
 					{gapType && (

@@ -128,13 +128,12 @@ export function LoginPageLayout({
 						withLabel
 						className="justify-center text-[#F1F5F9] [&_svg]:text-[#3B8FE8] [&_.text-muted-foreground]:text-[#94A3B8] [&_span.hidden]:!block"
 					/>
-					<h2
-						className="mt-4 text-xl tracking-tight"
-						style={{
-							color: "#F1F5F9",
-							fontFamily: "'Instrument Serif', serif",
-						}}
-					>
+				<h2
+					className="mt-4 text-xl font-semibold tracking-tight"
+					style={{
+						color: "#F1F5F9",
+					}}
+				>
 						{mobileTitle}
 					</h2>
 					<p className="mt-1 text-sm" style={{ color: "#94A3B8" }}>

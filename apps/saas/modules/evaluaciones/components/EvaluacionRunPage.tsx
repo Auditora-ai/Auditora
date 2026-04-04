@@ -114,7 +114,7 @@ export function EvaluacionRunPage({
               {t('label')}
             </p>
             <h1
-              className="mt-1 font-display text-lg"
+              className="mt-1 text-lg font-semibold"
               style={{ color: "#F1F5F9" }}
             >
               {templateTitle}
@@ -146,7 +146,7 @@ export function EvaluacionRunPage({
               style={{ color: "#3B8FE8" }}
             />
             <p
-              className="font-display text-xl"
+              className="text-xl font-semibold"
               style={{ color: "#F1F5F9" }}
             >
               {t('evaluatingTitle')}
@@ -172,7 +172,7 @@ export function EvaluacionRunPage({
               {t('resultsLabel')}
             </p>
             <h1
-              className="mt-2 font-display text-2xl md:text-3xl"
+              className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight"
               style={{ color: "#F1F5F9" }}
             >
               {templateTitle}

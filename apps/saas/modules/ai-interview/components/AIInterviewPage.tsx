@@ -135,11 +135,11 @@ export function AIInterviewPage({
 					<div className="flex h-full flex-col overflow-y-auto" style={{ backgroundColor: "#F8FAFC" }}>
 						{/* Diagram section */}
 						<div className="border-b p-6" style={{ borderColor: "#E2E8F0" }}>
-							<h2
-								className="mb-4 text-2xl"
-								style={{ fontFamily: "'Instrument Serif', Georgia, serif", color: "#0A1428" }}
-							>
-								Tu proceso: {processName}
+					<h2
+						className="mb-4 text-2xl font-semibold"
+						style={{ color: "#0A1428" }}
+					>
+						Tu proceso: {processName}
 							</h2>
 							{completionData.bpmnXml ? (
 								<InterviewBpmnViewer
@@ -156,11 +156,11 @@ export function AIInterviewPage({
 						{/* Risk report section */}
 						{completionData.risks && completionData.risks.length > 0 && (
 							<div className="p-6">
-								<h2
-									className="mb-4 text-2xl"
-									style={{ fontFamily: "'Instrument Serif', Georgia, serif", color: "#0A1428" }}
-								>
-									Riesgos Descubiertos
+							<h2
+								className="mb-4 text-2xl font-semibold"
+								style={{ color: "#0A1428" }}
+							>
+								Riesgos Descubiertos
 								</h2>
 
 								{completionData.riskSummary && (

@@ -1,7 +1,7 @@
 import { cn, Toaster } from "@repo/ui";
 import { ApiClientProvider } from "@shared/components/ApiClientProvider";
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Instrument_Serif, Oxanium } from "next/font/google";
+import { Geist, Geist_Mono, Oxanium } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { ThemeProvider } from "next-themes";
@@ -16,13 +16,6 @@ const sansFont = Geist({
 	weight: ["300", "400", "500", "600", "700"],
 	subsets: ["latin"],
 	variable: "--font-sans",
-});
-
-const displayFont = Instrument_Serif({
-	weight: "400",
-	subsets: ["latin"],
-	variable: "--font-display",
-	style: ["normal", "italic"],
 });
 
 const monoFont = Geist_Mono({
@@ -73,7 +66,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
 		<html
 			lang={locale}
 			suppressHydrationWarning
-			className={`${sansFont.variable} ${displayFont.variable} ${monoFont.variable} ${brandFont.variable}`}
+			className={`${sansFont.variable} ${monoFont.variable} ${brandFont.variable}`}
 		>
 			<body
 				className={cn(

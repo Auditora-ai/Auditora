@@ -108,16 +108,16 @@ function SectionSkeleton({ title }: { title: string }) {
 	return (
 		<section className="rounded-lg border border-slate-200 bg-white overflow-hidden">
 			<div className="border-b border-slate-100 px-4 py-4 md:px-6">
-				<h2 className="text-lg text-slate-900" style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}>
-					{title}
-				</h2>
-			</div>
-			<div className="px-4 py-4 space-y-3 md:px-6 md:py-5">
-				<div className="h-4 w-full animate-pulse rounded bg-slate-100" />
-				<div className="h-4 w-5/6 animate-pulse rounded bg-slate-100" />
-				<div className="h-4 w-4/6 animate-pulse rounded bg-slate-100" />
-			</div>
-		</section>
+			<h2 className="text-lg font-semibold text-slate-900">
+				{title}
+			</h2>
+		</div>
+		<div className="px-4 py-4 space-y-3 md:px-6 md:py-5">
+			<div className="h-4 w-full animate-pulse rounded bg-slate-100" />
+			<div className="h-4 w-5/6 animate-pulse rounded bg-slate-100" />
+			<div className="h-4 w-4/6 animate-pulse rounded bg-slate-100" />
+		</div>
+	</section>
 	);
 }
 
@@ -125,7 +125,7 @@ function FailedSection({ title, error, sessionId, type }: { title: string; error
 	return (
 		<section className="rounded-lg border border-slate-200 bg-white overflow-hidden">
 			<div className="border-b border-slate-100 px-4 py-4 md:px-6">
-				<h2 className="text-lg text-slate-900" style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}>
+				<h2 className="text-lg font-semibold text-slate-900">
 					{title}
 				</h2>
 			</div>

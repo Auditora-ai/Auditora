@@ -96,7 +96,7 @@ export default async function SharedScanResultsPage({
 		return (
 			<div className="min-h-screen bg-background flex items-center justify-center">
 				<div className="text-center px-6">
-					<h1 className="text-2xl font-serif text-foreground mb-2">
+					<h1 className="text-2xl font-semibold tracking-tight text-foreground mb-2">
 						Enlace Expirado
 					</h1>
 					<p className="text-muted-foreground">
@@ -119,7 +119,7 @@ export default async function SharedScanResultsPage({
 						Escaneo de Riesgo Operativo
 					</span>
 					</div>
-					<h1 className="text-3xl font-serif text-foreground">
+					<h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-foreground">
 						{analysis.companyName}
 					</h1>
 					<p className="text-muted-foreground mt-1">
@@ -165,7 +165,7 @@ export default async function SharedScanResultsPage({
 
 				{/* Business Processes */}
 				<div className="mb-8">
-				<h2 className="text-xl font-serif text-foreground mb-4 border-b border-border pb-2">
+				<h2 className="text-xl font-semibold text-foreground mb-4 border-b border-border pb-2">
 					Procesos Críticos de Negocio
 				</h2>
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -195,7 +195,7 @@ export default async function SharedScanResultsPage({
 				{/* Highest Risk Process Detail */}
 				{analysis.highestRiskProcess && (
 					<div className="mb-8">
-					<h2 className="text-xl font-serif text-foreground mb-4 border-b border-border pb-2">
+					<h2 className="text-xl font-semibold text-foreground mb-4 border-b border-border pb-2">
 						Mayor Riesgo: {analysis.highestRiskProcess.name}
 					</h2>
 						<div className="space-y-3">
@@ -249,7 +249,7 @@ export default async function SharedScanResultsPage({
 
 			{/* CTA to register */}
 			<div className="rounded-xl border border-border bg-card p-6 sm:p-8 text-center space-y-4">
-				<h2 className="text-xl font-serif text-foreground">
+				<h2 className="text-xl font-semibold text-foreground">
 					¿Quieres el diagnóstico completo?
 				</h2>
 				<p className="text-sm text-muted-foreground max-w-md mx-auto">

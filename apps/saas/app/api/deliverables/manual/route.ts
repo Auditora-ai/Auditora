@@ -104,14 +104,14 @@ export async function GET(request: NextRequest) {
   body { font-family: 'Inter', system-ui, -apple-system, sans-serif; color: #0f172a; line-height: 1.6; margin: 0; padding: 0; font-size: 12px; }
 
   .cover { text-align: center; padding-top: 200px; page-break-after: always; min-height: 100vh; }
-  .cover h1 { font-family: 'Instrument Serif', Georgia, serif; font-size: 42px; margin-bottom: 8px; }
+  .cover h1 { font-family: 'Geist', -apple-system, sans-serif; font-size: 42px; font-weight: 600; margin-bottom: 8px; }
   .cover .subtitle { font-size: 18px; color: #64748b; }
   .cover .meta { font-size: 13px; color: #94a3b8; margin-top: 60px; }
   .cover .powered { font-size: 10px; color: #cbd5e1; margin-top: 100px; }
 
-  h1 { font-family: 'Instrument Serif', Georgia, serif; font-size: 28px; margin-top: 0; page-break-before: always; }
+  h1 { font-family: 'Geist', -apple-system, sans-serif; font-size: 28px; font-weight: 600; margin-top: 0; page-break-before: always; }
   h1:first-of-type { page-break-before: auto; }
-  h2 { font-family: 'Instrument Serif', Georgia, serif; font-size: 20px; border-bottom: 2px solid #2563eb; padding-bottom: 4px; margin-top: 24px; }
+  h2 { font-family: 'Geist', -apple-system, sans-serif; font-size: 20px; font-weight: 600; border-bottom: 2px solid #2563eb; padding-bottom: 4px; margin-top: 24px; }
   h3 { font-size: 14px; color: #334155; margin-top: 16px; margin-bottom: 4px; }
 
   .section { margin-bottom: 20px; }

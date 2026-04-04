@@ -25,7 +25,7 @@ export function ExpandedSipocChat() {
 			{/* Header */}
 			<div className="flex items-center gap-2 border-b border-chrome-border px-4 py-3">
 				<SparklesIcon className="h-4 w-4 text-primary" />
-				<span className="font-display text-sm text-chrome-text">
+				<span className="text-sm font-medium text-chrome-text">
 					{t("layout.sipocAnalysis")}
 				</span>
 			</div>

@@ -42,7 +42,7 @@ export function EndSessionDialog({
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent className="sm:max-w-md">
 				<DialogHeader>
-					<DialogTitle className="font-display">{t("endDialog.title")}</DialogTitle>
+					<DialogTitle className="font-semibold">{t("endDialog.title")}</DialogTitle>
 					<DialogDescription>
 						{t("endDialog.description")}
 					</DialogDescription>

@@ -82,7 +82,7 @@ export function InterviewReveal({ sessionId, shareToken, onComplete }: Interview
 			<div className="text-center">
 				<p
 					className="text-lg font-medium"
-					style={{ fontFamily: "'Instrument Serif', Georgia, serif", color: "#0A1428" }}
+					style={{ color: "#0A1428" }}
 				>
 					Generando tu radiografía de proceso
 				</p>

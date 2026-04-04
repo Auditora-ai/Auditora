@@ -91,7 +91,7 @@ export default function IntakeSimulationPage() {
         />
         <div className="relative z-10 max-w-md text-center">
           <h1
-            className="mb-3 font-display text-2xl"
+            className="mb-3 text-2xl font-semibold tracking-tight"
             style={{ color: "#F1F5F9" }}
           >
             Enlace no válido

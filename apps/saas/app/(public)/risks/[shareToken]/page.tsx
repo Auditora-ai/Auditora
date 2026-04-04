@@ -94,7 +94,7 @@ export default function PublicRiskSharePage() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-serif text-foreground mb-2">
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground mb-2">
             {error === "not_found" ? "Link no encontrado" : "Link expirado"}
           </h1>
           <p className="text-muted-foreground">
@@ -128,7 +128,7 @@ export default function PublicRiskSharePage() {
               className="h-10 mb-4"
             />
           )}
-          <h1 className="text-3xl font-serif text-foreground">
+          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-foreground">
             Analisis de Riesgos
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -157,7 +157,7 @@ export default function PublicRiskSharePage() {
         </div>
 
         {/* Risk Register */}
-        <h2 className="text-xl font-serif text-foreground mb-4 border-b border-border pb-2">
+        <h2 className="text-xl font-semibold text-foreground mb-4 border-b border-border pb-2">
           Registro de Riesgos
         </h2>
         <div className="space-y-3 mb-8">
@@ -248,7 +248,7 @@ export default function PublicRiskSharePage() {
         {/* Opportunities */}
         {opportunities.length > 0 && (
           <>
-            <h2 className="text-xl font-serif text-foreground mb-4 border-b border-border pb-2">
+            <h2 className="text-xl font-semibold text-foreground mb-4 border-b border-border pb-2">
               Oportunidades
             </h2>
             <div className="space-y-3 mb-8">

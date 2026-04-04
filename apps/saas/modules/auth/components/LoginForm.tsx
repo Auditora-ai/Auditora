@@ -154,7 +154,7 @@ export function LoginForm() {
 
 	return (
 		<div>
-		<h1 className="auth-title font-display text-2xl md:text-3xl lg:text-4xl tracking-tight">
+		<h1 className="auth-title text-2xl md:text-3xl font-semibold tracking-tight">
 			{t("auth.login.title")}
 		</h1>
 		<p className="auth-subtitle mt-1.5 mb-6 md:mt-2 md:mb-8 text-sm md:text-base text-foreground/60">

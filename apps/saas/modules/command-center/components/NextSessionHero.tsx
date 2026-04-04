@@ -77,7 +77,7 @@ export function NextSessionHero({
 			</div>
 
 			{/* Process name */}
-			<h2 className="mb-0.5 font-display text-xl text-foreground">
+			<h2 className="mb-0.5 text-xl font-semibold text-foreground">
 				{session.processDefinition?.name ?? "Sesión general"}
 			</h2>
 

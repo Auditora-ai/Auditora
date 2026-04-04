@@ -120,7 +120,7 @@ function AccordionHeader({
 			) : (
 				<ChevronRightIcon className="h-3.5 w-3.5 text-chrome-text-muted" />
 			)}
-			<span className="font-display text-sm text-chrome-text-secondary">{title}</span>
+			<span className="text-sm font-medium text-chrome-text-secondary">{title}</span>
 			{badge && (
 				<span className="ml-auto rounded-full bg-primary/10 px-2 py-0.5 text-[9px] font-medium text-primary">
 					{badge}

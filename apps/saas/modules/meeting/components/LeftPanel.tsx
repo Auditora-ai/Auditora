@@ -105,7 +105,7 @@ export function LeftPanel({ collapsed }: LeftPanelProps) {
 		>
 			{/* Header */}
 			<div className="border-b border-chrome-border px-3 py-2">
-				<span className="font-display text-sm text-chrome-text-secondary">
+				<span className="text-sm font-medium text-chrome-text-secondary">
 					{t("leftPanel.header")}
 				</span>
 			</div>

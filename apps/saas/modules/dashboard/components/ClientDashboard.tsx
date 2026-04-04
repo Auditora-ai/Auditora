@@ -82,7 +82,7 @@ export function ClientDashboard({
 			{/* Header: Title + Differentiator Stat + Smart CTA */}
 			<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 				<div>
-					<h1 className="text-2xl font-serif font-semibold tracking-tight">
+					<h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
 						{t("hero.title")}
 					</h1>
 					{data.aiExtractedNodes > 0 && (

@@ -125,7 +125,7 @@ export default async function SharedReportPage({
 				{summaryData && (
 					<section className="rounded-lg border border-slate-200 bg-white overflow-hidden">
 						<div className="border-b border-slate-100 px-4 py-4 md:px-6">
-							<h2 className="text-lg text-slate-900" style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}>
+							<h2 className="text-lg font-semibold text-slate-900">
 								Resumen Ejecutivo
 							</h2>
 						</div>
