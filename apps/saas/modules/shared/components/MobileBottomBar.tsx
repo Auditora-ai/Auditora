@@ -67,7 +67,7 @@ export function MobileBottomBar() {
 			label: t("app.menu.processes"),
 			href: `${basePath}/processes`,
 			icon: WorkflowIcon,
-			isActive: pathname.startsWith(`${basePath}/processes`),
+			isActive: pathname.startsWith(`${basePath}/processes`) || pathname.startsWith(`${basePath}/procesos`) || pathname.startsWith(`${basePath}/procedures`),
 		},
 		{
 			label: t("app.menu.evaluaciones"),
@@ -79,7 +79,7 @@ export function MobileBottomBar() {
 			label: t("app.menu.dashboard"),
 			href: basePath,
 			icon: LayoutDashboardIcon,
-			isActive: pathname === basePath,
+			isActive: pathname === basePath || pathname === `${basePath}/panorama`,
 		},
 	];
 

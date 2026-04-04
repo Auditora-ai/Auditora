@@ -14,7 +14,7 @@ function useSectionTitle(): string {
 	if (pathname.includes("/descubrir") || pathname.includes("/sessions") || pathname.includes("/session/")) {
 		return t("app.menu.discover");
 	}
-	if (pathname.includes("/processes") || pathname.includes("/procesos")) {
+	if (pathname.includes("/processes") || pathname.includes("/procesos") || pathname.includes("/procedures")) {
 		return t("app.menu.processes");
 	}
 	if (pathname.includes("/evaluaciones")) {

@@ -293,18 +293,18 @@ export function Footer() {
 					</p>
 
 				<div className="flex items-center gap-3">
-					<a href="/security" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 text-[11px] font-medium text-white/50 border border-white/10 hover:bg-white/10 hover:text-white/70 transition-all">
+					<LocaleLink href="/security" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 text-[11px] font-medium text-white/50 border border-white/10 hover:bg-white/10 hover:text-white/70 transition-all">
 						<ShieldCheckIcon />
 						{t("common.footer.soc2")}
-					</a>
+					</LocaleLink>
 					<span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 text-[11px] font-medium text-white/50 border border-white/10">
 						<ShieldCheckIcon />
 						{t("common.footer.gdpr")}
 					</span>
-					<a href="/security" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 text-[11px] font-medium text-white/50 border border-white/10 hover:bg-white/10 hover:text-white/70 transition-all">
+					<LocaleLink href="/security" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 text-[11px] font-medium text-white/50 border border-white/10 hover:bg-white/10 hover:text-white/70 transition-all">
 						<ShieldCheckIcon />
 						{t("common.footer.iso27001")}
-					</a>
+					</LocaleLink>
 				</div>
 				</div>
 

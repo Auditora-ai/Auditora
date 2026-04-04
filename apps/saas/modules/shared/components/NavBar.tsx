@@ -122,7 +122,7 @@ export function NavBar() {
 			label: t("app.menu.processes"),
 			href: `${basePath}/processes`,
 			icon: WorkflowIcon,
-			isActive: pathname.startsWith(`${basePath}/processes`) || pathname.startsWith(`${basePath}/procesos`),
+			isActive: pathname.startsWith(`${basePath}/processes`) || pathname.startsWith(`${basePath}/procesos`) || pathname.startsWith(`${basePath}/procedures`),
 			hidden: !hasOrg,
 			section: "flow",
 			badge: processBadge,
