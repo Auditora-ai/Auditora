@@ -287,7 +287,7 @@ export function AIInterviewPage({
 							)}
 							<Link
 								href={`/${organizationSlug}/descubrir`}
-								className="flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium text-white min-h-[44px]"
+								className="flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium text-primary-foreground min-h-[44px]"
 								style={{ backgroundColor: "#3B8FE8" }}
 							>
 								Volver a Descubrir

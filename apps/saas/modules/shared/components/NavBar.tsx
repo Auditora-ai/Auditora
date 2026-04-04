@@ -207,8 +207,8 @@ export function NavBar() {
 					"relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-150",
 					"group/navitem",
 					item.isActive
-						? "bg-slate-800 text-slate-50 font-medium"
-						: "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200",
+						? "bg-accent text-accent-foreground font-medium"
+						: "text-muted-foreground hover:bg-accent/50 hover:text-foreground",
 					isCollapsedEffective &&
 						useSidebarLayout &&
 						"justify-center px-2",
@@ -218,8 +218,8 @@ export function NavBar() {
 					className={cn(
 						"size-4 shrink-0",
 						item.isActive
-							? "text-slate-50"
-							: "text-slate-500",
+							? "text-foreground"
+							: "text-foreground0",
 					)}
 				/>
 				{(!isCollapsedEffective || !useSidebarLayout) && (
@@ -259,7 +259,7 @@ export function NavBar() {
 						href={item.quickAction.href}
 						className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover/qa:opacity-100 transition-opacity"
 					>
-						<span className="flex size-5 items-center justify-center rounded bg-slate-700 hover:bg-slate-600 text-slate-300">
+						<span className="flex size-5 items-center justify-center rounded bg-muted hover:bg-accent text-muted-foreground">
 							<PlusIcon className="size-3" />
 						</span>
 					</Link>
@@ -307,10 +307,10 @@ export function NavBar() {
 						? "justify-center px-2"
 						: "px-3",
 					item.isActive
-						? "bg-[#3B8FE8]/[0.08] text-slate-50 font-medium"
+						? "bg-primary/[0.08] text-foreground font-medium"
 						: completed
-							? "text-slate-300 hover:bg-slate-800/50 hover:text-slate-100"
-							: "text-slate-500 hover:bg-slate-800/50 hover:text-slate-300",
+							? "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+							: "text-foreground0 hover:bg-accent/50 hover:text-muted-foreground",
 				)}
 			>
 				{/* Step circle */}
@@ -318,10 +318,10 @@ export function NavBar() {
 					className={cn(
 						"relative z-10 flex size-5 items-center justify-center rounded-full text-[10px] font-bold shrink-0 transition-colors duration-150",
 						item.isActive
-							? "bg-[#3B8FE8] text-slate-900"
+							? "bg-primary text-primary-foreground"
 							: completed
-								? "bg-[#3B8FE8]/20 text-[#3B8FE8] ring-1 ring-[#3B8FE8]/30"
-								: "bg-slate-800 text-slate-500 ring-1 ring-slate-700",
+								? "bg-primary/20 text-primary ring-1 ring-primary/30"
+								: "bg-accent text-foreground0 ring-1 ring-border",
 					)}
 				>
 					{step}
@@ -360,7 +360,7 @@ export function NavBar() {
 						href={item.quickAction.href}
 						className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover/qa:opacity-100 transition-opacity"
 					>
-						<span className="flex size-5 items-center justify-center rounded bg-slate-700 hover:bg-slate-600 text-slate-300">
+						<span className="flex size-5 items-center justify-center rounded bg-muted hover:bg-accent text-muted-foreground">
 							<PlusIcon className="size-3" />
 						</span>
 					</Link>
@@ -374,7 +374,7 @@ export function NavBar() {
 				{/* Section header label (CAPTURAR, DOCUMENTAR, etc.) */}
 				{sectionLabel && !isCollapsedEffective && (
 					<div className="mx-3 mb-1 mt-3 first:mt-0">
-						<span className="text-[9px] font-semibold uppercase tracking-[0.12em] text-slate-600">
+						<span className="text-[9px] font-semibold uppercase tracking-[0.12em] text-muted-foreground/60">
 							{sectionLabel}
 						</span>
 					</div>
@@ -385,7 +385,7 @@ export function NavBar() {
 						className={cn(
 							"absolute left-[21px] w-px h-[calc(100%-20px)] pointer-events-none transition-colors duration-150",
 							sectionLabel ? "top-[52px]" : "top-[32px]",
-							completed ? "bg-[#3B8FE8]/30" : "bg-slate-700/60",
+							completed ? "bg-primary/30" : "bg-muted/60",
 						)}
 					/>
 				)}
@@ -393,7 +393,7 @@ export function NavBar() {
 					<div
 						className={cn(
 							"absolute left-1/2 -translate-x-px top-[32px] w-px h-[calc(100%-20px)] pointer-events-none transition-colors duration-150",
-							completed ? "bg-[#3B8FE8]/30" : "bg-slate-700/60",
+							completed ? "bg-primary/30" : "bg-muted/60",
 						)}
 					/>
 				)}
@@ -408,7 +408,7 @@ export function NavBar() {
 						<div
 							className={cn(
 								"absolute left-1/2 -translate-x-px top-[32px] w-px h-[calc(100%-20px)] pointer-events-none transition-colors duration-150",
-								completed ? "bg-[#3B8FE8]/30" : "bg-slate-700/60",
+								completed ? "bg-primary/30" : "bg-muted/60",
 							)}
 						/>
 					)}
@@ -426,10 +426,10 @@ export function NavBar() {
 								<span className={cn(
 									"flex size-4 items-center justify-center rounded-full text-[9px] font-bold",
 									item.isActive
-										? "bg-[#3B8FE8] text-slate-900"
+										? "bg-primary text-primary-foreground"
 										: completed
-											? "bg-[#3B8FE8]/20 text-[#3B8FE8]"
-											: "bg-slate-700 text-slate-400",
+											? "bg-primary/20 text-primary"
+											: "bg-muted text-muted-foreground",
 								)}>
 									{step}
 								</span>
@@ -452,7 +452,7 @@ export function NavBar() {
 	return (
 		<nav
 			className={cn(
-				"w-full bg-slate-900 text-slate-200",
+				"w-full bg-card text-foreground/80",
 				"hidden md:block",
 				{
 					"md:fixed md:top-0 md:left-0 md:h-full md:w-[280px]":
@@ -470,12 +470,12 @@ export function NavBar() {
 					</Link>
 					{!isCollapsedEffective && user && (
 						<div className="mt-3 px-1">
-							<p className="text-sm font-medium text-slate-200">
+							<p className="text-sm font-medium text-foreground/80">
 								{t(`app.greeting.${getGreetingKey()}`)},{" "}
 								{user.name?.split(" ")[0] ?? ""}
 							</p>
 							{greetingSubtitle && (
-								<p className="mt-0.5 text-[11px] text-slate-500 leading-tight">
+								<p className="mt-0.5 text-[11px] text-foreground0 leading-tight">
 									{greetingSubtitle}
 								</p>
 							)}
@@ -505,7 +505,7 @@ export function NavBar() {
 				{hasOrg && !navLoading && navData && (
 					<div
 						className={cn(
-							"mb-4 rounded-lg bg-slate-800/50 p-3",
+							"mb-4 rounded-lg bg-accent/50 p-3",
 							isCollapsedEffective && "flex justify-center p-2",
 						)}
 					>
@@ -574,7 +574,7 @@ export function NavBar() {
 								variant="ghost"
 								size="icon"
 								onClick={toggleCollapsed}
-								className="text-slate-500 hover:text-slate-300 hover:bg-slate-800"
+								className="text-foreground0 hover:text-muted-foreground hover:bg-accent"
 								aria-label={
 									isCollapsed
 										? "Expand sidebar"

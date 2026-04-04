@@ -202,7 +202,7 @@ export function RiskDashboard({
 							]}
 						/>
 						{/* Onboarding checklist */}
-						<div className="mx-auto max-w-md rounded-2xl border border-white/10 bg-card/80 p-5 shadow-sm backdrop-blur-sm dark:border-white/5 dark:bg-card/60">
+						<div className="mx-auto max-w-md rounded-2xl border border-border bg-card/80 p-5 shadow-sm backdrop-blur-sm dark:border-border/50 dark:bg-card/60">
 							<h3 className="mb-3 text-sm font-semibold text-foreground">
 								{t("nextStepsTitle")}
 							</h3>
@@ -211,7 +211,7 @@ export function RiskDashboard({
 									<Link
 										key={i}
 										href={step.href}
-										className="group flex items-center gap-3 rounded-xl border border-white/10 px-4 py-3 min-h-[48px] transition-all hover:border-primary/30 hover:shadow-sm active:scale-[0.98] dark:border-white/5"
+										className="group flex items-center gap-3 rounded-xl border border-border px-4 py-3 min-h-[48px] transition-all hover:border-primary/30 hover:shadow-sm active:scale-[0.98] dark:border-border/50"
 									>
 										<span
 											className={`flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-medium ${
@@ -241,7 +241,7 @@ export function RiskDashboard({
 					<>
 						{/* ═══ Hero Score + Stats row ═══ */}
 						<div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-							<div className="rounded-2xl border border-white/10 bg-card/80 bg-gradient-to-br from-primary/5 via-transparent to-blue-500/5 p-4 shadow-sm backdrop-blur-sm dark:border-white/5 dark:bg-card/60 md:p-6">
+							<div className="rounded-2xl border border-border bg-card/80 bg-gradient-to-br from-primary/5 via-transparent to-blue-500/5 p-4 shadow-sm backdrop-blur-sm dark:border-border/50 dark:bg-card/60 md:p-6">
 								<div className="flex flex-col items-center gap-4 md:flex-row md:gap-8">
 									{/* Large maturity ring — hero element */}
 									<div className="flex flex-col items-center">
@@ -257,7 +257,7 @@ export function RiskDashboard({
 											{/* Documented processes: X of Y */}
 								<Link
 									href={`${basePath}/procesos`}
-									className="group rounded-xl bg-white/5 p-2.5 transition-all hover:bg-accent/30 active:scale-95 md:bg-transparent md:p-0"
+									className="group rounded-xl bg-muted/50 p-2.5 transition-all hover:bg-accent/30 active:scale-95 md:bg-transparent md:p-0"
 								>
 									<p className="text-xl font-bold tabular-nums text-foreground transition-colors group-hover:text-primary md:text-2xl">
 										{documentedCount}
@@ -273,7 +273,7 @@ export function RiskDashboard({
 											{/* Risk count */}
 								<Link
 									href={`${basePath}/procesos`}
-									className="group rounded-xl bg-white/5 p-2.5 transition-all hover:bg-accent/30 active:scale-95 md:bg-transparent md:p-0"
+									className="group rounded-xl bg-muted/50 p-2.5 transition-all hover:bg-accent/30 active:scale-95 md:bg-transparent md:p-0"
 								>
 									<p className="text-xl font-bold tabular-nums text-foreground transition-colors group-hover:text-amber-500 md:text-2xl">
 										{riskCount}
@@ -286,7 +286,7 @@ export function RiskDashboard({
 											{/* Evaluations completed */}
 								<Link
 									href={`${basePath}/evaluaciones`}
-									className="group rounded-xl bg-white/5 p-2.5 transition-all hover:bg-accent/30 active:scale-95 md:bg-transparent md:p-0"
+									className="group rounded-xl bg-muted/50 p-2.5 transition-all hover:bg-accent/30 active:scale-95 md:bg-transparent md:p-0"
 								>
 									<p className="text-xl font-bold tabular-nums text-foreground transition-colors group-hover:text-blue-500 md:text-2xl">
 													{evaluaciones?.totalSimulations ??
@@ -302,7 +302,7 @@ export function RiskDashboard({
 											{/* Active evaluators */}
 								<Link
 									href={`${basePath}/evaluaciones?tab=dashboard`}
-									className="group rounded-xl bg-white/5 p-2.5 transition-all hover:bg-accent/30 active:scale-95 md:bg-transparent md:p-0"
+									className="group rounded-xl bg-muted/50 p-2.5 transition-all hover:bg-accent/30 active:scale-95 md:bg-transparent md:p-0"
 								>
 									<p className="text-xl font-bold tabular-nums text-foreground transition-colors group-hover:text-green-500 md:text-2xl">
 													{evaluaciones?.membersEvaluated ??
@@ -323,7 +323,7 @@ export function RiskDashboard({
 							<div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
 								<Link
 									href={`${basePath}/descubrir`}
-								className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-card/80 p-4 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-md active:bg-accent/80 active:scale-[0.98] dark:border-white/5 dark:bg-card/60"
+								className="group flex items-center gap-3 rounded-2xl border border-border bg-card/80 p-4 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-md active:bg-accent/80 active:scale-[0.98] dark:border-border/50 dark:bg-card/60"
 							>
 								<div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-blue-500/10">
 									<SearchIcon className="size-5 text-blue-500" />
@@ -341,7 +341,7 @@ export function RiskDashboard({
 
 								<Link
 							href={`${basePath}/evaluaciones`}
-								className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-card/80 p-4 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-md active:bg-accent/80 active:scale-[0.98] dark:border-white/5 dark:bg-card/60"
+								className="group flex items-center gap-3 rounded-2xl border border-border bg-card/80 p-4 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-md active:bg-accent/80 active:scale-[0.98] dark:border-border/50 dark:bg-card/60"
 							>
 								<div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
 									<ClipboardCheckIcon className="size-5 text-primary" />
@@ -359,7 +359,7 @@ export function RiskDashboard({
 
 								<Link
 							href={`${basePath}/settings/members`}
-								className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-card/80 p-4 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-md active:bg-accent/80 active:scale-[0.98] dark:border-white/5 dark:bg-card/60"
+								className="group flex items-center gap-3 rounded-2xl border border-border bg-card/80 p-4 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-md active:bg-accent/80 active:scale-[0.98] dark:border-border/50 dark:bg-card/60"
 								>
 									<div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-green-500/10">
 										<UserPlusIcon className="size-5 text-green-500" />
@@ -385,7 +385,7 @@ export function RiskDashboard({
 									{t("topRisks")}
 								</h2>
 								{topRisks.length === 0 ? (
-									<div className="rounded-2xl border border-white/10 bg-card/80 p-8 text-center shadow-sm backdrop-blur-sm dark:border-white/5 dark:bg-card/60">
+									<div className="rounded-2xl border border-border bg-card/80 p-8 text-center shadow-sm backdrop-blur-sm dark:border-border/50 dark:bg-card/60">
 										<p className="text-sm text-muted-foreground">
 											{t("noRisksDesc")}
 										</p>
@@ -396,12 +396,12 @@ export function RiskDashboard({
 											<Link
 												key={risk.id}
 												href={`${basePath}/procesos`}
-												className={`block rounded-2xl border border-l-4 border-white/10 bg-card/80 p-4 backdrop-blur-sm transition-all duration-300 hover:shadow-md dark:border-white/5 dark:bg-card/60 ${
+												className={`block rounded-2xl border border-l-4 border-border bg-card/80 p-4 backdrop-blur-sm transition-all duration-300 hover:shadow-md dark:border-border/50 dark:bg-card/60 ${
 													risk.riskScore >= 16
-														? "border-l-[#DC2626] dark:border-red-900/30"
+														? "border-l-destructive"
 														: risk.riskScore >= 12
-															? "border-l-[#D97706] dark:border-amber-900/30"
-															: "border-l-[#0EA5E9] border-border"
+															? "border-l-amber-500"
+															: "border-l-primary border-border"
 												}`}
 											>
 												<div className="flex items-start justify-between">
@@ -457,7 +457,7 @@ export function RiskDashboard({
 									{t("vulnerableProcesses")}
 								</h2>
 								{vulnerableProcesses.length === 0 ? (
-									<div className="rounded-2xl border border-white/10 bg-card/80 p-8 text-center shadow-sm backdrop-blur-sm dark:border-white/5 dark:bg-card/60">
+									<div className="rounded-2xl border border-border bg-card/80 p-8 text-center shadow-sm backdrop-blur-sm dark:border-border/50 dark:bg-card/60">
 										<p className="text-sm text-muted-foreground">
 											{t("noVulnerableProcesses")}
 										</p>
@@ -481,7 +481,7 @@ export function RiskDashboard({
 												<Link
 													key={proc.processId}
 													href={`${basePath}/evaluaciones`}
-													className="block rounded-2xl border border-white/10 bg-card/80 p-4 backdrop-blur-sm transition-all duration-300 hover:shadow-md dark:border-white/5 dark:bg-card/60"
+													className="block rounded-2xl border border-border bg-card/80 p-4 backdrop-blur-sm transition-all duration-300 hover:shadow-md dark:border-border/50 dark:bg-card/60"
 												>
 													<div className="mb-2 flex items-center justify-between">
 														<h3 className="truncate text-sm font-medium text-foreground">
@@ -535,7 +535,7 @@ export function RiskDashboard({
 									{/* Org Score */}
 									<Link
 										href={`${basePath}/evaluaciones?tab=dashboard`}
-										className="group rounded-2xl border border-white/10 bg-card/80 p-4 backdrop-blur-sm transition-all hover:border-primary/30 hover:shadow-md dark:border-white/5 dark:bg-card/60"
+										className="group rounded-2xl border border-border bg-card/80 p-4 backdrop-blur-sm transition-all hover:border-primary/30 hover:shadow-md dark:border-border/50 dark:bg-card/60"
 									>
 										<div className="flex items-center gap-3">
 											<div className="flex size-10 items-center justify-center rounded-lg bg-primary/10">
@@ -558,7 +558,7 @@ export function RiskDashboard({
 									{/* Total Evaluations */}
 									<Link
 										href={`${basePath}/evaluaciones`}
-										className="group rounded-2xl border border-white/10 bg-card/80 p-4 backdrop-blur-sm transition-all hover:border-primary/30 hover:shadow-md dark:border-white/5 dark:bg-card/60"
+										className="group rounded-2xl border border-border bg-card/80 p-4 backdrop-blur-sm transition-all hover:border-primary/30 hover:shadow-md dark:border-border/50 dark:bg-card/60"
 									>
 										<div className="flex items-center gap-3">
 											<div className="flex size-10 items-center justify-center rounded-lg bg-blue-500/10">
@@ -582,7 +582,7 @@ export function RiskDashboard({
 									{/* Members Evaluated */}
 									<Link
 										href={`${basePath}/evaluaciones?tab=dashboard`}
-										className="group rounded-2xl border border-white/10 bg-card/80 p-4 backdrop-blur-sm transition-all hover:border-primary/30 hover:shadow-md dark:border-white/5 dark:bg-card/60"
+										className="group rounded-2xl border border-border bg-card/80 p-4 backdrop-blur-sm transition-all hover:border-primary/30 hover:shadow-md dark:border-border/50 dark:bg-card/60"
 									>
 										<div className="flex items-center gap-3">
 											<div className="flex size-10 items-center justify-center rounded-lg bg-green-500/10">
@@ -604,7 +604,7 @@ export function RiskDashboard({
 									{/* Completion Rate */}
 									<Link
 										href={`${basePath}/evaluaciones?tab=dashboard`}
-										className="group rounded-2xl border border-white/10 bg-card/80 p-4 backdrop-blur-sm transition-all hover:border-primary/30 hover:shadow-md dark:border-white/5 dark:bg-card/60"
+										className="group rounded-2xl border border-border bg-card/80 p-4 backdrop-blur-sm transition-all hover:border-primary/30 hover:shadow-md dark:border-border/50 dark:bg-card/60"
 									>
 										<div className="flex items-center gap-3">
 											<div className="flex size-10 items-center justify-center rounded-lg bg-amber-500/10">
@@ -626,7 +626,7 @@ export function RiskDashboard({
 								</div>
 
 								{/* Dimension mini-bars */}
-								<div className="mt-4 rounded-2xl border border-white/10 bg-card/80 p-4 shadow-sm backdrop-blur-sm dark:border-white/5 dark:bg-card/60">
+								<div className="mt-4 rounded-2xl border border-border bg-card/80 p-4 shadow-sm backdrop-blur-sm dark:border-border/50 dark:bg-card/60">
 									<div className="space-y-3">
 										{[
 											{
@@ -767,9 +767,9 @@ export function RiskDashboard({
 											<Link
 												key={step.id}
 												href={step.href}
-												className="group flex items-start gap-3 rounded-2xl border border-white/10 bg-card/80 p-4 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-md dark:border-white/5 dark:bg-card/60"
+												className="group flex items-start gap-3 rounded-2xl border border-border bg-card/80 p-4 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-md dark:border-border/50 dark:bg-card/60"
 											>
-												<div className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-white/5">
+												<div className="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted/50">
 													{iconMap[step.icon]}
 												</div>
 												<div className="min-w-0 flex-1">
@@ -787,7 +787,7 @@ export function RiskDashboard({
 
 						{/* ═══ Next Session ═══ */}
 						{nextSession && (
-							<div className="animate-in fade-in slide-in-from-bottom-2 delay-200 rounded-2xl border border-white/10 bg-card/80 p-4 shadow-sm backdrop-blur-sm duration-500 dark:border-white/5 dark:bg-card/60">
+							<div className="animate-in fade-in slide-in-from-bottom-2 delay-200 rounded-2xl border border-border bg-card/80 p-4 shadow-sm backdrop-blur-sm duration-500 dark:border-border/50 dark:bg-card/60">
 								<div className="flex items-center gap-3">
 									<div className="flex size-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
 										<CalendarIcon className="size-5" />
@@ -831,7 +831,7 @@ export function RiskDashboard({
 									{recentActivity.map((item, i) => (
 										<div
 											key={i}
-											className="flex items-center gap-3 rounded-xl border border-white/10 bg-card/80 px-4 py-3 backdrop-blur-sm dark:border-white/5 dark:bg-card/60"
+											className="flex items-center gap-3 rounded-xl border border-border bg-card/80 px-4 py-3 backdrop-blur-sm dark:border-border/50 dark:bg-card/60"
 										>
 											<span
 												className={`size-2 rounded-full ${

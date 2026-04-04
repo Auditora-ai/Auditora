@@ -86,7 +86,7 @@ export default async function DescubrirPage({
 					return (
 						<Card
 							key={channel.key}
-							className={`group relative overflow-hidden rounded-2xl border-slate-800 bg-slate-900/80 transition-all duration-300 ${channel.borderHover} hover:shadow-lg active:shadow-md active:scale-[0.98] ${channel.glowColor}`}
+							className={`group relative overflow-hidden rounded-2xl border-border bg-card transition-all duration-300 ${channel.borderHover} hover:shadow-lg active:shadow-md active:scale-[0.98] ${channel.glowColor}`}
 						>
 							<CardHeader className="pb-3 p-4 md:p-6 md:pb-3">
 								<div className="flex items-start justify-between">
@@ -110,17 +110,17 @@ export default async function DescubrirPage({
 										</span>
 									</div>
 								</div>
-								<CardTitle className="mt-3 md:mt-4 text-base font-semibold text-slate-50">
+								<CardTitle className="mt-3 md:mt-4 text-base font-semibold text-foreground">
 									{t(`${channel.key}.title`)}
 								</CardTitle>
 							</CardHeader>
 
 							<CardContent className="pb-3 md:pb-4 px-4 md:px-6 space-y-3">
-								<p className="text-sm leading-relaxed text-slate-400">
+								<p className="text-sm leading-relaxed text-muted-foreground">
 									{t(`${channel.key}.description`)}
 								</p>
 								{/* Output deliverables */}
-								<p className="text-[11px] font-medium tracking-wide text-slate-500 uppercase">
+								<p className="text-[11px] font-medium tracking-wide text-muted-foreground/60 uppercase">
 									{t(`${channel.key}.output`)}
 								</p>
 							</CardContent>
@@ -129,7 +129,7 @@ export default async function DescubrirPage({
 								<Button
 									asChild
 									variant="outline"
-									className="w-full border-slate-700 text-slate-200 hover:border-slate-600 hover:bg-slate-800 hover:text-white min-h-[44px] active:bg-slate-700"
+									className="w-full border-border text-foreground hover:border-border hover:bg-accent hover:text-foreground min-h-[44px] active:bg-accent/80"
 								>
 									<Link href={channel.href}>
 										{t(`${channel.key}.cta`)}
@@ -144,7 +144,7 @@ export default async function DescubrirPage({
 
 			{/* Past sessions */}
 			<div className="mt-8 md:mt-14">
-				<h2 className="mb-4 md:mb-6 text-base md:text-lg font-semibold text-slate-200">
+				<h2 className="mb-4 md:mb-6 text-base md:text-lg font-semibold text-foreground">
 					{t("pastSessions")}
 				</h2>
 				<SessionList organizationSlug={organizationSlug} />

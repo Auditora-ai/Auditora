@@ -98,7 +98,7 @@ export function InterviewChat({
 						{readyForReveal && (
 							<button
 								onClick={onReveal}
-								className="rounded-md px-3 py-2 text-xs sm:text-sm font-medium text-white transition-colors hover:opacity-90 min-h-[36px] sm:min-h-[40px]"
+								className="rounded-md px-3 py-2 text-xs sm:text-sm font-medium text-primary-foreground transition-colors hover:opacity-90 min-h-[36px] sm:min-h-[40px]"
 								style={{ backgroundColor: "#3B8FE8" }}
 							>
 								Ver BPMN
@@ -235,7 +235,7 @@ export function InterviewChat({
 					<button
 						onClick={handleSend}
 						disabled={!input.trim() || sending}
-						className="flex items-center justify-center rounded-xl px-5 text-white transition-colors disabled:opacity-50 active:scale-95"
+						className="flex items-center justify-center rounded-xl px-5 text-primary-foreground transition-colors disabled:opacity-50 active:scale-95"
 						style={{ backgroundColor: "#3B8FE8", minHeight: "48px", minWidth: "48px" }}
 					>
 						<SendIcon className="size-5" />

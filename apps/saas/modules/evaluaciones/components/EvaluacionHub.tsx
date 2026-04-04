@@ -170,10 +170,10 @@ export function EvaluacionHub({ templates, recentRuns, organizationSlug }: Evalu
 									<span className={cn(
 										"inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium shrink-0",
 										template.status === "PUBLISHED" && "bg-emerald-500/20 text-emerald-400",
-										template.status === "DRAFT" && "bg-slate-500/20 text-slate-400",
+										template.status === "DRAFT" && "bg-muted text-muted-foreground",
 										template.status === "GENERATING" && "bg-blue-500/20 text-blue-400",
 										template.status === "GENERATION_FAILED" && "bg-red-500/20 text-red-400",
-										template.status === "ARCHIVED" && "bg-slate-500/20 text-slate-500",
+										template.status === "ARCHIVED" && "bg-muted text-muted-foreground",
 									)}>
 										{template.status === "PUBLISHED" ? t("statusActive")
 											: template.status === "GENERATING" ? "…"
@@ -266,7 +266,7 @@ export function EvaluacionHub({ templates, recentRuns, organizationSlug }: Evalu
 											? "bg-emerald-500/20 text-emerald-400"
 											: run.status === "IN_PROGRESS"
 												? "bg-blue-500/20 text-blue-400"
-												: "bg-slate-500/20 text-slate-400",
+												: "bg-muted text-muted-foreground",
 									)}>
 										{run.status === "COMPLETED" ? t("statusCompleted") : run.status === "IN_PROGRESS" ? t("statusInProgress") : "—"}
 									</span>

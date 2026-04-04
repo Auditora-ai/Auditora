@@ -68,7 +68,7 @@ function MobileWorkspaceInner({
 	const statusVariant = STATUS_MAP[process.processStatus] ?? "info";
 	const statusColors: Record<string, string> = {
 		success: "bg-emerald-600/20 text-emerald-400 border-emerald-500/30",
-		info: "bg-sky-600/20 text-sky-400 border-sky-500/30",
+		info: "bg-sky-600/20 text-primary border-sky-500/30",
 		warning: "bg-amber-600/20 text-amber-400 border-amber-500/30",
 		error: "bg-red-600/20 text-red-400 border-red-500/30",
 	};
@@ -98,24 +98,24 @@ function MobileWorkspaceInner({
 	};
 
 	return (
-		<div className="flex min-h-screen flex-col bg-slate-950 text-slate-50">
+		<div className="flex min-h-screen flex-col bg-background text-foreground">
 			{/* ── Header ── */}
-			<header className="sticky top-0 z-30 flex items-center gap-3 border-b border-slate-800 bg-slate-950/95 backdrop-blur px-4 py-3">
+			<header className="sticky top-0 z-30 flex items-center gap-3 border-b border-border bg-background/95 backdrop-blur px-4 py-3">
 				<Link href={processesPath}>
 					<Button
 					variant="ghost"
 					size="icon"
-					className="h-11 w-11 shrink-0 text-slate-400 hover:text-slate-50"
+					className="h-11 w-11 shrink-0 text-muted-foreground hover:text-foreground"
 					>
 						<ArrowLeftIcon className="h-5 w-5" />
 					</Button>
 				</Link>
 				<div className="min-w-0 flex-1">
-					<h1 className="truncate text-base font-semibold text-slate-50">
+					<h1 className="truncate text-base font-semibold text-foreground">
 						{process.name}
 					</h1>
 					{process.category && (
-						<span className="text-xs text-slate-400">{process.category}</span>
+						<span className="text-xs text-muted-foreground">{process.category}</span>
 					)}
 				</div>
 				<Badge
@@ -129,17 +129,17 @@ function MobileWorkspaceInner({
 			<main className="flex-1 overflow-y-auto pb-24">
 				{/* ── Diagram Preview Card ── */}
 				<section className="mx-4 mt-4">
-					<div className="overflow-hidden rounded-xl border border-slate-800 bg-slate-900">
+					<div className="overflow-hidden rounded-xl border border-border bg-card">
 						{process.bpmnXml ? (
-							<div className="flex h-48 items-center justify-center bg-slate-900/50 p-4">
+							<div className="flex h-48 items-center justify-center bg-muted/50 p-4">
 								<div className="text-center">
-									<div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-sky-600/15">
-										<MonitorIcon className="h-7 w-7 text-sky-400" />
+									<div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-primary/15">
+										<MonitorIcon className="h-7 w-7 text-primary" />
 									</div>
-									<p className="text-sm font-medium text-slate-200">
+									<p className="text-sm font-medium text-foreground">
 										Diagrama BPMN
 									</p>
-									<p className="mt-1 text-xs text-slate-400">
+									<p className="mt-1 text-xs text-muted-foreground">
 										Abre en escritorio para editar
 									</p>
 								</div>
@@ -147,13 +147,13 @@ function MobileWorkspaceInner({
 						) : (
 							<div className="flex h-48 items-center justify-center p-4">
 								<div className="text-center">
-									<div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-slate-800">
-										<MonitorIcon className="h-7 w-7 text-slate-500" />
+									<div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-muted">
+										<MonitorIcon className="h-7 w-7 text-muted-foreground" />
 									</div>
-									<p className="text-sm font-medium text-slate-400">
+									<p className="text-sm font-medium text-muted-foreground">
 										No hay diagrama aún
 									</p>
-									<p className="mt-1 text-xs text-slate-500">
+									<p className="mt-1 text-xs text-muted-foreground">
 										Crea una sesión para generar el diagrama
 									</p>
 								</div>
@@ -161,13 +161,13 @@ function MobileWorkspaceInner({
 						)}
 
 						{/* Action buttons */}
-						<div className="flex gap-2 border-t border-slate-800 p-3">
+						<div className="flex gap-2 border-t border-border p-3">
 							{process.bpmnXml && (
 								<>
 									<Button
 										variant="outline"
 										size="sm"
-										className="flex-1 border-slate-700 bg-slate-800/50 text-slate-200 hover:bg-slate-800 hover:text-slate-50"
+										className="flex-1 border-border bg-muted text-foreground hover:bg-accent hover:text-foreground"
 										onClick={() =>
 											window.open(
 												`${processesPath}/${process.id}?view=diagram`,
@@ -181,7 +181,7 @@ function MobileWorkspaceInner({
 									<Button
 										variant="outline"
 										size="sm"
-										className="flex-1 border-slate-700 bg-slate-800/50 text-slate-200 hover:bg-slate-800 hover:text-slate-50"
+										className="flex-1 border-border bg-muted text-foreground hover:bg-accent hover:text-foreground"
 										onClick={handleDownloadPng}
 										disabled={downloading}
 									>
@@ -211,59 +211,59 @@ function MobileWorkspaceInner({
 				{/* ── Tab sections ── */}
 				<section className="mx-4 mt-4">
 					<Tabs defaultValue="resumen" className="w-full">
-						<TabsList className="w-full overflow-x-auto border border-slate-800 bg-slate-900 p-1">
+						<TabsList className="w-full overflow-x-auto border border-border bg-muted p-1">
 					<TabsTrigger
 						value="resumen"
-						className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 px-3 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
+						className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 px-3 text-xs data-[state=active]:bg-background data-[state=active]:text-foreground"
 					>
 						<LayoutDashboardIcon className="h-3.5 w-3.5" />
 						Resumen
 					</TabsTrigger>
 					<TabsTrigger
 						value="contexto"
-						className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 px-3 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
+						className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 px-3 text-xs data-[state=active]:bg-background data-[state=active]:text-foreground"
 					>
 						<FileTextIcon className="h-3.5 w-3.5" />
 						Contexto
 					</TabsTrigger>
 					<TabsTrigger
 						value="procedimientos"
-						className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 px-3 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
+						className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 px-3 text-xs data-[state=active]:bg-background data-[state=active]:text-foreground"
 					>
 						<ClipboardListIcon className="h-3.5 w-3.5" />
 						SOPs
 					</TabsTrigger>
 					<TabsTrigger
 						value="raci"
-						className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 px-3 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
+						className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 px-3 text-xs data-[state=active]:bg-background data-[state=active]:text-foreground"
 					>
 						<Table2Icon className="h-3.5 w-3.5" />
 						RACI
 					</TabsTrigger>
 					<TabsTrigger
 						value="riesgos"
-						className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 px-3 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
+						className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 px-3 text-xs data-[state=active]:bg-background data-[state=active]:text-foreground"
 					>
 						<ShieldAlertIcon className="h-3.5 w-3.5" />
 						Riesgos
 					</TabsTrigger>
 					<TabsTrigger
 						value="evaluacion"
-						className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 px-3 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
+						className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 px-3 text-xs data-[state=active]:bg-background data-[state=active]:text-foreground"
 					>
 						<BarChart3Icon className="h-3.5 w-3.5" />
 						Evaluación
 					</TabsTrigger>
 					<TabsTrigger
 						value="sesiones"
-						className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 px-3 text-xs data-[state=active]:bg-slate-800 data-[state=active]:text-slate-50"
+						className="flex min-h-[44px] min-w-[44px] items-center justify-center gap-1 px-3 text-xs data-[state=active]:bg-background data-[state=active]:text-foreground"
 					>
 						<VideoIcon className="h-3.5 w-3.5" />
 						Sesiones
 					</TabsTrigger>
 						</TabsList>
 
-						<div className="mt-3 rounded-xl border border-slate-800 bg-slate-900 p-3">
+						<div className="mt-3 rounded-xl border border-border bg-card p-3">
 							<TabsContent value="resumen" className="mt-0">
 								<ResumenTab process={process} />
 							</TabsContent>
@@ -320,18 +320,18 @@ function MobileWorkspaceInner({
 							className="flex items-center gap-2"
 							onClick={() => setFabOpen(false)}
 						>
-							<span className="rounded-lg bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-200 shadow-lg border border-slate-700">
+							<span className="rounded-lg bg-card px-3 py-1.5 text-xs font-medium text-foreground shadow-lg border border-border">
 								Iniciar entrevista
 							</span>
-							<div className="flex h-11 w-11 items-center justify-center rounded-full bg-sky-600 shadow-lg shadow-sky-600/25">
-								<PlayIcon className="h-4 w-4 text-white" />
+							<div className="flex h-11 w-11 items-center justify-center rounded-full bg-primary shadow-lg shadow-primary/25">
+								<PlayIcon className="h-4 w-4 text-primary-foreground" />
 							</div>
 						</Link>
 
 						{/* Generate Evaluation */}
 						{(process.risksCount ?? 0) > 0 && (
 							<div className="flex items-center gap-2">
-								<span className="rounded-lg bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-200 shadow-lg border border-slate-700">
+								<span className="rounded-lg bg-card px-3 py-1.5 text-xs font-medium text-foreground shadow-lg border border-border">
 									Generar evaluación
 								</span>
 								<GenerateEvaluationDialog
@@ -352,14 +352,14 @@ function MobileWorkspaceInner({
 				aria-expanded={fabOpen}
 				className={`flex h-14 w-14 items-center justify-center rounded-full shadow-xl transition-all duration-200 active:scale-[0.95] ${
 					fabOpen
-						? "bg-slate-700 rotate-45 shadow-slate-700/25"
-						: "bg-sky-600 shadow-sky-600/30"
+						? "bg-muted rotate-45 shadow-muted/25"
+						: "bg-primary shadow-primary/30"
 				}`}
 			>
 					{fabOpen ? (
-						<XIcon className="h-6 w-6 text-white" />
+						<XIcon className="h-6 w-6 text-primary-foreground" />
 					) : (
-						<PlusIcon className="h-6 w-6 text-white" />
+						<PlusIcon className="h-6 w-6 text-primary-foreground" />
 					)}
 				</button>
 			</div>
