@@ -85,7 +85,7 @@ export function CommandPalette() {
 					label: tApp("menu.dashboard"),
 					section: t("sections.view"),
 					icon: LayoutDashboardIcon,
-					action: () => router.push(basePath),
+					action: () => router.push(`${basePath}/panorama`),
 				},
 				// CONFIGURAR
 				{

@@ -294,7 +294,7 @@ export function OnboardingCompanyStep({
 					<Button
 						type="submit"
 						loading={form.formState.isSubmitting}
-						className="mt-2 w-full sm:w-auto"
+						className="mt-2 w-full sm:w-auto min-h-[44px]"
 						size="lg"
 					>
 						{t("onboarding.continue")}

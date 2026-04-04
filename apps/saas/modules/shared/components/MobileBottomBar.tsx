@@ -77,7 +77,7 @@ export function MobileBottomBar() {
 		},
 		{
 			label: t("app.menu.dashboard"),
-			href: basePath,
+			href: `${basePath}/panorama`,
 			icon: LayoutDashboardIcon,
 			isActive: pathname === basePath || pathname === `${basePath}/panorama`,
 		},

@@ -151,7 +151,7 @@ export function NavBar() {
 		{
 			id: "panorama",
 			label: t("app.menu.dashboard"),
-			href: basePath,
+			href: `${basePath}/panorama`,
 			icon: LayoutDashboardIcon,
 			isActive: pathname === "/" || pathname === basePath || pathname === `${basePath}/panorama`,
 			section: "flow",

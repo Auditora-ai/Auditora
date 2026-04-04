@@ -349,7 +349,7 @@ function computeNextSteps({ processCount, evaluacionesData, vulnerableProcesses,
 		steps.push({
 			id: "add-processes",
 			message: t("nextStepGrow"),
-			href: `${basePath}/processes`,
+			href: `${basePath}/procesos`,
 			icon: "grow",
 		});
 	}
