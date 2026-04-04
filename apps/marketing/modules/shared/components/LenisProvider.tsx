@@ -1,11 +1,18 @@
 "use client";
 
 import Lenis from "lenis";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef } from "react";
 
+gsap.registerPlugin(ScrollTrigger);
+
 /**
- * Smooth scroll provider using Lenis.
- * Wrap the page content to enable buttery-smooth scrolling.
+ * Smooth scroll provider using Lenis, synced with GSAP ScrollTrigger.
+ *
+ * KEY: Lenis.on("scroll") calls ScrollTrigger.update() so both systems
+ * share the same scroll position. Without this, ScrollTrigger pins,
+ * scrub timelines, and trigger positions are all broken.
  */
 export function LenisProvider({ children }: { children: React.ReactNode }) {
 	const lenisRef = useRef<Lenis | null>(null);
@@ -19,12 +26,14 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
 
 		lenisRef.current = lenis;
 
-		function raf(time: number) {
-			lenis.raf(time);
-			requestAnimationFrame(raf);
-		}
+		// ─── Connect Lenis → ScrollTrigger ───
+		lenis.on("scroll", ScrollTrigger.update);
 
-		requestAnimationFrame(raf);
+		// ─── Connect GSAP ticker → Lenis ───
+		gsap.ticker.add((time) => {
+			lenis.raf(time * 1000);
+		});
+		gsap.ticker.lagSmoothing(0);
 
 		return () => {
 			lenis.destroy();
