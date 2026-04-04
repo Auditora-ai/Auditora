@@ -7,17 +7,26 @@ import { clearCache } from "@shared/lib/cache";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { ArrowLeftIcon } from "lucide-react";
-import { useCallback, useMemo } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useMemo, useRef } from "react";
 import { withQuery } from "ufo";
 import { OnboardingAccountStep } from "./OnboardingAccountStep";
 import { OnboardingCompanyStep } from "./OnboardingCompanyStep";
 import { OnboardingFirstValueStep } from "./OnboardingFirstValueStep";
 import { OnboardingSetupCompleteStep } from "./OnboardingSetupCompleteStep";
 
+const stepTransition = {
+	initial: { opacity: 0, x: 20 },
+	animate: { opacity: 1, x: 0 },
+	exit: { opacity: 0, x: -20 },
+	transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] },
+};
+
 export function OnboardingForm() {
 	const t = useTranslations();
 	const router = useRouter();
 	const searchParams = useSearchParams();
+	const directionRef = useRef<"forward" | "back">("forward");
 
 	const stepSearchParam = searchParams.get("step");
 	const redirectTo = searchParams.get("redirectTo");
@@ -30,6 +39,7 @@ export function OnboardingForm() {
 		: Math.max(1, Math.min(4, parsedStep));
 
 	const setStep = (step: number) => {
+		directionRef.current = step > onboardingStep ? "forward" : "back";
 		router.replace(
 			withQuery(window.location.search ?? "", {
 				step,
@@ -98,6 +108,8 @@ export function OnboardingForm() {
 		onCompleted,
 	]);
 
+	const xDirection = directionRef.current === "forward" ? 1 : -1;
+
 	return (
 		<div>
 			<h1 className="font-bold text-xl md:text-2xl">
@@ -114,7 +126,7 @@ export function OnboardingForm() {
 							variant="ghost"
 							size="icon"
 							onClick={handleBack}
-							className="shrink-0 size-8"
+							className="shrink-0 size-9 min-h-[44px] min-w-[44px]"
 							aria-label={t("common.back")}
 						>
 							<ArrowLeftIcon className="size-4" />
@@ -124,7 +136,7 @@ export function OnboardingForm() {
 						value={(onboardingStep / steps.length) * 100}
 						className="h-2"
 					/>
-					<span className="shrink-0 text-foreground/60 text-xs">
+					<span className="shrink-0 text-foreground/60 text-xs tabular-nums">
 						{t("onboarding.step", {
 							step: onboardingStep,
 							total: steps.length,
@@ -133,7 +145,17 @@ export function OnboardingForm() {
 				</div>
 			)}
 
-			{steps[onboardingStep - 1]?.component}
+			<AnimatePresence mode="wait" initial={false}>
+				<motion.div
+					key={onboardingStep}
+					initial={{ opacity: 0, x: 20 * xDirection }}
+					animate={{ opacity: 1, x: 0 }}
+					exit={{ opacity: 0, x: -20 * xDirection }}
+					transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+				>
+					{steps[onboardingStep - 1]?.component}
+				</motion.div>
+			</AnimatePresence>
 		</div>
 	);
 }

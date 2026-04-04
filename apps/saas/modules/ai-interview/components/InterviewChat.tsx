@@ -199,30 +199,22 @@ export function InterviewChat({
 			{/* Input */}
 			<div className="border-t px-6 py-4" style={{ borderColor: "#E2E8F0" }}>
 				<div className="mx-auto flex max-w-2xl items-center gap-3">
-					<input
-						ref={inputRef}
-						type="text"
-						value={input}
-						onChange={(e) => setInput(e.target.value)}
-						onKeyDown={handleKeyDown}
-						placeholder="Escribe tu respuesta..."
-						disabled={sending}
-						className="flex-1 rounded-lg border px-4 py-3 text-sm outline-none transition-colors"
-						style={{
-							backgroundColor: "#F1F5F9",
-							borderColor: "#E2E8F0",
-							color: "#0A1428",
-							minHeight: "44px",
-						}}
-						onFocus={(e) => {
-							e.currentTarget.style.borderColor = "#3B8FE8";
-							e.currentTarget.style.backgroundColor = "#ECFDF5";
-						}}
-						onBlur={(e) => {
-							e.currentTarget.style.borderColor = "#E2E8F0";
-							e.currentTarget.style.backgroundColor = "#F1F5F9";
-						}}
-					/>
+				<input
+					ref={inputRef}
+					type="text"
+					value={input}
+					onChange={(e) => setInput(e.target.value)}
+					onKeyDown={handleKeyDown}
+					placeholder="Escribe tu respuesta..."
+					disabled={sending}
+					className="flex-1 rounded-lg border px-4 py-3 text-sm outline-none transition-colors focus:border-[#3B8FE8] focus:bg-[#EFF6FF] focus:ring-1 focus:ring-[#3B8FE8]/30"
+					style={{
+						backgroundColor: "#F1F5F9",
+						borderColor: "#E2E8F0",
+						color: "#0A1428",
+						minHeight: "44px",
+					}}
+				/>
 					<button
 						onClick={handleSend}
 						disabled={!input.trim() || sending}

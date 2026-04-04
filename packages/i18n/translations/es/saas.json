@@ -289,6 +289,8 @@
       "explore": "Explorar el dashboard primero"
     },
     "account": {
+      "title": "Tu perfil",
+      "subtitle": "Personaliza cómo te verán tus colegas en la plataforma",
       "avatar": "Avatar",
       "avatarDescription": "Haz clic en el círculo o arrastra una imagen para subir tu avatar.",
       "name": "Nombre"

@@ -287,6 +287,8 @@
       "explore": "Zuerst das Dashboard erkunden"
     },
     "account": {
+      "title": "Dein Profil",
+      "subtitle": "Passe an, wie deine Kollegen dich auf der Plattform sehen",
       "avatar": "Avatar",
       "avatarDescription": "Klicke auf den Kreis oder ziehe ein Bild hinein, um deinen Avatar hochzuladen.",
       "name": "Name"

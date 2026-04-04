@@ -9,6 +9,7 @@ import {
   AlertTriangle,
   CheckCircle2,
   Info,
+  Loader2,
   RotateCcw,
 } from "lucide-react";
 import Link from "next/link";
@@ -366,10 +367,17 @@ export function ResultsPhase({ url, result, sessionId, onReset }: ResultsPhasePr
         {/* Share CTA */}
         <button
           onClick={handleShare}
-          className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-6 py-3.5 text-sm font-medium text-white/80 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] hover:text-white min-h-[44px]"
+          disabled={sharing}
+          className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-6 py-3.5 text-sm font-medium text-white/80 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] hover:text-white disabled:opacity-60 disabled:cursor-not-allowed min-h-[44px]"
         >
-          <Share2 className="h-4 w-4" />
-          {copied ? "¡Link copiado!" : "Compartir"}
+          {sharing ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : copied ? (
+            <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+          ) : (
+            <Share2 className="h-4 w-4" />
+          )}
+          {copied ? "¡Link copiado!" : sharing ? "Compartiendo..." : "Compartir"}
         </button>
 
         {/* Scan again */}

@@ -140,7 +140,7 @@ export function AnalyzingPhase({
   }, [url, turnstileToken, onComplete, onError]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" role="status" aria-live="polite">
       {/* Header */}
       <div className="text-center">
         <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
@@ -149,6 +149,12 @@ export function AnalyzingPhase({
         <p className="mt-2 text-[#94A3B8] text-sm truncate max-w-xs mx-auto">
           {url}
         </p>
+        {/* Screen reader progress announcement */}
+        <span className="sr-only">
+          {currentStep < 4
+            ? `Paso ${currentStep + 1} de 4: ${STEPS[currentStep]?.label}`
+            : "Análisis completo"}
+        </span>
       </div>
 
       {/* Progress card */}

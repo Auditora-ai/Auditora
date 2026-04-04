@@ -11,10 +11,11 @@ import {
 	FormField,
 	FormItem,
 	FormLabel,
+	FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { UserAvatarUpload } from "@settings/components/UserAvatarUpload";
-import { ArrowRightIcon } from "lucide-react";
+import { AlertCircleIcon, ArrowRightIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -63,11 +64,27 @@ export function OnboardingAccountStep({
 
 	return (
 		<div>
+			<div className="mb-6 space-y-1">
+				<h2 className="text-lg font-semibold">
+					{t("onboarding.account.title")}
+				</h2>
+				<p className="text-sm text-muted-foreground">
+					{t("onboarding.account.subtitle")}
+				</p>
+			</div>
+
 			<Form {...form}>
 				<form
 					className="flex flex-col items-stretch gap-8"
 					onSubmit={onSubmit}
 				>
+					{form.formState.errors.root && (
+						<div className="flex items-center gap-2 rounded-lg border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+							<AlertCircleIcon className="size-4 shrink-0" />
+							{form.formState.errors.root.message}
+						</div>
+					)}
+
 					<FormField
 						control={form.control}
 						name="name"
@@ -77,8 +94,9 @@ export function OnboardingAccountStep({
 									{t("onboarding.account.name")}
 								</FormLabel>
 								<FormControl>
-									<Input {...field} />
+									<Input {...field} autoFocus />
 								</FormControl>
+								<FormMessage />
 							</FormItem>
 						)}
 					/>
@@ -105,7 +123,12 @@ export function OnboardingAccountStep({
 						</FormControl>
 					</FormItem>
 
-					<Button type="submit" loading={form.formState.isSubmitting}>
+					<Button
+						type="submit"
+						loading={form.formState.isSubmitting}
+						className="mt-2 w-full sm:w-auto min-h-[44px]"
+						size="lg"
+					>
 						{t("onboarding.continue")}
 						<ArrowRightIcon className="ml-2 size-4" />
 					</Button>

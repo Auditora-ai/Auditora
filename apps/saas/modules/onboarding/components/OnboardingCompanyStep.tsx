@@ -19,7 +19,7 @@ import {
 	SelectValue,
 } from "@repo/ui/components/select";
 import { Textarea } from "@repo/ui/components/textarea";
-import { ArrowRightIcon } from "lucide-react";
+import { AlertCircleIcon, ArrowRightIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -126,7 +126,12 @@ export function OnboardingCompanyStep({
 					className="flex flex-col items-stretch gap-6"
 					onSubmit={onSubmit}
 				>
-					<FormMessage className="text-center" />
+					{form.formState.errors.root && (
+						<div className="flex items-center gap-2 rounded-lg border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+							<AlertCircleIcon className="size-4 shrink-0" />
+							{form.formState.errors.root.message}
+						</div>
+					)}
 
 					<FormField
 						control={form.control}

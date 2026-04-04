@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { InterviewChat } from "./InterviewChat";
 import { InterviewReveal } from "./InterviewReveal";
 import { InterviewBpmnViewer } from "./InterviewBpmnViewer";
@@ -82,7 +83,16 @@ export function AIInterviewPage({
 
 			{/* Content */}
 			<div className="flex-1 overflow-hidden">
+				<AnimatePresence mode="wait">
 				{phase === "chat" && (
+					<motion.div
+						key="chat"
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						exit={{ opacity: 0 }}
+						transition={{ duration: 0.3 }}
+						className="h-full"
+					>
 					<InterviewChat
 						messages={messages}
 						sending={sending}
@@ -94,17 +104,34 @@ export function AIInterviewPage({
 						onReveal={handleReveal}
 						processName={processName}
 					/>
+					</motion.div>
 				)}
 
 				{phase === "completing" && (
+					<motion.div
+						key="completing"
+						initial={{ opacity: 0, scale: 0.98 }}
+						animate={{ opacity: 1, scale: 1 }}
+						exit={{ opacity: 0 }}
+						transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+						className="h-full"
+					>
 					<InterviewReveal
 						sessionId={sessionId}
 						shareToken={shareToken}
 						onComplete={handleComplete}
 					/>
+					</motion.div>
 				)}
 
 				{phase === "results" && completionData && (
+					<motion.div
+						key="results"
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+						className="h-full"
+					>
 					<div className="flex h-full flex-col overflow-y-auto" style={{ backgroundColor: "#F8FAFC" }}>
 						{/* Diagram section */}
 						<div className="border-b p-6" style={{ borderColor: "#E2E8F0" }}>
@@ -231,7 +258,9 @@ export function AIInterviewPage({
 							</div>
 						</div>
 					</div>
+				</motion.div>
 				)}
+				</AnimatePresence>
 			</div>
 		</div>
 	);

@@ -287,6 +287,8 @@
       "explore": "Explorer le tableau de bord d'abord"
     },
     "account": {
+      "title": "Votre profil",
+      "subtitle": "Personnalisez votre apparence pour vos collègues sur la plateforme",
       "avatar": "Avatar",
       "avatarDescription": "Cliquez sur le cercle ou déposez une image pour télécharger votre avatar.",
       "name": "Nom"
