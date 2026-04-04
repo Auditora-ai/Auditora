@@ -13,9 +13,10 @@ export function FinalCta() {
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		const targetUrl = url.trim()
-			? `${config.saasUrl}/scan?url=${encodeURIComponent(url.trim())}`
-			: config.saasUrl;
+		const trimmed = url.trim();
+		const targetUrl = trimmed
+			? `${config.saasUrl}/scan?url=${encodeURIComponent(trimmed)}&ref=cta`
+			: `${config.saasUrl}/scan?ref=cta`;
 		window.open(targetUrl, "_blank", "noopener,noreferrer");
 	};
 

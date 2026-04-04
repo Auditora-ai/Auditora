@@ -22,7 +22,7 @@ export default function ResumeInterviewPage() {
 	useEffect(() => {
 		async function loadSession() {
 			try {
-				// Fetch session data to get conversation log and process name
+				// Fetch session data to get conversation log, process name, and share token
 				const res = await fetch(`/api/sessions/interview/${sessionId}/status`);
 				if (!res.ok) {
 					setError("No se pudo cargar la sesión");
@@ -30,7 +30,17 @@ export default function ResumeInterviewPage() {
 					return;
 				}
 
-				// For now, just render the page — the chat hook will handle state
+				const data = await res.json();
+
+				// Hydrate process name and share token from API response
+				if (data.processName) setProcessName(data.processName);
+				if (data.shareToken) setShareToken(data.shareToken);
+
+				// Restore conversation history if available
+				if (data.messages && Array.isArray(data.messages) && data.messages.length > 0) {
+					setInitialMessages(data.messages);
+				}
+
 				setLoading(false);
 			} catch {
 				setError("Error de conexión");

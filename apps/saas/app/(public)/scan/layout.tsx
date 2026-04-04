@@ -3,9 +3,9 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Free Operations Scan | Auditora.ai",
+  title: "Escaneo Gratuito de Riesgo Operativo | Auditora.ai",
   description:
-    "Scan any company website in 60 seconds. Get a free operational risk assessment with process mapping and vulnerability scoring.",
+    "Escanea cualquier sitio web en 60 segundos. Obtén un análisis gratuito de riesgo operativo con mapeo de procesos y puntuación de vulnerabilidad.",
 };
 
 export default function ScanLayout({ children }: PropsWithChildren) {

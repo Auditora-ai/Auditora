@@ -195,6 +195,21 @@ export function ResultsPhase({ url, result, sessionId, onReset }: ResultsPhasePr
         className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
       />
 
+      {/* ---- Executive Summary ---- */}
+      {result.summary && (
+        <motion.div
+          variants={fadeUp}
+          className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8"
+        >
+          <h2 className="text-sm font-semibold uppercase tracking-widest text-[#94A3B8] mb-3">
+            Resumen Ejecutivo
+          </h2>
+          <p className="text-sm text-white/70 leading-relaxed">
+            {result.summary}
+          </p>
+        </motion.div>
+      )}
+
       {/* ---- Vulnerability Score Card ---- */}
       <motion.div
         variants={fadeUp}

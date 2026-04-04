@@ -238,18 +238,53 @@ export default async function SharedScanResultsPage({
 					</div>
 				)}
 
-				{/* Footer */}
-				<div className="text-center text-xs text-muted-foreground pt-8 border-t border-border space-y-1">
-				<p>
-					Generado el{" "}
-					{session.createdAt.toLocaleDateString("es-MX", {
-						year: "numeric",
-						month: "long",
-						day: "numeric",
-						})}
-					</p>
-					<p>Powered by Auditora.ai</p>
+			{/* Disclaimer */}
+			<div className="p-5 bg-muted/30 border border-border rounded-lg">
+				<p className="text-xs text-muted-foreground leading-relaxed">
+					Este es un análisis superficial basado en información pública.
+					Para una evaluación completa que incluya procesos internos, matrices
+					de riesgo detalladas y recomendaciones accionables, crea un diagnóstico completo.
+				</p>
+			</div>
+
+			{/* CTA to register */}
+			<div className="rounded-xl border border-border bg-card p-6 sm:p-8 text-center space-y-4">
+				<h2 className="text-xl font-serif text-foreground">
+					¿Quieres el diagnóstico completo?
+				</h2>
+				<p className="text-sm text-muted-foreground max-w-md mx-auto">
+					Regístrate gratis y accede a entrevistas guiadas por IA, diagramas BPMN
+					y evaluaciones de tu equipo basadas en tus procesos reales.
+				</p>
+				<div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center pt-2">
+					<a
+						href="/signup"
+						className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-7 py-3 text-sm font-bold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 min-h-[44px]"
+					>
+						Regístrate gratis
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+					</a>
+					<a
+						href="/scan"
+						className="inline-flex items-center justify-center gap-2 rounded-lg border border-border px-6 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground min-h-[44px]"
+					>
+						Escanear otro sitio
+					</a>
 				</div>
+			</div>
+
+			{/* Footer */}
+			<div className="text-center text-xs text-muted-foreground pt-8 border-t border-border space-y-1">
+			<p>
+				Generado el{" "}
+				{session.createdAt.toLocaleDateString("es-MX", {
+					year: "numeric",
+					month: "long",
+					day: "numeric",
+					})}
+				</p>
+				<p>Powered by Auditora.ai</p>
+			</div>
 			</div>
 		</div>
 	);

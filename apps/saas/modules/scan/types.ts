@@ -12,6 +12,7 @@ export interface ScanResult {
   companyName: string;
   industry: string;
   vulnerabilityScore: number;
+  summary: string;
   processes: ScanProcess[];
   highestRiskProcess: ScanHighRiskProcess;
 }
