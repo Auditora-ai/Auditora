@@ -135,7 +135,7 @@ export function ProcessLibrary({
 						variant="outline"
 						size="sm"
 						onClick={() => setShowImport(true)}
-						className="shrink-0 min-h-[40px]"
+						className="shrink-0 min-h-[44px] active:scale-95"
 					>
 						<Upload className="mr-1.5 size-4" />
 						Importar
@@ -144,7 +144,7 @@ export function ProcessLibrary({
 						variant="outline"
 						size="sm"
 						onClick={() => setShowTemplates(true)}
-						className="shrink-0 min-h-[40px]"
+						className="shrink-0 min-h-[44px] active:scale-95"
 					>
 						<Layers className="mr-1.5 size-4" />
 						Templates
@@ -153,7 +153,7 @@ export function ProcessLibrary({
 						variant="outline"
 						size="sm"
 						onClick={() => setShowAddModal(true)}
-						className="shrink-0 min-h-[40px]"
+						className="shrink-0 min-h-[44px] active:scale-95"
 					>
 						<PlusIcon className="mr-1.5 size-4" />
 						Manual
@@ -167,7 +167,7 @@ export function ProcessLibrary({
 			/>
 
 			{filteredProcesses.length === 0 ? (
-				<div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 md:p-12 text-center">
+				<div className="flex flex-col items-center justify-center rounded-2xl border border-dashed p-6 md:p-12 text-center">
 					<FileTextIcon className="mb-4 size-10 md:size-12 text-muted-foreground/50" />
 					<h3 className="text-base md:text-lg font-semibold">
 						{processes.length === 0
@@ -213,7 +213,7 @@ export function ProcessLibrary({
 					<button
 						type="button"
 						onClick={() => setShowAddModal(true)}
-						className="flex min-h-[140px] md:min-h-[160px] flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed p-5 text-muted-foreground transition-colors hover:border-primary hover:text-primary active:bg-accent/30"
+						className="flex min-h-[140px] md:min-h-[160px] flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed p-5 text-muted-foreground transition-all hover:border-primary hover:text-primary active:bg-accent/30 active:scale-[0.98]"
 					>
 						<PlusIcon className="size-7" />
 						<span className="text-sm font-medium">

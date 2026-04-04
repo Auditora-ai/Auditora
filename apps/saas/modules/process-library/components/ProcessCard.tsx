@@ -61,8 +61,8 @@ export function ProcessCard({
 	const tc = useTranslations("common");
 
 	return (
-		<Card className="transition-colors hover:bg-accent/30 active:bg-accent/50">
-			<CardContent className="p-3 md:p-4">
+		<Card className="rounded-2xl transition-colors hover:bg-accent/30 active:bg-accent/50 active:scale-[0.98]">
+			<CardContent className="p-4 md:p-4">
 				<div className="flex items-start justify-between gap-2">
 					<div className="min-w-0 flex-1">
 						<a
@@ -78,7 +78,7 @@ href={`${basePath}/procesos/${process.id}`}
 						</Badge>
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
-								<Button variant="ghost" size="sm" className="h-9 w-9 p-0">
+								<Button variant="ghost" size="sm" className="h-9 w-9 min-h-[44px] min-w-[44px] p-0">
 									<MoreHorizontalIcon className="size-4" />
 								</Button>
 							</DropdownMenuTrigger>

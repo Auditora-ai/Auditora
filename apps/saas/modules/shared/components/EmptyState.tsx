@@ -71,13 +71,14 @@ export function EmptyState({
 				</p>
 			)}
 			{actions && actions.length > 0 && (
-				<div className="mt-5 flex gap-2">
+				<div className="mt-5 flex flex-wrap gap-2">
 					{actions.map((action) =>
 						action.href ? (
 							<Button
 								key={action.label}
 								variant={action.variant ?? "primary"}
 								size={compact ? "sm" : "md"}
+								className="min-h-[44px] active:scale-95"
 								asChild
 							>
 								<a href={action.href}>
@@ -90,6 +91,7 @@ export function EmptyState({
 								key={action.label}
 								variant={action.variant ?? "primary"}
 								size={compact ? "sm" : "md"}
+								className="min-h-[44px] active:scale-95"
 								onClick={action.onClick}
 							>
 								{action.icon}

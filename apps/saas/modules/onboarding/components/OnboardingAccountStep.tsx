@@ -126,11 +126,11 @@ export function OnboardingAccountStep({
 					<Button
 						type="submit"
 						loading={form.formState.isSubmitting}
-						className="mt-2 w-full sm:w-auto min-h-[44px]"
-						size="lg"
-					>
-						{t("onboarding.continue")}
-						<ArrowRightIcon className="ml-2 size-4" />
+					className="mt-2 w-full sm:w-auto min-h-[48px] active:scale-95"
+					size="lg"
+				>
+					{t("onboarding.continue")}
+					<ArrowRightIcon className="ml-2 size-4" />
 					</Button>
 				</form>
 			</Form>

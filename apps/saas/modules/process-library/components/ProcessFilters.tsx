@@ -39,7 +39,7 @@ export function ProcessFilters({
 							search: e.target.value,
 						})
 					}
-					className="pl-9"
+					className="pl-9 min-h-[44px]"
 				/>
 			</div>
 

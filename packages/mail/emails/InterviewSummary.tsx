@@ -115,7 +115,7 @@ InterviewSummary.PreviewProps = {
 		{ title: "SLA sin monitoreo automático", severity: 4, probability: 4 },
 		{ title: "Rotación en compras sin backup", severity: 4, probability: 3 },
 	],
-	resultUrl: "https://app.auditora.ai/acme/sessions/interview/abc123",
+	resultUrl: "https://app.auditora.ai/acme/descubrir/interview/abc123",
 };
 
 export default InterviewSummary;

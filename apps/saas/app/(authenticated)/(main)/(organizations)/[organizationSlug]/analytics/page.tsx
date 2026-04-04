@@ -6,5 +6,5 @@ export default async function DeprecatedAnalyticsPage({
 	params: Promise<{ organizationSlug: string }>;
 }) {
 	const { organizationSlug } = await params;
-	redirect(`/${organizationSlug}`);
+	redirect(`/${organizationSlug}/panorama`);
 }

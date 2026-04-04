@@ -816,7 +816,7 @@ function ChildrenTab({
 						return (
 							<Link
 								key={child.id}
-								href={`${basePath}/processes/${child.id}`}
+								href={`${basePath}/${child.id}`}
 								className="block"
 							>
 								<Card className="border border-border transition-colors hover:bg-accent/50">

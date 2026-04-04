@@ -211,7 +211,7 @@ export function RiskDashboard({
 									<Link
 										key={i}
 										href={step.href}
-										className="group flex items-center gap-3 rounded-xl border border-white/10 px-4 py-3 transition-all hover:border-primary/30 hover:shadow-sm dark:border-white/5"
+										className="group flex items-center gap-3 rounded-xl border border-white/10 px-4 py-3 min-h-[48px] transition-all hover:border-primary/30 hover:shadow-sm active:scale-[0.98] dark:border-white/5"
 									>
 										<span
 											className={`flex size-6 shrink-0 items-center justify-center rounded-full text-xs font-medium ${
@@ -255,12 +255,12 @@ export function RiskDashboard({
 									<div className="w-full flex-1">
 										<div className="grid grid-cols-2 gap-3 text-center md:grid-cols-4 md:text-left">
 											{/* Documented processes: X of Y */}
-											<Link
-												href={`${basePath}/procesos`}
-												className="group rounded-xl bg-white/5 p-2.5 transition-colors hover:bg-accent/30 md:bg-transparent md:p-0"
-											>
-												<p className="text-xl font-bold tabular-nums text-foreground transition-colors group-hover:text-primary md:text-2xl">
-													{documentedCount}
+								<Link
+									href={`${basePath}/procesos`}
+									className="group rounded-xl bg-white/5 p-2.5 transition-all hover:bg-accent/30 active:scale-95 md:bg-transparent md:p-0"
+								>
+									<p className="text-xl font-bold tabular-nums text-foreground transition-colors group-hover:text-primary md:text-2xl">
+										{documentedCount}
 													<span className="text-sm font-normal text-muted-foreground">
 														/{processCount}
 													</span>
@@ -271,12 +271,12 @@ export function RiskDashboard({
 											</Link>
 
 											{/* Risk count */}
-											<Link
-												href={`${basePath}/procesos`}
-												className="group rounded-xl bg-white/5 p-2.5 transition-colors hover:bg-accent/30 md:bg-transparent md:p-0"
-											>
-												<p className="text-xl font-bold tabular-nums text-foreground transition-colors group-hover:text-amber-500 md:text-2xl">
-													{riskCount}
+								<Link
+									href={`${basePath}/procesos`}
+									className="group rounded-xl bg-white/5 p-2.5 transition-all hover:bg-accent/30 active:scale-95 md:bg-transparent md:p-0"
+								>
+									<p className="text-xl font-bold tabular-nums text-foreground transition-colors group-hover:text-amber-500 md:text-2xl">
+										{riskCount}
 												</p>
 												<p className="text-[10px] text-muted-foreground md:text-xs">
 													{t("risks")}
@@ -284,11 +284,11 @@ export function RiskDashboard({
 											</Link>
 
 											{/* Evaluations completed */}
-											<Link
-												href={`${basePath}/evaluaciones`}
-												className="group rounded-xl bg-white/5 p-2.5 transition-colors hover:bg-accent/30 md:bg-transparent md:p-0"
-											>
-												<p className="text-xl font-bold tabular-nums text-foreground transition-colors group-hover:text-blue-500 md:text-2xl">
+								<Link
+									href={`${basePath}/evaluaciones`}
+									className="group rounded-xl bg-white/5 p-2.5 transition-all hover:bg-accent/30 active:scale-95 md:bg-transparent md:p-0"
+								>
+									<p className="text-xl font-bold tabular-nums text-foreground transition-colors group-hover:text-blue-500 md:text-2xl">
 													{evaluaciones?.totalSimulations ??
 														0}
 												</p>
@@ -300,11 +300,11 @@ export function RiskDashboard({
 											</Link>
 
 											{/* Active evaluators */}
-											<Link
-												href={`${basePath}/evaluaciones?tab=dashboard`}
-												className="group rounded-xl bg-white/5 p-2.5 transition-colors hover:bg-accent/30 md:bg-transparent md:p-0"
-											>
-												<p className="text-xl font-bold tabular-nums text-foreground transition-colors group-hover:text-green-500 md:text-2xl">
+								<Link
+									href={`${basePath}/evaluaciones?tab=dashboard`}
+									className="group rounded-xl bg-white/5 p-2.5 transition-all hover:bg-accent/30 active:scale-95 md:bg-transparent md:p-0"
+								>
+									<p className="text-xl font-bold tabular-nums text-foreground transition-colors group-hover:text-green-500 md:text-2xl">
 													{evaluaciones?.membersEvaluated ??
 														0}
 												</p>
@@ -323,10 +323,10 @@ export function RiskDashboard({
 							<div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
 								<Link
 									href={`${basePath}/descubrir`}
-									className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-card/80 p-4 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-md active:bg-accent/80 dark:border-white/5 dark:bg-card/60"
-								>
-									<div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-blue-500/10">
-										<SearchIcon className="size-5 text-blue-500" />
+								className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-card/80 p-4 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-md active:bg-accent/80 active:scale-[0.98] dark:border-white/5 dark:bg-card/60"
+							>
+								<div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-blue-500/10">
+									<SearchIcon className="size-5 text-blue-500" />
 									</div>
 									<div className="min-w-0 flex-1">
 										<p className="text-sm font-medium text-foreground transition-colors group-hover:text-primary">
@@ -340,11 +340,11 @@ export function RiskDashboard({
 								</Link>
 
 								<Link
-									href={`${basePath}/evaluaciones`}
-									className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-card/80 p-4 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-md active:bg-accent/80 dark:border-white/5 dark:bg-card/60"
-								>
-									<div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-										<ClipboardCheckIcon className="size-5 text-primary" />
+							href={`${basePath}/evaluaciones`}
+								className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-card/80 p-4 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-md active:bg-accent/80 active:scale-[0.98] dark:border-white/5 dark:bg-card/60"
+							>
+								<div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+									<ClipboardCheckIcon className="size-5 text-primary" />
 									</div>
 									<div className="min-w-0 flex-1">
 										<p className="text-sm font-medium text-foreground transition-colors group-hover:text-primary">
@@ -358,8 +358,8 @@ export function RiskDashboard({
 								</Link>
 
 								<Link
-									href={`${basePath}/settings/members`}
-									className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-card/80 p-4 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-md active:bg-accent/80 dark:border-white/5 dark:bg-card/60"
+							href={`${basePath}/settings/members`}
+								className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-card/80 p-4 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-md active:bg-accent/80 active:scale-[0.98] dark:border-white/5 dark:bg-card/60"
 								>
 									<div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-green-500/10">
 										<UserPlusIcon className="size-5 text-green-500" />

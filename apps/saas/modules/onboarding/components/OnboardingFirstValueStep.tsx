@@ -71,7 +71,7 @@ export function OnboardingFirstValueStep({
 						key={key}
 						role="button"
 						tabIndex={0}
-						className="cursor-pointer transition-all hover:shadow-md hover:-translate-y-0.5 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+						className="cursor-pointer rounded-2xl transition-all hover:shadow-md hover:-translate-y-0.5 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
 						onClick={() => handleCardClick(path)}
 						onKeyDown={(e: React.KeyboardEvent) => {
 							if (e.key === "Enter" || e.key === " ") {

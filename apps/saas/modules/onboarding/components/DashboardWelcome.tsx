@@ -35,7 +35,7 @@ export function DashboardWelcome({
 
 			<div className="mt-10 grid w-full max-w-2xl gap-4 grid-cols-1 sm:grid-cols-3">
 				{steps.map(({ key, icon: Icon }, i) => (
-					<Card key={key} className="relative p-5">
+					<Card key={key} className="relative rounded-2xl p-5">
 						<div className="mb-3 flex items-center gap-2">
 							<span className="flex size-6 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
 								{i + 1}
@@ -54,16 +54,16 @@ export function DashboardWelcome({
 			</div>
 
 			<div className="mt-8 flex flex-col items-center gap-3">
-				<Button asChild size="lg">
+				<Button asChild size="lg" className="min-h-[48px] active:scale-95">
 					<Link href={`${basePath}/descubrir/interview`}>
 						<MessageSquareIcon className="mr-2 size-4" />
 						{t("cta")}
 					</Link>
 				</Button>
-				<button
-					type="button"
-					onClick={onDismiss}
-					className="text-sm text-muted-foreground underline-offset-4 hover:underline"
+			<button
+				type="button"
+				onClick={onDismiss}
+				className="text-sm text-muted-foreground underline-offset-4 hover:underline min-h-[44px] active:scale-95"
 				>
 					{t("explore")}
 				</button>

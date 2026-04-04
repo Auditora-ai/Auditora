@@ -411,7 +411,7 @@ async function runBatchPipeline(
 
 		if (user?.email && org?.slug) {
 			const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://app.auditora.ai";
-			const resultUrl = `${baseUrl}/${org.slug}/sessions/interview/${sessionId}`;
+			const resultUrl = `${baseUrl}/${org.slug}/descubrir/interview/${sessionId}`;
 
 			const lastScore = conversationLog
 				.filter((m) => m.role === "assistant" && m.metadata?.completenessScore)

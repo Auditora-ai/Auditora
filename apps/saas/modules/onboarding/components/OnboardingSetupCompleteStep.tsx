@@ -52,16 +52,16 @@ export function OnboardingSetupCompleteStep({
 				transition={{ duration: 0.5, delay: 0.5 }}
 				className="w-full max-w-sm space-y-3"
 			>
-				<Button
-					type="button"
-					onClick={handleGoToDashboard}
-					className="w-full min-h-[44px]"
-					size="lg"
-				>
+			<Button
+				type="button"
+				onClick={handleGoToDashboard}
+				className="w-full min-h-[48px] active:scale-95"
+				size="lg"
+			>
 					{t("onboarding.setupComplete.goToDashboard")}
 				</Button>
 
-				<Button variant="outline" className="w-full min-h-[44px]" asChild>
+				<Button variant="outline" className="w-full min-h-[48px] active:scale-95" asChild>
 					<Link href={`/${activeOrganization?.slug ?? ""}/settings/members`}>
 						<UsersIcon className="mr-2 size-4" />
 						{t("onboarding.setupComplete.inviteMembers")}

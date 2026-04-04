@@ -109,16 +109,16 @@ export function EvaluacionHub({ templates, recentRuns, organizationSlug }: Evalu
 	return (
 		<div className="flex flex-col gap-5 md:gap-6">
 			{/* Stats row — 3 columns, compact on mobile */}
-			<div className="grid grid-cols-3 gap-2 md:gap-4">
-				<div className="rounded-lg border border-border/50 bg-card p-3 md:p-4">
-					<p className="text-[10px] md:text-xs text-muted-foreground">Evaluaciones</p>
-					<p className="mt-0.5 text-xl md:text-2xl font-semibold text-foreground">{templates.length}</p>
-				</div>
-				<div className="rounded-lg border border-border/50 bg-card p-3 md:p-4">
-					<p className="text-[10px] md:text-xs text-muted-foreground truncate">Completadas</p>
-					<p className="mt-0.5 text-xl md:text-2xl font-semibold text-foreground">{completedRuns}</p>
-				</div>
-				<div className="rounded-lg border border-border/50 bg-card p-3 md:p-4">
+			<div className="grid grid-cols-3 gap-2 md:gap-4" role="list">
+			<div className="rounded-2xl border border-border/50 bg-card p-4 md:p-4">
+				<p className="text-[10px] md:text-xs text-muted-foreground">Evaluaciones</p>
+				<p className="mt-0.5 text-xl md:text-2xl font-semibold text-foreground">{templates.length}</p>
+			</div>
+			<div className="rounded-2xl border border-border/50 bg-card p-4 md:p-4">
+				<p className="text-[10px] md:text-xs text-muted-foreground truncate">Completadas</p>
+				<p className="mt-0.5 text-xl md:text-2xl font-semibold text-foreground">{completedRuns}</p>
+			</div>
+			<div className="rounded-2xl border border-border/50 bg-card p-4 md:p-4">
 					<p className="text-[10px] md:text-xs text-muted-foreground">Score prom.</p>
 				<p className={cn("mt-0.5 text-xl md:text-2xl font-semibold tabular-nums", scoreColor(avgScore))}>
 					{avgScore !== null ? avgScore : "—"}
@@ -142,7 +142,7 @@ export function EvaluacionHub({ templates, recentRuns, organizationSlug }: Evalu
 							<Link
 								key={template.id}
 								href={`/${organizationSlug}/evaluaciones/${template.id}`}
-								className="group flex items-center justify-between rounded-lg border border-border/50 bg-card p-3 md:p-4 transition-colors hover:border-border hover:bg-accent/30 active:bg-accent/50 min-h-[64px]"
+								className="group flex items-center justify-between rounded-2xl border border-border/50 bg-card p-4 md:p-4 transition-all hover:border-border hover:bg-accent/30 active:bg-accent/50 active:scale-[0.99] min-h-[64px]"
 							>
 								<div className="flex items-start gap-2.5 md:gap-3 min-w-0 flex-1">
 									<div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted/50">
@@ -193,7 +193,7 @@ export function EvaluacionHub({ templates, recentRuns, organizationSlug }: Evalu
 						{recentRuns.map((run) => (
 							<div
 								key={run.id}
-								className="flex items-center justify-between rounded-lg border border-border/50 bg-card px-3 py-2.5 md:px-4 md:py-3 min-h-[52px]"
+								className="flex items-center justify-between rounded-2xl border border-border/50 bg-card px-4 py-3 md:px-4 md:py-3 min-h-[52px]"
 							>
 								<div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
 									<div className="flex h-7 w-7 items-center justify-center rounded-full bg-muted/50 shrink-0">

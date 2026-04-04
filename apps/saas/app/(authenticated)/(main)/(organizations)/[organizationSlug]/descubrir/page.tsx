@@ -83,7 +83,7 @@ export default async function DescubrirPage({
 					return (
 						<Card
 							key={channel.key}
-							className={`group relative overflow-hidden border-slate-800 bg-slate-900/80 transition-all duration-300 ${channel.borderHover} hover:shadow-lg active:shadow-md ${channel.glowColor}`}
+							className={`group relative overflow-hidden rounded-2xl border-slate-800 bg-slate-900/80 transition-all duration-300 ${channel.borderHover} hover:shadow-lg active:shadow-md active:scale-[0.98] ${channel.glowColor}`}
 						>
 							<CardHeader className="pb-3 p-4 md:p-6 md:pb-3">
 								<div className="flex items-start justify-between">
