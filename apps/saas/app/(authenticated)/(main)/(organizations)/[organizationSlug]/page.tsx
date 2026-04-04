@@ -110,29 +110,26 @@ export default async function OrganizationPage({
 		(p) => p.processStatus === "EVALUATED",
 	).length;
 
-	// If no real processes yet, use mock data for demonstration
-	const useMock = totalCount === 0;
-	const displayProcesses = useMock ? MOCK_PROCESSES : processes;
-
-	const finalTotalCount = useMock ? MOCK_PROCESSES.length : totalCount;
-	const finalDocumentedCount = useMock
-		? MOCK_PROCESSES.filter(
-				(p) => p.processStatus === "DOCUMENTED" || p.processStatus === "EVALUATED",
-			).length
-		: documentedCount;
-	const finalEvaluatedCount = useMock
-		? MOCK_PROCESSES.filter((p) => p.processStatus === "EVALUATED").length
-		: evaluatedCount;
+	// Fetch industry from CompanyBrain/OrgContext if available
+	const companyBrain = await db.companyBrain.findFirst({
+		where: { organizationId: orgId },
+		select: {
+			orgContext: {
+				select: { industrySector: true },
+			},
+		},
+	});
+	const industry = companyBrain?.orgContext?.industrySector ?? null;
 
 	return (
 		<div className="h-[calc(100vh-56px)] md:h-[calc(100vh-64px)] overflow-y-auto">
 			<ProcessMap
-				processes={displayProcesses}
+				processes={processes}
 				orgName={activeOrganization.name}
-				industry={useMock ? "Manufactura" : "Sin clasificar"}
-				totalCount={finalTotalCount}
-				documentedCount={finalDocumentedCount}
-				evaluatedCount={finalEvaluatedCount}
+				industry={industry}
+				totalCount={totalCount}
+				documentedCount={documentedCount}
+				evaluatedCount={evaluatedCount}
 				organizationSlug={organizationSlug}
 			/>
 		</div>

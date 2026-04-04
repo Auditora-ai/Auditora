@@ -1,43 +1,11 @@
-import { db } from "@repo/database";
-import { MeetingView } from "@meeting/components/MeetingView";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 
-export const metadata = {
-	title: "Live Session — Auditora.ai",
-};
-
-export default async function LiveSessionPage({
-	params,
+// Redirect zombie route → discovery v3
+export default async function Page({
+  params,
 }: {
-	params: Promise<{ organizationSlug: string; sessionId: string }>;
+  params: Promise<{ organizationSlug: string }>;
 }) {
-	const { sessionId, organizationSlug } = await params;
-
-	const session = await db.meetingSession.findUnique({
-		where: { id: sessionId },
-		include: {
-			processDefinition: true,
-			organization: { select: { name: true } },
-		},
-	});
-
-	if (!session) {
-		return notFound();
-	}
-
-	return (
-		<MeetingView
-			sessionId={session.id}
-			sessionType={session.type as "DISCOVERY" | "DEEP_DIVE"}
-			processName={session.processDefinition?.name}
-			clientName={session.organization.name}
-			botId={session.recallBotId || undefined}
-			shareToken={session.shareToken || undefined}
-			startedAt={session.startedAt?.toISOString()}
-			processId={session.processDefinitionId || undefined}
-			organizationId={session.organizationId}
-			organizationSlug={organizationSlug}
-			bpmnXml={session.bpmnXml || session.processDefinition?.bpmnXml || null}
-		/>
-	);
+  const { organizationSlug } = await params;
+  redirect(`/${organizationSlug}/discovery`);
 }

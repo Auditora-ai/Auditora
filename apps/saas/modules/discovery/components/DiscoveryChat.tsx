@@ -145,11 +145,9 @@ export function DiscoveryChat({ organizationSlug }: DiscoveryChatProps) {
 
 	const handleConfirm = () => {
 		const confirmed = confirmArchitecture();
-		// In production, navigate to the next step
-		console.log(
-			`[${organizationSlug}] Architecture confirmed:`,
-			confirmed,
-		);
+		// TODO: In production, call API to create ProcessArchitecture + ProcessDefinitions
+		// Navigate to home to see the process map
+		window.location.href = `/${organizationSlug}`;
 	};
 
 	// ── Review phase ────────────────────────────────────────────────────
@@ -181,7 +179,7 @@ export function DiscoveryChat({ organizationSlug }: DiscoveryChatProps) {
 					<div className="flex items-center gap-3">
 						{/* Back button */}
 						<a
-							href={`/${organizationSlug}/descubrir`}
+							href={`/${organizationSlug}`}
 							className="flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted active:bg-muted"
 						>
 							<svg

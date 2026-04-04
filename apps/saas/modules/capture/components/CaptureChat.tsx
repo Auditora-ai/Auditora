@@ -213,7 +213,7 @@ function CompleteCard({
 				</div>
 
 				<Link
-					href={`/${organizationSlug}/procesos/${processId}`}
+					href={`/${organizationSlug}/process/${processId}`}
 					className="flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold text-white transition-colors hover:opacity-90 active:scale-[0.98]"
 					style={{ backgroundColor: "#3B8FE8", minHeight: "48px" }}
 				>

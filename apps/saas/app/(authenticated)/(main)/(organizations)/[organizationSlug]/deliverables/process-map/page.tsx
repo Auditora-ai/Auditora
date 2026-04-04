@@ -1,10 +1,11 @@
 import { redirect } from "next/navigation";
 
-export default async function DeliverablesProcessMapRedirect({
-	params,
+// Redirect zombie route → HOME
+export default async function Page({
+  params,
 }: {
-	params: Promise<{ organizationSlug: string }>;
+  params: Promise<{ organizationSlug: string }>;
 }) {
-	const { organizationSlug } = await params;
-	redirect(`/${organizationSlug}/procesos`);
+  const { organizationSlug } = await params;
+  redirect(`/${organizationSlug}`);
 }

@@ -88,7 +88,7 @@ export function ProcessDetail({
 					{/* Back + Title */}
 					<div className="flex items-center gap-3 mb-2">
 						<Link
-							href={`/${organizationSlug}/procesos`}
+							href={`/${organizationSlug}`}
 							className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors"
 						>
 							<ArrowLeftIcon className="h-4 w-4" />
@@ -171,11 +171,13 @@ export function ProcessDetail({
 
 			{/* Bottom CTA */}
 			{canEvaluate && (
-				<div className="fixed bottom-0 left-0 right-0 z-20 bg-white border-t border-slate-200 p-4 safe-area-inset-bottom">
-					<Button className="w-full h-12 text-sm font-semibold gap-2">
-						<UsersIcon className="h-4 w-4" />
-						Evaluar equipo
-					</Button>
+				<div className="fixed bottom-0 left-0 right-0 z-20 bg-background border-t border-border p-4 safe-area-inset-bottom">
+					<Link href={`/${organizationSlug}/evaluate/${process.id}`}>
+						<Button className="w-full h-12 text-sm font-semibold gap-2">
+							<UsersIcon className="h-4 w-4" />
+							Evaluar equipo
+						</Button>
+					</Link>
 				</div>
 			)}
 		</div>

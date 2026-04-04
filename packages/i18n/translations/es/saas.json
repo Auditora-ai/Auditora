@@ -80,6 +80,7 @@
       "sessions": "Sesiones",
       "discover": "Descubrir",
       "start": "Inicio",
+      "home": "Inicio",
       "dashboard": "Panorama",
       "processes": "Procesos",
       "risks": "Riesgos",
@@ -101,7 +102,8 @@
       "capture": "Capturar",
       "document": "Documentar",
       "evaluate": "Evaluar",
-      "view": "Ver"
+      "view": "Ver",
+      "act": "Actuar"
     },
     "greeting": {
       "morning": "Buenos días",
