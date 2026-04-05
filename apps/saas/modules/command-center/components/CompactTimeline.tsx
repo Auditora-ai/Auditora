@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import type { SessionData } from "./CommandCenter";
 
+// Dynamic per-process indexed colors for inline style — must remain as hex values
 const COLORS = ["#3B8FE8", "#7C3AED", "#16A34A", "#D97706", "#DC2626", "#0EA5E9"];
 
 export function CompactTimeline({ sessions }: { sessions: SessionData[] }) {

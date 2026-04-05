@@ -20,7 +20,7 @@ export function CompletenessRing({ score, size = 24 }: CompletenessRingProps) {
 					cy={size / 2}
 					r={radius}
 					fill="none"
-					stroke="#334155"
+					stroke="var(--chrome-subtle)"
 					strokeWidth={2.5}
 				/>
 				{/* Progress */}
@@ -29,7 +29,7 @@ export function CompletenessRing({ score, size = 24 }: CompletenessRingProps) {
 					cy={size / 2}
 					r={radius}
 					fill="none"
-					stroke="#3B8FE8"
+					stroke="var(--primary)"
 					strokeWidth={2.5}
 					strokeDasharray={circumference}
 					strokeDashoffset={offset}

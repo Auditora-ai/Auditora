@@ -369,7 +369,7 @@ function MobileTranscriptLine({ entry }: { entry: TranscriptEntry }) {
 			<div className="flex items-baseline gap-2">
 				<span
 					className="text-xs font-semibold"
-					style={{ color: isManual ? "#3B8FE8" : color }}
+					style={{ color: isManual ? "var(--primary)" : color }}
 				>
 					{isManual ? "You" : entry.speaker}
 				</span>

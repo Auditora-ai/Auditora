@@ -146,7 +146,7 @@ export function AnalyzingPhase({
         <h2 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
           Analizando...
         </h2>
-        <p className="mt-2 text-[#94A3B8] text-sm truncate max-w-xs mx-auto">
+        <p className="mt-2 text-chrome-text-secondary text-sm truncate max-w-xs mx-auto">
           {url}
         </p>
         {/* Screen reader progress announcement */}
@@ -175,7 +175,7 @@ export function AnalyzingPhase({
                 animate="visible"
                 className={`flex items-center gap-4 rounded-xl px-4 py-3 transition-colors duration-500 ${
                   isActive
-                    ? "bg-[#3B8FE8]/5 border border-[#3B8FE8]/20"
+                    ? "bg-primary/5 border border-primary/20"
                     : isCompleted
                       ? "bg-white/[0.02] border border-white/5"
                       : "border border-transparent"
@@ -185,9 +185,9 @@ export function AnalyzingPhase({
                 <div
                   className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all duration-500 ${
                     isCompleted
-                      ? "bg-[#3B8FE8]/15"
+                      ? "bg-primary/15"
                       : isActive
-                        ? "bg-[#3B8FE8]/10"
+                        ? "bg-primary/10"
                         : "bg-white/[0.03]"
                   }`}
                 >
@@ -203,7 +203,7 @@ export function AnalyzingPhase({
                           damping: 15,
                         }}
                       >
-                        <Check className="h-5 w-5 text-[#3B8FE8]" />
+                        <Check className="h-5 w-5 text-primary" />
                       </motion.div>
                     ) : isActive ? (
                       <motion.div
@@ -211,7 +211,7 @@ export function AnalyzingPhase({
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                       >
-                        <Loader2 className="h-5 w-5 text-[#3B8FE8] animate-spin" />
+                        <Loader2 className="h-5 w-5 text-primary animate-spin" />
                       </motion.div>
                     ) : (
                       <motion.div
@@ -231,7 +231,7 @@ export function AnalyzingPhase({
                 <span
                   className={`text-sm font-medium transition-colors duration-500 ${
                     isCompleted
-                      ? "text-[#3B8FE8]"
+                      ? "text-primary"
                       : isActive
                         ? "text-white"
                         : "text-white/30"
@@ -245,7 +245,7 @@ export function AnalyzingPhase({
                   <motion.span
                     initial={{ opacity: 0, x: -8 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="ml-auto text-xs text-[#3B8FE8]/60"
+                    className="ml-auto text-xs text-primary/60"
                   >
                     Listo
                   </motion.span>
@@ -259,7 +259,7 @@ export function AnalyzingPhase({
         <div className="mt-6">
           <div className="h-1 w-full rounded-full bg-white/[0.06] overflow-hidden">
             <motion.div
-              className="h-full rounded-full bg-gradient-to-r from-[#3B8FE8] to-cyan-400"
+              className="h-full rounded-full bg-gradient-to-r from-primary to-cyan-400"
               initial={{ width: "0%" }}
               animate={{
                 width: `${Math.min(((completedSteps.size + (currentStep < 4 ? 0.5 : 0)) / 4) * 100, 100)}%`,

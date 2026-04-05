@@ -117,6 +117,7 @@ export function StepInvitation({
 		].filter(Boolean).join("\n");
 	};
 
+	// Email HTML uses inline hex colors — email clients do not support CSS variables or Tailwind
 	const formatEmailHtml = () => {
 		if (!invitation) return "";
 		const roles = Object.entries(invitation.roleInstructions)

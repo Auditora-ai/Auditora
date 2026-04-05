@@ -56,7 +56,7 @@ export function InputPhase({ defaultUrl, error, onSubmit }: InputPhaseProps) {
     >
       {/* Badge */}
       <motion.div variants={itemVariants} className="mb-6 flex justify-center">
-        <span className="inline-flex items-center gap-2 bg-[#3B8FE8]/15 text-[#3B8FE8] rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest">
+        <span className="inline-flex items-center gap-2 bg-primary/15 text-primary rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest">
           <Globe className="h-3.5 w-3.5" />
           Escaneo gratuito
         </span>
@@ -68,7 +68,7 @@ export function InputPhase({ defaultUrl, error, onSubmit }: InputPhaseProps) {
         className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl"
       >
         Escanea tus{" "}
-        <span className="bg-gradient-to-r from-[#3B8FE8] to-cyan-400 bg-clip-text text-transparent">
+        <span className="bg-gradient-to-r from-primary to-cyan-400 bg-clip-text text-transparent">
           operaciones
         </span>
       </motion.h1>
@@ -76,7 +76,7 @@ export function InputPhase({ defaultUrl, error, onSubmit }: InputPhaseProps) {
       {/* Subtitle */}
       <motion.p
         variants={itemVariants}
-        className="mx-auto mt-4 max-w-md text-lg text-[#94A3B8]"
+        className="mx-auto mt-4 max-w-md text-lg text-chrome-text-secondary"
       >
         Pega cualquier sitio web. Identificaremos procesos críticos y
         vulnerabilidades operativas en 60 segundos.
@@ -109,7 +109,7 @@ export function InputPhase({ defaultUrl, error, onSubmit }: InputPhaseProps) {
             }`}
             style={{
               background:
-                "conic-gradient(from 0deg, #3B8FE8, #06B6D4, #3B82F6, #8B5CF6, #3B8FE8)",
+                "conic-gradient(from 0deg, var(--primary), #06B6D4, #3B82F6, #8B5CF6, var(--primary))",
               filter: "blur(8px)",
             }}
           />
@@ -121,12 +121,12 @@ export function InputPhase({ defaultUrl, error, onSubmit }: InputPhaseProps) {
             }`}
             style={{
               background:
-                "conic-gradient(from 0deg, #3B8FE8, #06B6D4, #3B82F6, #8B5CF6, #3B8FE8)",
+                "conic-gradient(from 0deg, var(--primary), #06B6D4, #3B82F6, #8B5CF6, var(--primary))",
             }}
           />
 
           {/* Inner container */}
-          <div className="relative flex items-center gap-3 rounded-2xl bg-[#0A1428] p-2">
+          <div className="relative flex items-center gap-3 rounded-2xl bg-primary-foreground p-2">
             <div className="flex flex-1 items-center gap-3 rounded-xl bg-white/[0.04] px-4 py-3">
               <Globe className="h-5 w-5 shrink-0 text-white/30" />
               <input
@@ -147,7 +147,7 @@ export function InputPhase({ defaultUrl, error, onSubmit }: InputPhaseProps) {
               type="submit"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="shrink-0 inline-flex items-center gap-2 rounded-xl bg-[#3B8FE8] px-5 py-3 text-sm font-bold text-[#0A1428] shadow-[0_0_30px_rgba(59,143,232,0.15)] transition-colors hover:bg-[#2E7FD6] min-h-[44px]"
+              className="shrink-0 inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-primary-foreground shadow-[0_0_30px_rgba(59,143,232,0.15)] transition-colors hover:bg-action-hover min-h-[44px]"
             >
               Escanear
               <ArrowRight className="h-4 w-4" />

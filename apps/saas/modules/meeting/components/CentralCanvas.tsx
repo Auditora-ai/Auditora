@@ -613,54 +613,54 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 							0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.6; }
 							100% { transform: translate(-50%, -50%) scale(1.8); opacity: 0; }
 						}
-						@keyframes dotPulse {
-							0%, 100% { transform: scale(1); box-shadow: 0 0 8px #60A5FA; }
-							50% { transform: scale(1.3); box-shadow: 0 0 16px #3B82F6, 0 0 32px rgba(37, 99, 235, 0.3); }
-						}
-						@keyframes pillFloat {
-							0%, 100% { transform: translateY(0); }
-							50% { transform: translateY(-4px); }
-						}
-						.ai-aura-border {
-							position: absolute; inset: 0; z-index: 30; pointer-events: none;
-							border: 2px solid rgba(37, 99, 235, 0.3);
-							border-image: linear-gradient(90deg, #3B8FE8, #0EA5E9, #7C3AED, #3B8FE8, #0EA5E9) 1;
-							animation: auraSweep 2s linear infinite;
-							background: transparent;
-						}
-						.ai-aura-scrim {
-							position: absolute; inset: 0; z-index: 29; pointer-events: none;
-							backdrop-filter: blur(2px);
-							background: rgba(248, 250, 252, 0.5);
-						}
-						.ai-aura-center {
-							position: absolute; inset: 0; z-index: 31; pointer-events: none;
-							display: flex; align-items: center; justify-content: center;
-						}
-						.ai-aura-ring {
-							position: absolute; top: 50%; left: 50%;
-							width: 120px; height: 120px; border-radius: 50%;
-							border: 1.5px solid rgba(37, 99, 235, 0.2);
-							transform: translate(-50%, -50%) scale(1);
-							animation: ringExpand 2.5s ease-out infinite;
-						}
-						.ai-aura-ring-2 { animation-delay: 1.25s; }
-						.ai-aura-pill {
-							position: relative;
-							display: flex; align-items: center; gap: 10px;
-							padding: 10px 20px; border-radius: 100px;
-							background: rgba(15, 23, 42, 0.92);
-							backdrop-filter: blur(12px);
-							color: #93C5FD; font-size: 13px; font-weight: 500;
-							letter-spacing: 0.02em;
-							box-shadow: 0 0 30px rgba(37, 99, 235, 0.2), 0 8px 24px rgba(0, 0, 0, 0.15);
-							animation: pillFloat 3s ease-in-out infinite, auraFade 2s ease-in-out infinite;
-						}
-						.ai-aura-dot {
-							width: 8px; height: 8px; border-radius: 50%;
-							background: #60A5FA; flex-shrink: 0;
-							animation: dotPulse 1.5s ease-in-out infinite;
-						}
+					@keyframes dotPulse {
+						0%, 100% { transform: scale(1); box-shadow: 0 0 8px var(--palette-action-light); }
+						50% { transform: scale(1.3); box-shadow: 0 0 16px var(--primary), 0 0 32px rgba(37, 99, 235, 0.3); }
+					}
+					@keyframes pillFloat {
+						0%, 100% { transform: translateY(0); }
+						50% { transform: translateY(-4px); }
+					}
+					.ai-aura-border {
+						position: absolute; inset: 0; z-index: 30; pointer-events: none;
+						border: 2px solid rgba(37, 99, 235, 0.3);
+						border-image: linear-gradient(90deg, var(--primary), var(--palette-info), #7C3AED, var(--primary), var(--palette-info)) 1;
+						animation: auraSweep 2s linear infinite;
+						background: transparent;
+					}
+					.ai-aura-scrim {
+						position: absolute; inset: 0; z-index: 29; pointer-events: none;
+						backdrop-filter: blur(2px);
+						background: rgba(248, 250, 252, 0.5);
+					}
+					.ai-aura-center {
+						position: absolute; inset: 0; z-index: 31; pointer-events: none;
+						display: flex; align-items: center; justify-content: center;
+					}
+					.ai-aura-ring {
+						position: absolute; top: 50%; left: 50%;
+						width: 120px; height: 120px; border-radius: 50%;
+						border: 1.5px solid rgba(37, 99, 235, 0.2);
+						transform: translate(-50%, -50%) scale(1);
+						animation: ringExpand 2.5s ease-out infinite;
+					}
+					.ai-aura-ring-2 { animation-delay: 1.25s; }
+					.ai-aura-pill {
+						position: relative;
+						display: flex; align-items: center; gap: 10px;
+						padding: 10px 20px; border-radius: 100px;
+						background: rgba(15, 23, 42, 0.92);
+						backdrop-filter: blur(12px);
+						color: var(--palette-action-light); font-size: 13px; font-weight: 500;
+						letter-spacing: 0.02em;
+						box-shadow: 0 0 30px rgba(37, 99, 235, 0.2), 0 8px 24px rgba(0, 0, 0, 0.15);
+						animation: pillFloat 3s ease-in-out infinite, auraFade 2s ease-in-out infinite;
+					}
+					.ai-aura-dot {
+						width: 8px; height: 8px; border-radius: 50%;
+						background: var(--palette-action-light); flex-shrink: 0;
+						animation: dotPulse 1.5s ease-in-out infinite;
+					}
 						@keyframes textFadeIn {
 							0% { opacity: 0; transform: translateY(6px); filter: blur(4px); }
 							100% { opacity: 1; transform: translateY(0); filter: blur(0); }
@@ -681,9 +681,9 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 						<span className="ai-aura-text">{t("canvas.fixingLabels")}</span>
 					</div>
 					<style>{`
-						@keyframes dotPulse {
-							0%, 100% { transform: scale(1); box-shadow: 0 0 8px #60A5FA; }
-							50% { transform: scale(1.3); box-shadow: 0 0 16px #3B82F6, 0 0 32px rgba(37, 99, 235, 0.3); }
+					@keyframes dotPulse {
+						0%, 100% { transform: scale(1); box-shadow: 0 0 8px var(--palette-action-light); }
+						50% { transform: scale(1.3); box-shadow: 0 0 16px var(--primary), 0 0 32px rgba(37, 99, 235, 0.3); }
 						}
 						@keyframes pillFloat {
 							0%, 100% { transform: translateY(0); }
@@ -693,25 +693,25 @@ export function CentralCanvas({ containerRef, leftCollapsed, rightCollapsed, onT
 							0%, 100% { opacity: 0.6; }
 							50% { opacity: 1; }
 						}
-						.ai-aura-pill {
-							position: relative;
-							display: flex; align-items: center; gap: 10px;
-							padding: 10px 20px; border-radius: 100px;
-							background: rgba(15, 23, 42, 0.92);
-							backdrop-filter: blur(12px);
-							color: #93C5FD; font-size: 13px; font-weight: 500;
-							letter-spacing: 0.02em;
-							box-shadow: 0 0 30px rgba(37, 99, 235, 0.2), 0 8px 24px rgba(0, 0, 0, 0.15);
-							animation: pillFloat 3s ease-in-out infinite, auraFade 2s ease-in-out infinite;
-						}
-						.ai-aura-dot {
-							width: 8px; height: 8px; border-radius: 50%;
-							background: #60A5FA; flex-shrink: 0;
-							animation: dotPulse 1.5s ease-in-out infinite;
-						}
-						.ai-aura-text {
-							white-space: nowrap;
-						}
+					.ai-aura-pill {
+						position: relative;
+						display: flex; align-items: center; gap: 10px;
+						padding: 10px 20px; border-radius: 100px;
+						background: rgba(15, 23, 42, 0.92);
+						backdrop-filter: blur(12px);
+						color: var(--palette-action-light); font-size: 13px; font-weight: 500;
+						letter-spacing: 0.02em;
+						box-shadow: 0 0 30px rgba(37, 99, 235, 0.2), 0 8px 24px rgba(0, 0, 0, 0.15);
+						animation: pillFloat 3s ease-in-out infinite, auraFade 2s ease-in-out infinite;
+					}
+					.ai-aura-dot {
+						width: 8px; height: 8px; border-radius: 50%;
+						background: var(--palette-action-light); flex-shrink: 0;
+						animation: dotPulse 1.5s ease-in-out infinite;
+					}
+					.ai-aura-text {
+						white-space: nowrap;
+					}
 					`}</style>
 				</div>
 			)}

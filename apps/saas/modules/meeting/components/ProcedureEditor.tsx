@@ -268,11 +268,11 @@ export function ProcedureEditor({ content, onChange, sessionId }: ProcedureEdito
 				.procedure-editor-content ul, .procedure-editor-content ol { padding-left: 1.5em; margin: 0.25em 0; }
 				.procedure-editor-content li { margin: 0.1em 0; }
 				.procedure-editor-content img { max-width: 100%; border-radius: 4px; margin: 0.5em 0; }
-				.procedure-editor-content a { color: #3B8FE8; text-decoration: underline; }
-				.procedure-editor-content blockquote { border-left: 3px solid #E2E8F0; padding-left: 0.75em; color: #64748B; }
+				.procedure-editor-content a { color: var(--primary); text-decoration: underline; }
+				.procedure-editor-content blockquote { border-left: 3px solid var(--border); padding-left: 0.75em; color: var(--muted-foreground); }
 				.procedure-editor-content .is-empty::before {
 					content: attr(data-placeholder);
-					color: #94A3B8;
+					color: var(--chrome-text-secondary);
 					pointer-events: none;
 					float: left;
 					height: 0;

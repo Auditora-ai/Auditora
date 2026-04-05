@@ -77,9 +77,9 @@ function riskLevelBorder(level: string) {
     critical: "border-l-red-500",
     high: "border-l-orange-500",
     medium: "border-l-yellow-500",
-    low: "border-l-[#3B8FE8]",
+    low: "border-l-primary",
   };
-  return map[level] ?? "border-l-[#3B8FE8]";
+  return map[level] ?? "border-l-primary";
 }
 
 /* ------------------------------------------------------------------ */
@@ -314,7 +314,7 @@ export function ResultsPhase({ url, result, sessionId, onReset }: ResultsPhasePr
           {result.companyName}
         </h1>
         <div className="mt-3 flex items-center justify-center gap-3 flex-wrap">
-          <span className="bg-[#3B8FE8]/15 text-[#3B8FE8] rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest">
+          <span className="bg-primary/15 text-primary rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest">
             {result.industry}
           </span>
           <span className="bg-white/[0.04] text-white/50 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-widest border border-white/10">
@@ -335,7 +335,7 @@ export function ResultsPhase({ url, result, sessionId, onReset }: ResultsPhasePr
           variants={fadeUp}
           className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8"
         >
-          <h2 className="text-sm font-semibold uppercase tracking-widest text-[#94A3B8] mb-3">
+          <h2 className="text-sm font-semibold uppercase tracking-widest text-chrome-text-secondary mb-3">
             Resumen Ejecutivo
           </h2>
           <p className="text-sm text-white/70 leading-relaxed">
@@ -364,7 +364,7 @@ export function ResultsPhase({ url, result, sessionId, onReset }: ResultsPhasePr
         variants={fadeUp}
         className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-8 text-center shadow-[0_0_30px_rgba(59,143,232,0.05)]"
       >
-        <p className="text-sm font-semibold uppercase tracking-widest text-[#94A3B8] mb-1">
+        <p className="text-sm font-semibold uppercase tracking-widest text-chrome-text-secondary mb-1">
           Puntuación de Vulnerabilidad
         </p>
         <p className="text-[10px] font-medium uppercase tracking-wider text-white/30 mb-4">
@@ -453,7 +453,7 @@ export function ResultsPhase({ url, result, sessionId, onReset }: ResultsPhasePr
                   {process.riskLevel}
                 </span>
               </div>
-              <p className="text-xs text-[#94A3B8] leading-relaxed">
+              <p className="text-xs text-chrome-text-secondary leading-relaxed">
                 {process.description}
               </p>
             </motion.div>
@@ -504,7 +504,7 @@ export function ResultsPhase({ url, result, sessionId, onReset }: ResultsPhasePr
                     </span>
                     <FmeaRiskBadge severity={risk.severity} />
                   </div>
-                  <p className="text-xs text-[#94A3B8] leading-relaxed">
+                  <p className="text-xs text-chrome-text-secondary leading-relaxed">
                     {risk.description}
                   </p>
                 </div>
@@ -543,7 +543,7 @@ export function ResultsPhase({ url, result, sessionId, onReset }: ResultsPhasePr
         {/* Primary CTA — deep analysis via interview */}
         <Link
           href={SIGNUP_URL}
-          className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-[#3B8FE8] px-7 py-3.5 text-sm font-bold text-white shadow-[0_0_30px_rgba(59,143,232,0.15)] transition-all duration-300 hover:bg-[#2E7FD6] hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(59,143,232,0.25)] min-h-[48px]"
+          className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-7 py-3.5 text-sm font-bold text-white shadow-[0_0_30px_rgba(59,143,232,0.15)] transition-all duration-300 hover:bg-action-hover hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(59,143,232,0.25)] min-h-[48px]"
         >
           Regístrate para diagnóstico completo
           <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
