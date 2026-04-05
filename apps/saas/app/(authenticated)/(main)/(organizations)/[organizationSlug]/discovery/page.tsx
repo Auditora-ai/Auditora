@@ -29,7 +29,7 @@ export default async function Page({
 				id: true,
 				orgContext: {
 					select: {
-						industry: true,
+						industrySector: true,
 						companySize: true,
 						mission: true,
 					},
@@ -41,7 +41,7 @@ export default async function Page({
 						type: true,
 						description: true,
 					},
-					orderBy: { order: "asc" },
+					orderBy: { orderIndex: "asc" },
 				},
 			},
 		}),
@@ -72,7 +72,7 @@ export default async function Page({
 			organizationSlug={organizationSlug}
 			organizationName={activeOrganization.name}
 			hasDiscovery={hasDiscovery}
-			industry={companyBrain?.orgContext?.industry ?? null}
+			industry={companyBrain?.orgContext?.industrySector ?? null}
 			companySize={companyBrain?.orgContext?.companySize ?? null}
 			mission={companyBrain?.orgContext?.mission ?? null}
 			valueChain={companyBrain?.valueChainActivities ?? []}
