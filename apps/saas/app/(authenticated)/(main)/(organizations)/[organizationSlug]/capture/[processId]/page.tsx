@@ -65,7 +65,7 @@ export default function CaptureProcessPage() {
 				<p className="text-sm text-destructive">{error ?? "Session not found"}</p>
 				<button
 					type="button"
-					onClick={() => router.push(`/${organizationSlug}/descubrir`)}
+					onClick={() => router.push(`/${organizationSlug}/discovery`)}
 					className="text-sm text-primary underline"
 				>
 					Back to Discover
