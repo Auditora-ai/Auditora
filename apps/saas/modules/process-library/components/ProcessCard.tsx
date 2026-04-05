@@ -66,7 +66,7 @@ export function ProcessCard({
 				<div className="flex items-start justify-between gap-2">
 					<div className="min-w-0 flex-1">
 						<a
-href={`${basePath}/procesos/${process.id}`}
+href={`${basePath}/process/${process.id}`}
 						className="truncate font-semibold text-sm hover:underline block min-h-[44px] flex items-center"
 						>
 							{process.name}
@@ -84,7 +84,7 @@ href={`${basePath}/procesos/${process.id}`}
 							</DropdownMenuTrigger>
 							<DropdownMenuContent align="end">
 								<DropdownMenuItem asChild className="min-h-[44px]">
-									<a href={`${basePath}/procesos/${process.id}`}>
+									<a href={`${basePath}/process/${process.id}`}>
 										<EyeIcon className="mr-2 size-4" />
 										{t("view")}
 									</a>

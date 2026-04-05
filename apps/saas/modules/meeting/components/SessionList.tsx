@@ -213,7 +213,7 @@ export function SessionList({ organizationSlug }: { organizationSlug: string }) 
 						Crea tu primera sesión para comenzar a mapear procesos.
 					</p>
 				<Button asChild className="mt-6">
-					<Link href={`/${organizationSlug}/descubrir`}>
+					<Link href={`/${organizationSlug}/discovery`}>
 						<PlusIcon className="mr-2 h-4 w-4" />
 						Descubrir procesos
 					</Link>

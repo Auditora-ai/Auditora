@@ -253,7 +253,7 @@ export function WorkspaceHeader({
 			)}
 
 			<Button size="sm" asChild>
-				<Link href={`/${organizationSlug}/descubrir/new?processId=${process.id}&type=DEEP_DIVE`}>
+				<Link href={`/${organizationSlug}/capture/new?processId=${process.id}&type=DEEP_DIVE`}>
 					<PlayIcon className="mr-1.5 h-3.5 w-3.5" />
 					Deep Dive
 				</Link>

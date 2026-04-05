@@ -233,7 +233,7 @@ export function ProcessPhaseDashboard({
 						? {
 								label: "Inicia tu primer Deep Dive",
 								onClick: () => {
-									window.location.href = `/${organizationSlug}/descubrir/new?processId=${process.id}&type=DEEP_DIVE`;
+									window.location.href = `/${organizationSlug}/capture/new?processId=${process.id}&type=DEEP_DIVE`;
 								},
 							}
 						: hasActiveSession && lastSession
@@ -247,7 +247,7 @@ export function ProcessPhaseDashboard({
 								? {
 										label: "Continuar última sesión",
 										onClick: () => {
-											window.location.href = `/${organizationSlug}/descubrir/new?processId=${process.id}&type=DEEP_DIVE&continuationOf=${lastSession.id}`;
+											window.location.href = `/${organizationSlug}/capture/new?processId=${process.id}&type=DEEP_DIVE&continuationOf=${lastSession.id}`;
 										},
 									}
 								: null,

@@ -131,7 +131,7 @@ export function RiskDashboard({
 		{
 			label: t("onboardingStep1"),
 			done: processCount > 0,
-			href: `${basePath}/descubrir`,
+			href: `${basePath}/discovery`,
 		},
 		{
 			label: t("onboardingStep2"),
@@ -172,7 +172,7 @@ export function RiskDashboard({
 						{t("createEvaluation")}
 					</Link>
 					<Link
-						href={`${basePath}/descubrir`}
+						href={`${basePath}/discovery`}
 						className="hidden items-center justify-center gap-1.5 rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-accent active:bg-accent/80 md:inline-flex md:min-h-0"
 					>
 						<PlusIcon className="size-4" />
@@ -192,11 +192,11 @@ export function RiskDashboard({
 							actions={[
 								{
 									label: t("emptyCtaCapture"),
-									href: `${basePath}/descubrir`,
+									href: `${basePath}/discovery`,
 								},
 								{
 									label: t("emptyCtaExplore"),
-									href: `${basePath}/procesos`,
+									href: `${basePath}/`,
 									variant: "outline",
 								},
 							]}
@@ -256,7 +256,7 @@ export function RiskDashboard({
 										<div className="grid grid-cols-2 gap-3 text-center md:grid-cols-4 md:text-left">
 											{/* Documented processes: X of Y */}
 								<Link
-									href={`${basePath}/procesos`}
+									href={`${basePath}/`}
 									className="group rounded-xl bg-muted/50 p-2.5 transition-all hover:bg-accent/30 active:scale-95 md:bg-transparent md:p-0"
 								>
 									<p className="text-xl font-bold tabular-nums text-foreground transition-colors group-hover:text-primary md:text-2xl">
@@ -272,7 +272,7 @@ export function RiskDashboard({
 
 											{/* Risk count */}
 								<Link
-									href={`${basePath}/procesos`}
+									href={`${basePath}/`}
 									className="group rounded-xl bg-muted/50 p-2.5 transition-all hover:bg-accent/30 active:scale-95 md:bg-transparent md:p-0"
 								>
 									<p className="text-xl font-bold tabular-nums text-foreground transition-colors group-hover:text-amber-500 md:text-2xl">
@@ -322,7 +322,7 @@ export function RiskDashboard({
 						<div className="animate-in fade-in slide-in-from-bottom-2 duration-500 delay-75">
 							<div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
 								<Link
-									href={`${basePath}/descubrir`}
+									href={`${basePath}/discovery`}
 								className="group flex items-center gap-3 rounded-2xl border border-border bg-card/80 p-4 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:shadow-md active:bg-accent/80 active:scale-[0.98] dark:border-border/50 dark:bg-card/60"
 							>
 								<div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-blue-500/10">
@@ -395,7 +395,7 @@ export function RiskDashboard({
 										{topRisks.map((risk) => (
 											<Link
 												key={risk.id}
-												href={`${basePath}/procesos`}
+												href={`${basePath}/`}
 												className={`block rounded-2xl border border-l-4 border-border bg-card/80 p-4 backdrop-blur-sm transition-all duration-300 hover:shadow-md dark:border-border/50 dark:bg-card/60 ${
 													risk.riskScore >= 16
 														? "border-l-destructive"

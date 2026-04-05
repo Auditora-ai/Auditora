@@ -155,7 +155,7 @@ export function ProcedureWorkspace({ procedure: initialProcedure, versions: init
 			{/* Header */}
 			<div className="shrink-0 space-y-3 border-b border-border/50 bg-background px-6 py-4">
 				<Breadcrumbs items={[
-					{ label: "Procedimientos", href: `${basePath}/procesos` },
+					{ label: "Procedimientos", href: `${basePath}/` },
 					{ label: procedure.title },
 				]} />
 

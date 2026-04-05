@@ -65,7 +65,7 @@ export function EvaluacionHub({ templates, recentRuns, organizationSlug }: Evalu
 				actions={[
 					{
 						label: t("goToProcesses"),
-						href: `/${organizationSlug}/procesos`,
+						href: `/${organizationSlug}/`,
 						variant: "primary",
 					},
 				]}

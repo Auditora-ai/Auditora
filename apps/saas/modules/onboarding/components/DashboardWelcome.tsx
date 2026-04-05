@@ -55,7 +55,7 @@ export function DashboardWelcome({
 
 			<div className="mt-8 flex flex-col items-center gap-3">
 				<Button asChild size="lg" className="min-h-[48px] active:scale-95">
-					<Link href={`${basePath}/descubrir/interview`}>
+					<Link href={`${basePath}/capture/new`}>
 						<MessageSquareIcon className="mr-2 size-4" />
 						{t("cta")}
 					</Link>

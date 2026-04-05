@@ -67,7 +67,7 @@ export function CreateProcedureDialog({
 			}
 
 			onOpenChange(false);
-			router.push(`/${organizationSlug}/procesos`);
+			router.push(`/${organizationSlug}/`);
 		} catch (err: any) {
 			setError(err.message);
 		} finally {

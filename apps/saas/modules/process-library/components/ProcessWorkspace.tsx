@@ -40,7 +40,7 @@ function WorkspaceInner({ process: initialProcess, organizationSlug, basePath }:
 	const [process, setProcess] = useState(initialProcess);
 	const { sidebarCollapsed } = useProcessWorkspace();
 
-	const processesPath = `${basePath}/procesos`;
+	const processesPath = `${basePath}/`;
 
 	const handleProcessUpdate = (updated: Partial<ProcessData>) => {
 		setProcess((prev) => ({ ...prev, ...updated }));

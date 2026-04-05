@@ -184,7 +184,7 @@ export function MeetingView({
 				router.push(`/${slug}/session/${sessionId}/review`);
 			} else if (mode === "save_only") {
 				toast.success(t("toast.sessionEndedSave"));
-				router.push(`/${slug}/procesos`);
+				router.push(`/${slug}/`);
 			} else {
 				toast.info(t("toast.sessionDiscarded"));
 				router.push(`/${slug}`);

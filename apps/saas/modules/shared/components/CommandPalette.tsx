@@ -48,7 +48,7 @@ export function CommandPalette() {
 				section: t("sections.actions"),
 				icon: PlusIcon,
 				action: () => {
-					if (basePath) router.push(`${basePath}/descubrir/new`);
+					if (basePath) router.push(`${basePath}/capture/new`);
 				},
 			},
 		];
@@ -61,7 +61,7 @@ export function CommandPalette() {
 					label: tApp("menu.discover"),
 					section: t("sections.discover"),
 					icon: CompassIcon,
-					action: () => router.push(`${basePath}/descubrir`),
+					action: () => router.push(`${basePath}/discovery`),
 				},
 				// DOCUMENTAR
 				{
@@ -69,7 +69,7 @@ export function CommandPalette() {
 					label: tApp("menu.processes"),
 					section: t("sections.document"),
 					icon: WorkflowIcon,
-					action: () => router.push(`${basePath}/procesos`),
+					action: () => router.push(`${basePath}/`),
 				},
 				// EVALUAR
 				{

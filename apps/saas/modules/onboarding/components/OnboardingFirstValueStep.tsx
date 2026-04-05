@@ -20,7 +20,7 @@ const ACTION_CARDS = [
 	{
 		key: "chatInterview",
 		icon: MessageSquareIcon,
-		path: "/descubrir/interview",
+		path: "/capture/new",
 		color: "text-blue-500",
 		bgColor: "bg-blue-500/10",
 	},
@@ -34,7 +34,7 @@ const ACTION_CARDS = [
 	{
 		key: "documentProcess",
 		icon: FileTextIcon,
-		path: "/descubrir/new",
+		path: "/capture/new",
 		color: "text-purple-500",
 		bgColor: "bg-purple-500/10",
 	},

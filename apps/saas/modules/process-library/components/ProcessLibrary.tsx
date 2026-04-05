@@ -182,7 +182,7 @@ export function ProcessLibrary({
 					<div className="mt-6 flex flex-col sm:flex-row gap-2">
 						{processes.length === 0 && (
 							<Button asChild className="min-h-[44px]">
-								<Link href={`${basePath}/descubrir/new`}>
+								<Link href={`${basePath}/capture/new`}>
 									<MessageSquareIcon className="mr-2 size-4" />
 									{t("empty.ctaInterview")}
 								</Link>

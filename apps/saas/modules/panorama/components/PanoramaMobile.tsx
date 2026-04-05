@@ -43,7 +43,7 @@ export function PanoramaMobile({ data }: { data: PanoramaData }) {
 					title={t("noData")}
 					description={t("noData")}
 					actions={[
-						{ label: t("noDataCta"), href: `${basePath}/descubrir` },
+						{ label: t("noDataCta"), href: `${basePath}/discovery` },
 						{ label: t("noDataCta"), href: `${basePath}/evaluaciones`, variant: "outline" },
 					]}
 				/>

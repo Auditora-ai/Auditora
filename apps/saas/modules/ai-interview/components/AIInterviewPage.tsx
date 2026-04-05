@@ -60,7 +60,7 @@ export function AIInterviewPage({
 				className="bg-background border-border"
 			>
 				<Link
-					href={`/${organizationSlug}/descubrir`}
+					href={`/${organizationSlug}/discovery`}
 					className="flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:opacity-80 min-h-[36px] min-w-[36px] justify-center sm:justify-start sm:min-w-0"
 					
 				>
@@ -286,7 +286,7 @@ export function AIInterviewPage({
 								</button>
 							)}
 							<Link
-								href={`/${organizationSlug}/descubrir`}
+								href={`/${organizationSlug}/discovery`}
 								className="flex items-center justify-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium text-primary-foreground min-h-[44px]"
 								
 							>

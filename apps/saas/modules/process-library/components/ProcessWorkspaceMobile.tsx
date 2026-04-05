@@ -59,7 +59,7 @@ function MobileWorkspaceInner({
 	const [fabOpen, setFabOpen] = useState(false);
 	const [downloading, setDownloading] = useState(false);
 
-	const processesPath = `${basePath}/procesos`;
+	const processesPath = `${basePath}/`;
 
 	const handleProcessUpdate = (updated: Partial<ProcessData>) => {
 		setProcess((prev) => ({ ...prev, ...updated }));
@@ -197,7 +197,7 @@ function MobileWorkspaceInner({
 									asChild
 								>
 									<Link
-										href={`/${organizationSlug}/descubrir/new?processId=${process.id}&type=DEEP_DIVE`}
+										href={`/${organizationSlug}/capture/new?processId=${process.id}&type=DEEP_DIVE`}
 									>
 										<PlayIcon className="mr-1.5 h-3.5 w-3.5" />
 										Iniciar sesión
@@ -316,7 +316,7 @@ function MobileWorkspaceInner({
 					<div className="mb-2 flex flex-col items-end gap-2 animate-in fade-in slide-in-from-bottom-2 duration-200">
 						{/* Start Interview */}
 						<Link
-							href={`/${organizationSlug}/descubrir/new?processId=${process.id}&type=DEEP_DIVE`}
+							href={`/${organizationSlug}/capture/new?processId=${process.id}&type=DEEP_DIVE`}
 							className="flex items-center gap-2"
 							onClick={() => setFabOpen(false)}
 						>
