@@ -59,6 +59,8 @@ export interface HomePageProps {
 	organizationId: string;
 	organizationName: string;
 	organizationSlug: string;
+	basePath: string;
+	processes: ProcessItem[];
 	maturityScore: number;
 	topRisks: TopRisk[];
 	nextSession: {

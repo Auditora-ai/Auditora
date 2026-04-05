@@ -11,22 +11,22 @@ function useSectionTitle(): string {
 	const pathname = usePathname();
 	const t = useTranslations();
 
-	if (pathname.includes("/descubrir") || pathname.includes("/sessions") || pathname.includes("/session/")) {
+	if (pathname.includes("/discovery") || pathname.includes("/capture")) {
 		return t("app.menu.discover");
 	}
-	if (pathname.includes("/processes") || pathname.includes("/procesos") || pathname.includes("/procedures")) {
+	if (pathname.includes("/process/")) {
 		return t("app.menu.processes");
 	}
-	if (pathname.includes("/evaluaciones")) {
+	if (pathname.includes("/evaluate") || pathname.includes("/evaluaciones")) {
 		return t("app.menu.evaluaciones");
-	}
-	if (pathname.includes("/settings")) {
-		return t("app.menu.organizationSettings");
 	}
 	if (pathname.includes("/panorama")) {
 		return t("app.menu.dashboard");
 	}
-	return t("app.menu.dashboard");
+	if (pathname.includes("/settings")) {
+		return t("app.menu.organizationSettings");
+	}
+	return t("app.menu.home");
 }
 
 export function MobileHeader() {

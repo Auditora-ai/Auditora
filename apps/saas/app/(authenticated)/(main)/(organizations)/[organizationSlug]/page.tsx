@@ -5,6 +5,7 @@ import type {
 	ActivityItem,
 	VulnerableProcess,
 	NextStepRecommendation,
+	ProcessItem,
 } from "@/modules/home/types";
 import { db } from "@repo/database";
 import { fetchHumanRiskDashboardData } from "@evaluaciones/lib/dashboard-queries";
@@ -43,20 +44,27 @@ export default async function OrganizationPage({
 	const [processes, topRisksRaw, nextSession, activeSession, recentSessions, evaluacionesData, recentEvaluations] =
 		await Promise.all([
 			// Process stats
-			architecture
-				? db.processDefinition.findMany({
-						where: {
-							architectureId: architecture.id,
-							level: "PROCESS",
+		architecture
+			? db.processDefinition.findMany({
+					where: {
+						architectureId: architecture.id,
+						level: "PROCESS",
+					},
+					select: {
+						id: true,
+						name: true,
+						category: true,
+						processStatus: true,
+						versions: { select: { id: true }, take: 1 },
+						risks: { select: { id: true, severity: true, probability: true, riskScore: true } },
+						simulationTemplates: {
+							select: { id: true },
+							take: 1,
 						},
-						select: {
-							id: true,
-							name: true,
-							versions: { select: { id: true }, take: 1 },
-							risks: { select: { id: true }, take: 1 },
-						},
-					})
-				: Promise.resolve([]),
+					},
+					orderBy: [{ priority: "desc" }, { name: "asc" }],
+				})
+			: Promise.resolve([]),
 
 			// Top risks by score
 			architecture
@@ -179,6 +187,18 @@ export default async function OrganizationPage({
 		riskScore: r.riskScore,
 	}));
 
+	// Map processes to ProcessItem for the home process map
+	const processItems: ProcessItem[] = processes.map((p) => ({
+		id: p.id,
+		name: p.name,
+		category: (p.category === "core" ? "operative" : p.category ?? "operative") as ProcessItem["category"],
+		status: mapProcessStatus(p.processStatus, p.versions.length > 0, p.simulationTemplates.length > 0),
+		alignmentScore: null, // populated below from evaluaciones heatmap
+		riskCount: p.risks.length,
+		criticalRiskCount: p.risks.filter((r) => r.riskScore >= 16).length,
+		evalCount: 0,
+	}));
+
 	const t = await getTranslations("dashboard.riskDashboard");
 	const basePath = `/${organizationSlug}`;
 
@@ -230,11 +250,24 @@ export default async function OrganizationPage({
 		t,
 	});
 
+	// Enrich processItems with alignment scores from evaluaciones heatmap
+	if (evaluacionesData && !evaluacionesData.insufficientData) {
+		for (const pi of processItems) {
+			const heatRow = evaluacionesData.processHeatmap.find((h) => h.processName === pi.name);
+			if (heatRow) {
+				pi.alignmentScore = heatRow.avgAlignment;
+				pi.evalCount = heatRow.simulationCount;
+			}
+		}
+	}
+
 	return (
 		<HomePage
 			organizationId={orgId}
 			organizationName={activeOrganization.name}
 			organizationSlug={organizationSlug}
+			basePath={basePath}
+			processes={processItems}
 			maturityScore={maturityScore}
 			topRisks={topRisks}
 			nextSession={
@@ -305,7 +338,7 @@ function computeNextSteps({ processCount, evaluacionesData, vulnerableProcesses,
 		steps.push({
 			id: "capture-first",
 			message: t("nextStepCapture"),
-			href: `${basePath}/descubrir`,
+			href: `${basePath}/discovery`,
 			icon: "scan",
 		});
 		return steps;
@@ -347,10 +380,22 @@ function computeNextSteps({ processCount, evaluacionesData, vulnerableProcesses,
 		steps.push({
 			id: "add-processes",
 			message: t("nextStepGrow"),
-			href: `${basePath}/procesos`,
+			href: `${basePath}/capture/new`,
 			icon: "grow",
 		});
 	}
 
 	return steps.slice(0, 3); // max 3 recommendations
+}
+
+/** Map DB processStatus + data state to vision lifecycle */
+function mapProcessStatus(
+	dbStatus: string,
+	hasVersions: boolean,
+	hasEvaluations: boolean,
+): ProcessItem["status"] {
+	if (hasEvaluations) return "EVALUATED";
+	if (hasVersions || dbStatus === "VALIDATED" || dbStatus === "APPROVED") return "DOCUMENTED";
+	if (dbStatus === "MAPPED") return "CAPTURED";
+	return "DRAFT";
 }

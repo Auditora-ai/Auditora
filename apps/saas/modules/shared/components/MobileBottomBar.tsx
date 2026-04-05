@@ -66,9 +66,9 @@ export function MobileBottomBar() {
 		},
 		{
 			label: t("app.menu.discover"),
-			href: `${basePath}/descubrir`,
+			href: `${basePath}/discovery`,
 			icon: CompassIcon,
-			isActive: pathname.startsWith(`${basePath}/descubrir`) || pathname.startsWith(`${basePath}/discovery`) || pathname.startsWith(`${basePath}/capture`) || pathname.startsWith(`${basePath}/sessions`) || pathname.startsWith(`${basePath}/session/`),
+			isActive: pathname.startsWith(`${basePath}/discovery`) || pathname.startsWith(`${basePath}/capture`),
 		},
 		{
 			label: t("app.menu.evaluaciones"),
