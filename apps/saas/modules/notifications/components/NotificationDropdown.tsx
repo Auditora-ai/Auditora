@@ -24,16 +24,16 @@ export function NotificationDropdown({
 	return (
 		<div className="flex flex-col max-h-[480px]">
 			{/* Header */}
-			<div className="flex items-center justify-between px-4 py-3 border-b border-slate-700/50">
-				<h3 className="text-sm font-semibold text-slate-200">
-					Notificaciones
+		<div className="flex items-center justify-between px-4 py-3 border-b border-chrome-border">
+			<h3 className="text-sm font-semibold text-foreground">
+				Notificaciones
 				</h3>
 				{hasUnread && (
-					<button
-						type="button"
-						onClick={() => markAllRead()}
-						className="flex items-center gap-1 text-xs text-[#3B8FE8] hover:text-[#3B8FE8]/80 transition-colors"
-					>
+				<button
+					type="button"
+					onClick={() => markAllRead()}
+					className="flex min-h-[48px] items-center gap-1 text-xs text-primary hover:text-primary/80 transition-colors"
+				>
 						<CheckCheckIcon className="size-3.5" />
 						Marcar todo como leído
 					</button>
@@ -43,16 +43,16 @@ export function NotificationDropdown({
 			{/* List */}
 			<div className="flex-1 overflow-y-auto">
 				{isLoading ? (
-					<div className="flex items-center justify-center py-12">
-						<div className="size-5 animate-spin rounded-full border-2 border-slate-600 border-t-[#3B8FE8]" />
-					</div>
+			<div className="flex items-center justify-center py-12">
+				<div className="size-5 animate-spin rounded-full border-2 border-chrome-subtle border-t-primary" />
+			</div>
 				) : notifications.length === 0 ? (
-					<div className="flex flex-col items-center justify-center py-12 text-slate-500">
+					<div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
 						<InboxIcon className="size-8 mb-2" />
 						<p className="text-sm">No hay notificaciones</p>
 					</div>
 				) : (
-					<div className="divide-y divide-slate-800/50">
+					<div className="divide-y divide-chrome-border-subtle/50">
 						{notifications.map((notification) => (
 							<NotificationItem
 								key={notification.id}

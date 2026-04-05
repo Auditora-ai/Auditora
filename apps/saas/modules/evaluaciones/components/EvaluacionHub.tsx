@@ -3,6 +3,7 @@
 import { EmptyState } from "@shared/components/EmptyState";
 import { GraduationCapIcon, UserIcon, AlertTriangleIcon, CheckCircle2Icon, PlayCircleIcon } from "lucide-react";
 import { cn } from "@repo/ui";
+import { Badge } from "@repo/ui/components/badge";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
@@ -41,16 +42,33 @@ interface EvaluacionHubProps {
 
 function scoreColor(score: number | null): string {
 	if (score === null) return "text-muted-foreground";
-	if (score >= 75) return "text-emerald-400";
-	if (score >= 50) return "text-amber-400";
-	return "text-red-400";
+	if (score >= 80) return "text-emerald-500";
+	if (score >= 60) return "text-amber-500";
+	return "text-destructive";
 }
 
 function riskIndicator(avgScore: number | null): { label: string; color: string; bg: string } {
 	if (avgScore === null) return { label: "—", color: "text-muted-foreground", bg: "bg-muted/50" };
-	if (avgScore >= 75) return { label: "LOW", color: "text-emerald-400", bg: "bg-emerald-500/10" };
-	if (avgScore >= 50) return { label: "MED", color: "text-amber-400", bg: "bg-amber-500/10" };
-	return { label: "HIGH", color: "text-red-400", bg: "bg-red-500/10" };
+	if (avgScore >= 80) return { label: "LOW", color: "text-emerald-500", bg: "bg-emerald-500/10" };
+	if (avgScore >= 60) return { label: "MED", color: "text-amber-500", bg: "bg-amber-500/10" };
+	return { label: "HIGH", color: "text-destructive", bg: "bg-destructive/10" };
+}
+
+function statusVariant(status: EvaluacionTemplateStatus): { status?: "success" | "info" | "warning" | "error"; variant?: "secondary" } {
+	switch (status) {
+		case "PUBLISHED": return { status: "success" };
+		case "GENERATING": return { status: "info" };
+		case "GENERATION_FAILED": return { status: "error" };
+		default: return { variant: "secondary" };
+	}
+}
+
+function runStatusVariant(status: EvaluacionRunStatus): { status?: "success" | "info"; variant?: "secondary" } {
+	switch (status) {
+		case "COMPLETED": return { status: "success" };
+		case "IN_PROGRESS": return { status: "info" };
+		default: return { variant: "secondary" };
+	}
 }
 
 export function EvaluacionHub({ templates, recentRuns, organizationSlug }: EvaluacionHubProps) {
@@ -126,7 +144,7 @@ export function EvaluacionHub({ templates, recentRuns, organizationSlug }: Evalu
 
 			{/* Templates — Harvard-case style cards */}
 			<div>
-				<h2 className="mb-3 text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider">
+				<h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
 					{t("catalog")}
 				</h2>
 				<div className="grid gap-3">
@@ -150,6 +168,7 @@ export function EvaluacionHub({ templates, recentRuns, organizationSlug }: Evalu
 						const roleName = template.targetRole === "CUSTOM"
 							? template.customRoleName ?? t("customRole")
 							: t(`roleLabels.${template.targetRole}`);
+						const sv = statusVariant(template.status);
 
 						return (
 							<Link
@@ -167,20 +186,13 @@ export function EvaluacionHub({ templates, recentRuns, organizationSlug }: Evalu
 											{template.processDefinition.name} · {roleName}
 										</p>
 									</div>
-									<span className={cn(
-										"inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium shrink-0",
-										template.status === "PUBLISHED" && "bg-emerald-500/20 text-emerald-400",
-										template.status === "DRAFT" && "bg-muted text-muted-foreground",
-										template.status === "GENERATING" && "bg-blue-500/20 text-blue-400",
-										template.status === "GENERATION_FAILED" && "bg-red-500/20 text-red-400",
-										template.status === "ARCHIVED" && "bg-muted text-muted-foreground",
-									)}>
+									<Badge {...sv} className="shrink-0 text-[10px]">
 										{template.status === "PUBLISHED" ? t("statusActive")
 											: template.status === "GENERATING" ? "…"
 											: template.status === "GENERATION_FAILED" ? "Error"
 											: template.status === "ARCHIVED" ? "Archived"
 											: t("statusDraft")}
-									</span>
+									</Badge>
 								</div>
 
 								{/* Middle: Key metrics row */}
@@ -220,7 +232,7 @@ export function EvaluacionHub({ templates, recentRuns, organizationSlug }: Evalu
 											<div
 												className={cn(
 													"h-full rounded-full transition-all duration-500",
-													completionRate >= 75 ? "bg-emerald-500" : completionRate >= 40 ? "bg-amber-500" : "bg-red-500"
+													completionRate >= 80 ? "bg-emerald-500" : completionRate >= 60 ? "bg-amber-500" : "bg-destructive"
 												)}
 												style={{ width: `${completionRate}%` }}
 											/>
@@ -236,43 +248,39 @@ export function EvaluacionHub({ templates, recentRuns, organizationSlug }: Evalu
 			{/* Recent runs */}
 			{recentRuns.length > 0 && (
 				<div>
-					<h2 className="mb-3 text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wider">
+					<h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
 						{t("recentRuns")}
 					</h2>
 					<div className="grid gap-2">
-						{recentRuns.map((run) => (
-							<div
-								key={run.id}
-								className="flex items-center justify-between rounded-2xl border border-border/50 bg-card px-4 py-3 md:px-4 md:py-3 min-h-[52px]"
-							>
-								<div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
-									<div className="flex h-7 w-7 items-center justify-center rounded-full bg-muted/50 shrink-0">
-										<UserIcon className="h-3.5 w-3.5 text-muted-foreground" />
+						{recentRuns.map((run) => {
+							const rsv = runStatusVariant(run.status);
+							return (
+								<div
+									key={run.id}
+									className="flex items-center justify-between rounded-2xl border border-border/50 bg-card px-4 py-3 md:px-4 md:py-3 min-h-[52px]"
+								>
+									<div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
+										<div className="flex h-7 w-7 items-center justify-center rounded-full bg-muted/50 shrink-0">
+											<UserIcon className="h-3.5 w-3.5 text-muted-foreground" />
+										</div>
+										<div className="min-w-0">
+											<span className="text-sm text-foreground truncate block">{run.user.name}</span>
+											<span className="text-[10px] md:text-xs text-muted-foreground truncate block">
+												{run.scenario.template.title}
+											</span>
+										</div>
 									</div>
-									<div className="min-w-0">
-										<span className="text-sm text-foreground truncate block">{run.user.name}</span>
-										<span className="text-[10px] md:text-xs text-muted-foreground truncate block">
-											{run.scenario.template.title}
+									<div className="flex items-center gap-2 md:gap-3 shrink-0 ml-2">
+										<span className={cn("text-sm font-medium tabular-nums", scoreColor(run.overallScore))}>
+											{run.overallScore !== null ? run.overallScore : "—"}
 										</span>
+										<Badge {...rsv} className="text-[10px]">
+											{run.status === "COMPLETED" ? t("statusCompleted") : run.status === "IN_PROGRESS" ? t("statusInProgress") : "—"}
+										</Badge>
 									</div>
 								</div>
-								<div className="flex items-center gap-2 md:gap-3 shrink-0 ml-2">
-						<span className={cn("text-sm font-medium", scoreColor(run.overallScore))} style={{ fontVariantNumeric: "tabular-nums" }}>
-							{run.overallScore !== null ? run.overallScore : "—"}
-						</span>
-									<span className={cn(
-										"inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium",
-										run.status === "COMPLETED"
-											? "bg-emerald-500/20 text-emerald-400"
-											: run.status === "IN_PROGRESS"
-												? "bg-blue-500/20 text-blue-400"
-												: "bg-muted text-muted-foreground",
-									)}>
-										{run.status === "COMPLETED" ? t("statusCompleted") : run.status === "IN_PROGRESS" ? t("statusInProgress") : "—"}
-									</span>
-								</div>
-							</div>
-						))}
+							);
+						})}
 					</div>
 				</div>
 			)}

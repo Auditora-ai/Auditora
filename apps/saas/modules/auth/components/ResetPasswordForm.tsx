@@ -16,6 +16,7 @@ import {
 	FormMessage,
 } from "@repo/ui/components/form";
 import { passwordSchema } from "@repo/utils";
+import { cn } from "@repo/ui";
 import { PasswordInput } from "@shared/components/PasswordInput";
 import { useRouter } from "@shared/hooks/router";
 import { AlertTriangleIcon, ArrowLeftIcon, MailboxIcon } from "lucide-react";
@@ -35,7 +36,7 @@ export function ResetPasswordForm() {
 	const router = useRouter();
 	const { getAuthErrorMessage } = useAuthErrorMessages();
 	const searchParams = useSearchParams();
-	const token = searchParams.get("token");
+	const token=searchParams.get("token");
 
 	const form = useForm({
 		resolver: zodResolver(formSchema),
@@ -71,10 +72,10 @@ export function ResetPasswordForm() {
 
 	return (
 		<>
-			<h1 className="font-bold text-xl md:text-2xl">
+			<h1 className="font-bold text-xl md:text-2xl text-foreground">
 				{t("auth.resetPassword.title")}
 			</h1>
-			<p className="mt-1 mb-6 text-foreground/60">
+			<p className="mt-1 mb-6 text-muted-foreground">
 				{t("auth.resetPassword.message")}{" "}
 			</p>
 
@@ -121,7 +122,7 @@ export function ResetPasswordForm() {
 							)}
 						/>
 
-						<Button loading={form.formState.isSubmitting}>
+						<Button className="min-h-[48px]" loading={form.formState.isSubmitting}>
 							{t("auth.resetPassword.submit")}
 						</Button>
 					</form>

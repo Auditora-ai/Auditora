@@ -14,8 +14,10 @@ import {
 	FormField,
 	FormItem,
 	FormLabel,
+	FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { cn } from "@repo/ui";
 import { useRouter } from "@shared/hooks/router";
 import {
 	AlertTriangleIcon,
@@ -74,7 +76,7 @@ export function LoginForm() {
 		defaultValues: {
 			email: email ?? "",
 			password: "",
-			mode: authConfig.enablePasswordLogin ? "password" : "magic-link",
+			mode: authConfig.enablePasswordLogin ? "password": "magic-link",
 			rememberMe: true,
 		},
 	});
@@ -154,10 +156,10 @@ export function LoginForm() {
 
 	return (
 		<div>
-		<h1 className="auth-title text-2xl md:text-3xl font-semibold tracking-tight">
+		<h1 className="auth-title text-2xl md:text-3xl font-semibold tracking-tight text-foreground">
 			{t("auth.login.title")}
 		</h1>
-		<p className="auth-subtitle mt-1.5 mb-6 md:mt-2 md:mb-8 text-sm md:text-base text-foreground/60">
+		<p className="auth-subtitle mt-1.5 mb-6 md:mt-2 md:mb-8 text-sm md:text-base text-muted-foreground">
 			{t("auth.login.subtitle")}
 		</p>
 
@@ -251,38 +253,38 @@ export function LoginForm() {
 															{...field}
 															autoComplete="current-password"
 														/>
-														<button
-															type="button"
-															onClick={() =>
-																setShowPassword(
-																	!showPassword,
-																)
-															}
-															className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground transition-colors hover:text-foreground"
-															aria-label={
-																showPassword
-																	? "Hide password"
-																	: "Show password"
-															}
-														>
-															{showPassword ? (
-																<EyeOffIcon className="size-4" />
-															) : (
-																<EyeIcon className="size-4" />
-															)}
-														</button>
-													</div>
-												</FormControl>
-											</FormItem>
-										)}
-									/>
-								)}
+								<button
+										type="button"
+										onClick={() =>
+											setShowPassword(
+												!showPassword,
+											)
+										}
+										className="absolute inset-y-0 right-0 flex min-h-12 min-w-12 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
+												aria-label={
+													showPassword
+														? "Hide password"
+														: "Show password"
+												}
+											>
+												{showPassword ? (
+													<EyeOffIcon className="size-4" />
+												) : (
+													<EyeIcon className="size-4" />
+												)}
+											</button>
+										</div>
+									</FormControl>
+								</FormItem>
+							)}
+								/>
+							)}
 
 							{/* Remember me + Forgot password row */}
 							{authConfig.enablePasswordLogin &&
 								signinMode === "password" && (
 									<div className="flex items-center justify-between">
-								<label className="flex cursor-pointer items-center gap-2 text-sm text-foreground/60">
+								<label className="flex cursor-pointer items-center gap-2 text-sm text-muted-foreground">
 									<input
 										type="checkbox"
 										className="size-4 rounded border-border accent-primary"
@@ -304,7 +306,7 @@ export function LoginForm() {
 								)}
 
 							<Button
-								className="w-full"
+								className="min-h-[48px] w-full"
 								type="submit"
 								variant="primary"
 								size="lg"
@@ -329,8 +331,8 @@ export function LoginForm() {
 							authConfig.enableSocialLogin)) && (
 						<>
 							<div className="relative my-6 h-4">
-								<hr className="relative top-2" />
-								<p className="-translate-x-1/2 absolute top-0 left-1/2 mx-auto inline-block h-4 bg-background px-2 text-center font-medium text-foreground/60 text-sm leading-tight">
+								<hr className="relative top-2 border-border" />
+								<p className="-translate-x-1/2 absolute top-0 left-1/2 mx-auto inline-block h-4 bg-background px-2 text-center font-medium text-muted-foreground text-sm leading-tight">
 									{t("auth.login.continueWith")}
 								</p>
 							</div>
@@ -352,7 +354,7 @@ export function LoginForm() {
 								{authConfig.enablePasskeys && (
 							<Button
 								variant="secondary"
-								className="w-full min-h-[44px]"
+								className="min-h-[48px] w-full"
 								onClick={() => signInWithPasskey()}
 									>
 										<KeyIcon className="mr-1.5 size-4 text-primary" />
@@ -365,7 +367,7 @@ export function LoginForm() {
 
 					{authConfig.enableSignup && (
 						<div className="mt-6 text-center text-sm">
-							<span className="text-foreground/60">
+							<span className="text-muted-foreground">
 								{t("auth.login.dontHaveAnAccount")}{" "}
 							</span>
 							<Link

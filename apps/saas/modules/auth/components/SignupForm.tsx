@@ -18,6 +18,7 @@ import {
 	FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { cn } from "@repo/ui";
 import { passwordSchema } from "@repo/utils";
 import { PasswordInput } from "@shared/components/PasswordInput";
 import {
@@ -127,10 +128,10 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 
 	return (
 		<div>
-			<h1 className="auth-title text-2xl md:text-3xl font-semibold tracking-tight">
+			<h1 className="auth-title text-2xl md:text-3xl font-semibold tracking-tight text-foreground">
 				{t("auth.signup.title")}
 			</h1>
-			<p className="auth-subtitle mt-2 mb-8 text-base text-foreground/60">
+			<p className="auth-subtitle mt-2 mb-8 text-base text-muted-foreground">
 				{t("auth.signup.message")}
 			</p>
 
@@ -249,7 +250,7 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 											/>
 										</FormControl>
 										<div className="space-y-1">
-											<FormLabel className="text-xs font-normal leading-relaxed text-foreground/60">
+											<FormLabel className="text-xs font-normal leading-relaxed text-muted-foreground">
 												{t.rich(
 													"auth.signup.acceptTerms",
 													{
@@ -257,7 +258,7 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 															<Link
 																href="/legal/terms"
 																target="_blank"
-																className="underline text-foreground/80 hover:text-foreground"
+																className="underline text-foreground hover:text-foreground"
 															>
 																{chunks}
 															</Link>
@@ -268,7 +269,7 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 															<Link
 																href="/legal/privacy-policy"
 																target="_blank"
-																className="underline text-foreground/80 hover:text-foreground"
+																className="underline text-foreground hover:text-foreground"
 															>
 																{chunks}
 															</Link>
@@ -285,7 +286,7 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 							<Button
 								variant="primary"
 								size="lg"
-								className="w-full"
+								className="min-h-[48px] w-full"
 								loading={form.formState.isSubmitting}
 							>
 								{t("auth.signup.submit")}
@@ -304,8 +305,8 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 						authConfig.enableSocialLogin && (
 							<>
 								<div className="relative my-6 h-4">
-									<hr className="relative top-2" />
-									<p className="-translate-x-1/2 absolute top-0 left-1/2 mx-auto inline-block h-4 bg-background px-2 text-center font-medium text-foreground/60 text-sm leading-tight">
+									<hr className="relative top-2 border-border" />
+									<p className="-translate-x-1/2 absolute top-0 left-1/2 mx-auto inline-block h-4 bg-background px-2 text-center font-medium text-muted-foreground text-sm leading-tight">
 										{t("auth.login.continueWith")}
 									</p>
 								</div>
@@ -328,7 +329,7 @@ export function SignupForm({ prefillEmail }: { prefillEmail?: string }) {
 			)}
 
 			<div className="mt-6 text-center text-sm">
-				<span className="text-foreground/60">
+				<span className="text-muted-foreground">
 					{t("auth.signup.alreadyHaveAccount")}{" "}
 				</span>
 				<Link

@@ -2,6 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Loader2Icon } from "lucide-react";
+import { Card, CardContent } from "@repo/ui/components/card";
+import { Skeleton } from "@repo/ui/components/skeleton";
+import { cn } from "@repo/ui";
 
 interface InterviewBpmnViewerProps {
 	bpmnXml: string;
@@ -62,27 +65,32 @@ export function InterviewBpmnViewer({ bpmnXml, className }: InterviewBpmnViewerP
 
 	if (error) {
 		return (
-			<div
-				className={`flex items-center justify-center rounded-lg border ${className || ""}`}
-				style={{ borderColor: "#E2E8F0", backgroundColor: "#F1F5F9" }}
+			<Card
+				size="sm"
+				className={cn(
+					"flex items-center justify-center shadow-none",
+					className,
+				)}
 			>
-				<span className="text-sm" style={{ color: "#DC2626" }}>{error}</span>
-			</div>
+				<CardContent className="flex items-center justify-center py-8">
+					<span className="text-sm text-destructive">{error}</span>
+				</CardContent>
+			</Card>
 		);
 	}
 
 	return (
-		<div className={`relative ${className || ""}`}>
+		<Card size="sm" className={cn("relative shadow-none overflow-hidden", className)}>
 			{loading && (
-				<div className="absolute inset-0 z-10 flex items-center justify-center rounded-lg" style={{ backgroundColor: "#F1F5F9" }}>
-					<Loader2Icon className="size-6 animate-spin" style={{ color: "#D97706" }} />
+				<div className="absolute inset-0 z-10 flex items-center justify-center">
+					<Skeleton className="absolute inset-0 rounded-none" />
+					<Loader2Icon className="relative z-20 size-6 animate-spin text-primary" />
 				</div>
 			)}
 			<div
 				ref={containerRef}
-				className="h-full w-full rounded-lg border"
-				style={{ borderColor: "#E2E8F0", backgroundColor: "#F8FAFC" }}
+				className="h-full w-full bg-background"
 			/>
-		</div>
+		</Card>
 	);
 }

@@ -20,6 +20,7 @@ import {
 	InputOTPSeparator,
 	InputOTPSlot,
 } from "@repo/ui/components/input-otp";
+import { cn } from "@repo/ui";
 import { useRouter } from "@shared/hooks/router";
 import { AlertTriangleIcon, ArrowLeftIcon } from "lucide-react";
 import Link from "next/link";
@@ -76,10 +77,10 @@ export function OtpForm() {
 
 	return (
 		<>
-			<h1 className="font-bold text-xl md:text-2xl">
+			<h1 className="font-bold text-xl md:text-2xl text-foreground">
 				{t("auth.verify.title")}
 			</h1>
-			<p className="mt-1 mb-4 text-foreground/60">
+			<p className="mt-1 mb-4 text-muted-foreground">
 				{t("auth.verify.message")}
 			</p>
 
@@ -149,7 +150,7 @@ export function OtpForm() {
 						)}
 					/>
 
-					<Button loading={form.formState.isSubmitting}>
+					<Button className="min-h-[48px]" loading={form.formState.isSubmitting}>
 						{t("auth.verify.submit")}
 					</Button>
 				</form>

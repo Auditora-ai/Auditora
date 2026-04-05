@@ -4,6 +4,8 @@ import { useState, useRef, useCallback } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { AlertCircleIcon, RotateCcwIcon } from "lucide-react";
+import { cn } from "@repo/ui";
+import { Button } from "@repo/ui/components/button";
 import { useTranslations } from 'next-intl';
 
 interface DecisionOption {
@@ -254,42 +256,36 @@ export function EvaluacionRunner({
       {/* Progress bar — visible on mobile */}
       <div className="mb-6 md:mb-8">
         <div className="mb-2 flex items-center justify-between">
-          <span className="text-xs font-medium" style={{ color: "#94A3B8" }}>
+          <span className="text-xs font-medium text-muted-foreground">
             {t('decisionOf', { current: currentIndex + 1, total })}
           </span>
-          <span className="text-xs font-medium tabular-nums" style={{ color: "#64748B" }}>
+          <span className="text-xs font-medium tabular-nums text-muted-foreground">
             {Math.round(((currentIndex + 1) / total) * 100)}%
           </span>
         </div>
-        <div
-          className="h-1.5 md:h-1 w-full overflow-hidden rounded-full"
-          style={{ backgroundColor: "#1E293B" }}
-        >
+        <div className="h-1.5 md:h-1 w-full overflow-hidden rounded-full bg-muted">
           <div
             ref={progressRef}
-            className="h-full rounded-full"
-            style={{
-              width: `${progressPercent}%`,
-              background:
-                "linear-gradient(90deg, #3B8FE8, rgba(59,143,232,0.8))",
-            }}
+            className="h-full rounded-full bg-primary"
+            style={{ width: `${progressPercent}%` }}
           />
         </div>
       </div>
 
       {/* Error banner */}
       {error && (
-        <div className="mb-6 flex items-center gap-3 rounded-lg border border-red-500/30 bg-red-950/30 px-4 py-3">
-          <AlertCircleIcon className="h-4 w-4 shrink-0 text-red-400" />
-          <p className="flex-1 text-sm text-red-300">{error}</p>
-          <button
-            type="button"
+        <div className="mb-6 flex items-center gap-3 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3">
+          <AlertCircleIcon className="h-4 w-4 shrink-0 text-destructive" />
+          <p className="flex-1 text-sm text-destructive">{error}</p>
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => setError(null)}
-            className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-medium text-red-400 transition-colors hover:bg-red-950/50 hover:text-red-300"
+            className="text-destructive hover:text-destructive min-h-[48px]"
           >
-            <RotateCcwIcon className="h-3 w-3" />
+            <RotateCcwIcon className="h-3 w-3 mr-1" />
             {t('retry')}
-          </button>
+          </Button>
         </div>
       )}
 
@@ -298,24 +294,15 @@ export function EvaluacionRunner({
         <div ref={decisionRef}>
           {/* Prompt */}
           <div className="sim-decision-content mb-8">
-            <h2
-              className="text-xl font-semibold leading-relaxed md:text-2xl"
-              style={{ color: "#F1F5F9" }}
-            >
+            <h2 className="text-xl font-semibold leading-relaxed md:text-2xl text-foreground">
               {current.prompt}
             </h2>
             {current.proceduralReference && (
-              <div
-                className="mt-4 rounded-lg border px-4 py-3"
-                style={{
-                  borderColor: "rgba(59,143,232,0.15)",
-                  backgroundColor: "rgba(59,143,232,0.05)",
-                }}
-              >
-                <p className="text-[10px] font-medium uppercase tracking-wider" style={{ color: "#3B8FE8" }}>
+              <div className="mt-4 rounded-lg border border-primary/15 bg-primary/5 px-4 py-3">
+                <p className="text-[10px] font-medium uppercase tracking-wider text-primary">
                   {t('proceduralReference')}
                 </p>
-                <p className="mt-1 text-xs leading-relaxed" style={{ color: "#94A3B8" }}>
+                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
                   {current.proceduralReference}
                 </p>
               </div>
@@ -330,46 +317,23 @@ export function EvaluacionRunner({
                 key={idx}
                 onClick={() => handleOptionClick(idx)}
                 disabled={submitting}
-                className="sim-option-card group rounded-xl min-h-[56px] p-4 md:p-6 text-left transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A1428] disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.98]"
-                style={{
-                  backgroundColor: "#111827",
-                  borderWidth: "1.5px",
-                  borderStyle: "solid",
-                  borderColor: "#1E293B",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "rgba(59,143,232,0.5)";
-                  e.currentTarget.style.boxShadow =
-                    "0 0 20px rgba(59,143,232,0.1)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "#1E293B";
-                  e.currentTarget.style.boxShadow = "none";
-                }}
+                className={cn(
+                  "sim-option-card group rounded-xl min-h-[56px] p-4 md:p-6 text-left transition-all duration-200",
+                  "border border-border bg-card",
+                  "hover:border-primary/50 hover:shadow-[0_0_20px_hsl(var(--primary)/0.1)]",
+                  "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                  "disabled:cursor-not-allowed disabled:opacity-50 active:scale-[0.98]"
+                )}
               >
                 <div className="mb-2 md:mb-3 flex items-center gap-3">
-                  <span
-                    className="flex h-8 w-8 md:h-7 md:w-7 shrink-0 items-center justify-center rounded-full text-sm md:text-xs font-bold transition-colors"
-                    style={{
-                      borderWidth: "2px",
-                      borderStyle: "solid",
-                      borderColor: "#334155",
-                      color: "#94A3B8",
-                    }}
-                  >
+                  <span className="flex h-8 w-8 md:h-7 md:w-7 shrink-0 items-center justify-center rounded-full text-sm md:text-xs font-bold border-2 border-border text-muted-foreground transition-colors">
                     {String.fromCharCode(65 + idx)}
                   </span>
-                  <span
-                    className="text-base md:text-base font-semibold"
-                    style={{ color: "#F1F5F9" }}
-                  >
+                  <span className="text-base md:text-base font-semibold text-foreground">
                     {option.label}
                   </span>
                 </div>
-                <p
-                  className="text-sm md:text-sm leading-relaxed pl-11 md:pl-10"
-                  style={{ color: "#94A3B8" }}
-                >
+                <p className="text-sm md:text-sm leading-relaxed pl-11 md:pl-10 text-muted-foreground">
                   {option.description}
                 </p>
               </button>
@@ -384,10 +348,7 @@ export function EvaluacionRunner({
           ref={consequenceRef}
           className="flex min-h-[40vh] items-center justify-center"
         >
-          <p
-            className="sim-consequence-text max-w-xl text-center text-lg italic leading-relaxed"
-            style={{ color: "#94A3B8" }}
-          >
+          <p className="sim-consequence-text max-w-xl text-center text-lg italic leading-relaxed text-muted-foreground">
             {consequenceText}
           </p>
         </div>

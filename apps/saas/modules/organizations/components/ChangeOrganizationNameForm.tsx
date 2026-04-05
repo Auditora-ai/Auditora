@@ -4,6 +4,14 @@ import { useActiveOrganization } from "@organizations/hooks/use-active-organizat
 import { organizationListQueryKey } from "@organizations/lib/api";
 import { authClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/components/button";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { SettingsItem } from "@shared/components/SettingsItem";
@@ -64,24 +72,41 @@ export function ChangeOrganizationNameForm() {
 
 	return (
 		<SettingsItem title={t("organizations.settings.changeName.title")}>
-			<form onSubmit={onSubmit}>
-				<Input {...form.register("name")} />
+			<Form {...form}>
+				<form onSubmit={onSubmit}>
+					<FormField
+						control={form.control}
+						name="name"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>
+									{t("organizations.settings.changeName.title")}
+								</FormLabel>
+								<FormControl>
+									<Input {...field} />
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 
-				<div className="mt-4 flex justify-end">
-					<Button
-						type="submit"
-						disabled={
-							!(
-								form.formState.isValid &&
-								form.formState.dirtyFields.name
-							)
-						}
-						loading={form.formState.isSubmitting}
-					>
-						{t("settings.save")}
-					</Button>
-				</div>
-			</form>
+					<div className="mt-4 flex justify-end">
+						<Button
+							className="min-h-[48px]"
+							type="submit"
+							disabled={
+								!(
+									form.formState.isValid &&
+									form.formState.dirtyFields.name
+								)
+							}
+							loading={form.formState.isSubmitting}
+						>
+							{t("settings.save")}
+						</Button>
+					</div>
+				</form>
+			</Form>
 		</SettingsItem>
 	);
 }

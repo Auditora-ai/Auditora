@@ -126,7 +126,7 @@ export function OrganizationProfileForm() {
 				</div>
 
 				<div className="flex justify-end">
-					<Button type="submit" loading={isSaving}>
+					<Button className="min-h-[48px]" type="submit" loading={isSaving}>
 						{t("settings.save")}
 					</Button>
 				</div>

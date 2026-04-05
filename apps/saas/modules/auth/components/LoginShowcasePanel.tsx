@@ -1,6 +1,7 @@
 "use client";
 
 import { useGSAP } from "@gsap/react";
+import { cn } from "@repo/ui";
 import { Logo } from "@repo/ui";
 import gsap from "gsap";
 import { BrainCircuitIcon, GitBranchIcon, ShieldAlertIcon } from "lucide-react";
@@ -32,17 +33,17 @@ export function LoginShowcasePanel({
 		{
 			icon: BrainCircuitIcon,
 			label: t("auth.showcase.feature.ai"),
-			color: "text-[#3B8FE8]",
+			color: "text-primary",
 		},
 		{
 			icon: GitBranchIcon,
 			label: t("auth.showcase.feature.bpmn"),
-			color: "text-[#3B8FE8]",
+			color: "text-primary",
 		},
 		{
 			icon: ShieldAlertIcon,
 			label: t("auth.showcase.feature.risk"),
-			color: "text-[#EF4444]",
+			color: "text-destructive",
 		},
 	];
 
@@ -168,32 +169,15 @@ export function LoginShowcasePanel({
 	return (
 		<div
 			ref={panelRef}
-			className="relative flex h-full flex-col justify-between overflow-hidden p-8 lg:p-12"
-			style={{ backgroundColor: "#0A1428" }}
+			className="relative flex h-full flex-col justify-between overflow-hidden bg-card p-8 lg:p-12"
 		>
-			{/* Subtle gradient overlays for depth */}
-			<div
-				className="pointer-events-none absolute inset-0"
-				style={{
-					background:
-						"radial-gradient(ellipse at top right, rgba(59,143,232,0.06), transparent 60%)",
-				}}
-			/>
-			<div
-				className="pointer-events-none absolute inset-0"
-				style={{
-					background:
-						"radial-gradient(ellipse at bottom left, rgba(239,68,68,0.04), transparent 60%)",
-				}}
-			/>
-
 			{/* Content */}
 			<div className="relative z-10 flex h-full flex-col justify-between">
 				{/* Logo */}
 				<div className="showcase-logo">
 					<Logo
 						withLabel
-						className="text-[#F1F5F9] [&_svg]:text-[#3B8FE8] [&_.text-muted-foreground]:text-[#94A3B8]"
+						className="text-foreground"
 					/>
 				</div>
 
@@ -201,20 +185,16 @@ export function LoginShowcasePanel({
 				<div className="flex flex-1 flex-col justify-center py-12">
 					{/* Badge */}
 					<div
-						className="showcase-badge mb-6"
-						style={{ clipPath: "inset(0 0% 0 0)" }}
+						className="showcase-badge mb-6 [clip-path:inset(0_0%_0_0)]"
 					>
-						<span className="inline-flex items-center rounded-full border border-[#3B8FE8]/20 bg-[#3B8FE8]/10 px-3 py-1 text-xs font-medium text-[#6EE7C4]">
+						<span className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
 							{t("auth.showcase.badge")}
 						</span>
 					</div>
 
 					{/* Headline */}
 				<h2
-					className="text-2xl font-semibold leading-snug tracking-tight lg:text-3xl"
-					style={{
-						color: "#F1F5F9",
-					}}
+					className="text-2xl font-semibold leading-snug tracking-tight text-foreground lg:text-3xl"
 				>
 						<SplitWords innerClassName="tagline-word">
 							{title}
@@ -223,8 +203,7 @@ export function LoginShowcasePanel({
 
 					{/* Subtitle */}
 					<p
-						className="showcase-subtitle mt-3 text-sm lg:text-base"
-						style={{ color: "#94A3B8" }}
+						className="showcase-subtitle mt-3 text-sm text-muted-foreground lg:text-base"
 					>
 						{subtitle}
 					</p>
@@ -234,8 +213,7 @@ export function LoginShowcasePanel({
 						{features.map((feature) => (
 							<div
 								key={feature.label}
-								className="showcase-feature flex items-center gap-2 rounded-lg border border-[#1E293B] bg-[#111827] px-3 py-2 text-sm"
-								style={{ color: "#F1F5F9" }}
+								className="showcase-feature flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground"
 							>
 								<feature.icon
 									className={`size-4 ${feature.color}`}
@@ -250,42 +228,37 @@ export function LoginShowcasePanel({
 				<div className="flex items-center gap-8">
 					<div className="showcase-metric">
 						<p
-							className="text-2xl font-bold"
-							style={{ color: "#F1F5F9" }}
+							className="text-2xl font-bold text-foreground"
 						>
 							2,000+
 						</p>
-						<p className="text-sm" style={{ color: "#94A3B8" }}>
+						<p className="text-sm text-muted-foreground">
 							{t("auth.showcase.metric.processes")}
 						</p>
 					</div>
 					<div
-						className="h-8 w-px"
-						style={{ backgroundColor: "#1E293B" }}
+						className="h-8 w-px bg-border"
 					/>
 					<div className="showcase-metric">
 						<p
-							className="text-2xl font-bold"
-							style={{ color: "#F1F5F9" }}
+							className="text-2xl font-bold text-foreground"
 						>
 							500+
 						</p>
-						<p className="text-sm" style={{ color: "#94A3B8" }}>
+						<p className="text-sm text-muted-foreground">
 							{t("auth.showcase.metric.organizations")}
 						</p>
 					</div>
 					<div
-						className="h-8 w-px"
-						style={{ backgroundColor: "#1E293B" }}
+						className="h-8 w-px bg-border"
 					/>
 					<div className="showcase-metric">
 						<p
-							className="text-2xl font-bold"
-							style={{ color: "#F1F5F9" }}
+							className="text-2xl font-bold text-foreground"
 						>
 							98%
 						</p>
-						<p className="text-sm" style={{ color: "#94A3B8" }}>
+						<p className="text-sm text-muted-foreground">
 							{t("auth.showcase.metric.accuracy")}
 						</p>
 					</div>

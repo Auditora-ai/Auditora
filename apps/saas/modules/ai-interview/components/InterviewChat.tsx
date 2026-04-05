@@ -3,6 +3,13 @@
 import { useState, useRef, useEffect } from "react";
 import { SendIcon, SparklesIcon, Zap } from "lucide-react";
 import { TopicChips } from "./TopicChips";
+import { Button } from "@repo/ui/components/button";
+import { Badge } from "@repo/ui/components/badge";
+import { Input } from "@repo/ui/components/input";
+import { Progress } from "@repo/ui/components/progress";
+import { Avatar, AvatarFallback } from "@repo/ui/components/avatar";
+import { Skeleton } from "@repo/ui/components/skeleton";
+import { cn } from "@repo/ui";
 
 interface ChatMessage {
 	role: "user" | "assistant";
@@ -31,11 +38,11 @@ interface InterviewChatProps {
 }
 
 const SIPOC_DIMS = [
-	{ key: "suppliers" as const, label: "S", fullLabel: "Proveedores", color: "#8B5CF6" },
-	{ key: "inputs" as const, label: "I", fullLabel: "Entradas", color: "#3B82F6" },
-	{ key: "process" as const, label: "P", fullLabel: "Proceso", color: "#F59E0B" },
-	{ key: "outputs" as const, label: "O", fullLabel: "Salidas", color: "#22C55E" },
-	{ key: "customers" as const, label: "C", fullLabel: "Clientes", color: "#EC4899" },
+	{ key: "suppliers" as const, label: "S", fullLabel: "Proveedores" },
+	{ key: "inputs" as const, label: "I", fullLabel: "Entradas" },
+	{ key: "process" as const, label: "P", fullLabel: "Proceso" },
+	{ key: "outputs" as const, label: "O", fullLabel: "Salidas" },
+	{ key: "customers" as const, label: "C", fullLabel: "Clientes" },
 ] as const;
 
 export function InterviewChat({
@@ -51,7 +58,7 @@ export function InterviewChat({
 }: InterviewChatProps) {
 	const [input, setInput] = useState("");
 	const messagesEndRef = useRef<HTMLDivElement>(null);
-	const inputRef = useRef<HTMLInputElement>(null);
+	const inputRef = useRef<HTMLInputElement | null>(null);
 
 	useEffect(() => {
 		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -77,39 +84,45 @@ export function InterviewChat({
 			<div className="border-b border-border px-4 py-3 sm:px-6 sm:py-4">
 				<div className="flex items-center justify-between gap-2">
 					<div className="flex items-center gap-2 min-w-0">
-						<SparklesIcon className="size-4 sm:size-5 shrink-0"  />
-						<h2 className="text-sm sm:text-lg font-semibold truncate text-foreground" >
+						<SparklesIcon className="size-4 sm:size-5 shrink-0 text-primary" />
+						<h2 className="text-sm sm:text-lg font-semibold truncate text-foreground">
 							{processName}
 						</h2>
 					</div>
 					<div className="flex items-center gap-2 shrink-0">
 						{/* Completeness badge */}
-						<div
-							className="flex items-center gap-1 rounded-full px-2.5 py-1"
-							className={completenessScore >= 70 ? "bg-green-500/10 text-green-600 dark:text-green-400" : "bg-amber-500/10 text-amber-600 dark:text-amber-400"}
+						<Badge
+							variant="outline"
+							className={cn(
+								"rounded-full border-transparent",
+								completenessScore >= 70
+									? "bg-primary/10 text-primary"
+									: "bg-amber-500/10 text-amber-500",
+							)}
 						>
 							<span className="text-[10px] sm:text-xs font-medium">
 								{completenessScore}%
 							</span>
-						</div>
+						</Badge>
 						{readyForReveal && (
-							<button
+							<Button
+								variant="default"
+								size="sm"
 								onClick={onReveal}
-								className="rounded-md px-3 py-2 text-xs sm:text-sm font-medium text-primary-foreground transition-colors hover:opacity-90 min-h-[36px] sm:min-h-[40px]"
-								
+								className="min-h-[36px] sm:min-h-[48px]"
 							>
 								Ver BPMN
-							</button>
+							</Button>
 						)}
 					</div>
 				</div>
 
-				{/* SIPOC coverage bar — methodology-visible */}
+				{/* SIPOC coverage bar — uses Progress component */}
 				{sipocCoverage && (
 					<div className="mt-2 sm:mt-3">
 						<div className="flex items-center gap-1 mb-1">
-							<Zap className="size-2.5"  />
-							<span className="text-[9px] font-bold uppercase tracking-widest" >
+							<Zap className="size-2.5 text-muted-foreground" />
+							<span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
 								Cobertura SIPOC
 							</span>
 						</div>
@@ -118,27 +131,24 @@ export function InterviewChat({
 								const val = sipocCoverage[dim.key];
 								return (
 									<div key={dim.key} className="flex items-center gap-1" title={dim.fullLabel}>
-										<span
-											className="flex h-5 w-5 items-center justify-center rounded text-[10px] font-bold"
-											style={{
-												backgroundColor: val >= 70 ? `${dim.color}20` : val > 30 ? `${dim.color}10` : "#F1F5F9",
-												color: val >= 70 ? dim.color : val > 30 ? "#D97706" : "#94A3B8",
-												border: `1px solid ${val >= 70 ? `${dim.color}30` : "transparent"}`,
-											}}
+										<Badge
+											variant="outline"
+											className={cn(
+												"flex h-5 w-5 items-center justify-center rounded px-0 text-[10px] font-bold",
+												val >= 70
+													? "bg-primary/10 text-primary border-primary/20"
+													: val > 30
+														? "bg-amber-500/10 text-amber-500 border-amber-500/20"
+														: "bg-muted text-muted-foreground border-border",
+											)}
 										>
 											{dim.label}
-										</span>
-										<div className="h-1.5 w-8 sm:w-12 overflow-hidden rounded-full" >
-											<div
-												className="h-full rounded-full transition-all"
-												style={{
-													width: `${val}%`,
-													backgroundColor: val >= 70 ? dim.color : "#D97706",
-													transitionDuration: "500ms",
-												}}
-											/>
-										</div>
-										<span className="hidden sm:inline text-[9px] font-medium" >
+										</Badge>
+										<Progress
+											value={val}
+											className="h-1.5 w-8 sm:w-12"
+										/>
+										<span className="hidden sm:inline text-[9px] font-medium text-muted-foreground">
 											{dim.fullLabel}
 										</span>
 									</div>
@@ -155,14 +165,20 @@ export function InterviewChat({
 					{messages.map((msg, i) => (
 						<div
 							key={i}
-							className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+							className={cn("flex gap-2", msg.role === "user" ? "justify-end" : "justify-start")}
 						>
+							{msg.role === "assistant" && (
+								<Avatar size="sm" className="mt-1 shrink-0">
+									<AvatarFallback>AI</AvatarFallback>
+								</Avatar>
+							)}
 							<div
-						className={`rounded-2xl px-4 py-3 text-sm leading-relaxed ${
-							msg.role === "user"
-								? "max-w-[85%] sm:max-w-[75%] bg-primary text-primary-foreground"
-								: "max-w-[90%] sm:max-w-[80%] bg-muted border border-border text-foreground"
-						}`}
+								className={cn(
+									"rounded-2xl px-4 py-3 text-sm leading-relaxed",
+									msg.role === "user"
+										? "max-w-[85%] sm:max-w-[75%] bg-primary text-primary-foreground"
+										: "max-w-[90%] sm:max-w-[80%] bg-muted text-foreground",
+								)}
 							>
 								{msg.content}
 							</div>
@@ -182,23 +198,23 @@ export function InterviewChat({
 					)}
 
 					{sending && (
-						<div className="flex justify-start">
-							<div
-								className="flex items-center gap-1 rounded-2xl px-4 py-3"
-								
-							>
-								<span className="animate-bounce text-xs" style={{ animationDelay: "0ms" }}>●</span>
-								<span className="animate-bounce text-xs" style={{ animationDelay: "150ms" }}>●</span>
-								<span className="animate-bounce text-xs" style={{ animationDelay: "300ms" }}>●</span>
+						<div className="flex justify-start gap-2">
+							<Avatar size="sm" className="mt-1 shrink-0">
+								<AvatarFallback>AI</AvatarFallback>
+							</Avatar>
+							<div className="flex items-center gap-1.5 rounded-2xl bg-muted px-4 py-3">
+								<Skeleton className="h-2 w-2 rounded-full" />
+								<Skeleton className="h-2 w-2 rounded-full" />
+								<Skeleton className="h-2 w-2 rounded-full" />
 							</div>
 						</div>
 					)}
 
 					{error && (
 						<div className="flex justify-center">
-							<span className="rounded-md px-3 py-1.5 text-xs" >
+							<Badge variant="destructive" className="rounded-md px-3 py-1.5 text-xs">
 								{error}
-							</span>
+							</Badge>
 						</div>
 					)}
 
@@ -207,9 +223,9 @@ export function InterviewChat({
 			</div>
 
 			{/* Input — sticky bottom with safe area */}
-			<div className="border-t border-border bg-background px-3 py-3 sm:px-6 sm:py-4 pb-safe" >
+			<div className="border-t border-border bg-background px-3 py-3 sm:px-6 sm:py-4 pb-safe">
 				<div className="mx-auto flex max-w-2xl items-center gap-2 sm:gap-3">
-					<input
+					<Input
 						ref={inputRef}
 						type="text"
 						enterKeyHint="send"
@@ -218,16 +234,17 @@ export function InterviewChat({
 						onKeyDown={handleKeyDown}
 						placeholder="Escribe tu respuesta..."
 						disabled={sending}
-					className="flex-1 rounded-xl border border-border bg-muted text-foreground px-4 py-3 text-[16px] sm:text-sm outline-none transition-colors focus:border-primary focus:bg-primary/5 focus:ring-1 focus:ring-primary/30"
-					style={{ minHeight: "48px" }}
+						className="flex-1 rounded-xl border-border bg-muted text-foreground px-4 py-3 text-[16px] sm:text-sm min-h-[48px]"
 					/>
-					<button
+					<Button
+						variant="default"
+						size="icon-lg"
 						onClick={handleSend}
 						disabled={!input.trim() || sending}
-						className="flex items-center justify-center rounded-xl bg-primary px-5 text-primary-foreground transition-colors disabled:opacity-50 active:scale-95 min-h-[48px] min-w-[48px]"	
+						className="rounded-xl min-h-[48px] min-w-[48px]"
 					>
 						<SendIcon className="size-5" />
-					</button>
+					</Button>
 				</div>
 			</div>
 		</div>

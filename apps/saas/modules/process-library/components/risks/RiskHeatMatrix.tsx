@@ -32,6 +32,7 @@ const PROBABILITY_LABELS = [
   "Casi Seguro",
 ];
 
+// Dynamic risk color computed from score — must remain as inline style values
 function getScoreColor(score: number): string {
   if (score >= 20) return "#DC2626";
   if (score >= 12) return "#D97706";
@@ -39,6 +40,7 @@ function getScoreColor(score: number): string {
   return "#16A34A";
 }
 
+// Dynamic risk fill color computed from score — must remain as inline style values
 function getScoreColorFill(score: number): string {
   if (score >= 20) return "rgba(220,38,38,0.7)";
   if (score >= 12) return "rgba(217,119,6,0.7)";
@@ -129,7 +131,7 @@ export function RiskHeatMatrix({
         <text
           x={14}
           y={PADDING_TOP + GRID_H / 2}
-          style={{ fill: "var(--muted-foreground, #94A3B8)" }}
+          className="fill-muted-foreground"
           fontSize={11}
           textAnchor="middle"
           transform={`rotate(-90, 14, ${PADDING_TOP + GRID_H / 2})`}
@@ -141,7 +143,7 @@ export function RiskHeatMatrix({
         <text
           x={PADDING_LEFT + GRID_W / 2}
           y={SVG_H - 6}
-          style={{ fill: "var(--muted-foreground, #94A3B8)" }}
+          className="fill-muted-foreground"
           fontSize={11}
           textAnchor="middle"
         >
@@ -156,7 +158,7 @@ export function RiskHeatMatrix({
               key={`sev-${i}`}
               x={PADDING_LEFT - 6}
               y={y + 4}
-              style={{ fill: "var(--muted-foreground, #94A3B8)" }}
+              className="fill-muted-foreground"
               fontSize={9}
               textAnchor="end"
             >
@@ -173,7 +175,7 @@ export function RiskHeatMatrix({
               key={`prob-${i}`}
               x={x}
               y={PADDING_TOP + GRID_H + 16}
-              style={{ fill: "var(--muted-foreground, #94A3B8)" }}
+              className="fill-muted-foreground"
               fontSize={9}
               textAnchor="middle"
             >
@@ -212,11 +214,11 @@ export function RiskHeatMatrix({
                   height={CELL_SIZE}
                   fill={count > 0 ? getScoreColorFill(score) : "transparent"}
                   stroke={
-                    isActive || isFocused ? "#3B8FE8" : undefined
+                    isActive || isFocused ? "var(--primary)" : undefined
                   }
                   style={
                     !(isActive || isFocused)
-                      ? { stroke: "var(--border, #334155)" }
+                      ? { stroke: "var(--border)" }
                       : undefined
                   }
                   strokeWidth={isActive || isFocused ? 3 : 1}
@@ -226,7 +228,7 @@ export function RiskHeatMatrix({
                   <text
                     x={x + CELL_SIZE / 2}
                     y={y + CELL_SIZE / 2 + 5}
-                    fill="#F1F5F9"
+                    className="fill-primary-foreground"
                     fontSize={16}
                     fontWeight="bold"
                     textAnchor="middle"
@@ -238,10 +240,10 @@ export function RiskHeatMatrix({
                 <text
                   x={x + CELL_SIZE - 6}
                   y={y + 14}
-                  fill={count > 0 ? "#F1F5F9" : undefined}
+                  fill={count > 0 ? "var(--primary-foreground)" : undefined}
                   style={
                     count === 0
-                      ? { fill: "var(--muted-foreground, #64748B)" }
+                      ? { fill: "var(--muted-foreground)" }
                       : undefined
                   }
                   fontSize={8}

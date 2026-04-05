@@ -3,6 +3,7 @@
 import { config } from "@config";
 import { authClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/components/button";
+import { cn } from "@repo/ui";
 import { parseAsString, useQueryState } from "nuqs";
 import { oAuthProviders } from "../constants/oauth-providers";
 
@@ -33,7 +34,7 @@ export function SocialSigninButton({
 			onClick={() => onSignin()}
 			variant="secondary"
 			type="button"
-			className={className}
+			className={cn("min-h-[48px]", className)}
 		>
 			{providerData.icon && (
 				<i className="mr-2 text-primary">

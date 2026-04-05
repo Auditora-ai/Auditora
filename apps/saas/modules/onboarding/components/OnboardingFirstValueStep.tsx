@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@repo/ui/components/button";
 import {
 	Card,
 	CardContent,
@@ -7,7 +8,8 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@repo/ui/components/card";
-import { BarChart3Icon, FileTextIcon, MessageSquareIcon } from "lucide-react";
+import { Badge } from "@repo/ui/components/badge";
+import { CompassIcon, ArrowRightIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@shared/hooks/router";
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
@@ -15,30 +17,6 @@ import { useActiveOrganization } from "@organizations/hooks/use-active-organizat
 interface OnboardingFirstValueStepProps {
 	onCompleted: () => void;
 }
-
-const ACTION_CARDS = [
-	{
-		key: "chatInterview",
-		icon: MessageSquareIcon,
-		path: "/capture/new",
-		color: "text-blue-500",
-		bgColor: "bg-blue-500/10",
-	},
-	{
-		key: "exploreDashboard",
-		icon: BarChart3Icon,
-		path: "/panorama",
-		color: "text-emerald-500",
-		bgColor: "bg-emerald-500/10",
-	},
-	{
-		key: "documentProcess",
-		icon: FileTextIcon,
-		path: "/capture/new",
-		color: "text-purple-500",
-		bgColor: "bg-purple-500/10",
-	},
-] as const;
 
 export function OnboardingFirstValueStep({
 	onCompleted,
@@ -49,13 +27,13 @@ export function OnboardingFirstValueStep({
 
 	const orgSlug = activeOrganization?.slug ?? "";
 
-	const handleCardClick = (path: string) => {
+	const handleStartDiscovery = () => {
 		onCompleted();
-		router.push(`/${orgSlug}${path}`);
+		router.push(`/${orgSlug}/discovery`);
 	};
 
 	return (
-		<div className="flex flex-col items-center gap-8">
+		<div className="flex flex-col items-center gap-6">
 			<div className="text-center space-y-2">
 				<h2 className="text-lg font-semibold">
 					{t("onboarding.firstValue.title")}
@@ -65,39 +43,33 @@ export function OnboardingFirstValueStep({
 				</p>
 			</div>
 
-			<div className="grid w-full max-w-2xl gap-4 grid-cols-1 sm:grid-cols-3">
-				{ACTION_CARDS.map(({ key, icon: Icon, path, color, bgColor }) => (
-					<Card
-						key={key}
-						role="button"
-						tabIndex={0}
-						className="cursor-pointer rounded-2xl transition-all hover:shadow-md hover:-translate-y-0.5 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-						onClick={() => handleCardClick(path)}
-						onKeyDown={(e: React.KeyboardEvent) => {
-							if (e.key === "Enter" || e.key === " ") {
-								e.preventDefault();
-								handleCardClick(path);
-							}
-						}}
+			<Card className="w-full max-w-md rounded-2xl">
+				<CardHeader className="text-center pb-2">
+					<div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-full bg-primary/10">
+						<CompassIcon className="size-6 text-primary" />
+					</div>
+					<CardTitle className="text-base">
+						{t("onboarding.firstValue.chatInterview")}
+					</CardTitle>
+				</CardHeader>
+				<CardContent className="flex flex-col items-center gap-4">
+					<CardDescription className="text-center text-sm">
+						{t("onboarding.firstValue.chatInterviewDesc")}
+					</CardDescription>
+					<Badge variant="secondary" className="text-xs">
+						{t("onboarding.firstValue.exploreDashboard")}
+					</Badge>
+					<Button
+						type="button"
+						onClick={handleStartDiscovery}
+						className="w-full min-h-[48px] active:scale-95"
+						size="lg"
 					>
-						<CardHeader>
-							<div
-								className={`mb-2 flex size-10 items-center justify-center rounded-lg ${bgColor}`}
-							>
-								<Icon className={`size-5 ${color}`} />
-							</div>
-							<CardTitle className="text-sm">
-								{t(`onboarding.firstValue.${key}`)}
-							</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<CardDescription className="text-xs">
-								{t(`onboarding.firstValue.${key}Desc`)}
-							</CardDescription>
-						</CardContent>
-					</Card>
-				))}
-			</div>
+						{t("onboarding.firstValue.documentProcess")}
+						<ArrowRightIcon className="ml-2 size-4" />
+					</Button>
+				</CardContent>
+			</Card>
 		</div>
 	);
 }

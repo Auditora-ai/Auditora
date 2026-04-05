@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Loader2Icon, AlertTriangleIcon, ShareIcon } from "lucide-react";
+import { Loader2Icon, AlertTriangleIcon } from "lucide-react";
 import type { InterviewCompletionStatus } from "@ai-interview/lib/interview-types";
+import { Button } from "@repo/ui/components/button";
+import { Progress } from "@repo/ui/components/progress";
+import { Card, CardContent } from "@repo/ui/components/card";
 
 interface InterviewRevealProps {
 	sessionId: string;
@@ -53,12 +56,13 @@ export function InterviewReveal({ sessionId, shareToken, onComplete }: Interview
 
 	if (status.status === "error") {
 		return (
-			<div className="flex min-h-[400px] flex-col items-center justify-center gap-4" style={{ backgroundColor: "#F8FAFC" }}>
-				<AlertTriangleIcon className="size-12" style={{ color: "#DC2626" }} />
-				<p className="text-center text-sm" style={{ color: "#0A1428" }}>
+			<div className="flex min-h-[400px] flex-col items-center justify-center gap-4 bg-background">
+				<AlertTriangleIcon className="size-12 text-destructive" />
+				<p className="text-center text-sm text-foreground">
 					{status.error || "Error generando resultados"}
 				</p>
-				<button
+				<Button
+					variant="default"
 					onClick={() => {
 						setStatus({ status: "processing", step: "knowledge", progress: 0 });
 						fetch(`/api/sessions/interview/${sessionId}/complete`, {
@@ -66,47 +70,36 @@ export function InterviewReveal({ sessionId, shareToken, onComplete }: Interview
 							headers: { "Content-Type": "application/json" },
 						}).catch(() => {});
 					}}
-					className="rounded-md px-4 py-2 text-sm font-medium text-white"
-					style={{ backgroundColor: "#3B8FE8" }}
+					className="min-h-[48px]"
 				>
 					Reintentar
-				</button>
+				</Button>
 			</div>
 		);
 	}
 
 	return (
-		<div className="flex min-h-[400px] flex-col items-center justify-center gap-6" style={{ backgroundColor: "#F8FAFC" }}>
-			<Loader2Icon className="size-12 animate-spin" style={{ color: "#D97706" }} />
+		<div className="flex min-h-[400px] flex-col items-center justify-center gap-6 bg-background">
+			<Loader2Icon className="size-12 animate-spin text-primary" />
 
 			<div className="text-center">
-				<p
-					className="text-lg font-medium"
-					style={{ color: "#0A1428" }}
-				>
+				<p className="text-lg font-medium text-foreground">
 					Generando tu radiografía de proceso
 				</p>
-				<p className="mt-1 text-sm" style={{ color: "#64748B" }}>
+				<p className="mt-1 text-sm text-muted-foreground">
 					{STEP_LABELS[status.step || "knowledge"]}
 				</p>
 			</div>
 
 			{/* Progress bar */}
-			<div className="w-64">
-				<div className="h-2 overflow-hidden rounded-full" style={{ backgroundColor: "#E2E8F0" }}>
-					<div
-						className="h-full rounded-full transition-all"
-						style={{
-							width: `${status.progress || 0}%`,
-							backgroundColor: "#D97706",
-							transitionDuration: "500ms",
-						}}
-					/>
-				</div>
-				<p className="mt-1 text-center text-xs" style={{ color: "#94A3B8" }}>
-					{status.progress || 0}%
-				</p>
-			</div>
+			<Card size="sm" className="w-64 shadow-none bg-transparent border-none">
+				<CardContent className="px-0 py-0">
+					<Progress value={status.progress || 0} className="h-2" />
+					<p className="mt-1 text-center text-xs text-muted-foreground">
+						{status.progress || 0}%
+					</p>
+				</CardContent>
+			</Card>
 		</div>
 	);
 }

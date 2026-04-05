@@ -5,6 +5,9 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ArrowLeftIcon, ChevronDownIcon } from "lucide-react";
 import Link from "next/link";
+import { cn } from "@repo/ui";
+import { Badge } from "@repo/ui/components/badge";
+import { Button } from "@repo/ui/components/button";
 import { useTranslations } from "next-intl";
 import { launchConfetti } from "../utils/confetti";
 
@@ -20,22 +23,22 @@ interface EvaluacionResultsProps {
   backHref: string;
 }
 
-function scoreColor(score: number): string {
-  if (score >= 75) return "#16A34A";
-  if (score >= 50) return "#D97706";
-  return "#DC2626";
+function scoreColorClass(score: number): string {
+  if (score >= 80) return "text-emerald-500";
+  if (score >= 60) return "text-amber-500";
+  return "text-destructive";
 }
 
-function scoreBorderColor(score: number): string {
-  if (score >= 75) return "rgba(22,163,74,0.5)";
-  if (score >= 50) return "rgba(217,119,6,0.5)";
-  return "rgba(220,38,38,0.5)";
+function scoreBorderClass(score: number): string {
+  if (score >= 80) return "border-emerald-500/50";
+  if (score >= 60) return "border-amber-500/50";
+  return "border-destructive/50";
 }
 
-function scoreBarGradient(score: number): string {
-  if (score >= 75) return "linear-gradient(90deg, #16A34A, #22C55E)";
-  if (score >= 50) return "linear-gradient(90deg, #D97706, #F59E0B)";
-  return "linear-gradient(90deg, #DC2626, #EF4444)";
+function scoreBarClass(score: number): string {
+  if (score >= 80) return "bg-emerald-500";
+  if (score >= 60) return "bg-amber-500";
+  return "bg-destructive";
 }
 
 export function EvaluacionResults({
@@ -199,24 +202,21 @@ export function EvaluacionResults({
       {/* Overall score circle */}
       <div className="sim-result-circle mb-12 flex flex-col items-center">
         <div
-          className="flex h-40 w-40 items-center justify-center rounded-full"
-          style={{
-            borderWidth: "3px",
-            borderStyle: "solid",
-            borderColor: scoreBorderColor(scores.overallScore),
-          }}
+          className={cn(
+            "flex h-40 w-40 items-center justify-center rounded-full border-[3px]",
+            scoreBorderClass(scores.overallScore),
+          )}
         >
           <div className="text-center">
             <span
-              className="text-6xl font-bold tabular-nums"
-              style={{ color: scoreColor(scores.overallScore) }}
+              className={cn(
+                "text-6xl font-bold tabular-nums",
+                scoreColorClass(scores.overallScore),
+              )}
             >
               {displayedScore}
             </span>
-            <p
-              className="mt-1 text-xs font-medium uppercase tracking-wider"
-              style={{ color: "#64748B" }}
-            >
+            <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               {t('overallScore')}
             </p>
           </div>
@@ -228,25 +228,26 @@ export function EvaluacionResults({
         {dimensions.map((dim) => (
           <div key={dim.key} className="sim-result-dim">
             <div className="mb-2 flex items-center justify-between">
-              <span className="text-sm" style={{ color: "#94A3B8" }}>
+              <span className="text-sm text-muted-foreground">
                 {dim.label}
               </span>
               <span
-                className="text-sm font-semibold tabular-nums"
-                style={{ color: scoreColor(dim.value) }}
+                className={cn(
+                  "text-sm font-semibold tabular-nums",
+                  scoreColorClass(dim.value),
+                )}
               >
                 {dim.value}
               </span>
             </div>
-            <div
-              className="h-2 w-full overflow-hidden rounded-full"
-              style={{ backgroundColor: "#1E293B" }}
-            >
+            <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
               <div
-                className={`sim-result-bar-fill sim-result-bar-${dim.key} h-full rounded-full`}
+                className={cn(
+                  `sim-result-bar-fill sim-result-bar-${dim.key} h-full rounded-full`,
+                  scoreBarClass(dim.value),
+                )}
                 style={{
                   width: "0%",
-                  background: scoreBarGradient(dim.value),
                   "--target-width": `${dim.value}%`,
                 } as React.CSSProperties}
               />
@@ -258,24 +259,18 @@ export function EvaluacionResults({
       {/* Error patterns */}
       {errorPatterns && errorPatterns.length > 0 && (
         <div className="mb-8">
-          <h3
-            className="mb-3 text-xs font-medium uppercase tracking-wider"
-            style={{ color: "#64748B" }}
-          >
+          <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             {t('errorPatterns')}
           </h3>
           <div className="flex flex-wrap gap-2">
             {errorPatterns.map((pattern, idx) => (
-              <span
+              <Badge
                 key={idx}
-                className="sim-result-pattern rounded-full px-3 py-1.5 text-xs font-medium"
-                style={{
-                  backgroundColor: "rgba(220,38,38,0.1)",
-                  color: "#EF4444",
-                }}
+                status="error"
+                className="sim-result-pattern"
               >
                 {pattern}
-              </span>
+              </Badge>
             ))}
           </div>
         </div>
@@ -283,20 +278,11 @@ export function EvaluacionResults({
 
       {/* AI Feedback (expandable) */}
       {aiFeedback && (
-        <div
-          className="mb-10 overflow-hidden rounded-xl"
-          style={{
-            backgroundColor: "#111827",
-            borderWidth: "1px",
-            borderStyle: "solid",
-            borderColor: "#1E293B",
-          }}
-        >
+        <div className="mb-10 overflow-hidden rounded-xl border border-border bg-card">
           <button
             type="button"
             onClick={toggleFeedback}
-            className="flex w-full items-center justify-between px-5 py-4 text-left transition-colors"
-            style={{ color: "#F1F5F9" }}
+            className="flex w-full items-center justify-between px-5 py-4 text-left transition-colors text-foreground min-h-[48px]"
           >
             <span className="text-sm font-medium">
               {feedbackOpen
@@ -304,11 +290,10 @@ export function EvaluacionResults({
                 : t('showFeedback')}
             </span>
             <ChevronDownIcon
-              className="h-4 w-4 transition-transform"
-              style={{
-                color: "#64748B",
-                transform: feedbackOpen ? "rotate(180deg)" : "rotate(0deg)",
-              }}
+              className={cn(
+                "h-4 w-4 text-muted-foreground transition-transform",
+                feedbackOpen && "rotate-180",
+              )}
             />
           </button>
           <div
@@ -317,10 +302,7 @@ export function EvaluacionResults({
             style={{ height: feedbackOpen ? "auto" : 0 }}
           >
             <div className="px-5 pb-5">
-              <p
-                className="text-sm leading-relaxed"
-                style={{ color: "#94A3B8" }}
-              >
+              <p className="text-sm leading-relaxed text-muted-foreground">
                 {aiFeedback}
               </p>
             </div>
@@ -330,27 +312,12 @@ export function EvaluacionResults({
 
       {/* Back link */}
       <div className="sim-result-actions flex justify-center">
-        <Link
-          href={backHref}
-          className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-all"
-          style={{
-            borderWidth: "1px",
-            borderStyle: "solid",
-            borderColor: "#1E293B",
-            color: "#94A3B8",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = "rgba(59,143,232,0.3)";
-            e.currentTarget.style.color = "#F1F5F9";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = "#1E293B";
-            e.currentTarget.style.color = "#94A3B8";
-          }}
-        >
-          <ArrowLeftIcon className="h-4 w-4" />
-          {t('backToCatalog')}
-        </Link>
+        <Button variant="outline" asChild className="rounded-full min-h-[48px]">
+          <Link href={backHref}>
+            <ArrowLeftIcon className="h-4 w-4 mr-2" />
+            {t('backToCatalog')}
+          </Link>
+        </Button>
       </div>
     </div>
   );

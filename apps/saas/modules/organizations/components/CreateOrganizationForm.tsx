@@ -95,7 +95,7 @@ export function CreateOrganizationForm({
 					/>
 
 					<Button
-						className="mt-6 w-full"
+						className="mt-6 w-full min-h-[48px]"
 						type="submit"
 						variant="primary"
 						loading={form.formState.isSubmitting}

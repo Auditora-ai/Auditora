@@ -13,7 +13,7 @@ export function AddCommentButton({ onClick, count, className = "" }: AddCommentB
     <button
       type="button"
       onClick={onClick}
-      className={`group flex items-center gap-1.5 rounded-full bg-white/[0.04] border border-white/10 px-3 py-1.5 min-h-[32px] text-xs text-white/50 hover:text-[#3B8FE8] hover:border-[#3B8FE8]/30 hover:bg-[#3B8FE8]/5 transition-all ${className}`}
+      className={`group flex items-center gap-1.5 rounded-full bg-chrome-raised/30 border border-chrome-border px-3 py-1.5 min-h-[48px] text-xs text-chrome-text-muted hover:text-primary hover:border-primary/30 hover:bg-primary/5 transition-all ${className}`}
       title="Add comment"
     >
       <MessageSquare className="h-3.5 w-3.5" />

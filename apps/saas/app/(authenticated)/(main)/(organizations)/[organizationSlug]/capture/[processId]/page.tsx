@@ -7,7 +7,7 @@ import { Loader2Icon } from "lucide-react";
 
 /**
  * /capture/[processId] — starts or resumes a SIPOC interview for a specific process.
- * Reuses the same AI interview flow as /descubrir/interview but pre-scoped to a process.
+ * Reuses the same AI interview flow as /discovery/interview but pre-scoped to a process.
  */
 export default function CaptureProcessPage() {
 	const params = useParams();

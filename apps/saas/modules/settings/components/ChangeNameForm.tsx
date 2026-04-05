@@ -4,6 +4,14 @@ import { useSession } from "@auth/hooks/use-session";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/components/button";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { SettingsItem } from "@shared/components/SettingsItem";
@@ -47,24 +55,41 @@ export function ChangeNameForm() {
 
 	return (
 		<SettingsItem title={t("settings.account.changeName.title")}>
-			<form onSubmit={onSubmit}>
-				<Input type="text" {...form.register("name")} />
+			<Form {...form}>
+				<form onSubmit={onSubmit}>
+					<FormField
+						control={form.control}
+						name="name"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>
+									{t("settings.account.changeName.title")}
+								</FormLabel>
+								<FormControl>
+									<Input type="text" {...field} />
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 
-				<div className="mt-4 flex justify-end">
-					<Button
-						type="submit"
-						loading={form.formState.isSubmitting}
-						disabled={
-							!(
-								form.formState.isValid &&
-								form.formState.dirtyFields.name
-							)
-						}
-					>
-						{t("settings.save")}
-					</Button>
-				</div>
-			</form>
+					<div className="mt-4 flex justify-end">
+						<Button
+							type="submit"
+							className="min-h-[48px]"
+							loading={form.formState.isSubmitting}
+							disabled={
+								!(
+									form.formState.isValid &&
+									form.formState.dirtyFields.name
+								)
+							}
+						>
+							{t("settings.save")}
+						</Button>
+					</div>
+				</form>
+			</Form>
 		</SettingsItem>
 	);
 }

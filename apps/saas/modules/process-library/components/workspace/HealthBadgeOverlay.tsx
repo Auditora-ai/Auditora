@@ -57,6 +57,7 @@ export function HealthBadgeOverlay({ getModeler, isReady, raciEntries }: HealthB
 			if (!name) continue;
 
 			const hasRaci = raciNames.has(name.toLowerCase().trim());
+			// Dynamic runtime color for DOM overlays — must remain as inline hex values
 			const color = hasRaci ? "#16A34A" : "#DC2626";
 
 			const badge = document.createElement("div");

@@ -162,27 +162,27 @@ export function TwoFactorBlock() {
 			title={t("settings.account.security.twoFactor.title")}
 			description={t("settings.account.security.twoFactor.description")}
 		>
-			{user?.twoFactorEnabled ? (
-				<div className="flex items-start flex-col gap-4">
-					<div className="flex items-center gap-1.5">
-						<ShieldCheckIcon className="size-6 text-green-500" />
-						<p className="text-sm text-foreground">
-							{t("settings.account.security.twoFactor.enabled")}
-						</p>
-					</div>
-					<Button variant="secondary" onClick={verifyPassword}>
-						<XIcon className="mr-1.5 size-4" />
-						{t("settings.account.security.twoFactor.disable")}
-					</Button>
+		{user?.twoFactorEnabled ? (
+			<div className="flex flex-col items-start gap-4">
+				<div className="flex items-center gap-1.5">
+					<ShieldCheckIcon className="size-6 text-success" />
+					<p className="text-sm text-foreground">
+						{t("settings.account.security.twoFactor.enabled")}
+					</p>
 				</div>
-			) : (
-				<div className="flex justify-start">
-					<Button variant="secondary" onClick={verifyPassword}>
-						<TabletSmartphoneIcon className="mr-1.5 size-4" />
-						{t("settings.account.security.twoFactor.enable")}
-					</Button>
-				</div>
-			)}
+				<Button variant="secondary" className="min-h-[48px]" onClick={verifyPassword}>
+					<XIcon className="mr-1.5 size-4" />
+					{t("settings.account.security.twoFactor.disable")}
+				</Button>
+			</div>
+		) : (
+			<div className="flex justify-start">
+				<Button variant="secondary" className="min-h-[48px]" onClick={verifyPassword}>
+					<TabletSmartphoneIcon className="mr-1.5 size-4" />
+					{t("settings.account.security.twoFactor.enable")}
+				</Button>
+			</div>
+		)}
 
 			<Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
 				<DialogContent>
@@ -219,20 +219,20 @@ export function TwoFactorBlock() {
 									/>
 								</FormItem>
 							</div>
-							<div className="mt-4">
-								<Button
-									type="submit"
-									variant="secondary"
-									className="w-full"
-									loading={
-										enableTwoFactorMutation.isPending ||
-										disableTwoFactorMutation.isPending
-									}
-								>
-									{t("common.actions.continue")}
-									<ArrowRightIcon className="ml-1.5 size-4" />
-								</Button>
-							</div>
+					<div className="mt-4">
+							<Button
+								type="submit"
+								variant="secondary"
+								className="w-full min-h-[48px]"
+								loading={
+									enableTwoFactorMutation.isPending ||
+									disableTwoFactorMutation.isPending
+								}
+							>
+								{t("common.actions.continue")}
+								<ArrowRightIcon className="ml-1.5 size-4" />
+							</Button>
+						</div>
 						</form>
 					) : (
 						<form onSubmit={handleSubmit}>
@@ -252,7 +252,7 @@ export function TwoFactorBlock() {
 									)}
 								</Card>
 
-								<hr />
+								<hr className="border-border" />
 
 								<div className="grid grid-cols-1 gap-4">
 									<FormItem>
@@ -270,17 +270,17 @@ export function TwoFactorBlock() {
 									</FormItem>
 								</div>
 							</div>
-							<div className="mt-4">
-								<Button
-									type="submit"
-									variant="secondary"
-									className="w-full"
-									loading={verifyTwoFactorMutation.isPending}
-								>
-									<CheckIcon className="mr-1.5 size-4" />
-									{t("common.actions.verify")}
-								</Button>
-							</div>
+					<div className="mt-4">
+							<Button
+								type="submit"
+								variant="secondary"
+								className="w-full min-h-[48px]"
+								loading={verifyTwoFactorMutation.isPending}
+							>
+								<CheckIcon className="mr-1.5 size-4" />
+								{t("common.actions.verify")}
+							</Button>
+						</div>
 						</form>
 					)}
 				</DialogContent>

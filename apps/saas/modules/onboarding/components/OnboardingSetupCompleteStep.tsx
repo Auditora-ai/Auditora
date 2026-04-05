@@ -2,7 +2,7 @@
 
 import { useActiveOrganization } from "@organizations/hooks/use-active-organization";
 import { Button } from "@repo/ui/components/button";
-import { CheckCircle2Icon, UsersIcon } from "lucide-react";
+import { CheckCircle2Icon, CompassIcon, PlusIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -16,6 +16,7 @@ export function OnboardingSetupCompleteStep({
 }: OnboardingSetupCompleteStepProps) {
 	const t = useTranslations();
 	const { activeOrganization } = useActiveOrganization();
+	const basePath = `/${activeOrganization?.slug ?? ""}`;
 
 	const handleGoToDashboard = () => {
 		onCompleted();
@@ -27,9 +28,9 @@ export function OnboardingSetupCompleteStep({
 				initial={{ scale: 0, opacity: 0 }}
 				animate={{ scale: 1, opacity: 1 }}
 				transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.1 }}
-				className="flex size-20 items-center justify-center rounded-full bg-emerald-500/10"
+				className="flex size-20 items-center justify-center rounded-full bg-primary/10"
 			>
-				<CheckCircle2Icon className="size-10 text-emerald-500" />
+				<CheckCircle2Icon className="size-10 text-primary" />
 			</motion.div>
 
 			<motion.div
@@ -52,18 +53,26 @@ export function OnboardingSetupCompleteStep({
 				transition={{ duration: 0.5, delay: 0.5 }}
 				className="w-full max-w-sm space-y-3"
 			>
-			<Button
-				type="button"
-				onClick={handleGoToDashboard}
-				className="w-full min-h-[48px] active:scale-95"
-				size="lg"
-			>
-					{t("onboarding.setupComplete.goToDashboard")}
+				<Button
+					type="button"
+					asChild
+					className="w-full min-h-[48px] active:scale-95"
+					size="lg"
+					onClick={handleGoToDashboard}
+				>
+					<Link href={`${basePath}/discovery`}>
+						<CompassIcon className="mr-2 size-4" />
+						{t("onboarding.setupComplete.goToDashboard")}
+					</Link>
 				</Button>
 
-				<Button variant="outline" className="w-full min-h-[48px] active:scale-95" asChild>
-					<Link href={`/${activeOrganization?.slug ?? ""}/settings/members`}>
-						<UsersIcon className="mr-2 size-4" />
+				<Button
+					variant="outline"
+					className="w-full min-h-[48px] active:scale-95"
+					asChild
+				>
+					<Link href={`${basePath}/capture/new`}>
+						<PlusIcon className="mr-2 size-4" />
 						{t("onboarding.setupComplete.inviteMembers")}
 					</Link>
 				</Button>

@@ -66,6 +66,7 @@ function matchNodeToFailureRate(
 /**
  * Get badge color based on failure rate.
  * Green (0-20%) → Yellow (20-50%) → Orange (50-70%) → Red (70-100%)
+ * Dynamic runtime color for DOM overlays — must remain as inline hex values
  */
 function getFailureColor(rate: number): string {
 	if (rate <= 20) return "#16A34A"; // green

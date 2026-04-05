@@ -46,8 +46,8 @@ export function NotificationBell({
 				type="button"
 				onClick={() => setIsOpen(!isOpen)}
 				className={cn(
-					"relative flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-400 transition-colors hover:bg-slate-800 hover:text-slate-200",
-					isOpen && "bg-slate-800 text-slate-200",
+					"relative flex min-h-[48px] items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-chrome-hover hover:text-foreground",
+					isOpen && "bg-chrome-hover text-foreground",
 					collapsed && "justify-center px-2",
 				)}
 				aria-label={`Notificaciones${unreadCount > 0 ? ` (${unreadCount} sin leer)` : ""}`}
@@ -55,7 +55,7 @@ export function NotificationBell({
 				<div className="relative">
 					<BellIcon className="size-4" />
 					{unreadCount > 0 && (
-						<span className="absolute -right-1.5 -top-1.5 flex size-4 items-center justify-center rounded-full bg-[#3B8FE8] text-[10px] font-bold text-slate-900">
+						<span className="absolute -right-1.5 -top-1.5 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
 							{unreadCount > 9 ? "9+" : unreadCount}
 						</span>
 					)}
@@ -67,7 +67,7 @@ export function NotificationBell({
 			{isOpen && (
 				<div
 					className={cn(
-						"absolute z-50 w-96 rounded-xl border border-slate-700/50 bg-slate-900 shadow-2xl",
+						"absolute z-50 w-96 rounded-xl border border-chrome-border bg-chrome-raised shadow-2xl",
 						collapsed
 							? "bottom-0 left-full ml-2"
 							: "bottom-full left-0 mb-2",

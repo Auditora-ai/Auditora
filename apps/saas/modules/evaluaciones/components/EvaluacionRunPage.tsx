@@ -91,10 +91,7 @@ export function EvaluacionRunPage({
   );
 
   return (
-    <div
-      className="min-h-screen"
-      style={{ backgroundColor: "#0A1428" }}
-    >
+    <div className="min-h-screen bg-background">
       {phase === "intro" && (
         <EvaluacionIntro
           templateTitle={templateTitle}
@@ -107,16 +104,10 @@ export function EvaluacionRunPage({
         <div className="py-8">
           {/* Header */}
           <div className="mx-auto mb-8 max-w-3xl px-4">
-            <p
-              className="text-xs font-medium uppercase tracking-[0.2em]"
-              style={{ color: "#3B8FE8" }}
-            >
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-primary">
               {t('label')}
             </p>
-            <h1
-              className="mt-1 text-lg font-semibold"
-              style={{ color: "#F1F5F9" }}
-            >
+            <h1 className="mt-1 text-lg font-semibold text-foreground">
               {templateTitle}
             </h1>
           </div>
@@ -136,25 +127,16 @@ export function EvaluacionRunPage({
             className="pointer-events-none absolute inset-0"
             style={{
               background:
-                "radial-gradient(ellipse at top right, rgba(59,143,232,0.08), transparent 60%)",
+                "radial-gradient(ellipse at top right, hsl(var(--primary) / 0.08), transparent 60%)",
             }}
           />
 
           <div className="relative z-10 text-center">
-            <Loader2Icon
-              className="mx-auto mb-6 h-8 w-8 animate-spin"
-              style={{ color: "#3B8FE8" }}
-            />
-            <p
-              className="text-xl font-semibold"
-              style={{ color: "#F1F5F9" }}
-            >
+            <Loader2Icon className="mx-auto mb-6 h-8 w-8 animate-spin text-primary" />
+            <p className="text-xl font-semibold text-foreground">
               {t('evaluatingTitle')}
             </p>
-            <p
-              className="mt-2 text-sm"
-              style={{ color: "#64748B" }}
-            >
+            <p className="mt-2 text-sm text-muted-foreground">
               {t('evaluatingDescription')}
             </p>
           </div>
@@ -165,16 +147,10 @@ export function EvaluacionRunPage({
         <div className="py-12">
           {/* Header */}
           <div className="mx-auto mb-10 max-w-2xl px-4 text-center">
-            <p
-              className="text-xs font-medium uppercase tracking-[0.2em]"
-              style={{ color: "#3B8FE8" }}
-            >
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-primary">
               {t('resultsLabel')}
             </p>
-            <h1
-              className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight"
-              style={{ color: "#F1F5F9" }}
-            >
+            <h1 className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight text-foreground">
               {templateTitle}
             </h1>
           </div>

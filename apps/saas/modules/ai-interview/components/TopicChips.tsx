@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { SparklesIcon, SearchIcon, PlusIcon } from "lucide-react";
+import { Badge } from "@repo/ui/components/badge";
+import { cn } from "@repo/ui";
 
 interface TopicSuggestion {
 	id: string;
@@ -21,10 +23,10 @@ const TYPE_ICONS: Record<string, typeof SparklesIcon> = {
 	new: PlusIcon,
 };
 
-const TYPE_COLORS: Record<string, { bg: string; border: string; text: string }> = {
-	deepen: { bg: "#FEF3C7", border: "#D97706", text: "#92400E" },
-	explore: { bg: "#EFF6FF", border: "#2563EB", text: "#1E40AF" },
-	new: { bg: "#F0FDF4", border: "#16A34A", text: "#166534" },
+const TYPE_STYLES: Record<string, string> = {
+	deepen: "bg-amber-500/10 border-amber-500/20 text-amber-500 hover:bg-amber-500/20 cursor-pointer",
+	explore: "bg-primary/10 border-primary/20 text-primary hover:bg-primary/20 cursor-pointer",
+	new: "bg-secondary border-border text-secondary-foreground hover:bg-secondary/80 cursor-pointer",
 };
 
 export function TopicChips({ onSelect }: TopicChipsProps) {
@@ -54,23 +56,22 @@ export function TopicChips({ onSelect }: TopicChipsProps) {
 		<div className="flex flex-wrap justify-center gap-2 px-4 py-3">
 			{suggestions.map((topic) => {
 				const Icon = TYPE_ICONS[topic.type] || SparklesIcon;
-				const colors = TYPE_COLORS[topic.type] || TYPE_COLORS.new;
+				const styles = TYPE_STYLES[topic.type] || TYPE_STYLES.new;
 
 				return (
-					<button
+					<Badge
 						key={topic.id}
+						variant="outline"
 						onClick={() => onSelect(topic)}
-						className="flex items-center gap-2 rounded-full px-4 py-2 text-sm transition-all hover:scale-105"
-						style={{
-							backgroundColor: colors.bg,
-							border: `1px solid ${colors.border}`,
-							color: colors.text,
-						}}
+						className={cn(
+							"rounded-full px-4 py-2 text-sm transition-all hover:scale-105 min-h-[48px] h-auto gap-1.5",
+							styles,
+						)}
 					>
 						<Icon className="size-3.5" />
 						<span className="font-medium">{topic.label}</span>
 						<span className="text-xs opacity-70">{topic.description}</span>
-					</button>
+					</Badge>
 				);
 			})}
 		</div>

@@ -109,21 +109,22 @@ export function ChangePasswordForm() {
 								</FormItem>
 							)}
 						/>
-						<div className="flex justify-end">
-							<Button
-								type="submit"
-								loading={form.formState.isSubmitting}
-								disabled={
-									!(
-										form.formState.isValid &&
-										Object.keys(form.formState.dirtyFields)
-											.length
-									)
-								}
-							>
-								{t("settings.save")}
-							</Button>
-						</div>
+						<div className="mt-4 flex justify-end">
+						<Button
+							type="submit"
+							className="min-h-[48px]"
+							loading={form.formState.isSubmitting}
+							disabled={
+								!(
+									form.formState.isValid &&
+									Object.keys(form.formState.dirtyFields)
+										.length
+								)
+							}
+						>
+							{t("settings.save")}
+						</Button>
+					</div>
 					</div>
 				</form>
 			</Form>

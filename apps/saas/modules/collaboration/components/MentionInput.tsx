@@ -137,26 +137,26 @@ export function MentionInput({
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
         rows={rows}
-        className="w-full rounded-lg bg-white/[0.04] border border-white/10 px-3 py-2 text-sm text-white/90 placeholder:text-white/30 focus:border-[#3B8FE8]/50 focus:outline-none resize-none min-h-[44px]"
+        className="w-full rounded-lg bg-chrome-raised/30 border border-chrome-border px-3 py-2 text-sm text-chrome-text placeholder:text-chrome-text-muted/60 focus:border-primary/50 focus:outline-none resize-none min-h-[44px]"
       />
       {showSuggestions && filteredMembers.length > 0 && (
         <div
           ref={suggestionsRef}
-          className="absolute bottom-full left-0 mb-1 w-56 max-h-40 overflow-y-auto rounded-lg bg-[#0F2847] border border-white/10 shadow-xl z-50"
+          className="absolute bottom-full left-0 mb-1 w-56 max-h-40 overflow-y-auto rounded-lg bg-chrome-raised border border-chrome-border shadow-xl z-50"
         >
           <div className="p-1">
-            <div className="px-2 py-1 text-[10px] text-white/30 uppercase tracking-wider">Members</div>
+            <div className="px-2 py-1 text-[10px] text-chrome-text-muted/60 uppercase tracking-wider">Members</div>
             {filteredMembers.map((member) => (
               <button
                 key={member.id}
                 type="button"
                 onClick={() => insertMention(member)}
-                className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-white/[0.06] transition-colors text-left min-h-[36px]"
+                className="w-full flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-chrome-hover transition-colors text-left min-h-[48px]"
               >
-                <div className="h-6 w-6 min-h-6 min-w-6 rounded-full bg-[#3B8FE8]/20 flex items-center justify-center text-[10px] text-[#3B8FE8]">
+                <div className="h-6 w-6 min-h-6 min-w-6 rounded-full bg-primary/20 flex items-center justify-center text-[10px] text-primary">
                   {member.name.charAt(0).toUpperCase()}
                 </div>
-                <span className="text-sm text-white/80">{member.name}</span>
+                <span className="text-sm text-chrome-text-secondary">{member.name}</span>
               </button>
             ))}
           </div>

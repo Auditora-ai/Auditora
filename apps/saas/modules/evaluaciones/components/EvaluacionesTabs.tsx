@@ -69,7 +69,7 @@ export function EvaluacionesTabs({
 							id={`tab-${tab.id}`}
 							onClick={() => handleTabChange(tab.id)}
 							className={cn(
-								"flex items-center gap-1.5 md:gap-2 rounded-md px-3 py-2.5 text-xs md:text-sm font-medium transition-colors whitespace-nowrap min-h-[40px] flex-1 justify-center md:flex-none",
+								"flex items-center gap-1.5 md:gap-2 rounded-md px-3 py-2.5 text-xs md:text-sm font-medium transition-colors whitespace-nowrap min-h-[48px] flex-1 justify-center md:flex-none",
 								isActive
 									? "bg-background text-foreground shadow-sm"
 									: "text-muted-foreground hover:text-foreground",

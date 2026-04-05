@@ -4,6 +4,9 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { SplitWords } from "@shared/components/SplitWords";
+import { cn } from "@repo/ui";
+import { Button } from "@repo/ui/components/button";
+import { Badge } from "@repo/ui/components/badge";
 import { useTranslations } from 'next-intl';
 import { ShieldAlertIcon, UserCircle2Icon, TargetIcon } from "lucide-react";
 
@@ -115,39 +118,32 @@ export function EvaluacionIntro({
   return (
     <div
       ref={containerRef}
-      className="relative flex min-h-screen flex-col items-center justify-center px-5 md:px-6 py-12"
-      style={{ backgroundColor: "#0A1428" }}
+      className="relative flex min-h-screen flex-col items-center justify-center px-5 md:px-6 py-12 bg-background"
     >
       {/* Gradient overlays */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at top right, rgba(59,143,232,0.08), transparent 60%)",
+            "radial-gradient(ellipse at top right, hsl(var(--primary) / 0.08), transparent 60%)",
         }}
       />
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at bottom left, rgba(217,119,6,0.04), transparent 60%)",
+            "radial-gradient(ellipse at bottom left, hsl(var(--chart-4) / 0.04), transparent 60%)",
         }}
       />
 
       <div className="relative z-10 mx-auto max-w-2xl text-center">
         {/* Label */}
-        <p
-          className="sim-intro-label mb-4 md:mb-6 text-xs font-medium uppercase tracking-[0.2em]"
-          style={{ color: "#3B8FE8" }}
-        >
+        <p className="sim-intro-label mb-4 md:mb-6 text-xs font-medium uppercase tracking-[0.2em] text-primary">
           {t('label')}
         </p>
 
         {/* Title */}
-        <h1
-          className="sim-intro-word mb-6 md:mb-10 text-2xl md:text-5xl font-semibold leading-tight tracking-tight"
-          style={{ color: "#F1F5F9" }}
-        >
+        <h1 className="sim-intro-word mb-6 md:mb-10 text-2xl md:text-5xl font-semibold leading-tight tracking-tight text-foreground">
           <SplitWords>{templateTitle}</SplitWords>
         </h1>
 
@@ -155,90 +151,57 @@ export function EvaluacionIntro({
         {(roleName || processName || scenarioCount) && (
           <div className="mb-6 md:mb-8 flex flex-wrap items-center justify-center gap-2 md:gap-3">
             {roleName && (
-              <div
-                className="sim-intro-meta inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium"
-                style={{
-                  backgroundColor: "rgba(59,143,232,0.1)",
-                  color: "#93C5FD",
-                  borderWidth: "1px",
-                  borderStyle: "solid",
-                  borderColor: "rgba(59,143,232,0.2)",
-                }}
+              <Badge
+                status="info"
+                className="sim-intro-meta gap-1.5 rounded-full px-3 py-1.5 text-xs"
               >
                 <UserCircle2Icon className="size-3.5" />
                 {t('yourRole', { role: roleName })}
-              </div>
+              </Badge>
             )}
             {processName && (
-              <div
-                className="sim-intro-meta inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium"
-                style={{
-                  backgroundColor: "rgba(217,119,6,0.1)",
-                  color: "#FCD34D",
-                  borderWidth: "1px",
-                  borderStyle: "solid",
-                  borderColor: "rgba(217,119,6,0.2)",
-                }}
+              <Badge
+                status="warning"
+                className="sim-intro-meta gap-1.5 rounded-full px-3 py-1.5 text-xs"
               >
                 <TargetIcon className="size-3.5" />
                 {processName}
-              </div>
+              </Badge>
             )}
             {scenarioCount && scenarioCount > 0 && (
-              <div
-                className="sim-intro-meta inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium"
-                style={{
-                  backgroundColor: "rgba(16,185,129,0.1)",
-                  color: "#6EE7B7",
-                  borderWidth: "1px",
-                  borderStyle: "solid",
-                  borderColor: "rgba(16,185,129,0.2)",
-                }}
+              <Badge
+                status="success"
+                className="sim-intro-meta gap-1.5 rounded-full px-3 py-1.5 text-xs"
               >
                 <ShieldAlertIcon className="size-3.5" />
                 {t('decisionCount', { count: scenarioCount })}
-              </div>
+              </Badge>
             )}
           </div>
         )}
 
         {/* Narrative */}
-        <div
-          className="sim-intro-narrative mb-8 md:mb-10 space-y-4 text-left text-base md:text-lg italic leading-relaxed"
-          style={{ color: "#94A3B8" }}
-        >
+        <div className="sim-intro-narrative mb-8 md:mb-10 space-y-4 text-left text-base md:text-lg italic leading-relaxed text-muted-foreground">
           {narrative.split("\n").filter(Boolean).map((paragraph, i) => (
             <p key={i}>{paragraph}</p>
           ))}
         </div>
 
         {/* Stakes callout */}
-        <div
-          className="sim-intro-stakes mb-8 md:mb-10 mx-auto max-w-md rounded-lg px-4 py-3 text-center"
-          style={{
-            backgroundColor: "rgba(220,38,38,0.06)",
-            borderWidth: "1px",
-            borderStyle: "solid",
-            borderColor: "rgba(220,38,38,0.15)",
-          }}
-        >
-          <p className="text-xs md:text-sm font-medium" style={{ color: "#FCA5A5" }}>
+        <div className="sim-intro-stakes mb-8 md:mb-10 mx-auto max-w-md rounded-lg border border-destructive/15 bg-destructive/5 px-4 py-3 text-center">
+          <p className="text-xs md:text-sm font-medium text-destructive">
             {t('stakesMessage')}
           </p>
         </div>
 
         {/* Start button */}
-        <button
-          type="button"
+        <Button
           onClick={onStart}
-          className="sim-intro-btn inline-flex min-h-[52px] md:min-h-[48px] items-center rounded-full px-10 py-3.5 text-base font-semibold transition-all hover:opacity-90 active:scale-[0.97]"
-          style={{
-            backgroundColor: "#3B8FE8",
-            color: "#0A1428",
-          }}
+          size="lg"
+          className="sim-intro-btn rounded-full px-10 min-h-[52px] md:min-h-[48px] text-base font-semibold"
         >
           {t('startButton')}
-        </button>
+        </Button>
       </div>
     </div>
   );

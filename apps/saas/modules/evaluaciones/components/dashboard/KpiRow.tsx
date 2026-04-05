@@ -28,19 +28,16 @@ function KpiCard({
   suffix?: string;
 }) {
   return (
-    <div className="rounded-lg border border-slate-800 bg-slate-900 p-4 md:p-5">
+    <div className="rounded-lg border border-border bg-card p-4 md:p-5">
       <div className="flex items-center gap-2">
-        <Icon className="h-4 w-4 text-slate-500" />
-        <p className="text-[10px] font-medium uppercase tracking-wider text-slate-500 md:text-xs">
+        <Icon className="h-4 w-4 text-muted-foreground" />
+        <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground md:text-xs">
           {label}
         </p>
       </div>
-      <p
-        className="mt-2 text-2xl font-semibold text-foreground md:text-3xl"
-        style={{ fontVariantNumeric: "tabular-nums" }}
-      >
+      <p className="mt-2 text-2xl font-semibold text-foreground tabular-nums md:text-3xl">
         {value}
-        {suffix && <span className="text-base text-slate-500 md:text-lg">{suffix}</span>}
+        {suffix && <span className="text-base text-muted-foreground md:text-lg">{suffix}</span>}
       </p>
     </div>
   );

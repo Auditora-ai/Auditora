@@ -4,7 +4,7 @@ import { Button } from "@repo/ui/components/button";
 import { Card } from "@repo/ui/components/card";
 import {
 	ArrowRightIcon,
-	FileTextIcon,
+	CompassIcon,
 	MessageSquareIcon,
 	GitBranchIcon,
 } from "lucide-react";
@@ -12,7 +12,7 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 
 const steps = [
-	{ key: "step1", icon: FileTextIcon },
+	{ key: "step1", icon: CompassIcon },
 	{ key: "step2", icon: MessageSquareIcon },
 	{ key: "step3", icon: GitBranchIcon },
 ] as const;
@@ -55,18 +55,23 @@ export function DashboardWelcome({
 
 			<div className="mt-8 flex flex-col items-center gap-3">
 				<Button asChild size="lg" className="min-h-[48px] active:scale-95">
-					<Link href={`${basePath}/capture/new`}>
-						<MessageSquareIcon className="mr-2 size-4" />
+					<Link href={`${basePath}/discovery`}>
+						<CompassIcon className="mr-2 size-4" />
 						{t("cta")}
 					</Link>
 				</Button>
-			<button
-				type="button"
-				onClick={onDismiss}
-				className="text-sm text-muted-foreground underline-offset-4 hover:underline min-h-[44px] active:scale-95"
+
+				<Button
+					variant="outline"
+					asChild
+					size="sm"
+					className="min-h-[44px] active:scale-95"
 				>
-					{t("explore")}
-				</button>
+					<Link href={`${basePath}/capture/new`}>
+						<MessageSquareIcon className="mr-2 size-4" />
+						{t("explore")}
+					</Link>
+				</Button>
 			</div>
 		</div>
 	);

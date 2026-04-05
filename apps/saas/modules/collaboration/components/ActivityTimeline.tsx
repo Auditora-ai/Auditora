@@ -31,11 +31,11 @@ interface ActivityTimelineProps {
 }
 
 const ACTION_CONFIG: Record<string, { icon: typeof Activity; label: string; color: string }> = {
-  edited_bpmn: { icon: GitBranch, label: "edited the diagram", color: "text-[#3B8FE8]" },
+  edited_bpmn: { icon: GitBranch, label: "edited the diagram", color: "text-primary" },
   edited_procedure: { icon: Edit3, label: "edited the procedure", color: "text-purple-400" },
   added_risk: { icon: AlertTriangle, label: "added a risk", color: "text-amber-400" },
   updated_raci: { icon: User, label: "updated RACI matrix", color: "text-emerald-400" },
-  commented: { icon: MessageSquare, label: "left a comment", color: "text-[#3B8FE8]" },
+  commented: { icon: MessageSquare, label: "left a comment", color: "text-primary" },
   resolved_comment: { icon: CheckCircle, label: "resolved a comment", color: "text-emerald-400" },
 };
 
@@ -70,7 +70,7 @@ export function ActivityTimeline({ processId, limit = 10 }: ActivityTimelineProp
     return (
       <div className="space-y-3 p-2">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="h-8 rounded-lg bg-white/[0.02] animate-pulse" />
+          <div key={i} className="h-8 rounded-lg bg-chrome-raised/50 animate-pulse" />
         ))}
       </div>
     );
@@ -79,8 +79,8 @@ export function ActivityTimeline({ processId, limit = 10 }: ActivityTimelineProp
   if (activities.length === 0) {
     return (
       <div className="py-6 text-center">
-        <Activity className="h-6 w-6 text-white/20 mx-auto mb-2" />
-        <p className="text-xs text-white/30">No recent activity</p>
+        <Activity className="h-6 w-6 text-chrome-text-muted/40 mx-auto mb-2" />
+        <p className="text-xs text-chrome-text-muted/60">No recent activity</p>
       </div>
     );
   }
@@ -91,23 +91,23 @@ export function ActivityTimeline({ processId, limit = 10 }: ActivityTimelineProp
         const config = ACTION_CONFIG[activity.action] ?? {
           icon: Activity,
           label: activity.action,
-          color: "text-white/50",
+          color: "text-chrome-text-muted",
         };
         const Icon = config.icon;
 
         return (
           <div
             key={activity.id}
-            className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-white/[0.02] transition-colors"
+            className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-chrome-raised/50 transition-colors"
           >
             <Icon className={`h-3.5 w-3.5 flex-shrink-0 ${config.color}`} />
             <div className="flex-1 min-w-0">
-              <span className="text-xs text-white/70">
-                <strong className="text-white/90">{activity.user.name}</strong>{" "}
-                <span className="text-white/50">{config.label}</span>
+              <span className="text-xs text-chrome-text-secondary">
+                <strong className="text-chrome-text">{activity.user.name}</strong>{" "}
+                <span className="text-chrome-text-muted">{config.label}</span>
               </span>
             </div>
-            <span className="text-[10px] text-white/25 flex-shrink-0">
+            <span className="text-[10px] text-chrome-text-muted/50 flex-shrink-0">
               {formatTimeAgo(activity.createdAt)}
             </span>
           </div>

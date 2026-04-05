@@ -54,14 +54,14 @@ export function CommentSidebar({ section, onClose }: CommentSidebarProps) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#0A1428]/80 backdrop-blur-sm border-l border-white/10">
+    <div className="flex flex-col h-full bg-chrome-base/80 backdrop-blur-sm border-l border-chrome-border">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-chrome-border">
         <div className="flex items-center gap-2">
-          <MessageSquare className="h-4 w-4 text-[#3B8FE8]" />
-          <span className="text-sm font-semibold text-white/90">Comments</span>
+          <MessageSquare className="h-4 w-4 text-primary" />
+          <span className="text-sm font-semibold text-chrome-text">Comments</span>
           {comments.length > 0 && (
-            <span className="text-[11px] text-white/40 bg-white/[0.06] px-1.5 py-0.5 rounded-full">
+            <span className="text-[11px] text-chrome-text-muted bg-chrome-raised/50 px-1.5 py-0.5 rounded-full">
               {comments.length}
             </span>
           )}
@@ -70,9 +70,9 @@ export function CommentSidebar({ section, onClose }: CommentSidebarProps) {
           <button
             type="button"
             onClick={onClose}
-            className="h-8 w-8 min-h-8 min-w-8 flex items-center justify-center rounded-lg hover:bg-white/[0.06] transition-colors"
+            className="h-8 w-8 min-h-[48px] min-w-8 flex items-center justify-center rounded-lg hover:bg-chrome-hover transition-colors"
           >
-            <X className="h-4 w-4 text-white/50" />
+            <X className="h-4 w-4 text-chrome-text-muted" />
           </button>
         )}
       </div>
@@ -82,14 +82,14 @@ export function CommentSidebar({ section, onClose }: CommentSidebarProps) {
         {isLoadingComments ? (
           <div className="flex flex-col gap-3 p-2">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-20 rounded-xl bg-white/[0.02] animate-pulse" />
+              <div key={i} className="h-20 rounded-xl bg-chrome-raised/50 animate-pulse" />
             ))}
           </div>
         ) : comments.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
-            <MessageSquare className="h-8 w-8 text-white/20 mb-2" />
-            <p className="text-sm text-white/40">No comments yet</p>
-            <p className="text-[11px] text-white/25 mt-1">Be the first to comment on this section</p>
+            <MessageSquare className="h-8 w-8 text-chrome-text-muted/40 mb-2" />
+            <p className="text-sm text-chrome-text-muted">No comments yet</p>
+            <p className="text-[11px] text-chrome-text-muted/50 mt-1">Be the first to comment on this section</p>
           </div>
         ) : (
           comments.map((comment) => (
@@ -104,14 +104,14 @@ export function CommentSidebar({ section, onClose }: CommentSidebarProps) {
       </div>
 
       {/* Compose */}
-      <div className="border-t border-white/10 p-3">
+      <div className="border-t border-chrome-border p-3">
         {replyingTo && (
-          <div className="flex items-center justify-between mb-2 px-2 py-1 bg-white/[0.03] rounded-lg">
-            <span className="text-[11px] text-white/40">Replying to thread</span>
+          <div className="flex items-center justify-between mb-2 px-2 py-1 bg-chrome-raised/30 rounded-lg">
+            <span className="text-[11px] text-chrome-text-muted">Replying to thread</span>
             <button
               type="button"
               onClick={() => setReplyingTo(null)}
-              className="text-[11px] text-white/40 hover:text-white/70"
+              className="text-[11px] text-chrome-text-muted hover:text-chrome-text-secondary"
             >
               Cancel
             </button>
@@ -125,18 +125,18 @@ export function CommentSidebar({ section, onClose }: CommentSidebarProps) {
             onKeyDown={handleKeyDown}
             placeholder="Add a comment..."
             rows={2}
-            className="flex-1 rounded-lg bg-white/[0.04] border border-white/10 px-3 py-2 text-sm text-white/90 placeholder:text-white/30 focus:border-[#3B8FE8]/50 focus:outline-none resize-none min-h-[44px]"
+            className="flex-1 rounded-lg bg-chrome-raised/30 border border-chrome-border px-3 py-2 text-sm text-chrome-text placeholder:text-chrome-text-muted/60 focus:border-primary/50 focus:outline-none resize-none min-h-[44px]"
           />
           <button
             type="button"
             onClick={handleSubmit}
             disabled={!newComment.trim() || isAddingComment}
-            className="h-11 w-11 min-h-11 min-w-11 flex items-center justify-center rounded-lg bg-[#3B8FE8] text-white hover:bg-[#2E7FD6] disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex-shrink-0"
+            className="h-11 w-11 min-h-[48px] min-w-11 flex items-center justify-center rounded-lg bg-primary text-primary-foreground hover:bg-action-hover disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex-shrink-0"
           >
             <Send className="h-4 w-4" />
           </button>
         </div>
-        <p className="text-[10px] text-white/25 mt-1.5">Ctrl+Enter to send</p>
+        <p className="text-[10px] text-chrome-text-muted/50 mt-1.5">Ctrl+Enter to send</p>
       </div>
     </div>
   );

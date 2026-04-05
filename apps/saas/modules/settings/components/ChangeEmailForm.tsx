@@ -4,6 +4,14 @@ import { useSession } from "@auth/hooks/use-session";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/components/button";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
 import { toastError, toastSuccess } from "@repo/ui/components/toast";
 import { SettingsItem } from "@shared/components/SettingsItem";
@@ -46,29 +54,41 @@ export function ChangeEmailForm() {
 			title={t("settings.account.changeEmail.title")}
 			description={t("settings.account.changeEmail.description")}
 		>
-			<form
-				onSubmit={(e) => {
-					e.preventDefault();
-					onSubmit();
-				}}
-			>
-				<Input type="email" {...form.register("email")} />
+			<Form {...form}>
+				<form onSubmit={onSubmit}>
+					<FormField
+						control={form.control}
+						name="email"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>
+									{t("settings.account.changeEmail.title")}
+								</FormLabel>
+								<FormControl>
+									<Input type="email" {...field} />
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
 
-				<div className="mt-4 flex justify-end">
-					<Button
-						type="submit"
-						loading={form.formState.isSubmitting}
-						disabled={
-							!(
-								form.formState.isValid &&
-								form.formState.dirtyFields.email
-							)
-						}
-					>
-						{t("settings.save")}
-					</Button>
-				</div>
-			</form>
+					<div className="mt-4 flex justify-end">
+						<Button
+							type="submit"
+							className="min-h-[48px]"
+							loading={form.formState.isSubmitting}
+							disabled={
+								!(
+									form.formState.isValid &&
+									form.formState.dirtyFields.email
+								)
+							}
+						>
+							{t("settings.save")}
+						</Button>
+					</div>
+				</form>
+			</Form>
 		</SettingsItem>
 	);
 }

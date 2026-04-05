@@ -18,7 +18,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@repo/ui/components/select";
-import { Textarea } from "@repo/ui/components/textarea";
+
 import { AlertCircleIcon, ArrowRightIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
@@ -274,15 +274,14 @@ export function OnboardingCompanyStep({
 								<FormLabel>
 									{t("onboarding.company.concernProcess")}
 								</FormLabel>
-								<FormControl>
-									<Textarea
-										{...field}
-										placeholder={t(
-											"onboarding.company.concernProcessPlaceholder",
-										)}
-										rows={3}
-									/>
-								</FormControl>
+					<FormControl>
+								<Input
+									{...field}
+									placeholder={t(
+										"onboarding.company.concernProcessPlaceholder",
+									)}
+								/>
+							</FormControl>
 								<p className="text-xs text-muted-foreground">
 									{t("onboarding.company.concernProcessOptional")}
 								</p>

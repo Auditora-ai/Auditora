@@ -21,10 +21,11 @@ const chartConfig = {
   value: { label: "Score" },
 } satisfies ChartConfig;
 
+/* Dynamic bar color based on runtime data — kept as inline style values */
 function barColor(value: number): string {
-  if (value >= 80) return "#34d399"; // emerald-400
-  if (value >= 60) return "#fbbf24"; // amber-400
-  return "#f87171"; // red-400
+  if (value >= 80) return "hsl(var(--chart-2))";
+  if (value >= 60) return "hsl(var(--chart-4))";
+  return "hsl(var(--chart-5))";
 }
 
 export function ScoreDistributionChart({
@@ -48,8 +49,8 @@ export function ScoreDistributionChart({
   ];
 
   return (
-    <div className="rounded-lg border border-slate-800 bg-slate-900 p-5">
-      <h3 className="mb-4 text-sm font-medium text-slate-400">
+    <div className="rounded-lg border border-border bg-card p-5">
+      <h3 className="mb-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
         {t("scoreDistribution")}
       </h3>
       <ChartContainer config={chartConfig} className="h-[180px] w-full">
@@ -63,21 +64,21 @@ export function ScoreDistributionChart({
             domain={[0, 100]}
             tickLine={false}
             axisLine={false}
-            tick={{ fill: "#64748b", fontSize: 11 }}
+            tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
           />
           <YAxis
             type="category"
             dataKey="dimension"
             tickLine={false}
             axisLine={false}
-            tick={{ fill: "#94a3b8", fontSize: 12 }}
+            tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
             width={110}
           />
           <ChartTooltip
             content={
               <ChartTooltipContent
                 formatter={(v) => (
-                  <span style={{ fontVariantNumeric: "tabular-nums" }}>
+                  <span className="tabular-nums">
                     {v}/100
                   </span>
                 )}

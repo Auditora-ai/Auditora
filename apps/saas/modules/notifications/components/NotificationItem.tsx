@@ -49,8 +49,8 @@ export function NotificationItem({
 	return (
 		<div
 			className={cn(
-				"group flex items-start gap-3 px-4 py-3 cursor-pointer transition-colors hover:bg-slate-800/50",
-				!notification.read && "bg-slate-800/30 border-l-2 border-[#3B8FE8]",
+				"group flex items-start gap-3 px-4 py-3 cursor-pointer transition-colors hover:bg-chrome-hover/50",
+				!notification.read && "bg-chrome-hover/30 border-l-2 border-primary",
 			)}
 			onClick={handleClick}
 			onKeyDown={(e) => e.key === "Enter" && handleClick()}
@@ -60,7 +60,7 @@ export function NotificationItem({
 			{/* Icon */}
 			<div
 				className={cn(
-					"mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-slate-800",
+					"mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full bg-chrome-hover",
 					iconColor,
 				)}
 			>
@@ -69,19 +69,19 @@ export function NotificationItem({
 
 			{/* Content */}
 			<div className="min-w-0 flex-1">
-				<p className="text-sm font-medium text-slate-200 line-clamp-1">
-					{notification.title}
-				</p>
-				<p className="mt-0.5 text-xs text-slate-400 line-clamp-2">
-					{notification.body}
+			<p className="text-sm font-medium text-foreground line-clamp-1">
+				{notification.title}
+			</p>
+			<p className="mt-0.5 text-xs text-chrome-text-secondary line-clamp-2">
+				{notification.body}
 				</p>
 				<div className="mt-1 flex items-center gap-2">
-					{notification.actor && (
-						<span className="text-xs text-slate-500">
-							{notification.actor.name}
-						</span>
-					)}
-					<span className="text-xs text-slate-600">{timeAgo}</span>
+				{notification.actor && (
+					<span className="text-xs text-muted-foreground">
+						{notification.actor.name}
+					</span>
+				)}
+				<span className="text-xs text-chrome-text-muted">{timeAgo}</span>
 				</div>
 			</div>
 
@@ -92,7 +92,7 @@ export function NotificationItem({
 					e.stopPropagation();
 					onArchive(notification.id);
 				}}
-				className="mt-1 opacity-0 group-hover:opacity-100 transition-opacity text-slate-500 hover:text-slate-300"
+				className="mt-1 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-foreground"
 				aria-label="Archivar notificación"
 			>
 				<XIcon className="size-3.5" />

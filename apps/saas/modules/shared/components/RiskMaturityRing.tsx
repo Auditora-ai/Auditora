@@ -33,10 +33,17 @@ export function RiskMaturityRing({
 	// Color based on score
 	const ringColor =
 		score >= 70
-			? "#16A34A" // green — good maturity
+			? "var(--success)" // green — good maturity
 			: score >= 40
-				? "#D97706" // amber — needs work
-				: "#DC2626"; // red — critical
+				? "var(--palette-orientation)" // amber — needs work
+				: "var(--destructive)"; // red — critical
+
+	const scoreColorClass =
+		score >= 70
+			? "text-success"
+			: score >= 40
+				? "text-orientation"
+				: "text-destructive";
 
 	const isEmpty = score === 0;
 
@@ -87,13 +94,12 @@ export function RiskMaturityRing({
 						{isEmpty ? (
 							<span className="text-lg text-muted-foreground">—</span>
 						) : (
-							<>
-								<span
-									className="text-4xl font-bold tabular-nums"
-									style={{ color: ringColor }}
-								>
-									{score}
-								</span>
+						<>
+							<span
+								className={cn("text-4xl font-bold tabular-nums", scoreColorClass)}
+							>
+								{score}
+							</span>
 								<span className="text-xs text-muted-foreground">/100</span>
 							</>
 						)}
@@ -119,8 +125,7 @@ export function RiskMaturityRing({
 					) : (
 						<>
 							<span
-								className="text-lg font-semibold tabular-nums"
-								style={{ color: ringColor }}
+								className={cn("text-lg font-semibold tabular-nums", scoreColorClass)}
 							>
 								{score}
 							</span>
@@ -133,8 +138,7 @@ export function RiskMaturityRing({
 			)}
 			{isSmall && !isEmpty && (
 				<span
-					className="text-xs font-semibold tabular-nums"
-					style={{ color: ringColor }}
+					className={cn("text-xs font-semibold tabular-nums", scoreColorClass)}
 				>
 					{score}
 				</span>

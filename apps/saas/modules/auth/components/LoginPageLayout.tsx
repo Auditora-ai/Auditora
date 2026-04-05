@@ -105,7 +105,7 @@ export function LoginPageLayout({
 
 	return (
 		<div className="flex min-h-screen flex-col lg:flex-row">
-			{/* Left: Dark chrome showcase panel (hidden on mobile) */}
+			{/* Left: Showcase panel (hidden on mobile) */}
 			<aside className="hidden w-[55%] lg:block xl:w-[60%]">
 				<div className="sticky top-0 h-screen">
 					<LoginShowcasePanel variant={variant} />
@@ -113,36 +113,24 @@ export function LoginPageLayout({
 			</aside>
 
 			{/* Mobile brand header (visible only on mobile) */}
-			<div className="relative overflow-hidden lg:hidden" style={{ backgroundColor: "#0A1428" }}>
-				{/* Subtle gradient overlay */}
-				<div
-					className="pointer-events-none absolute inset-0"
-					style={{
-						background:
-							"radial-gradient(ellipse at top right, rgba(59,143,232,0.06), transparent 60%)",
-					}}
-				/>
-
+			<div className="relative overflow-hidden bg-card lg:hidden">
 				<div className="relative z-10 px-6 pt-8 pb-6 text-center">
 					<Logo
 						withLabel
-						className="justify-center text-[#F1F5F9] [&_svg]:text-[#3B8FE8] [&_.text-muted-foreground]:text-[#94A3B8] [&_span.hidden]:!block"
+						className="justify-center text-foreground"
 					/>
 				<h2
-					className="mt-4 text-xl font-semibold tracking-tight"
-					style={{
-						color: "#F1F5F9",
-					}}
+					className="mt-4 text-xl font-semibold tracking-tight text-foreground"
 				>
 						{mobileTitle}
 					</h2>
-					<p className="mt-1 text-sm" style={{ color: "#94A3B8" }}>
+					<p className="mt-1 text-sm text-muted-foreground">
 						{mobileSubtitle}
 					</p>
 				</div>
 			</div>
 
-			{/* Right: Warm canvas form panel */}
+			{/* Right: Form panel */}
 			<main
 				ref={formRef}
 				className="flex min-h-0 flex-1 flex-col bg-background lg:min-h-screen"

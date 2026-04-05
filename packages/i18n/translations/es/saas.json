@@ -281,14 +281,14 @@
     "welcome": {
       "title": "Bienvenido a Auditora.ai",
       "subtitle": "Tu plataforma de evaluación de procesos con IA",
-      "step1": "Documenta un proceso",
-      "step1Desc": "Captura tu proceso más crítico con entrevista IA",
-      "step2": "Ejecuta una evaluación",
-      "step2Desc": "Deja que la IA evalúe el cumplimiento del proceso documentado",
+      "step1": "Discovery organizacional",
+      "step1Desc": "Descubre y mapea los procesos clave de tu empresa con IA",
+      "step2": "Captura tu primer proceso",
+      "step2Desc": "Documenta un proceso crítico con entrevista guiada por IA",
       "step3": "Obtén tus insights",
       "step3Desc": "Visualiza riesgos, brechas y puntajes de cumplimiento automáticamente",
-      "cta": "Iniciar entrevista IA",
-      "explore": "Explorar el dashboard primero"
+      "cta": "Iniciar Discovery",
+      "explore": "Capturar un proceso"
     },
     "account": {
       "title": "Tu perfil",
@@ -351,22 +351,21 @@
       }
     },
     "firstValue": {
-      "title": "Empieza a obtener valor",
-      "subtitle": "Basado en tu industria, te recomendamos empezar aquí",
-      "recommendation": "Recomendamos documentar primero tu proceso más crítico. Las evaluaciones son más valiosas cuando se basan en procedimientos reales.",
-      "chatInterview": "Iniciar entrevista IA",
-      "chatInterviewDesc": "Deja que la IA te guíe para documentar un proceso en minutos",
-      "exploreDashboard": "Explorar dashboard",
-      "exploreDashboardDesc": "Descubre lo que Auditora puede hacer por tu equipo",
-      "documentProcess": "Documentar un proceso",
-      "documentProcessDesc": "Empieza con tu proceso más crítico"
+      "title": "Descubre tu organización",
+      "subtitle": "El siguiente paso es mapear los procesos clave de tu empresa",
+      "recommendation": "El Discovery organizacional te permite identificar y priorizar los procesos críticos de tu empresa. Es el punto de partida para obtener el máximo valor.",
+      "chatInterview": "Discovery organizacional",
+      "chatInterviewDesc": "Identifica y prioriza los procesos clave de tu empresa con ayuda de IA",
+      "exploreDashboard": "Fase 0 — Recomendado",
+      "documentProcess": "Iniciar Discovery",
+      "documentProcessDesc": "Empieza con el mapeo de tu organización"
     },
     "setupComplete": {
       "title": "¡Tu organización está lista!",
-      "subtitle": "Estás listo para empezar a mejorar el cumplimiento de procesos.",
-      "inviteMembers": "Invitar miembros",
-      "inviteMembersDesc": "Agrega colegas que deban participar en evaluaciones",
-      "goToDashboard": "Ir al dashboard"
+      "subtitle": "Estás listo para descubrir y optimizar los procesos de tu empresa.",
+      "inviteMembers": "Capturar un proceso",
+      "inviteMembersDesc": "Documenta tu primer proceso con entrevista IA",
+      "goToDashboard": "Iniciar Discovery"
     }
   },
   "organizations": {

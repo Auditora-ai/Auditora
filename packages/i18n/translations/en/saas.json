@@ -281,14 +281,14 @@
     "welcome": {
       "title": "Welcome to Auditora.ai",
       "subtitle": "Your AI-powered process evaluation platform",
-      "step1": "Document a process",
-      "step1Desc": "Capture your most critical process via AI interview",
-      "step2": "Run an evaluation",
-      "step2Desc": "Let AI assess compliance against the documented process",
+      "step1": "Organizational Discovery",
+      "step1Desc": "Discover and map your company's key processes with AI",
+      "step2": "Capture your first process",
+      "step2Desc": "Document a critical process via AI-guided interview",
       "step3": "Get your insights",
       "step3Desc": "View risks, gaps, and compliance scores automatically",
-      "cta": "Start AI interview",
-      "explore": "Explore the dashboard first"
+      "cta": "Start Discovery",
+      "explore": "Capture a process"
     },
     "account": {
       "title": "Your profile",
@@ -351,22 +351,21 @@
       }
     },
     "firstValue": {
-      "title": "Start getting value",
-      "subtitle": "Based on your industry, we recommend starting here",
-      "recommendation": "We recommend documenting your most critical process first. Evaluations are more valuable when based on real procedures.",
-      "chatInterview": "Start AI interview",
-      "chatInterviewDesc": "Let AI guide you through documenting a process in minutes",
-      "exploreDashboard": "Explore dashboard",
-      "exploreDashboardDesc": "See what Auditora can do for your team",
-      "documentProcess": "Document a process",
-      "documentProcessDesc": "Start with your most critical process"
+      "title": "Discover your organization",
+      "subtitle": "The next step is to map your company's key processes",
+      "recommendation": "Organizational Discovery lets you identify and prioritize your company's critical processes. It's the starting point to get maximum value.",
+      "chatInterview": "Organizational Discovery",
+      "chatInterviewDesc": "Identify and prioritize your company's key processes with AI assistance",
+      "exploreDashboard": "Phase 0 — Recommended",
+      "documentProcess": "Start Discovery",
+      "documentProcessDesc": "Begin mapping your organization"
     },
     "setupComplete": {
       "title": "Your organization is ready!",
-      "subtitle": "You're all set to start improving process compliance.",
-      "inviteMembers": "Invite team members",
-      "inviteMembersDesc": "Add colleagues who should participate in evaluations",
-      "goToDashboard": "Go to dashboard"
+      "subtitle": "You're all set to discover and optimize your company's processes.",
+      "inviteMembers": "Capture a process",
+      "inviteMembersDesc": "Document your first process with AI interview",
+      "goToDashboard": "Start Discovery"
     }
   },
   "organizations": {

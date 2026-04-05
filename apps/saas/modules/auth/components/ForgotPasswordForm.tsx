@@ -14,6 +14,7 @@ import {
 	FormMessage,
 } from "@repo/ui/components/form";
 import { Input } from "@repo/ui/components/input";
+import { cn } from "@repo/ui";
 import { AlertTriangleIcon, ArrowLeftIcon, MailboxIcon } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -63,10 +64,10 @@ export function ForgotPasswordForm() {
 
 	return (
 		<>
-			<h1 className="font-bold text-xl md:text-2xl">
+			<h1 className="font-bold text-xl md:text-2xl text-foreground">
 				{t("auth.forgotPassword.title")}
 			</h1>
-			<p className="mt-1 mb-6 text-foreground/60">
+			<p className="mt-1 mb-6 text-muted-foreground">
 				{t("auth.forgotPassword.message")}{" "}
 			</p>
 
@@ -114,7 +115,7 @@ export function ForgotPasswordForm() {
 							)}
 						/>
 
-						<Button loading={form.formState.isSubmitting}>
+						<Button className="min-h-[48px]" loading={form.formState.isSubmitting}>
 							{t("auth.forgotPassword.submit")}
 						</Button>
 					</form>

@@ -285,7 +285,7 @@ export function ProjectGantt({
 					headerHeight={50}
 					rowHeight={42}
 					todayColor="rgba(37, 99, 235, 0.06)"
-					arrowColor="var(--muted-foreground, #94A3B8)"
+					arrowColor="var(--muted-foreground)"
 					arrowIndent={20}
 				/>
 			</div>
@@ -293,17 +293,17 @@ export function ProjectGantt({
 			{/* Legend */}
 			<div className="flex items-center gap-4 border-t border-border bg-secondary px-6 py-2">
 				<span className="text-[10px] text-chrome-text-secondary">Fases:</span>
-				{[
-					{ label: "Contexto", color: "#7C3AED" },
-					{ label: "Captura", color: "#3B8FE8" },
-					{ label: "Modelo", color: "#0EA5E9" },
-					{ label: "Análisis", color: "#16A34A" },
-				].map((phase) => (
-					<div key={phase.label} className="flex items-center gap-1">
-						<div className="h-3.5 w-3.5 rounded-sm" style={{ backgroundColor: phase.color }} />
-						<span className="text-[10px] text-chrome-text-muted">{phase.label}</span>
-					</div>
-				))}
+			{[
+				{ label: "Contexto", cls: "bg-violet-600" },
+				{ label: "Captura", cls: "bg-blue-500" },
+				{ label: "Modelo", cls: "bg-sky-500" },
+				{ label: "Análisis", cls: "bg-emerald-600" },
+			].map((phase) => (
+				<div key={phase.label} className="flex items-center gap-1">
+					<div className={`h-3.5 w-3.5 rounded-sm ${phase.cls}`} />
+					<span className="text-[10px] text-chrome-text-muted">{phase.label}</span>
+				</div>
+			))}
 				<div className="flex items-center gap-1">
 					<div className="h-3.5 w-3.5 rounded-sm bg-border" />
 					<span className="text-[10px] text-chrome-text-secondary">Fuera de scope</span>

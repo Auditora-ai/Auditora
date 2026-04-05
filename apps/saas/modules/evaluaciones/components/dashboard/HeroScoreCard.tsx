@@ -16,7 +16,7 @@ export function HeroScoreCard({ score }: HeroScoreCardProps) {
   const stroke = scoreStroke(score);
 
   return (
-    <div className="flex flex-col items-center rounded-lg border border-slate-800 bg-slate-900 p-8">
+    <div className="flex flex-col items-center rounded-lg border border-border bg-card p-8">
       <svg
         width="180"
         height="180"
@@ -34,9 +34,9 @@ export function HeroScoreCard({ score }: HeroScoreCardProps) {
           fill="none"
           stroke="currentColor"
           strokeWidth="10"
-          className="text-slate-800"
+          className="text-muted"
         />
-        {/* Progress */}
+        {/* Progress — dynamic stroke color based on score */}
         <circle
           cx="90"
           cy="90"
@@ -52,14 +52,14 @@ export function HeroScoreCard({ score }: HeroScoreCardProps) {
       </svg>
       <div className="relative -mt-[118px] mb-[46px] flex flex-col items-center">
         <span
-          className="text-5xl font-semibold"
-          style={{ color: stroke, fontVariantNumeric: "tabular-nums" }}
+          className="text-5xl font-semibold tabular-nums"
+          style={{ color: stroke }}
         >
           {score}
         </span>
-        <span className="text-sm text-slate-500">/100</span>
+        <span className="text-sm text-muted-foreground">/100</span>
       </div>
-      <p className="text-xs font-medium uppercase tracking-wider text-slate-500">
+      <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
         {t("humanRiskScore")}
       </p>
     </div>

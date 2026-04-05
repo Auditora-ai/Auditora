@@ -126,6 +126,7 @@ export function InviteMemberForm({
 
 					<div className="mt-4 flex justify-end">
 						<Button
+							className="min-h-[48px]"
 							type="submit"
 							loading={form.formState.isSubmitting}
 						>
